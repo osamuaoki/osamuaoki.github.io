@@ -82,7 +82,7 @@ source for hugo.</p>
 </code></pre>
 
 <p>See published source of this site at
-<a href="https://github.com:osamuaoki/osamuaoki-hugo">https://github.com:osamuaoki/osamuaoki-hugo</a></p>
+<a href="https://github.com/osamuaoki/osamuaoki-hugo">https://github.com/osamuaoki/osamuaoki-hugo</a></p>
 
 <h2 id="publishing-html-pages">Publishing HTML pages</h2>
 
@@ -101,10 +101,13 @@ this generated HTML files.</p>
  $ git push -u origin master
 </code></pre>
 
+<p>This publishes web page at <a href="https://osamuaoki.github.io/">https://osamuaoki.github.io/</a></p>
+
 <p>Let&rsquo;s use  <code>git submodule</code> to manage these 2 repositories.</p>
 
 <pre><code> $ cd ..
- $ git submodule add public
+ $ rm -rf public
+ $ git submodule add git@github.com:osamuaoki/osamuaoki.github.io.git public
  $ git add .
  $ git commit -m &quot;add submodule&quot;
 </code></pre>
@@ -138,6 +141,21 @@ to a certain branch of a certain github repository to enable github pages.</p>
 
 <p>For more, follow
 <a href="https://gohugo.io/hosting-and-deployment/hosting-on-github/">Host on GitHub</a></p>
+
+<h2 id="updating-webpages">Updating webpages</h2>
+
+<pre><code> $ cd /path/to/&lt;webbuildtree&gt;/content
+  ... hack source
+ $ cd /path/to/&lt;webbuildtree&gt;
+ $ git add -A .
+ $ git commit -m &quot;updated source&quot;
+ $ hugo
+ $ cd publish
+ $ git add -A .
+ $ git commit -m &quot;updated webpages&quot;
+ $ cd ..
+ $ git commit -a -m &quot;updated submodule for webpages&quot;
+</code></pre>
 
 <h2 id="salsa-debian-page">salsa (debian) page</h2>
 
