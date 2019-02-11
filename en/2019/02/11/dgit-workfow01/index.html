@@ -117,6 +117,36 @@ with <code>dgit</code>.  Let me get all key points of manpages.</p>
 
 <p>Here, the maintainer column indicates relationship of the maintainer to the upstream development.</p>
 
+<p>Let&rsquo;s copy key parts of manpages.</p>
+
+<h2 id="dgit-maint-native-7">dgit-maint-native(7)</h2>
+
+<p>This document describes elements of a workflow for using dgit to
+maintain a Debian package that uses one of the native source formats
+(&ldquo;1.0&rdquo; &amp; &ldquo;3.0 (native)&rdquo;).</p>
+
+<ul>
+<li><p>We expect that your git history is fast-forwarding.</p></li>
+
+<li><p>You should be prepared to tolerate a small amount of ugliness in
+your git history in the form of merges which stitch the dgit-
+generated archive view into your maintainer history.</p>
+
+<p>This is to handle uploads that were not made with dgit, such as the
+uploads you made before switching to this workflow, or NMUs.</p></li>
+</ul>
+
+<p>Benefits</p>
+
+<ul>
+<li><p>Benefit from dgit&rsquo;s safety catches.  In particular, ensure that
+your upload always matches exactly your git HEAD.</p></li>
+
+<li><p>Provide a better, more detailed history to downstream dgit users.</p></li>
+
+<li><p>Incorporate an NMU with one command.</p></li>
+</ul>
+
 <h2 id="dgit-maint-merge-7">dgit-maint-merge(7)</h2>
 
 <p>This document describes elements of a workflow for maintaining a non-
