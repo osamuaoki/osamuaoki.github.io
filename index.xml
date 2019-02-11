@@ -6,10 +6,20 @@
     <description>Recent content on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 09 Feb 2019 11:15:56 +0900</lastBuildDate>
+    <lastBuildDate>Mon, 11 Feb 2019 21:53:26 +0900</lastBuildDate>
     
 	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>dgit workflow</title>
+      <link>/en/2019/02/11/dgit-workfow01/</link>
+      <pubDate>Mon, 11 Feb 2019 21:53:26 +0900</pubDate>
+      
+      <guid>/en/2019/02/11/dgit-workfow01/</guid>
+      <description>For Debian maintainer, there can be 4 approaches for maintaining git repository with dgit. Let me get all key points of manpages.
+   tutorials model tool history patch quilt maintainer     dgit-maint-native(7) native git(1) upstream git (same) N/A upstream   dgit-maint-merge(7) merge git merge(1) upstream git applied merged upstream   dgit-maint-debrebase(7) rebasish git-debrebase(1) upstream git applied series downstream   dgit-maint-gbp(7) gbp git-buildpackage(1) upstream tar unapplied series downstream    Here, the maintainer column indicates relationship of the maintainer to the upstream development.</description>
+    </item>
     
     <item>
       <title>Initial setup for hugo (2)</title>
@@ -46,7 +56,7 @@
 実際にanthyをibus-anthyの下で動作させると「７桁半角数字＋半角t」や、 他の「t」で終わる文字列を入れても何も起こりません。ibus-anthyの下では このzipcode.tは明らかに使われていません。
 良く見るとibus-anthyが
 /usr/share/ibus-anthy/dicts/emoji.t /usr/share/ibus-anthy/dicts/era.t /usr/share/ibus-anthy/dicts/oldchar.t /usr/share/ibus-anthy/dicts/symbol.t /usr/share/ibus-anthy/dicts/zipcode.t  をインストールして、GUIの設定が「~/.anthy/*.t」からシムリンクをはるなど してこれらをユーザー辞書として使えるようにしているようです。
-ただこれらのユーザー辞書では、入力文字列として半角tを最後つけることはされて いません。「郵便番号→住所」変換をするための辞書は「３桁全角数字、 全角マイナス、４桁全角数字」を入力すると、郵便番号に対応する住所の文字列を 対応させるようになっていますし、実際の動作もそうです。
+ただこれらのユーザー辞書では、入力文字列として半角tを最後つけることはされて いません。「郵便番号→住所」変換をするための辞書は「３桁全角数字、 全角の長音(UTF-8=E383BC, Unicode=U+30FC)、４桁全角数字」を入力すると、 郵便番号に対応する住所の文字列を対応させるようになっていますし、実際の 動作もそうです。
 どうもこの違いは、使うフロントエンドによって提供されるローマ字入力から かなに変換される際のルールが異なることが背景にあるようです。 （「uim」は使っていないのであくまで推測です）
  「ibus-anthy」 数字・記号入力は全角数字・記号、単ローマ字入力は大文字半角 「uim」 数字・記号入力は半角数字・記号、単ローマ字入力は小文字半角  ローマ字入力からのかな漢字変換は、どうも使うフロントエンドによって少々動作が 違うので要注意です。
 そもそもこの変な変換辞書スタイルは、昔の「canna辞書」由来かもしれません。</description>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>dgit workflow | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">dgit workflow</span></h1>
+
+<h2 class="date">2019/02/11</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/02/09/initial-setup02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>For Debian maintainer, there can be 4 approaches for maintaining git repository
+with <code>dgit</code>.  Let me get all key points of manpages.</p>
+
+<table>
+<thead>
+<tr>
+<th>tutorials</th>
+<th>model</th>
+<th>tool</th>
+<th>history</th>
+<th>patch</th>
+<th>quilt</th>
+<th>maintainer</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>dgit-maint-native(7)</td>
+<td>native</td>
+<td>git(1)</td>
+<td>upstream git</td>
+<td>(same)</td>
+<td>N/A</td>
+<td>upstream</td>
+</tr>
+
+<tr>
+<td>dgit-maint-merge(7)</td>
+<td>merge</td>
+<td>git merge(1)</td>
+<td>upstream git</td>
+<td>applied</td>
+<td>merged</td>
+<td>upstream</td>
+</tr>
+
+<tr>
+<td>dgit-maint-debrebase(7)</td>
+<td>rebasish</td>
+<td>git-debrebase(1)</td>
+<td>upstream git</td>
+<td>applied</td>
+<td>series</td>
+<td>downstream</td>
+</tr>
+
+<tr>
+<td>dgit-maint-gbp(7)</td>
+<td>gbp</td>
+<td>git-buildpackage(1)</td>
+<td>upstream tar</td>
+<td>unapplied</td>
+<td>series</td>
+<td>downstream</td>
+</tr>
+</tbody>
+</table>
+
+<p>Here, the maintainer column indicates relationship of the maintainer to the upstream development.</p>
+
+<h2 id="dgit-maint-merge-7">dgit-maint-merge(7)</h2>
+
+<p>This document describes elements of a workflow for maintaining a non-
+native Debian package using dgit.  The workflow makes the following
+opinionated assumptions:</p>
+
+<ul>
+<li><p>Git histories should be the non-linear histories produced by
+git-merge(1), preserving all information about divergent
+development that was later brought together.</p></li>
+
+<li><p>Maintaining convenient and powerful git workflows takes priority
+over the usefulness of the raw Debian source package.  The Debian
+archive is thought of as an output format.</p>
+
+<p>For example, we don&rsquo;t spend time curating a series of quilt
+patches.  However, in straightforward cases, the information such a
+series would contain is readily available from dgit-repos.</p></li>
+
+<li><p>It is more important to have the Debian package&rsquo;s git history be a
+descendent of upstream&rsquo;s git history than to use exactly the
+orig.tar that upstream makes available for download.</p></li>
+</ul>
+
+<p>This workflow is less suitable for some packages.  When the Debian
+delta contains multiple pieces which interact, or which you aren&rsquo;t
+going to be able to upstream soon, it might be preferable to maintain
+the delta as a rebasing patch series.  For such a workflow see for
+example dgit-maint-debrebase(7) and dgit-maint-gbp(7).</p>
+
+<h2 id="dgit-maint-debrebase-7">dgit-maint-debrebase(7)</h2>
+
+<p>This document describes elements of a workflow for maintaining a non-
+native Debian package using dgit.  We maintain the Debian delta as a
+series of git commits on our master branch.  We use git-debrebase(1) to
+shuffle our branch such that this series of git commits appears at the
+end of the branch.  All the public git history is fast-forwarding,
+i.e., we do not rewrite and force-push.</p>
+
+<p>Some advantages of this workflow:</p>
+
+<ul>
+<li><p>Manipulate the delta queue using the full power of git-rebase(1),
+instead of relying on quilt(1), and without having to switch back
+and forth between patches-applied and patches-unapplied branches
+when committing changes and trying to build, as with gbp-pq(1).</p></li>
+
+<li><p>If you are using 3.0 (quilt), provide your delta queue as a
+properly separated series of quilt patches in the source package
+that you upload to the archive (unlike with dgit-maint-merge(7)).</p></li>
+
+<li><p>Avoid the git tree being dirtied by the application or
+unapplication of patches, as they are always applied.</p></li>
+
+<li><p>Benefit from dgit&rsquo;s safety catches.  In particular, ensure that
+your upload always matches exactly your git HEAD.</p></li>
+
+<li><p>Provide your full git history in a standard format on dgit-repos,
+where it can benefit downstream dgit users, such as people using
+dgit to do an NMU (see dgit-nmu-simple(7) and dgit-user(7)).</p></li>
+
+<li><p>Minimise the amount you need to know about 3.0 (quilt) in order to
+maintain Debian source packages which use that format.</p></li>
+</ul>
+
+<p>This workflow is appropriate for packages where the Debian delta
+contains multiple pieces which interact, or which you don&rsquo;t expect to
+be able to upstream soon.  For packages with simple and/or short-lived
+Debian deltas, use of git-debrebase(1) introduces unneeded complexity.
+For such packages, consider the workflow described in
+dgit-maint-merge(7).</p>
+
+<h2 id="dgit-maint-gbp-7">dgit-maint-gbp(7)</h2>
+
+<p>This document explains how dgit can be incorporated into a
+git-buildpackage(1) package-maintenance workflow.  This should be read
+jointly with git-buildpackage(1)&rsquo;s documentation.  Some reasons why you
+might want to incorporate dgit into your existing workflow:</p>
+
+<ul>
+<li><p>Benefit from dgit&rsquo;s safety catches.  In particular, ensure that
+your upload always matches exactly your git HEAD.</p></li>
+
+<li><p>Provide a better, more detailed git history to downstream dgit
+users, such as people using dgit to do an NMU (see
+dgit-nmu-simple(7) and dgit-user(7)).</p></li>
+</ul>
+
+<p>Note that we assume a patches-unapplied repository: the upstream source
+committed to the git repository is unpatched.  git-buildpackage(1) can
+work with patched-applied repositories, but is normally used with
+patches-unapplied.</p>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/02/09/initial-setup02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
