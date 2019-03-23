@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>キーボード入力モード選択 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">キーボード入力モード選択</span></h1>
+
+<h2 class="date">2019/03/23</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/02/09/anthy-dict/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<h2 id="キーボード入力モード選択">キーボード入力モード選択</h2>
+
+<p>キーボード入力モード選択がトグル動作（日本語/英語の交互切り替え)だと
+今どっちか分からなくなって結構不便です。</p>
+
+<p>切り替えが、状態が分からなくとも一発でできるのが望ましいので、
+その設定方法を以下に記します。</p>
+
+<h3 id="日本語キーボードの設定方法">日本語キーボードの設定方法</h3>
+
+<p>日本語キーボードだと、変換と無変換キーを、Anthyの入力モード
+HiraganaとLatinへの切り替えにAnthyの中のキーバインディングで
+設定して常にibus-anthyで使うことで何とかなっていました。</p>
+
+<p>もともとWindowsでもALT-漢字、漢字、ALT-`等でトグル動作するのが嫌いで
+Macの真似でこうしていました。最近のWindows10はこんな感じのようですね。</p>
+
+<h3 id="英語キーボードでの課題">英語キーボードでの課題</h3>
+
+<p>ただ、英語キーボードの場合は変換と無変換キーはありません。</p>
+
+<ul>
+<li>SHIFTと普通の文字との組み合わせは論外。</li>
+<li>CTRLと普通の文字との組み合わせも、VIM使うので全部先約有り。</li>
+<li>ALTと普通の文字との組み合わせも、メニューへのショートカットでt全部先約有り。</li>
+</ul>
+
+<p>こういったことも有り、私はCTRL-SPACE, SHIFT-SPACEを一時使っていました</p>
+
+<p>ところが、SHIFT-SPACEやCTRL-SPACEもLokalizeなどのアプリ
+が使っていました。（ALT-SPACEは既にGNOMEが使っている）</p>
+
+<p>アプリとの喧嘩を避けるにはGUI用にリザーブされている、GUIキー（SUPERと
+かWindowsキーともいう)等を入力モード選択に使うのが良いわけです。
+ただこれはAnthyなどのアプリからは使えません。</p>
+
+<h3 id="英語キーボードでの設定方法">英語キーボードでの設定方法</h3>
+
+<p>そこで、GNOMEの設定→デバイス→キーボードの登場です。ここで、TYPING
+にINPUT METHODが２つしか無いとします。英語とANTHYとしましょう。
+まず、使いたくないデフォルト設定のSUPER-SPACEやSUPER-SHIFT-SPACEを
+設定変更の画面でバックスペースでともに無効にします。</p>
+
+<p>つぎに、一番下のプラスをたたき、新規定義をします。</p>
+
+<p>inputSources[0]がANTHYとすると、変換キーはないので右にあってまず使わない
+MENUキーをあてがいましょう。Commandは長いけど１行で入れてください。</p>
+
+<pre><code>Name     InputMethod_0
+Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&quot;
+Shortcut MENU
+</code></pre>
+
+<p>もし、MENUキーを使うのが嫌ならSUPER-m、SUPER-,、SUPER-.、SUPER-/などの右下の
+キーとSUPERの組み合わせが使いやすい気がします。（２つ以上のインプットメソッド
+を使うときに便利ですね。)</p>
+
+<p>inputSources[1]がENGLISHとすると、これには使わなくなったSUPER-SPACE
+をあてがいましょう。</p>
+
+<pre><code>Name     InputMethod_1
+Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[1].activate()&quot;
+Shortcut SUPER-SPACE
+</code></pre>
+
+<p>そしてANTHYは常にHiraganaとして置けばよしです。</p>
+
+<p>ちょっとこれで使ってみましょう。(実は、SUPER-/とMENUの両方の設定して
+日本語切り替えはどっちが使いやすいか比較中です。)</p>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/02/09/anthy-dict/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
