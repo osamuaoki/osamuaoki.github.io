@@ -25,12 +25,14 @@
  SHIFTと普通の文字との組み合わせは論外。 CTRLと普通の文字との組み合わせも、VIM使うので全部先約有り。 ALTと普通の文字との組み合わせも、メニューへのショートカットでt全部先約有り。  こういったことも有り、私はCTRL-SPACE, SHIFT-SPACEを一時使っていました
 ところが、SHIFT-SPACEやCTRL-SPACEもLokalizeなどのアプリ が使っていました。（ALT-SPACEは既にGNOMEが使っている）
 アプリとの喧嘩を避けるにはGUI用にリザーブされている、GUIキー（SUPERと かWindowsキーともいう)等を入力モード選択に使うのが良いわけです。 ただこれはAnthyなどのアプリからは使えません。
-英語キーボードでの設定方法 そこで、GNOMEの設定→デバイス→キーボードの登場です。ここで、TYPING にINPUT METHODが２つしか無いとします。英語とANTHYとしましょう。 まず、使いたくないデフォルト設定のSUPER-SPACEやSUPER-SHIFT-SPACEを 設定変更の画面でバックスペースでともに無効にします。
-つぎに、一番下のプラスをたたき、新規定義をします。
+英語キーボードでの設定方法 そこで、GNOMEの設定→デバイス→キーボードの登場です。
+まず、使いたくないデフォルト設定のSUPER-SPACEやSUPER-SHIFT-SPACEを 設定変更の画面のTYPINGにある設定をバックスペースでともに無効にします。
+つぎに、設定リストの一番下のプラスをたたき、新規定義を追加します。
+ここで、使用するINPUT METHODが２つしか無いとします。英語とANTHYとしましょう。
 inputSources[0]がANTHYとすると、変換キーはないので右にあってまず使わない MENUキーをあてがいましょう。Commandは長いけど１行で入れてください。
 Name InputMethod_0 Command gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval &amp;quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&amp;quot; Shortcut MENU  もし、MENUキーを使うのが嫌ならSUPER-m、SUPER-,、SUPER-.、SUPER-/などの右下の キーとSUPERの組み合わせが使いやすい気がします。（２つ以上のインプットメソッド を使うときに便利ですね。)
 inputSources[1]がENGLISHとすると、これには使わなくなったSUPER-SPACE をあてがいましょう。
-Name InputMethod_1 Command gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval &amp;quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[1].activate()&amp;quot; Shortcut SUPER-SPACE  そしてANTHYは常にHiraganaとして置けばよしです。</description>
+Name InputMethod_1 Command gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval &amp;quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[1].activate()&amp;quot; Shortcut SUPER-SPACE  そしてANTHYは常にHiraganaとしておけばよしです。</description>
     </item>
     
   </channel>

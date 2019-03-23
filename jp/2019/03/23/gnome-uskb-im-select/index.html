@@ -94,12 +94,14 @@ Macの真似でこうしていました。最近のWindows10はこんな感じ�
 
 <h3 id="英語キーボードでの設定方法">英語キーボードでの設定方法</h3>
 
-<p>そこで、GNOMEの設定→デバイス→キーボードの登場です。ここで、TYPING
-にINPUT METHODが２つしか無いとします。英語とANTHYとしましょう。
-まず、使いたくないデフォルト設定のSUPER-SPACEやSUPER-SHIFT-SPACEを
-設定変更の画面でバックスペースでともに無効にします。</p>
+<p>そこで、GNOMEの設定→デバイス→キーボードの登場です。</p>
 
-<p>つぎに、一番下のプラスをたたき、新規定義をします。</p>
+<p>まず、使いたくないデフォルト設定のSUPER-SPACEやSUPER-SHIFT-SPACEを
+設定変更の画面のTYPINGにある設定をバックスペースでともに無効にします。</p>
+
+<p>つぎに、設定リストの一番下のプラスをたたき、新規定義を追加します。</p>
+
+<p>ここで、使用するINPUT METHODが２つしか無いとします。英語とANTHYとしましょう。</p>
 
 <p>inputSources[0]がANTHYとすると、変換キーはないので右にあってまず使わない
 MENUキーをあてがいましょう。Commandは長いけど１行で入れてください。</p>
@@ -121,10 +123,10 @@ Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Sh
 Shortcut SUPER-SPACE
 </code></pre>
 
-<p>そしてANTHYは常にHiraganaとして置けばよしです。</p>
+<p>そしてANTHYは常にHiraganaとしておけばよしです。</p>
 
-<p>ちょっとこれで使ってみましょう。(実は、SUPER-/とMENUの両方の設定して
-日本語切り替えはどっちが使いやすいか比較中です。)</p>
+<p>ちょっとこれで使ってみましょう。(実は、ANTHY選択をSUPER-/とMENUの両方の設定
+して、日本語切り替えはどっちのキーが使いやすいかは比較中です。)</p>
 
 
 <table width="100%">
