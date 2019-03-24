@@ -58,8 +58,14 @@
 
 <h2 id="キーボード入力モード選択">キーボード入力モード選択</h2>
 
-<p>Gnome等のLinuxの日本語環境でキーボード入力モード選択がトグル動作
-（日本語/英語の交互切り替え)だと今どっちか分からなくなって結構不便です。</p>
+<p>Gnome等のLinuxの日本語環境でキーボード入力モード選択がトグル（ローテート）
+動作（日本語/英語の交互切り替え)だと今どっちか分からなくなって結構不便です。</p>
+
+<p>SUPER-SPACEとSHIFT-SUPER-SPACEがGnomeの側でのキーボード入力ソースの
+デフォルトの切り替えキーです。</p>
+
+<p>input methos内での切り替えは、昔のWindowsと同じ&rdquo;zenkaku-hankaku&rdquo;とか、
+うに径で良く使う&rdquo;<Shift>space&rdquo;が良くバインドされています。</p>
 
 <p>切り替えが、状態が分からなくとも一発でできるのが望ましいので、
 その設定方法を以下に記します。</p>
@@ -87,53 +93,67 @@ HiraganaとLatinへの切り替えにAnthyの中のキーバインディング�
 
 <p>こういったことも有り、私はCTRL-SPACE, SHIFT-SPACEを一時使っていました</p>
 
-<p>ところが、SHIFT-SPACEやCTRL-SPACEもLokalizeなどのアプリ
+<p>ところが、SHIFT-SPACEやCTRL-SPACEのどちらかをLokalizeなどのアプリ
 が使っていました。（ALT-SPACEは既にGNOMEが使っている）</p>
 
 <p>こうなると、お手上げです。</p>
 
-<h3 id="英語キーボードでの設定方法-gnome">英語キーボードでの設定方法 (Gnome)</h3>
+<h3 id="英語キーボードでの設定方法-gnome-ibus-anthy">英語キーボードでの設定方法 (Gnome+ibus+Anthy)</h3>
 
 <p>アプリとの喧嘩を避けるにはGUI用にリザーブされている、GUIキー（SUPERと
-かWindowsキーともいう)やMENUキー等を入力モード選択に使うのが良いわけです。</p>
+かWindowsキーともいう)やMENUキー等をGNOME側からのコントロールでibusの
+各入力エンジン選択に使うのが良いわけです。（GUIキーはAnthyなどのアプリ
+のパネルからは使えません。）</p>
 
-<p>ただこれはAnthyなどのアプリからは使えません。</p>
+<p>そこで、GNOMEの設定→デバイス→キーボードの登場です。Gnomeは内部では通常
+ibusしかサポートしていないので、ここに書いてあることは他のuim,fcitx,scim
+ではそのまま使えません。ここで、使用するINPUT METHODが２つしか無いとします。
+英語とANTHYとしましょう。</p>
 
-<p>そこで、GNOMEの設定→デバイス→キーボードの登場です。</p>
+<p>設定リストの一番下のプラスをたたき、新規定義を追加します。</p>
 
-<p>まず、使いたくないデフォルト設定のSUPER-SPACEやSUPER-SHIFT-SPACEを
-TYPINGにある設定を選び、出てきた設定変更の画面でバックスペースを用いて
-ともに無効にします。</p>
+<p>キーとして使えそうなのはSUPER-,、SUPER-.、SUPER-/、SUPER-&lsquo;、SUPER-\、
+SUPER-RETURNあたりです。SUPER-jもあいてますね。
+SUPER-lで画面ロックなので、このまわりのSUPER-k、SUPER-;、は避けたいですね。
+SUPER-a、SUPER-s、SUPER-n、SUPER-m、SUPER-TAB、SUPER-vも先約があるので
+使えません。SUPERが左手なので右手のキーとの組み合わせが使いやすいかな。</p>
 
-<p>つぎに、設定リストの一番下のプラスをたたき、新規定義を追加します。</p>
-
-<p>ここで、使用するINPUT METHODが２つしか無いとします。英語とANTHYとしましょう。</p>
-
-<p>inputSources[0]がANTHYとすると、変換キーはないので右にあってまず使わない
-MENUキーをあてがいましょう。Commandは長いけど１行で入れてください。</p>
+<p>inputSources<a href="GNOMEのキーボード入力ソース選択画面で最初の項目">0</a>
+がANTHYとすると、変換キーはないのでSUPER-j (Japanese)
+をあてがいましょう。Commandは長いけど１行で入れてください。</p>
 
 <pre><code>Name     InputMethod_0
 Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&quot;
-Shortcut MENU
+Shortcut SUPER-j
 </code></pre>
 
-<p>もし、MENUキーを使うのが嫌ならSUPER-,、SUPER-.、SUPER-/などの右下の
-キーとSUPERの組み合わせが使いやすい気がします。（２つ以上のインプットメソッド
-を使うときに便利ですね。)</p>
+<p>もし、これが嫌ならSUPER-,、SUPER-.、SUPER-/などの右下のキーとSUPERの
+組み合わせが使いやすい気がします。
+（２つ以上のインプットメソッドを使うときにも便利ですね。)</p>
 
-<p>inputSources[1]がENGLISHとすると、これには使わなくなったSUPER-SPACE
-をあてがいましょう。</p>
+<p>inputSources[1]がENGLISHとすると、これには安心して戻れるように
+SUPER-RETURNをあてがいましょう。</p>
 
 <pre><code>Name     InputMethod_1
 Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[1].activate()&quot;
-Shortcut SUPER-SPACE
+Shortcut SUPER-RETURN
 </code></pre>
 
 <p>そしてANTHYは常にHiraganaとしておけばよしです。</p>
 
-<p>ちょっとこれで使ってみましょう。(実は、ANTHY選択をSUPER-/とMENUの
-両方の設定にして、英語もSUPER-,とSUPER-SPACEの両方の設定にして、
-どのキーが使いやすいかは比較検討中です。)</p>
+<p>ちょっとこれで使ってみましょう。</p>
+
+<p>実は、ANTHY選択をSUPER-jとSUPER-/の両方の設定にして、
+英語もSUPER-RETURNとSUPER-,の両方の設定にして、
+どのキーが使いやすいかは比較検討中です。</p>
+
+<p>ちなみに、デフォルト設定されているSUPER-SPACEやSUPER-SHIFT-SPACEを使い
+たくなければ、TYPINGにある設定から選び、出てきた設定変更の画面で
+バックスペースを用いてともに無効すれば、これらは使いまわしができます。</p>
+
+<p>やはり、システムのデフォルト関係は変えたくないので、
+右にあってまず使わないMENUキーの利用や、機能が重なり
+使いまわせそうなSUPER-SPACEは使いませんでした。</p>
 
 
 <table width="100%">
