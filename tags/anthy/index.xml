@@ -20,7 +20,7 @@
       <description>Anthyのソースを見るとメイン 辞書以外のユーザー辞書は、単漢字入力などの入力文字列として半角tを最後 につけた辞書が、ファイル名「*.t」で多数含まれ配布されています。
 （もっとも、現在のDebianのソースは NIIBE Yutakaさんが最近再構成したので、 ファイルの起源はどうもalt-cannadicは由来かもしれません）
 これらは個人用辞書用と言うことですが、現在（２０１９年２月）の時点では 「郵便番号→住所」変換をするためのzipcode.t以外はバイナリーパッケージに コピーされていないので直接システムに導入するようにはなっていません。
-ただ同梱された「郵便番号→住所」変換をするための辞書は「７桁半角数字＋半角t」 を入力すると郵便番号に対応する住所の文字列を吐き出すようになっているように 見受けます。
+ただ同梱された「郵便番号→住所」変換をするための辞書は「７桁半角数字＋半角t」 を入力すると郵便番号に対応する住所の文字列を吐き出すようになっているように 見受けます。&amp;ndash;&amp;gt; ７桁半角数字が変換されないように見えたのはDEBIANのバグでし た。[2019-05-06: Debian BTS](https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=927074）
 実際にanthyをibus-anthyの下で動作させると「７桁半角数字＋半角t」や、 他の「t」で終わる文字列を入れても何も起こりません。ibus-anthyの下では このzipcode.tは明らかに使われていません。
 良く見るとibus-anthyが
 /usr/share/ibus-anthy/dicts/emoji.t /usr/share/ibus-anthy/dicts/era.t /usr/share/ibus-anthy/dicts/oldchar.t /usr/share/ibus-anthy/dicts/symbol.t /usr/share/ibus-anthy/dicts/zipcode.t  をインストールして、GUIの設定が「~/.anthy/*.t」からシムリンクをはるなど してこれらをユーザー辞書として使えるようにしているようです。
