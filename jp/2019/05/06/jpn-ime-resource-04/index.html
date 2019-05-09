@@ -150,9 +150,13 @@
 
 <p>2019-05-09追加: mecabのcostとpmwの相関をざっくり見てみた</p>
 
-<p><img src="/img/pmw-cost.png" alt="mecabのcostとpmwの相関" /></p>
+<p><img src="/img/pmw.png" alt="mecabのcostとpmwの相関" /></p>
 
-<p>完全では無いが、ある程度の相関は有りそうでした。</p>
+<p>完全では無いが、ある程度の相関は有りそうでした。これにあわせて、
+単語発生頻度pmwから、mecabのcostや、anthyのfreqを概算推定する
+モデルも作りました。anthyのfreqはもと辞書中記載の数字で、プログラム
+内では８倍して使われています。ちょうど1 pmwが125なので、8倍されると
+内部で1000になっています。</p>
 
 <h2 id="名前">名前</h2>
 
