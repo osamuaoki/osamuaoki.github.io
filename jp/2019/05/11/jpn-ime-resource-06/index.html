@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Anthyの文法係り受け定義(1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Anthyの文法係り受け定義(1)</span></h1>
+
+<h2 class="date">2019/05/11</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/05/10/jpn-ime-resource-05/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<!-- vim: se ai tw=79: -->
+
+<p>まず、<code>anthy.dep</code>として定義される、文法係り受け定義関連の要点をレビューしました。</p>
+
+<p>使ったanthyのソースはDebian BusterのベースとなるgniibeさんがUTF-8化パッチ
+を掛けかなり変更した0.3です。</p>
+
+<p><code>anthy.dep</code>は、基本的に<code>depgraph/</code>内のファイルからせいせいされます。</p>
+
+<h2 id="anthyの文法係り受け定義">Anthyの文法係り受け定義</h2>
+
+<p>単文節内の、単語結合の遷移ルールが「接頭辞 自立語 接尾辞 付属語」
+という順の結合で定義されるとして、以下の２段階ででデーターファイルを
+読み込み<code>anthy.dep</code>の中に文法係り受けルールを定義します。</p>
+
+<ul>
+<li>付属語グラフを、<code>init_depword_tab()</code>が、付属語に関する日本語表現を使った結合ルールを<code>all.depword</code> から読み込みメモリー中に作成します。</li>
+<li>自立語からの遷移表を、<code>init_indep_word_seq_tab()</code>が、<code>indepword-wt.txt</code>から自立語のソースの辞書内で用いる品詞ニモニック文字列と対応する日本語表現を読み込み作成します。</li>
+</ul>
+
+<p>ここで、Anthyで言う付属語とは、活用語尾を含みます。</p>
+
+<h2 id="付属語グラフ">付属語グラフ</h2>
+
+<p>付属語ノードの結合ルールは、活用語尾や助詞や助動詞等のノードが一定の規則
+にしたがって並んで、次のノードに遷移していくグラフ構造モデルです。</p>
+
+<p>この付属語グラフを規程するために読み込まれる<code>all.depword</code>は、
+活用語尾を定義した<code>conjugate.table</code>と助詞や助動詞等のノードを定義した<code>*.depword</code>を、
+<code>sed</code>でコメント行を除き結合して生成します。</p>
+
+<p>この<code>all.depword</code>は、基本的に</p>
+
+<pre><code>@ノード名 &quot;そこに続く単語1&quot; &quot;そこに続く単語2&quot; .. &quot;..n&quot; \
+  @遷移するノード名1 @遷移するノード名2 .. @遷移するノード名m
+</code></pre>
+
+<p>という形式の行の繰り返しです。(読みやすいように折り返しましたが、
+通常１行で記載します)</p>
+
+<p>終端で次のノード名がない場合には、そこに@のみを遷移するノード名
+として記します。</p>
+
+<p>上記では、<code>@遷移するノード名</code>と典型的な場合をイメージした形式で記しま
+したが、実際にはもう少し多くの情報を盛り込めます。具体的には
+<code>{遷移の属性}{接続の強さ}@ノードの名前</code>という形式です。</p>
+
+<p><code>遷移の属性</code>は、<code>depgraph/parse_transition()</code>にあるtokenでswitchするcase分岐
+構造のコードで扱われ、DOC/SPLITTERに説明されたアルファベット２文字の
+ニモニックです。ここにそれを内容をコードに揃えてアップデートし再録説明すると、</p>
+
+<ul>
+<li>活用形
+
+<ul>
+<li>未然形 Cz (ct = CT_MIZEN)</li>
+<li>連用形 Cy (ct = CT_RENYOU)</li>
+<li>終止形 Cs (ct = CT_SYUSI)</li>
+<li>連体形 Ct (ct = CT_RENTAI)</li>
+<li>仮定形 Ck (ct = CT_KATEI)</li>
+<li>命令形 Cm (ct = CT_MEIREI)</li>
+<li>語幹形 Cg (ct = CT_HEAD)</li>
+</ul></li>
+<li>自立語部の品詞
+
+<ul>
+<li>動詞   Hv (pos = POS_V)</li>
+<li>名詞   Hn (pos = POS_NOUN)</li>
+<li>形容詞 Hj (pos = POS_AJV)</li>
+</ul></li>
+<li>文節の属性
+
+<ul>
+<li><s>名詞句? Sn (dc = DEP_NO)</s> (コメントアウト)</li>
+<li>付属語     Sf (dc = DEP_FUZOKUGO) (その他修飾語とも)</li>
+<li>格助詞     Sk (dc = DEP_KAKUJOSHI)</li>
+<li>連用修飾語 Sy (dc = DEP_RENYOU)</li>
+<li>連体修飾語 St (dc = DEP_RENTAI)</li>
+<li>終端       Se (dc = DEP_END)</li>
+<li>付属語なし Sr (dc = DEP_RAW)</li>
+</ul></li>
+</ul>
+
+<p><code>接続の強さ</code>は</p>
+
+<ul>
+<li><code>なし</code> <code>NORMAL_CONNECTION</code></li>
+<li><code>.</code>    <code>WEAK_CONNECTION</code></li>
+<li><code>:</code>    <code>WEAKER_CONNECTION</code></li>
+</ul>
+
+<p>(コードを見る限り、現状では<code>WEAK_CONNECTION</code>と<code>WEAKER_CONNECTION</code>は同じ値)</p>
+
+<p>たとえば、<code>all.depword</code>の内容は以下です。</p>
+
+<pre><code>@形容動詞語幹 &quot;な&quot; @連体形接続-接続助詞 St@
+@形容動詞語幹 &quot;なる&quot; @連体形接続-接続助詞 St@
+@形容詞語幹 &quot;から&quot; @形容詞未然形RA
+@形容詞語幹 &quot;かろ&quot; @形容詞未然形
+@形容詞語幹 &quot;かっ&quot; @形容詞連用形D
+@形容詞語幹 &quot;く&quot; @形容詞連用形NA
+@形容詞語幹 &quot;い&quot; @形容詞終止形
+@形容詞語幹 &quot;し&quot; Se.@
+@形容詞語幹 &quot;ゅう&quot; Sy@
+@形容詞語幹 &quot;いん&quot; @形容詞終止形
+@形容詞語幹 &quot;い&quot; @形容詞連体形
+@形容詞語幹 &quot;けれ&quot; @形容詞仮定形
+@形容詞語幹 &quot;けりゃ&quot; Sy@
+@形容詞語幹 &quot;きゃ&quot; Sy@ @と
+@形容詞語幹 &quot;&quot; @げ(形容詞-形容動詞化) @さ(名詞化) @め(形容詞接続) @すぎる
+@形容詞語幹 &quot;&quot; @そう @そうだ
+@形容詞語幹 &quot;き&quot; St@
+@形容詞語幹 &quot;くっては&quot; &quot;くっちゃ&quot; Sy@
+@形容詞語幹 &quot;や&quot; Se@
+...
+@あげる &quot;あげ&quot; @上下一段活用動詞語幹
+@ある &quot;あ&quot; @ラ行5段活用動詞語幹
+@いう &quot;い&quot; @ワ行5段活用動詞語幹
+@いく &quot;い&quot; @カ行5段活用動詞語幹
+@いけない &quot;いけな&quot; @形容詞語幹
+@いたす &quot;いたす&quot; &quot;いたします&quot; @けれど
+@いたす &quot;いたす&quot; &quot;いたします&quot; St@ St@間投助詞
+@いただく &quot;いただ&quot; @カ行5段活用動詞語幹
+@いる &quot;&quot; @たり @た(助動詞) @ます
+@いる &quot;い&quot; @たり @た(助動詞) @ない @ぬ @ます @そう
+@いる &quot;い&quot; @たい @がち @よう(手段) @さえ @がてら
+@いる &quot;い&quot; @やすい @にくい @て @つづける
+@いる &quot;い&quot; @たがる @ます @そうだ @なさる @つつ
+@いる &quot;い&quot; @連用形接続-接続助詞 @た(助動詞) @たり @まくる
+@いる &quot;いらっしゃ&quot; @ラ行5段活用動詞語幹
+...
+</code></pre>
+
+<p>これらは、以下のような連接を規定します：</p>
+
+<ul>
+<li>口語形容動詞の「静かな」なら、「静かなのに」とか「静かな音楽」</li>
+<li>文語形容動詞の「静かなり」なら、「静かなるども」とか「静かなる音楽」</li>
+<li>文語形容詞の「美し」なら、「美しからう」</li>
+<li>口語形容詞の「美しい」なら、「美しかろう」</li>
+<li>口語形容詞の「美しい」なら、「美しかった」</li>
+<li>口語形容詞の「美しい」なら、「美しくない」</li>
+<li>&hellip;</li>
+</ul>
+
+<h2 id="自立語からの遷移表">自立語からの遷移表</h2>
+
+<p><code>indepword-wt.txt</code>は以下の内容です。</p>
+
+<pre><code>#kxi @カ変活用動詞連用形
+#kxo @カ変活用動詞未然形
+#kxoi @カ変活用動詞命令形
+#kxure @カ変活用動詞仮定形
+#kxuru @カ変活用動詞終止形
+#kxuru2
+#kxya
+#sxi @する未然形「し」
+#sxe @する未然形「せ」
+#sxi2 @する連用形「し」
+...
+</code></pre>
+
+<ul>
+<li>前のコラムは自立語で、<code>src-worddic/wtab.h</code>で定義されたソースの辞書内で用いられる品詞ニモニック文字列です。</li>
+<li>後のコラムは付属語で、付属語グラフで用いられる日本語品詞名です。</li>
+</ul>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/05/10/jpn-ime-resource-05/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

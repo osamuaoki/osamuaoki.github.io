@@ -12,6 +12,27 @@
     
     
     <item>
+      <title>Anthyの文法係り受け定義(1)</title>
+      <link>/jp/2019/05/11/jpn-ime-resource-06/</link>
+      <pubDate>Sat, 11 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2019/05/11/jpn-ime-resource-06/</guid>
+      <description>まず、anthy.depとして定義される、文法係り受け定義関連の要点をレビューしました。
+使ったanthyのソースはDebian BusterのベースとなるgniibeさんがUTF-8化パッチ を掛けかなり変更した0.3です。
+anthy.depは、基本的にdepgraph/内のファイルからせいせいされます。
+Anthyの文法係り受け定義 単文節内の、単語結合の遷移ルールが「接頭辞 自立語 接尾辞 付属語」 という順の結合で定義されるとして、以下の２段階ででデーターファイルを 読み込みanthy.depの中に文法係り受けルールを定義します。
+ 付属語グラフを、init_depword_tab()が、付属語に関する日本語表現を使った結合ルールをall.depword から読み込みメモリー中に作成します。 自立語からの遷移表を、init_indep_word_seq_tab()が、indepword-wt.txtから自立語のソースの辞書内で用いる品詞ニモニック文字列と対応する日本語表現を読み込み作成します。  ここで、Anthyで言う付属語とは、活用語尾を含みます。
+付属語グラフ 付属語ノードの結合ルールは、活用語尾や助詞や助動詞等のノードが一定の規則 にしたがって並んで、次のノードに遷移していくグラフ構造モデルです。
+この付属語グラフを規程するために読み込まれるall.depwordは、 活用語尾を定義したconjugate.tableと助詞や助動詞等のノードを定義した*.depwordを、 sedでコメント行を除き結合して生成します。
+このall.depwordは、基本的に
+@ノード名 &amp;quot;そこに続く単語1&amp;quot; &amp;quot;そこに続く単語2&amp;quot; .. &amp;quot;..n&amp;quot; \ @遷移するノード名1 @遷移するノード名2 .. @遷移するノード名m  という形式の行の繰り返しです。(読みやすいように折り返しましたが、 通常１行で記載します)
+終端で次のノード名がない場合には、そこに@のみを遷移するノード名 として記します。
+上記では、@遷移するノード名と典型的な場合をイメージした形式で記しま したが、実際にはもう少し多くの情報を盛り込めます。具体的には {遷移の属性}{接続の強さ}@ノードの名前という形式です。
+遷移の属性は、depgraph/parse_transition()にあるtokenでswitchするcase分岐 構造のコードで扱われ、DOC/SPLITTERに説明されたアルファベット２文字の ニモニックです。ここにそれを内容をコードに揃えてアップデートし再録説明すると、
+ 活用形  未然形 Cz (ct = CT_MIZEN) 連用形 Cy (ct = CT_RENYOU) 終止形 Cs (ct = CT_SYUSI) 連体形 Ct (ct = CT_RENTAI) 仮定形 Ck (ct = CT_KATEI) 命令形 Cm (ct = CT_MEIREI) 語幹形 Cg (ct = CT_HEAD)  自立語部の品詞  動詞 Hv (pos = POS_V) 名詞 Hn (pos = POS_NOUN) 形容詞 Hj (pos = POS_AJV)  文節の属性  名詞句?</description>
+    </item>
+    
+    <item>
       <title>Anthyの辞書ファイル(1)</title>
       <link>/jp/2019/05/10/jpn-ime-resource-05/</link>
       <pubDate>Fri, 10 May 2019 00:00:00 +0000</pubDate>
