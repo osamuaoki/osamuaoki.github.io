@@ -6,10 +6,35 @@
     <description>Recent content in input-method on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 06 May 2019 13:00:00 +0900</lastBuildDate>
+    <lastBuildDate>Fri, 10 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/input-method/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Anthyの辞書ファイル(1)</title>
+      <link>/jp/2019/05/10/jpn-ime-resource-05/</link>
+      <pubDate>Fri, 10 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2019/05/10/jpn-ime-resource-05/</guid>
+      <description>まず、辞書ファイルの要点をレビューしました。
+Anthyの辞書関連定義ファイル 変換候補漢字が、読みに対して、その品詞、頻度とともに定義される「辞書」ファイルは、 その作成経緯により2種類の拡張子が使われています。
+ Anthy用辞書: *.t Canna用辞書: *.ctd  これらはすべてalt-cannadicとmkworddicにあります。
+単純な品詞や頻度だけでは正しい漢字選択ができない場合に対応する「用例辞書」 ファイルudictはmkworddicにあります。
+Anthyの辞書ファイル処理機構 上記の「辞書」ファイルと「用例辞書」ファイルは、mkworddicディレクトリー 中にビルド時に生成されるmkworddicにより読み込まれ、さらに負の頻度を持つ 「逆変換用辞書」データーが追加作成されます。
+これを詳しく見ていきましょう。
+mkworddicが-fオプションでdict.argsを指定して起動されます。dict.args は通常同一ディレクトリー内のdict.args.in`からビルド時作成されます。 これを変更することで組み込まれる辞書は調節できます。
+dict.argsの設定内容の処理は、mkworddic/mkdic.c:execute_batch()で処理されます。
+ readコマンドは指定された「辞書」ファイルをread_dict_file()で読み込みます。 read_ucコマンドは指定された「用例辞書」ファイルをread_udict_file()で読み込みます。 build_reverse_dictコマンドは「逆変換用辞書」データーをbuild_reverse_dict()で作成し追加します。 writeコマンドはメモリー中の全辞書データーを指定されたファイル（anthy.wdic）にwrite_dict_file()で書き出します。  詳細は、mkworddicのソースをmkworddic/mkdic.cから追いかけると見えてきます。
+ちなみに、anthy.wdicは、mkanthydic/ディレクトリーのファイルから生成するビルド 時用のバイナリープログラムmkfiledicにより、単語の条件付き連鎖発現頻度情報を整理 して生成する各種情報ファイルと統合され、漢字かな変換実行時に用いられるanthy.dic となります。
+Anthyの辞書ファイル構造(基本) mkanthydic/mkdic.c:push_back_word_entry_line()からコードを読むと辞書ファイルの 構造が分かります。
+最も典型的な辞書ソースデーターファイルの構造は、半角スペースで区切られた以下の 構造をしています。
+&amp;lt;ひらがな見出し語&amp;gt; [#&amp;lt;品詞&amp;gt;[*&amp;lt;頻度&amp;gt;] [&amp;lt;変換後文字列&amp;gt;]... ]...   &amp;lt;ひらがな見出し語&amp;gt; (index)は、全角ひらがな以外の半角・全角の数字や記号も許されます。 *&amp;lt;頻度&amp;gt;は省略可能です。 &amp;lt;変換後文字列&amp;gt;は同音異字に関して繰り返し羅列可能です。 #&amp;lt;品詞&amp;gt;*&amp;lt;頻度&amp;gt; [&amp;lt;変換後文字列&amp;gt;]...も繰り返し羅列可能です。  #&amp;lt;品詞&amp;gt;に関しては後述する。
+ただし、現在は「&amp;lt;ひらがな見出し語&amp;gt;」は30文字までに制約されています。この他、 プログラム内の各種文字列長は固定長でいろいろ制約があることが多いので要注意です。
+またindex中の濁点は通常「が」のように１文字表現をしますが、１文字表現の無い 「う゛」は２文字表記されています。
+辞書中に「う゛」を「ヴ」で置き換えた項目を入れることはDebianが使っている 0.3のソース中ではされていません。現在のanthyの入力対応は、ひらがな・ カタカナ・ローマ字で、入力はひらがなに変換してから漢字変換操作がされるので、 「ヴ」は自動的に「う゛」となります。だからたとえ、フロントエンドがibusの 場合で「ヴ」をひらがなに混ぜて返す仕様となっていても問題は起こりません。 辞書中の「&amp;lt;ひらがな見出し語&amp;gt;」に「ヴ」を書くのを加えるのは 使われない無駄なデーターとなるので好ましくありません。（辞書ファイル中の README中の文言は無視しましょう）
+ src-main/main.c:need_reconvert() src-worddic/word_dic.c:anthy_get_seq_ent_from_xstr()  このソース辞書から作られるanthy.dic辞書中の、素（raw）の「&amp;lt;頻度&amp;gt;」の 典型的値は以下です： * 良く使われる言葉は大きく、５００ー６００程度 * 普通の言葉は、１００ー２００程度 * 単漢字などは、１０ー３０程度 * 指定が無い場合には、１</description>
+    </item>
     
     <item>
       <title>unidic固有名詞カタカナ問題</title>
