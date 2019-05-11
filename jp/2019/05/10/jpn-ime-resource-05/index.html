@@ -58,9 +58,9 @@
 
 <!-- vim: se ai tw=79: -->
 
-<p>まず、辞書ファイルの要点をレビューしました。</p>
+<p>まず、辞書関連ファイルの要点をレビューしました。</p>
 
-<h2 id="anthyの辞書関連定義ファイル">Anthyの辞書関連定義ファイル</h2>
+<h2 id="anthyの辞書関連定義ソースファイル">Anthyの辞書関連定義ソースファイル</h2>
 
 <p>変換候補漢字が、読みに対して、その品詞、頻度とともに定義される「辞書」ファイルは、
 その作成経緯により2種類の拡張子が使われています。</p>
@@ -75,7 +75,7 @@
 <p>単純な品詞や頻度だけでは正しい漢字選択ができない場合に対応する「用例辞書」
 ファイル<code>udict</code>は<code>mkworddic</code>にあります。</p>
 
-<h2 id="anthyの辞書ファイル処理機構">Anthyの辞書ファイル処理機構</h2>
+<h2 id="anthyの辞書ソースファイル処理機構">Anthyの辞書ソースファイル処理機構</h2>
 
 <p>上記の「辞書」ファイルと「用例辞書」ファイルは、<code>mkworddic</code>ディレクトリー
 中にビルド時に生成される<code>mkworddic</code>により読み込まれ、さらに負の頻度を持つ
@@ -103,7 +103,7 @@
 して生成する各種情報ファイルと統合され、漢字かな変換実行時に用いられる<code>anthy.dic</code>
 となります。</p>
 
-<h2 id="anthyの辞書ファイル構造-基本">Anthyの辞書ファイル構造(基本)</h2>
+<h2 id="anthyの辞書ソースファイル構造-基本">Anthyの辞書ソースファイル構造(基本)</h2>
 
 <p><code>mkanthydic/mkdic.c:push_back_word_entry_line()</code>からコードを読むと辞書ファイルの
 構造が分かります。</p>
@@ -150,7 +150,7 @@ README中の文言は無視しましょう）</p>
  * 単漢字などは、１０ー３０程度
  * 指定が無い場合には、１</p>
 
-<h2 id="anthyの辞書ファイル構造-複合語">Anthyの辞書ファイル構造（複合語）</h2>
+<h2 id="anthyの辞書ソースファイル構造-複合語">Anthyの辞書ソースファイル構造（複合語）</h2>
 
 <p>複合語の収録のために、「&lt;変換後文字列&gt;」には特別の記述法があります。</p>
 
@@ -172,7 +172,7 @@ README中の文言は無視しましょう）</p>
 <pre><code>仮名漢字変換エンジン #T35 #_2かな_2かんじ_2へんかん_4えんじん
 </code></pre>
 
-<h2 id="anthyの用例辞書ファイル">Anthyの用例辞書ファイル</h2>
+<h2 id="anthyの用例辞書ソースファイル">Anthyの用例辞書ソースファイル</h2>
 
 <p>Anthyの用例辞書（<code>udict</code>）ファイルは、以下の意味がある。</p>
 
@@ -200,7 +200,7 @@ README中の文言は無視しましょう）</p>
 
 <h2 id="品詞">品詞</h2>
 
-<p>例えば、品詞を示す<code>K5r</code>は、辞書データー以外のソースの数ヶ所で定義・説明・使用されています。</p>
+<p>例えば、辞書データーソースファイル中で品詞を示す<code>K5r</code>は、辞書データーソース以外のソースの数ヶ所で定義・説明・使用されています。</p>
 
 <ul>
 <li>定義: <code>src-worddic/wtab.h:{&quot;#K5r&quot;,POS_V,COS_NONE,SCOS_NONE,CC_K5,CT_HEAD,WF_INDEP|WF_MEISI   /* &quot;カ行五段(連用形名詞)&quot;*/},</code> &mdash; 品詞の属性定義</li>
@@ -209,11 +209,62 @@ README中の文言は無視しましょう）</p>
 </ul>
 
 <p><code>src-worddic/wtab.h</code>中で用いられている定数は<code>anthy/wtype.h</code>中に定義されていて、
-その説明は<code>doc/POS</code>をまず読むと良い。品詞を扱うための<code>wtype_t</code>も、その中で定義
-されています。</p>
+その説明は<code>doc/POS</code>をまず読むと良いでしょう。他の品詞も同様です。</p>
 
-<p>注意すべきは、品詞を読み込む際に、<code>mkworddic/mkdic.c:  if (!strcmp(name, &quot;#T35&quot;)) {</code>
-ですべての<code>#T35</code>を<code>#T</code>と変換してからメモリーに読み込んでいることです。</p>
+<p>この、<code>src-worddic/wtab.h</code>は<code>src-worddic/wtype.c</code>の中で次のように利用され、
+<code>wttable wt_name_tab[]</code>という配列に読み込まれて、辞書内の品詞ニモニック文字列
+と品詞の属性ベクトル量を関連付けます。</p>
+
+<pre><code>struct wttable {
+  const char *name;
+  int pos;
+  int cos;
+  int scos;
+  int cc;
+  int ct;/*カ変など*/
+  int flags;
+};
+
+/* 辞書中の品詞の名前を品詞に変換するテーブル */
+static struct wttable wt_name_tab[]= {
+#include &quot;wtab.h&quot;
+};
+</code></pre>
+
+<p>ただ、品詞の属性ベクトル量である<code>struct wttable</code>は、6*8=48バイトもの
+大きさなので、<code>anthy/wtype.h</code>の中で定義された以下の構造体<code>wtype_t</code>を用いて
+29bit(4バイト以下なので8バイトの整数１つに収まる)のコンパクトな
+ビットフィールド表現でメモリー中に保持されます。</p>
+
+<pre><code>/** 品詞 */
+struct wtype{
+  unsigned int pos  : POS_BITS;
+  unsigned int cos  : COS_BITS;
+  unsigned int scos : SCOS_BITS;
+  unsigned int cc   : CC_BITS;
+  unsigned int ct   : CT_BITS;
+  unsigned int wf   : WF_BITS;
+};
+
+typedef struct wtype wtype_t;
+</code></pre>
+
+<p>この、辞書内の品詞ニモニック文字列から<code>wtype_t</code>で表現された品詞のメモリー内
+表現形式への変換は、<code>src-worddic/wtype.c:anthy_type_to_wtype()</code>で行われます。
+この関数は与えた品詞ニモニック文字列によって以下の挙動をします。</p>
+
+<ul>
+<li><code>#</code>で始まらない場合には返り値がNULLで、<code>wtype_t</code>は<code>anthy_wt_none</code>を返します。</li>
+<li>品詞の属性ベクトル量に変換するテーブル内に存在した場合には返り値が品詞ニモニック文字列で、<code>wtype_t</code>はテーブル変換ルールで定義される値を返します。</li>
+<li>品詞の属性ベクトル量に変換するテーブル内に存在しない場合には返り値がNULLで、<code>wtype_t</code>は<code>anthy_wt_all</code>を返します。</li>
+</ul>
+
+<p>この、<code>wtype_t</code>の形式に収まったデーターは直接触りにくいので、
+<code>anthy_wtype_get_*()</code>という各属性毎のアクセス関数があります。</p>
+
+<p>ここでちょっと注意すべきは、品詞を読み込む際に、
+<code>mkworddic/mkdic.c:  if (!strcmp(name, &quot;#T35&quot;)) {</code>
+ですべての<code>#T35</code>を<code>#T</code>と変換してからメモリーに読み込み処理を行っていることです。</p>
 
 <p>また、この<code>#T35</code>は多用されています。<code>src-util/typetab</code>を見ると以下とあり、
 所謂、形容動詞語幹でも無く、形容詞語幹でも無く、サ変動詞の語幹でもない、

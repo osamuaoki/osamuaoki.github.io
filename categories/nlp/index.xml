@@ -17,17 +17,17 @@
       <pubDate>Fri, 10 May 2019 00:00:00 +0000</pubDate>
       
       <guid>/jp/2019/05/10/jpn-ime-resource-05/</guid>
-      <description>まず、辞書ファイルの要点をレビューしました。
-Anthyの辞書関連定義ファイル 変換候補漢字が、読みに対して、その品詞、頻度とともに定義される「辞書」ファイルは、 その作成経緯により2種類の拡張子が使われています。
+      <description>まず、辞書関連ファイルの要点をレビューしました。
+Anthyの辞書関連定義ソースファイル 変換候補漢字が、読みに対して、その品詞、頻度とともに定義される「辞書」ファイルは、 その作成経緯により2種類の拡張子が使われています。
  Anthy用辞書: *.t Canna用辞書: *.ctd  これらはすべてalt-cannadicとmkworddicにあります。
 単純な品詞や頻度だけでは正しい漢字選択ができない場合に対応する「用例辞書」 ファイルudictはmkworddicにあります。
-Anthyの辞書ファイル処理機構 上記の「辞書」ファイルと「用例辞書」ファイルは、mkworddicディレクトリー 中にビルド時に生成されるmkworddicにより読み込まれ、さらに負の頻度を持つ 「逆変換用辞書」データーが追加作成されます。
+Anthyの辞書ソースファイル処理機構 上記の「辞書」ファイルと「用例辞書」ファイルは、mkworddicディレクトリー 中にビルド時に生成されるmkworddicにより読み込まれ、さらに負の頻度を持つ 「逆変換用辞書」データーが追加作成されます。
 これを詳しく見ていきましょう。
 mkworddicが-fオプションでdict.argsを指定して起動されます。dict.args は通常同一ディレクトリー内のdict.args.in`からビルド時作成されます。 これを変更することで組み込まれる辞書は調節できます。
 dict.argsの設定内容の処理は、mkworddic/mkdic.c:execute_batch()で処理されます。
  readコマンドは指定された「辞書」ファイルをread_dict_file()で読み込みます。 read_ucコマンドは指定された「用例辞書」ファイルをread_udict_file()で読み込みます。 build_reverse_dictコマンドは「逆変換用辞書」データーをbuild_reverse_dict()で作成し追加します。 writeコマンドはメモリー中の全辞書データーを指定されたファイル（anthy.wdic）にwrite_dict_file()で書き出します。  詳細は、mkworddicのソースをmkworddic/mkdic.cから追いかけると見えてきます。
 ちなみに、anthy.wdicは、mkanthydic/ディレクトリーのファイルから生成するビルド 時用のバイナリープログラムmkfiledicにより、単語の条件付き連鎖発現頻度情報を整理 して生成する各種情報ファイルと統合され、漢字かな変換実行時に用いられるanthy.dic となります。
-Anthyの辞書ファイル構造(基本) mkanthydic/mkdic.c:push_back_word_entry_line()からコードを読むと辞書ファイルの 構造が分かります。
+Anthyの辞書ソースファイル構造(基本) mkanthydic/mkdic.c:push_back_word_entry_line()からコードを読むと辞書ファイルの 構造が分かります。
 最も典型的な辞書ソースデーターファイルの構造は、半角スペースで区切られた以下の 構造をしています。
 &amp;lt;ひらがな見出し語&amp;gt; [#&amp;lt;品詞&amp;gt;[*&amp;lt;頻度&amp;gt;] [&amp;lt;変換後文字列&amp;gt;]... ]...   &amp;lt;ひらがな見出し語&amp;gt; (index)は、全角ひらがな以外の半角・全角の数字や記号も許されます。 *&amp;lt;頻度&amp;gt;は省略可能です。 &amp;lt;変換後文字列&amp;gt;は同音異字に関して繰り返し羅列可能です。 #&amp;lt;品詞&amp;gt;*&amp;lt;頻度&amp;gt; [&amp;lt;変換後文字列&amp;gt;]...も繰り返し羅列可能です。  #&amp;lt;品詞&amp;gt;に関しては後述する。
 ただし、現在は「&amp;lt;ひらがな見出し語&amp;gt;」は30文字までに制約されています。この他、 プログラム内の各種文字列長は固定長でいろいろ制約があることが多いので要注意です。
