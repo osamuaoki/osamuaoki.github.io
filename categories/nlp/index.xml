@@ -6,10 +6,31 @@
     <description>Recent content in nlp on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 11 May 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 12 May 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/nlp/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>AnthyのBuildトライ(1)</title>
+      <link>/jp/2019/05/12/jpn-ime-resource-07/</link>
+      <pubDate>Sun, 12 May 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2019/05/12/jpn-ime-resource-07/</guid>
+      <description>Debian Busterの(0.3系)のAnthyは問題がある。
+一方、mozcの最新コードや辞書を見たら、昔よりかなり整理され 変なデーターで無理やり特定コーパスのみの最適化というか過学習 の結果のような辞書データーもない。使ってみると正直悪くない。
+いまさらanthyという感もあるが、せめて以前程度に動くようにはしたい。
+すぐ気づいた明らかなバグ２つは解決法が見えた。
+ Use UTF-8 for zipcode bug fix. Closes: #927074 Convert depgraph/master.depword to UTF-8. Closes: #923948  ただ、後者は文法係り受け定義関連を再構築必要があるので、debian/rulesを 以下としてビルドする必要がある。
+override_dh_auto_configure: dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode  だが、上手くいかない。
+UTF-8 での処理のデフォルト化 anthy/anthy.hに以下と定義されているので、encoding関係が 初期値の0だと、どうも出力がEUCJPになってしまうようだ。
+#define ANTHY_UTF8_ENCODING 2  これは、0にしておかないとdefault_encodingやencodingやprint_encoding などがUTF-8にならない懸念がある。2としている意味を感じなかったので これを変えた。特に以下への影響が気になる。
+ anthy_putxchar() anthy_putxstr() anthy_putxstrln()  これらは、以下で使われている。
+ mkworddic/mkdic.c src-main/context.c src-splitter/metaword.c src-splitter/wordlist.c src-worddic/record.c src-util/convdb.c test/check.c  まあ、道理でparsed_data0がUTF-8で読めないどうもEUCJPで文字列を出しているわけです。 これじゃ、まともにうがかないのも納得。
+さらによく見ると、calctrans/proccorpus.cが以下になっている。
+ anthy_conf_override(&amp;quot;CONFFILE&amp;quot;, &amp;quot;../anthy-conf&amp;quot;);  これは、ビルド中のソース内のファイルを見てほしいので以下にする。
+ anthy_conf_override(&amp;quot;CONFFILE&amp;quot;, &amp;quot;../anthy-test-conf&amp;quot;);  無限ループ 上記を対策しても上手くビルドしない。</description>
+    </item>
     
     <item>
       <title>Anthyの文法係り受け定義(1)</title>
