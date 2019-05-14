@@ -64,7 +64,10 @@
 変なデーターで無理やり特定コーパスのみの最適化というか過学習
 の結果のような辞書データーもない。使ってみると正直悪くない。</p>
 
-<p>いまさらanthyという感もあるが、せめて以前程度に動くようにはしたい。</p>
+<p>いまさらanthyを触るのもという感もあるが、せめて以前程度に
+動くようにはしたい。特にDebianのパッケージは完全メンテナー
+モードで、salsaでバグ修正優先での対応を考えます。
+（githubは、いろいろ遊ぶかもしれません）</p>
 
 <p>すぐ気づいた明らかなバグ２つは解決法が見えた。</p>
 
@@ -73,17 +76,21 @@
 <li>Convert depgraph/master.depword to UTF-8.  Closes: #923948</li>
 </ul>
 
-<p>ただ、後者は文法係り受け定義関連を再構築必要があるので、<code>debian/rules</code>を
-以下としてビルドする必要がある。</p>
+<p>後者は文法係り受け定義関連を再構築必要がある。簡単にするには
+<code>debian/rules</code>を以下としてDebianのビルドシステムで<code>debuild</code>と
+してビルドする必要がある。</p>
 
 <pre><code>override_dh_auto_configure:
         dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode
 
 </code></pre>
 
-<p>だが、上手くいかない。</p>
+<p>だが、上手くいかない。ソース壊れている?</p>
 
 <h2 id="utf-8-での処理のデフォルト化">UTF-8 での処理のデフォルト化</h2>
+
+<p>まず、テスト環境で変な文字が出るので気になっていた、UTF-8廻りを
+確認した。</p>
 
 <p><code>anthy/anthy.h</code>に以下と定義されているので、<code>encoding</code>関係が
 初期値の0だと、どうも出力がEUCJPになってしまうようだ。</p>
@@ -113,8 +120,10 @@
 <li><code>test/check.c</code></li>
 </ul>
 
-<p>まあ、道理で<code>parsed_data0</code>がUTF-8で読めないどうもEUCJPで文字列を出しているわけです。
-これじゃ、まともにうがかないのも納得。</p>
+<p>まあ、道理で<code>parsed_data0</code>がUTF-8環境で読めない。どうもEUCJPで文字列
+をはき出しているわけです。これじゃ、まともに動かないのも納得です。
+きっと連接の統計がまともにできていないので、連文節変換をすると変な
+結果が出るようになったのだろう。とりあえず、修正。</p>
 
 <p>さらによく見ると、<code>calctrans/proccorpus.c</code>が以下になっている。</p>
 
@@ -247,6 +256,12 @@ before output
 <p>PS: 「なくなるかな」や「なるかなど」といれると、
 「なくなるか名」や「なるな度」となるのが 1:0.3-8.1までの
 問題でした。特に語尾が変になります。</p>
+
+<p>2019-05-13追記: Debianのexperimentalに
+<a href="https://tracker.debian.org/news/1039742/accepted-anthy-103-9-source-all-amd64-into-experimental/">anthy 1:0.3-9</a>
+としてアップロード。（Busterはフリーズされたのでリリースの邪魔をしない苦肉の策)
+0.3-9に変更後は「無くなるかな」とまともですが、一方「奈留など。」と変な候補も
+示されます。まだ、他にもおかしいところがあるかもしれませんね。</p>
 
 
 <table width="100%">

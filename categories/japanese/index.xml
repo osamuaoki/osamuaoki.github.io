@@ -19,17 +19,16 @@
       <guid>/jp/2019/05/12/jpn-ime-resource-07/</guid>
       <description>Debian Busterの(0.3系)のAnthyは問題がある。
 一方、mozcの最新コードや辞書を見たら、昔よりかなり整理され 変なデーターで無理やり特定コーパスのみの最適化というか過学習 の結果のような辞書データーもない。使ってみると正直悪くない。
-いまさらanthyという感もあるが、せめて以前程度に動くようにはしたい。
+いまさらanthyを触るのもという感もあるが、せめて以前程度に 動くようにはしたい。特にDebianのパッケージは完全メンテナー モードで、salsaでバグ修正優先での対応を考えます。 （githubは、いろいろ遊ぶかもしれません）
 すぐ気づいた明らかなバグ２つは解決法が見えた。
- Use UTF-8 for zipcode bug fix. Closes: #927074 Convert depgraph/master.depword to UTF-8. Closes: #923948  ただ、後者は文法係り受け定義関連を再構築必要があるので、debian/rulesを 以下としてビルドする必要がある。
-override_dh_auto_configure: dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode  だが、上手くいかない。
-UTF-8 での処理のデフォルト化 anthy/anthy.hに以下と定義されているので、encoding関係が 初期値の0だと、どうも出力がEUCJPになってしまうようだ。
+ Use UTF-8 for zipcode bug fix. Closes: #927074 Convert depgraph/master.depword to UTF-8. Closes: #923948  後者は文法係り受け定義関連を再構築必要がある。簡単にするには debian/rulesを以下としてDebianのビルドシステムでdebuildと してビルドする必要がある。
+override_dh_auto_configure: dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode  だが、上手くいかない。ソース壊れている?
+UTF-8 での処理のデフォルト化 まず、テスト環境で変な文字が出るので気になっていた、UTF-8廻りを 確認した。
+anthy/anthy.hに以下と定義されているので、encoding関係が 初期値の0だと、どうも出力がEUCJPになってしまうようだ。
 #define ANTHY_UTF8_ENCODING 2  これは、0にしておかないとdefault_encodingやencodingやprint_encoding などがUTF-8にならない懸念がある。2としている意味を感じなかったので これを変えた。特に以下への影響が気になる。
  anthy_putxchar() anthy_putxstr() anthy_putxstrln()  これらは、以下で使われている。
- mkworddic/mkdic.c src-main/context.c src-splitter/metaword.c src-splitter/wordlist.c src-worddic/record.c src-util/convdb.c test/check.c  まあ、道理でparsed_data0がUTF-8で読めないどうもEUCJPで文字列を出しているわけです。 これじゃ、まともにうがかないのも納得。
-さらによく見ると、calctrans/proccorpus.cが以下になっている。
- anthy_conf_override(&amp;quot;CONFFILE&amp;quot;, &amp;quot;../anthy-conf&amp;quot;);  これは、ビルド中のソース内のファイルを見てほしいので以下にする。
- anthy_conf_override(&amp;quot;CONFFILE&amp;quot;, &amp;quot;../anthy-test-conf&amp;quot;);  無限ループ 上記を対策しても上手くビルドしない。</description>
+ mkworddic/mkdic.c src-main/context.c src-splitter/metaword.c src-splitter/wordlist.c src-worddic/record.c src-util/convdb.c test/check.c  まあ、道理でparsed_data0がUTF-8環境で読めない。どうもEUCJPで文字列 をはき出しているわけです。これじゃ、まともに動かないのも納得です。 きっと連接の統計がまともにできていないので、連文節変換をすると変な 結果が出るようになったのだろう。とりあえず、修正。
+さらによく見ると、calctrans/proccorpus.cが以下になっている。</description>
     </item>
     
     <item>
@@ -141,7 +140,7 @@ $ wc -l gcanna.t 137488 gcanna.t   Jumann++  基本語彙辞書 3万語 WEB等�
       <pubDate>Sun, 05 May 2019 01:29:00 +0900</pubDate>
       
       <guid>/jp/2019/05/05/jpn-ime-resource-01/</guid>
-      <description> anthy 関連のリソース（日本語中心）  Debian (*****)  wiki: http://wiki.debian.org/Teams/DebianAnthy salsa: https://salsa.debian.org/input-method-team/anthy BTS: https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=anthy  G-HAL (engine patch)  2019-04-06: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/im.html#anthy 2018-05-31: http://www.fenix.ne.jp/~G-HAL/whatsnew/20182nd.html#whatsnew2018530 2011-10-08: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/anthy.html  vagus (dictionary patch)  2012-03-10: http://vagus.seesaa.net/ https://osdn.net/projects/alt-cannadic/wiki/FrontPage  ootnegx  2011-12-03: http://ootnegx.blogspot.com/2011/12/g-hal-anthy.html  archlinux wiki  2018-08-30: https://wiki.archlinux.jp/index.php/Uim_%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B#Anthy  kakurasan  2010-11-20: https://kakurasan.hatenadiary.jp/entry/20101120/p1 2010-12-14: https://kakurasan.hatenadiary.jp/entry/20101214/p1  arekorebibouroku  2017-09-24 http://arekorebibouroku.hateblo.jp/entry/2017/09/24/171025  rikuku  2013-07-12: https://rikukuu.blog.fc2.com/blog-entry-199.html 2019-01-13: https://rikukuu.blog.fc2.com/blog-entry-640.html data: https://drive.google.com/file/d/1RW1mcYzbfp0dPfzFmnSme-duiGqYtzRb/view?usp=sharing   </description>
+      <description> anthy 関連のリソース（日本語中心）  Debian (*****)  wiki: http://wiki.debian.org/Teams/DebianAnthy salsa: https://salsa.debian.org/debian/anthy/tree/debian (current)  salsa: https://salsa.debian.org/input-method-team/anthy (old)  BTS: https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=anthy  G-HAL (engine patch)  2019-04-06: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/im.html#anthy 2018-05-31: http://www.fenix.ne.jp/~G-HAL/whatsnew/20182nd.html#whatsnew2018530 2011-10-08: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/anthy.html  vagus (dictionary patch)  2012-03-10: http://vagus.seesaa.net/ https://osdn.net/projects/alt-cannadic/wiki/FrontPage  ootnegx  2011-12-03: http://ootnegx.blogspot.com/2011/12/g-hal-anthy.html  archlinux wiki  2018-08-30: https://wiki.archlinux.jp/index.php/Uim_%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B#Anthy  kakurasan  2010-11-20: https://kakurasan.hatenadiary.jp/entry/20101120/p1 2010-12-14: https://kakurasan.hatenadiary.jp/entry/20101214/p1  arekorebibouroku  2017-09-24 http://arekorebibouroku.hateblo.jp/entry/2017/09/24/171025  rikuku  2013-07-12: https://rikukuu.blog.fc2.com/blog-entry-199.html 2019-01-13: https://rikukuu.blog.fc2.com/blog-entry-640.html data: https://drive.google.com/file/d/1RW1mcYzbfp0dPfzFmnSme-duiGqYtzRb/view?usp=sharing   </description>
     </item>
     
     <item>
