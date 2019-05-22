@@ -130,8 +130,17 @@ SJ3 は BSDライセンスのようです。
       <guid>/jp/2019/05/05/jpn-ime-resource-02/</guid>
       <description>フリー（無償）で入手し、研究用なら制約無く使用ができる各種辞書の情報です。
 Unidic  語彙数: 87万語 (2018-03版) GPL/LGPL/BSD License 新　UniDic 2.2GB 旧　UniDic MeCab で UniDic 辞書を使ってみる
-$ wc -l lex.csv 872831 lex.csv   canna辞書(Anthy)  語彙数: 13万の読みの異なる言葉 GPL
-$ wc -l gcanna.t 137488 gcanna.t   Jumann++  基本語彙辞書 3万語 WEB等含む合計 90万語 Apache License, Version 2.0  mecab-ipadic-neologd  語彙数: 55万語 https://github.com/neologd https://github.com/neologd/mecab-ipadic-neologd https://github.com/neologd/mecab-ipadic-neologd/blob/master/README.ja.md http://www.anlp.jp/proceedings/annual_meeting/2017/pdf_dir/B6-1.pdf Apache License, Version 2.0  mecab-unidic-neologd  語彙数: 325万語 https://github.com/neologd/mecab-unidic-neologd https://github.com/neologd/mecab-unidic-neologd/blob/master/README.ja.md Apache License, Version 2.</description>
+$ wc -l lex.csv 872831 lex.csv   活用形はすべて展開して、それぞれ１行のデーターとなっている。
+もし頻度表が全辞書形と考えると、表層形900K/辞書形180Kと大きいとも言えるが、 スマホ写真１枚分のデーターより小さいともいえる。
+canna辞書(Anthy)  語彙数: 13万の読みの異なる言葉 GPL
+$ wc -l gcanna.t 137488 gcanna.t   このファイルは現代的な感覚では、4.6MBと非常に小さい。
+各種情報も織り込んだBinary辞書のanthy.dicでも23MB程度。
+Mozc /usr/lib/mozc/mozc_serverは、約18MBという巨大なサイズがある。
+これは、辞書をプログラムないのメモリーイメージで静的内蔵しているためと 推察される。でも写真数枚程度で、現代的な感覚ではメモリー常駐させるのが 十分可能なサイズともいえる。
+$ du -Sh . 59M $ wc -l id.def 2652 id.def  ソース中の辞書ファイルサイズ概算59MBと６０MB近くありAnthyより１桁大ききい。 品詞分類数は2652ときめ細かい。
+ソース中の辞書ファイルは100K行のデーターが定義されたファイルで １０個ほどあるので、展開済み登録語彙数は約１００万語程度と見受ける。 こうみてもanthy等の１０倍の単語登録がある。(ただし、Anthyは１行に複数語 登録するので実際の差は小さいかもしれない。)
+まあデーターが巨大なので変換精度は上がるが、リソース消費が大きく動作が重く なる懸念がある。
+Jumann++  基本語彙辞書 3万語 WEB等含む合計 90万語 Apache License, Version 2.</description>
     </item>
     
     <item>
@@ -140,7 +149,7 @@ $ wc -l gcanna.t 137488 gcanna.t   Jumann++  基本語彙辞書 3万語 WEB等�
       <pubDate>Sun, 05 May 2019 01:29:00 +0900</pubDate>
       
       <guid>/jp/2019/05/05/jpn-ime-resource-01/</guid>
-      <description> anthy 関連のリソース（日本語中心）  Debian (*****)  wiki: http://wiki.debian.org/Teams/DebianAnthy salsa: https://salsa.debian.org/debian/anthy/tree/debian (current)  salsa: https://salsa.debian.org/input-method-team/anthy (old)  BTS: https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=anthy  G-HAL (engine patch)  2019-04-06: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/im.html#anthy 2018-05-31: http://www.fenix.ne.jp/~G-HAL/whatsnew/20182nd.html#whatsnew2018530 2011-10-08: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/anthy.html  vagus (dictionary patch)  2012-03-10: http://vagus.seesaa.net/ https://osdn.net/projects/alt-cannadic/wiki/FrontPage  ootnegx  2011-12-03: http://ootnegx.blogspot.com/2011/12/g-hal-anthy.html  archlinux wiki  2018-08-30: https://wiki.archlinux.jp/index.php/Uim_%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B#Anthy  kakurasan  2010-11-20: https://kakurasan.hatenadiary.jp/entry/20101120/p1 2010-12-14: https://kakurasan.hatenadiary.jp/entry/20101214/p1  arekorebibouroku  2017-09-24 http://arekorebibouroku.hateblo.jp/entry/2017/09/24/171025  rikuku  2013-07-12: https://rikukuu.blog.fc2.com/blog-entry-199.html 2019-01-13: https://rikukuu.blog.fc2.com/blog-entry-640.html data: https://drive.google.com/file/d/1RW1mcYzbfp0dPfzFmnSme-duiGqYtzRb/view?usp=sharing   </description>
+      <description>anthy 関連のリソース（日本語中心）  Original upstream  https://ja.osdn.net/projects/anthy/  Easy to read mail archive  https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd1.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd2.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd3.html  Debian (*****)  wiki: http://wiki.debian.org/Teams/DebianAnthy salsa: https://salsa.debian.org/debian/anthy/tree/debian (current)  salsa: https://salsa.debian.org/input-method-team/anthy (old)  BTS: https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=anthy  G-HAL (engine patch)  2019-04-06: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/im.html#anthy 2018-05-31: http://www.fenix.ne.jp/~G-HAL/whatsnew/20182nd.html#whatsnew2018530 2011-10-08: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/anthy.html  vagus (dictionary patch)  2012-03-10: http://vagus.seesaa.net/ https://osdn.net/projects/alt-cannadic/wiki/FrontPage  ootnegx  2011-12-03: http://ootnegx.blogspot.com/2011/12/g-hal-anthy.html  archlinux wiki  2018-08-30: https://wiki.archlinux.jp/index.php/Uim_%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B#Anthy  kakurasan  2010-11-20: https://kakurasan.hatenadiary.jp/entry/20101120/p1 2010-12-14: https://kakurasan.</description>
     </item>
     
     <item>
@@ -217,7 +226,8 @@ Anthyのソースを見るとメイン 辞書以外のユーザー辞書は、�
 ただこれらのユーザー辞書では、入力文字列として半角tを最後つけることはされて いません。「郵便番号→住所」変換をするための辞書は「３桁全角数字、 全角の長音(UTF-8=E383BC, Unicode=U+30FC)、４桁全角数字」を入力すると、 郵便番号に対応する住所の文字列を対応させるようになっていますし、実際の 動作もそうです。
 どうもこの違いは、使うフロントエンドによって提供されるローマ字入力からかな に変換される際のルールが異なるので、ibusでは小文字のtが入れにくいことにある ようです。（「uim」は使っていないのであくまで推測です）
  「ibus-anthy」 数字・記号入力は全角数字・記号、単ローマ字入力は大文字半角 「uim」 数字・記号入力は半角数字・記号、単ローマ字入力は小文字半角  ローマ字入力からのかな漢字変換は、どうも使うフロントエンドによって少々動作が 違うので要注意です。
-そもそもこの変な小文字のtを末尾に入れる変換辞書スタイルは、 昔の「canna辞書」由来かもしれません。</description>
+そもそもこの変な小文字のtを末尾に入れる変換辞書スタイルは、 昔の「canna辞書」由来かもしれません。
+2019-05-22: 上記メモを書いた後いろいろ試して、FREEZE中なのでDebianの experimentalにバグ修正版1:0.3-9をアップロードしています。７桁数字での 郵便番号はちゃんと出るようになりました。</description>
     </item>
     
     <item>
@@ -228,9 +238,10 @@ Anthyのソースを見るとメイン 辞書以外のユーザー辞書は、�
       <guid>/jp/2019/02/09/word-freq/</guid>
       <description>BCCWJ Unidicを用いた単語出現頻度情報
  語彙調査データ： (古い)  https://pj.ninjal.ac.jp/corpus_center/archive.html （２００４） https://pj.ninjal.ac.jp/corpus_center/files/goihyo_frq_ver.1.0.txt 3万語  『現代日本語書き言葉均衡コーパス』語彙表：(新しい)
- https://pj.ninjal.ac.jp/corpus_center/bccwj/freq-list.html （２０１１） https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-suw.html (1.0E8 data, 短単位語彙表：18万語網羅） https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-luw.html (8.3E7 data, 長単位語彙表: 243万語網羅）
-$ wc -l BCCWJ_frequencylist_* 2434722 BCCWJ_frequencylist_luw_ver1_1.tsv 185137 BCCWJ_frequencylist_suw_ver1_1.tsv    BCCWJ短単位語彙表 このデーターから読み取れること。
-   頻度順位 積算出現率     1 0.048   10 0.303   100 0.556   1000 0.752   10000 0.933   100000 0.997 (6 sample)   150000 1.</description>
+ https://pj.ninjal.ac.jp/corpus_center/bccwj/freq-list.html （２０１１） https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-suw.html (1.0E8 data, 短単位語彙表：18万語網羅、748MB） https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-luw.html (8.3E7 data, 長単位語彙表: 243万語網羅、1GB）
+$ wc -l BCCWJ_frequencylist_* 2434722 BCCWJ_frequencylist_luw_ver1_1.tsv 185137 BCCWJ_frequencylist_suw_ver1_1.tsv    辞書形ごとにまとめて頻度統計を行っている。
+活用語の辞書形集約はあまり違和感が無かったが、要注意は固有名詞である。 人名の姓と名はカタカナ表記を辞書形（LEMMA)として集約されている。
+BCCWJ短単位語彙の累積頻度    単語 頻度順位 頻度(pmw) 累積頻度     の 1 48383 0.048   と 10 21773 0.303   持つ 100 885 0.556   決まる 1000 90 0.</description>
     </item>
     
     <item>

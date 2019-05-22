@@ -72,9 +72,9 @@
 
 <ul>
 <li><a href="https://pj.ninjal.ac.jp/corpus_center/bccwj/freq-list.html">https://pj.ninjal.ac.jp/corpus_center/bccwj/freq-list.html</a> （２０１１）</li>
-<li><a href="https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-suw.html">https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-suw.html</a> (1.0E8 data, 短単位語彙表：18万語網羅）</li>
+<li><a href="https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-suw.html">https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-suw.html</a> (1.0E8 data, 短単位語彙表：18万語網羅、748MB）</li>
 
-<li><p><a href="https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-luw.html">https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-luw.html</a> (8.3E7 data, 長単位語彙表: 243万語網羅）</p>
+<li><p><a href="https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-luw.html">https://pj.ninjal.ac.jp/corpus_center/bccwj/bcc-chu-luw.html</a> (8.3E7 data, 長単位語彙表: 243万語網羅、1GB）</p>
 
 <pre><code>$ wc -l BCCWJ_frequencylist_*
 2434722 BCCWJ_frequencylist_luw_ver1_1.tsv
@@ -83,90 +83,234 @@
 </ul></li>
 </ul>
 
-<h3 id="bccwj短単位語彙表">BCCWJ短単位語彙表</h3>
+<p>辞書形ごとにまとめて頻度統計を行っている。</p>
 
-<p>このデーターから読み取れること。</p>
+<p>活用語の辞書形集約はあまり違和感が無かったが、要注意は固有名詞である。
+人名の姓と名はカタカナ表記を辞書形（LEMMA)として集約されている。</p>
+
+<h3 id="bccwj短単位語彙の累積頻度">BCCWJ短単位語彙の累積頻度</h3>
 
 <table>
 <thead>
 <tr>
+<th>単語</th>
 <th>頻度順位</th>
-<th>積算出現率</th>
+<th>頻度(pmw)</th>
+<th>累積頻度</th>
 </tr>
 </thead>
 
 <tbody>
 <tr>
+<td>の</td>
 <td>1</td>
+<td>48383</td>
 <td>0.048</td>
 </tr>
 
 <tr>
+<td>と</td>
 <td>10</td>
+<td>21773</td>
 <td>0.303</td>
 </tr>
 
 <tr>
+<td>持つ</td>
 <td>100</td>
+<td>885</td>
 <td>0.556</td>
 </tr>
 
 <tr>
+<td>決まる</td>
 <td>1000</td>
+<td>90</td>
 <td>0.752</td>
 </tr>
 
 <tr>
+<td>胃癌</td>
 <td>10000</td>
+<td>5.3</td>
 <td>0.933</td>
 </tr>
 
 <tr>
+<td>阿姨</td>
 <td>100000</td>
+<td>0.05</td>
 <td>0.997 (6 sample)</td>
 </tr>
 
 <tr>
+<td>んふ</td>
 <td>150000</td>
+<td>0.01</td>
 <td>1.000</td>
 </tr>
 </tbody>
 </table>
 
-<h3 id="短単位語彙表の収録語彙の全体感">短単位語彙表の収録語彙の全体感</h3>
+<p>2019-05-22: updated</p>
 
-<p>(2019-05-06 追加)</p>
+<h3 id="bccwj短単位語頻度彙表とmecabのコスト値の対比">BCCWJ短単位語頻度彙表とmecabのコスト値の対比</h3>
 
-<pre><code>            rank  pmw       cost
-の            #1 48383      -573 (固有POS対象)
-に            #2 34188      -608 (固有POS対象)
-は            #4 31448     -1390 (固有POS対象)
-為る          #8 24508      2642 (固有POS対象) *
-です         #16  7690       811 (固有POS対象多し)
-三           #32  2985       937 (固有POS対象多し)
-時           #64  1548      3808 (固有POS対象多し)
-必要        #128   674      3967
-現在        #256   325      2155
-料          #512   171      6594
-準備       #1024    88      3808
-回す       #2048    43      6516
-広域       #4096    18      5149
-敬意       #8191     7      4084
-炒め物    #16385     2.5    6118 (使いそうな言葉多し。外来語の変換必要対象あり)
-和魂      #32666     0.8    6118 (固有名詞・外来語多し、使いそうな言葉・外来語有り)
-割り打ち  #64790     0.19   6117 (固有名詞、難解語多し)
-輪っぱ飯 #121932     0.028  6118 (固有名詞、難解語多し)
-(last)   #152442     0.010       (固有名詞、難解語多し)
-</code></pre>
+<table>
+<thead>
+<tr>
+<th>WORD</th>
+<th>rank</th>
+<th>pmw</th>
+<th>cost (mecabより)</th>
+</tr>
+</thead>
 
-<p>Jumann++　の基本語彙辞書 3万語は、辞書登録の基本語彙数としていい線かも知れない。
-積算95%カバーのレベル。
-い</p>
+<tbody>
+<tr>
+<td>の</td>
+<td>#1</td>
+<td>48383</td>
+<td>-573 (固有POS対象)</td>
+</tr>
+
+<tr>
+<td>に</td>
+<td>#2</td>
+<td>34188</td>
+<td>-608 (固有POS対象)</td>
+</tr>
+
+<tr>
+<td>は</td>
+<td>#4</td>
+<td>31448</td>
+<td>-1390 (固有POS対象)</td>
+</tr>
+
+<tr>
+<td>為る</td>
+<td>#8</td>
+<td>24508</td>
+<td>2642 (固有POS対象) *</td>
+</tr>
+
+<tr>
+<td>です</td>
+<td>#16</td>
+<td>7690</td>
+<td>811 (固有POS対象多し)</td>
+</tr>
+
+<tr>
+<td>三</td>
+<td>#32</td>
+<td>2985</td>
+<td>937 (固有POS対象多し)</td>
+</tr>
+
+<tr>
+<td>時</td>
+<td>#64</td>
+<td>1548</td>
+<td>3808 (固有POS対象多し)</td>
+</tr>
+
+<tr>
+<td>必要</td>
+<td>#128</td>
+<td>674</td>
+<td>3967</td>
+</tr>
+
+<tr>
+<td>現在</td>
+<td>#256</td>
+<td>325</td>
+<td>2155</td>
+</tr>
+
+<tr>
+<td>料</td>
+<td>#512</td>
+<td>171</td>
+<td>6594</td>
+</tr>
+
+<tr>
+<td>準備</td>
+<td>#1024</td>
+<td>88</td>
+<td>3808</td>
+</tr>
+
+<tr>
+<td>回す</td>
+<td>#2048</td>
+<td>43</td>
+<td>6516</td>
+</tr>
+
+<tr>
+<td>広域</td>
+<td>#4096</td>
+<td>18</td>
+<td>5149</td>
+</tr>
+
+<tr>
+<td>敬意</td>
+<td>#8191</td>
+<td>7</td>
+<td>4084</td>
+</tr>
+
+<tr>
+<td>炒め物</td>
+<td>#16385</td>
+<td>2.5</td>
+<td>6118 (使いそうな言葉多し。外来語の変換必要対象あり)</td>
+</tr>
+
+<tr>
+<td>和魂</td>
+<td>#32666</td>
+<td>0.8</td>
+<td>6118 (固有名詞・外来語多し、使いそうな言葉・外来語有り)</td>
+</tr>
+
+<tr>
+<td>割り打ち</td>
+<td>#64790</td>
+<td>0.19</td>
+<td>6117 (固有名詞、難解語多し)</td>
+</tr>
+
+<tr>
+<td>輪っぱ飯</td>
+<td>#121932</td>
+<td>0.028</td>
+<td>6118 (固有名詞、難解語多し)</td>
+</tr>
+
+<tr>
+<td>(last)</td>
+<td>#152442</td>
+<td>0.010</td>
+<td>(固有名詞、難解語多し)</td>
+</tr>
+</tbody>
+</table>
+
+<p>Jumann++　の基本語彙辞書 3万語は、辞書登録の基本語彙数としていい線かも
+知れない。累積で約95%の辞書形をカバーするレベル。</p>
 
 <p>pmwが0.1を切ったデーターの頻度数は、サンプル集合の影響を大いに受けているよう
-なので、過学習防止で同一頻度扱いをしてもいい感じ。</p>
+なので、過学習防止で同一頻度扱いをしてもいい感じ。
+これはRANK=#81496＝辞書形８万語に絞ることに相当する。
+累積で約99%の辞書形をカバーするレベル。</p>
 
-<p>上記のcostは2019-05-07にmecabから追加</p>
+<p>2019-05-07, 2019-05-22: updated</p>
 
 <h2 id="各種辞書情報">各種辞書情報</h2>
 

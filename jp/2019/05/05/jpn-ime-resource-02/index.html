@@ -73,6 +73,11 @@
 </code></pre></li>
 </ul>
 
+<p>活用形はすべて展開して、それぞれ１行のデーターとなっている。</p>
+
+<p>もし頻度表が全辞書形と考えると、表層形900K/辞書形180Kと大きいとも言えるが、
+スマホ写真１枚分のデーターより小さいともいえる。</p>
+
 <h2 id="canna辞書-anthy">canna辞書(Anthy)</h2>
 
 <ul>
@@ -84,6 +89,35 @@
 137488 gcanna.t
 </code></pre></li>
 </ul>
+
+<p>このファイルは現代的な感覚では、4.6MBと非常に小さい。</p>
+
+<p>各種情報も織り込んだBinary辞書のanthy.dicでも23MB程度。</p>
+
+<h2 id="mozc">Mozc</h2>
+
+<p><code>/usr/lib/mozc/mozc_server</code>は、約18MBという巨大なサイズがある。</p>
+
+<p>これは、辞書をプログラムないのメモリーイメージで静的内蔵しているためと
+推察される。でも写真数枚程度で、現代的な感覚ではメモリー常駐させるのが
+十分可能なサイズともいえる。</p>
+
+<pre><code>$ du -Sh .
+59M
+$ wc -l id.def
+2652 id.def
+</code></pre>
+
+<p>ソース中の辞書ファイルサイズ概算59MBと６０MB近くありAnthyより１桁大ききい。
+品詞分類数は2652ときめ細かい。</p>
+
+<p>ソース中の辞書ファイルは100K行のデーターが定義されたファイルで
+１０個ほどあるので、展開済み登録語彙数は約１００万語程度と見受ける。
+こうみてもanthy等の１０倍の単語登録がある。(ただし、Anthyは１行に複数語
+登録するので実際の差は小さいかもしれない。)</p>
+
+<p>まあデーターが巨大なので変換精度は上がるが、リソース消費が大きく動作が重く
+なる懸念がある。</p>
 
 <h2 id="jumann">Jumann++</h2>
 
@@ -121,6 +155,8 @@
 <ul>
 <li>article: <a href="http://poiut.web.fc2.com/computer/sj3/sj3public.html">http://poiut.web.fc2.com/computer/sj3/sj3public.html</a></li>
 <li>BSD</li>
+<li>Sj3のシステム辞書(バイナリ) sj3main.dic (約３万語)</li>
+<li>Sj3システム辞書増補版(約９万語) visual+.dic.gz (gzipped euc-jp) (1.8MB)</li>
 </ul></li>
 </ul>
 
