@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>日本語単語頻度 (2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">日本語単語頻度 (2)</span></h1>
+
+<h2 class="date">2019/05/27</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/05/12/jpn-ime-resource-07/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>以前書いた、<a href="/jp/2019/02/09/word-freq/">Unidicを用いた単語出現頻度情報</a>
+をさらに読み込んでみた。</p>
+
+<h2 id="品詞ごとのbccwjの表中出現語数比率">品詞ごとのBCCWJの表中出現語数比率</h2>
+
+<p>BCCWJの表中の語彙の品詞ごとの出現語数比率の高頻度部分は：</p>
+
+<table>
+<thead>
+<tr>
+<th>単語</th>
+<th>頻度(%)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>名詞-普通名詞-一般</td>
+<td>48.11%</td>
+</tr>
+
+<tr>
+<td>名詞-固有名詞-人名-一般</td>
+<td>12.10%</td>
+</tr>
+
+<tr>
+<td>名詞-固有名詞-地名-一般</td>
+<td>8.25%</td>
+</tr>
+
+<tr>
+<td>名詞-固有名詞-人名-名</td>
+<td>5.80%</td>
+</tr>
+
+<tr>
+<td>名詞-普通名詞-サ変可能</td>
+<td>5.39%</td>
+</tr>
+
+<tr>
+<td>動詞-一般</td>
+<td>5.10%</td>
+</tr>
+
+<tr>
+<td>名詞-固有名詞-人名-姓</td>
+<td>4.98%</td>
+</tr>
+
+<tr>
+<td>名詞-固有名詞-一般</td>
+<td>4.52%</td>
+</tr>
+
+<tr>
+<td>副詞</td>
+<td>1.66%</td>
+</tr>
+
+<tr>
+<td>名詞-普通名詞-形状詞可能</td>
+<td>0.85%</td>
+</tr>
+
+<tr>
+<td>形状詞-一般</td>
+<td>0.74%</td>
+</tr>
+
+<tr>
+<td>形容詞-一般</td>
+<td>0.42%</td>
+</tr>
+
+<tr>
+<td>接尾辞-名詞的-一般</td>
+<td>0.36%</td>
+</tr>
+
+<tr>
+<td>名詞-固有名詞-地名-国</td>
+<td>0.28%</td>
+</tr>
+
+<tr>
+<td>名詞-普通名詞-助数詞可能</td>
+<td>0.28%</td>
+</tr>
+
+<tr>
+<td>名詞-普通名詞-副詞可能</td>
+<td>0.23%</td>
+</tr>
+</tbody>
+</table>
+
+<p>かな漢字変換のデーターベースの辞書を辞書形をキーとして作ると、
+その構成はざっくり：</p>
+
+<ul>
+<li>「名詞-普通名詞-一般」が、約50%です。</li>
+<li>「名詞-固有名詞」等が、30%です。</li>
+<li>活用語は、コアの「動詞」、「形状詞」、「形容詞」等が約8%ぐらい、
+これに「名詞-普通名詞-サ変可能」等が約7%ほどあるのを加えると、
+合わせて約15%です</li>
+<li>残りは約5%です。</li>
+</ul>
+
+<p>ここで「形状詞」は、私が習ったころの日本の学校の国語の時間に教える
+文法では「形容動詞」と言っていた「～だ」という単語の品詞です。</p>
+
+<p>活用語を展開すると、口語だけで６ー８に分かれる。だから、
+かな漢字変換のデーターベースの辞書を活用語を展開してて作ると、
+収録語彙数は倍増し、その構成はざっくり：</p>
+
+<ul>
+<li>「名詞-普通名詞-一般」が、約30%です。</li>
+<li>「名詞-固有名詞」等が、18%です。</li>
+<li>活用語は、合わせて約50%です</li>
+<li>残りは約3%です。</li>
+</ul>
+
+<p>活用語を展開しない辞書を使うために検索時に活用形を組み込む
+複雑なロジックを導入するデメリットを考えると、辞書サイズが
+辞書形で20万語程度なら、
+200K*3Bytes/char*6文字*2(活用形展開)*2(キーと値)=14MB
+程度なので悪い話ではなさそう。</p>
+
+<p>Anthyのバイナリー辞書は、活用形展開していないで23MB程度の辞書サイズ
+があるがこれは用例辞書も含んでいる。いずれにせよ、50MBとなってもいい
+感じともいえる。</p>
+
+<h2 id="品詞ごとのコーパス中出現語数比率">品詞ごとのコーパス中出現語数比率</h2>
+
+<p>コーパス中での語彙の発現頻度(pmw)を考慮した、コーパス中での語彙の
+品詞ごとの出現語数比率の高頻度部分は：</p>
+
+<table>
+<thead>
+<tr>
+<th>単語</th>
+<th>頻度(%)</th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>助詞-格助詞</td>
+<td>17.59%</td>
+</tr>
+
+<tr>
+<td>名詞-普通名詞-一般</td>
+<td>16.87%</td>
+</tr>
+
+<tr>
+<td>助動詞</td>
+<td>9.83%</td>
+</tr>
+
+<tr>
+<td>動詞-非自立可能</td>
+<td>7.04%</td>
+</tr>
+
+<tr>
+<td>名詞-普通名詞-サ変可能</td>
+<td>6.51%</td>
+</tr>
+
+<tr>
+<td>動詞-一般</td>
+<td>6.49%</td>
+</tr>
+
+<tr>
+<td>助詞-接続助詞</td>
+<td>4.64%</td>
+</tr>
+
+<tr>
+<td>助詞-係助詞</td>
+<td>4.37%</td>
+</tr>
+
+<tr>
+<td>名詞-数詞</td>
+<td>3.94%</td>
+</tr>
+
+<tr>
+<td>名詞-普通名詞-副詞可能</td>
+<td>2.58%</td>
+</tr>
+
+<tr>
+<td>接尾辞-名詞的-一般</td>
+<td>2.38%</td>
+</tr>
+
+<tr>
+<td>副詞</td>
+<td>1.75%</td>
+</tr>
+
+<tr>
+<td>名詞-普通名詞-助数詞可能</td>
+<td>1.70%</td>
+</tr>
+
+<tr>
+<td>助詞-副助詞</td>
+<td>1.45%</td>
+</tr>
+
+<tr>
+<td>代名詞</td>
+<td>1.45%</td>
+</tr>
+
+<tr>
+<td>助詞-準体助詞</td>
+<td>1.06%</td>
+</tr>
+</tbody>
+</table>
+
+<p>これを見ると、解析対象中の品詞の発現頻度は、名詞が辞書収録中の頻度の半分以下で
+比較的少なく、一方活用する語彙の割合が全体の半分近くある感じです。</p>
+
+<h2 id="メモリー消費">メモリー消費</h2>
+
+<pre><code>VSZ   RSS   COMMAND
+172056 11356 /usr/lib/ibus-mozc/ibus-engine-mozc --ibus
+ 83784 28736 /usr/lib/mozc/mozc_server
+308136 51220 python3 /usr/share/ibus-anthy/engine/main.py --ibus
+</code></pre>
+
+<p>ここで、</p>
+
+<ul>
+<li>VSS（psコマンドではVSZと表現される）はプロセスがアクセスできるアドレスの総和である。</li>
+<li>RSSはプロセスが実際に使用しているRAMの総メモリ量である。</li>
+</ul>
+
+<p>ふーん、、、あまり詳しく見ないので間違っているかもしれないが、辞書データーを保持する
+デーモンも含めても、<code>mozc</code>のメモリー消費は意外と少ない。</p>
+
+<!-- vim: se ai tw=79: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/05/12/jpn-ime-resource-07/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
