@@ -263,6 +263,36 @@ before output
 0.3-9に変更後は「無くなるかな」とまともですが、一方「奈留など。」と変な候補も
 示されます。まだ、他にもおかしいところがあるかもしれませんね。</p>
 
+<p>2019-06-01追記: master branchを0.4 upstream releaseに向けアップデート中。
+基本的に細かいバグ修正にフォーカスしている。「だよ～ん」問題は0.3-9の
+コーパス修正による回避ではなく、calctrans.cが呼ぶproccorpus.cを見直し
+無限ループに入らないようにした。</p>
+
+<p>さてコーパス中で問題となっていたのは
+「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。
+ibus-anthyでチルダで入力できるのは
+「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。
+ibus-mozcでチルダで入力できるのは
+「〜」(UTF-8: E3 80 9C, U+301C)波ダッシュです。</p>
+
+<p>これで気になって、波ダッシュ WAVE_DASH (Shift_JIS:0x8160, Unicode:U+301C)と
+全角チルダ FULLWIDTH_TILDE(Shift_JIS:0xFF5E, Unicode:U+FF5E)の違いや状況を
+調べてみました。結論は、日本語の文中に書く「波ダッシュ」は本来の「波ダッシュ」
+U+301Cが正しいようだ。Windows XP以前のデーターは「波ダッシュ」が見た目で文字化
+けするので、これを避けるために「全角チルダ」を本来「波ダッシュ」の代用に使っ
+ているようだ。</p>
+
+<ul>
+<li><a href="https://ja.wikipedia.org/wiki/Unicode#.E6.97.A5.E6.9C.AC.E8.AA.9E.E7.92.B0.E5.A2.83.E3.81.A7.E3.81.AEUnicode.E3.81.AE.E8.AB.B8.E5.95.8F.E9.A1.8C">波ダッシュ・全角チルダ問題</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/%E6%B3%A2%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5">波ダッシュ</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/%E3%83%81%E3%83%AB%E3%83%80">チルダ</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/Wikipedia:%E8%A1%A8%E8%A8%98%E3%82%AC%E3%82%A4%E3%83%89#%E6%B3%A2%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5">Wikipedia:表記ガイド: 波ダッシュ</a></li>
+<li><a href="https://xhtml.exblog.jp/11578228/">https://xhtml.exblog.jp/11578228/</a></li>
+<li><a href="https://internet.watch.impress.co.jp/docs/special/691658.html">https://internet.watch.impress.co.jp/docs/special/691658.html</a></li>
+<li><a href="http://software.fujitsu.com/jp/manual/manualfiles/M060036/J2S19850/01Z2B/note03/note0117.htm">http://software.fujitsu.com/jp/manual/manualfiles/M060036/J2S19850/01Z2B/note03/note0117.htm</a></li>
+<li><a href="https://srkzhr.hatenadiary.org/entry/20090617/1245254444">https://srkzhr.hatenadiary.org/entry/20090617/1245254444</a></li>
+</ul>
+
 
 <table width="100%">
   <tbody>
