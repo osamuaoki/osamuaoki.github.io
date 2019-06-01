@@ -279,7 +279,7 @@ ibus-mozcでチルダで入力できるのは
 全角チルダ FULLWIDTH_TILDE(Shift_JIS:0xFF5E, Unicode:U+FF5E)の違いや状況を
 調べてみました。結論は、日本語の文中に書く「波ダッシュ」は本来の「波ダッシュ」
 U+301Cが正しいようだ。Windows XP以前のデーターは「波ダッシュ」が見た目で文字化
-けするので、これを避けるために「全角チルダ」を本来「波ダッシュ」の代用に使っ
+けするので、これを避けるために「全角チルダ」を本来の「波ダッシュ」の代用に使っ
 ているようだ。</p>
 
 <ul>
@@ -292,6 +292,10 @@ U+301Cが正しいようだ。Windows XP以前のデーターは「波ダッシ�
 <li><a href="http://software.fujitsu.com/jp/manual/manualfiles/M060036/J2S19850/01Z2B/note03/note0117.htm">http://software.fujitsu.com/jp/manual/manualfiles/M060036/J2S19850/01Z2B/note03/note0117.htm</a></li>
 <li><a href="https://srkzhr.hatenadiary.org/entry/20090617/1245254444">https://srkzhr.hatenadiary.org/entry/20090617/1245254444</a></li>
 </ul>
+
+<p>今後はanthyも、「〜」(UTF-8: E3 80 9C, U+301C)「波ダッシュ」に揃えて行く方が良さそうだ。
+これで思い出したのは「う゛」である。もうそろそろ Diacriticを使わずに、「ゔ」(U+3094)
+を内部的に使った方がすっきりする気がする。</p>
 
 
 <table width="100%">
