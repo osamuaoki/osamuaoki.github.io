@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>AnthyのBuildトライ(2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">AnthyのBuildトライ(2)</span></h1>
+
+<h2 class="date">2019/06/02</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/05/27/word-freq-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<!-- vim: se ai tw=79: -->
+
+<h2 id="0-4に向けた変更">0.4に向けた変更</h2>
+
+<p>Debian Busterの(0.3系)のAnthyに関して、Busterはフリーズ中なので、
+リリースの邪魔をしない苦肉の策として、機能的に最低限必要なバグ修正のみに
+対応したパッケージをDebianのexperimentalに
+<a href="https://tracker.debian.org/news/1039742/accepted-anthy-103-9-source-all-amd64-into-experimental/">anthy 1:0.3-9</a>
+としてアップロードしました。その後、gniibeさんから連絡があり、リリースが
+落ち着いたら、この辺やその他のバグ修正をまとめて0.4 upstream release
+をするのがいいのではと、私のアクションを歓迎する旨の連絡がありました。</p>
+
+<p>そこで、調子に乗って0.4に向け<a href="https://salsa.debian.org/debian/anthy/tree/master">master branch</a>
+を<a href="https://salsa.debian.org/debian/anthy/commits/master">アップデート</a>し始めました。</p>
+
+<ul>
+<li>0.3-9の修正をまず手始めに取り込んでいます。</li>
+<li>ソースコード中のファイルを可能な範囲で、過去文書も含めてUTF-8化しました。
+例外はemacsのLISPコード(*.el)です。</li>
+<li>ファイル中のencoding説明が現状を反映するように更新しました。また、build関係の
+関係の説明をわかりやすくするよう加筆しました。</li>
+<li>Makefile.amなどのリリースtarを作る際などに出会う細かなバグの修正をしました。</li>
+<li>コマンド起動時のencoding指定などのsyntaxを揃えました。</li>
+<li>ChangeLogをコミットと同時に変更すると、多くのトピックブランチを作って今後
+管理する上でやりにくいので、トピックブランチをマージしたあとgitのlogから
+リリース前にいつでもChangeLogを簡単に更新出きるupdateLog.shを追加しました。</li>
+</ul>
+
+<p>ここまでのコミットa11cdd7 (&ldquo;Update Makefile.am&rdquo;, 2019-05-24)だと、機能的には
+0.3-9と変更はありません。</p>
+
+<p>0.4 upstream releaseに向けアップデートは基本的に細かいバグ修正にフォーカスするので
+これだけでもいいのですが、もう少しローリスクの変更を追加しています。</p>
+
+<p>最初は、「だよ～ん」無限ループ問題です。これはコーパス修正による回避ではなく、
+calctrans.cが呼ぶproccorpus.cを見直し無限ループに入らないようにしました。
+bdd71e4 (&ldquo;Ignore problematic line to avoid infinite loop&rdquo;, 2019-05-31)</p>
+
+<p>さらに、平成の市町村合併前のZIPコードのままなのは気になります。まあ、郵便局
+の元データーから作り直すのも手なんですが、実際に使えるデーターとするには
+一部手動調整があります。ライセンス的にはskkでもmozcでも、どちらのZIPデーター
+でも良かったのですが、京都市街中心部の歴史的住所がうまく手動調整されていた
+skkのデーターが気に入ったので、簡単にvimで整形して置き換えました。</p>
+
+<p>ここまでは、リスクがほとんど無いのでさっそくmaster branchにコミットしました。</p>
+
+<h2 id="0-4に向けて次に何をするべきか">0.4に向けて次に何をするべきか</h2>
+
+<p>さて、この辺でgniibeさんのコードをもう少し深いところまで読み込み、さらに
+gniibeさんとは独立にEUCJPベースのコードで色々面白いことを試されているG-HAL
+さんのコードも見比べて、今後どう進めるのかを考え出しています。ただ、いきな
+りこれらに取り組むのは少々危険です。</p>
+
+<p>そういった意味で、「0.4に向けて次に何をするのか？」は、以下の２点と考えています。</p>
+
+<ul>
+<li>デバグには、「ログ出力」がプログラムの動作に干渉しないようにするのが重要です。</li>
+<li>「変換結果の客観評価」できる基準と評価プログラムの整理が必要です。</li>
+</ul>
+
+<p>後者の必要性は、過去のgniibeさんのMLポストでも見受けます。G-HALさんはanthy-agentを
+使われているとのことですが、私が今すぐ数値評価結果をとれるほど自動化されたシステム
+ではまだ無いように見受けました。やはり、かなり読み込んだG-HALさん並の「分かった人」
+でないと簡単では無いようです。</p>
+
+<p>以下に、今すぐには取り組めないが、関連案件で気づいたり考えていることを簡単にメモ
+しておきます。</p>
+
+<h2 id="波ダッシュ問題">波ダッシュ問題</h2>
+
+<p>どうも、世間の常識のようですが、「波ダッシュ問題」に気づきました。
+気づいたことをメモしておきます。</p>
+
+<p>0.3のコーパス中で問題となっていたのは
+「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。
+ibus-anthyでチルダで入力できるのは
+「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。
+ibus-mozcでチルダで入力できるのは
+「〜」(UTF-8: E3 80 9C, U+301C)波ダッシュです。</p>
+
+<p>これで気になって、波ダッシュ WAVE_DASH (Shift_JIS:0x8160, Unicode:U+301C)と
+全角チルダ FULLWIDTH_TILDE(Shift_JIS:0xFF5E, Unicode:U+FF5E)の違いや状況を
+調べてみました。結論は、日本語の文中に書く「波ダッシュ」は本来の「波ダッシュ」
+U+301Cが正しいようだ。Windows XP以前のデーターは「波ダッシュ」が見た目で文字化
+けするので、これを避けるために「全角チルダ」を本来の「波ダッシュ」の代用に使っ
+ているようです。</p>
+
+<ul>
+<li><a href="https://ja.wikipedia.org/wiki/Unicode#.E6.97.A5.E6.9C.AC.E8.AA.9E.E7.92.B0.E5.A2.83.E3.81.A7.E3.81.AEUnicode.E3.81.AE.E8.AB.B8.E5.95.8F.E9.A1.8C">波ダッシュ・全角チルダ問題</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/%E6%B3%A2%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5">波ダッシュ</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/%E3%83%81%E3%83%AB%E3%83%80">チルダ</a></li>
+<li><a href="https://ja.wikipedia.org/wiki/Wikipedia:%E8%A1%A8%E8%A8%98%E3%82%AC%E3%82%A4%E3%83%89#%E6%B3%A2%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5">Wikipedia:表記ガイド: 波ダッシュ</a></li>
+<li><a href="https://xhtml.exblog.jp/11578228/">https://xhtml.exblog.jp/11578228/</a></li>
+<li><a href="https://internet.watch.impress.co.jp/docs/special/691658.html">https://internet.watch.impress.co.jp/docs/special/691658.html</a></li>
+<li><a href="http://software.fujitsu.com/jp/manual/manualfiles/M060036/J2S19850/01Z2B/note03/note0117.htm">http://software.fujitsu.com/jp/manual/manualfiles/M060036/J2S19850/01Z2B/note03/note0117.htm</a></li>
+<li><a href="https://srkzhr.hatenadiary.org/entry/20090617/1245254444">https://srkzhr.hatenadiary.org/entry/20090617/1245254444</a></li>
+</ul>
+
+<p>今後はanthyも、かな入力時は「〜」(UTF-8: E3 80 9C, U+301C)「波ダッシュ」に揃えて行く方が良さ
+そうですね。英数記号入力時は「全角チルダ」とするのでしょうね。</p>
+
+<p>これで思い出したのは「う゛」である。もうそろそろ Diacriticを使わずに、「ゔ」(U+3094)
+を内部的に使った方がすっきりする気もします。</p>
+
+<h2 id="辞書ファイルの内部構造">辞書ファイルの内部構造</h2>
+
+<p>gniibeさんは、旧コードの辞書のバグが嫌になり、システム辞書はハッシュを使う
+新データーベースのコードに置き換え、ユーザー辞書は単純リニアサーチのコード
+を使っているようです。変更履歴にtrieデーター構造は捨ているとも書かれています。</p>
+
+<p>一方、G-HALさんは、どうも旧コードをバグ修正などをしながら使い続けているようです。
+さらにどこかでtokyocabinetをデーターベースで使っているようだし、ユーザー辞書は
+trieデーター構造のコードが使われているようでもあります。</p>
+
+<p>よく読んだわけでは無いので自信は無いですが、anthyに入っているtrieデーター構造は
+base/next/chack等の表現が見当たらず、メモリーフットプリントを心配しているので、
+ナイーブなtrieデーター構造のような気がしています。</p>
+
+<p>この手の辞書は、やはりtrieデーター構造を使うのが一番いい気がします。mozcは、C++
+でかかれていてtrieデーター構造を使っています。意外と大きなデーターを扱う
+のに比較的小さなメモリフットプリントなのは、メモリ使用に配慮したデーター構造
+<a href="http://chasen.org/~taku/software/darts/">Darts</a>
+だからと感じています。</p>
+
+<p>anthyはCコードなので、Cでかかれた同様のものが無いかと見渡していたらありました。
+<a href="https://linux.thai.net/~thep/datrie/">An Implementation of Double-Array Trie</a>
+というタイ語の処理系で使われてきたDouble-Array Trieコードがあり、かなりこなれ
+たもののようです。UpstreamはDDで、パッケージ化済みなようなので、魅力的です。</p>
+
+<p>ただ、この手のスピードやメモリフットプリントの最適化は、現状を見ると優先順位は
+あまり高くないですね。</p>
+
+<p>とりあえずは、もう少しバカなことを提案しない「かな漢字変換」が当面の最重要課題
+の気がします。そういった意味でも、上記の「ログ出力」と「変換結果の客観評価」
+が大事です。</p>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/05/27/word-freq-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
