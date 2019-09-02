@@ -6,28 +6,26 @@
     <description>Recent content in nlp on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 02 Jun 2019 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 01 Sep 2019 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/nlp/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>AnthyのBuildトライ(2)</title>
-      <link>/jp/2019/06/02/jpn-ime-resource-08/</link>
-      <pubDate>Sun, 02 Jun 2019 00:00:00 +0000</pubDate>
+      <link>/jp/2019/09/01/jpn-ime-resource-08/</link>
+      <pubDate>Sun, 01 Sep 2019 00:00:00 +0000</pubDate>
       
-      <guid>/jp/2019/06/02/jpn-ime-resource-08/</guid>
-      <description>0.4に向けた変更 Debian Busterの(0.3系)のAnthyに関して、Busterはフリーズ中なので、 リリースの邪魔をしない苦肉の策として、機能的に最低限必要なバグ修正のみに 対応したパッケージをDebianのexperimentalに anthy 1:0.3-9 としてアップロードしました。その後、gniibeさんから連絡があり、リリースが 落ち着いたら、この辺やその他のバグ修正をまとめて0.4 upstream release をするのがいいのではと、私のアクションを歓迎する旨の連絡がありました。
-そこで、調子に乗って0.4に向けmaster branch をアップデートし始めました。
- 0.3-9の修正をまず手始めに取り込んでいます。 ソースコード中のファイルを可能な範囲で、過去文書も含めてUTF-8化しました。 例外はemacsのLISPコード(*.el)です。 ファイル中のencoding説明が現状を反映するように更新しました。また、build関係の 関係の説明をわかりやすくするよう加筆しました。 Makefile.amなどのリリースtarを作る際などに出会う細かなバグの修正をしました。 コマンド起動時のencoding指定などのsyntaxを揃えました。 ChangeLogをコミットと同時に変更すると、多くのトピックブランチを作って今後 管理する上でやりにくいので、トピックブランチをマージしたあとgitのlogから リリース前にいつでもChangeLogを簡単に更新出きるupdateLog.shを追加しました。  ここまでのコミットa11cdd7 (&amp;ldquo;Update Makefile.am&amp;rdquo;, 2019-05-24)だと、機能的には 0.3-9と変更はありません。
-0.4 upstream releaseに向けアップデートは基本的に細かいバグ修正にフォーカスするので これだけでもいいのですが、もう少しローリスクの変更を追加しています。
-最初は、「だよ～ん」無限ループ問題です。これはコーパス修正による回避ではなく、 calctrans.cが呼ぶproccorpus.cを見直し無限ループに入らないようにしました。 bdd71e4 (&amp;ldquo;Ignore problematic line to avoid infinite loop&amp;rdquo;, 2019-05-31)
+      <guid>/jp/2019/09/01/jpn-ime-resource-08/</guid>
+      <description>0.4に向けた変更 Debian Busterの(0.3系)のAnthyに関して、Busterはフリーズ中なので、 リリースの邪魔をしない苦肉の策として、機能的に最低限必要なバグ修正のみに 対応したパッケージをDebianのexperimentalに anthy 1:0.3-9 としてアップロードしました。
+その後、gniibeさんから連絡があり、私の提案とは少し違ういい感じで改訂され anthy 1:0.4-2 がリリースされました。これでひとまず解決したので、 当面AnthyのBuildトライは休憩することにしました。
+過去のBuildトライ時の問題点 治ったとは思いますが、以前気になった点を備忘録でここに記します。
+「だよ～ん」無限ループ問題です。これはコーパス修正による回避ではなく、 calctrans.cが呼ぶproccorpus.cを見直し無限ループに入らないようにしました。 bdd71e4 (&amp;ldquo;Ignore problematic line to avoid infinite loop&amp;rdquo;, 2019-05-31)
 さらに、平成の市町村合併前のZIPコードのままなのは気になります。まあ、郵便局 の元データーから作り直すのも手なんですが、実際に使えるデーターとするには 一部手動調整があります。ライセンス的にはskkでもmozcでも、どちらのZIPデーター でも良かったのですが、京都市街中心部の歴史的住所がうまく手動調整されていた skkのデーターが気に入ったので、簡単にvimで整形して置き換えました。
-ここまでは、リスクがほとんど無いのでさっそくmaster branchにコミットしました。
-0.4に向けて次に何をするべきか さて、この辺でgniibeさんのコードをもう少し深いところまで読み込み、さらに gniibeさんとは独立にEUCJPベースのコードで色々面白いことを試されているG-HAL さんのコードも見比べて、今後どう進めるのかを考え出しています。ただ、いきな りこれらに取り組むのは少々危険です。
-そういった意味で、「0.4に向けて次に何をするのか？」は、以下の２点と考えています。
- デバグには、「ログ出力」がプログラムの動作に干渉しないようにするのが重要です。 「変換結果の客観評価」できる基準と評価プログラムの整理が必要です。  後者の必要性は、過去のgniibeさんのMLポストでも見受けます。G-HALさんはanthy-agentを 使われているとのことですが、私が今すぐ数値評価結果をとれるほど自動化されたシステム ではまだ無いように見受けました。やはり、かなり読み込んだG-HALさん並の「分かった人」 でないと簡単では無いようです。
-以下に、今すぐには取り組めないが、関連案件で気づいたり考えていることを簡単にメモ しておきます。</description>
+波ダッシュ問題 どうも、世間の常識のようですが、「波ダッシュ問題」に気づきました。 Buildトライ時に気づいたことをメモしておきます。
+0.3のコーパス中で問題となっていたのは 「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。 ibus-anthyでチルダで入力できるのは 「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。 ibus-mozcでチルダで入力できるのは 「〜」(UTF-8: E3 80 9C, U+301C)波ダッシュです。
+これで気になって、波ダッシュ WAVE_DASH (Shift_JIS:0x8160, Unicode:U+301C)と 全角チルダ FULLWIDTH_TILDE(Shift_JIS:0xFF5E, Unicode:U+FF5E)の違いや状況を 調べてみました。結論は、日本語の文中に書く「波ダッシュ」は本来の「波ダッシュ」 U+301Cが正しいようだ。Windows XP以前のデーターは「波ダッシュ」が見た目で文字化 けするので、これを避けるために「全角チルダ」を本来の「波ダッシュ」の代用に使っ ているようです。
+ 波ダッシュ・全角チルダ問題 波ダッシュ チルダ Wikipedia:表記ガイド: 波ダッシュ https://xhtml.</description>
     </item>
     
     <item>
