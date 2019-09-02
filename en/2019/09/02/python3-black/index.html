@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>python3 formatting with black | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">python3 formatting with black</span></h1>
+
+<h2 class="date">2019/09/02</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/02/11/dgit-workfow01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>I see formatting consistency provided by the <code>black</code> command helps me.</p>
+
+<p>The <code>black</code> is available as Debian package and its upstream is at
+<a href="https://github.com/psf/black">https://github.com/psf/black</a></p>
+
+<h2 id="lint-tools-before-black">Lint tools before <code>black</code></h2>
+
+<p>These are basic lint tools before <code>black</code>.</p>
+
+<ul>
+<li><code>pycodestyle</code> (formerly called <code>pep8</code>)</li>
+<li><code>flake8</code> (bundle of: <code>pycodestyle</code> + <code>pyflakes</code>).</li>
+</ul>
+
+<h2 id="install-black">Install <code>black</code></h2>
+
+<pre><code> $ sudo apt install python3-black
+</code></pre>
+
+<h2 id="use-black">Use <code>black</code></h2>
+
+<pre><code> $ black a-python-code-directory/
+</code></pre>
+
+<p>or</p>
+
+<pre><code> $ black a-python-code-file.py
+</code></pre>
+
+<h2 id="skip-lint-prigram">Skip Lint prigram</h2>
+
+<p>Line with <code>#NOQA</code> at the end are skipped by <code>pycodestyle</code> for PEP-8 lint.</p>
+
+<p>Lines between <code># fmt: off</code> and <code># fmt: on</code> are skipped by the <code>black</code>.</p>
+
+<h2 id="make-black-to-work-with-other-tools">Make <code>black</code> to work with other tools</h2>
+
+<p>Adding followings to <code>pyproject.toml</code> may be useful.</p>
+
+<pre><code class="language-ini">[flake8]
+max-line-length = 88
+select = C,E,F,W,B,B950
+ignore = E203,W503,W504
+
+[tool.isort]
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+</code></pre>
+
+<p>Here:</p>
+
+<ul>
+<li>max-line-length per line
+
+<ul>
+<li>Black default is 88 ch/line <a href="https://github.com/psf/black#line-length">https://github.com/psf/black#line-length</a></li>
+<li>Ignore <code>E501</code> for line too long (82 &gt; 79 characters)</li>
+</ul></li>
+<li><a href="https://pep8.readthedocs.io/en/latest/intro.html#error-codes">pep8 Warning / Error codes</a>
+
+<ul>
+<li><code>E203</code> for <a href="https://github.com/psf/black#slices">https://github.com/psf/black#slices</a></li>
+<li><code>W503</code> for <a href="https://github.com/psf/black#line-breaks--binary-operators">https://github.com/psf/black#line-breaks--binary-operators</a></li>
+<li><code>W504</code> for line break after binary operator (default ignored)</li>
+</ul></li>
+</ul>
+
+<h2 id="other-programs">Other programs</h2>
+
+<ul>
+<li><a href="https://github.com/timothycrosley/isort">isort</a> is a Python utility /
+library to sort imports alphabetically, and automatically separated into
+sections.</li>
+<li>[flake8-black](<a href="https://pypi.org/project/flake8-black/">https://pypi.org/project/flake8-black/</a> is a <code>flake8</code> plugin
+for validating Python code style with the command line code formatting tool
+<code>black</code>.</li>
+</ul>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/02/11/dgit-workfow01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
