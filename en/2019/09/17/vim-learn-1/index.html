@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Re-learning Vim (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Re-learning Vim (1)</span></h1>
+
+<h2 class="date">2019/09/17</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/09/02/python3-black/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>I can use Vim as a basic editor with TKL-keyboard while tapping some keys
+multiple times.  Functional but not elegant!</p>
+
+<p>I decided to re-learn Vim to use it <em>properly</em>.  Here is my learning memo.</p>
+
+<h2 id="concept">Concept</h2>
+
+<ul>
+<li>Use default vim (minimum configuration, if possible).
+
+<ul>
+<li>Use as much native functionalities.</li>
+</ul></li>
+<li>50%/60%-keyboard ready.
+
+<ul>
+<li>No cursor keys.</li>
+</ul></li>
+</ul>
+
+<h2 id="guiding-voice">Guiding voice</h2>
+
+<p>Here are a few insightful recommendations for the best practices for Vim.</p>
+
+<ul>
+<li>Voice of Vim God (Vim upstream: Bram Moolenaar): <a href="https://www.moolenaar.net/habits.html">Seven habits of effective text editing</a></li>
+<li>Voice of Vim Gurus: <a href="https://www.vi-improved.org/recommendations/">#vim Recommendations</a></li>
+<li>Voice of reference <a href="https://github.com/mhinz/vim-galore">vim-galore</a> of which
+I don&rsquo;t agree some tips.</li>
+<li><a href="https://vimhelp.org/">RTFM</a> or <code>vim &quot;+h|only&quot;</code>.</li>
+</ul>
+
+<h2 id="normal-mode">NORMAL MODE</h2>
+
+<p>Unlike other editors, the existence of NORMAL MODE is what makes Vim as the
+great editor which demands minimum access to the ALT-key and CTRL-key.</p>
+
+<h3 id="cheat-sheet">Cheat sheet</h3>
+
+<p>Here is my cheat sheet to remind me of all the important key strokes used
+around NORMAL MODE with emphasis on motion keys:</p>
+
+<pre><code> NORMAL MODE:        Goto BOF → gg      r +--- Next Char
+ screen                   n N # ?ααα   e / +-- End of Word (non-alnum)
+ scroll        ai+wW({[&lt;sp&quot;'`↓  ^b    t / / +- Word Next (non-alnum)
+ ↓     Change c{motion} cc  c↑  ^u   n / / / + End of Word (space)
+ ↓     Delete d{motion} dd  d↑  H   e / / / / +Word Next (space)
+ +--+  Copy   y{motion} yy  y↑  {  C / / / / / +Till α, x  Delete char
+ |zt|  Put After/Before p / P   ( / / / / / / / Find α, r  Replace char
+ |^e|  &quot;α  Use α as register    k/ / / / / / /  / EOL,  ~  Change case
+ |zz|     0 ^ Fα Tα gE B ge b h M l e w E W tα fα $    gd  Goto definiton
+ |^y| ↓↓↓ Split Window ↓↓↓      j ←--- Line            ^]  Tag jump
+ |zb| ^W + ncsvhjkl=+-_&lt;&gt;|      ) ←--- Sentence        ^t  Tag jump-back
+ +--+ Join lines       J        } ←--- Paragraph       ^o  Jump back
+      Forward Backward Search   L ←--- Bottom of Page  {visual}&gt;  Indent →
+      n N /ααα ?ααα ← Find ααα  ^d ←-- Prev 1/2 Page   {visual}&lt;  Indent ←
+      n N *    # ←--- Indicator ^f ←-- Next Page       {visual}=  Indent ⇆
+      , ; tα   Tα ←-- Till α    /ααα ← Find ααα * n N  {visual}gq Format Text
+      , ; fα   Fα ←-- Find α    G ←--- Goto EOF
+   Next Prev   %  ←-- Match     [{ ]} [[ ]] [] ][ Look for {}
+ Record: qα, End-Record: q, Play-Record: @α, Mark as α: mα, Jump to α: `α/'α
+ Undo: u, Redo: ^r, Repeat: . , Fold: Open zo/zO/zr/zR, Close zc/zC/zm/zM
+ Insert Mode: i/a Before/After Char, I/A Before/After Line, O/o above/below
+ Visual Mode: v Char V Line ^V Block, Replace Mode: R, Normal mode: &lt;ESC&gt;
+</code></pre>
+
+<p>This is intentionally terse. I found key sequences such as <code>3w</code>, <code>bd$</code>, <code>ciw</code>,
+<code>3yaw</code>, … quite useful.</p>
+
+<h3 id="hints-for-memorizing-key-strokes">Hints for memorizing key strokes</h3>
+
+<p>Some key assignments looks confusing.  Here are my hints for memorizing such
+key strokes.</p>
+
+<ul>
+<li>Cursor move keys
+
+<ul>
+<li><code>j</code> shape points to downward.</li>
+<li><code>k</code> shape points to upward.</li>
+</ul></li>
+<li>Screen scroll keys:
+
+<ul>
+<li><code>^b</code>: Backward page</li>
+<li><code>^u</code>: Upward <sup>1</sup>&frasl;<sub>2</sub> page</li>
+<li><code>^y</code>: expose up 1 line == Yester(day)-line, next to ^u (Keep cursor)</li>
+<li><code>^f</code>: Forward  page</li>
+<li><code>^d</code>: Downward <sup>1</sup>&frasl;<sub>2</sub> page</li>
+<li><code>^e</code>: Expose down 1 line, next to ^d (Keep cursor)</li>
+</ul></li>
+</ul>
+
+<h3 id="interesting-commands">Interesting commands</h3>
+
+<ul>
+<li><code>ga</code>: Get Unicode point (HEX etc.)</li>
+<li><code>g8</code>: Get Binary data HEX sequence</li>
+<li><code>^G</code>: Get cursor Position</li>
+<li><code>{visual}g?</code>: ROT13</li>
+</ul>
+
+<h3 id="remap-keys">Remap keys</h3>
+
+<p>I remap SPACE-key as leader-key in NORMAL since it has no practical use and
+easier access than default <code>\</code>-key.</p>
+
+<pre><code>let mapleader = ' '
+</code></pre>
+
+<h3 id="some-options">Some options</h3>
+
+<p>I tend to set as follows in the vim startup file (<code>~.vimrc</code> or its equivalent):</p>
+
+<pre><code>&quot; make vim copy buffer bigger (default 50 lines: viminfo='100,&lt;50,s10,h)
+set viminfo='100,&lt;5000,s100,h
+
+&quot; Allow to move cursor beyond for block
+set virtualedit=block
+
+</code></pre>
+
+<h2 id="insert-mode">INSERT MODE</h2>
+
+<p>INSERT MODE is intuitive with cursor keys.</p>
+
+<h3 id="cool-inputs-with-control-keys">Cool inputs with Control keys</h3>
+
+<ul>
+<li><code>^H</code>: Delete a character before the cursor. (&lt;BS&gt;)</li>
+<li><code>^W</code>: Delete the word before the cursor.</li>
+<li><code>^U</code>: Delete all entered characters before the cursor.</li>
+<li><code>^P</code>: Find previous keyword.(map non-starter &lt;S-TAB&gt; to this)</li>
+<li><code>^N</code>: Find next keyword.    (map non-starter &lt;TAB&gt; to this)</li>
+<li><code>^Y</code>: Insert the character which is above the cursor.</li>
+<li><code>^E</code>: Insert the character which is below the cursor.</li>
+<li><code>^T</code>: Insert one shiftwidth of indent.</li>
+<li><code>^D</code>: Delete one shiftwidth of indent.</li>
+<li><code>0^D</code>: Delete all indent.</li>
+<li><code>^Vxαα</code>: Insert character at 0xαα.</li>
+<li><code>^Vuαααα</code>: Insert Unicode character at 0xαααα.</li>
+<li><code>^VUαααααα</code>: Insert Unicode character at 0xαααααααα.</li>
+</ul>
+
+<h3 id="remap-non-starter-tab">Remap non-starter TAB</h3>
+
+<p>I remap non-starter TAB following the vim manual (<code>:h ins-completion</code>):</p>
+
+<pre><code>&quot; Auto complete &lt;C-N&gt; with &lt;TAB&gt; in non-BOL
+&quot;
+function! CleverTab()
+   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+      return &quot;\&lt;Tab&gt;&quot;
+   else
+      return &quot;\&lt;C-N&gt;&quot;
+   endif
+endfunction
+inoremap &lt;Tab&gt; &lt;C-R&gt;=CleverTab()&lt;CR&gt;
+&quot; Auto complete &lt;C-P&gt; with &lt;S-TAB&gt; in non-BOL
+&quot;
+function! CleverSTab()
+   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
+      return &quot;\&lt;S-Tab&gt;&quot;
+   else
+      return &quot;\&lt;C-P&gt;&quot;
+   endif
+endfunction
+inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
+</code></pre>
+
+<h3 id="remap-to-esc">Remap to ESC</h3>
+
+<p>Pressing ESC-key is a bit stressful since it is far from the finger home
+position.  I remap a quick key sequence <code>kj</code> to ESC-key.</p>
+
+<pre><code>inoremap kj  &lt;Esc&gt;
+</code></pre>
+
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/09/02/python3-black/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
