@@ -56,7 +56,7 @@
 
 
 
-<p>I can use Vim as a basic editor with TKL-keyboard while tapping some keys
+<p>I could use Vim as a basic editor with TKL-keyboard while tapping some keys
 multiple times.  Functional but not elegant!</p>
 
 <p>I decided to re-learn Vim to use it <em>properly</em>.  Here is my learning memo.</p>
@@ -78,20 +78,21 @@ multiple times.  Functional but not elegant!</p>
 
 <h2 id="guiding-voice">Guiding voice</h2>
 
-<p>Here are a few insightful recommendations for the best practices for Vim.</p>
+<p>Here are a few insightful recommendations on the best practices for Vim.</p>
 
 <ul>
 <li>Voice of Vim God (Vim upstream: Bram Moolenaar): <a href="https://www.moolenaar.net/habits.html">Seven habits of effective text editing</a></li>
 <li>Voice of Vim Gurus: <a href="https://www.vi-improved.org/recommendations/">#vim Recommendations</a></li>
-<li>Voice of reference <a href="https://github.com/mhinz/vim-galore">vim-galore</a> of which
-I don&rsquo;t agree some tips.</li>
+<li>Voice of internet mumbling such as
+<a href="https://github.com/mhinz/vim-galore">vim-galore</a> on which I don&rsquo;t always
+agree.</li>
 <li><a href="https://vimhelp.org/">RTFM</a> or <code>vim &quot;+h|only&quot;</code>.</li>
 </ul>
 
 <h2 id="normal-mode">NORMAL MODE</h2>
 
 <p>Unlike other editors, the existence of NORMAL MODE is what makes Vim as the
-great editor which demands minimum access to the ALT-key and CTRL-key.</p>
+great editor which allows the minimum usage of the ALT-key and CTRL-key.</p>
 
 <h3 id="cheat-sheet">Cheat sheet</h3>
 
@@ -122,12 +123,14 @@ around NORMAL MODE with emphasis on motion keys:</p>
  Visual Mode: v Char V Line ^V Block, Replace Mode: R, Normal mode: &lt;ESC&gt;
 </code></pre>
 
-<p>This is intentionally terse. I found key sequences such as <code>3w</code>, <code>bd$</code>, <code>ciw</code>,
-<code>3yaw</code>, … quite useful.</p>
+<p>This is intentionally terse.</p>
+
+<p>I found some key sequences such as <code>3w</code>, <code>bc$</code>, <code>ciw</code>, <code>3yaw</code>, … quite useful,
+now.</p>
 
 <h3 id="hints-for-memorizing-key-strokes">Hints for memorizing key strokes</h3>
 
-<p>Some key assignments looks confusing.  Here are my hints for memorizing such
+<p>Some key assignments look confusing.  Here are my hints for memorizing such
 key strokes.</p>
 
 <ul>
@@ -158,9 +161,9 @@ key strokes.</p>
 <li><code>{visual}g?</code>: ROT13</li>
 </ul>
 
-<h3 id="remap-keys">Remap keys</h3>
+<h3 id="map-keys">Map keys</h3>
 
-<p>I remap SPACE-key as leader-key in NORMAL since it has no practical use and
+<p>I map SPACE-key as leader-key in NORMAL MODE since it has no practical use and
 easier access than default <code>\</code>-key.</p>
 
 <pre><code>let mapleader = ' '
@@ -168,7 +171,7 @@ easier access than default <code>\</code>-key.</p>
 
 <h3 id="some-options">Some options</h3>
 
-<p>I tend to set as follows in the vim startup file (<code>~.vimrc</code> or its equivalent):</p>
+<p>I tend to set as follows in the vim startup file (<code>~/.vimrc</code> or its equivalent):</p>
 
 <pre><code>&quot; make vim copy buffer bigger (default 50 lines: viminfo='100,&lt;50,s10,h)
 set viminfo='100,&lt;5000,s100,h
@@ -182,27 +185,30 @@ set virtualedit=block
 
 <p>INSERT MODE is intuitive with cursor keys.</p>
 
-<h3 id="cool-inputs-with-control-keys">Cool inputs with Control keys</h3>
+<h3 id="cool-inputs-with-ctrl-keys">Cool inputs with <code>CTRL</code>-keys</h3>
+
+<p>Here are some non-intuitive key sequences.</p>
 
 <ul>
-<li><code>^H</code>: Delete a character before the cursor. (&lt;BS&gt;)</li>
+<li><code>^H</code>: Delete a character before the cursor. (<code>&lt;BS&gt;</code>)</li>
 <li><code>^W</code>: Delete the word before the cursor.</li>
 <li><code>^U</code>: Delete all entered characters before the cursor.</li>
-<li><code>^P</code>: Find previous keyword.(map non-starter &lt;S-TAB&gt; to this)</li>
-<li><code>^N</code>: Find next keyword.    (map non-starter &lt;TAB&gt; to this)</li>
+<li><code>^P</code>: Find previous keyword.(map non-starter <code>&lt;S-TAB&gt;</code> to this)</li>
+<li><code>^N</code>: Find next keyword.    (map non-starter <code>&lt;TAB&gt;</code> to this)</li>
 <li><code>^Y</code>: Insert the character which is above the cursor.</li>
 <li><code>^E</code>: Insert the character which is below the cursor.</li>
 <li><code>^T</code>: Insert one shiftwidth of indent.</li>
 <li><code>^D</code>: Delete one shiftwidth of indent.</li>
+<li><code>^X</code>: Start of sub-mode (<code>h: insert_expand</code>).</li>
 <li><code>0^D</code>: Delete all indent.</li>
-<li><code>^Vxαα</code>: Insert character at 0xαα.</li>
-<li><code>^Vuαααα</code>: Insert Unicode character at 0xαααα.</li>
-<li><code>^VUαααααα</code>: Insert Unicode character at 0xαααααααα.</li>
+<li><code>^Vxαα</code>: Insert character at <code>0xαα</code>.</li>
+<li><code>^Vuαααα</code>: Insert Unicode character at <code>0xαααα</code>.</li>
+<li><code>^VUαααααα</code>: Insert Unicode character at <code>0xαααααααα</code>.</li>
 </ul>
 
-<h3 id="remap-non-starter-tab">Remap non-starter TAB</h3>
+<h3 id="map-non-starter-tab">Map non-starter TAB</h3>
 
-<p>I remap non-starter TAB following the vim manual (<code>:h ins-completion</code>):</p>
+<p>I map non-starter <code>TAB</code> following the vim manual (<code>:h ins-completion</code>):</p>
 
 <pre><code>&quot; Auto complete &lt;C-N&gt; with &lt;TAB&gt; in non-BOL
 &quot;
@@ -226,13 +232,20 @@ endfunction
 inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
 </code></pre>
 
-<h3 id="remap-to-esc">Remap to ESC</h3>
+<h3 id="map-to-esc">Map to ESC</h3>
 
 <p>Pressing ESC-key is a bit stressful since it is far from the finger home
-position.  I remap a quick key sequence <code>kj</code> to ESC-key.</p>
+position.  I map a quick key sequence <code>kj</code> to <code>ESC</code>-key.</p>
 
 <pre><code>inoremap kj  &lt;Esc&gt;
+inoremap kjk kj
 </code></pre>
+
+<p>The second mapping is to allow quick input of &ldquo;kj&rdquo; by &ldquo;kjk&rdquo;.  Without this, you
+need to wait a second after entering &ldquo;k&rdquo; to enter &ldquo;kj&rdquo;.</p>
+
+<p>(&ldquo;k&rdquo; and &ldquo;j&rdquo; are easiest to type and unlikely under normal input situation.  I
+remember this as my &ldquo;Knee Jerk&rdquo; reaction to the distant <code>ESC</code>-key.)</p>
 
 <!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
