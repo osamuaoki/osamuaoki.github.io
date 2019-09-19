@@ -190,10 +190,10 @@ etc.</p>
 
 <p>COMMAND MODE is started from NORMAL MODE by pressing <code>:</code> or <code>/</code> or <code>?</code>.</p>
 
-<h3 id="cool-inputs-with-ctrl-keys">Cool inputs with <code>CTRL</code>-keys</h3>
+<h3 id="last-resort-inputs-with-ctrl-keys">Last resort inputs with <code>CTRL</code>-keys</h3>
 
-<p>Here are some non-intuitive key sequences used by INSERT MOD used by INSERT
-MODE.  Some key sequences with are also valid for COMMAND MODE.</p>
+<p>Here are some non-intuitive key sequences used by INSERT MODE used by INSERT
+MODE.  Some key sequences are also valid for COMMAND MODE.</p>
 
 <ul>
 <li><code>^H</code>: Delete a character before the cursor. (same as <code>&lt;BS&gt;</code>)</li>
@@ -205,9 +205,8 @@ MODE.  Some key sequences with are also valid for COMMAND MODE.</p>
 <li><code>^E</code>: Insert the character which is below the cursor. (Only INSERT MODE)</li>
 <li><code>^T</code>: Insert one shiftwidth of indent. (Only INSERT MODE)</li>
 <li><code>^D</code>: Delete one shiftwidth of indent. (Only INSERT MODE)</li>
-<li><code>^D</code>: List all possible choices. (Only in COMMAND MODE started by <code>:</code>)
-wildmenu)</li>
-<li><code>^F</code>: open edittable command history. (only COMMAND MODE)</li>
+<li><code>^D</code>: List all possible choices. (Only Ex COMMAND MODE to start wildmenu)</li>
+<li><code>^F</code>: open editable command history. (only COMMAND MODE)</li>
 <li><code>^X</code>: start of sub-mode (<code>h: insert_expand</code>).</li>
 <li><code>0^D</code>: delete all indent.</li>
 <li><code>^Vxαα</code>: insert character at <code>0xαα</code>. (command mode)</li>
@@ -215,8 +214,8 @@ wildmenu)</li>
 <li><code>^Vuαααααα</code>: insert unicode character at <code>0xαααααααα</code>. (command mode)</li>
 </ul>
 
-<p>You can use NORMAL-MODE-like editing by starting the COMMAND MODE with <code>q:</code> or
-<code>q/</code> or <code>q?</code>.  Alternatively, typing <code>^F</code> in command mode started by <code>:</code> or <code>/</code>
+<p>You can use NORMAL-MODE-like editing by starting COMMAND MODE with <code>q:</code> or
+<code>q/</code> or <code>q?</code>.  Alternatively, typing <code>^F</code> in COMMAND MODE started by <code>:</code> or <code>/</code>
 or <code>?</code> also starts NORMAL-MODE-like editing.</p>
 
 <h3 id="map-non-starter-tab-in-insert-mode">Map non-starter TAB in INSERT MODE</h3>
@@ -264,6 +263,60 @@ you need to wait a second after entering &ldquo;<code>k</code>&rdquo; to enter &
 
 <p>(&rdquo;<code>k</code>&rdquo; and &ldquo;<code>j</code>&rdquo; are easiest to type and unlikely under normal input situation.
 I remember this as my <strong>Knee-Jerk-reaction</strong> to the distant <code>ESC</code>-key.)</p>
+
+<h2 id="quickfix-mode">QUICKFIX MODE</h2>
+
+<p>If you have a task to search some text to make Vim to jump to particular places
+in its buffer, QUICKFIX MODE is the one to automate your process.  No more
+<code>grep</code> on another terminal window.</p>
+
+<p>There are 4 basic commands to start preparing jump list data.</p>
+
+<ul>
+<li><code>:make</code>: Run <code>make</code> for compile-jump-edit cycle. (<code>:h :make</code>)</li>
+<li><code>:grep</code>: Run system-<code>grep</code> for search-jump-edit cycle. (<code>:h :grep</code>)</li>
+<li><code>:vimgrep</code>: Run internal-<code>grep</code> for search-jump-edit cycle. (<code>:h :vimgrep</code>)</li>
+<li><code>:helpgrep</code>: Run internal-<code>grep</code> on all help text files for search-jump-read
+cycle. (<code>:h :helpgrep</code>)</li>
+</ul>
+
+<p>Then you access and use the jump list.</p>
+
+<ul>
+<li><code>:copen</code>: Open a window to show the current list of errors.</li>
+<li><code>:cclose</code>: Close a window for the jump list.</li>
+<li><code>:cwindow</code>: Open the quickfix window if error.  Otherwise, close the quickfix
+window.</li>
+<li><code>:cnext</code>: Jump to next quickfix item location.</li>
+<li><code>:cprev</code>: Jump to previous quickfix item location.</li>
+</ul>
+
+<p>Please note there are <code>l...</code> variants of above commands.</p>
+
+<h2 id="terminal-mode">TERMINAL MODE</h2>
+
+<p>This is a new Vim/NVim feature.  Now capturing shell session is as easy.  No
+more envying EMACS terminal mode.</p>
+
+<ul>
+<li><code>:terminal</code>: Start TERMINAL MODE. (<code>:h :terminal</code>)</li>
+<li><code>^WN</code> or <code>^\^N</code>: Switch to TERMINAL-NORMAL MODE.</li>
+<li><code>^W^W</code>: Move focus to the next window</li>
+<li><code>^W:</code>: Enter an Ex COMMAND MODE.</li>
+<li><code>^W.</code>: Send a <code>^W</code> to the job in the terminal.</li>
+<li><code>^W^\</code>: Send a <code>^\</code> to the job in the terminal.</li>
+<li><code>^W^C</code>: Send a <code>^C</code> to the job in the terminal.</li>
+</ul>
+
+<p>Typing <code>i</code> etc. will get you return to TERMINAL MODE from TERMINAL-NORMAL MODE.</p>
+
+<h3 id="map-to-wn">Map to <code>^WN</code></h3>
+
+<p>Similar key sequence trick as described in INSERT MODE can also be implemented.</p>
+
+<pre><code>tnoremap kj  &lt;Esc&gt;
+tnoremap kjk kj
+</code></pre>
 
 <!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
