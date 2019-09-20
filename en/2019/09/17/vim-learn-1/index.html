@@ -68,11 +68,12 @@ multiple times.  This was functional but not so elegant!</p>
 
 <ul>
 <li>Use as much native functionalities.</li>
+<li>Don&rsquo;t force Vim to behave like another program.</li>
 </ul></li>
 <li>50%/60%-keyboard ready.
 
 <ul>
-<li>No cursor keys.</li>
+<li>Use no cursor keys, if possible.</li>
 </ul></li>
 </ul>
 
@@ -81,12 +82,14 @@ multiple times.  This was functional but not so elegant!</p>
 <p>Here are a few insightful recommendations on the best practices for Vim.</p>
 
 <ul>
-<li>Voice of Vim God (Vim upstream: Bram Moolenaar): <a href="https://www.moolenaar.net/habits.html">Seven habits of effective text editing</a></li>
-<li>Voice of Vim Gurus: <a href="https://www.vi-improved.org/recommendations/">#vim Recommendations</a></li>
-<li>Voice of internet mumbling such as
+<li>Voice of Vim God (Vim upstream: Bram Moolenaar): <a href="https://www.moolenaar.net/habits.html">Seven habits of effective
+text editing</a></li>
+<li><a href="https://vimhelp.org/">RTFM</a> or type &ldquo;<code>vim '+h|only'</code>&rdquo;.</li>
+<li>Voice of Vim Gurus: <a href="https://www.vi-improved.org/recommendations/">#vim
+Recommendations</a></li>
+<li>Voice of internet mumblings such as
 <a href="https://github.com/mhinz/vim-galore">vim-galore</a> on which I don&rsquo;t always
 agree.</li>
-<li><a href="https://vimhelp.org/">RTFM</a> or type &ldquo;<code>vim '+h|only'</code>&rdquo;.</li>
 </ul>
 
 <h2 id="normal-mode">NORMAL MODE</h2>
@@ -110,7 +113,7 @@ around NORMAL MODE with emphasis on motion keys:</p>
  |zz|     0 ^ Fα Tα gE B ge b h M l e w E W tα fα $    gd  Goto definiton
  |^y| ↓↓↓ Split Window ↓↓↓      j ←--- Line            ^]  Tag jump
  |zb| ^W + ncsvhjkl=+-_&lt;&gt;|      ) ←--- Sentence        ^T  Tag jump-back
- +--+ Join lines       J        } ←--- Paragraph       ^O  Jump back
+ +--+ Join lines       J        } ←--- Paragraph       ^I/^O  Jump next/prev
       Forward Backward Search   L ←--- Bottom of Page  {visual}&gt;  Indent →
       n N /ααα ?ααα ← Find ααα  ^D ←-- Prev 1/2 Page   {visual}&lt;  Indent ←
       n N *    # ←--- Indicator ^F ←-- Next Page       {visual}=  Indent ⇆
@@ -123,7 +126,7 @@ around NORMAL MODE with emphasis on motion keys:</p>
  Visual Mode: v Char V Line ^V Block, Replace Mode: R, Normal mode: &lt;ESC&gt;
 </code></pre>
 
-<p>This is intentionally terse.</p>
+<p>This is intentionally terse.  <code>^</code> is used as prefix for CTRL-key.</p>
 
 <p>I found some key sequences such as <code>3w</code>, <code>bc$</code>, <code>ciw</code>, <code>3yaw</code>, … quite useful,
 now.</p>
@@ -158,7 +161,7 @@ key strokes.</p>
 <li><code>ga</code>: Get Unicode point (HEX etc.)</li>
 <li><code>g8</code>: Get Binary data HEX sequence</li>
 <li><code>^G</code>: Get cursor Position</li>
-<li><code>{visual}g?</code>: ROT13</li>
+<li><code>{visual}g?</code>: ROT13 (Super insecure encryption)</li>
 </ul>
 
 <h3 id="map-leader-key">Map leader key</h3>
@@ -234,11 +237,15 @@ MODE.  Some key sequences are also valid for COMMAND MODE.</p>
 <li><code>^Vuαααααα</code>: insert unicode character at <code>0xαααααααα</code>. (command mode)</li>
 </ul>
 
+<p>Although it is tempting to map some CONTROL-key sequences to some cursor keys,
+don&rsquo;t bother to do so since they are most likely used by Vim.  Use NORMAL MODE
+and COMMAND NORMAL MODE and native cursor keys.</p>
+
 <h3 id="map-non-starter-tab-in-insert-mode">Map non-starter TAB in INSERT MODE</h3>
 
 <p>I map non-starter <code>TAB</code> following the vim manual (<code>:h ins-completion</code>):</p>
 
-<pre><code>&quot; auto complete &lt;c-n&gt; with &lt;tab&gt; in non-bol
+<pre><code class="language-vim">&quot; auto complete &lt;c-n&gt; with &lt;tab&gt; in non-bol
 &quot;
 function! clevertab()
    if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
@@ -264,6 +271,23 @@ inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
 
 <p>Normally, <code>TAB</code> in COMMAND MODE starts <strong>wildmenu</strong> under <code>:set wildmenu</code>.  You
 can use <code>TAB</code> and <code>S-TAB</code> to chose the one you want.</p>
+
+<h3 id="basics-in-command-mode">Basics in COMMAND MODE</h3>
+
+<ul>
+<li><code>:e ααα</code>: Edit ααα file</li>
+<li><code>:w</code>: Write file</li>
+<li><code>:wall</code>: Write all file</li>
+<li><code>:wq</code>: Write and Quit</li>
+<li><code>:q!</code>: Quit (force)</li>
+<li><code>:bα</code>: Edit buffer α</li>
+<li><code>:bn</code>: Edit next buffer</li>
+<li><code>:bf</code>: Edit previous buffer</li>
+<li><code>:r ααα</code>: Read ααα file to cursor</li>
+<li><code>:r! ααα</code>: Read ααα command output to cursor</li>
+<li><code>:%s/ααα/βββ/gc</code>: Replace ααα with βββ for all lines with confirmation</li>
+<li><code>:bufdo ααα</code>: Execute ααα in each buffer in the buffer list.</li>
+</ul>
 
 <h2 id="quickfix-mode">QUICKFIX MODE</h2>
 
@@ -313,9 +337,9 @@ more envying EMACS terminal mode.</p>
 
 <h3 id="map-a-key-sequence-to-wn-in-terminal-mode">Map a key sequence to <code>^WN</code> in TERMINAL MODE</h3>
 
-<p>Similar key sequence trick as described in INSERT MODE can also be implemented.</p>
+<p>Similar key sequence trick as described in INSERT MODE can also be implemented</p>
 
-<pre><code>tnoremap kj  &lt;Esc&gt;
+<pre><code>tnoremap kj  &lt;C-W&gt;N
 tnoremap kjk kj
 </code></pre>
 
