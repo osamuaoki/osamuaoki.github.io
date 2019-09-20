@@ -161,7 +161,7 @@ key strokes.</p>
 <li><code>{visual}g?</code>: ROT13</li>
 </ul>
 
-<h3 id="map-keys">Map keys</h3>
+<h3 id="map-leader-key">Map leader key</h3>
 
 <p>I map SPACE-key as leader-key in NORMAL MODE since it has no practical use and
 easier access than default <code>\</code>-key.</p>
@@ -193,6 +193,22 @@ etc.</p>
 <p>You can use NORMAL-MODE-like editing for COMMAND MODE situation by starting it
 with <code>q:</code> or <code>q/</code> or <code>q?</code>.  Alternatively, typing <code>^F</code> in COMMAND MODE
 situation also starts NORMAL-MODE-like editing.</p>
+
+<h3 id="map-a-key-sequence-to-esc-in-insert-mode">Map a key sequence to ESC in INSERT MODE</h3>
+
+<p>Pressing <code>ESC</code>-key to get back to NORMAL MODE from INSERT MODE is a bit
+stressful since it is far from the finger home position.  I map a quick key
+sequence of &ldquo;<code>kj</code>&rdquo; to <code>ESC</code>-key.</p>
+
+<pre><code>inoremap kj  &lt;Esc&gt;
+inoremap kjk kj
+</code></pre>
+
+<p>The second mapping is to allow quick input of <code>kj</code> by <code>kjk</code>.  Without this, you
+need to wait a second after entering <code>k</code> to enter <code>kj</code>.</p>
+
+<p><code>k</code> and <code>j</code> are easiest to type and unlikely under normal input situation.  I
+remember this as my <strong>Knee-Jerk-reaction</strong> to the distant <code>ESC</code>-key.</p>
 
 <h3 id="last-resort-inputs-with-ctrl-keys">Last resort inputs with <code>CTRL</code>-keys</h3>
 
@@ -249,21 +265,6 @@ inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
 <p>Normally, <code>TAB</code> in COMMAND MODE starts <strong>wildmenu</strong> under <code>:set wildmenu</code>.  You
 can use <code>TAB</code> and <code>S-TAB</code> to chose the one you want.</p>
 
-<h3 id="map-to-esc">Map to ESC</h3>
-
-<p>Pressing <code>ESC</code>-key is a bit stressful since it is far from the finger home
-position.  I map a quick key sequence of &ldquo;<code>kj</code>&rdquo; to <code>ESC</code>-key.</p>
-
-<pre><code>inoremap kj  &lt;Esc&gt;
-inoremap kjk kj
-</code></pre>
-
-<p>The second mapping is to allow quick input of <code>kj</code> by <code>kjk</code>.  Without this, you
-need to wait a second after entering <code>k</code> to enter <code>kj</code>.</p>
-
-<p><code>k</code> and <code>j</code> are easiest to type and unlikely under normal input situation.  I
-remember this as my <strong>Knee-Jerk-reaction</strong> to the distant <code>ESC</code>-key.</p>
-
 <h2 id="quickfix-mode">QUICKFIX MODE</h2>
 
 <p>If you have a task to search some text to make Vim to jump to particular places
@@ -310,7 +311,7 @@ more envying EMACS terminal mode.</p>
 
 <p>Typing <code>i</code> etc. will get you return to TERMINAL MODE from TERMINAL-NORMAL MODE.</p>
 
-<h3 id="map-to-wn">Map to <code>^WN</code></h3>
+<h3 id="map-a-key-sequence-to-wn-in-terminal-mode">Map a key sequence to <code>^WN</code> in TERMINAL MODE</h3>
 
 <p>Similar key sequence trick as described in INSERT MODE can also be implemented.</p>
 
