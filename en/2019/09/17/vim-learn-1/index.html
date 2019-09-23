@@ -163,7 +163,8 @@ key strokes.</p>
 <ul>
 <li><code>ga</code>: Get Unicode point (HEX etc.)</li>
 <li><code>g8</code>: Get Binary data HEX sequence</li>
-<li><code>^G</code>: Get cursor Position</li>
+<li><code>^G</code>: Get filename and cursor position</li>
+<li><code>g^G</code>: Get cursor position in column, line, word, character and byte</li>
 <li><code>{visual}g?</code>: ROT13 (Super insecure encryption)</li>
 </ul>
 
@@ -342,11 +343,11 @@ more envying EMACS terminal mode.</p>
 <li><code>^W^C</code>: Send a <code>^C</code> to the job in the terminal.</li>
 </ul>
 
-<p>Typing <code>i</code> etc. will get you return to TERMINAL MODE from TERMINAL-NORMAL MODE.</p>
+<p>Typing <code>i</code> etc. will get you back to TERMINAL MODE from TERMINAL-NORMAL MODE.</p>
 
 <h3 id="map-a-key-sequence-to-wn-in-terminal-mode">Map a key sequence to <code>^WN</code> in TERMINAL MODE</h3>
 
-<p>Similar key sequence trick as described in INSERT MODE can also be implemented</p>
+<p>Similar key sequence trick proposed for INSERT MODE can also be implemented</p>
 
 <pre><code>tnoremap kj  &lt;C-W&gt;N
 tnoremap kjk kj
