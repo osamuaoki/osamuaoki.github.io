@@ -87,13 +87,22 @@ multiple times.  This was functional but not so elegant!</p>
 <li>Voice of Vim God (Vim upstream: Bram Moolenaar): <a href="https://www.moolenaar.net/habits.html">Seven habits of effective text editing</a></li>
 <li><a href="https://vimhelp.org/">RTFM</a> or type &ldquo;<code>vim '+h|only'</code>&rdquo;.</li>
 <li>Voice of Vim Gurus: <a href="https://www.vi-improved.org/recommendations/">#vim Recommendations</a></li>
-<li>Interesting hints from some people:
+<li>Some interesting hints found:
 
 <ul>
 <li><a href="http://learnvimscriptthehardway.stevelosh.com/">Learn Vimscript the Hard Way</a></li>
 <li><a href="https://github.com/mhinz/vim-galore">vim-galore</a></li>
 </ul></li>
 </ul>
+
+<p>Here, I summarized my rationale behind my configuration decisions for me to
+remember them.</p>
+
+<p>Please note that I am publishing my current <code>~/.vim/</code> directory implementation
+at <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a> .  This is not general purpose plugin
+managing system but if you are manually managing Vim plugins with Vim 8&rsquo;s
+native package management infrastructure, and <code>git submodule</code>, this may give
+you interesting hints.</p>
 
 <h2 id="normal-mode">NORMAL MODE</h2>
 
@@ -136,8 +145,9 @@ now.</p>
 
 <h3 id="hints-for-memorizing-key-strokes">Hints for memorizing key strokes</h3>
 
-<p>Some key assignments look confusing.  Here are my hints for memorizing such
-key strokes.</p>
+<p>Since most key assignments are chosen from the initial of the corresponding
+English word, they are quite intuitive.  But, some key assignments look
+confusing.  Here are my hints for memorizing such key strokes.</p>
 
 <ul>
 <li>Cursor move keys
@@ -163,7 +173,7 @@ key strokes.</p>
 <ul>
 <li><code>ga</code>: Get Unicode point (HEX etc.)</li>
 <li><code>g8</code>: Get Binary data HEX sequence</li>
-<li><code>^G</code>: Get filename and cursor position</li>
+<li><code>^G</code>: Get filename and cursor position (see &ldquo;<code>:h 'ruler'</code>&rdquo;)</li>
 <li><code>g^G</code>: Get cursor position in column, line, word, character and byte</li>
 <li><code>{visual}g?</code>: ROT13 (Super insecure encryption)</li>
 </ul>
@@ -288,9 +298,6 @@ can use <code>TAB</code> and <code>S-TAB</code> to chose the one you want.</p>
 <li><code>:bα</code>: Edit buffer α</li>
 <li><code>:bn</code>: Edit next buffer</li>
 <li><code>:bp</code>: Edit previous buffer</li>
-<li><code>:cw</code>: Open quickfix window</li>
-<li><code>:cn</code>: Jump to next quickfix item</li>
-<li><code>:cp</code>: Jump to previous quickfix item</li>
 <li><code>:r ααα</code>: Read ααα file to cursor</li>
 <li><code>:r! ααα</code>: Read ααα command output to cursor</li>
 <li><code>:%s/ααα/βββ/gc</code>: Replace ααα with βββ for all lines with confirmation</li>
@@ -315,13 +322,12 @@ in its buffer, QUICKFIX MODE is the one to automate your process.  No more
 search-jump-read cycle. (<code>:h :helpgrep</code>)</li>
 </ul>
 
-<p>Then you access and use the jump list.</p>
+<p>Then you access and use the jump listi from COMMAND MODE.</p>
 
 <ul>
+<li><code>:cw[indow]</code>: Open the quickfix window if error.</li>
 <li><code>:cope[n]</code>: Open a window to show the current list of errors.</li>
 <li><code>:ccl[ose]</code>: Close a window for the jump list.</li>
-<li><code>:cw[indow]</code>: Open the quickfix window if error.  Otherwise, close the quickfix
-window.</li>
 <li><code>:cn[ext]</code>: Jump to next quickfix item location.</li>
 <li><code>:cp[rev]</code>: Jump to previous quickfix item location.</li>
 </ul>

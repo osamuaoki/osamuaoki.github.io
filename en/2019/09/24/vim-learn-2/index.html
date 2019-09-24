@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Re-learning Vim (2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Re-learning Vim (2)</span></h1>
+
+<h2 class="date">2019/09/24</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/09/21/wayland/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>Let&rsquo;s review a few interesting plugins.</p>
+
+<p>Please note that I manage plugins via GUI reconfiguration framework using the
+<code>vimconf</code> command.  See
+<a href="https://github.com/osamuaoki/dot-vim">osamuaoki/dot-vim</a>.  I admit my scheme
+is not the main stream one.</p>
+
+<p>Please note very basic configuration is at
+<a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">~/.vim/vimrc</a>.</p>
+
+<p>All other initialization code is provided as plugin.</p>
+
+<h2 id="osamuaoki-00-vimrc"><code>osamuaoki/00-vimrc</code></h2>
+
+<p>My kitchen sink initialization
+<a href="https://github.com/osamuaoki/00-vimrc/blob/master/plugin/00-vimrc.vim">script</a>.</p>
+
+<h2 id="ciaranm-securemodelines"><code>ciaranm/securemodelines</code></h2>
+
+<p>Features like &ldquo;modeline&rdquo; is very convenient but it may become source of
+security concern.  This plugin disables Vim&rsquo;s native capability for &ldquo;modeline&rdquo;
+but still enables very limited commands to be parsed.</p>
+
+<p>Since this works even under &ldquo;<code>:set nomodeline</code>&rdquo; default start scheme, I am
+using this all the time.</p>
+
+<h2 id="ntpeters-vim-better-whitespace"><code>ntpeters/vim-better-whitespace</code></h2>
+
+<p>This is a new improved version of <code>bronson/vim-trailing-whitespace</code> .  This
+takes care all weird UTF-8 spaces too.</p>
+
+<ul>
+<li>Mark all types of spaces in wrong position on display</li>
+<li>Strip tailing spaces upon hitting &ldquo;<SPACE>s&rdquo;.</li>
+</ul>
+
+<p>See my
+<a href="https://github.com/osamuaoki/dot-vim/blob/master/conf/preconf.available/vim-better-whitespace">configuration</a>.</p>
+
+<h2 id="osamuaoki-vim-spell-under"><code>osamuaoki/vim-spell-under</code></h2>
+
+<p>When syntax highlist and spell checker are activated together, text becomes
+difficult to read in some cases in terminal.  This forces spell checker to use
+underline.</p>
+
+<h2 id="romainl-vim-qlist"><code>romainl/vim-qlist</code></h2>
+
+<p>Modify <code>[I</code>, <code>]I</code>, <code>[D</code>, <code>]D</code> behavior to make them compatible with QuickFix
+system.</p>
+
+<h2 id="vim-airline-vim-airline"><code>vim-airline/vim-airline</code></h2>
+
+<p>Too nice looking to avoid.</p>
+
+<h2 id="tpope-vim-fugitive"><code>tpope/vim-fugitive</code></h2>
+
+<p>This allows to issue <code>git</code> commands from Vim command line.</p>
+
+<h2 id="airblade-vim-gitgutter"><code>airblade/vim-gitgutter</code></h2>
+
+<p>Checks diff from repository contents.</p>
+
+<h2 id="dense-analysis-ale"><code>dense-analysis/ale</code></h2>
+
+<p>Very nice syntax checker.</p>
+
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/09/21/wayland/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
