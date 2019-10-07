@@ -264,26 +264,26 @@ and COMMAND NORMAL MODE and native cursor keys.</p>
 
 <h3 id="map-non-starter-tab-in-insert-mode">Map non-starter TAB in INSERT MODE</h3>
 
-<p>I map non-starter <code>TAB</code> following the vim manual (<code>:h ins-completion</code>):</p>
+<p>I map non-starter <code>TAB</code> following the vim manual with some twist (<code>:h ins-completion</code>):</p>
 
-<pre><code class="language-vim">&quot; auto complete &lt;c-n&gt; with &lt;tab&gt; in non-bol
-&quot;
-function! clevertab()
-   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
-      return &quot;\&lt;tab&gt;&quot;
-   else
-      return &quot;\&lt;c-n&gt;&quot;
-   endif
+<pre><code class="language-vim">&quot; Auto complete &lt;C-N&gt; with &lt;TAB&gt; if tailing non-space character
+&quot; (TAB may be used to indent line under &quot;set expandtab&quot;)
+function! CleverTab()
+  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
+    return &quot;\&lt;Tab&gt;&quot;
+  else
+    return &quot;\&lt;C-N&gt;&quot;
+  endif
 endfunction
-inoremap &lt;tab&gt; &lt;c-r&gt;=clevertab()&lt;cr&gt;
-&quot; auto complete &lt;c-p&gt; with &lt;s-tab&gt; in non-bol
+inoremap &lt;Tab&gt; &lt;C-R&gt;=CleverTab()&lt;CR&gt;
+&quot; Auto complete &lt;C-P&gt; with &lt;S-TAB&gt; in non-BOL
 &quot;
-function! cleverstab()
-   if strpart( getline('.'), 0, col('.')-1 ) =~ '^\s*$'
-      return &quot;\&lt;s-tab&gt;&quot;
-   else
-      return &quot;\&lt;c-p&gt;&quot;
-   endif
+function! CleverSTab()
+  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
+    return &quot;\&lt;S-Tab&gt;&quot;
+  else
+    return &quot;\&lt;C-P&gt;&quot;
+  endif
 endfunction
 inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
 </code></pre>
