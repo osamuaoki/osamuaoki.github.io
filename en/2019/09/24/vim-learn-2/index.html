@@ -73,6 +73,65 @@ is not the main stream one.</p>
 <p>My kitchen sink initialization
 <a href="https://github.com/osamuaoki/00-vimrc/blob/master/plugin/00-vimrc.vim">script</a>.</p>
 
+<h3 id="map-non-starter-tab-in-insert-mode">Map non-starter TAB in INSERT MODE</h3>
+
+<p>I map non-starter <code>TAB</code> following the vim manual with some twist (<code>:h ins-completion</code>):</p>
+
+<pre><code class="language-vim">&quot; Auto complete &lt;C-N&gt; with &lt;TAB&gt; if tailing non-space character
+&quot; (TAB may be used to indent line under &quot;set expandtab&quot;)
+function! CleverTab()
+  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
+    return &quot;\&lt;Tab&gt;&quot;
+  else
+    return &quot;\&lt;C-N&gt;&quot;
+  endif
+endfunction
+inoremap &lt;Tab&gt; &lt;C-R&gt;=CleverTab()&lt;CR&gt;
+&quot; Auto complete &lt;C-P&gt; with &lt;S-TAB&gt; in non-BOL
+&quot;
+function! CleverSTab()
+  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
+    return &quot;\&lt;S-Tab&gt;&quot;
+  else
+    return &quot;\&lt;C-P&gt;&quot;
+  endif
+endfunction
+inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
+</code></pre>
+
+<h3 id="map-a-key-sequence-to-esc-in-insert-mode">Map a key sequence to ESC in INSERT MODE</h3>
+
+<p>Pressing <code>ESC</code>-key to get back to NORMAL MODE from INSERT MODE is a bit
+stressful since it is far from the finger home position.  I map a quick key
+sequence of &ldquo;<code>kj</code>&rdquo; to <code>ESC</code>-key.</p>
+
+<pre><code>inoremap kj  &lt;Esc&gt;
+inoremap kjk kj
+</code></pre>
+
+<p>The second mapping is to allow quick input of <code>kj</code> by <code>kjk</code>.  Without this, you
+need to wait a second after entering <code>k</code> to enter <code>kj</code>.</p>
+
+<p><code>k</code> and <code>j</code> are easiest to type and unlikely under normal input situation.  I
+remember this as my <strong>Knee-Jerk-reaction</strong> to the distant <code>ESC</code>-key.</p>
+
+<h3 id="map-a-key-sequence-to-wn-in-terminal-mode">Map a key sequence to <code>^WN</code> in TERMINAL MODE</h3>
+
+<p>Similar key sequence trick proposed for INSERT MODE can also be implemented</p>
+
+<pre><code>tnoremap kj  &lt;C-W&gt;N
+tnoremap kjk kj
+</code></pre>
+
+<h3 id="map-q-to-q-in-normal-mode">Map <code>Q</code> to <code>@q</code> in NORMAL MODE</h3>
+
+<p>Record and apply keyboard MACRO just with <code>q</code>-key. (&ldquo;qq&rdquo; to start recording
+MACRO, &ldquo;qq&rdquo; to quit recording MACRO, &ldquo;Q&rdquo; to apply MACRO)</p>
+
+<pre><code>nnoremap Q @q
+xnoremap Q :norm @q&lt;cr&gt;
+</code></pre>
+
 <h2 id="ciaranm-securemodelines"><code>ciaranm/securemodelines</code></h2>
 
 <p>Features like &ldquo;modeline&rdquo; is very convenient but it may become source of

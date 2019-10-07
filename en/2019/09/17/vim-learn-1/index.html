@@ -218,22 +218,6 @@ etc.</p>
 with <code>q:</code> or <code>q/</code> or <code>q?</code>.  Alternatively, typing <code>^F</code> in COMMAND MODE
 situation also starts NORMAL-MODE-like editing.</p>
 
-<h3 id="map-a-key-sequence-to-esc-in-insert-mode">Map a key sequence to ESC in INSERT MODE</h3>
-
-<p>Pressing <code>ESC</code>-key to get back to NORMAL MODE from INSERT MODE is a bit
-stressful since it is far from the finger home position.  I map a quick key
-sequence of &ldquo;<code>kj</code>&rdquo; to <code>ESC</code>-key.</p>
-
-<pre><code>inoremap kj  &lt;Esc&gt;
-inoremap kjk kj
-</code></pre>
-
-<p>The second mapping is to allow quick input of <code>kj</code> by <code>kjk</code>.  Without this, you
-need to wait a second after entering <code>k</code> to enter <code>kj</code>.</p>
-
-<p><code>k</code> and <code>j</code> are easiest to type and unlikely under normal input situation.  I
-remember this as my <strong>Knee-Jerk-reaction</strong> to the distant <code>ESC</code>-key.</p>
-
 <h3 id="last-resort-inputs-with-ctrl-keys">Last resort inputs with <code>CTRL</code>-keys</h3>
 
 <p>Here are some non-intuitive key sequences used by INSERT MODE used by INSERT
@@ -261,32 +245,6 @@ MODE.  Some key sequences are also valid for COMMAND MODE.</p>
 <p>Although it is tempting to map some CONTROL-key sequences to some cursor keys,
 don&rsquo;t bother to do so since they are most likely used by Vim.  Use NORMAL MODE
 and COMMAND NORMAL MODE and native cursor keys.</p>
-
-<h3 id="map-non-starter-tab-in-insert-mode">Map non-starter TAB in INSERT MODE</h3>
-
-<p>I map non-starter <code>TAB</code> following the vim manual with some twist (<code>:h ins-completion</code>):</p>
-
-<pre><code class="language-vim">&quot; Auto complete &lt;C-N&gt; with &lt;TAB&gt; if tailing non-space character
-&quot; (TAB may be used to indent line under &quot;set expandtab&quot;)
-function! CleverTab()
-  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
-    return &quot;\&lt;Tab&gt;&quot;
-  else
-    return &quot;\&lt;C-N&gt;&quot;
-  endif
-endfunction
-inoremap &lt;Tab&gt; &lt;C-R&gt;=CleverTab()&lt;CR&gt;
-&quot; Auto complete &lt;C-P&gt; with &lt;S-TAB&gt; in non-BOL
-&quot;
-function! CleverSTab()
-  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
-    return &quot;\&lt;S-Tab&gt;&quot;
-  else
-    return &quot;\&lt;C-P&gt;&quot;
-  endif
-endfunction
-inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
-</code></pre>
 
 <h3 id="tab-in-command-mode">TAB in COMMAND MODE</h3>
 
@@ -357,14 +315,6 @@ more envying EMACS terminal mode.</p>
 </ul>
 
 <p>Typing <code>i</code> etc. will get you back to TERMINAL MODE from TERMINAL-NORMAL MODE.</p>
-
-<h3 id="map-a-key-sequence-to-wn-in-terminal-mode">Map a key sequence to <code>^WN</code> in TERMINAL MODE</h3>
-
-<p>Similar key sequence trick proposed for INSERT MODE can also be implemented</p>
-
-<pre><code>tnoremap kj  &lt;C-W&gt;N
-tnoremap kjk kj
-</code></pre>
 
 <!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
