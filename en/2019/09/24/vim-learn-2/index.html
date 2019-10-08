@@ -73,6 +73,8 @@ is not the main stream one.</p>
 <p>My kitchen sink initialization
 <a href="https://github.com/osamuaoki/00-vimrc/blob/master/plugin/00-vimrc.vim">script</a>.</p>
 
+<p>Let&rsquo;s list its highlights.</p>
+
 <h3 id="map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</h3>
 
 <p>Adjust PASTE MODE by <code>F2</code>-key.</p>
@@ -138,6 +140,25 @@ function! CleverSTab()
   endif
 endfunction
 inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
+</code></pre>
+
+<h3 id="indentation-changes-in-visual-mode">Indentation changes in VISUAL MODE</h3>
+
+<p>Remap to keep VISUAL MODE selection for <code>&lt;</code> and <code>&gt;</code>.</p>
+
+<pre><code class="language-vim">xnoremap &gt; &gt;gv
+xnoremap &lt; &lt;gv
+</code></pre>
+
+<h3 id="set-cursorline-in-normal-mode">Set cursorline in NORMAL MODE</h3>
+
+<p>Let&rsquo;s set cursorline in NORMAL MODE (and starting)</p>
+
+<pre><code class="language-vim">augroup MyCursor
+  au!
+  autocmd InsertLeave,WinEnter,VimEnter * set cursorline
+  autocmd InsertEnter,WinLeave * set nocursorline
+augroup END
 </code></pre>
 
 <h2 id="ciaranm-securemodelines"><code>ciaranm/securemodelines</code></h2>
