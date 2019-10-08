@@ -75,10 +75,10 @@ is not the main stream one.</p>
 
 <h3 id="map-non-starter-tab-in-insert-mode">Map non-starter TAB in INSERT MODE</h3>
 
-<p>I map non-starter <code>TAB</code> following the vim manual with some twist (<code>:h ins-completion</code>):</p>
+<p>I follow the vim manual with some twist to map non-starter <code>TAB</code>. (<code>:h
+ins-completion</code>):</p>
 
 <pre><code class="language-vim">&quot; Auto complete &lt;C-N&gt; with &lt;TAB&gt; if tailing non-space character
-&quot; (TAB may be used to indent line under &quot;set expandtab&quot;)
 function! CleverTab()
   if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
     return &quot;\&lt;Tab&gt;&quot;
@@ -87,7 +87,7 @@ function! CleverTab()
   endif
 endfunction
 inoremap &lt;Tab&gt; &lt;C-R&gt;=CleverTab()&lt;CR&gt;
-&quot; Auto complete &lt;C-P&gt; with &lt;S-TAB&gt; in non-BOL
+&quot; Auto complete &lt;C-P&gt; with &lt;S-TAB&gt; if tailing non-space character
 &quot;
 function! CleverSTab()
   if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
