@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>自作キーボード(1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">自作キーボード(1)</span></h1>
+
+<h2 class="date">2020/01/03</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/09/01/jpn-ime-resource-08/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>以下は基本的に備忘録です。</p>
+
+<h2 id="2016-2017年頃の自作キーボードのハード作成">2016-2017年頃の自作キーボードのハード作成</h2>
+
+<p><a href="https://www.arduino.cc/">Arduino</a>は素人ででもシステム細部まで理解して
+プログラム出きるので、それなりに面白いんですが、LEDのチカチカやbeep音出し
+だけではすぐに飽きてしまいました。</p>
+
+<p>そこでキーボードの自作を思いたち、2016年の年末から海外サイトを色々見ました。</p>
+
+<ul>
+<li><a href="https://geekhack.org/">https://geekhack.org/</a> &ndash; geekhack</li>
+<li><a href="https://deskthority.net/">https://deskthority.net/</a> &ndash; deskthority</li>
+</ul>
+
+<p>昔から気になっていたことを根本的に解決してくれる
+<a href="https://olkb.com/">ortholinear</a>系のデザインのキーボードがとっても気になり
+欲しくなりました。ただPCBからすべて買って組み立てるだけでは面白くない
+ので、キースイッチの位置精度が要るケース部品のネタ部分だけを3mm MDF板の
+レーザー加工で2017年2月に発注し入手しました。</p>
+
+<p>作ろうとしたキーボードのデザインは、14C * 4R のortholinear タイプで、
+右端のキーを真ん中に移動し、左右の手を通常より2キー離れて置くことを特徴とし
+ていました。planck等で採用されている片側6列ではなく片側7列とし、左右の手
+の間隔を通常より取ったので窮屈でない姿勢で使えるキーボードのデザインにでき
+たと一人悦に入っていました。</p>
+
+<p>MDFを木工ボンドで接着し組み立て、角をヤスリで落し、段差を紙粘土で埋めて
+スムーズな形にして、仕上げに塗装したあと、キーを置いてみて気分を楽しんで
+いました。</p>
+
+<p>ただその後、他の事に忙しくなり、電子回路を組み上げずに中断していました。
+(ケースの高さを抑えかつ強度を確保しようとし過ぎため、ケース内のスペース
+が少なく配線の作業性が極端に悪かったのも一因です。)</p>
+
+<p>まあ、MDFは木材感覚なので、塗装が出来るのと、角を削って落とせるのは
+メリットでした。キーはプレートマウント状態ですがMDF板は3mm あり1.0-1,5 mm
+厚であるべきマウントプレートとして引っかかりある取り付けができませんでした。
+それに関してはキースイッチをホットメルト接着剤で裏から留めることで安定させ
+たので、むしろカンカンという金属板の共鳴音もしなくていい感じでした。</p>
+
+<h2 id="キーボード関連mcu-ソフト状況">キーボード関連MCU・ソフト状況</h2>
+
+<p>このころいろいろ読んでの、私なりのキーボード関連でのソフトに関する結論を
+備忘録で記します。</p>
+
+<p>まず、USBキーボードに使うMCUはやはりサポートソフトのARDUINOやQMKがあり
+とっつきが良いATmega32u4に絞りました。読み込んだ資料は以下です。</p>
+
+<ul>
+<li><a href="https://www.microchip.com/wwwproducts/en/atmega32u4">atmega32u4 data etc.</a></li>
+<li><a href="https://avr.jp/user/DS/PDF/mega16U4.pdf">atmega32u4 データシート</a></li>
+<li><a href="https://github.com/abcminiuser/lufa">LUFA: the Lightweight USB Framework for AVRs</a></li>
+<li><a href="https://github.com/arduino/Arduino/">Arduino</a></li>
+<li><a href="https://github.com/qmk/qmk_firmware">The QMK Configurator</a> &ndash; Open-source
+keyboard firmware for Atmel AVR and Arm USB families</li>
+</ul>
+
+<p>いくつか気づいたポイントを以下に箇条書きにします。</p>
+
+<ul>
+<li>アプリは、低アドレスに置かれ、電源ON時にアドレス0からスタートする。</li>
+<li>ブートローダーは、高アドレス置かれ、リセット時にブートローダーの
+最下位アドレスからスタートする。スタートした際のUSBデバイスタイプや
+占有メモリーサイズが違うブートローダーが幾つかあり、いずれも
+ホストコンピューターからUSB経由で送り込まれるアプリデーターを
+下位アドレスに書き込む。</li>
+<li>ChipのデーターシートでISP (In-System Programming)とよばれる方法が
+我々にとってもっとも低レベルのChipへのプログラム導入方法。これは
+ArduinoでICSP とマークされているピンからのプログラム導入と同じです。
+ブートローダーの書き込みにはこれが必須です。</li>
+<li>アプリケーションのプログラムにもISPを使えるのですが、やはり手軽なのは
+USB経由でホストコンピューターからブートローダー経由でアプリデーターを
+送り込む方法です。これだとISPを使いブートローダーを書き込んだチップの
+ISPのPINを、組み込み後I/Oに利用したりアクセスしにくくなってもアプリ
+更新が難なくできます。</li>
+</ul>
+
+<p>ATmega32u4関連で使えそうなdevelopment boardは以下:</p>
+
+<ul>
+<li>Arduino Leonardo (大き過ぎ,32+6+USB) &ndash; 互換品なら1000円程度</li>
+<li>Arduino micro (34+6+USB) &ndash; 3000円程度</li>
+<li>Teensy 2.0 (小さい,29+1+USB) &ndash; 互換品なら1000円程度</li>
+<li>Pro Micro (24+USB)　&ndash; 互換品なら800円程度</li>
+</ul>
+
+<p>大きさと使えるピン数と価格のバランスで、Teensy 2.0互換品が良さそうです。</p>
+
+<p>(将来ATmega32u4の計算パワーやメモリー量に不足を感じたら、その際には
+Arm系のSTM32F401を使う500円程度で買えるdevelopment boardを考えます。)</p>
+
+<p>ATmega32u4の代表的なブートローダーのUSBデバイスタイプ、サイズ状況は以下:</p>
+
+<p>LUFAには各種USBデバイスタイプ(HID, CID, DFU, &hellip;)のブートローダーがあるが、
+どうもいずれも4KBのメモリーを占有する(要確認)。</p>
+
+<p>Atmelのチップには製造時、1KBメモリーを占有する(要確認)、DFUブートローダー
+が書き込まれている。ソースは無いがBINARYは
+<a href="http://ww1.microchip.com/downloads/en/DeviceDoc/megaUSB_DFU_Bootloaders.zip">megaAVR DFU USB Bootloaders</a>
+で入手可能。LUFAのDFUブートローダーよりは小さい模様。</p>
+
+<p>Arduino Leonardoのブートローダーは、CIDブートローダーで、これは中身はどうもLUFAの
+CIDブートローダーそのもので、大きさは変わらない模様。</p>
+
+<p>Teensy 2.0というATmega32u4を使う純正development boardにはプロプライエタリーの
+512Bに収まったHIDブートローダーが書き込まれている。LUFA版のHIDブートローダー
+より小さい。使用するUSB VID等が違う以外はLUFAのHIDブートローダーとまったく
+同じプロトコルを使っている。ホストコンピューター側のソフトはフリーソフトで
+同じもの。 Teensy2.0互換として売られているUSB AVR開発ボードにはTeensyの
+HIDブートローダーが当たり前ですが書き込まれていません。AtmelのDFU
+ブートローダーが書き込まれているようです。</p>
+
+<p>OSによるデバイス認識対応の手間や問題が発生しないのはHIDブートローダー。</p>
+
+<p>幸い、LUFAのHIDブートローダーをアッセンブリーで512Bに収めた
+<a href="https://github.com/volium/nanoBoot">nanoBoot</a> がMITライセンスで提供されている。
+総合的にはこれをISPでブートローダーとしてATmega32u4の高位アドレスに
+組上げ前に書き込むのが、OS対応も楽でメモリーも有効利用でき一番良い模様。</p>
+
+<p>ホスト側のプログラマーの状況は以下：</p>
+
+<p><code>avrdude</code>はISPによる直接プログラム更新とDFU・CIDのブートローダー利用の
+プログラム更新に対応。ArduinoのGUIアプリもバックエンドでこれを
+利用しています。</p>
+
+<p><code>dfu-programmer</code>はDFUブートローダー利用のプログラム更新のみに対応。
+(Windows用にはFLIPを使うそうです。)</p>
+
+<p>LUFAの<code>hid_bootloader_cli</code>は、nanoBootも含めたHIDブートローダー利用のプログラム
+更新に対応している。</p>
+
+<h2 id="2019-2020年頃の自作キーボードのハード作成">2019-2020年頃の自作キーボードのハード作成</h2>
+
+<p>配線スペース確保のために、兎に角荒技ですがMDFをDremelに似た小型手動ルーターで
+見えない部分で削りました。</p>
+
+<p>現在配線作業が進行中！それに付けても気を付け無いとよく断線や接触不良が起こりま
+した。</p>
+
+<p>組み立て時のテストの件：</p>
+
+<p>結線確認はまずテスターでしました。それなりの性能のテスターは結線確認を0.5V以下
+でするので、ダイオードの順方向でも「導通ビー」とならないので注意が必要でした。
+まあ、低圧での検査はデバイスを壊す心配は無くいいのですが、キーボードのマトリクス
+確認には、3Vで検査する安いテスターの方が便利でした。</p>
+
+<p>この次のレベルの結線確認には各種「LED Blink」他のアプリを準備するのが便利そう。
+このアプリの準備はArduino環境であれ何であれどんなプラットフォームで作ろうと
+良いはず。アプリのバイナリーサイズが許容範囲内で全て低位アドレスに書き込めさえ
+すれば動くはず。</p>
+
+<!-- vim: se ai tw=79: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2019/09/01/jpn-ime-resource-08/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
