@@ -71,8 +71,25 @@ Uno等を使ってます。</p>
 
 <h2 id="接続">接続</h2>
 
-<p>ISPは電源供給ソースでは無いので、別途チップへの電源供給ソースが必要！
-Unoなら12V、NanoならUSBを必ずつなぐこと。</p>
+<p>AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、
+別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。</p>
+
+<p>不便なのでAVRISP mkIIのUSB 電源(TP1) と PIN#1 をつなぐ、５V電源供給ソースと
+する等の改造記事もよくあります。</p>
+
+<ul>
+<li><a href="https://qiita.com/hideyuki/items/71381b741d89878e3e79">https://qiita.com/hideyuki/items/71381b741d89878e3e79</a> Easy access via TP1</li>
+<li><a href="http://shiozoku.blogspot.com/2014/02/avr-isp-mkii.html">http://shiozoku.blogspot.com/2014/02/avr-isp-mkii.html</a> Use switch</li>
+<li><a href="https://jeelabs.org/2010/04/02/avrisp-mkii-w-5v-power/">https://jeelabs.org/2010/04/02/avrisp-mkii-w-5v-power/</a> After poly fuse</li>
+<li><a href="http://www.webx.dk/avrisp-mk2-modding/">http://www.webx.dk/avrisp-mk2-modding/</a> 3V/5V selectable</li>
+</ul>
+
+<p>ただし、ターゲットボード側で電源を確保している場合は使えません。</p>
+
+<p>また、これはあとで考えましょう。</p>
+
+<p><a href="https://github.com/osamuaoki/avrdude-friend">TTL-232R-5V を使った自作プロクラマー</a>
+は電源電圧供給していた。</p>
 
 <p>ISPケーブルの赤線は１ピン側です。</p>
 
@@ -296,6 +313,8 @@ avrdude done.  Thank you.
 
 <pre><code>$ sudo avrdude -c avrisp2 -P usb -p m328p -F  -U lfuse:w:0xfd:m -U hfuse:w:0xde:m -U efuse:w:0xff:m
 </code></pre>
+
+<p>なぜか書き換えられました。</p>
 
 <!-- vim: se ai tw=79: -->
 
