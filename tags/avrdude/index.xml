@@ -6,10 +6,22 @@
     <description>Recent content in avrdude on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 21 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 27 Feb 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/avrdude/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>AVRISP markII mod-VCC (J)</title>
+      <link>/jp/2020/02/27/avrisp-mod-j/</link>
+      <pubDate>Thu, 27 Feb 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/02/27/avrisp-mod-j/</guid>
+      <description>AVRチップのISPプログラマにAVR ISP markIIを使うと、対象AVRチップに別途電源供給 する必要があり、ISP出力のPIN#2にVCCを供給していた以前の TTL-232R-5V を使った自作プロクラマー を使うより煩雑でした。
+そこで、AVR ISP markIIを改造し、ISP出力のPIN#2にVCCを供給出きるように改造し ました。
+参考情報 いろんな人が不便と感じ、AVRISP mkIIのUSB から電源を取り、ISP出力のPIN#2 に つなぎVCC電源供給ソースとする改造記事を書いています。以下の改造記事を参考に しました。
+ http://www.webx.dk/avrisp-mk2-modding/ (3V/5V selectable, use own fuse, easy output) https://jeelabs.org/2010/04/02/avrisp-mkii-w-5v-power/ (nice input after poly fuse) https://forum.arduino.cc/index.php?topic=125502.0 (half ass fix, Nice pics of wiring, good output point) https://qiita.com/hideyuki/items/71381b741d89878e3e79 (Easy access via TP1, No fuse) http://shiozoku.blogspot.com/2014/02/avr-isp-mkii.html Use switch (No fuse, interesting use reminder) https://electronics.stackexchange.com/questions/286693/can-anything-be-done-about-this-avrisp-mkii-or-is-it-dead (Nice pics of wiring, not the same purpose, fix by bypassing broken DC/DC)　これは本改造とは違う修理改造。  これらの記事の基板の方が私の持っている基板より配線が太く見やすいです。</description>
+    </item>
     
     <item>
       <title>ATmega328P (1)</title>
@@ -20,8 +32,9 @@
       <description>AVRチップのISP経由プログラムの練習をします。これには、 TTL-232R-5V を使った自作プロクラマー を使うのも良いのですが、最近Atmel AVR ISP mkIIをただで人からもらったので それを使います。
 ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoのコンパチボードや本物の Uno等を使ってます。
 ソフト環境 $ sudo apt install avrdude  接続 AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
-不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースと する等の改造記事もよくあります。
- http://www.webx.dk/avrisp-mk2-modding/ (3V/5V selectable, use own fuse, easy output) https://jeelabs.org/2010/04/02/avrisp-mkii-w-5v-power/ (nice input after poly fuse) https://forum.arduino.cc/index.php?topic=125502.0 (half ass fix, Nice pics of wiring, good output point) https://qiita.com/hideyuki/items/71381b741d89878e3e79 (Easy access via TP1, No fuse) http://shiozoku.blogspot.com/2014/02/avr-isp-mkii.html Use switch (No fuse, interesting use reminder) https://electronics.</description>
+ちなみに、 TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、 これはあとで考えましょう。
+ISPケーブルの赤線は１ピン側です。
+Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/ Copyright (c) 2007-2014 Joerg Wunsch System wide configuration file is &amp;quot;/etc/avrdude.conf&amp;quot; User configuration file is &amp;quot;/root/.</description>
     </item>
     
   </channel>
