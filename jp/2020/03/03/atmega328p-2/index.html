@@ -124,11 +124,36 @@ inclideファイルがあります。これさえ分かれば後はコードを�
 
 <p>ポートの名前は、
 <a href="http://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061A.pdf">ATmega328Pのデーターシート</a>
-の「Register Description」の章を見ましょう。<code>DDRB</code>は、
-Port BのData Direction Register（データー方向レジスター）と分かります。</p>
+の「Register Description」の章を見ましょう。例えば：</p>
+
+<ul>
+<li><code>DDRB</code>は、Port B の Data Direction Register（データー入出力方向レジスター）
+
+<ul>
+<li>「0」WRITE、入力ポートに設定 (デフォルト)</li>
+<li>「1」WRITE、出力ポートに設定</li>
+<li>READ:　設定値の読み出し</li>
+</ul></li>
+<li><code>PORTB</code>は、Port B の Data Register (出力レジスター)
+
+<ul>
+<li>「0」WRITE、出力ポート: LOW (0V)設定  / 入力ポート: Pull-up OFF 設定 (デフォルト)</li>
+<li>「1」WRITE、出力ポート: HIGH (VCC)設定 / 入力ポート: Pull-up ON 設定</li>
+<li>READ:　設定値の読み出し</li>
+</ul></li>
+<li><code>PINB</code>は、Port B の Input Pins Address (入力レジスター)　入力・出力ポートとも有効
+
+<ul>
+<li>「0」WRITE: ビット設定値の無変更</li>
+<li>「1」WRITE: ビット設定値の変更（トグル）</li>
+<li>READ:　入力値の読み出し</li>
+</ul></li>
+</ul>
 
 <p>一方<code>_BV(bit)</code>の<code>bit</code>に書かれるマクロの値は文字列の最後の数字その物
-のことが多いです。（変数名は<code>iom328p.h</code>を見てポートタイプ毎に選びます。）</p>
+のことが多いです。データーシート中のビットの名前に合わせてあるので
+チップ間で不規則な面があります。ある程度コードのポータビリティー
+のための変数名エリアスが<code>iom328p.h</code>に定義されています。</p>
 
 <p>この他のマニュアル、特に
 <a href="http://ww1.microchip.com/downloads/en/Appnotes/Atmel-42787-AVR-Software-User-Guide_ApplicationNote_AVR42787.pdf">AVR42787: AVR Software User Guide</a>
@@ -190,7 +215,7 @@ main (void) {
 <p>Linux系の開発環境だとGNU Make を使うので、この中の
 <code>winavr-code/Mfile/data/makefile_template.winavr</code>
 が基本テンプレートとなります。これをソース内に
-<code>Makefile</code>にコピーして使います。</p>
+<code>Makefile</code>にコピーして書き換えて使います。</p>
 
 <!-- vim: se ai tw=79: -->
 
