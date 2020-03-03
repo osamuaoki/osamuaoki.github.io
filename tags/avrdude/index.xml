@@ -6,10 +6,23 @@
     <description>Recent content in avrdude on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 27 Feb 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 03 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/tags/avrdude/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ATmega328P (2)</title>
+      <link>/jp/2020/03/03/atmega328p-2/</link>
+      <pubDate>Tue, 03 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/03/03/atmega328p-2/</guid>
+      <description>Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの練習の続きをしました。
+開発環境 クロスコンパイル開発環境は以下でOK（2020/03, Debian stable buster）
+ $ sudo apt install gcc-avr avr-libc binutils-avr  開発例: Lチカ点滅 まず、単純なLEDのBLINKを例に開発しましょう。
+Cのソースコード 以下にいわゆるLチカ blink.cを例示します。これでNanoのPB5ピンに ぶら下がっているLEDを0.5秒間隔でON/OFFします。
+// Arduino nano board is 16 MHz #define F_CPU 16000000UL #include &amp;lt;avr/io.h&amp;gt; #include &amp;lt;util/delay.h&amp;gt; int main (void) { // For Data Direction Register of port B, set the 5th bit (OR) DDRB |= _BV(DDB5); while(1) { // For Port B, toggle the 5th bit (XOR) PORTB ^= _BV(PORTB5); _delay_ms(500); // 500 ms delay } }  ここで普通のCのプログラムでは見かけないマクロの_BV()や、 よく分からない変数DDRB等が気になります。</description>
+    </item>
     
     <item>
       <title>AVRISP markII mod-VCC (J)</title>
@@ -35,22 +48,6 @@ ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoの
 ちなみに、 TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、 これはあとで考えましょう。
 ISPケーブルの赤線は１ピン側です。
 Uno Nano Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/ Copyright (c) 2007-2014 Joerg Wunsch System wide configuration file is &amp;quot;/etc/avrdude.</description>
-    </item>
-    
-    <item>
-      <title>ATmega328P (2)</title>
-      <link>/jp/2020/02/21/atmega328p-2/</link>
-      <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/jp/2020/02/21/atmega328p-2/</guid>
-      <description>AVRチップのプログラムの練習の続きです。
-まず、単純なLEDのBLINKをしましょう。
-blink.c  $ sudo apt install subversion $ svn checkout https://svn.code.sf.net/p/winavr/code/trunk winavr-code  これには、 TTL-232R-5V を使った自作プロクラマー を使うのも良いのですが、最近Atmel AVR ISP mkIIをただで人からもらったので それを使います。
-ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoのコンパチボードや本物の Uno等を使ってます。
-ソフト環境 $ sudo apt install avrdude  接続 AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
-ちなみに、 TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、 これはあとで考えましょう。
-ISPケーブルの赤線は１ピン側です。
-Uno Nano Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.</description>
     </item>
     
   </channel>

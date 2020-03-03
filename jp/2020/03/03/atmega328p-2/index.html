@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ATmega328P (2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">ATmega328P (2)</span></h1>
+
+<h2 class="date">2020/03/03</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/02/27/avrisp-mod-j/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>Arduino Uno/Nano に使われている基本のシリアルAVRの
+<a href="https://www.microchip.com/wwwproducts/en/ATmega328p">ATmega328P</a>
+を中心としてAVRチップのプログラムの練習の続きをしました。</p>
+
+<h2 id="開発環境">開発環境</h2>
+
+<p>クロスコンパイル開発環境は以下でOK（2020/03, Debian stable buster）</p>
+
+<pre><code> $ sudo apt install gcc-avr avr-libc binutils-avr
+</code></pre>
+
+<h2 id="開発例-lチカ点滅">開発例: Lチカ点滅</h2>
+
+<p>まず、単純なLEDのBLINKを例に開発しましょう。</p>
+
+<h3 id="cのソースコード">Cのソースコード</h3>
+
+<p>以下にいわゆるLチカ <code>blink.c</code>を例示します。これでNanoのPB5ピンに
+ぶら下がっているLEDを0.5秒間隔でON/OFFします。</p>
+
+<pre><code>// Arduino nano board is 16 MHz
+#define F_CPU 16000000UL
+
+#include &lt;avr/io.h&gt;
+#include &lt;util/delay.h&gt;
+
+int
+main (void) {
+    // For Data Direction Register of port B, set the 5th bit (OR)
+    DDRB |= _BV(DDB5);
+    while(1)
+    {
+        // For Port B, toggle the 5th bit (XOR)
+        PORTB ^= _BV(PORTB5);
+        _delay_ms(500); // 500 ms delay
+    }
+}
+
+</code></pre>
+
+<p>ここで普通のCのプログラムでは見かけないマクロの<code>_BV()</code>や、
+よく分からない変数<code>DDRB</code>等が気になります。</p>
+
+<p>AVRクロスコンパイル開発環境では、普通を違い<code>/usr/lib/avr/include/</code>下に
+inclideファイルがあります。これさえ分かれば後はコードを見ればほぼ自明です。</p>
+
+<p>例えば<code>_BV()</code>は、基本のヘッダーファイル<code>avr/io.h</code>が読み込む
+<code>avr/sfr_defs.h</code>中に定義されています。</p>
+
+<pre><code>#define _BV(bit) (1 &lt;&lt; (bit))
+</code></pre>
+
+<p>ところで、見慣れない変数名ですがその答えは、<code>avr/io.h</code>や<code>avr/sfr_defs.h</code>
+を読むと見えてきます。ちなみに、<code>avr/io.h</code>はチップのIO（入出力）の定義の
+ヘッダーファイルで、<code>avr/sfr_defs.h</code>は「AVR special function registers」
+の定義のヘッダーファイルです。</p>
+
+<p>これらのヘッダーファイルは、xmega等もサポートするために少々複雑になって
+いますが、ザックリはchipのdatasheetを読んでIOポートの物理アドレスを調べ
+てプログラムを書かなくとも、データーシートの「ポートの名前」等をCの変数
+名として使えるようにするCマクロの仕組みです。</p>
+
+<p><code>io.h</code>がコンパイル時に<code>-mmcu=atmega328p</code>で選ばれたチップ毎に合わせて
+<code>iom328p.h</code>などの対応する定義ファイルをinclideすることで異なるハード
+ウエアーへの対応を実現しています。</p>
+
+<p>ポートの名前は、
+<a href="http://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061A.pdf">ATmega328Pのデーターシート</a>
+の「Register Description」の章を見ましょう。<code>DDRB</code>は、
+Port BのData Direction Register（データー方向レジスター）と分かります。</p>
+
+<p>一方<code>_BV(bit)</code>の<code>bit</code>に書かれるマクロの値は文字列の最後の数字その物
+のことが多いです。（変数名は<code>iom328p.h</code>を見てポートタイプ毎に選びます。）</p>
+
+<p>この他のマニュアル、特に
+<a href="http://ww1.microchip.com/downloads/en/Appnotes/Atmel-42787-AVR-Software-User-Guide_ApplicationNote_AVR42787.pdf">AVR42787: AVR Software User Guide</a>
+や
+<a href="http://ww1.microchip.com/downloads/en/Appnotes/doc1497.pdf">AVR035: Efficient C Coding for AVR</a>
+等にも目を通しましょう。</p>
+
+<h3 id="コンパイル-リンク-プログラム">コンパイル・リンク・プログラム</h3>
+
+<p><a href="/jp/2020/02/21/atmega328p-1/">AVRISP mkII をISP接続</a>した上で
+コンパイル・リンク・プログラムは次の様に進めます。</p>
+
+<pre><code> $ avr-gcc -mmcu=atmega328p -Wall -Os -o blink.elf blink.c
+ $ avr-objcopy -j .text -j .data -O ihex blink.elf blink.hex
+ $ sudo avrdude -p m328p -c avrisp2 -e -U flash:w:blink.hex
+</code></pre>
+
+<p>どうですか、Lチカしていますね。</p>
+
+<h2 id="lピカー点灯">Lピカー点灯</h2>
+
+<p>ビット値が1が、出力がHIGHであることを確認しましょう。上記ソースコードを
+以下の様に変更します。</p>
+
+<pre><code>// Arduino nano board is 16 MHz
+#define F_CPU 16000000UL
+
+#include &lt;avr/io.h&gt;
+
+int
+main (void) {
+    // For Data Direction Register of port B, set the 5th bit (OR)
+    DDRB |= _BV(DDB5);
+    // For Port B, turn on the 5th bit (OR)
+    PORTB |= _BV(PORTB5);
+    while(1)
+    {
+        _delay_ms(500); // 500 ms delay
+    }
+}
+
+</code></pre>
+
+<p>同様のコンパイル・リンク・プログラムをします。</p>
+
+<p>どうですか、今度はLEDが付きっぱなしですね。</p>
+
+<h2 id="makefile">Makefile</h2>
+
+<p>毎回シェルにコマンドを打ち込むのも面倒です。</p>
+
+<p>こういった基本的な開発環境では、<code>Makefile</code>を使いたいですよね。
+<code>Makefile</code>の基本テンプレートは以下がよく使われます。</p>
+
+<pre><code> $ sudo apt install subversion
+ $ svn checkout https://svn.code.sf.net/p/winavr/code/trunk winavr-code
+</code></pre>
+
+<p>Linux系の開発環境だとGNU Make を使うので、この中の
+<code>winavr-code/Mfile/data/makefile_template.winavr</code>
+が基本テンプレートとなります。これをソース内に
+<code>Makefile</code>にコピーして使います。</p>
+
+<!-- vim: se ai tw=79: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/02/27/avrisp-mod-j/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
