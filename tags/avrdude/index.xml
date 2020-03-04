@@ -47,7 +47,9 @@ ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoの
 ソフト環境 $ sudo apt install avrdude  接続 AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
 ちなみに、 TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、 これはあとで考えましょう。
 ISPケーブルの赤線は１ピン側です。
-Uno Nano Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/ Copyright (c) 2007-2014 Joerg Wunsch System wide configuration file is &amp;quot;/etc/avrdude.</description>
+Uno Nano AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。
+AVRISP mkII に赤いLEDが点滅は、ISPコネクター「逆差し」です。
+Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/ Copyright (c) 2007-2014 Joerg Wunsch System wide configuration file is &amp;quot;/etc/avrdude.</description>
     </item>
     
   </channel>
