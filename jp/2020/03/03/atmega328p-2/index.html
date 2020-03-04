@@ -168,7 +168,7 @@ inclideファイルがあります。これさえ分かれば後はコードを�
 
 <pre><code> $ avr-gcc -mmcu=atmega328p -Wall -Os -o blink.elf blink.c
  $ avr-objcopy -j .text -j .data -O ihex blink.elf blink.hex
- $ sudo avrdude -p m328p -c avrisp2 -e -U flash:w:blink.hex
+ $ sudo avrdude -p m328p -c avrisp2 -U flash:w:blink.hex
 </code></pre>
 
 <p>どうですか、Lチカしていますね。</p>
@@ -270,14 +270,30 @@ USBコネクター側のPIN)のどれかを接地(ground)するとLEDが消え�
 
 <p>Optibootが入っていればシリアル経由のプログラムができます。</p>
 
+<p>入れ方は、<a href="https://osamuaoki.github.io/jp/2020/02/21/atmega328p-1/">https://osamuaoki.github.io/jp/2020/02/21/atmega328p-1/</a>
+の最後の「Optiboot プログラムのインストール」を参照下さい</p>
+
+<p><code>avrdude</code>を<code>-e</code>付きで実行するような乱暴なことをせず、
+上記の様にISPからの書き込みが下位アドレスに留まれば、高位
+アドレスのOptibootは温存されます。</p>
+
+<p>Optibootが入っていることは、電源供給時にRESETを押すと、ピカピカ
+とLEDが2回光るので確認できます。</p>
+
 <p>ホストPCから開発ボードのUSBポートにUSBケーブルをつなぎ、
 USB-Serial変換器（Arduino UnoはFT232Rが、Arduino Nano互換機では
 CH340がその役割）経由でATmega328PのD0/D1ピンにシリアルにデーター
 を流し込みプログラムするには、上記のISP経由の書き込みに換え、
 以下をホストPCから実行します。</p>
 
-<pre><code> $ sudo avrdude -p m328p -c arduino -e -U flash:w:blink.hex
+<pre><code> $ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:blink.hex
 </code></pre>
+
+<p>この方がプログラム更新にはISPよりはるかに手軽です。</p>
+
+<p>もちろんFUSE操作などにはISPは不可欠です。</p>
+
+<p>TIP: 上記で使用したシリアルデバイス名「ttyUSB0」は<code>sudo dmesg</code>などとして探します。</p>
 
 <h2 id="makefile">Makefile</h2>
 

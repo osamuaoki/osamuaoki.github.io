@@ -187,7 +187,7 @@ avrdude done.  Thank you.
 
 <p>ISP ケーブルが、ボード上をUSB向けに伸びるので挿しにくいので注意。</p>
 
-<pre><code>$ sudo avrdude -c avrisp2 -P usb -p m328p v
+<pre><code>$ sudo avrdude -c avrisp2 -P usb -p m328p -v
 
 avrdude: Version 6.3-20171130
          Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/
@@ -343,11 +343,11 @@ Arduino用bootloaderのなかで一番小さな　Optiboot インストール法
 からダウンロードできます。</p>
 
 <p>上記の方法で<code>optiboot_atmega328.hex</code>が手に入れば、ボード上のATmega328pに、
-ISPプログラマーのAVRISP mkII を用い、まずFUSEを初期化（ロック解除）し、
-さらに<code>optiboot_atmega328.hex</code>をフラッシュメモリーに書き込むことで
+ISPプログラマーのAVRISP mkII を用い、まずFUSEを完全消去初期化（ロック解除）し、
+さらに<code>optiboot_atmega328.hex</code>をフラッシュメモリーに強引に書き込むことで
 Optiboot プログラムのインストールができます。</p>
 
-<pre><code> $ sudo avrdude -p m328p -c avrisp2 -e -F -U lock:w:0x3F:m \
+<pre><code> $ sudo avrdude -p m328p -c avrisp2 -e -F -U lock:w:0xFF:m \
                 -U efuse:w:0xfd:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m
  $ sudo avrdude -p m328p -c avrisp2 -U flash:w:/path/to/optiboot_atmega328.hex
 
@@ -360,6 +360,10 @@ Optiboot プログラムのインストールができます。</p>
 <li><a href="https://nagayasu-shinya.com/arduino-bootloader-writer/#toc6">ArduinoのBootloaderを修復する</a></li>
 <li><a href="http://blog-yama.a-quest.com/?eid=970124">簡単！ATmega328Pにブートローダを書きこ</a></li>
 </ul>
+
+<p>TIP: LOCK FUSEの設定値は、単純に考えると0x3F=0b00111111です。ただ未使用ビット
+の6,7-bitは、読むと1を返すので書き込み内容確認が成立する0xFF=0b11111111を設定値
+にします。</p>
 
 <!-- vim: se ai tw=79: -->
 
