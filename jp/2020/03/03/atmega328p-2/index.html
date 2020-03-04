@@ -67,14 +67,14 @@
 <pre><code> $ sudo apt install gcc-avr avr-libc binutils-avr
 </code></pre>
 
-<h2 id="開発例-lチカ点滅">開発例: Lチカ点滅</h2>
+<h2 id="例-led点滅-lチカ">例: LED点滅 (Lチカ)</h2>
 
-<p>まず、単純なLEDのBLINKを例に開発しましょう。</p>
+<p>まず、単純なLEDの点滅（通称Lチカ）を例にプログラム開発を示します。</p>
 
 <h3 id="cのソースコード">Cのソースコード</h3>
 
-<p>以下にいわゆるLチカ <code>blink.c</code>を例示します。これでNanoのPB5ピンに
-ぶら下がっているLEDを0.5秒間隔でON/OFFします。</p>
+<p>以下にLチカのCのソースコード <code>blink.c</code>を示します。
+これでNanoのPB5ピンにぶら下がっているLEDを0.5秒間隔でON/OFFします。</p>
 
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
@@ -93,7 +93,6 @@ main (void) {
         _delay_ms(500); // 500 ms delay
     }
 }
-
 </code></pre>
 
 <p>ここで普通のCのプログラムでは見かけないマクロの<code>_BV()</code>や、
@@ -114,9 +113,10 @@ inclideファイルがあります。これさえ分かれば後はコードを�
 の定義のヘッダーファイルです。</p>
 
 <p>これらのヘッダーファイルは、xmega等もサポートするために少々複雑になって
-いますが、ザックリはchipのdatasheetを読んでIOポートの物理アドレスを調べ
-てプログラムを書かなくとも、データーシートの「ポートの名前」等をCの変数
-名として使えるようにするCマクロの仕組みです。</p>
+いますが、ザックリは対象chipのdatasheetを読んでIOポートの物理アドレスを
+手動で調べてそのアドレス値を数値でプログラムを書かなくとも、データーシー
+トの「ポートの名前」等をCの変数名として直接使えるようにするCマクロの
+仕組みです。</p>
 
 <p><code>io.h</code>がコンパイル時に<code>-mmcu=atmega328p</code>で選ばれたチップ毎に合わせて
 <code>iom328p.h</code>などの対応する定義ファイルをinclideすることで異なるハード
@@ -132,28 +132,28 @@ inclideファイルがあります。これさえ分かれば後はコードを�
 <ul>
 <li>「0」WRITE、入力ポートに設定 (デフォルト)</li>
 <li>「1」WRITE、出力ポートに設定</li>
-<li>READ:　設定値の読み出し</li>
+<li>READ:　入出力方向設定値の読み出し</li>
 </ul></li>
 <li><code>PORTB</code>は、Port B の Data Register (出力レジスター)
 
 <ul>
 <li>「0」WRITE、出力ポート: LOW (0V)設定  / 入力ポート: Pull-up OFF 設定 (デフォルト)</li>
 <li>「1」WRITE、出力ポート: HIGH (VCC)設定 / 入力ポート: Pull-up ON 設定</li>
-<li>READ:　設定値の読み出し</li>
+<li>READ:　出力設定値の読み出し</li>
 </ul></li>
 <li><code>PINB</code>は、Port B の Input Pins Address (入力レジスター)　入力・出力ポートとも有効
 
 <ul>
-<li>「0」WRITE: ビット設定値の無変更</li>
-<li>「1」WRITE: ビット設定値の変更（トグル）</li>
+<li>「0」WRITE: 出力ビット設定値の無変更</li>
+<li>「1」WRITE: 出力ビット設定値の変更（トグル）</li>
 <li>READ:　入力値の読み出し</li>
 </ul></li>
 </ul>
 
 <p>一方<code>_BV(bit)</code>の<code>bit</code>に書かれるマクロの値は文字列の最後の数字その物
 のことが多いです。データーシート中のビットの名前に合わせてあるので
-チップ間で不規則な面があります。ある程度コードのポータビリティー
-のための変数名エリアスが<code>iom328p.h</code>に定義されています。</p>
+チップ間で一見命名が不規則な面があります。ただコードのポータビリティー
+のための変数名エリアスが<code>io*.h</code>にある程度定義されています。</p>
 
 <p>この他のマニュアル、特に
 <a href="http://ww1.microchip.com/downloads/en/Appnotes/Atmel-42787-AVR-Software-User-Guide_ApplicationNote_AVR42787.pdf">AVR42787: AVR Software User Guide</a>
@@ -173,7 +173,7 @@ inclideファイルがあります。これさえ分かれば後はコードを�
 
 <p>どうですか、Lチカしていますね。</p>
 
-<h2 id="lピカー点灯">Lピカー点灯</h2>
+<h2 id="例-led点灯">例: LED点灯</h2>
 
 <p>ビット値が1が、出力がHIGHであることを確認しましょう。上記ソースコードを
 以下の様に変更します。</p>
@@ -191,15 +191,93 @@ main (void) {
     PORTB |= _BV(PORTB5);
     while(1)
     {
-        _delay_ms(500); // 500 ms delay
     }
 }
-
 </code></pre>
 
 <p>同様のコンパイル・リンク・プログラムをします。</p>
 
 <p>どうですか、今度はLEDが付きっぱなしですね。</p>
+
+<h2 id="例-led点滅-lチカ-の別の方法">例: LED点滅 (Lチカ)の別の方法</h2>
+
+<p>PINへの書き込みによる、トグルを使うようにオリジナルのLED点滅ソースコードを
+以下の様に変更します。</p>
+
+<pre><code>// Arduino nano board is 16 MHz
+#define F_CPU 16000000UL
+
+#include &lt;avr/io.h&gt;
+#include &lt;util/delay.h&gt;
+
+int
+main (void) {
+    // For Data Direction Register of port B, set the 5th bit
+    DDRB = _BV(DDB5);
+    while(1)
+    {
+        // For PIN B, toggle the 5th bit
+        PINB = _BV(PINB5);
+        _delay_ms(500); // 500 ms delay
+    }
+}
+</code></pre>
+
+<p>同様のコンパイル・リンク・プログラムをします。</p>
+
+<p>どうですか、Lチカしていますね。</p>
+
+<h2 id="例-入力にあわせてled点滅">例: 入力にあわせてLED点滅</h2>
+
+<p>入力にあわせてLED点滅させるようにオリジナルのLED点滅ソースコードを
+以下の様に変更します。</p>
+
+<pre><code>// Arduino nano board is 16 MHz
+#define F_CPU 16000000UL
+
+#include &lt;avr/io.h&gt;
+
+int
+main (void) {
+    // For Data Direction Register of port B, set 5 pin as output for LED
+    DDRB = 0b00100000;
+    // pull-up for all port B non-5 pins (0b11011111)
+    PORTB = ~ 0b00100000;
+    while(1)
+    {
+    // Check if any one of low 5 bits 01234 of PORTB is grounded
+        if  ((PINB &amp; 0x1f) == 0x1f) {
+    // not grounded -&gt; LED ON
+            PORTB |=   0b00100000;
+        } else {
+    // grounded -&gt; LED OFF
+            PORTB &amp;= ~ 0b00100000;
+        }
+    }
+}
+</code></pre>
+
+<p>今回はビット値の設定をマクロではなく直接２進表記の数値でしました。</p>
+
+<p>同様のコンパイル・リンク・プログラムをします。</p>
+
+<p>どうですか、LEDが付いていますね。</p>
+
+<p>ここでPORTBの01234の5つのPIN(USBコネクターを右に置いた際に、手前
+USBコネクター側のPIN)のどれかを接地(ground)するとLEDが消えますね。</p>
+
+<h2 id="シリアル経由のプログラム">シリアル経由のプログラム</h2>
+
+<p>Optibootが入っていればシリアル経由のプログラムができます。</p>
+
+<p>ホストPCから開発ボードのUSBポートにUSBケーブルをつなぎ、
+USB-Serial変換器（Arduino UnoはFT232Rが、Arduino Nano互換機では
+CH340がその役割）経由でATmega328PのD0/D1ピンにシリアルにデーター
+を流し込みプログラムするには、上記のISP経由の書き込みに換え、
+以下をホストPCから実行します。</p>
+
+<pre><code> $ sudo avrdude -p m328p -c arduino -e -U flash:w:blink.hex
+</code></pre>
 
 <h2 id="makefile">Makefile</h2>
 
@@ -215,7 +293,8 @@ main (void) {
 <p>Linux系の開発環境だとGNU Make を使うので、この中の
 <code>winavr-code/Mfile/data/makefile_template.winavr</code>
 が基本テンプレートとなります。これをソース内に
-<code>Makefile</code>にコピーして書き換えて使います。</p>
+<code>Makefile</code>にコピーして、周波数・チップ種・プログラマーなどに合わせ
+変数を書き換えて使います。</p>
 
 <!-- vim: se ai tw=79: -->
 

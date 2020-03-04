@@ -19,8 +19,8 @@
       <guid>/jp/2020/03/03/atmega328p-2/</guid>
       <description>Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの練習の続きをしました。
 開発環境 クロスコンパイル開発環境は以下でOK（2020/03, Debian stable buster）
- $ sudo apt install gcc-avr avr-libc binutils-avr  開発例: Lチカ点滅 まず、単純なLEDのBLINKを例に開発しましょう。
-Cのソースコード 以下にいわゆるLチカ blink.cを例示します。これでNanoのPB5ピンに ぶら下がっているLEDを0.5秒間隔でON/OFFします。
+ $ sudo apt install gcc-avr avr-libc binutils-avr  例: LED点滅 (Lチカ) まず、単純なLEDの点滅（通称Lチカ）を例にプログラム開発を示します。
+Cのソースコード 以下にLチカのCのソースコード blink.cを示します。 これでNanoのPB5ピンにぶら下がっているLEDを0.5秒間隔でON/OFFします。
 // Arduino nano board is 16 MHz #define F_CPU 16000000UL #include &amp;lt;avr/io.h&amp;gt; #include &amp;lt;util/delay.h&amp;gt; int main (void) { // For Data Direction Register of port B, set the 5th bit (OR) DDRB |= _BV(DDB5); while(1) { // For Port B, toggle the 5th bit (XOR) PORTB ^= _BV(PORTB5); _delay_ms(500); // 500 ms delay } }  ここで普通のCのプログラムでは見かけないマクロの_BV()や、 よく分からない変数DDRB等が気になります。</description>
     </item>
     

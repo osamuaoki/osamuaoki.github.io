@@ -301,9 +301,12 @@ avrdude done.  Thank you.
 </ul></li>
 </ul>
 
-<p>前に壊したかも知れないので、とりあえずNanoを修正:</p>
+<p>確かNano互換ボードは購入時は特にArduinoとしてチップが初期化されて
+いなかったので自分で初期化しました。それが良くなかったかも知れないので、
+とりあえずNanoのFUSEをISPで修正しました:</p>
 
-<pre><code>$ sudo avrdude -c avrisp2 -P usb -p m328p -F  -U lfuse:w:0xfd:m -U hfuse:w:0xde:m -U efuse:w:0xff:m
+<pre><code> $ sudo avrdude -c avrisp2 -P usb -p m328p -F  \
+                -U efuse:w:0xfd:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m
 </code></pre>
 
 <p>なぜか書き換えられました。</p>
@@ -319,6 +322,44 @@ BOOTSZ=11 256ワード（512BYTE）に変更されています。どうもちゃ
 <p>FUSE設定の詳細状況は
 <a href="https://eleccelerator.com/fusecalc/fusecalc.php?chip=atmega328p">FUSECALC</a>
 をみて確認しましょう。</p>
+
+<h2 id="optiboot-プログラムのインストール">Optiboot プログラムのインストール</h2>
+
+<p>シリアルAVRで、ISPプログラマーを使わず、シリアル接続からのプログラムを可能にする
+Arduino用bootloaderのなかで一番小さな　Optiboot インストール法のメモです。</p>
+
+<p>Optiboot のアップストリームのソースは　<a href="https://github.com/Optiboot/optiboot">https://github.com/Optiboot/optiboot</a>
+にあります。ここには色々の情報があるので一度見てください。</p>
+
+<p>ただ、bootloaderをチップに焼き込むにはHEXのバイナリーがあれば充分です。</p>
+
+<p>ちなみに、Debian/Ubuntuなら、少々古いソースコードから作られた
+パッケージですが<code>arduino-core</code>パッケージがインストールされていれば
+<code>/usr/share/arduino/hardware/arduino/bootloaders/optiboot/optiboot_atmega328.hex</code>
+にHEXのバイナリーがあります。</p>
+
+<p>最新のArduino配布のOptibootのHEXのバイナリーの<code>optiboot_atmega328.hex</code>は、
+<a href="https://github.com/arduino/ArduinoCore-avr/tree/master/bootloaders/optiboot">https://github.com/arduino/ArduinoCore-avr/tree/master/bootloaders/optiboot</a>
+からダウンロードできます。</p>
+
+<p>上記の方法で<code>optiboot_atmega328.hex</code>が手に入れば、ボード上のATmega328pに、
+ISPプログラマーのAVRISP mkII を用い、まずFUSEを初期化（ロック解除）し、
+さらに<code>optiboot_atmega328.hex</code>をフラッシュメモリーに書き込むことで
+Optiboot プログラムのインストールができます。</p>
+
+<pre><code> $ sudo avrdude -p m328p -c avrisp2 -e -F -U lock:w:0x3F:m \
+                -U efuse:w:0xfd:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m
+ $ sudo avrdude -p m328p -c avrisp2 -U flash:w:/path/to/optiboot_atmega328.hex
+
+</code></pre>
+
+<p>FUSE設定は　<a href="https://eleccelerator.com/fusecalc/fusecalc.php">fusecalc</a>
+を見て下さい。以下の記事も参考にして下さい。</p>
+
+<ul>
+<li><a href="https://nagayasu-shinya.com/arduino-bootloader-writer/#toc6">ArduinoのBootloaderを修復する</a></li>
+<li><a href="http://blog-yama.a-quest.com/?eid=970124">簡単！ATmega328Pにブートローダを書きこ</a></li>
+</ul>
 
 <!-- vim: se ai tw=79: -->
 
