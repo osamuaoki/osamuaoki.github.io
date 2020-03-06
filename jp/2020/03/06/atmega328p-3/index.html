@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ATmega328P (3) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">ATmega328P (3)</span></h1>
+
+<h2 class="date">2020/03/06</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/03/03/atmega328p-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの
+<a href="https://www.microchip.com/wwwproducts/en/ATmega328p">ATmega328P</a>
+を中心としてAVRチップのプログラムの勉強・練習の続きとして、
+「AVR Libc Reference Manual」を読み込んでAVR独特の世界をみました。</p>
+
+<h2 id="メモリー">メモリー</h2>
+
+<p>PCでのプログラムとはメモリー関係は、少々勝手が違い、IO関係を直接触る上、
+メモリー空間も狭いので要注意です。</p>
+
+<p>さらにATmega328Pを含むAVRはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀに対してﾒﾓﾘとﾊﾞｽを分離する
+ﾊｰﾊﾞｰﾄﾞ構造を使用し、メモリーアドレス空間もそれぞれ別です。
+（PCはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀがメモリーアドレス空間を共有するノイマン構造。）</p>
+
+<ul>
+<li>ﾌﾟﾛｸﾞﾗﾑは不揮発性のフラッシュに格納されます。</li>
+<li>ﾃﾞｰﾀは通常の揮発性のSRAMに格納されます。</li>
+<li>不揮発データーを格納する別のEEPROMもあります。</li>
+</ul>
+
+<p>ATmega328Pだと：</p>
+
+<ul>
+<li>ﾌﾗｯｼｭ ﾒﾓﾘ容量 (ﾊﾞｲﾄ) 32K</li>
+<li>SRAM容量 (ﾊﾞｲﾄ) 2K</li>
+<li>EEPROM容量 (ﾊﾞｲﾄ) 1K</li>
+</ul>
+
+<p>実際のデーターメモリー領域は以下です。</p>
+
+<ul>
+<li>ﾚｼﾞｽﾀ ﾌｧｲﾙ    (32: 0x00-0x1F)　ーALUの汎用レジスタ</li>
+<li>I/Oﾚｼﾞｽﾀ      (64: 0x20-0x5F) - アセンブラIN/OUT命令は0x20オフセットしたLDS/STS</li>
+<li>拡張I/Oﾚｼﾞｽﾀ (160: 0x60-0xFF)</li>
+<li>内蔵SRAM      (2K: 0x100-0x3FFF)</li>
+</ul>
+
+<p>IN/OUT命令関連のことがよく分からない。どうもAVRの前の世代のマイコン8051の命令
+のことのようだ。アセンブラコード移植を意識しているようだ。INTEL系はIOは0x00から
+始まる独立アドレス空間なので、アセンブラコードは0x20オフセットした
+LDS/STS命令に置き換えると言っているようです。</p>
+
+<p>ﾌﾟﾛｸﾞﾗﾑ領域（フラッシュ）へのアクセスには専用のアセンブラコードLPM/SPMがあります。</p>
+
+<p>EEPROM領域へのアクセスは専用のI/Oﾚｼﾞｽﾀ経由で行うようです。</p>
+
+<p>Cコードからは、マクロが準備されているので、ﾌﾟﾛｸﾞﾗﾑ領域たやEEPROM領域へのアクセス
+には専用マクロ等を使うようだ。詳しくは「ATmega328Pマニュアル」の「ﾃﾞｰﾀ用EEPROMﾒﾓﾘ」や、
+「AVR Libc Reference Manual」の「Data in Program Space」や、
+<code>avr/eeprom.h</code> や <code>avr/pgmspace.h</code>を参照しましょう。</p>
+
+<p>また、AVRはﾊｰﾊﾞｰﾄﾞ構造なので、リンカーに渡すデーターメモリーの開始アドレス
+は実際のアドレスに0x800000 を手動で加えることも要注意です。</p>
+
+<h2 id="メモリー消費の確認">メモリー消費の確認</h2>
+
+<p>メモリー消費は、以下のコマンドで調べます。フラッシュ消費は「Program」、
+SRAM消費は「Data」で示されます。SRAMの初期化データーをフラッシュが
+保持するため、「.text」がダブルカウントされます。</p>
+
+<pre><code> $ avr-size --mcu=atmega328p --format=avr blink.elf
+AVR Memory Usage
+----------------
+Device: atmega328p
+
+Program:     162 bytes (0.5% Full)
+(.text + .data + .bootloader)
+
+Data:          0 bytes (0.0% Full)
+(.data + .bss + .noinit)
+</code></pre>
+
+<h2 id="メモリー消費の節約">メモリー消費の節約</h2>
+
+<p>通常変数はデーターメモリー領域に置かれますが、場所をとる文字定数や
+配列となったデーターベースはプログラムメモリー領域のフラッシュに置き
+貴重なSRAMの使用を節約したいころです。</p>
+
+<p><code>PROGMEM</code>マクロや <code>PSTR</code>マクロや <code>PGM_P</code>マクロや <code>pgm_read_byte()</code>
+関数はそのためにあります。</p>
+
+<p><code>puts_P()</code> や <code>fprint_P()</code>等というサフックス付き変種関数は、
+ﾌﾟﾛｸﾞﾗﾑ領域（フラッシュ）に置いた文字列を出力文字列やフォーマット
+文字列として利用しながら<code>puts()</code> や <code>fprint()</code>という相当する標準
+関数と同等の機能を提供します。</p>
+
+<p>また、<code>malloc()</code>を使用するのはメモリー消費の節約の点で好ましく
+無いのでこれを避ける標準入出力を作る仕組みを提供するために
+<code>FDEV_SETUP_STREAM()</code>マクロなどが提供されています。</p>
+
+<p>この辺はAVR独特の世界の詳細なので、標準ストリームと併せて実例で学びましょう。</p>
+
+<h2 id="標準ストリーム">標準ストリーム</h2>
+
+<p>もうひとつのAVR独特の世界は標準ストリームです。</p>
+
+<p>C標準とは違い、avr-libcには適用できるデバイス情報がないため、
+標準ストリーム<code>stdin</code>、<code>stdout</code>と<code>stderr</code>のストリームは
+アプリケーション起動時に事前に初期化されません。</p>
+
+<p>これもAVR独特の世界の詳細なので、メモリーと併せて実例で学びましょう。</p>
+
+<h2 id="avr独特の世界の例">AVR独特の世界の例</h2>
+
+<p>&hellip; WIP &hellip;</p>
+
+<!-- vim: se ai tw=79: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/03/03/atmega328p-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -6,10 +6,27 @@
     <description>Recent content in DIY on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 03 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Fri, 06 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/diy/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ATmega328P (3)</title>
+      <link>/jp/2020/03/06/atmega328p-3/</link>
+      <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/03/06/atmega328p-3/</guid>
+      <description>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの勉強・練習の続きとして、 「AVR Libc Reference Manual」を読み込んでAVR独特の世界をみました。
+メモリー PCでのプログラムとはメモリー関係は、少々勝手が違い、IO関係を直接触る上、 メモリー空間も狭いので要注意です。
+さらにATmega328Pを含むAVRはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀに対してﾒﾓﾘとﾊﾞｽを分離する ﾊｰﾊﾞｰﾄﾞ構造を使用し、メモリーアドレス空間もそれぞれ別です。 （PCはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀがメモリーアドレス空間を共有するノイマン構造。）
+ ﾌﾟﾛｸﾞﾗﾑは不揮発性のフラッシュに格納されます。 ﾃﾞｰﾀは通常の揮発性のSRAMに格納されます。 不揮発データーを格納する別のEEPROMもあります。  ATmega328Pだと：
+ ﾌﾗｯｼｭ ﾒﾓﾘ容量 (ﾊﾞｲﾄ) 32K SRAM容量 (ﾊﾞｲﾄ) 2K EEPROM容量 (ﾊﾞｲﾄ) 1K  実際のデーターメモリー領域は以下です。
+ ﾚｼﾞｽﾀ ﾌｧｲﾙ (32: 0x00-0x1F)　ーALUの汎用レジスタ I/Oﾚｼﾞｽﾀ (64: 0x20-0x5F) - アセンブラIN/OUT命令は0x20オフセットしたLDS/STS 拡張I/Oﾚｼﾞｽﾀ (160: 0x60-0xFF) 内蔵SRAM (2K: 0x100-0x3FFF)  IN/OUT命令関連のことがよく分からない。どうもAVRの前の世代のマイコン8051の命令 のことのようだ。アセンブラコード移植を意識しているようだ。INTEL系はIOは0x00から 始まる独立アドレス空間なので、アセンブラコードは0x20オフセットした LDS/STS命令に置き換えると言っているようです。
+ﾌﾟﾛｸﾞﾗﾑ領域（フラッシュ）へのアクセスには専用のアセンブラコードLPM/SPMがあります。
+EEPROM領域へのアクセスは専用のI/Oﾚｼﾞｽﾀ経由で行うようです。
+Cコードからは、マクロが準備されているので、ﾌﾟﾛｸﾞﾗﾑ領域たやEEPROM領域へのアクセス には専用マクロ等を使うようだ。詳しくは「ATmega328Pマニュアル」の「ﾃﾞｰﾀ用EEPROMﾒﾓﾘ」や、 「AVR Libc Reference Manual」の「Data in Program Space」や、 avr/eeprom.h や avr/pgmspace.</description>
+    </item>
     
     <item>
       <title>ATmega328P (2)</title>
@@ -18,8 +35,13 @@
       
       <guid>/jp/2020/03/03/atmega328p-2/</guid>
       <description>Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの練習の続きをしました。
+確かにハードとして少々古い感はありますが、５V仕様で安価で入手簡単な開発 ボードがあるのが練習用にいい感じです。
 開発環境 クロスコンパイル開発環境は以下でOK（2020/03, Debian stable buster）
- $ sudo apt install gcc-avr avr-libc binutils-avr  例: LED点滅 (Lチカ) まず、単純なLEDの点滅（通称Lチカ）を例にプログラム開発を示します。
+ $ sudo apt install gcc-avr avr-libc binutils-avr  レファレンス文書 MICROCHIP社（AVRを作っていた旧Atmel社はPICを作っていた旧MICROCHIP社と合併 して、現在MICROCHIP社をして両方を供給中）の AVR関連英文サイト が基本の開発関連レファレンス文書を広くカバーしています。
+日本語資料は、ＡＶＲ日本語情報サイトに素晴らしい 公式文書の翻訳資料群があります。
+特にソフトに関しては AVR Libc Reference Manual 英文 MICROCHIPサイト・ AVR Libc Reference Manual 英文 NONGNUサイト。AVR Libc 日本語版もあります。 は重要です。
+もちろん対象ハードであるATmega328Pのデーターシート も重要です。ATmega328/328Pのデーターシート 日本語版
+例: LED点滅 (Lチカ) まず、単純なLEDの点滅（通称Lチカ）を例にプログラム開発を示します。
 Cのソースコード 以下にLチカのCのソースコード blink.cを示します。 これでNanoのPB5ピンにぶら下がっているLEDを0.5秒間隔でON/OFFします。
 // Arduino nano board is 16 MHz #define F_CPU 16000000UL #include &amp;lt;avr/io.h&amp;gt; #include &amp;lt;util/delay.h&amp;gt; int main (void) { // For Data Direction Register of port B, set the 5th bit (OR) DDRB |= _BV(DDB5); while(1) { // For Port B, toggle the 5th bit (XOR) PORTB ^= _BV(PORTB5); _delay_ms(500); // 500 ms delay } }  ここで普通のCのプログラムでは見かけないマクロの_BV()や、 よく分からない変数DDRB等が気になります。</description>
     </item>
@@ -42,14 +64,17 @@ Cのソースコード 以下にLチカのCのソースコード blink.cを示�
       <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
       
       <guid>/jp/2020/02/21/atmega328p-1/</guid>
-      <description>AVRチップのISP経由プログラムの練習をします。これには、 TTL-232R-5V を使った自作プロクラマー を使うのも良いのですが、最近Atmel AVR ISP mkIIをただで人からもらったので それを使います。
+      <description>AVRチップのISP経由プログラムの練習をします。
 ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoのコンパチボードや本物の Uno等を使ってます。
-ソフト環境 $ sudo apt install avrdude  接続 AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
+プロクラマー これには、 TTL-232R-5V を使った自作プロクラマー を使うのも良いのですが、最近Atmel AVR ISP mkIIをただで人からもらったので それを使います。
+詳細な使用説明書（英文）： AVR ISP mkII User Guide
+ソフト環境 Debian GNU/Linux buster=stable 環境です。
+$ sudo apt install avrdude  接続 AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
 ちなみに、 TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、 これはあとで考えましょう。
 ISPケーブルの赤線は１ピン側です。
 Uno Nano AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。
 AVRISP mkII に赤いLEDが点滅は、ISPコネクター「逆差し」です。
-Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/ Copyright (c) 2007-2014 Joerg Wunsch System wide configuration file is &amp;quot;/etc/avrdude.</description>
+Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.</description>
     </item>
     
     <item>
