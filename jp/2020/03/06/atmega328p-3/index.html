@@ -135,18 +135,20 @@ Data:          0 bytes (0.0% Full)
 貴重なSRAMの使用を節約したいころです。</p>
 
 <p><code>PROGMEM</code>マクロや <code>PSTR</code>マクロや <code>PGM_P</code>マクロや <code>pgm_read_byte()</code>
-関数はそのためにあります。</p>
+関数はそのためにあります。これらは「Program Space Utilities」として
+<code>avr/pgmspace.h</code>により提供されています。</p>
 
 <p><code>puts_P()</code> や <code>fprint_P()</code>等というサフックス付き変種関数は、
 ﾌﾟﾛｸﾞﾗﾑ領域（フラッシュ）に置いた文字列を出力文字列やフォーマット
 文字列として利用しながら<code>puts()</code> や <code>fprint()</code>という相当する標準
-関数と同等の機能を提供します。</p>
+関数と同等の機能を提供します。これらの変種関数も含めて
+標準の「Standard IO facilities」として<code>stdio.h</code>により提供されています。</p>
 
-<p>また、<code>malloc()</code>を使用するのはメモリー消費の節約の点で好ましく
-無いのでこれを避ける標準入出力を作る仕組みを提供するために
+<p>また、<code>stdio.h</code>は、<code>malloc()</code>を使用するのはメモリー消費の節約の点で
+好ましく無いのでこれを避ける標準入出力を作る仕組みを提供するために
 <code>FDEV_SETUP_STREAM()</code>マクロなどが提供されています。</p>
 
-<p>この辺はAVR独特の世界の詳細なので、標準ストリームと併せて実例で学びましょう。</p>
+<p>この辺はAVR独特の世界の詳細なので、他と併せて実例で学びましょう。</p>
 
 <h2 id="標準ストリーム">標準ストリーム</h2>
 
@@ -156,11 +158,175 @@ Data:          0 bytes (0.0% Full)
 標準ストリーム<code>stdin</code>、<code>stdout</code>と<code>stderr</code>のストリームは
 アプリケーション起動時に事前に初期化されません。</p>
 
-<p>これもAVR独特の世界の詳細なので、メモリーと併せて実例で学びましょう。</p>
+<p>これもAVR独特の世界の詳細なので、他と併せて実例で学びましょう。</p>
+
+<h2 id="標準ライブラリ">標準ライブラリ</h2>
+
+<p>ATmega328Pはavr5なので、リンクされる標準ライブラリのバイナリは
+<code>/usr/lib/avr/lib/avr5/</code>にあります。ライブラリが標準ライブラリの
+<code>libc.a</code>と数学関数ライブラリの<code>libm.a</code>と分かれているのは普通だし
+チップ対応の<code>libatmega328p.a</code>があるのは分かりますが、
+<code>libprintf_flt.a</code>や<code>libprintf_min.a</code>や<code>libscanf_flt.a</code>や
+<code>libscanf_min.a</code>が気になります。</p>
+
+<p>これらは、<code>printf()</code>や<code>scanf()</code>関連機能をコンパイラオプションで
+制限・拡張することで、無駄にメモリー消費しないために存在します。
+標準では使いそうにない浮動小数点関係のフォーマット機能は削られ
+ています。まあ普通のAVR使用環境ではこれで充分です。</p>
+
+<p>必要になったら「AVR Libc Reference Manual」の
+「<stdio.h>: Standard IO facilities」の <code>vfprintf()</code>と
+<code>vfscanf()</code>の説明のそれぞれの最後の部分を精読しましょう。</p>
 
 <h2 id="avr独特の世界の例">AVR独特の世界の例</h2>
 
-<p>&hellip; WIP &hellip;</p>
+<p>「AVR Libc Reference Manual」のデモプロジェクトは、
+<code>/usr/share/doc/avr-libc/examples/</code>にあります。</p>
+
+<p>これを参考に、「LEDタイマー点灯」に加筆して、端子入力に合わせて
+シリアルに「Hello」等とゆっくり出力する簡単なプログラムの
+<code>hello.c</code>を作成しました。（シリアル出力なしで、デモコードより簡単です。）</p>
+
+<pre><code>// Arduino nano board is 16 MHz
+#define F_CPU 16000000UL
+#define BAUD 115200
+// Usable Baud Rate 300 600 1200 2400 4800 9600 14400 19200 28800 38400 57600 115200
+// $ picocom -b 115200 /dev/ttyUSB0
+#include &lt;avr/io.h&gt;
+#include &lt;avr/pgmspace.h&gt;
+#include &lt;util/delay.h&gt;
+#include &lt;util/setbaud.h&gt;
+#include &lt;stdio.h&gt;
+
+static void
+uart_init(void)
+{
+UBRR0H = UBRRH_VALUE;
+UBRR0L = UBRRL_VALUE;
+#if USE_2X
+UCSR0A |= (1 &lt;&lt; U2X0);
+#else
+UCSR0A &amp;= ~(1 &lt;&lt; U2X0);
+#endif
+/* async, non-parity, 1-bit stop, 8-bit data */
+UCSR0C = _BV(UCSZ01)|_BV(UCSZ00);
+/* transmitter enable */
+UCSR0B = _BV(TXEN0);
+}
+
+int
+uart_putchar(char c, FILE *stream)
+{
+    if (c == '\n') {
+        uart_putchar('\r', stream);
+    }
+    loop_until_bit_is_set(UCSR0A, UDRE0);
+    UDR0 = c;
+    return 0;
+}
+
+#define SURE_LO 0
+#define UNSURE  1
+#define SURE_HI 2
+#define BIT5HI  0b00100000
+
+FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
+
+int
+check (void) {
+    // Check if any one of low 5 bits 01234 of PORTB is grounded
+    if ((PINB &amp; 0x1f) != 0x1f) {
+        _delay_ms(50); // 50 ms delay
+        if ((PINB &amp; 0x1f) != 0x1f) {
+            return SURE_LO;
+        }
+    }
+    // Check if all low 5 bits 01234 of PORTB are not grounded
+    else if ((PINB &amp; 0x1f) == 0x1f) {
+        _delay_ms(50); // 50 ms delay
+        if ((PINB &amp; 0x1f) == 0x1f) {
+            return SURE_HI;
+        }
+    }
+    return UNSURE;
+}
+
+int
+main (void) {
+    int previous = SURE_HI; // pull-uped
+    uart_init();
+    stdout = &amp;uart_str;
+    // For Data Direction Register of port B, set 5 pin as output for LED
+    DDRB = BIT5HI;
+    // pull-up for all port B non-5 pins (0b11011111)
+    PORTB = ~ BIT5HI;
+    while(1) {
+        if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
+            // LED ON
+            PORTB |=   BIT5HI;
+            printf_P(PSTR(&quot;Hello world! &quot;));
+            for (int i=1; i &lt; 10; i++) {
+                _delay_ms(100); // 100 ms delay
+                printf_P(PSTR(&quot;-&quot;));
+            }
+            // LED OFF
+            PORTB &amp;= ~ BIT5HI;
+            printf_P(PSTR(&quot;&gt; Bye world!\n&quot;));
+            previous = SURE_LO;
+        } else if ((previous == SURE_LO) &amp; (check() == SURE_HI)) {
+            previous = SURE_HI;
+        }
+    }
+}
+</code></pre>
+
+<p>ハードウエアーに対応するレジスター名やビットの名前がAVRの世代毎に違うためか
+「AVR Libc Reference Manual」のデモプロジェクトにコードはそのままでは動き
+ませんでした。さらに、レジスター名等もデーターシートとも微妙に異なっていま
+した。最後はデーターシートとヘッダーファイルの定義を見比べて、微妙に数字を
+加えたりの名前の合わせ込みをしました。</p>
+
+<p>デモコードより正確なボーレート計算を<code>util/setbaud.h</code>を使ってしました。</p>
+
+<p>さて、これをコンパイルしてできる<code>hello.hex</code>を、USB経由でチップに以下で
+プログラムしました。</p>
+
+<pre><code>$ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:blink.hex
+</code></pre>
+
+<p>USBをつないだまま、以下を実行し、「LEDタイマー点灯」と同様の端子の接地
+をするとホストPCに文字列が印字されました。</p>
+
+<pre><code> $ picocom -b 115200 /dev/ttyUSB0
+picocom v3.1
+
+port is        : /dev/ttyUSB0
+flowcontrol    : none
+baudrate is    : 115200
+parity is      : none
+databits are   : 8
+stopbits are   : 1
+escape is      : C-a
+local echo is  : no
+noinit is      : no
+noreset is     : no
+hangup is      : no
+nolock is      : no
+send_cmd is    : sz -vv
+receive_cmd is : rz -vv -E
+imap is        :
+omap is        :
+emap is        : crcrlf,delbs,
+logfile is     : none
+initstring     : none
+exit_after is  : not set
+exit is        : no
+
+Type [C-a] [C-h] to see available commands
+Terminal ready
+Hello world! ---------&gt; Bye world!
+Hello world! ---------&gt; Bye world!
+</code></pre>
 
 <!-- vim: se ai tw=79: -->
 

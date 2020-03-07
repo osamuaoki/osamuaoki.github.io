@@ -248,9 +248,9 @@ main (void) {
 
 <p>どうですか、Lチカしていますね。</p>
 
-<h2 id="例-入力にあわせてled点滅">例: 入力にあわせてLED点滅</h2>
+<h2 id="例-端子入力にあわせてled点滅">例: 端子入力にあわせてLED点滅</h2>
 
-<p>入力にあわせてLED点滅させるようにオリジナルのLED点滅ソースコードを
+<p>端子入力にあわせてLED点滅させるようにオリジナルのLED点滅ソースコードを
 以下の様に変更します。</p>
 
 <pre><code>// Arduino nano board is 16 MHz
@@ -285,7 +285,68 @@ main (void) {
 <p>どうですか、LEDが付いていますね。</p>
 
 <p>ここでPORTBの01234の5つのPIN(USBコネクターを右に置いた際に、手前
-USBコネクター側のPIN)のどれかを接地(ground)するとLEDが消えますね。</p>
+USBコネクター側の端子)のどれかを接地(ground)するとLEDが消えますね。</p>
+
+<h2 id="例-端子入力にあわせてledタイマー点灯">例: 端子入力にあわせてLEDタイマー点灯</h2>
+
+<p>端子入力にあわせてLEDを3秒間タイマー点灯させるようにオリジナルの
+LED点滅ソースコードを以下の様に変更します。</p>
+
+<pre><code>// Arduino nano board is 16 MHz
+#define F_CPU 16000000UL
+
+#include &lt;avr/io.h&gt;
+#include &lt;util/delay.h&gt;
+
+#define SURE_LO 0
+#define UNSURE  1
+#define SURE_HI 2
+int
+check (void) {
+    // Check if any one of low 5 bits 01234 of PORTB is grounded
+    if ((PINB &amp; 0x1f) != 0x1f) {
+        _delay_ms(50); // 50 ms delay
+        if ((PINB &amp; 0x1f) != 0x1f) {
+            return SURE_LO;
+        }
+    }
+    // Check if all low 5 bits 01234 of PORTB are not grounded
+    else if ((PINB &amp; 0x1f) == 0x1f) {
+        _delay_ms(50); // 50 ms delay
+        if ((PINB &amp; 0x1f) == 0x1f) {
+            return SURE_HI;
+        }
+    }
+    return UNSURE;
+}
+
+#define BIT5HI  0b00100000
+int
+main (void) {
+    int previous = SURE_HI; // pull-uped
+    // For Data Direction Register of port B, set 5 pin as output for LED
+    DDRB = BIT5HI;
+    // pull-up for all port B non-5 pins (0b11011111)
+    PORTB = ~ BIT5HI;
+    while(1)
+    {
+        if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
+            // LED ON
+            PORTB |=   BIT5HI;
+            _delay_ms(3000); // 3000 ms delay
+            // LED OFF
+            PORTB &amp;= ~ BIT5HI;
+            previous = SURE_LO;
+        } else if ((previous == SURE_LO) &amp; (check() == SURE_HI)) {
+            previous = SURE_HI;
+        }
+    }
+}
+</code></pre>
+
+<p>ここでPORTBの01234の5つのPIN(USBコネクターを右に置いた際に、手前
+USBコネクター側の端子)のどれかを接地(ground)するとLEDが3秒間点灯
+します。</p>
 
 <h2 id="シリアル経由のプログラム">シリアル経由のプログラム</h2>
 
