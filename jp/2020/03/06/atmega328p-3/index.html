@@ -188,10 +188,9 @@ Data:          0 bytes (0.0% Full)
 
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
-#define BAUD 115200
-#define BAUD_TOL 3
-// Usable Baud Rate 300 600 1200 2400 4800 9600 14400 19200 28800 38400 57600
-// 115200 $ picocom -b 115200 /dev/ttyUSB0
+// Usable Baud Rate ... 9600 14400 19200 28800 38400 57600 2%
+#define BAUD 19200
+// Use with $ picocom -b 19200 /dev/ttyUSB0
 #include &lt;avr/io.h&gt;
 #include &lt;avr/pgmspace.h&gt;
 #include &lt;stdio.h&gt;
@@ -252,13 +251,19 @@ int main(void) {
   stdout = &amp;uart_str;
   // For Data Direction Register of port B, set 5 pin as output for LED
   DDRB = BIT5HI;
+  DDRC = 0;
+  DDRD = 0;
   // pull-up for all port B non-5 pins (0b11011111)
   PORTB = ~BIT5HI;
+  PORTC = 0xff;
+  PORTD = 0xff;
+  printf_P(PSTR(&quot;Hello world!\n&quot;));
   while (1) {
     if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
       // LED ON
       PORTB |= BIT5HI;
-      printf_P(PSTR(&quot;Hello world! PINB = %02X\n&quot;), PINB);
+      printf_P(PSTR(&quot;PINB=%02X PINC=%02X PIND=%02X\n&quot;), PINB, PINC, PIND);
+      _delay_ms(3000);  // 3000 ms delay
       // LED OFF
       PORTB &amp;= ~BIT5HI;
       previous = SURE_LO;
@@ -276,7 +281,7 @@ int main(void) {
 見比べて、レジスター名等に微妙に数字を加えたりの合わせ込みをしました。</p>
 
 <p>さらにデモコードより正確なボーレート計算法をすべく<code>util/setbaud.h</code>を使い
-許容誤差3%としました。</p>
+ました。</p>
 
 <p>さて、これをコンパイルしてできる<code>hello.hex</code>を、USB経由でチップに以下で
 プログラムしました。</p>
@@ -288,12 +293,12 @@ int main(void) {
 をするとターミナルプログラムを起動したホストPCに、端子の接地状況を含め
 た文字列が印字されます。</p>
 
-<pre><code> $ picocom -b 115200 /dev/ttyUSB0
+<pre><code>$ picocom -b 19200 /dev/ttyUSB0
 picocom v3.1
 
 port is        : /dev/ttyUSB0
 flowcontrol    : none
-baudrate is    : 115200
+baudrate is    : 19200
 parity is      : none
 databits are   : 8
 stopbits are   : 1
@@ -305,8 +310,8 @@ hangup is      : no
 nolock is      : no
 send_cmd is    : sz -vv
 receive_cmd is : rz -vv -E
-imap is        :
-omap is        :
+imap is        : 
+omap is        : 
 emap is        : crcrlf,delbs,
 logfile is     : none
 initstring     : none
@@ -315,11 +320,11 @@ exit is        : no
 
 Type [C-a] [C-h] to see available commands
 Terminal ready
-Hello world! PINB = 0F
-Hello world! PINB = 0F
-Hello world! PINB = 0F
-Hello world! PINB = 17
-Hello world! PINB = 17
+Hello world!
+PINB=3D PINC=3D PIND=FF
+PINB=3D PINC=3D PIND=FF
+PINB=3D PINC=3B PIND=FF
+PINB=3B PINC=3B PIND=FF
 </code></pre>
 
 <!-- vim: se ai tw=79: -->
