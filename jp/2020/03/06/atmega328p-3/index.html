@@ -184,7 +184,7 @@ Data:          0 bytes (0.0% Full)
 
 <p>これを参考に、「LEDタイマー点灯」に加筆して、端子入力に合わせて
 シリアルに端子の接地状況を出力する簡単なプログラムの<code>hello.c</code>を
-作成しました。（シリアルん入力なしで、デモコードより簡単なところ
+作成しました。（シリアル入力なしで、デモコードより簡単なところ
 からスタートです。）</p>
 
 <pre><code>// Arduino nano board is 16 MHz
@@ -293,9 +293,8 @@ int main(void) {
 <pre><code>$ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:blink.hex
 </code></pre>
 
-<p>USBをつないだまま、以下を実行し、「LEDタイマー点灯」と同様のB端子の接地
-したり他の端子も接地したりすると、ターミナルプログラムを起動したホストPCに、
-端子の接地状況が表示されます。</p>
+<p>USBをつないだまま、以下を実行し、B端子や他の端子を接地したりすると、
+ターミナルプログラムを起動したホストPCに端子の接地状況が表示されます。</p>
 
 <pre><code>$ picocom -b 19200 /dev/ttyUSB0
 picocom v3.1
@@ -314,8 +313,8 @@ hangup is      : no
 nolock is      : no
 send_cmd is    : sz -vv
 receive_cmd is : rz -vv -E
-imap is        : 
-omap is        : 
+imap is        :
+omap is        :
 emap is        : crcrlf,delbs,
 logfile is     : none
 initstring     : none
