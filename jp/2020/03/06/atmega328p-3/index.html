@@ -144,10 +144,6 @@ Data:          0 bytes (0.0% Full)
 関数と同等の機能を提供します。これらの変種関数も含めて
 標準の「Standard IO facilities」として<code>stdio.h</code>により提供されています。</p>
 
-<p>また、<code>stdio.h</code>は、<code>malloc()</code>を使用するのはメモリー消費の節約の点で
-好ましく無いのでこれを避ける標準入出力を作る仕組みを提供するために
-<code>FDEV_SETUP_STREAM()</code>マクロなどが提供されています。</p>
-
 <p>この辺はAVR独特の世界の詳細なので、他と併せて実例で学びましょう。</p>
 
 <h2 id="標準ストリーム">標準ストリーム</h2>
@@ -158,9 +154,13 @@ Data:          0 bytes (0.0% Full)
 標準ストリーム<code>stdin</code>、<code>stdout</code>と<code>stderr</code>のストリームは
 アプリケーション起動時に事前に初期化されません。</p>
 
-<p>これもAVR独特の世界の詳細なので、他と併せて実例で学びましょう。</p>
+<p>また、<code>stdio.h</code>は、<code>malloc()</code>を使用するのはメモリー消費の節約の点で
+好ましく無いのでこれを避ける標準入出力を作る仕組みを提供するために
+<code>FDEV_SETUP_STREAM()</code>マクロなどが提供されています。</p>
 
-<h2 id="標準ライブラリ">標準ライブラリ</h2>
+<p>これらもAVR独特の世界の詳細なので、他と併せて実例で学びましょう。</p>
+
+<h2 id="標準ライブラリの機能の制限-拡張">標準ライブラリの機能の制限・拡張</h2>
 
 <p>ATmega328Pはavr5なので、リンクされる標準ライブラリのバイナリは
 <code>/usr/lib/avr/lib/avr5/</code>にあります。ライブラリが標準ライブラリの
@@ -172,11 +172,10 @@ Data:          0 bytes (0.0% Full)
 <p>これらは、<code>printf()</code>や<code>scanf()</code>関連機能をコンパイラオプションで
 制限・拡張することで、無駄にメモリー消費しないために存在します。
 標準では使いそうにない浮動小数点関係のフォーマット機能は削られ
-ています。まあ普通のAVR使用環境ではこれで充分です。</p>
+ています。まあ普通のAVR使用環境ではデフォルトで充分です。</p>
 
-<p>必要になったら「AVR Libc Reference Manual」の
-「<stdio.h>: Standard IO facilities」の <code>vfprintf()</code>と
-<code>vfscanf()</code>の説明のそれぞれの最後の部分を精読しましょう。</p>
+<p>必要になったら「AVR Libc Reference Manual」の「Standard IO facilities」の
+<code>vfprintf()</code>と<code>vfscanf()</code>の説明のそれぞれの最後の部分を精読しましょう。</p>
 
 <h2 id="avr独特の世界の例">AVR独特の世界の例</h2>
 
@@ -184,8 +183,8 @@ Data:          0 bytes (0.0% Full)
 <code>/usr/share/doc/avr-libc/examples/</code>にあります。</p>
 
 <p>これを参考に、「LEDタイマー点灯」に加筆して、端子入力に合わせて
-シリアルに「Hello」等とゆっくり出力する簡単なプログラムの
-<code>hello.c</code>を作成しました。（シリアル出力なしで、デモコードより簡単です。）</p>
+シリアルに「Hello」等を出力する簡単なプログラムの<code>hello.c</code>を作成しました。
+（シリアル出力なしで、デモコードより簡単です。）</p>
 
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
@@ -270,11 +269,11 @@ int main(void) {
 }
 </code></pre>
 
-<p>ヘッダーで使われるハードウエアーに対応するレジスター名やビットの名前を最近
-のより強力なAVRと共通にしたためか「AVR Libc Reference Manual」にあるデモ
-プロジェクトのコードはそのままでは動かなくなってました。使うレジスター名
-等がデーターシートと微妙に異なっていたのでヘッダーファイルの定義を見比べて、
-微妙に数字を加えたりの合わせ込みをしました。</p>
+<p><code>avr-libc</code>が提供するヘッダーで使われるハードウエアーに対応するレジスター名
+やビットの名前を、最近のより同一機能レジスターが複数ある強力なAVRと共通に
+したためか、「AVR Libc Reference Manual」にあるデモプロジェクトの
+コードはそのままでは動かなくなってました。ヘッダーファイルの定義と
+見比べて、レジスター名等に微妙に数字を加えたりの合わせ込みをしました。</p>
 
 <p>さらにデモコードより正確なボーレート計算法をすべく<code>util/setbaud.h</code>を使い
 許容誤差3%としました。</p>
@@ -286,7 +285,8 @@ int main(void) {
 </code></pre>
 
 <p>USBをつないだまま、以下を実行し、「LEDタイマー点灯」と同様の端子の接地
-をするとホストPCに端子の接地状況を含めた文字列が印字されました。</p>
+をするとターミナルプログラムを起動したホストPCに、端子の接地状況を含め
+た文字列が印字されます。</p>
 
 <pre><code> $ picocom -b 115200 /dev/ttyUSB0
 picocom v3.1
