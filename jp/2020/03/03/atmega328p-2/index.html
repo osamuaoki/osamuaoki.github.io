@@ -70,6 +70,42 @@
 <pre><code> $ sudo apt install gcc-avr avr-libc binutils-avr
 </code></pre>
 
+<h2 id="コードスタイル">コードスタイル</h2>
+
+<p>以下色々なところからコードを引っ張ってくると、コードスタイルが混じって
+見づらくなるし、手動で直すのもばかばかしいのでちょっとコードスタイル関係を
+調べました。もともとK&amp;R系のTAB無し2-4スペースインデントの
+<a href="https://en.wikipedia.org/wiki/Indentation_style#Variant:_1TBS_(OTBS)">1TBS</a>
+なので、色々のスタイルガイドを見て、結局
+<a href="https://github.com/google/styleguide/">GOOGLEスタイル</a>
+に最も共感しました。</p>
+
+<p>今後はPython以外は全言語基本2スペースインデントにします。</p>
+
+<p>VIMのモードライン&copy;</p>
+
+<pre><code>// vim: set sts=2 sw=2 ft=c ai si et tw=80:
+</code></pre>
+
+<p>VIMのモードライン(SH)</p>
+
+<pre><code># vim: set sts=2 sw=2 ft=sh ai si et tw=80:
+</code></pre>
+
+<p>VIMのモードライン(PYTHON)</p>
+
+<pre><code># vim: set sts=4 sw=4 ft=python ai si et:
+</code></pre>
+
+<p>Cの自動リフォーマットは</p>
+
+<pre><code> $ clang-format -style=Google -i filename.c
+</code></pre>
+
+<p>SHELLの全文リフォーマットはVIMで(modelineが無い場合は<code>:set syntax=sh</code>の後)<code>gg=G</code>とする。</p>
+
+<p>PYTHONの全文リフォーマットは「black」を使います。</p>
+
 <h2 id="レファレンス文書">レファレンス文書</h2>
 
 <p>MICROCHIP社（AVRを作っていた旧Atmel社はPICを作っていた旧MICROCHIP社と合併
@@ -103,16 +139,14 @@
 #include &lt;avr/io.h&gt;
 #include &lt;util/delay.h&gt;
 
-int
-main (void) {
-    // For Data Direction Register of port B, set the 5th bit (OR)
-    DDRB |= _BV(DDB5);
-    while(1)
-    {
-        // For Port B, toggle the 5th bit (XOR)
-        PORTB ^= _BV(PORTB5);
-        _delay_ms(500); // 500 ms delay
-    }
+int main(void) {
+  // For Data Direction Register of port B, set the 5th bit (OR)
+  DDRB |= _BV(DDB5);
+  while (1) {
+    // For Port B, toggle the 5th bit (XOR)
+    PORTB ^= _BV(PORTB5);
+    _delay_ms(500);  // 500 ms delay
+  }
 }
 </code></pre>
 
@@ -204,15 +238,13 @@ inclideファイルがあります。これさえ分かれば後はコードを�
 
 #include &lt;avr/io.h&gt;
 
-int
-main (void) {
-    // For Data Direction Register of port B, set the 5th bit (OR)
-    DDRB |= _BV(DDB5);
-    // For Port B, turn on the 5th bit (OR)
-    PORTB |= _BV(PORTB5);
-    while(1)
-    {
-    }
+int main(void) {
+  // For Data Direction Register of port B, set the 5th bit (OR)
+  DDRB |= _BV(DDB5);
+  // For Port B, turn on the 5th bit (OR)
+  PORTB |= _BV(PORTB5);
+  while (1) {
+  }
 }
 </code></pre>
 
@@ -231,16 +263,14 @@ main (void) {
 #include &lt;avr/io.h&gt;
 #include &lt;util/delay.h&gt;
 
-int
-main (void) {
-    // For Data Direction Register of port B, set the 5th bit
-    DDRB = _BV(DDB5);
-    while(1)
-    {
-        // For PIN B, toggle the 5th bit
-        PINB = _BV(PINB5);
-        _delay_ms(500); // 500 ms delay
-    }
+int main(void) {
+  // For Data Direction Register of port B, set the 5th bit
+  DDRB = _BV(DDB5);
+  while (1) {
+    // For PIN B, toggle the 5th bit
+    PINB = _BV(PINB5);
+    _delay_ms(500);  // 500 ms delay
+  }
 }
 </code></pre>
 
@@ -258,23 +288,22 @@ main (void) {
 
 #include &lt;avr/io.h&gt;
 
-int
-main (void) {
-    // For Data Direction Register of port B, set 5 pin as output for LED
-    DDRB = 0b00100000;
-    // pull-up for all port B non-5 pins (0b11011111)
-    PORTB = ~ 0b00100000;
-    while(1)
-    {
+int main(void) {
+  // For Data Direction Register of port B, set 5 pin as output for LED
+  DDRB = 0b00100000;
+  // pull-up for all port B non-5 pins (0b11011111)
+  PORTB = ~0b00100000;
+  while (1) {
     // Check if any one of low 5 bits 01234 of PORTB is grounded
-        if  ((PINB &amp; 0x1f) == 0x1f) {
-    // not grounded -&gt; LED ON
-            PORTB |=   0b00100000;
-        } else {
-    // grounded -&gt; LED OFF
-            PORTB &amp;= ~ 0b00100000;
-        }
+    if ((PINB &amp; 0x1f) == 0x1f) {
+      // not grounded -&gt; LED ON
+      PORTB |= 0b00100000;
+      printf();
+    } else {
+      // grounded -&gt; LED OFF
+      PORTB &amp;= ~0b00100000;
     }
+  }
 }
 </code></pre>
 
@@ -299,48 +328,45 @@ LED点滅ソースコードを以下の様に変更します。</p>
 #include &lt;util/delay.h&gt;
 
 #define SURE_LO 0
-#define UNSURE  1
+#define UNSURE 1
 #define SURE_HI 2
-int
-check (void) {
-    // Check if any one of low 5 bits 01234 of PORTB is grounded
+int check(void) {
+  // Check if any one of low 5 bits 01234 of PORTB is grounded
+  if ((PINB &amp; 0x1f) != 0x1f) {
+    _delay_ms(50);  // 50 ms delay
     if ((PINB &amp; 0x1f) != 0x1f) {
-        _delay_ms(50); // 50 ms delay
-        if ((PINB &amp; 0x1f) != 0x1f) {
-            return SURE_LO;
-        }
+      return SURE_LO;
     }
-    // Check if all low 5 bits 01234 of PORTB are not grounded
-    else if ((PINB &amp; 0x1f) == 0x1f) {
-        _delay_ms(50); // 50 ms delay
-        if ((PINB &amp; 0x1f) == 0x1f) {
-            return SURE_HI;
-        }
+  }
+  // Check if all low 5 bits 01234 of PORTB are not grounded
+  else if ((PINB &amp; 0x1f) == 0x1f) {
+    _delay_ms(50);  // 50 ms delay
+    if ((PINB &amp; 0x1f) == 0x1f) {
+      return SURE_HI;
     }
-    return UNSURE;
+  }
+  return UNSURE;
 }
 
-#define BIT5HI  0b00100000
-int
-main (void) {
-    int previous = SURE_HI; // pull-uped
-    // For Data Direction Register of port B, set 5 pin as output for LED
-    DDRB = BIT5HI;
-    // pull-up for all port B non-5 pins (0b11011111)
-    PORTB = ~ BIT5HI;
-    while(1)
-    {
-        if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
-            // LED ON
-            PORTB |=   BIT5HI;
-            _delay_ms(3000); // 3000 ms delay
-            // LED OFF
-            PORTB &amp;= ~ BIT5HI;
-            previous = SURE_LO;
-        } else if ((previous == SURE_LO) &amp; (check() == SURE_HI)) {
-            previous = SURE_HI;
-        }
+#define BIT5HI 0b00100000
+int main(void) {
+  int previous = SURE_HI;  // pull-uped
+  // For Data Direction Register of port B, set 5 pin as output for LED
+  DDRB = BIT5HI;
+  // pull-up for all port B non-5 pins (0b11011111)
+  PORTB = ~BIT5HI;
+  while (1) {
+    if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
+      // LED ON
+      PORTB |= BIT5HI;
+      _delay_ms(3000);  // 3000 ms delay
+      // LED OFF
+      PORTB &amp;= ~BIT5HI;
+      previous = SURE_LO;
+    } else if ((previous == SURE_LO) &amp; (check() == SURE_HI)) {
+      previous = SURE_HI;
     }
+  }
 }
 </code></pre>
 
@@ -394,7 +420,7 @@ CH340がその役割）経由でATmega328PのD0/D1ピンにシリアルにデー
 <code>Makefile</code>にコピーして、周波数・チップ種・プログラマーなどに合わせ
 変数を書き換えて使います。</p>
 
-<!-- vim: se ai tw=79: -->
+<!-- vim: set sts=2 sw=2 ai et si tw=80: -->
 
 
 <table width="100%">

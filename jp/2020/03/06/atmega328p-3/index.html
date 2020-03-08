@@ -190,103 +190,94 @@ Data:          0 bytes (0.0% Full)
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 #define BAUD 115200
-// Usable Baud Rate 300 600 1200 2400 4800 9600 14400 19200 28800 38400 57600 115200
-// $ picocom -b 115200 /dev/ttyUSB0
+#define BAUD_TOL 3
+// Usable Baud Rate 300 600 1200 2400 4800 9600 14400 19200 28800 38400 57600
+// 115200 $ picocom -b 115200 /dev/ttyUSB0
 #include &lt;avr/io.h&gt;
 #include &lt;avr/pgmspace.h&gt;
+#include &lt;stdio.h&gt;
 #include &lt;util/delay.h&gt;
 #include &lt;util/setbaud.h&gt;
-#include &lt;stdio.h&gt;
 
-static void
-uart_init(void)
-{
-UBRR0H = UBRRH_VALUE;
-UBRR0L = UBRRL_VALUE;
+static void uart_init(void) {
+  UBRR0H = UBRRH_VALUE;
+  UBRR0L = UBRRL_VALUE;
 #if USE_2X
-UCSR0A |= (1 &lt;&lt; U2X0);
+  UCSR0A |= (1 &lt;&lt; U2X0);
 #else
-UCSR0A &amp;= ~(1 &lt;&lt; U2X0);
+  UCSR0A &amp;= ~(1 &lt;&lt; U2X0);
 #endif
-/* async, non-parity, 1-bit stop, 8-bit data */
-UCSR0C = _BV(UCSZ01)|_BV(UCSZ00);
-/* transmitter enable */
-UCSR0B = _BV(TXEN0);
+  /* async, non-parity, 1-bit stop, 8-bit data */
+  UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
+  /* transmitter enable */
+  UCSR0B = _BV(TXEN0);
 }
 
-int
-uart_putchar(char c, FILE *stream)
-{
-    if (c == '\n') {
-        uart_putchar('\r', stream);
-    }
-    loop_until_bit_is_set(UCSR0A, UDRE0);
-    UDR0 = c;
-    return 0;
+int uart_putchar(char c, FILE *stream) {
+  if (c == '\n') {
+    uart_putchar('\r', stream);
+  }
+  loop_until_bit_is_set(UCSR0A, UDRE0);
+  UDR0 = c;
+  return 0;
 }
 
 #define SURE_LO 0
-#define UNSURE  1
+#define UNSURE 1
 #define SURE_HI 2
-#define BIT5HI  0b00100000
+#define BIT5HI 0b00100000
 
 FILE uart_str = FDEV_SETUP_STREAM(uart_putchar, NULL, _FDEV_SETUP_WRITE);
 
-int
-check (void) {
-    // Check if any one of low 5 bits 01234 of PORTB is grounded
+int check(void) {
+  // Check if any one of low 5 bits 01234 of PORTB is grounded
+  if ((PINB &amp; 0x1f) != 0x1f) {
+    _delay_ms(50);  // 50 ms delay
     if ((PINB &amp; 0x1f) != 0x1f) {
-        _delay_ms(50); // 50 ms delay
-        if ((PINB &amp; 0x1f) != 0x1f) {
-            return SURE_LO;
-        }
+      return SURE_LO;
     }
-    // Check if all low 5 bits 01234 of PORTB are not grounded
-    else if ((PINB &amp; 0x1f) == 0x1f) {
-        _delay_ms(50); // 50 ms delay
-        if ((PINB &amp; 0x1f) == 0x1f) {
-            return SURE_HI;
-        }
+  }
+  // Check if all low 5 bits 01234 of PORTB are not grounded
+  else if ((PINB &amp; 0x1f) == 0x1f) {
+    _delay_ms(50);  // 50 ms delay
+    if ((PINB &amp; 0x1f) == 0x1f) {
+      return SURE_HI;
     }
-    return UNSURE;
+  }
+  return UNSURE;
 }
 
-int
-main (void) {
-    int previous = SURE_HI; // pull-uped
-    uart_init();
-    stdout = &amp;uart_str;
-    // For Data Direction Register of port B, set 5 pin as output for LED
-    DDRB = BIT5HI;
-    // pull-up for all port B non-5 pins (0b11011111)
-    PORTB = ~ BIT5HI;
-    while(1) {
-        if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
-            // LED ON
-            PORTB |=   BIT5HI;
-            printf_P(PSTR(&quot;Hello world! &quot;));
-            for (int i=1; i &lt; 10; i++) {
-                _delay_ms(100); // 100 ms delay
-                printf_P(PSTR(&quot;-&quot;));
-            }
-            // LED OFF
-            PORTB &amp;= ~ BIT5HI;
-            printf_P(PSTR(&quot;&gt; Bye world!\n&quot;));
-            previous = SURE_LO;
-        } else if ((previous == SURE_LO) &amp; (check() == SURE_HI)) {
-            previous = SURE_HI;
-        }
+int main(void) {
+  int previous = SURE_HI;  // pull-uped
+  uart_init();
+  stdout = &amp;uart_str;
+  // For Data Direction Register of port B, set 5 pin as output for LED
+  DDRB = BIT5HI;
+  // pull-up for all port B non-5 pins (0b11011111)
+  PORTB = ~BIT5HI;
+  while (1) {
+    if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
+      // LED ON
+      PORTB |= BIT5HI;
+      printf_P(PSTR(&quot;Hello world! PINB = %02X\n&quot;), PINB);
+      // LED OFF
+      PORTB &amp;= ~BIT5HI;
+      previous = SURE_LO;
+    } else if ((previous == SURE_LO) &amp; (check() == SURE_HI)) {
+      previous = SURE_HI;
     }
+  }
 }
 </code></pre>
 
-<p>ハードウエアーに対応するレジスター名やビットの名前がAVRの世代毎に違うためか
-「AVR Libc Reference Manual」のデモプロジェクトにコードはそのままでは動き
-ませんでした。さらに、レジスター名等もデーターシートとも微妙に異なっていま
-した。最後はデーターシートとヘッダーファイルの定義を見比べて、微妙に数字を
-加えたりの名前の合わせ込みをしました。</p>
+<p>ヘッダーで使われるハードウエアーに対応するレジスター名やビットの名前を最近
+のより強力なAVRと共通にしたためか「AVR Libc Reference Manual」にあるデモ
+プロジェクトのコードはそのままでは動かなくなってました。使うレジスター名
+等がデーターシートと微妙に異なっていたのでヘッダーファイルの定義を見比べて、
+微妙に数字を加えたりの合わせ込みをしました。</p>
 
-<p>デモコードより正確なボーレート計算を<code>util/setbaud.h</code>を使ってしました。</p>
+<p>さらにデモコードより正確なボーレート計算法をすべく<code>util/setbaud.h</code>を使い
+許容誤差3%としました。</p>
 
 <p>さて、これをコンパイルしてできる<code>hello.hex</code>を、USB経由でチップに以下で
 プログラムしました。</p>
@@ -295,7 +286,7 @@ main (void) {
 </code></pre>
 
 <p>USBをつないだまま、以下を実行し、「LEDタイマー点灯」と同様の端子の接地
-をするとホストPCに文字列が印字されました。</p>
+をするとホストPCに端子の接地状況を含めた文字列が印字されました。</p>
 
 <pre><code> $ picocom -b 115200 /dev/ttyUSB0
 picocom v3.1
@@ -324,8 +315,11 @@ exit is        : no
 
 Type [C-a] [C-h] to see available commands
 Terminal ready
-Hello world! ---------&gt; Bye world!
-Hello world! ---------&gt; Bye world!
+Hello world! PINB = 0F
+Hello world! PINB = 0F
+Hello world! PINB = 0F
+Hello world! PINB = 17
+Hello world! PINB = 17
 </code></pre>
 
 <!-- vim: se ai tw=79: -->
