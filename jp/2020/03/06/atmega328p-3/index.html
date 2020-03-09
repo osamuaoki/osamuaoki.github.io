@@ -112,9 +112,9 @@ LDS/STS命令に置き換えると言っているようです。</p>
 
 <h2 id="メモリー消費の確認">メモリー消費の確認</h2>
 
-<p>メモリー消費は、以下のコマンドで調べます。フラッシュ消費は「Program」、
+<p>メモリー消費は、<code>avr-size</code>コマンドで調べます。フラッシュ消費は「Program」、
 SRAM消費は「Data」で示されます。SRAMの初期化データーをフラッシュが
-保持するため、「.text」がダブルカウントされます。</p>
+保持するため、「.data」が両方でカウントされます。</p>
 
 <pre><code> $ avr-size --mcu=atmega328p --format=avr blink.elf
 AVR Memory Usage
@@ -179,13 +179,16 @@ Data:          0 bytes (0.0% Full)
 
 <h2 id="avr独特の世界の例">AVR独特の世界の例</h2>
 
+<h3 id="コンソールターミナルへの出力-stdio-h">コンソールターミナルへの出力(<code>stdio.h</code>)</h3>
+
 <p>「AVR Libc Reference Manual」のデモプロジェクトは、
 <code>/usr/share/doc/avr-libc/examples/</code>にあります。</p>
 
 <p>これを参考に、「LEDタイマー点灯」に加筆して、端子入力に合わせて
-シリアルに端子の接地状況を出力する簡単なプログラムの<code>hello.c</code>を
-作成しました。（シリアル入力なしで、デモコードより簡単なところ
-からスタートです。）</p>
+シリアルに端子の接地状況を出力し、接続したPCのコンソールターミナルへ
+AVRの状態を出力する簡単なプログラムの<code>hello.c</code>を作成しました。</p>
+
+<p>（シリアル入力なしで、デモコードより簡単なところからスタートです。）</p>
 
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
@@ -292,38 +295,14 @@ AVRのサポートを考えてか、そのヘッダーで提供するハード�
 <p>さて、これをコンパイルしてできる<code>hello.hex</code>を、USB経由でチップに以下で
 プログラムしました。</p>
 
-<pre><code>$ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:blink.hex
+<pre><code>$ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:hello.hex
 </code></pre>
 
 <p>USBをつないだまま、以下を実行し、B端子や他の端子を接地したりすると、
 ターミナルプログラムを起動したホストPCに端子の接地状況が表示されます。</p>
 
 <pre><code>$ picocom -b 19200 /dev/ttyUSB0
-picocom v3.1
-
-port is        : /dev/ttyUSB0
-flowcontrol    : none
-baudrate is    : 19200
-parity is      : none
-databits are   : 8
-stopbits are   : 1
-escape is      : C-a
-local echo is  : no
-noinit is      : no
-noreset is     : no
-hangup is      : no
-nolock is      : no
-send_cmd is    : sz -vv
-receive_cmd is : rz -vv -E
-imap is        :
-omap is        :
-emap is        : crcrlf,delbs,
-logfile is     : none
-initstring     : none
-exit_after is  : not set
-exit is        : no
-
-Type [C-a] [C-h] to see available commands
+ ... (snip) ...
 Terminal ready
 Hello world!
 PINB=3D PINC=3D PIND=FF
@@ -331,6 +310,232 @@ PINB=3D PINC=3D PIND=FF
 PINB=3D PINC=3B PIND=FF
 PINB=3B PINC=3B PIND=FF
 </code></pre>
+
+<p>メモリー消費を見てみましょう。</p>
+
+<pre><code> $ avr-size --mcu=atmega328p --format=avr hello.elf
+Device: atmega328p
+
+Program:    2038 bytes (6.2% Full)
+(.text + .data + .bootloader)
+
+Data:         20 bytes (1.0% Full)
+(.data + .bss + .noinit)
+</code></pre>
+
+<p>なんと<code>stdio.h</code>の<code>printf()</code>関連を使った途端、10倍以上の
+2KBもメモリーを消費してしまいました。大きなATmega328Pだと
+収まっていますが、<code>printf()</code>の重さは要注意です。</p>
+
+<ul>
+<li>ﾌﾗｯｼｭ ﾒﾓﾘ容量 (ﾊﾞｲﾄ) 1K</li>
+<li>SRAM容量 (ﾊﾞｲﾄ) 64</li>
+</ul>
+
+<p>ちなみに、小さなATtiny13Aだと：</p>
+
+<ul>
+<li>ﾌﾗｯｼｭ ﾒﾓﾘ容量 (ﾊﾞｲﾄ) 1K</li>
+<li>SRAM容量 (ﾊﾞｲﾄ) 64</li>
+<li>EEPROM容量 (ﾊﾞｲﾄ) 64</li>
+</ul>
+
+<p>なので、<code>printf()</code>はコード中に絶対に使えません。</p>
+
+<p>ちなみにシリアル入力を<code>scanf</code>で処理するようなコードを足したら
+4KB以上メモリー消費してしまいました。</p>
+
+<h3 id="コンソールターミナルへの出力-コンパクト">コンソールターミナルへの出力(コンパクト)</h3>
+
+<p>そもそも16進表示では見にくいのと、各端子の入出力やプルアップ設定も表示
+させたいし、メモリー消費も抑えたいので<code>printf()</code>を使わずにプログラムを
+書き直しました。</p>
+
+<pre><code>// Arduino nano board is 16 MHz
+#define F_CPU 16000000UL
+// Usable Baud Rate ... 9600 14400 19200 28800 38400 57600 2%
+#define BAUD 19200
+// Use with $ picocom -b 19200 /dev/ttyUSB0
+#include &lt;avr/io.h&gt;
+#include &lt;avr/pgmspace.h&gt;
+#include &lt;util/delay.h&gt;
+#include &lt;util/setbaud.h&gt;
+
+static void uart_init(void) {
+  UBRR0H = UBRRH_VALUE;
+  UBRR0L = UBRRL_VALUE;
+#if USE_2X
+  UCSR0A |= (1 &lt;&lt; U2X0);
+#else
+  UCSR0A &amp;= ~(1 &lt;&lt; U2X0);
+#endif
+  /* async, non-parity, 1-bit stop, 8-bit data */
+  UCSR0C = _BV(UCSZ01) | _BV(UCSZ00);
+  /* transmitter enable */
+  UCSR0B = _BV(TXEN0);
+}
+
+int uart_putchar(char c) {
+  if (c == '\n') {
+    uart_putchar('\r');
+  }
+  loop_until_bit_is_set(UCSR0A, UDRE0);
+  UDR0 = c;
+  return 0;
+}
+
+int uart_puts_P(PGM_P s) {
+  char c;
+  while (1) {
+    c = pgm_read_byte(s++);
+    if (c == '\0') break;
+    uart_putchar(c);
+  }
+  return 0;
+}
+
+int uart_put_byte(char c, char x0, char x1) {
+  for (int i = 0; i &lt; 8; i++) {
+    uart_putchar((c &amp; 0x80) ? x0 : x1);
+    c = c &lt;&lt; 1;
+  }
+  return 0;
+}
+
+int uart_put_byte_10(char c) { return uart_put_byte(c, '1', '0'); }
+
+int uart_put_byte_OI(char c) { return uart_put_byte(c, 'O', 'I'); }
+
+int uart_put_byte_MK(char c) { return uart_put_byte(c, '*', '_'); }
+
+#define SURE_LO 0
+#define UNSURE 1
+#define SURE_HI 2
+#define BIT5HI 0b00100000
+
+int check(void) {
+  // Check if any one of low 5 bits 01234 of PORTB is grounded
+  if ((PINB &amp; 0x1f) != 0x1f) {
+    _delay_ms(50);  // 50 ms delay
+    if ((PINB &amp; 0x1f) != 0x1f) {
+      return SURE_LO;
+    }
+  }
+  // Check if all low 5 bits 01234 of PORTB are not grounded
+  else if ((PINB &amp; 0x1f) == 0x1f) {
+    _delay_ms(50);  // 50 ms delay
+    if ((PINB &amp; 0x1f) == 0x1f) {
+      return SURE_HI;
+    }
+  }
+  return UNSURE;
+}
+
+int main(void) {
+  int previous = SURE_HI;  // pull-uped
+  uart_init();
+  // For Data Direction Register of port B, set 5 pin as output for LED
+  DDRB = BIT5HI;
+  DDRC = 0;
+  DDRD = 0;
+  // pull-up for all port B non-5 pins (0b11011111)
+  PORTB = ~BIT5HI;
+  PORTC = 0xff;
+  PORTD = 0xff;
+  uart_puts_P(PSTR(&quot;Hello world!\n&quot;));
+  while (1) {
+    if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
+      // LED ON
+      PORTB |= BIT5HI;
+      uart_puts_P(PSTR(&quot;DDRB =&quot;));
+      uart_put_byte_OI(DDRB);
+      uart_puts_P(PSTR(&quot; DDRC =&quot;));
+      uart_put_byte_OI(DDRC);
+      uart_puts_P(PSTR(&quot; DDRD =&quot;));
+      uart_put_byte_OI(DDRD);
+      uart_puts_P(PSTR(&quot;\n&quot;));
+      uart_puts_P(PSTR(&quot;PORTB=&quot;));
+      uart_put_byte_MK(PORTB);
+      uart_puts_P(PSTR(&quot; PORTC=&quot;));
+      uart_put_byte_MK(PORTC);
+      uart_puts_P(PSTR(&quot; PORTD=&quot;));
+      uart_put_byte_MK(PORTD);
+      uart_puts_P(PSTR(&quot;\n&quot;));
+      uart_puts_P(PSTR(&quot;PINB =&quot;));
+      uart_put_byte_10(PINB);
+      uart_puts_P(PSTR(&quot; PINC =&quot;));
+      uart_put_byte_10(PINC);
+      uart_puts_P(PSTR(&quot; PIND =&quot;));
+      uart_put_byte_10(PIND);
+      uart_puts_P(PSTR(&quot;\n.....................\n&quot;));
+      _delay_ms(3000);  // 3000 ms delay
+      // LED OFF
+      PORTB &amp;= ~BIT5HI;
+      previous = SURE_LO;
+    } else if ((previous == SURE_LO) &amp; (check() == SURE_HI)) {
+      previous = SURE_HI;
+    }
+  }
+}
+</code></pre>
+
+<p>USBをつないだまま、以下を実行し、B端子や他の端子を接地したりすると、
+ターミナルプログラムを起動したホストPCに端子の接地状況が表示されます。</p>
+
+<pre><code>$ picocom -b 19200 /dev/ttyUSB0
+... (snip) ...
+Terminal ready
+Hello world!
+DDRB =IIOIIIII DDRC =IIIIIIII DDRD =IIIIIIII
+PORTB=******** PORTC=_******* PORTD=********
+PINB =00111011 PINC =00111111 PIND =11111101
+.....................
+DDRB =IIOIIIII DDRC =IIIIIIII DDRD =IIIIIIII
+PORTB=******** PORTC=_******* PORTD=********
+PINB =00111101 PINC =00111111 PIND =11111101
+.....................
+DDRB =IIOIIIII DDRC =IIIIIIII DDRD =IIIIIIII
+PORTB=******** PORTC=_******* PORTD=********
+PINB =00111110 PINC =00111111 PIND =11111101
+.....................
+DDRB =IIOIIIII DDRC =IIIIIIII DDRD =IIIIIIII
+PORTB=******** PORTC=_******* PORTD=********
+PINB =00110111 PINC =00110111 PIND =11111101
+.....................
+</code></pre>
+
+<!-- xxx******** -->
+
+<p>ソースコードが大幅に増え、表示する情報量も<code>printf()</code>を使う場合の
+約3倍となっています。</p>
+
+<pre><code> $ avr-size --mcu=atmega328p --format=avr hello.elf
+AVR Memory Usage
+----------------
+Device: atmega328p
+
+Program:     754 bytes (2.4% Full)
+(.text + .data + .bootloader)
+
+Data:          0 bytes (0.0% Full)
+(.data + .bss + .noinit)
+</code></pre>
+
+<p>でも一方メモリー消費は<code>printf()</code>を使う場合の3分の1に収まっています。
+この目的に特化したコードを書くこのアプローチなら小さなATtiny13Aでも
+使えそうです。</p>
+
+<p>チップ周辺の配線確認をするシェルのようなものをこの延長線上に書こうと
+今考えています。</p>
+
+<h2 id="アセンブラー">アセンブラー</h2>
+
+<p>winavr由来のMakefileを使ってコンパイルしたら、<code>hello.lst</code>といった
+コンパイル結果のアセンブラーで書かれたダンプリストが作成されています。</p>
+
+<p>細かなことはマニュアルを読むしか無いのですが、avr-gccは、GNU cc/asでは
+ありますが、アセンブラーはGNU標準のATT式ではなくINTEL式の代入される方が
+前にオペランド記述される順であることに注意がいります。</p>
 
 <!-- vim: se ai tw=79: -->
 

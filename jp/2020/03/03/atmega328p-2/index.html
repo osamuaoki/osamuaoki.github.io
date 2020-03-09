@@ -222,11 +222,19 @@ inclideファイルがあります。これさえ分かれば後はコードを�
 コンパイル・リンク・プログラムは次の様に進めます。</p>
 
 <pre><code> $ avr-gcc -mmcu=atmega328p -Wall -Os -o blink.elf blink.c
+ $ avr-size --mcu=atmega328p --format=avr blink.elf
+Program:     162 bytes (0.5% Full)
+(.text + .data + .bootloader)
+
+Data:          0 bytes (0.0% Full)
+(.data + .bss + .noinit
  $ avr-objcopy -j .text -j .data -O ihex blink.elf blink.hex
  $ sudo avrdude -p m328p -c avrisp2 -U flash:w:blink.hex
 </code></pre>
 
 <p>どうですか、Lチカしていますね。</p>
+
+<p>小さなプログラムで、フラッシュ使用は162バイトで、SRAM使用は0バイトです。</p>
 
 <h2 id="例-led点灯">例: LED点灯</h2>
 
@@ -251,6 +259,8 @@ int main(void) {
 <p>同様のコンパイル・リンク・プログラムをします。</p>
 
 <p>どうですか、今度はLEDが付きっぱなしですね。</p>
+
+<p>さらに小さなプログラムで、フラッシュ使用は138バイトで、SRAM使用は0バイトです。</p>
 
 <h2 id="例-led点滅-lチカ-の別の方法">例: LED点滅 (Lチカ)の別の方法</h2>
 
@@ -278,6 +288,9 @@ int main(void) {
 
 <p>どうですか、Lチカしていますね。</p>
 
+<p>これも小さなプログラムで、フラッシュ使用は158バイトで、SRAM使用は0バイトです。
+同一機能を4バイト少なくして実現しました。</p>
+
 <h2 id="例-端子入力にあわせてled点滅">例: 端子入力にあわせてLED点滅</h2>
 
 <p>端子入力にあわせてLED点滅させるようにオリジナルのLED点滅ソースコードを
@@ -298,7 +311,6 @@ int main(void) {
     if ((PINB &amp; 0x1f) == 0x1f) {
       // not grounded -&gt; LED ON
       PORTB |= 0b00100000;
-      printf();
     } else {
       // grounded -&gt; LED OFF
       PORTB &amp;= ~0b00100000;
@@ -315,6 +327,8 @@ int main(void) {
 
 <p>ここでPORTBの01234の5つのPIN(USBコネクターを右に置いた際に、手前
 USBコネクター側の端子)のどれかを接地(ground)するとLEDが消えますね。</p>
+
+<p>これも小さなプログラムで、フラッシュ使用は156バイトで、SRAM使用は0バイトです。</p>
 
 <h2 id="例-端子入力にあわせてledタイマー点灯">例: 端子入力にあわせてLEDタイマー点灯</h2>
 
@@ -373,6 +387,9 @@ int main(void) {
 <p>ここでPORTBの01234の5つのPIN(USBコネクターを右に置いた際に、手前
 USBコネクター側の端子)のどれかを接地(ground)するとLEDが3秒間点灯
 します。</p>
+
+<p>ちょっと大きくはなったとは言えまだ小さなプログラムで、
+フラッシュ使用は286バイトで、SRAM使用は0バイトです。</p>
 
 <h2 id="シリアル経由のプログラム">シリアル経由のプログラム</h2>
 
