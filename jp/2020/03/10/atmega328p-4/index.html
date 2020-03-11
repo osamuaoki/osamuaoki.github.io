@@ -202,8 +202,8 @@ Program 1とProgram 2だけを比べるとマクロがプログラムサイズ�
 なっています。GCCは賢いですね。</p>
 
 <p>ただ、<code>static</code>か<code>inline</code>のいずれもかかれていないと、<code>read_and_convert()</code>
-が外部から呼び出されれも良いように独立の<code>read_and_convert()のコードを削除せず
-に残しています。ちなみに</code>static`は、関数をそのファイル内部からだけ呼び出せるよ
+が外部から呼び出されれも良いように独立の<code>read_and_convert()</code>のコードを削除せず
+に残しています。ちなみに<code>static</code>は、関数をそのファイル内部からだけ呼び出せるよ
 うにする仕組みだそうです。この結果の差、納得ですね。</p>
 
 <h3 id="for-vs-while-1">for (;;) vs. while (1)</h3>
@@ -213,6 +213,9 @@ Program 1とProgram 2だけを比べるとマクロがプログラムサイズ�
 
 <p>GCCは賢いですね。全く同じコードが生成されていました。特に<code>for (;;)</code>等を
 好んで使うことは無いようです。</p>
+
+<p>また、<code>do { } while(expression)</code>は条件分岐1つで実現できるのでメリット
+<code>for (;;)</code>や<code>while (1)</code>に<code>if</code>分岐を埋め込むよりかなりコンパクトですね。</p>
 
 <h3 id="decrement-and-increment">decrement and increment</h3>
 
