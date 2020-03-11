@@ -19,8 +19,10 @@
       <guid>/jp/2020/03/10/atmega328p-4/</guid>
       <description>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの勉強・練習の続きをしました。
 AVRのコーディング上の注意点 以下をAVRのコーディング上の注意点の参考にしました。
- 2003年出版のIAR CベースのAVR035: Efficient C Coding for AVR 2011年出版のGCC4.5ベースのAtmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers  わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。 私なりに検討して、よくまとまっていたAVR035文書の結論を現在の 開発環境に合わせて、8 bitのATmega328Pぐらいにフォーカスして ある程度の憶測も折り込み以下に書きなおして見ました。
-Hints to Reduce Code Size  Compile with full size optimization. (use avr-gcc -s option) Use local variables whenever possible. Use the smallest explicit applicable data type such as uint8_t with &amp;lt;stdint.h&amp;gt;. Use unsigned if applicable.</description>
+ 2003年出版のIAR CベースのAVR035: Efficient C Coding for AVR 2011年出版のGCC4.5ベースのAtmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers  わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。 8 bitのATmega328Pぐらいにフォーカスして、現在の開発環境下で私なりに検討して、 ある程度の憶測も折り込み、よくまとまっていたAVR035文書の結論を以下に書きなお して見ました。
+あまり頑張り過ぎることは無いと考えています。無理がある時には、コードを凝るの ではなく、所詮趣味でなので実現する機能を削るとか、値段は知れているので高性能 のチップに乗り換えるとかする方が良いのでしょう。
+そういった意味では、裸のavr-gcc+avr-libcでの開発に拘らずに、Arduino系のインフ ラを利用したコード開発をすれば楽になる面もあるのも事実です。このメモ作成は、 あくまでAVRのコーディングの基礎学習行為の備忘録です。
+Hints to Reduce Code Size  Compile with full size optimization. (use avr-gcc -s option) Use local variables whenever possible. Use the smallest explicit applicable data type such as uint8_t with &amp;lt;stdint.</description>
     </item>
     
     <item>
