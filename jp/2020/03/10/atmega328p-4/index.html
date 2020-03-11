@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ATmega328P (4) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">ATmega328P (4)</span></h1>
+
+<h2 class="date">2020/03/10</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/03/06/atmega328p-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの
+<a href="https://www.microchip.com/wwwproducts/en/ATmega328p">ATmega328P</a>
+を中心としてAVRチップのプログラムの勉強・練習の続きをしました。</p>
+
+<h2 id="avrのコーディング上の注意点">AVRのコーディング上の注意点</h2>
+
+<p>以下をAVRのコーディング上の注意点の参考にしました。</p>
+
+<ul>
+<li>2003年出版のIAR Cベースの<a href="http://ww1.microchip.com/downloads/en/Appnotes/doc1497.pdf">AVR035: Efficient C Coding for AVR</a></li>
+<li>2011年出版のGCC4.5ベースの<a href="https://ww1.microchip.com/downloads/en/AppNotes/doc8453.pdf">Atmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers</a></li>
+</ul>
+
+<p>わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。
+私なりに検討して、よくまとまっていたAVR035文書の結論を現在の
+開発環境に合わせて、8 bitのATmega328Pぐらいにフォーカスして
+ある程度の憶測も折り込み以下に書きなおして見ました。</p>
+
+<h3 id="hints-to-reduce-code-size">Hints to Reduce Code Size</h3>
+
+<ol>
+<li>Compile with full size optimization. (use avr-gcc <code>-s</code> option)</li>
+<li>Use local variables whenever possible.</li>
+<li>Use the smallest explicit applicable data type such as <code>uint8_t</code> with <code>&lt;stdint.h&gt;</code>. Use unsigned if applicable.</li>
+<li>If a non-local variable is only referenced within one function, it should be declared <code>static</code>.</li>
+<li>If a function is only referenced within one file, it should be declared <code>static</code>.</li>
+<li>Specify <code>inline</code> for functions in library performing tasks that generates less than 2-3 lines assembly code.</li>
+<li>Collect non-local data in structures whenever natural. This increases the possibility of indirect addressing without pointer reload.</li>
+<li>Use pointers with offset or declare structures to access memory mapped I/O.</li>
+<li>Use descending loop counters and branch on zero with pre-decrement if applicable.</li>
+<li>Use <code>do { } while(expression)</code> if applicable.</li>
+<li>Store Indirect to SRAM with Pre-decrement and Load Indirect from SRAM with Post-increment.</li>
+<li>Access I/O memory directly (i.e., do not use pointers).  Use <code>_BV(bit)</code>, <code>_SFR_IO8(mem_addr)</code>, and other MACROs defined in <code>avr/sfr_defs.h</code>.</li>
+<li>If possible, avoid calling functions from inside the interrupt routine.</li>
+<li>Code reuse is intra-modular. Collect several functions in one module (i.e., in one file) to increase code reuse factor.</li>
+<li>In some cases, full speed optimization results in lower code size than full size optimization. Compile on a module by module basis to investigate what gives the best result.</li>
+<li>Declare main as <code>__attribute__((noreturn))</code> if not called from anywhere in the program.</li>
+<li>Reduce the size of the Interrupt Vector segment (<code>INTVEC</code>) to what is actually needed by the application. Alternatively, concatenate all the <code>CODE</code> segments into one declaration and it will be done automatically.</li>
+<li>Optimize C_startup to not initialize unused segments (i.e., <code>IDATA0</code> or <code>IDATA1</code> if all variables are tiny or small).</li>
+</ol>
+
+<p>ここで、16、17、18は、普通ここまでしない感があります。
+ATtiny13A向けにコンパイル結果をアッセンブリーでハンド
+チューンして小さくしたい時等のテクニックの感があります。</p>
+
+<h3 id="hints-to-maximize-code-speed">Hints to Maximize Code Speed</h3>
+
+<ol>
+<li>Use “if-else” and “switch-case” properly.
+
+<ul>
+<li>For “if-else”, always put the most probable conditions in the first place.</li>
+<li>For “switch-case”, the compiler usually generates lookup tables with index and jump to the correct place directly. (要確認：<code>-03</code>のの場合？)</li>
+</ul></li>
+</ol>
+
+<h3 id="five-hints-to-reduce-ram-requirements">Five Hints to Reduce RAM Requirements</h3>
+
+<ol>
+<li>All constants and literals should be placed in Flash by using <code>PROGMEM</code>, <code>PSTR</code>, and <code>PGM_P</code> MACROs.</li>
+<li>Avoid using global variables if the variables are local in nature. This also saves code space. Local variables are allocated from the stack dynamically and are removed when the function goes out of scope.</li>
+<li>If using large functions with variables with a limited lifetime within the function, the use of subscopes can be beneficial.</li>
+<li>Get good estimates of the sizes of the software Stack and return Stack (Linker File).</li>
+<li>Do not waste space for the IDATA0 and UDATA0 segments unless you are using tiny variables (Linker File).</li>
+</ol>
+
+<h3 id="checklist-for-debugging-programs">Checklist for Debugging Programs</h3>
+
+<ol>
+<li>Ensure that the CSTACK segment is sufficiently large.</li>
+<li>Ensure that the RSTACK segment is sufficiently large.</li>
+<li>Ensure that the external memory interface is enabled if it should be enabled and disabled if it should be disabled.</li>
+<li>If a regular function and an interrupt routine are communicating through a global variable, make sure this variable is declared volatile to ensure that it is reread from RAM each time it is checked</li>
+</ol>
+
+<h2 id="検証のメモ">検証のメモ</h2>
+
+<h3 id="c-task">C_task</h3>
+
+<p>これはIARのCコンパイラー特定の書法です。</p>
+
+<p>スタックを気にするなら、GCCのCコンパイラーでは最新「AVR Libc Reference Manual」の
+<a href="https://www.microchip.com/webdoc/avrlibcreferencemanual/porting_1iar_porting_non_returning_main.html">Non-Returning main()</a>
+にあるように、<code>__attribute__((noreturn))</code>を使うのですかね。</p>
+
+<h3 id="macros-vs-functions">Macros vs. Functions</h3>
+
+<p>AVR035のP20に高らかに、「短い関数はマクロにした方がよい」とあります。</p>
+
+<p>「C89(gcc3シリーズ)の昔ならいざ知らず、C99(gcc4シリーズ)以降なら
+<code>static inline</code>と書けばコードが埋め込まれるので問題ないのでは？」
+と不思議に思っていました。</p>
+
+<p>現在(2020, Debian buster)のavr-gcc (GCC) 5.4.0を用いて実状を確認しました。
+（コードはエラーやワーニングが出ないようにちょっと手を入れてます）</p>
+
+<p>Program 1: 152 Byte</p>
+
+<pre><code>#include &lt;avr/io.h&gt;
+/* Read UART value and convert it to ASCII*/
+char read_and_convert(void) { return (PINB + 0x48); }
+/* Write to UART*/
+int main(void) { UDR0 = read_and_convert(); }
+</code></pre>
+
+<p>Program 2: 146 Byte</p>
+
+<pre><code>#include &lt;avr/io.h&gt;
+/* A macro to read UART value and convert it to ASCII*/
+#define read_and_convert() (PINB + 0x48)
+/* Write to UART*/
+int main(void) { UDR0 = read_and_convert(); }
+</code></pre>
+
+<p>Program 3: 146 Byte</p>
+
+<pre><code>#include &lt;avr/io.h&gt;
+/* Read UART value and convert it to ASCII*/
+static inline char read_and_convert(void) { return (PINB + 0x48); }
+/* Write to UART*/
+int main(void) { UDR0 = read_and_convert(); }
+</code></pre>
+
+<p>これは、<code>s</code>の「optimize for size」でコンパイルした場合ですが、
+Program 1とProgram 2だけを比べるとマクロがプログラムサイズで有利にも
+見えますが、チャンと<code>static inline</code>と書けば読みづらいマクロを使わなくとも
+プログラムサイズを抑えられることが確認できました。</p>
+
+<p><code>static inline</code>とまで書かなくとも、<code>static</code>か<code>inline</code>のいずれか1つでも
+指定すれば146 Byteになります。</p>
+
+<p>この6バイトの差ですが、winavrのMakefileでコンパイルした際に生成される<code>.lss</code>
+拡張子の付いたファイルの内容を見れば分かります。</p>
+
+<p>すべてのコードで<code>main()</code>への関数埋め込みでコードサイズが小さくなるように
+なっています。GCCは賢いですね。</p>
+
+<p>ただ、<code>static</code>か<code>inline</code>のいずれもかかれていないと、<code>read_and_convert()</code>
+が外部から呼び出されれも良いように独立の<code>read_and_convert()のコードを削除せず
+に残しています。ちなみに</code>static`は、関数をそのファイル内部からだけ呼び出せるよ
+うにする仕組みだそうです。この結果の差、納得ですね。</p>
+
+<h3 id="for-vs-while-1">for (;;) vs. while (1)</h3>
+
+<p><code>for (;;)</code>と<code>while (1)</code>も最適化すれば同じと思っていたので、同様に
+現在(2020, Debian buster)のavr-gcc (GCC) 5.4.0を用いて実状を確認しました。</p>
+
+<p>GCCは賢いですね。全く同じコードが生成されていました。特に<code>for (;;)</code>等を
+好んで使うことは無いようです。</p>
+
+<h3 id="decrement-and-increment">decrement and increment</h3>
+
+<p><a href="http://ww1.microchip.com/downloads/en/devicedoc/atmel-0856-avr-instruction-set-manual.pdf">AVRのインストラクションセット</a>
+を見ると、間接データーアクセスがある場合には以下のコマンドが使えるように
+配慮するのは充分考えるべきことですね。</p>
+
+<ul>
+<li><code>ST</code>: Store Indirect with Pre-decrement</li>
+<li><code>LD</code>: Load Indirect with Post-increment</li>
+</ul>
+
+<p>また分岐（ブランチ）判断は、２値比較より、ゼロ値比較の方が比較値の設定を
+しなくて良い分がけ効率的なので、ループカウンターにdecrementを好むのは
+納得できます。</p>
+
+<p>当然条件分岐が発生する<code>if</code>文や<code>while</code>文などの中は、同時にゼロフラグも立つので
+Pre-decrementが好ましいのも納得できます。</p>
+
+<h3 id="参考情報ソース集">参考情報ソース集</h3>
+
+<ul>
+<li><a href="https://gcc.gnu.org/wiki/avr-gcc">GCC Wiki avr-gcc</a></li>
+<li><a href="https://www.clarestudio.org/elec/avr/">クレア工房 AVRマイコン</a>
+
+<ul>
+<li><a href="https://www.clarestudio.org/elec/avr/gcc-2.html">クレア工房 AVRマイコン AVR-GCC 活用編</a></li>
+</ul></li>
+<li>スタートアップ・割り込みベクター表関係のメモリー節約
+
+<ul>
+<li><a href="https://www.avrfreaks.net/forum/suppress-vector-table">ATMEL COMMUNITY: Suppress vector table</a></li>
+<li><a href="https://www.avrfreaks.net/forum/avr-gcc-how-remove-interrupt-table">ATMEL COMMUNITY: AVR-GCC. How to remove Interrupt table?</a></li>
+<li><a href="https://www.avrfreaks.net/node/23518">ATMEL COMMUNITY: &lt;__ctors_end&gt;???</a></li>
+</ul></li>
+<li>GCCにはメモリーモデルはない
+
+<ul>
+<li><a href="https://www.avrfreaks.net/forum/tiny-memory-model">ATMEL COMMUNITY: tiny memory model</a></li>
+<li><a href="https://www.avrfreaks.net/forum/using-tiny-memory-model-avr-gcc-and-at90s2313">ATMEL COMMUNITY: Using tiny memory model with AVR-GCC And AT90S2313</a></li>
+</ul></li>
+<li><a href="http://www.joshknows.com/avr">joshknows: AVR 8-bit Microcontrollers</a></li>
+<li><a href="https://electronics.stackexchange.com/questions/327992/c-integer-promotion-on-8-bit-mcus/328010">C Integer Promotion on 8-bit MCUs</a></li>
+</ul>
+
+<!-- vim: se ai tw=79: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/03/06/atmega328p-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
