@@ -91,14 +91,14 @@
 <li>If a non-local variable is only referenced within one function, it should be declared <code>static</code>.</li>
 <li>If a function is only referenced within one file, it should be declared <code>static</code>.</li>
 <li>Specify <code>inline</code> for functions in library performing tasks that generates less than 2-3 lines assembly code.</li>
+<li>If possible, avoid calling functions from inside the interrupt routine.</li>
 <li>Collect non-local data in structures whenever natural. This increases the possibility of indirect addressing without pointer reload.</li>
-<li>Use pointers with offset or declare structures to access memory mapped I/O.</li>
 <li>Use descending loop counters and branch on zero with pre-decrement if applicable.</li>
 <li>Use <code>do { } while(expression)</code> if applicable.</li>
-<li>Store Indirect to SRAM with Pre-decrement and Load Indirect from SRAM with Post-increment.</li>
 <li>Access I/O memory directly (i.e., do not use pointers).  Use <code>_BV(bit)</code>, <code>_SFR_IO8(mem_addr)</code>, and other MACROs defined in <code>avr/sfr_defs.h</code>.</li>
-<li>If possible, avoid calling functions from inside the interrupt routine.</li>
 <li>Code reuse is intra-modular. Collect several functions in one module (i.e., in one file) to increase code reuse factor.</li>
+<li>Use pointers with offset or declare structures to access memory mapped I/O.</li>
+<li>Store Indirect to SRAM with Pre-decrement and Load Indirect from SRAM with Post-increment.</li>
 <li>In some cases, full speed optimization results in lower code size than full size optimization. Compile on a module by module basis to investigate what gives the best result.</li>
 <li>Declare main as <code>__attribute__((noreturn))</code> if not called from anywhere in the program.</li>
 <li>Reduce the size of the Interrupt Vector segment (<code>INTVEC</code>) to what is actually needed by the application. Alternatively, concatenate all the <code>CODE</code> segments into one declaration and it will be done automatically.</li>
@@ -235,10 +235,33 @@ Program 1とProgram 2だけを比べるとマクロがプログラムサイズ�
 <p>当然条件分岐が発生する<code>if</code>文や<code>while</code>文などの中は、同時にゼロフラグも立つので
 Pre-decrementが好ましいのも納得できます。</p>
 
+<h3 id="プログラムメモリー">プログラムメモリー</h3>
+
+<p>プログラムメモリーのアドレッシングはワード（2 BYTE）単位です。だから直接
+ジャンプ(JMP, CALL)やデーターアクセス(LPM, SPM)も、アッセンブラーでが
+問題なく128KBまで簡単に対応できます。</p>
+
+<p>つまりATmega1284P やAT90USB1287などもOKです。</p>
+
+<p>GCCにAVRオプションに関するところには；</p>
+
+<pre><code>Pointers in the implementation are 16 bits wide. The address of a function or
+label is represented as word address so that indirect jumps and calls can
+target any code address in the range of 64 Ki words.
+</code></pre>
+
+<p>とあるのでいける気もします。</p>
+
+<p>ただCでは64KB以上ではヘッダーファイルを見る限り３２ビットポインター
+（内部処理は２４ビットとか？）の<code>_PF</code>関数が要るようなことがあるよう
+なので使い方の詳細は要確認です。</p>
+
 <h3 id="参考情報ソース集">参考情報ソース集</h3>
 
 <ul>
 <li><a href="https://gcc.gnu.org/wiki/avr-gcc">GCC Wiki avr-gcc</a></li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc-7.5.0/gcc/AVR-Options.html#AVR-Options">GCC Manual: AVR Options</a></li>
+<li><a href="http://ww1.microchip.com/downloads/en/Appnotes/Atmel-2575-C-Functions-for-Reading-and-Writing-to-Flash-Memory_ApplicationNote_AVR106.pdf">AVR106: C Functions for Reading and Writing to Flash Memory</a></li>
 <li><a href="https://www.clarestudio.org/elec/avr/">クレア工房 AVRマイコン</a>
 
 <ul>
@@ -259,6 +282,7 @@ Pre-decrementが好ましいのも納得できます。</p>
 </ul></li>
 <li><a href="http://www.joshknows.com/avr">joshknows: AVR 8-bit Microcontrollers</a></li>
 <li><a href="https://electronics.stackexchange.com/questions/327992/c-integer-promotion-on-8-bit-mcus/328010">C Integer Promotion on 8-bit MCUs</a></li>
+<li><a href="https://en.wikibooks.org/wiki/Embedded_Systems/Atmel_AVR">Embedded Systems/Atmel AVR</a></li>
 </ul>
 
 <!-- vim: se ai tw=79: -->
