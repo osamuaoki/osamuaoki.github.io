@@ -187,7 +187,7 @@ static inline char read_and_convert(void) { return (PINB + 0x48); }
 int main(void) { UDR0 = read_and_convert(); }
 </code></pre>
 
-<p>これは、<code>s</code>の「optimize for size」でコンパイルした場合ですが、
+<p>これは、<code>-s</code>の「optimize for size」でコンパイルした場合ですが、
 Program 1とProgram 2だけを比べるとマクロがプログラムサイズで有利にも
 見えますが、チャンと<code>static inline</code>と書けば読みづらいマクロを使わなくとも
 プログラムサイズを抑えられることが確認できました。</p>
@@ -205,6 +205,9 @@ Program 1とProgram 2だけを比べるとマクロがプログラムサイズ�
 が外部から呼び出されれも良いように独立の<code>read_and_convert()</code>のコードを削除せず
 に残しています。ちなみに<code>static</code>は、関数をそのファイル内部からだけ呼び出せるよ
 うにする仕組みだそうです。この結果の差、納得ですね。</p>
+
+<p>実際にいくつかプログラムを書いてgccで<code>-s</code>オプション付きでコンパイルすると
+よくオプティマイズされています。</p>
 
 <h3 id="for-vs-while-1">for (;;) vs. while (1)</h3>
 
@@ -237,31 +240,82 @@ Pre-decrementが好ましいのも納得できます。</p>
 
 <h3 id="プログラムメモリー">プログラムメモリー</h3>
 
-<p>プログラムメモリーのアドレッシングはワード（2 BYTE）単位です。だから直接
-ジャンプ(JMP, CALL)やデーターアクセス(LPM, SPM)も、アッセンブラーでが
-問題なく128KBまで簡単に対応できます。</p>
+<p>フラッシュが32KBのATmega328PやATmega32u4や、フラッシュが128KBの
+ATmega1284P やAT90USB1287などにフォーカスしてプログラムメモリー関係を
+調べました。(xmegaチップは本メモのスコープ外です。)</p>
 
-<p>つまりATmega1284P やAT90USB1287などもOKです。</p>
-
-<p>GCCにAVRオプションに関するところには；</p>
+<p>GCCのAVRオプションに関するところに；</p>
 
 <pre><code>Pointers in the implementation are 16 bits wide. The address of a function or
 label is represented as word address so that indirect jumps and calls can
 target any code address in the range of 64 Ki words.
 </code></pre>
 
-<p>とあるのでいける気もします。</p>
+<p>とあるのですが、フラッシュが128KBに大きくなりバイト単位アドレスが
+16ビット長に収まらなくなった際にどういう注意がいるのかが気になるので
+調べてみました。</p>
 
-<p>ただCでは64KB以上ではヘッダーファイルを見る限り３２ビットポインター
-（内部処理は２４ビットとか？）の<code>_PF</code>関数が要るようなことがあるよう
-なので使い方の詳細は要確認です。</p>
+<p>プログラムメモリーには、割り込み処理や初期化関係のコードがメモリー
+アドレスの頭にあります。その次に長い文字列等の定数データー群が置かれ、
+さらに通常の主プログラムのコード群が収められます。そして、プログラム
+メモリーの最後にブートローダーのコードが収まります。</p>
+
+<p>AVRのコマンド長は偶数（２または４）で、実行プログラムは偶数バイトに
+アラインされます。だからプログラムメモリー上の実行命令アドレッシング
+はワード（2 BYTE）単位でよく、４バイト命令である直接ジャンプ(JMP, CALL)
+命令もアーギュメントにバイト単位のアドレスを2で割った数値を16ビット長
+で収めることで問題なく128KBまでのプログラムメモリー（フラッシュ）すべて
+を問題なくに利用できます。</p>
+
+<p>一方、文字列等の定数データー群へのアクセスは、バイト単位でしたい訳です
+が、Cのプログラムメモリー上のポインタータイプの<code>PGM_P</code>に関して
+<code>suzeof(PGM_P)</code>を確認すると2 BYTEとなっています。実際、
+<code>pgm_read_byte(s)</code>は以下のように2 BYTE命令２つにコンパイルされます。</p>
+
+<pre><code>fc 01           movw    r30, r24
+84 91           lpm     r24, Z
+</code></pre>
+
+<p>これでは、LPMコマンドによる16ビットのZレジスター（R30, R31）によ
+り示されるアドレスからの１バイト読み込みなのでプログラムメモリー
+上の最初の64KBにしか対応できません。まあ、実用上問題になることは
+ないですが…定数データーの大きさには注意がいります。</p>
+
+<p>一方、プログラムメモリー（フラッシュ）へのプログラム書き込み・
+更新のSPMコマンドでは 64 BYTE(128 BYTE)等のページ単位の操作なので
+128KBでも問題無いようです。これは必要な際にまたデーターシートの
+「Boot Loader Support 」あたりを読むことにします。</p>
+
+<p>本題から離れますが、感触として、より高機能な大きなプログラム用途
+なら計算能力もある32Bit-ARM系チップを使った安い開発ボード($10以下)
+を使えば、クロックも72MHz以上で早く、メモリーアクセスも素直で
+SRAMも大きくフリーのGCCによるサポートもいいし楽な気がします。
+Blue PillやBlack Pillという名前の高機能の
+<a href="https://ht-deko.com/arduino/stm32f103c8t6.html">中華開発ボード</a>
+が流通しています。
+<a href="https://www.cnx-software.com/2019/12/24/stm32-black-pill-board-features-stm32f4-cortex-m4-mcu-optional-spi-flash/">載っているチップのスペック</a>
+はたとえば以下です。</p>
+
+<ul>
+<li>STMicro STM32F103C8T6 ARM Cortex-M3  MCU @  72 MHz with  64KB flash,  20KB SRAM</li>
+<li>STMicro STM32F401CCU6 ARM Cortex-M4F MCU @  84 MHz with 256KB flash,  64KB SRAM</li>
+<li>STMicro STM32F411CEU6 ARM Cortex-M4F MCU @ 100 MHz with 512KB flash, 128KB SRAM</li>
+</ul>
 
 <h3 id="参考情報ソース集">参考情報ソース集</h3>
 
 <ul>
 <li><a href="https://gcc.gnu.org/wiki/avr-gcc">GCC Wiki avr-gcc</a></li>
 <li><a href="https://gcc.gnu.org/onlinedocs/gcc-7.5.0/gcc/AVR-Options.html#AVR-Options">GCC Manual: AVR Options</a></li>
-<li><a href="http://ww1.microchip.com/downloads/en/Appnotes/Atmel-2575-C-Functions-for-Reading-and-Writing-to-Flash-Memory_ApplicationNote_AVR106.pdf">AVR106: C Functions for Reading and Writing to Flash Memory</a></li>
+<li><a href="https://onlinedocs.microchip.com/">AVRのOnline文書一式表 (web)</a>
+
+<ul>
+<li><a href="https://onlinedocs.microchip.com/pr/GUID-0B644D8F-67E7-49E6-82C9-1B2B9ABE6A0D-en-US-1/index.html">AVRのインストラクションセット (web)</a>
+<a href="http://ww1.microchip.com/downloads/en/devicedoc/atmel-0856-avr-instruction-set-manual.pdf">AVRのインストラクションセット (pdf)</a></li>
+<li><a href="https://onlinedocs.microchip.com/pr/GUID-E06F3258-483F-4A7B-B1F8-69933E029363-en-US-2/index.html">AVR Assembler (web)</a> &ndash; MACRO命令他</li>
+<li><a href="https://onlinedocs.microchip.com/pr/GUID-317042D4-BCCE-4065-BB05-AC4312DBC2C4-en-US-1/index.html">AVR Libc 2.0 (web)</a></li>
+</ul></li>
+<li><a href="http://ww1.microchip.com/downloads/en/Appnotes/Atmel-2575-C-Functions-for-Reading-and-Writing-to-Flash-Memory_ApplicationNote_AVR106.pdf">AVR106: C Functions for Reading and Writing to Flash Memory (pdf)</a></li>
 <li><a href="https://www.clarestudio.org/elec/avr/">クレア工房 AVRマイコン</a>
 
 <ul>
