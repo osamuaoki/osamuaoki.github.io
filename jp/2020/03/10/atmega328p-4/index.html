@@ -69,14 +69,27 @@
 <li>2011年出版のGCC4.5ベースの<a href="https://ww1.microchip.com/downloads/en/AppNotes/doc8453.pdf">Atmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers</a></li>
 </ul>
 
-<p>わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。
-8 bitのATmega328Pぐらいにフォーカスして、現在の開発環境下で私なりに検討して、
+<p>わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。&rdquo;c99 plus GCC
+extensions&rdquo;となるように<code>-std=gnu99</code>をWinAvrベースの<code>Makefile</code>に指定してます。
+ちなみに、avr-gcc (GCC) 5.4.0では<code>-std=C99</code>は&rdquo;ISO C99 standard&rdquo;完全準拠の
+はずです。avr-gcc helpの記述に<code>-std=c11</code>、<code>-std=c++11</code>があり<code>ISO 2011 C/C++</code>
+まで完全準拠が選べるようです。WinAvrの<code>Makefile</code>の<code>ISO C99</code>準拠が不完全との
+コメントは古いバージョンのavr-gccに基づいているようですね。確かGCCは4以降
+&ldquo;ISO C99 standard&rdquo;完全準拠だった気がします。</p>
+
+<p>ちなみに、<code>-std=gnu99</code>では、<code>-std=c11</code>で導入された<code>0b10111011</code>と言った
+２進表記での整数定数表記ができます。これが便利です。</p>
+
+<p>8 bitのATmega328Pぐらいにフォーカスして、現在の開発環境下で私なりに検討して、
 ある程度の憶測も折り込み、よくまとまっていたAVR035文書の結論を以下に書きなお
 して見ました。</p>
 
-<p>あまり頑張り過ぎることは無いと考えています。無理がある時には、コードを凝るの
-ではなく、所詮趣味でなので実現する機能を削るとか、値段は知れているので高性能
-のチップに乗り換えるとかする方が良いのでしょう。</p>
+<p>あまりコードサイズの最適化に頑張り過ぎることは無いと考えています。無理がある
+時には、コードを凝るのではなく、所詮趣味でなので実現する機能を削るとか、値段
+は知れているので高性能のチップに乗り換えるとかする方が良いのでしょう。実際
+Arduino Nanoに載っているATmega328pですらかなり余裕があるので、読みやすくバグ
+発生しにくいコーディングを心がけ、デバグしやすいように部分・部分をテストでき
+るモジュラーな構成を念頭にするもがいい気がします。</p>
 
 <p>そういった意味では、裸のavr-gcc+avr-libcでの開発に拘らずに、Arduino系のインフ
 ラを利用したコード開発をすれば楽になる面もあるのも事実です。このメモ作成は、
@@ -316,6 +329,12 @@ Blue PillやBlack Pillという名前の高機能の
 <li><a href="https://onlinedocs.microchip.com/pr/GUID-317042D4-BCCE-4065-BB05-AC4312DBC2C4-en-US-1/index.html">AVR Libc 2.0 (web)</a></li>
 </ul></li>
 <li><a href="http://ww1.microchip.com/downloads/en/Appnotes/Atmel-2575-C-Functions-for-Reading-and-Writing-to-Flash-Memory_ApplicationNote_AVR106.pdf">AVR106: C Functions for Reading and Writing to Flash Memory (pdf)</a></li>
+<li><a href="https://www.microchip.com/wwwproducts/en/ATmega328p">ATmega328P</a>
+
+<ul>
+<li><a href="http://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061A.pdf">megaAVR® Data Sheet (E)</a></li>
+<li><a href="https://avr.jp/user/DS/PDF/mega328P.pdf">ATmega328/328P Data Sheet (J)</a></li>
+</ul></li>
 <li><a href="https://www.clarestudio.org/elec/avr/">クレア工房 AVRマイコン</a>
 
 <ul>
