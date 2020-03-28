@@ -6,10 +6,24 @@
     <description>Recent content in DIY on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 10 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 28 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/diy/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ATmega32u4 (1)</title>
+      <link>/jp/2020/03/28/atmega32u4-1/</link>
+      <pubDate>Sat, 28 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/03/28/atmega32u4-1/</guid>
+      <description>前々回・前回は、Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P のプログラムの勉強・練習をしました。その結果チップ周辺の配線状態 確認をホストPCのターミナルからするシェルのような avrmon を書きました。
+今回は基本のUSB AVRの ATmega32u4 を中心としたAVRチップのプログラム方法とその環境に関して、 調査と情報の整理をしました。
+ATmega32u4開発ボード ATmega32u4を5V 16MHzで使う開発ボードをしては、 Arduino Leonardo、 Arduino micro、 SparkFun Pro Micro、 RobotDyn Micro ATmega32U4-MU、 Teensy 2.0などや そのコンパチ品が通販サイト(例えば、 banggood、 aliexpress、 ebay )で出回っています。私はTeensy 2.0のコンパチ品を入手しました。
+AVRへのプログラム導入 ATmega32u4へのプログラム導入アプローチは、 ATmega328Pへのプログラム導入アプローチ より選択肢が多く混乱しがちなので、以前書いた英語のメモ( Serial AVRや USB AVR )をベースに、日本語で以下に比較しながら状況を確認と整理をします。
+Serial AVR Serial AVR (ATmega328P等) では、チップにプログラムを導入するのに 主に２つのアプローチがあります:
+ ISP:  ホストPC上でavrdudeをISPモードで走らせ、AVR ISP mkII等の プログラマー経由でSPIポートに接続しATmega328Pを、ハードウエアー だけを用いチップを書き換えます。  Serial:  ホストPC上でavrdudeをArduinoモードで走らせ、D0/D1ピンに TTLレベルのRS-232C接続経由で、チップの上位アドレスに置かれた ブートローダーソフトの助けを受け、チップを書き換えます。 開発ボード上に、FT-232R や CH340 等のUSB-Serial変換チップが 載っている場合、ホストPCから外見的にはUSB接続に見えます。 昔のAtmel STK500 や、昔のArduinoにはブートローダー(4KB)が導入済みです。 Firmwareを探すときにこれらの古いのを踏まないように要注意です。 最近のArduino系の開発ボードでは、サイズを小さくしたブートローダー のOptiboot(512B)が導入済みです。(一押し！)   USB AVR USB AVR (ATmega32u4等) では、チップにプログラムを導入するのに 主に4つのアプローチがあります:</description>
+    </item>
     
     <item>
       <title>ATmega328P (4)</title>
@@ -19,7 +33,7 @@
       <guid>/jp/2020/03/10/atmega328p-4/</guid>
       <description>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの勉強・練習の続きをしました。
 AVRのコーディング上の注意点 以下をAVRのコーディング上の注意点の参考にしました。
- 2003年出版のIAR CベースのAVR035: Efficient C Coding for AVR 2011年出版のGCC4.5ベースのAtmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers  わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。&amp;rdquo;c99 plus GCC extensions&amp;rdquo;となるように-std=gnu99をWinAvrベースのMakefileに指定してます。 ちなみに、avr-gcc (GCC) 5.4.0では-std=C99は&amp;rdquo;ISO C99 standard&amp;rdquo;完全準拠の はずです。avr-gcc helpの記述に-std=c11、-std=c++11がありISO 2011 C/C++ まで完全準拠が選べるようです。WinAvrのMakefileのISO C99準拠が不完全との コメントは古いバージョンのavr-gccに基づいているようですね。確かGCCは4以降 &amp;ldquo;ISO C99 standard&amp;rdquo;完全準拠だった気がします。
+ 2003年出版のIAR CベースのAVR035: Efficient C Coding for AVR 2011年出版のGCC4.5ベースのAtmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers  わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。&amp;rdquo;c99 plus GCC extensions&amp;rdquo;となるように-std=gnu99をWinAvrベースのMakefileに指定してます。 ちなみに、avr-gcc (GCC) 5.4.0では-std=C99は&amp;rdquo;ISO C99 standard&amp;rdquo;完全準拠の はずです。avr-gcc helpの記述に-std=c11、-std=c++11がありISO 2011 C/C++ まで完全準拠が選べるようです。WinAvrのMakefile内に書かれた 「ISO C99準拠が不完全」とのコメントは古いバージョンのavr-gccに基づいている ようですね。確かGCCは4以降では&amp;rdquo;ISO C99 standard&amp;rdquo;完全準拠だった気がします。
 ちなみに、-std=gnu99では、-std=c11で導入された0b10111011と言った ２進表記での整数定数表記ができます。これが便利です。
 8 bitのATmega328Pぐらいにフォーカスして、現在の開発環境下で私なりに検討して、 ある程度の憶測も折り込み、よくまとまっていたAVR035文書の結論を以下に書きなお して見ました。
 あまりコードサイズの最適化に頑張り過ぎることは無いと考えています。無理がある 時には、コードを凝るのではなく、所詮趣味でなので実現する機能を削るとか、値段 は知れているので高性能のチップに乗り換えるとかする方が良いのでしょう。実際 Arduino Nanoに載っているATmega328pですらかなり余裕があるので、読みやすくバグ 発生しにくいコーディングを心がけ、デバグしやすいように部分・部分をテストでき るモジュラーな構成を念頭にするもがいい気がします。
