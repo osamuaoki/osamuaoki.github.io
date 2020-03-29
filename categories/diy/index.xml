@@ -6,10 +6,25 @@
     <description>Recent content in DIY on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 28 Mar 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 29 Mar 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/diy/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>ATmega32u4 (2)</title>
+      <link>/jp/2020/03/29/atmega32u4-2/</link>
+      <pubDate>Sun, 29 Mar 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/03/29/atmega32u4-2/</guid>
+      <description>今回も引き続き基本のUSB AVRの ATmega32u4 を中心としたAVRチップのプログラム方法とその環境に関して、 調査と情報の整理をします。
+ISP接続 Arduino系の開発ボードなら、6pinのICSPコネクターが付いているので 1pin(ポチマーク)側にAVRISP mkIIからのISP接続フラットケーブルの 赤線側を合わせて挿せば良い ので簡単でした。
+ATmega32u4の開発ボードの SparkFun Pro Micro、 Teensy 2.0 や、AT90USB1286の開発ボードの Teensy 2.0++ などやそのコンパチ品はICSPコネクターが付いていないので 「直結接続」が必要です。
+「直結接続」のために、以下の写真のように片側にクリップ、 片側にオスやメスのデュポンコネクターが付いたワイヤーを準備 しました。(AVR系をAVRUSP mkIIでISP書き換えするにはオスの デュポンコネクター版だけで充分ですが、将来ARM系のSTM32F等を ST-LINK/V2等で書き換えするのにはメスのデュポンコネクター版が あると便利そうなので両方準備してみました。)
+左右逆にしないことが大事なので、接続関係をここにまとめます。
+ISP接続フラットケーブルのコネクター （赤線側上です。コネクター穴側から見た「左図」が大事！)
+ RED SIDE 赤線側 BTM VIEW コネクター穴側 TOP VIEW VCC 2 1 MISO MISO 1 2 VCC MOSI 4 3 SCK SCK 3 4 MOSI GND 6 5 RST RST 5 6 GND (こっちがメイン) Looking from Looking from the the hole side back of the connector hole  以下、開発ボードの端子はチップが載っている表側(TOP側)から、 USBコネクターを「左」に置き見て、「半時計回り」(CCW)で 「0スタート」(逆方向は-1スタート、角からスタート、重複命名有り) で位置表記し、ISPコネクターの端子は赤線側を上にして、 コネクター穴側から見て位置表記することとします。</description>
+    </item>
     
     <item>
       <title>ATmega32u4 (1)</title>
@@ -18,7 +33,7 @@
       
       <guid>/jp/2020/03/28/atmega32u4-1/</guid>
       <description>前々回・前回は、Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P のプログラムの勉強・練習をしました。その結果チップ周辺の配線状態 確認をホストPCのターミナルからするシェルのような avrmon を書きました。
-今回は基本のUSB AVRの ATmega32u4 を中心としたAVRチップのプログラム方法とその環境に関して、 調査と情報の整理をしました。
+今回は基本のUSB AVRの ATmega32u4 を中心としたAVRチップのプログラム方法とその環境に関して、 調査と情報の整理をします。
 ATmega32u4開発ボード ATmega32u4を5V 16MHzで使う開発ボードをしては、 Arduino Leonardo、 Arduino micro、 SparkFun Pro Micro、 RobotDyn Micro ATmega32U4-MU、 Teensy 2.0などや そのコンパチ品が通販サイト(例えば、 banggood、 aliexpress、 ebay )で出回っています。私はTeensy 2.0のコンパチ品を入手しました。
 AVRへのプログラム導入 ATmega32u4へのプログラム導入アプローチは、 ATmega328Pへのプログラム導入アプローチ より選択肢が多く混乱しがちなので、以前書いた英語のメモ( Serial AVRや USB AVR )をベースに、日本語で以下に比較しながら状況を確認と整理をします。
 Serial AVR Serial AVR (ATmega328P等) では、チップにプログラムを導入するのに 主に２つのアプローチがあります:

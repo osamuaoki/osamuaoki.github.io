@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ATmega32u4 (2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">ATmega32u4 (2)</span></h1>
+
+<h2 class="date">2020/03/29</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/03/28/atmega32u4-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>今回も引き続き基本のUSB AVRの
+<a href="https://www.microchip.com/wwwproducts/en/ATmega32u4">ATmega32u4</a>
+を中心としたAVRチップのプログラム方法とその環境に関して、
+調査と情報の整理をします。</p>
+
+<h2 id="isp接続">ISP接続</h2>
+
+<p>Arduino系の開発ボードなら、6pinのICSPコネクターが付いているので
+1pin(ポチマーク)側にAVRISP mkIIからのISP接続フラットケーブルの
+<a href="https://osamuaoki.github.io/jp/2020/02/21/atmega328p-1/">赤線側を合わせて挿せば良い</a>
+ので簡単でした。</p>
+
+<p>ATmega32u4の開発ボードの
+<a href="https://www.sparkfun.com/products/12640">SparkFun Pro Micro</a>、
+<a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
+や、AT90USB1286の開発ボードの
+<a href="https://www.pjrc.com/store/teensypp.html">Teensy 2.0++</a>
+などやそのコンパチ品はICSPコネクターが付いていないので
+「直結接続」が必要です。</p>
+
+<p>「直結接続」のために、以下の写真のように片側にクリップ、
+片側にオスやメスのデュポンコネクターが付いたワイヤーを準備
+しました。(AVR系をAVRUSP mkIIでISP書き換えするにはオスの
+デュポンコネクター版だけで充分ですが、将来ARM系のSTM32F等を
+ST-LINK/V2等で書き換えするのにはメスのデュポンコネクター版が
+あると便利そうなので両方準備してみました。)</p>
+
+<p><img src="/img/clip-wire.jpg" alt="直結用クリップワイヤー" /></p>
+
+<p>左右逆にしないことが大事なので、接続関係をここにまとめます。</p>
+
+<p>ISP接続フラットケーブルのコネクター
+（赤線側上です。コネクター穴側から見た「左図」が大事！)</p>
+
+<pre><code>                  RED SIDE 赤線側
+BTM VIEW コネクター穴側                 TOP VIEW
+VCC  2  1 MISO                        MISO 1  2 VCC
+MOSI 4  3 SCK                         SCK  3  4 MOSI
+GND  6  5 RST                         RST  5  6 GND
+
+(こっちがメイン)
+Looking from                          Looking from the
+the hole side                         back of the connector hole
+</code></pre>
+
+<p>以下、開発ボードの端子はチップが載っている表側(TOP側)から、
+USBコネクターを「左」に置き見て、「半時計回り」(CCW)で
+「0スタート」(逆方向は-1スタート、角からスタート、重複命名有り)
+で位置表記し、ISPコネクターの端子は赤線側を上にして、
+コネクター穴側から見て位置表記することとします。</p>
+
+<p><a href="https://www.pjrc.com/teensy/pinout.html">Teensy 2.0開発ボード</a>の場合(所有)：</p>
+
+<ul>
+<li>ボード下0: GND</li>
+<li>ボード下2: SCLK &ndash;&gt; 3 コネクター右側中央</li>
+<li>ボード下3: MOSI &ndash;&gt; 4 コネクター左側中央(VCC/GND間)</li>
+<li>ボード下4: MISO &ndash;&gt; 1 コネクター右側上(赤線側)</li>
+<li>&hellip;</li>
+<li>ボード右2: VCC  &ndash;&gt; 2 コネクター左側上(赤線側)</li>
+<li>ボード右3(CTR): GND  &ndash;&gt; 6 コネクター左側下</li>
+<li>ボード右4: RST  &ndash;&gt; 5 コネクター右側下</li>
+<li>ボード上-1(Last): VCC</li>
+</ul>
+
+<p><a href="https://www.pjrc.com/teensy/pinout.html">Teensy 2.0++開発ボード</a>の場合(所有)：</p>
+
+<ul>
+<li>ボード下0: GND</li>
+<li>ボード右1: VCC  &ndash;&gt; 2 コネクター左側上(赤線側)</li>
+<li>ボード右2(CTR): GND  &ndash;&gt; 6 コネクター左側下</li>
+<li>ボード右3: RST  &ndash;&gt; 5 コネクター右側下</li>
+<li>&hellip;</li>
+<li>ボード上-7: SCLK &ndash;&gt; 3 コネクター右側中央</li>
+<li>ボード上-6: MOSI &ndash;&gt; 4 コネクター左側中央(VCC/GND間)</li>
+<li>ボード上-5: MISO &ndash;&gt; 1 コネクター右側上(赤線側)</li>
+<li>ボード上-1(Last): VCC</li>
+</ul>
+
+<p>参考:<a href="https://learn.sparkfun.com/tutorials/pro-micro--fio-v3-hookup-guide/hardware-overview-pro-micro">Pro Micro開発ボード</a>の場合(非所有、推定)：</p>
+
+<ul>
+<li>ボード上1: MOSI &ndash;&gt; 4 コネクター左側中央(VCC/GND間)</li>
+<li>ボード上2: MISO &ndash;&gt; 1 コネクター右側上(赤線側)</li>
+<li>ボード上3: SCLK &ndash;&gt; 3 コネクター右側中央</li>
+<li>&hellip;</li>
+<li>ボード上-4: VCC  &ndash;&gt; 2 コネクター左側上(赤線側)</li>
+<li>ボード上-3: RST  &ndash;&gt; 5 コネクター右側下</li>
+<li>ボード上-2: GND  &ndash;&gt; 6 コネクター左側下</li>
+</ul>
+
+<p>以下では、外部電源接続無しでISP接続で読み書きできるよう
+にした<a href="/jp/2020/02/27/avrisp-mod-j/">改造AVRISP mkII</a>を
+使っています。</p>
+
+<h2 id="teensy-2-0-compat">teensy 2.0 compat.</h2>
+
+<p>ブレッドボードに挿し一部クリップ接続で検査！</p>
+
+<p><img src="/img/isp-clip.jpg" alt="ISP接続 ブレッドボード+クリップ" /></p>
+
+<pre><code>$ sudo avrdude -c avrisp2 -P usb -p m32u4 -v
+....
+avrdude: stk500v2_command(): command failed
+avrdude: stk500v2_program_enable(): bad AVRISPmkII connection status: Unknown status 0x00
+avrdude: initialization failed, rc=-1
+         Double check connections and try again, or use -F to override
+         this check.
+
+
+avrdude done.  Thank you.
+</code></pre>
+
+<p>うーん、前に何か悪いことしてチップを壊したかな？ちょっと不安。
+ブレッドボードは接触によく不安があるし、挟むタイプのクリップは
+挟む線が太いと外れやすくここも接触に不安がありました。</p>
+
+<p>そこで不安を解消するように、開発ボードがPIN付き基板なので
+メス+オスのデュポンコネクターのワイヤーでしっかり接続して、
+再チャレンジしました。</p>
+
+<p><img src="/img/isp-wire.jpg" alt="ISP接続 ワイヤー" /></p>
+
+<pre><code>$ sudo avrdude -c avrisp2 -P usb -p m32u4 -v -F
+...
+
+avrdude: Device signature = 0x1e9587 (probably m32u4)
+avrdude: safemode: lfuse reads as 5F
+avrdude: safemode: hfuse reads as D9
+avrdude: safemode: efuse reads as C5
+
+avrdude: safemode: lfuse reads as 5F
+avrdude: safemode: hfuse reads as D9
+avrdude: safemode: efuse reads as C5
+avrdude: safemode: Fuses OK (E:C5, H:D9, L:5F)
+
+avrdude done.  Thank you.
+</code></pre>
+
+<p>まずは良し良しでした。とにかく素人電子工作では接触不良に要注意です。
+さらに<code>-U lock:r:-:h</code>をつけると、0xC5コードが出て文字化けした後、
+0xffと表示されます。</p>
+
+<ul>
+<li>CKDIV8</li>
+<li>SUT1 (16K CK)</li>
+<li>SPIEN</li>
+<li>BOOTSZ1, BOOTSZ0 (ブート領域2KW=4KB)</li>
+<li>HWBE</li>
+<li>BODLEVEL1 (BODが2.2V)</li>
+</ul>
+
+<p>ちなみに、正規品はブート領域が4KBではなく、512Bで、BOD設定も違います。</p>
+
+<ul>
+<li>LFUSE: 0x5F</li>
+<li>HFUSE: 0xDF (ブート領域512B)</li>
+<li>EFUSE: 0xF4 (BODが2.4V)</li>
+<li>LOCK:  0xCC</li>
+</ul>
+
+<h2 id="teensy-2-0-compat-1">Teensy 2.0++ compat.</h2>
+
+<p>こっちはピン無し裸ボードなので、上記の直結用クリップワイヤーを
+使ってつなぎました。</p>
+
+<pre><code>$ sudo avrdude -c avrisp2 -P usb -p usb1286 -v -F
+.....
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.00s
+
+avrdude: Device signature = 0x1e9782 (probably usb1287)
+avrdude: safemode: lfuse reads as 4F
+avrdude: safemode: hfuse reads as DD
+avrdude: safemode: efuse reads as F5
+
+avrdude: safemode: lfuse reads as 4F
+avrdude: safemode: hfuse reads as DD
+avrdude: safemode: efuse reads as F5
+avrdude: safemode: Fuses OK (E:F5, H:DD, L:4F)
+</code></pre>
+
+<p>うまくはつながっているようですが、チョット変です。上記だと；</p>
+
+<ul>
+<li>CKDIV8</li>
+<li>SUT1, SUT0 (1K CK)</li>
+<li>SPIEN</li>
+<li>BOOTSZ0 (1KW=2KB)</li>
+<li>HWBE</li>
+<li>BODLEVEL1</li>
+</ul>
+
+<p>正直、AtmelのDFUやLUFAのDFUが約4KBあるのに、なぜこの開発ボードの
+チップは2KBのブート領域なのかはチョット不思議です。安売りしていた
+のはこれが原因かな？他の人がどうしているのかを調べると:
+<a href="http://blog.lincomatic.com/?p=548">Bootloaders for AT90USB1286</a></p>
+
+<pre><code> $ avrdude -c usbtiny -p at90usb1286 -U lfuse:w:0xde:m -U hfuse:w:0xdb:m -U efuse:w:0xf0:m
+</code></pre>
+
+<ul>
+<li>LFUSE: 0xDE Unset CKDIV8, SUT 258 CK</li>
+<li>HFUSE: 0xDB (ブート領域4KB=2KW)</li>
+<li>EFUSE: 0xF0 (BODがV)4.3V</li>
+</ul>
+
+<p>純正Atmel DFUは4KBより少し大きいのも気になります。</p>
+
+<p>ちなみに以下は参考です。</p>
+
+<ul>
+<li><a href="https://www.microchip.com/wwwproducts/en/AT90USB1286">AT90usb1286のデーターシート等</a></li>
+<li><a href="https://www.avrfreaks.net/forum/working-at90usb1286-bootloader">Working with AT90USB1286 bootloader</a></li>
+<li><a href="https://forum.pjrc.com/threads/34108-Teensy-reset">Teensy reset</a></li>
+</ul>
+
+<h2 id="avrへのプログラム導入">AVRへのプログラム導入</h2>
+
+<p>Fuse関連で困ったらは、
+<a href="https://eleccelerator.com/fusecalc/fusecalc.php">fusecalc</a>
+や
+<a href="https://make.kosakalab.com/make/electronic-work/aitendo-pm32u4/">Pro Micro クローン ATmega32U4を使う</a>
+や
+<a href="https://github.com/osamuaoki/avrdude-friend/wiki/AVR-fuse">AVR fuse</a>
+を見ましょう。</p>
+
+<!-- vim: se ai tw=79: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/03/28/atmega32u4-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
