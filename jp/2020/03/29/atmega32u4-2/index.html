@@ -252,23 +252,116 @@ avrdude: safemode: Fuses OK (E:F5, H:DD, L:4F)
 
 <p>正直、AtmelのDFUやLUFAのDFUが約4KBあるのに、なぜこの開発ボードの
 チップは2KBのブート領域なのかはチョット不思議です。安売りしていた
-のはこれが原因かな？他の人がどうしているのかを調べると:
-<a href="http://blog.lincomatic.com/?p=548">Bootloaders for AT90USB1286</a></p>
-
-<pre><code> $ avrdude -c usbtiny -p at90usb1286 -U lfuse:w:0xde:m -U hfuse:w:0xdb:m -U efuse:w:0xf0:m
-</code></pre>
-
-<ul>
-<li>LFUSE: 0xDE Unset CKDIV8, SUT 258 CK</li>
-<li>HFUSE: 0xDB (ブート領域4KB=2KW)</li>
-<li>EFUSE: 0xF0 (BODがV)4.3V</li>
-</ul>
+のはこれが原因かな？(他のFUSE値は大きな問題ではないとは考えます。)</p>
 
 <p>純正Atmel DFUは4KBより少し大きいのも気になります。</p>
+
+<h2 id="fuse設定のあるべき姿の考察">Fuse設定のあるべき姿の考察</h2>
+
+<p>Fuse設定のあるべき姿を考えてみました。分かるところから押さえます。
+まずATmega32u4を考えます。</p>
+
+<p>P354-P355にかかれたチップのデフォルトは:</p>
+
+<ul>
+<li>LFUSE: 0x41</li>
+<li>HFUSE: 0x99</li>
+<li>EFUSE: 0xF3</li>
+<li>LOCK:  0xEC</li>
+</ul>
+
+<p>です。これを基本に、理由毎に変更します。</p>
+
+<p>CKDIV8は出荷時にプログラムされている(=0)が多くの設定でも採用
+されています。一見チョット不安になりましたが、実際にはスタート
+アップコードにCPU_PRESCALEマクロ置いてあり分周しなくなるので、
+これは問題ないとみました。</p>
+
+<p>まず、5V 16 MHz Crystal使用でBODをするから、以下確定です(P30,P31)。
+* CKSEL0 = 1
+* SUT1..0 = 01
+* CKSEL3..1 = 111</p>
+
+<p>だから</p>
+
+<ul>
+<li>LFUSE: 0x5F  5V 16 MHz Crystal使用でBOD</li>
+</ul>
+
+<p>HFUSEはJTAGは使わないので外すことにして、後はブートローダー
+のサイズとブートリセットアドレスで決めます。$0000に置く
+ファームウエアーが、ブートローダーに後で飛べるようになっていない
+普通の場合はブートリセットアドレス=$0000を非設定にすべきです。</p>
+
+<p>4KBの標準的なブートローダーだと:</p>
+
+<ul>
+<li>HFUSE: 0xD8 (ブートリセットアドレス=$0000　設定 DFU - KBD系)</li>
+<li>HFUSE: 0xD9 (ブートリセットアドレス=$0000　非設定　Caterina系)</li>
+</ul>
+
+<p>512BのnanoBoot/teensyブートローダーだと:</p>
+
+<ul>
+<li>HFUSE: 0xDF (ブートリセットアドレス=$0000　非設定 - teensy)</li>
+</ul>
+
+<p>さて残るはEFUSEです。ハイニブル等は変更理由はないので決めるべきは
+BOD電圧です。(確かハイニブルは何を書いてもF-&gt;Cになったりした気が
+します)</p>
+
+<ul>
+<li>EFUSE: 0xF4 BOD=2.4V teensy　なかなかリセットがかからない</li>
+<li>EFUSE: 0xF3 BOD=2.6V チップのデフォルト</li>
+<li>EFUSE: 0xF0 BOD=4.3V すぐリセットかかる</li>
+</ul>
+
+<p>落ちにくくするためにBOD=2.4V teensyを真似しましょう。</p>
+
+<p>LOCKの上２ビットは無効なのでややこしいです。</p>
+
+<p>デフォルトは0xEC=0x1Cです。ブートローダーを覗けません。書き換え禁止。
+0xFF=0x3Fは一切ロック無しです。
+0xEF=0x2FとするとブートローダーへのSPM書き込みを禁止しますね。
+0xCF=0x0FとするとブートローダーへのSPM書き込みを禁止の上にブートローダーを覗けませんね。</p>
+
+<p>アプリケーションやEEPROMの書き込み・制約・。書き換え禁止は興味無いですね。
+趣味のデバイスは基本ロック不要です。</p>
+
+<ul>
+<li><p>LOCK:  0x3F=0xFF ロック不要(基本)</p></li>
+
+<li><p>LOCK:  0x2F=0xEF ロック(アプリ書き込み時の上書き防止)</p></li>
+</ul>
+
+<h2 id="atmega32u4のfuse設定のあるべき姿">ATmega32u4のFuse設定のあるべき姿</h2>
+
+<ul>
+<li>LFUSE: 0x5F  5V 16 MHz Crystal使用でBOD</li>
+<li>HFUSE: 0xD9 (ブートリセットアドレス=$0000　非設定　Caterina系 4KB)</li>
+<li>HFUSE: 0xDF (ブートリセットアドレス=$0000　非設定 - teensy系 512B)</li>
+<li>EFUSE: 0xF4 BOD=2.4V teensy　なかなかリセットがかからない</li>
+<li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
+</ul>
+
+<h2 id="at90usb1286のfuse設定のあるべき姿">AT90usb1286のFuse設定のあるべき姿</h2>
+
+<p>ブートローダーの大きさ次第です。</p>
+
+<ul>
+<li>LFUSE: 0x5F  5V 16 MHz Crystal使用でBOD</li>
+<li>HFUSE: 0xD9 (ブートリセットアドレス=$0000　非設定　8KB)</li>
+<li>HFUSE: 0xDB (ブートリセットアドレス=$0000　非設定　4KB)</li>
+<li>HFUSE: 0xDD (ブートリセットアドレス=$0000　非設定　2KB)</li>
+<li>HFUSE: 0xDF (ブートリセットアドレス=$0000　非設定　1KB)</li>
+<li>EFUSE: 0xF4 BOD=2.4V teensy　なかなかリセットがかからない</li>
+<li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
+</ul>
 
 <p>ちなみに以下は参考情報です。</p>
 
 <ul>
+<li><a href="https://www.microchip.com/wwwproducts/en/ATmega32u4">ATmega32u4のデーターシート等</a></li>
 <li><a href="https://www.microchip.com/wwwproducts/en/AT90USB1286">AT90usb1286のデーターシート等</a></li>
 <li><a href="https://www.avrfreaks.net/forum/working-at90usb1286-bootloader">Working with AT90USB1286 bootloader</a></li>
 <li><a href="https://forum.pjrc.com/threads/34108-Teensy-reset">Teensy reset</a></li>
