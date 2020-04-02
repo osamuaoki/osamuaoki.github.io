@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>programming on Goofing Osamu</title>
+    <link>/categories/programming/</link>
+    <description>Recent content in programming on Goofing Osamu</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 02 Apr 2020 00:00:00 +0000</lastBuildDate>
+    
+	<atom:link href="/categories/programming/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>GITのフォーク管理法</title>
+      <link>/jp/2020/04/02/git-fork/</link>
+      <pubDate>Thu, 02 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/04/02/git-fork/</guid>
+      <description>Gitを使う際に、自分が作ったフォークされたレポを、アップストリーム のオリジナルのレポの更新に合わせて如何にスムーズに更新をしていくかは、 アプローチ方法や解がいくつもあるだけに悩まされます。
+備忘録を兼ねて、アップストリームがGITHUBを使っている場合を例に以下にメモします。
+基本のGITのフォークの管理手順 簡単のために以下の前提を置きます。（追跡＝tracking）
+ オリジナルの他人が管理するリモートのレポ名を、「upstream」(任意名ですが慣習名)にします。 オリジナルの他人が管理するリモートのレポ上の「master」ブランチが追跡されます。（コピー元） フォークされた自分が管理するリモートのレポ名を、「origin」にします。 フォークされた自分が管理するリモートのレポ上の「master」ブランチが追跡します。（コピー先） フォークのレポでは、オリジナルのレポにあるbranch名やtag名とぶつかるbranch名やtag名を作らないようにします。  自分が書き換える開発ブランチは、「devel」ブランチ」にします。   この際の基本のGITのフォークの管理手順は以下です。
+ アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、 自分のアカウントにフォークされたリモートのレポを作成 フォークされたレポをローカルに「git clone」して、ローカルのレポを作成  git clone git@github.com:my_name/project_name.git ; cd project_name  自分が書き換える開発ブランチを作成  git checkout -b devel  開発ブランチにコミット オリジナルのリモートのレポをローカルのレポに「upstream」として追加。  git remote add upstream https://github.com/upstream_name/project_name.git  フォークされたレポの「master」ブランチをオリジナルのレポの「master」ブランチに同期
+ git checkout master git fetch -p upstream git pull upstream master git push origin master  -pは--pruneのショートハンドで、不要なリモート追跡ブランチを削除し てくれます。
+  開発ブランチに戻り、開発再開</description>
+    </item>
+    
+  </channel>
+</rss>
