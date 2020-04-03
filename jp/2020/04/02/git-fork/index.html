@@ -198,7 +198,7 @@ $ git push -u origin dev_branch
 <li><!-- dummy -->
 
 <pre><code>$ git reflog
-...
+...git remote set-url --push upstream DISABLED_FOR_PUSH
 $ git branch new_branch_name HEAD@{6}
 </code></pre></li>
 </ul></li>
@@ -231,10 +231,9 @@ $ git branch new_branch_name HEAD@{6}
 
 <pre><code>$ git clone https://upstream_site/repo_name.git
 $ cd repo_name
+$ git branch upstream-master
 $ git remote rename origin upstream
 $ git remote set-url --push upstream DISABLED_FOR_PUSH
-$ git checkout -b upstream-master upstream/master
-$ git checkout master
 $ git remote add origin git@salsa.debian.org:myname/repo_name.git
 $ git push -u origin
  ...
@@ -246,16 +245,19 @@ $ git checkout master
 ...
 </code></pre>
 
-<p>上記で「<code>master</code>」ブランチが、ちゃんとリモートの
-「<code>remotes/origin/master</code>」を追跡するようになるのは、
-<code>git push -u origin</code>操作の副作用です。</p>
+<p>上記でローカルの「<code>upstream-master</code>」ブランチが、
+ちゃんとリモートの「<code>remotes/upstream/master</code>」を
+追跡するようになります。さらにローカルの「<code>upstream-master</code>」
+ブランチは、別のリモートの「<code>remotes/origin/upstream-master</code>」
+にpushされ保存されます。</p>
 
-<p>push対象ブランチが、デフォルトの現在Checkoutしている
-ブランチで、push先のリモートでもブランチ名が同じだから
-コマンドラインへの入力文字列が短くて済んでます。</p>
+<p>push対象ブランチが、デフォルトの現在Checkoutしているブランチで、
+push先のリモートでもブランチ名が同じ「<code>upstream-master</code>」だから
+pushの際のコマンドラインへの入力文字列が短くて済んでます。</p>
 
-<p>上記の後半の操作を繰り返すことで、「<code>upstream-master</code>」が、
-常に「<code>remotes/upstream/master</code>」を追跡していきます。</p>
+<p>上記の後半の操作を繰り返すことで、ローカルの「<code>upstream-master</code>」が、
+常にアップストリームが更新する「<code>remotes/upstream/master</code>」を
+追跡していきます。</p>
 
 <h3 id="github">GITHUB</h3>
 
