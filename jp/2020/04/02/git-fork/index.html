@@ -247,10 +247,12 @@ $ git checkout master
 
 <p>上記で「<code>master</code>」ブランチが、ちゃんとリモートの
 「<code>remotes/origin/master</code>」を追跡するようになるのは、
-<code>git push -u origin</code>操作の副作用です。</p>
+<code>git push -u origin</code>操作の副作用です。ブランチ名が
+ローカルとpush先のリモートで同じだから入力文字列が
+短くて済んでます。</p>
 
-<p>ブランチ名がローカルとpush先のリモートで同じだから
-入力がこれで済んでます。</p>
+<p>上記の後半の操作を繰り返すことで、「<code>upstream-master</code>」が、
+「<code>remotes/upstream/master</code>」を追跡していきます。</p>
 
 <h3 id="github">GITHUB</h3>
 
@@ -265,12 +267,12 @@ $ git checkout master
 <h3 id="自由なブランチ名の設定">自由なブランチ名の設定</h3>
 
 <p>また、例えば<code>gitk</code>で見つけた既存のリモートブランチ（例えば
-「<code>remotes/upstream/foo</code>」）のあるコミットにGUIでローカルの
-ブランチ（例えば「<code>bar</code>」）をGUIで追加できます。</p>
+「<code>remotes/upstream/foo</code>」）のある最終コミットにGUIでローカルの
+ブランチ（例えば「<code>bar</code>」）を追加できます。</p>
 
 <p>この「<code>bar</code>」ブランチを、自分が公開している<code>origin</code>という
 リモートレポに<code>gitk</code>で「<code>remotes/origin/baz</code>」と表示される
-ブランチをしてpushするには以下とします。</p>
+ブランチとしてpushするには以下の操作をします。</p>
 
 <pre><code>$ git checkout bar
 $ git push -u origin bar:baz
@@ -279,7 +281,8 @@ $ git push -u origin bar:baz
 <p><code>-u</code> は<code>--set-upstream-to</code>のショートハンドです。</p>
 
 <p>一度この様にすると、<code>.git/comfig</code>ファイルにその設定が記録され、
-それは以下のようにして確認できます。</p>
+エディターで調整できますし、さらにこれは以下のようにしても確認
+できます。</p>
 
 <pre><code>$ git config --list
 ...
@@ -287,11 +290,11 @@ branch.bar.remote=origin
 branch.bar.merge=refs/heads/baz
 </code></pre>
 
-<p>こうすると、「<code>bar</code>」ブランチをチェックアウトして、変更後コミット
-すると、この後は単に<code>git push</code>とするだけで、「<code>bar</code>」ブランチの
-最新コミットが<code>gitk</code>で「<code>remotes/origin/baz</code>」と表示される
-<code>origin</code>というリモートレポ上のリモートブランチ「<code>baz</code>」に
-pushされます。</p>
+<p>こう設定した後、「<code>bar</code>」ブランチをチェックアウトして、ファイル
+を変更後GITレポにコミットすると、この後は単に<code>git push</code>とするだ
+けで、「<code>bar</code>」ブランチの最新コミットが<code>gitk</code>で
+「<code>remotes/origin/baz</code>」と表示される<code>origin</code>というリモートレポ上
+のリモートブランチ「<code>baz</code>」にpushされます。（ややこしい！）</p>
 
 <p>もちろん、特段の理由なくローカルやリモートでブランチ名がコロコロ
 変わる複雑な設定をするのは無用な混乱を起こすのでできるだけ避ける
