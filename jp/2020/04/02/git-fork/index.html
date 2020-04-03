@@ -133,7 +133,7 @@ $ git push origin master
 <a href="https://beta.docs.qmk.fm/using-qmk/guides/git-best-practices/newbs_git_using_your_master_branch">QMK等のプロジェクト</a>
 等が推奨する手順です。</p>
 
-<h3 id="便利な関連コマンド">便利な関連コマンド</h3>
+<h3 id="gitブランチ操作のヒント集">GITブランチ操作のヒント集</h3>
 
 <p>GITのブランチの作成・ブランチ間の移動他のたまにしか使わない操作の多くは、
 <code>gitk --all</code>をした後、右マウスクリックをしたら出来ます。</p>
@@ -217,7 +217,7 @@ $ git branch new_branch_name HEAD@{6}
 </ul></li>
 </ul>
 
-<h2 id="gitブランチ操作の応用問題">GITブランチ操作の応用問題</h2>
+<h2 id="gitブランチ操作の応用例">GITブランチ操作の応用例</h2>
 
 <h3 id="debianのパッケージング操作">Debianのパッケージング操作</h3>
 
@@ -245,9 +245,12 @@ $ git checkout master
 ...
 </code></pre>
 
-<p>上記で「<code>master</code>」ブランチが、ちゃんとリモートの「<code>origin/master</code>」
-を追跡するようになるのは、<code>git push -u origin</code>操作の副作用です。
-ブランチ名が基本同じだからこれで済んでます。</p>
+<p>上記で「<code>upstream-master</code>」ブランチが、ちゃんとリモートの
+「<code>remotes/origin/master</code>」を追跡するようになるのは、
+<code>git push -u origin</code>操作の副作用です。</p>
+
+<p>ブランチ名がローカルとpush先のリモートで同じだから
+入力がこれで済んでます。</p>
 
 <h3 id="github">GITHUB</h3>
 
