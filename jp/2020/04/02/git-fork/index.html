@@ -272,9 +272,9 @@ $ git checkout master
 ブランチ（例えば「<code>bar</code>」）を新規追加した場合を考えましょう。</p>
 
 <p>この「<code>bar</code>」ブランチを、自分が公開している<code>origin</code>という
-リモートレポに、他人からは「<code>baz</code>」ブランチと呼ばれることとなる、
-<code>gitk</code>で「<code>remotes/origin/baz</code>」と表示されるブランチとして
-pushするには以下の操作をします。</p>
+リモートレポに、他人からは「<code>baz</code>」ブランチと呼ばれることと
+なるブランチとして、(別の見方では自分の<code>gitk</code>で「<code>remotes/origin/baz</code>」
+と表示されるブランチとして)、pushするには以下の操作をします。</p>
 
 <pre><code>$ git checkout bar
 $ git push -u origin bar:baz
@@ -282,9 +282,11 @@ $ git push -u origin bar:baz
 
 <p><code>-u</code> は<code>--set-upstream-to</code>のショートハンドです。</p>
 
-<p>一度この様にすると、<code>.git/comfig</code>ファイルにその設定が記録され、
-エディターで調整できますし、さらにこれは以下のようにしても確認
-できます。</p>
+<p>一度この操作をすると、<code>.git/comfig</code>ファイルにこの設定が記録され
+ます。この設定は<code>git comfig</code>コマンドで調整できますし、また
+エディターで<code>.git/comfig</code>ファイルを直接編集しても調整できます。</p>
+
+<p>さらにこの状況は以下のようにして確認できます。</p>
 
 <pre><code>$ git config --list
 ...
