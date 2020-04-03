@@ -203,8 +203,9 @@ $ git branch new_branch_name HEAD@{6}
 </code></pre></li>
 </ul></li>
 
-<li><p>間違って<code>git add filename</code>だけをした(コミット無し)のを、ファイルは
-そのままで状態を元に戻す。</p>
+<li><p>間違って<code>git add filename</code>だけをしたが、まだコミット無しの状態
+の場合、ユーザー編集中のファイルをそのままに、レポの状態をadd前の
+状態に復元</p>
 
 <ul>
 <li><code>$ git rm --cached filename</code></li>
