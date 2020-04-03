@@ -57,7 +57,7 @@
 
 
 <p>Gitを使う際に、自分が作ったフォークされたレポを、アップストリーム
-のオリジナルのレポの更新に合わせて如何にスムーズに更新をしていくかは、
+のレポの更新に合わせて如何にスムーズに更新をしていくかは、
 アプローチ方法や解がいくつもあるだけに悩まされます。</p>
 
 <p>備忘録を兼ねて、アップストリームがGITHUBを使っている場合を例に以下にメモします。</p>
@@ -67,15 +67,11 @@
 <p>簡単のために以下の前提を置きます。（追跡＝tracking）</p>
 
 <ul>
-<li>オリジナルの他人が管理するリモートのレポ名を、「<code>upstream</code>」(任意名ですが慣習名)にします。</li>
-<li>オリジナルの他人が管理するリモートのレポ上の「<code>master</code>」ブランチが追跡されます。（コピー元）</li>
+<li>アップストリームの他人が管理するリモートのレポ名を、「<code>upstream</code>」(任意名ですが慣習名)にします。</li>
+<li>アップストリームの他人が管理するリモートのレポ上の「<code>master</code>」ブランチが追跡されます。（コピー元）</li>
 <li>フォークされた自分が管理するリモートのレポ名を、「<code>origin</code>」にします。</li>
 <li>フォークされた自分が管理するリモートのレポ上の「<code>master</code>」ブランチが追跡します。（コピー先）</li>
-<li>フォークのレポでは、オリジナルのレポにあるbranch名やtag名とぶつかるbranch名やtag名を作らないようにします。
-
-<ul>
-<li>自分が書き換える開発ブランチは、「<code>devel</code>」ブランチ」にします。</li>
-</ul></li>
+<li>フォークのレポでは、アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を作らないようにします。</li>
 </ul>
 
 <p>この際の基本のGITのフォークの管理手順は以下です。</p>
@@ -88,19 +84,19 @@
 <ul>
 <li><code>$ git clone git@github.com:my_name/project_name.git ; cd project_name</code></li>
 </ul></li>
-<li>自分が書き換える開発ブランチを作成
+<li>自分が書き換える開発ブランチ(ここでは「<code>devel</code>」)を作成
 
 <ul>
 <li><code>$ git checkout -b devel</code></li>
 </ul></li>
-<li>開発ブランチにコミット</li>
-<li>オリジナルのリモートのレポをローカルのレポに「<code>upstream</code>」として追加。
+<li>ファイルを編集し、開発ブランチにコミット</li>
+<li>アップストリームのリモートのレポをローカルにリモート「<code>upstream</code>」として追加。
 
 <ul>
 <li><code>$ git remote add upstream https://github.com/upstream_name/project_name.git</code></li>
 </ul></li>
 
-<li><p>フォークされたレポの「<code>master</code>」ブランチをオリジナルのレポの「<code>master</code>」ブランチに同期</p>
+<li><p>フォークされたレポの「<code>master</code>」ブランチをアップストリームのレポの「<code>master</code>」ブランチに同期</p>
 
 <ul>
 <li><!-- dummy -->
@@ -121,7 +117,7 @@ $ git push origin master
 <li><code>$ git checkout devel</code></li>
 </ul></li>
 
-<li><p>状況に合わせて、merge/rebaseする。</p>
+<li><p>状況に合わせて、merge/rebase等をする。</p>
 
 <ul>
 <li><code>$ git merge master</code></li>
@@ -147,22 +143,22 @@ $ git push origin master
 <ul>
 <li><code>$ git remote rename origin upstream</code></li>
 </ul></li>
-<li><code>origin</code>という名前をつけたリモートレポのURLを<code>https://foo/bar.git</code>に変更
+<li><code>origin</code>という名前をつけたリモートのURLを<code>https://foo/bar.git</code>に変更
 
 <ul>
 <li><code>$ git remote set-url origin https://foo/bar.git</code></li>
 </ul></li>
-<li><code>upstream</code>という名前をつけたリモートレポURLへのpushの禁止
+<li><code>upstream</code>という名前をつけたリモートへのpushの禁止
 
 <ul>
 <li><code>$ git remote set-url --push upstream DISABLED_FOR_PUSH</code></li>
-<li>上記操作で「<code>.git/config</code>に<code>pushurl = DISABLED_FOR_PUSH</code>」
+<li>上記操作で<code>.git/config</code>ファイルに「<code>pushurl = DISABLED_FOR_PUSH</code>」
 というラインができている。
-この行を<code>#</code>でコメントアウトするとこの設定を無効化できます。</li>
+この行頭に<code>#</code>を挿入しコメントアウトするとこの設定を無効化できます。</li>
 </ul></li>
 
-<li><p>ローカルのブランチ<code>dev_branch</code>を作成後、
-それをリモートレポの<code>origin</code>へpushできるように設定</p>
+<li><p>ローカルのブランチ<code>dev_branch</code>を作成後、それをリモート<code>origin</code>へ
+pushできるように設定</p>
 
 <ul>
 <li><!-- dummy -->
@@ -224,10 +220,13 @@ $ git branch new_branch_name HEAD@{6}
 
 <p>Debianのパッケージング操作等では、自分が管理するリモートのレポ上の
 「<code>upstream</code>」と「<code>master</code>」というブランチ名を普通特定用途に用いて
-います。だから追跡ブランチの名前をこれら以外から選ぶ必要があります。</p>
+います。だからアップストリームの「<code>master</code>」ブランチを追跡する
+ブランチの名前をこれら以外から選ぶ必要があります。</p>
 
-<p>例えば「<code>upstream-master</code>」というブランチ名を追跡ブランチの名前とすると
-フォークされたレポをオリジナルのレポに同期する操作は次のようになります。</p>
+<p>例えばフォークされたレポの「<code>upstream-master</code>」というブランチ名を
+追跡に用いるブランチの名前とします。「<code>upstream-master</code>」ブランチ
+のコンテントがアップストリームのコンテントに同期させる操作は次の
+ようになります。</p>
 
 <pre><code>$ git clone https://upstream_site/repo_name.git
 $ cd repo_name
@@ -245,15 +244,16 @@ $ git checkout master
 ...
 </code></pre>
 
-<p>上記でローカルの「<code>upstream-master</code>」ブランチが、
-ちゃんとリモートの「<code>remotes/upstream/master</code>」を
-追跡するようになります。さらにローカルの「<code>upstream-master</code>」
-ブランチは、別のリモートの「<code>remotes/origin/upstream-master</code>」
-にpushされ保存されます。</p>
+<p>上記でローカルの「<code>upstream-master</code>」ブランチが、アップストリーム
+リモートの「<code>remotes/upstream/master</code>」を追跡するようになります。</p>
 
-<p>push対象ブランチが、デフォルトの現在Checkoutしているブランチで、
-push先のリモートでもブランチ名が同じ「<code>upstream-master</code>」だから
-pushの際のコマンドラインへの入力文字列が短くて済んでます。</p>
+<p>また、ローカルの「<code>upstream-master</code>」ブランチは、自分のリモートの
+「<code>remotes/origin/upstream-master</code>」にpushされ保存されます。</p>
+
+<p>push対象に「<code>upstream-master</code>」ブランチが、現在Checkoutしている
+デフォルトブランチで、push先のリモートでもブランチ名が同じ
+「<code>upstream-master</code>」だから、pushの際のコマンドラインへの入力文字列
+が短くて済んでます。</p>
 
 <p>上記の後半の操作を繰り返すことで、ローカルの「<code>upstream-master</code>」が、
 常にアップストリームが更新する「<code>remotes/upstream/master</code>」を
