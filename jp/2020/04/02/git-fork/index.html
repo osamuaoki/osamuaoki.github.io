@@ -247,9 +247,11 @@ $ git checkout master
 
 <p>上記で「<code>master</code>」ブランチが、ちゃんとリモートの
 「<code>remotes/origin/master</code>」を追跡するようになるのは、
-<code>git push -u origin</code>操作の副作用です。対象ブランチが
-デフォルトの現在Checkoutしたブランチでpush先のリモート
-でも同じブランチ名だから入力文字列が短くて済んでます。</p>
+<code>git push -u origin</code>操作の副作用です。</p>
+
+<p>push対象ブランチが、デフォルトの現在Checkoutしている
+ブランチで、push先のリモートでもブランチ名が同じだから
+コマンドラインへの入力文字列が短くて済んでます。</p>
 
 <p>上記の後半の操作を繰り返すことで、「<code>upstream-master</code>」が、
 常に「<code>remotes/upstream/master</code>」を追跡していきます。</p>
@@ -302,8 +304,8 @@ branch.bar.merge=refs/heads/baz
 
 <p>もちろん、特段の理由なくローカルやリモートでブランチ名がコロコロ
 変わる複雑な設定をするのは無用な混乱を起こすのでできるだけ避ける
-べきです。ここで「<code>bar</code>」ブランチを同じ「<code>bar</code>」の名前でpushする
-なら上記例の<code>git push</code>コマンドラインの最後の<code>bar:baz</code>は省略できます。</p>
+べきです。(こで「<code>bar</code>」ブランチを同じ「<code>bar</code>」の名前でpushする
+なら上記例の<code>git push</code>コマンドラインの最後の<code>bar:baz</code>は省略できます。)</p>
 
 <h2 id="参考cookbookサイト">参考Cookbookサイト</h2>
 
