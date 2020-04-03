@@ -86,18 +86,18 @@
 <li>フォークされたレポをローカルに「<code>git clone</code>」して、ローカルのレポを作成
 
 <ul>
-<li><code>git clone git@github.com:my_name/project_name.git ; cd project_name</code></li>
+<li><code>$ git clone git@github.com:my_name/project_name.git ; cd project_name</code></li>
 </ul></li>
 <li>自分が書き換える開発ブランチを作成
 
 <ul>
-<li><code>git checkout -b devel</code></li>
+<li><code>$ git checkout -b devel</code></li>
 </ul></li>
 <li>開発ブランチにコミット</li>
 <li>オリジナルのリモートのレポをローカルのレポに「<code>upstream</code>」として追加。
 
 <ul>
-<li><code>git remote add upstream https://github.com/upstream_name/project_name.git</code></li>
+<li><code>$ git remote add upstream https://github.com/upstream_name/project_name.git</code></li>
 </ul></li>
 
 <li><p>フォークされたレポの「<code>master</code>」ブランチをオリジナルのレポの「<code>master</code>」ブランチに同期</p>
@@ -105,10 +105,10 @@
 <ul>
 <li><!-- dummy -->
 
-<pre><code>git checkout master
-git fetch -p upstream
-git pull upstream master
-git push origin master
+<pre><code>$ git checkout master
+$ git fetch -p upstream
+$ git pull upstream master
+$ git push origin master
 </code></pre>
 
 <p><code>-p</code>は<code>--prune</code>のショートハンドで、不要なリモート追跡ブランチを削除し
@@ -118,14 +118,14 @@ git push origin master
 <li><p>開発ブランチに戻り、開発再開</p>
 
 <ul>
-<li><code>git checkout devel</code></li>
+<li><code>$ git checkout devel</code></li>
 </ul></li>
 
 <li><p>状況に合わせて、merge/rebaseする。</p>
 
 <ul>
-<li><code>git merge master</code></li>
-<li><code>git rebase -i master</code></li>
+<li><code>$ git merge master</code></li>
+<li><code>$ git rebase -i master</code></li>
 </ul></li>
 </ol>
 
@@ -145,17 +145,17 @@ git push origin master
 <li>リモートレポの名前を<code>origin</code>から<code>upstream</code>に変更
 
 <ul>
-<li><code>git remote rename origin upstream</code></li>
+<li><code>$ git remote rename origin upstream</code></li>
 </ul></li>
 <li><code>origin</code>という名前をつけたリモートレポのURLを<code>https://foo/bar.git</code>に変更
 
 <ul>
-<li><code>git remote set-url origin https://foo/bar.git</code></li>
+<li><code>$ git remote set-url origin https://foo/bar.git</code></li>
 </ul></li>
 <li><code>upstream</code>という名前をつけたリモートレポURLへのpushの禁止
 
 <ul>
-<li><code>git remote set-url --push upstream DISABLED_FOR_PUSH</code></li>
+<li><code>$ git remote set-url --push upstream DISABLED_FOR_PUSH</code></li>
 <li>上記操作で「<code>.git/config</code>に<code>pushurl = DISABLED_FOR_PUSH</code>」
 というラインができている。
 この行を<code>#</code>でコメントアウトするとこの設定を無効化できます。</li>
@@ -167,8 +167,8 @@ git push origin master
 <ul>
 <li><!-- dummy -->
 
-<pre><code>git checkout -b dev_branch
-git push -u origin dev_branch
+<pre><code>$ git checkout -b dev_branch
+$ git push -u origin dev_branch
 </code></pre>
 
 <p><code>-u</code> は<code>--set-upstream</code>のショートハンド</p></li>
@@ -179,7 +179,7 @@ git push -u origin dev_branch
 <ul>
 <li><!-- dummy -->
 
-<pre><code>git branch -m oldname newname
+<pre><code>$ git branch -m oldname newname
 </code></pre>
 
 <p>(<code>-m</code> は<code>--move</code>のショートハンド)</p></li>
@@ -188,8 +188,8 @@ git push -u origin dev_branch
 <li><p>リモートブランチを削除する(新・旧の2アプローチ有り)</p>
 
 <ul>
-<li><code>git push -d origin remote_branch_name</code> (注、<code>-d</code>は<code>--delete</code>のショートハンド)</li>
-<li><code>git push origin :remote_branch_name</code> (注、<code>:</code>の前はスペース)</li>
+<li><code>$ git push -d origin remote_branch_name</code> (注、<code>-d</code>は<code>--delete</code>のショートハンド)</li>
+<li><code>$ git push origin :remote_branch_name</code> (注、<code>:</code>の前はスペース)</li>
 </ul></li>
 
 <li><p>削除したブランチを復活</p>
@@ -197,9 +197,9 @@ git push -u origin dev_branch
 <ul>
 <li><!-- dummy -->
 
-<pre><code>git reflog
+<pre><code>$ git reflog
 ...
-git branch new_branch_name HEAD@{6}
+$ git branch new_branch_name HEAD@{6}
 </code></pre></li>
 </ul></li>
 
@@ -207,17 +207,19 @@ git branch new_branch_name HEAD@{6}
 そのままで状態を元に戻す。</p>
 
 <ul>
-<li><code>git rm --cached filename</code></li>
+<li><code>$ git rm --cached filename</code></li>
 </ul></li>
 
 <li><p>レポのリモートとの関連状況を確認</p>
 
 <ul>
-<li><code>git remote -v</code></li>
+<li><code>$ git remote -v</code></li>
 </ul></li>
 </ul>
 
-<h2 id="gitのフォークの管理手順-応用問題">GITのフォークの管理手順（応用問題）</h2>
+<h2 id="gitブランチ操作の応用問題">GITブランチ操作の応用問題</h2>
+
+<h3 id="debianのパッケージング操作">Debianのパッケージング操作</h3>
 
 <p>Debianのパッケージング操作等では、自分が管理するリモートのレポ上の
 「<code>upstream</code>」と「<code>master</code>」というブランチ名を普通特定用途に用いて
@@ -226,51 +228,72 @@ git branch new_branch_name HEAD@{6}
 <p>例えば「<code>upstream-master</code>」というブランチ名を追跡ブランチの名前とすると
 フォークされたレポをオリジナルのレポに同期する操作は次のようになります。</p>
 
-<pre><code>git clone https://upstream_site/repo_name.git
-cd repo_name
-git remote rename origin upstream
-git remote set-url --push upstream DISABLED_FOR_PUSH
-git checkout -b upstream-master -t upstream/master
-git checkout master
-git remote add origin git@salsa.debian.org:myname/repo_name.git
-git push -u origin
-...
-git checkout upstream-master
-git fetch -p upstream
-git pull upstream master
-git push origin upstream-master
-git checkout master
+<pre><code>$ git clone https://upstream_site/repo_name.git
+$ cd repo_name
+$ git remote rename origin upstream
+$ git remote set-url --push upstream DISABLED_FOR_PUSH
+$ git checkout -b upstream-master upstream/master
+$ git checkout master
+$ git remote add origin git@salsa.debian.org:myname/repo_name.git
+$ git push -u origin
+ ...
+$ git checkout upstream-master
+$ git fetch -p upstream
+$ git pull upstream master
+$ git push origin upstream-master
+$ git checkout master
 ...
 </code></pre>
-
-<p><code>-t</code>は<code>--track</code>のショートハンドで、リモート追跡ブランチを作成し
-てくれます。</p>
 
 <p>上記で「<code>master</code>」ブランチが、ちゃんとリモートの「<code>origin/master</code>」
 を追跡するようになるのは、<code>git push -u origin</code>操作の副作用です。
 ブランチ名が基本同じだからこれで済んでます。</p>
 
-<p>例えば<code>gitk</code>で見つけた既存のリモートブランチ（例えば「<code>upstream/foo</code>」）
-のあるコミットにGUIでローカルのブランチ（例えば「<code>bar</code>」）を追加し
-ただけでは追跡ブランチになりません。明示指定が必要です。</p>
+<h3 id="github">GITHUB</h3>
 
-<pre><code>git checkout bar
-git branch -u upstream/foo
-</code></pre>
-
-<p><code>-u</code> は<code>--set-upstream-to</code>のショートハンドです。</p>
-
-<p>これで、「<code>bar</code>」をチェックアウトして、変更をコミットした後、
-<code>git push</code>だけで、「<code>bar</code>」が「<code>upstream/foo</code>」にpushされる
-ような複雑な設定ができました。</p>
-
-<p>ここで行ったGITHUBウエッブページを使わずに、フォークしたレポを
+<p>上記で行ったGITHUBウエッブページを使わずに、フォークしたレポを
 <code>git clone ...</code>経由でDebianのサーバー上に作成した操作手法は、
 コマンドライン環境だけでアップストリームと交流することが前提です。</p>
 
 <p>GITHUBのレポ間フォークの場合、GITHUB上でウエッブページを使い
 フォークしないとPULL request等のウエッブ連携操作に支障がでる
 恐れがあります。この辺の配慮は必要です。</p>
+
+<h3 id="自由なブランチ名の設定">自由なブランチ名の設定</h3>
+
+<p>また、例えば<code>gitk</code>で見つけた既存のリモートブランチ（例えば
+「<code>remotes/upstream/foo</code>」）のあるコミットにGUIでローカルの
+ブランチ（例えば「<code>bar</code>」）をGUIで追加できます。</p>
+
+<p>この「<code>bar</code>」ブランチを、自分が公開している<code>origin</code>という
+リモートレポに<code>gitk</code>で「<code>remotes/origin/baz</code>」と表示される
+ブランチをしてpushするには以下とします。</p>
+
+<pre><code>$ git checkout bar
+$ git push -u origin bar:baz
+</code></pre>
+
+<p><code>-u</code> は<code>--set-upstream-to</code>のショートハンドです。</p>
+
+<p>一度この様にすると、<code>.git/comfig</code>ファイルにその設定が記録され、
+それは以下のようにして確認できます。</p>
+
+<pre><code>$ git config --list
+...
+branch.bar.remote=origin
+branch.bar.merge=refs/heads/baz
+</code></pre>
+
+<p>こうすると、「<code>bar</code>」ブランチをチェックアウトして、変更後コミット
+すると、この後は単に<code>git push</code>とするだけで、「<code>bar</code>」ブランチの
+最新コミットが<code>gitk</code>で「<code>remotes/origin/baz</code>」と表示される
+<code>origin</code>というリモートレポ上のリモートブランチ「<code>baz</code>」に
+pushされます。</p>
+
+<p>もちろん、特段の理由なくローカルやリモートでブランチ名がコロコロ
+変わる複雑な設定をするのは無用な混乱を起こすのでできるだけ避ける
+べきです。ここで「<code>bar</code>」ブランチを同じ「<code>bar</code>」の名前でpushする
+なら<code>git push</code>コマンドラインの最後の<code>bar:baz</code>は省略できます。</p>
 
 <h2 id="参考cookbookサイト">参考Cookbookサイト</h2>
 
