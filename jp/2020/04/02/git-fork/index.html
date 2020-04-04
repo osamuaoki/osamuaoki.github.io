@@ -246,7 +246,7 @@ $ git checkout master
 ...
 </code></pre>
 
-<p>上記でローカルの「<code>upstream-master</code>」ブランチが、アップストリーム
+<p>上記でローカルの「<code>upstream-master</code>」ブランチが、アップストリームの
 リモートの「<code>master</code>」ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」
 と表示)を追跡するようになります。</p>
 
@@ -254,25 +254,39 @@ $ git checkout master
 「<code>upstream-master</code>」ブランチ(<code>gitk</code>が「<code>remotes/origin/upstream-master</code>」
 と表示)にpushされ保存されます。</p>
 
-<p>push対象の「<code>upstream-master</code>」ブランチが、現在Checkoutしている
+<p>push対象のローカルの「<code>upstream-master</code>」ブランチが、現在Checkoutしている
 デフォルトブランチで、push先のリモートでもブランチ名が同じ
 「<code>upstream-master</code>」だから、pushの際のコマンドラインへの入力文字列
-が短くて済んでます。</p>
+をかなり省略できるので短くて済んでます。</p>
 
 <p>上記の後半の操作を繰り返すことで、ローカルの「<code>upstream-master</code>」が、
-常にアップストリームが更新するアップストリームリモートの「<code>master</code>」
-ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」と表示)を追跡していきます。</p>
+常にアップストリームが更新するアップストリームのリモートの「<code>master</code>」
+ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」と表示)を追跡していけます。</p>
 
-<h3 id="github">GITHUB</h3>
+<h3 id="github-gitlab">GITHUB/GITLAB</h3>
 
-<p>上記で行ったGITHUBウエッブページを使わずに、フォークしたレポを
-<code>git clone ...</code>経由でDebianのサーバー上に作成した操作手法は、
-コマンドライン環境だけでアップストリームと交流することが前提です。</p>
+<p>GITHUBとGITLABは、ともに類似の無償のGITレポのホスティングを提供している
+非常にポピュラーなWEBサービスです。ここではGITHUBとGITLABの
+<a href="https://about.gitlab.com/devops-tools/github-vs-gitlab.html">サービスの細かな違い</a>
+や
+<a href="https://medium.com/@patrickporto/4-branching-workflows-for-git-30d0aaee7bf">ワークフロー流儀の細かな違い</a>
+には深入りしません。</p>
 
-<p>GITHUB上のウエッブサービスを利用する場合には別の配慮が必要です。
-例えばGITHUBのレポ間フォークの場合、GITHUB上でウエッブページを
-使いフォークしないとPULL request等のウエッブ連携操作に支障が
-でる恐れがあります。</p>
+<p>簡単に特徴をまとめると、GITHUBは先発のクローズドソフトプラットフォーム
+でユーザー数が多いのが特徴で、GITLABは後発ですが基本のソフトプラット
+フォームがオープンなFLOSS(Free and open-source software)として開放され
+ていて、Debian等のFLOSSプロジェクトが自らのソースコードWEBサービスの
+ホスティングに採用してているのが特徴です。</p>
+
+<p>「Debianのパッケージング操作」で行ったGITHUBやGITLABのウエッブページ
+を使わずにフォークしたレポを、<code>git clone ...</code>経由でDebianのサーバー上
+に作成した操作手法は、コマンドライン環境だけでアップストリームと交流
+することが前提です。</p>
+
+<p>GITHUBやGITLAB上のウエッブサービスを利用する場合には状況によっては
+別の配慮が必要です。例えばGITHUBやGITLAB内のレポ間フォークの場合、
+GITHUBやGITLAB上でウエッブページを使いフォークしないとPULL request等
+のウエッブ連携操作に支障がでる恐れがあります。</p>
 
 <h3 id="自由なブランチ名の設定">自由なブランチ名の設定</h3>
 
