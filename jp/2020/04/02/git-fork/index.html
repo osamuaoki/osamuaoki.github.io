@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GITのフォーク管理法 | Goofing Osamu</title>
+    <title>GITを使うフォークの管理 | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,7 +32,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">GITのフォーク管理法</span></h1>
+<h1><span class="title">GITを使うフォークの管理</span></h1>
 
 <h2 class="date">2020/04/02</h2>
 </div>
@@ -58,23 +58,25 @@
 
 <p>Gitを使う際に、自分が作ったフォークされたレポを、アップストリーム
 のレポの更新に合わせて如何にスムーズに更新をしていくかは、
-アプローチ方法や解がいくつもあるだけに悩まされます。</p>
+レポの開始方法やブランチ名の設定アプローチやコマンド実行手順に
+解がいくつもあるだけに悩まされます。</p>
 
-<p>備忘録を兼ねて、アップストリームがGITHUBを使っている場合を例に以下にメモします。</p>
+<p>よく混乱していつも悩むので、備忘録を兼ねて、アップストリームがGITHUBを使っている
+場合を例に以下にメモを作成します。</p>
 
-<h2 id="基本のgitのフォークの管理手順">基本のGITのフォークの管理手順</h2>
+<h2 id="gitを使うフォークの管理手順-基本">GITを使うフォークの管理手順(基本)</h2>
 
 <p>簡単のために以下の前提を置きます。（追跡＝tracking）</p>
 
 <ul>
-<li>アップストリームの他人が管理するリモートのレポ名を、「<code>upstream</code>」(任意名ですが慣習名)にします。</li>
-<li>アップストリームの他人が管理するリモートのレポ上の「<code>master</code>」ブランチが追跡されます。（コピー元）</li>
-<li>フォークされた自分が管理するリモートのレポ名を、「<code>origin</code>」にします。</li>
-<li>フォークされた自分が管理するリモートのレポ上の「<code>master</code>」ブランチが追跡します。（コピー先）</li>
-<li>フォークのレポでは、アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を作らないようにします。</li>
+<li>他人が管理する、アップストリームのリモートのレポ名を、「<code>upstream</code>」(任意名ですが慣習名)とします。</li>
+<li>他人が管理する、アップストリームのリモートのレポ上の「<code>master</code>」ブランチを追跡します。（コピー元）</li>
+<li>自分が管理する、フォークしたリモートのレポ名を、「<code>origin</code>」とします。</li>
+<li>自分が管理する、フォークしたリモートのレポ上の「<code>master</code>」ブランチに追跡コピーを保管します。（コピー先）</li>
+<li>アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を、フォークしたレポに勝手に作らないようにします。</li>
 </ul>
 
-<p>この際の基本のGITのフォークの管理手順は以下です。</p>
+<p>この際の、GITを使うフォークの管理手順は以下です。</p>
 
 <ol>
 <li>アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、
@@ -126,16 +128,17 @@ $ git push origin master
 </ol>
 
 <p>これは
-<a href="https://beta.docs.qmk.fm/using-qmk/guides/git-best-practices/newbs_git_using_your_master_branch">QMK等のプロジェクト</a>
-等が推奨する手順です。</p>
+<a href="https://docs.qmk.fm/#/newbs_git_using_your_master_branch">QMKプロジェクト</a>
+等で推奨されるフォーク手順です。</p>
 
 <h3 id="gitブランチ操作のヒント集">GITブランチ操作のヒント集</h3>
 
-<p>GITのブランチの作成・ブランチ間の移動等の多くのたまにしか使わない操作は、
-<code>gitk --all</code>をした後、右マウスクリックをしたら出来ます。</p>
+<p>GITのブランチの作成・ブランチ間の移動・ブランチのチェックアウト等の
+多くの操作は、<code>gitk --all</code>をした後、右マウスクリックで表示される
+GUIメニューから出来ます。</p>
 
 <p>ただリモートレポURLの登録・変更や、リモートのレポ上のブランチの作成・設定変更
-等はコマンドライン入力が必要です。</p>
+等にはコマンドライン入力操作が必要です。</p>
 
 <ul>
 <li>リモートレポの名前を<code>origin</code>から<code>upstream</code>に変更
@@ -200,7 +203,7 @@ $ git branch new_branch_name HEAD@{6}
 </ul></li>
 
 <li><p>間違って<code>git add filename</code>だけをしたが、まだコミット無しの状態
-の場合、ユーザー編集中のファイルをそのままに、レポの状態をadd前の
+の場合に、ユーザー編集中のファイルに手を付けずに、レポの状態をadd前の
 状態に復元</p>
 
 <ul>
