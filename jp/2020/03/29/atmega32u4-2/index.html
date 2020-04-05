@@ -277,10 +277,10 @@ avrdude: safemode: Fuses OK (E:F5, H:DD, L:4F)
 
 <p>です。これを基本に、理由毎に変更します。</p>
 
-<p>CKDIV8は出荷時にプログラムされている(=0)が多くの設定でも採用
+<p>CKDIV8は出荷時にプログラムされている(=0)がTeensyの設定でも採用
 されています。一見チョット不安になりましたが、実際にはスタート
-アップコードにCPU_PRESCALEマクロ置いてあり分周しなくなるので、
-これは問題ないとみました。</p>
+アップコードに<code>CLKPR = 0x80;CLKPR = 0;</code>を置くのがTeensyの標準の
+ようで分周を1に戻すのでので、これは問題ないとみました。</p>
 
 <p>まず、5V 16 MHz Crystal使用でBODをするから、以下確定です(P30,P31)。
 * CKSEL0 = 1
@@ -290,28 +290,73 @@ avrdude: safemode: Fuses OK (E:F5, H:DD, L:4F)
 <p>だから</p>
 
 <ul>
-<li>LFUSE: 0x5F  5V 16 MHz Crystal使用でBOD</li>
+<li>LFUSE: 0x5F  5V 16 MHz Crystal使用(Teensy)
+
+<ul>
+<li>CKDIV8設定で低速スタート、別途BOD設定</li>
+</ul></li>
+<li>LFUSE: 0xFF  5V 16 MHz Crystal使用(Leonardo)
+
+<ul>
+<li>CKDIV8非設定で高速スタート65ms余計に待つ</li>
+</ul></li>
 </ul>
 
-<p>HFUSEはJTAGは使わないので外すことにして、後はブートローダー
-のサイズとブートリセット関係で決めます。</p>
+<p>HFUSEはJTAGは使わないので外す(これはTeensyもLeonardo等のArduino系
+も同じ設定)ことにして、後はブートローダーのサイズとリセット挙動の
+関係で決めます。</p>
+
+<p>リセットボタンは押し際には現在実行中のプログラムが止まり、さらに
+押したままでは何も起こらず、離した際にリセットがMCUにかかります。</p>
+
+<p>まず、「Teensyの環境では、電源投入時に先頭アドレス0x0000に飛び
+アプリケーションのファームウエアーが動き、リセットボタンを押して
+離した際にはbootloaderが始動する」というのが基本です。
+PCのリセットボタンのイメージでアプリケーションが再起動することは
+ないので要注意です。bootloaderがアプリケーションのファームウエアー
+を導入した後ではじめてそのアプリケーションのファームウエアーが動く
+ようです。純正のTeensyは、アドレス0x000にアプリケーションとして
+Blinkが、アドレス0x8000-0x0200 = 0x7E00 Byte (32KB - 512B) に
+bootloaderとしてHIDデバイスとなるbootloaderが導入されるようです。</p>
+
+<p>一方、「Arduinoの基本環境では、電源投入時に先頭アドレス0x0000に飛び
+アプリケーションのファームウエアーが動く」まではTeensyとも同じです
+が、「リセットボタンを押して離した際にbootloaderが始動」しますが、
+実際にbootloaderがアプリケーションのファームウエアーを導入した際に
+は導入した後はそのアプリケーションのファームウエアーが動くのでしょう
+が、「８秒間たってもbootloaderがアプリケーションのファームウエアーを
+導入しないときにも先頭アドレス0x0000に飛びアプリケーションのファーム
+ウエアーが動く」ようです。純正のArduino(Leonardo, micro)は、アドレス
+0x8000-0x1000 = 0x7000 Byte (32KB - 4KB) にbootloaderとしてCIDデバイス
+(仮想シリアル)となるbootloader(Caterina)が導入されるようです。さらに、
+SPARKFUNが公開している改良bootloader(Caterina改)では、「リセットボタン
+をダブルクリックすると待ち時間無しで先頭アドレス0x0000に飛びアプリ
+ケーションのファームウエアーが動く」ようです。リセット時にbootloader
+が動くのはTeensyと同じですが、Arduino系のbootloaderが賢く条件を満たせ
+ばアプリケーションのファームウエアーがリセットされて動くようになって
+います。</p>
+
+<p>この辺の違いを認識しないと、各種情報を読む際に混乱します。</p>
 
 <p>チップのHFUSEとEFUSEのデフォルトはBOOTRST非設定(リセット=1)、
 HWBE設定(セット=0)となっています。</p>
 
 <p>どの開発ボード（teensy・Pro Micro・Arduino Leonardo・Arduino Micro)
 でも、ALE/HWB pinが接地されています。この場合、Boot Reset Fuse
-(BOOTRST)の設定によらず、HWBE FUSEビットが設定(セット=0)されると
-ハードリセットがかかると有無言わずブートローダーに飛びます。</p>
+(BOOTRST)の設定によらず、teensyのデフォルトのようにHWBE FUSEビット
+が設定(セット=0)されるとリセットボタンを押して離した際に有無言わず
+ブートローダーに飛びます。一方、Pro Micro・Arduino Leonardo・
+Arduino MicroデフォルトのようにHWBE FUSEビットが非設定(リセット=1)
+でBoot Reset Fuse (BOOTRST)を設定(セット=0)としてもリセットボタンを
+押して離した際にブートローダーに飛びます。</p>
 
 <p>もしHWBE FUSEビットを非設定(リセット=1)にデフォルトから変更すると、
-Boot Reset Fuse (BOOTRST)を設定(セット=0)すると、ハードリセットが
-かかるとブートローダーに飛びますが、非設定(リセット=1)だと、アプリ
-のファームウエアーのアドレス$0000に飛ぶようになります。</p>
+Boot Reset Fuse (BOOTRST)を設定(セット=0)のままだと、リセットが
+かかるとアプリのファームウエアーのアドレス$0000に飛ぶようになり
+ます。</p>
 
-<p>ポイントは普通の開発ボードでHWBE FUSEビットがデフォルトの
-設定(セット=0)にしているとBoot Reset Fuse (BOOTRST)は関係ない
-ということです。</p>
+<p>ポイントは普通の開発ボードでは、TeensyかArduinoのFUSE設定の組み合
+わせ方を混ぜなければ良いようです。</p>
 
 <p>もちろん、HWBE FUSEビット非設定(リセット=1)に変更して、Boot Reset Fuse
 (BOOTRST)設定(セット=0)して、$0000に置くファームウエアーに
@@ -322,25 +367,42 @@ Boot Reset Fuse (BOOTRST)を設定(セット=0)すると、ハードリセット
 <p>4KBの標準的なブートローダーだと:</p>
 
 <ul>
-<li>HFUSE: 0xD8 (ブートリセットアドレス=$0000　設定 DFU - KBD系で見た)</li>
-<li>HFUSE: 0xD9 (ブートリセットアドレス=$0000　非設定　Caterina系標準)　推奨</li>
+<li>HFUSE: 0xD9 (BOOTRST設定 DFU?)</li>
+<li>HFUSE: 0xD8 (BOOTRST非設定　Caterina系標準) Leonardo</li>
 </ul>
 
 <p>512BのnanoBoot/teensyブートローダーだと:</p>
 
 <ul>
-<li>HFUSE: 0xDF (ブートリセットアドレス=$0000　非設定 - teensy標準)</li>
+<li>HFUSE: 0xDF (BOOTRST非設定 - teensy標準)</li>
 </ul>
 
 <p>さて残るはEFUSEです。ハイニブル等は変更理由はないので決めるべきは
-BOD電圧です。(確かハイニブルは何を書いてもF-&gt;Cになったりした気が
+BOD電圧です。(EFUSEは上位４ビットは何を書いても0xF-&gt;0xCになります)
 します)</p>
 
+<p>HWBE非設定(=1 Caterina系)</p>
+
 <ul>
-<li>EFUSE: 0xF4 BOD=2.4V teensy　なかなかリセットがかからない</li>
+<li>EFUSE: 0xFE BOD=2.0V 本当になかなかリセットがかからない</li>
+<li>EFUSE: 0xFD BOD=2.2V 本当になかなかリセットがかからない</li>
+<li>EFUSE: 0xFC BOD=2.4V なかなかリセットがかからない</li>
+<li>EFUSE: 0xFB BOD=2.6V Leonardo</li>
+<li>EFUSE: 0xF8 BOD=4.3V すぐリセットかかる</li>
+</ul>
+
+<p>HWBE設定(=0 Teensy系)</p>
+
+<ul>
+<li>EFUSE: 0xF6 BOD=2.0V 本当になかなかリセットがかからない</li>
+<li>EFUSE: 0xF5 BOD=2.2V 本当になかなかリセットがかからない</li>
+<li>EFUSE: 0xF4 BOD=2.4V teensy HWBE設定(=0)</li>
 <li>EFUSE: 0xF3 BOD=2.6V チップのデフォルト</li>
 <li>EFUSE: 0xF0 BOD=4.3V すぐリセットかかる</li>
 </ul>
+
+<p>電圧が低くなると、最高動作周波数が落ちるのでプリスケーラー
+設定関係(CLKPRレジスターや、CKDIV8ヒューズ)も配慮がいるかな？</p>
 
 <p>落ちにくくするためにBOD=2.4V teensyを真似しましょう。</p>
 
@@ -355,18 +417,27 @@ BOD電圧です。(確かハイニブルは何を書いてもF-&gt;Cになった
 趣味のデバイスは基本ロック不要です。</p>
 
 <ul>
-<li><p>LOCK:  0x3F=0xFF ロック不要(基本)</p></li>
-
-<li><p>LOCK:  0x2F=0xEF ロック(アプリ書き込み時の上書き防止)</p></li>
+<li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
+<li>LOCK:  0x2F=0xEF ロック(アプリ書き込み時の上書き防止)</li>
 </ul>
 
 <h2 id="atmega32u4のfuse設定のあるべき姿">ATmega32u4のFuse設定のあるべき姿</h2>
 
+<p>Caterina系 4KB</p>
+
+<ul>
+<li>LFUSE: 0xFF  5V 16 MHz Crystal使用</li>
+<li>HFUSE: 0xD8 (BOOTRST非設定　Caterina系 4KB)</li>
+<li>EFUSE: 0xFB BOD=2.6V Leonardo HWBE非設定(=1)</li>
+<li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
+</ul>
+
+<p>teensy系 512B</p>
+
 <ul>
 <li>LFUSE: 0x5F  5V 16 MHz Crystal使用でBOD</li>
-<li>HFUSE: 0xD9 (ブートリセットアドレス=$0000　非設定　Caterina系 4KB)</li>
-<li>HFUSE: 0xDF (ブートリセットアドレス=$0000　非設定 - teensy系 512B)</li>
-<li>EFUSE: 0xF4 BOD=2.4V teensy　なかなかリセットがかからない</li>
+<li>HFUSE: 0xDF (BOOTRST非設定 - teensy系 512B)</li>
+<li>EFUSE: 0xF4 BOD=2.4V teensy HWBE設定(=0)</li>
 <li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
 </ul>
 
@@ -376,11 +447,11 @@ BOD電圧です。(確かハイニブルは何を書いてもF-&gt;Cになった
 
 <ul>
 <li>LFUSE: 0x5F  5V 16 MHz Crystal使用でBOD</li>
-<li>HFUSE: 0xD9 (ブートリセットアドレス=$0000　非設定　8KB)</li>
-<li>HFUSE: 0xDB (ブートリセットアドレス=$0000　非設定　4KB)</li>
-<li>HFUSE: 0xDD (ブートリセットアドレス=$0000　非設定　2KB)</li>
-<li>HFUSE: 0xDF (ブートリセットアドレス=$0000　非設定　1KB)</li>
-<li>EFUSE: 0xF4 BOD=2.4V teensy　なかなかリセットがかからない</li>
+<li>HFUSE: 0xDF (BOOTRST非設定 - teensy系 1KB)</li>
+<li>HFUSE: 0xDD (BOOTRST非設定 - teensy系 2KB)</li>
+<li>HFUSE: 0xDB (BOOTRST非設定 - teensy系 4KB)</li>
+<li>HFUSE: 0xD9 (BOOTRST非設定 - teensy系 8KB)</li>
+<li>EFUSE: 0xF4 BOD=2.4V teensy HWBE設定(=0)</li>
 <li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
 </ul>
 
