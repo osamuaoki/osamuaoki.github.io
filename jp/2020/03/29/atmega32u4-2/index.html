@@ -472,6 +472,20 @@ BOD電圧です。(EFUSEは上位４ビットは何を書いても0xF-&gt;0xCに
 <a href="https://github.com/osamuaoki/avrdude-friend/wiki/AVR-fuse">AVR fuse</a>
 でも見ましょう。</p>
 
+<h2 id="割り込みvector表">割り込みVector表</h2>
+
+<p>起動関係を読んでいて一体どうして割り込みVector表をプログラムするのか
+が最初見えなかった。</p>
+
+<p>割り込みルーチンは<code>ISR(&lt;割り込みVector名&gt;)</code>という名前の関数と
+して定義します。</p>
+
+<p>リンカーがコンパイル時に、この関数にあわせて、スタートアップコード中
+の割り込みVector表に、この割り込みルーチンのアドレスをいれて
+割り込みVector表を完成するらしいと分かって、やっと分かった気が
+しました。だから、<code>blink.lst</code>には見当たらないが、<code>blink.lss</code>等に
+詳しく残っています。</p>
+
 <!-- vim: se ai tw=79: -->
 
 
