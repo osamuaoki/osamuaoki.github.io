@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ATmega32u4 (3) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">ATmega32u4 (3)</span></h1>
+
+<h2 class="date">2020/04/05</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/04/02/git-fork/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>今回も引き続き基本のUSB AVRの
+<a href="https://www.microchip.com/wwwproducts/en/ATmega32u4">ATmega32u4</a>
+を中心としたAVRチップに関して、Teensy 2.0の中華コンパチ評価ボード
+を用いて練習します。</p>
+
+<h2 id="割り込みvector表">割り込みVector表</h2>
+
+<p>Bootloaderからの起動を追いかけて、電源投入(POR)やリセットボタンを
+押された際のMCU処理の流れが気になりました。割り込みVector表がある
+のは分かるのですが、どうして割り込みVector表をプログラムするのか
+がよく見えませんでした。</p>
+
+<p>割り込みルーチンは<code>ISR(&lt;割り込みVector名&gt;)</code>という形で関数として
+定義します。割り込みVector表自体は明示的にプログラムしません。
+後で考えれば「なーんだ」でしたが、リンカーがコンパイル時に、
+この<code>ISR()</code>関数定義にあわせて、コンパイラー提供のスタートアップ
+コード中の確保されている割り込みVector表に、割り込みルーチンの
+アドレスを入れ完成するらしいと分かりました。確かによく見ると
+割り込みVector表は、<code>blink.lst</code>に見当たらないが、<code>blink.lss</code>等
+に定義されています。</p>
+
+<h2 id="isp接続とusb接続の干渉問題">ISP接続とUSB接続の干渉問題</h2>
+
+<p>ISP接続でブートローダーを導入した上で、その動作をUSB経由接続でアプリケーション
+のファームウエアーを導入して試そうとして見た際に、何度やっても電源投入で
+ファームウエアーが立ち上がらず、ブートローダーが立ち上がって悩みました。</p>
+
+<p>問題はISP接続のリセット線が繋がっていたことです。通電時でも0.5Vぐらいの端子の
+ため、リセット線がPULL-DOWNされてリセットボタンが押されたのと同じ状態になって
+MCUが停止していたようです。さらにややこしくしたのは改造ISPではプログラマーの
+電圧検知端子がプログラマーのVCCに繋がっているので、評価ボードからプログラマー
+に電気が供給され、電圧の高いリセットボタンが離された状態に一時的にでもなるのか
+単にMCUの実行が止まるのではなくちゃんとリセットがかかり、ブートローダーが
+立ち上がるようです。</p>
+
+<p>少なくとも、プログラマーからのISP接続のリセット線だけは評価ボードから抜く
+必要があります。まあ、VCCに繋がっている線も念のため抜くべきです。これらが
+<a href="/jp/2020/03/29/atmega32u4-2/">ATmega32u4 (2) ISP接続</a>
+の「（使わないときは抜く）」という表記の背景です。</p>
+
+<h2 id="led点滅-lチカ">LED点滅 (Lチカ)</h2>
+
+<p>まず、ブートローダー動作確認用にATmega32u4用に単純なLEDの点滅（通称Lチカ）
+というアプリケーションのファームウエアーのコードをPD0:PD7ピン全部を点滅
+させるように書き換えます。こうすることでLチカが、このアプリケーションに
+よるのか、それともブートローダー中のコードによるのかを、外部LED挙動で
+簡単に判別できるようになります。</p>
+
+<pre><code>#define F_CPU 16000000UL
+
+#include &lt;avr/io.h&gt;
+#include &lt;util/delay.h&gt;
+
+int main(void) {
+  CLKPR = 0x80;
+  CLKPR = 0; // set cpu prescale to 1 (disable CKDIV8)
+  DDRD = 0xff;
+  while (1) {
+    PORTD = 0xff;
+    _delay_ms(100);  // 0.1 ms delay
+    PORTD = 0;
+    _delay_ms(1000);  // 1.0 s delay
+  }
+}
+</code></pre>
+
+<p>ここで、<a href="/jp/2020/03/03/atmega328p-2/">Atmega328Pの場合</a>
+との大きな違いは、最初の<code>CLKPR</code>への書き込みの2行です。これは、
+FUSEがCKDIV8と設定された際にCPU供給周波数が分周され2MHzで
+ゆっくり走るので、ソフトからこの設定を解除し、CPU供給周波数を
+確実に全速の16MHzに設定しています。これがないと、超低速Lチカ
+になってしまいます。</p>
+
+<p>実際には、これをベースに
+<a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/003_m32u4/blink1">1回光る blink1</a>
+と
+<a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/003_m32u4/blink2">2回光る blink2</a>
+の２つのコードを作成しました。もちろんこれらの中の<code>Makefile</code>は、<code>MCU = atmega32u4</code>としています。</p>
+
+<p>AVRISP mkIIを用いて、ATmega328Pと同じように<code>make program</code>を実行すれば
+<a href="/jp/2020/03/29/atmega32u4-2/">FUSEテストと同じISP接続</a>
+でプログラムできます。</p>
+
+<p>一度プログラムできると、ISP接続をキチッと外し（単に
+ISPプログラマーをPCから抜くのではなく評価ボード側の
+少なくともリセットと電源供給を外す）、ミニUSBコネクター
+でPCとケーブル接続すると、PCから電源供給されLチカが始まります。</p>
+
+<h2 id="lufaブートローダー-4kb-each">LUFAブートローダー (4KB each)</h2>
+
+<p>USB AVRのブートローダーには基本3種類あります。まず基本3種類すべてを提供
+しているLUFAのソースをforkして、ブランチ<code>teensy2</code>を作成し、そこで
+Teensy 2.0なのでATmega32u4/16MHzをターゲットに設定を書き換え、CDC、
+HID、DFUの3種類すべてをコンパイルし、結果も保存しました。</p>
+
+<ul>
+<li><p><a href="https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result">https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result</a></p>
+
+<pre><code>dec  hex filename          programmer
+3886  f2e BootloaderCDC.hex avrdude -c avr109
+3938  f62 BootloaderDFU.hex dfu-programmer
+2118  846 BootloaderHID.hex hid_bootloader_cli
+</code></pre></li>
+</ul>
+
+<p>いずれも、2KB-4KBの間です。</p>
+
+<p>CDCは、<a href="https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/32U4Note.pdf">アプリのファームウエアーの実行のリセットがスマートにできる</a>
+いい感じのSparkfanの改造版Caterina CDCがあるのですが、
+<a href="https://github.com/sparkfun/Arduino_Boards/">https://github.com/sparkfun/Arduino_Boards/</a>
+にあったバイナリーにTeensyのLEDに対応するものがなかったので
+今回はパスします。</p>
+
+<h2 id="nanoboot-512b">nanoBoot (512B)</h2>
+
+<p><a href="https://github.com/volium/nanoBoot">nanoBo</a>
+は512 Byteに収まる小さな優れものBootloaderです。これはm
+LUFA HIDブートローダーをハンドオプティマイズしたものです。
+ただし、オリジナルはCKDIV8と非設定限定だったので、本物の
+<a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
+と同じFUSE設定では使えません。そこでフォークした
+<a href="https://github.com/osamuaoki/nanoBoot">nanoBoot</a>
+を作りました。これなら、中華コンパチ評価ボードを本物の
+<a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
+と同じFUSE設定で使えるはずです。もちろん512 Byteに収ま
+っています。</p>
+
+<p>これもコンパイルし、この結果もフォークした上記のLUFAのブランチに保存しました。</p>
+
+<ul>
+<li><a href="https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result">https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result</a></li>
+</ul>
+
+<h2 id="hid-bootloader-cli"><code>hid_bootloader_cli</code></h2>
+
+<p>LUFAのhid bootloaderに対応する、ホストPC側のプログラムです。
+Debianでコンパイルするには、<code>libusb-dev</code>パッケージが導入されている
+必要があります。</p>
+
+<p>これもコンパイルし、この結果もフォークした上記のLUFAのブランチに保存しました。</p>
+
+<ul>
+<li><a href="https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result">https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result</a></li>
+</ul>
+
+<!-- vim: se ai tw=79: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/04/02/git-fork/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
