@@ -296,6 +296,15 @@ $ git checkout master
 GITHUBやGITLAB上でウエッブページを使いフォークしないとPULL request等
 のウエッブ連携操作に支障がでる恐れがあります。</p>
 
+<h4 id="default-branch">Default branch</h4>
+
+<p>ブランチ名を変えずにフォークしたレポの「<code>master</code>」は、アップストリーム
+の「<code>master</code>」を同じ内容なので、オープニングのページで表示される
+<code>README.MD</code>がアップストリームを同じ内容になります。これでは折角のフォークが
+隠れてしまいます。これは、ログインしてGITHUBやGITLABの設定に入り、
+Default branch（デフォルトのブランチ）をもとの「<code>master</code>」ではない、
+フォークした内容がコミットされたブランチに設定することで解決します。</p>
+
 <h3 id="自由なブランチ名の設定">自由なブランチ名の設定</h3>
 
 <p>また、例えば<code>gitk</code>で見つけた既存のリモートブランチ（例えば<code>gitk</code>が
