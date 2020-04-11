@@ -170,15 +170,16 @@ HID、DFUの3種類すべてをコンパイルし、この結果も
 <h2 id="nanoboot改led-512b">nanoBoot改LED (512B)</h2>
 
 <p>元々の<a href="https://github.com/volium/nanoBoot">nanoBoot</a>
-は512 Byteに収まる小さな優れものBootloaderです。これはm
-LUFA HIDブートローダーをハンドオプティマイズしたものです。
-ただし、オリジナルはCKDIV8と非設定限定で、LED点灯での
+は512 Byteに収まる小さな優れものBootloaderです。これは
+LUFA HIDブートローダーを徹底的にハンドオプティマイズしたものです。
+ただし、オリジナルはCKDIV8と非設定限定で、LEDでの
 ブートローダーの起動確認もできませんでした。本物の
 <a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
-と同じFUSE設定では使えませんでした。非常に丁寧にコメントが書き込まれている
-アッセンブラーの手動最適化手法が満載の素晴らしいコードとコメントでした。</p>
+と同じFUSE設定では使えませんでした。それにつけても
+非常に丁寧にコメントが書き込まれているアッセンブラーの
+手動最適化手法が満載の素晴らしいコードとコメントでした。</p>
 
-<p>自分が欲しい機能のCKDIV8対応とLED点灯でのブートローダー
+<p>自分が欲しい機能のCKDIV8対応と、LED点灯でのブートローダー
 の起動確認を何とか押し込むように、限られたスペースに押し込む
 パズル感覚のコーディングで、フォークした
 <a href="https://github.com/osamuaoki/nanoBoot">nanoBoot改 LED付</a>
@@ -186,7 +187,8 @@ LUFA HIDブートローダーをハンドオプティマイズしたものです
 <a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
 と同じFUSE設定で使えるし、ブートローダー
 の起動確認もLEDで確実にでき快適です。もちろん512 Byteに収ま
-っています。</p>
+っています。また、8MHzでコンパイルすると510 Byteに収ま
+ります。</p>
 
 <p>コンパイル結果も含めて、
 <a href="https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result">フォークしたLUFAのブランチ</a>
@@ -261,7 +263,7 @@ Debianでコンパイルするには、<code>libusb-dev</code>パッケージが
 <tr>
 <td><code>BootloaderCDC.hex</code></td>
 <td>4KB</td>
-<td>LED点滅あり</td>
+<td>LED　点滅で確認</td>
 <td><code>avrcdc</code></td>
 <td>良好</td>
 </tr>
@@ -269,7 +271,7 @@ Debianでコンパイルするには、<code>libusb-dev</code>パッケージが
 <tr>
 <td><code>BootloaderDFU.hex</code></td>
 <td>4KB</td>
-<td>LED点滅あり</td>
+<td>LED　点滅で確認</td>
 <td><code>avrdfu1</code></td>
 <td>良好</td>
 </tr>
@@ -277,7 +279,7 @@ Debianでコンパイルするには、<code>libusb-dev</code>パッケージが
 <tr>
 <td><code>BootloaderDFU.hex</code></td>
 <td>4KB</td>
-<td>LED点滅あり</td>
+<td>LED　点滅で確認</td>
 <td><code>avrdfu2</code></td>
 <td>良好</td>
 </tr>
@@ -285,7 +287,7 @@ Debianでコンパイルするには、<code>libusb-dev</code>パッケージが
 <tr>
 <td><code>BootloaderHID.hex</code></td>
 <td>4KB</td>
-<td>LED点滅なし</td>
+<td>LED　変化なし</td>
 <td><code>avrhid</code></td>
 <td>良好</td>
 </tr>
@@ -293,7 +295,7 @@ Debianでコンパイルするには、<code>libusb-dev</code>パッケージが
 <tr>
 <td><code>nanoBoot.hex</code>(w/LED)</td>
 <td>512B</td>
-<td>LED点灯確認</td>
+<td>LED　点灯で確認</td>
 <td><code>avrhid</code></td>
 <td>良好</td>
 </tr>
