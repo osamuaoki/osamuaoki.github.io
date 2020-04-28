@@ -75,7 +75,7 @@
 詳細なデーター差分の検出には大きな労力が必要な割に、詳細な差分は
 サイズも大きくなりがちでメリットが少ないという特徴があります。</p>
 
-<p>そこで大きなファイルは、Gitの本体で直接扱うこと止め、労力とのバランス
+<p>そこで大きなファイルは、Gitの本体で直接扱かわずに、労力とのバランス
 を考えGitの上に構築したGit Annexで扱うのが望ましいです。Git Annexでは
 データー保存の効率化対象を単純なファイルの重複保存や世代間のファイル
 の位置移動に絞ります。この制約の下では、ファイル実体によって決まる
@@ -96,7 +96,7 @@ unlock機能と、Git Annexに編集結果を戻すlock機能を提供します�
 
 <p>さらにGit Annexは、「特定パスに保存する」という部分に関して、
 「分散保存を管理するインフラを提供する」とすることで、すべての
-分散管理レポジトリーのローカルに全ファイルを保持しなくても良い
+分散管理レポジトリー内に全ファイルを保持しなくても良い
 とします。ここは全ファイルを保持する本来のGitレポジトリーと
 大きく異なるところです。Git Annexは、分散管理レポジトリー間で
 それぞれが保存するファイルに関するメタ情報を交換するインフラも
@@ -151,10 +151,10 @@ $ git annex init &quot;my laptop&quot;
 <p>Git Annexレポジトリーは、上記のように区別できるdescriptionを与えることが
 望ましいです。</p>
 
-<p>最初に設定の有無に関わらず、<code>git annex describe &quot;my laptop&quot;</code>
-と後からdescriptionを設定・変更できます。</p>
+<p>最初のdescription設定に関わらず、<code>git annex describe &quot;my laptop&quot;</code>
+と後からも設定・変更できます。</p>
 
-<h3 id="git-annexへのファイル実体の追加-add">Git Annexへのファイル実体の追加(add)</h3>
+<h3 id="ファイル実体のgit-annexへの追加-add">ファイル実体のGit Annexへの追加(add)</h3>
 
 <p>作業ディレクトリーツリー中にGit Annexに管理させる新規ファイル
 <code>foo</code>を追加するのは、ファイルを目的位置に移動し、その場所で</p>
@@ -193,12 +193,12 @@ $ git annex init &quot;my laptop&quot;
 移動・複製する際には、ファイルの内容には変更が無いので、
 Git AnnexのコマンドではなくGitのコマンド操作で充分です。</p>
 
-<p>移動:</p>
+<h4 id="移動">移動:</h4>
 
 <pre><code>$ git mv foo bar
 </code></pre>
 
-<p>複製:</p>
+<h4 id="複製">複製:</h4>
 
 <pre><code>$ git cp foo bar
 </code></pre>
@@ -233,7 +233,7 @@ $ cd ~/annex
 $ git remote add usbdrive /media/usb/annex
 </code></pre>
 
-<h3 id="git-annexレポジトリーの同期-sync">Git Annexレポジトリーの同期(sync)</h3>
+<h3 id="git-annexレポジトリー間の同期-sync">Git Annexレポジトリー間の同期(sync)</h3>
 
 <p>Git Annexが管理する大きなデーターのレポジトリー間の操作の前に、
 大きなデーターに関するメタデーターを、登録されたリモートレポジトリー
@@ -258,7 +258,7 @@ $ git annex sync
 <p>メタデーターだけでなく、Git Annexが管理するファイル実体の更新も同時
 に行いたい時には<code>git annex sync --content</code>とします。</p>
 
-<h3 id="git-annexレポジトリー間のファイル実体の外への移動-move">Git Annexレポジトリー間のファイル実体の外への移動(move)</h3>
+<h3 id="ファイル実体のgit-annexレポジトリー間移動-move">ファイル実体のGit Annexレポジトリー間移動(move)</h3>
 
 <p>USBメモリーを差し込んだまま、laptop上の<code>~/annex</code>にあるGit Annex
 レポジトリーから<code>my_cool_big_file1</code>をusbdriveに移動(move)するには
@@ -268,7 +268,7 @@ $ git annex sync
 $ git annex move my_cool_big_file1 --to usbdrive
 </code></pre>
 
-<h3 id="git-annexレポジトリー間のファイル実体の外への複製-copy">Git Annexレポジトリー間のファイル実体の外への複製(copy)</h3>
+<h3 id="ファイル実体のgit-annexレポジトリー間複製-copy">ファイル実体のGit Annexレポジトリー間複製(copy)</h3>
 
 <p>USBメモリーを差し込んだまま、laptop上の<code>~/annex</code>にあるGit Annex
 レポジトリーから<code>my_cool_big_file2</code>をusbdriveに複製(copy)するには
@@ -278,7 +278,7 @@ $ git annex move my_cool_big_file1 --to usbdrive
 $ git annex copy my_cool_big_file2 --to usbdrive
 </code></pre>
 
-<h3 id="git-annexのファイル実体の削除-drop">Git Annexのファイル実体の削除(drop)</h3>
+<h3 id="ファイル実体のgit-annexレポジトリーからの削除-drop">ファイル実体のGit Annexレポジトリーからの削除(drop)</h3>
 
 <p>USBメモリーを差し込んだまま、laptop上の<code>~/annex</code>にあるGit Annex
 レポジトリーから<code>my_cool_big_file2</code>ファイル実体を削除(drop)する
@@ -291,7 +291,7 @@ $ git annex drop my_cool_big_file2
 <p>この時もしUSBメモリーを差し込んでいないと、Git Annexは重複データー
 の存在を確認できないので削除を拒否します。</p>
 
-<h3 id="git-annexレポジトリー間のファイル実体の外からの獲得-get">Git Annexレポジトリー間のファイル実体の外からの獲得(get)</h3>
+<h3 id="ファイル実体の他git-annexレポジトリーからの獲得-get">ファイル実体の他Git Annexレポジトリーからの獲得(get)</h3>
 
 <p>USBメモリーを差し込んだまま、laptop上の<code>~/annex</code>にあるGit Annex
 レポジトリーのファイル実体がなくなりダングリングシムリンクとなった
@@ -305,22 +305,29 @@ $ git annex get my_cool_big_file2
 <p>この時もしUSBメモリーを差し込んでいないと、Git Annexは外部の重複
 データーにアクセスできない旨のメッセージを表示します。</p>
 
-<h3 id="git-annexレポジトリーの未使用ファイル実体の整理-unused">Git Annexレポジトリーの未使用ファイル実体の整理(unused)</h3>
+<h3 id="未使用ファイル実体のgit-annexレポジトリーからの整理-unused">未使用ファイル実体のGit Annexレポジトリーからの整理(unused)</h3>
 
 <p>Git Annexレポジトリーの未使用ファイル実体の確認は以下のように操作します。</p>
 
 <pre><code>$ git annex unused
 </code></pre>
 
-<p>未使用ファイルを効率的に<code>drop</code>するには、例えば以下のように操作します。</p>
+<p>未使用ファイルを効率的にGit Annexレポジトリーから削除<code>drop</code>するには、
+例えば以下のように操作します。</p>
 
 <pre><code>$ git annex dropunused 1-1000
 </code></pre>
 
-<p>未使用ファイルを効率的に<code>copy</code>や<code>move</code>するには、以下のように操作します。</p>
+<p>未使用ファイルを効率的に移動<code>move</code>や複製<code>copy</code>するには、以下のように操作します。</p>
+
+<h4 id="移動-1">移動:</h4>
+
+<pre><code>$ git annex move --unused --to archive
+</code></pre>
+
+<h4 id="複製-1">複製:</h4>
 
 <pre><code>$ git annex copy --unused --to backup
-$ git annex move --unused --to archive
 </code></pre>
 
 <h2 id="git-annexの実操作ヒント">Git Annexの実操作ヒント</h2>
@@ -349,19 +356,20 @@ $ git annex move --unused --to archive
 
 <p>デフォルトは N=1 です。レポジトリーの
 <a href="https://git-annex.branchable.com/trust/">信頼性</a>
-にも注意しましょう。
-<code>.gitattributes</code>ファイルを使って、ファイル毎にオーバーライドできます。</p>
+にも注意しましょう。</p>
 
-<p><a href="https://git-annex.branchable.com/walkthrough/backups/">情報源</a></p>
+<p><code>.gitattributes</code>ファイルを使って、ファイル毎にオーバーライドできます。
+&ndash; <a href="https://git-annex.branchable.com/walkthrough/backups/">情報源</a></p>
 
 <h3 id="git-annexレポジトリーのファイルの探索や適度の冗長保存">Git Annexレポジトリーのファイルの探索や適度の冗長保存</h3>
 
-<p>以下でローカルに無いファイルの探索をします。</p>
+<p>保存状況の重複も含めた探索確認を以下でします。</p>
 
 <pre><code>$ git annex whereis
 </code></pre>
 
-<p>適度の冗長保存は以下でできます。</p>
+<p>例えばそれぞれ2つづつの適度の冗長保存は以下でできます。
+&ndash; <a href="https://git-annex.branchable.com/walkthrough/automatically_managing_content/">情報源</a></p>
 
 <pre><code>$ git annex get --auto --numcopies=2
  ...
@@ -369,16 +377,13 @@ $ git annex drop --auto --numcopies=2
  ...
 </code></pre>
 
-<p><a href="https://git-annex.branchable.com/walkthrough/automatically_managing_content/">情報源</a></p>
-
 <h3 id="git-annexレポジトリーの整合性確認">Git Annexレポジトリーの整合性確認</h3>
 
-<p>レポジトリーデーターの整合性確認は以下のように操作します。</p>
+<p>レポジトリーデーターの整合性確認は以下のように操作します。
+&ndash; <a href="https://git-annex.branchable.com/walkthrough/fsck__58___verifying_your_data/">情報源</a></p>
 
 <pre><code>git annex fsck
 </code></pre>
-
-<p><a href="https://git-annex.branchable.com/walkthrough/fsck__58___verifying_your_data/">情報源</a></p>
 
 <h3 id="git-annexレポジトリーの変更回復-undo">Git Annexレポジトリーの変更回復(undo)</h3>
 
@@ -390,11 +395,16 @@ $ git annex drop --auto --numcopies=2
 
 <p>ダングリングシムリンクがあると混乱するソフト
 (例えばDebian 10 BusterのShotwell 0.30.1)には、
-<a href="https://git-annex.branchable.com/tips/hiding_missing_files/">ダングリングシムリンクを削除</a>
-して対応できます。</p>
+ダングリングシムリンクを削除して対応できます。
+&ndash; <a href="https://git-annex.branchable.com/tips/hiding_missing_files/">情報源</a></p>
 
 <pre><code>$ git annex adjust --hide-missing
 </code></pre>
+
+<h3 id="git-config-と-git-annex-config-の違い"><code>git config</code>と<code>git annex config</code>の違い</h3>
+
+<p><code>git config</code>の設定はコマンドを実行したレポジトリーにのみ有効だが、
+<code>git annex config</code>の設定はクローンしたレポジトリーにも有効です。</p>
 
 <h3 id="ハードリンク利用によるディスクスペース節約">ハードリンク利用によるディスクスペース節約</h3>
 
@@ -404,7 +414,7 @@ $ git annex drop --auto --numcopies=2
 <p>同一ファイルシステム上のレポジトリー間だと下記のように設定した
 共有cacheをハードリンクを利用して作成してダウンロードとディスク
 スペースの両方を節約できます。
-<a href="https://git-annex.branchable.com/tips/local_caching_of_annexed_files/">情報源</a></p>
+&ndash; <a href="https://git-annex.branchable.com/tips/local_caching_of_annexed_files/">情報源</a></p>
 
 <pre><code>$ git config annex.hardlink true
 $ git annex untrust here
@@ -412,23 +422,23 @@ $ git annex untrust here
 
 <p>Unlockした作業ディレクトリー中のファイルとGit Annexのレポジトリー間
 だとハードリンクを利用してディスクスペースを節約できます。
-<a href="https://joeyh.name/blog/entry/git-annex_v6/">情報源</a></p>
+&ndash; <a href="https://joeyh.name/blog/entry/git-annex_v6/">情報源</a></p>
 
 <pre><code>$ git config annex.thin true
 $ git annex fix
 </code></pre>
 
-<h3 id="git-annexとgit間のファイル保存と管理の自動振り分け">Git AnnexとGit間のファイル保存と管理の自動振り分け</h3>
+<h3 id="ファイルの自動振り分け保存">ファイルの自動振り分け保存</h3>
 
 <p>作業ディレクトリーツリー中に異種のコンテントを含み、
 コンテント内容によってGit AnnexとGitのいずれかに保存したい
-際に、これを自動化できる設定があります。</p>
+際には、これを設定で自動化できます。</p>
 
 <ul>
-<li>Git側の設定<a href="https://git-annex.branchable.com/git-annex-smudge/">情報源</a></li>
-<li>Git Annex側の設定<a href="https://git-annex.branchable.com/tips/largefiles/">情報源</a></li>
-<li>設定を利用する上での課題<a href="https://git-annex.branchable.com/todo/git_smudge_clean_interface_suboptiomal/">情報源</a></li>
-<li>メカニズム説明<a href="http://hackage.haskell.org/package/git-annex-3.20110915/src/debian/git-annex/usr/share/doc/git-annex/html/todo/smudge.html">情報源</a></li>
+<li>Git側の設定 &ndash; <a href="https://git-annex.branchable.com/git-annex-smudge/">情報源</a></li>
+<li>Git Annex側の設定 &ndash; <a href="https://git-annex.branchable.com/tips/largefiles/">情報源</a></li>
+<li>設定を利用する上での課題 &ndash; <a href="https://git-annex.branchable.com/todo/git_smudge_clean_interface_suboptiomal/">情報源</a></li>
+<li>メカニズム説明 &ndash; <a href="http://hackage.haskell.org/package/git-annex-3.20110915/src/debian/git-annex/usr/share/doc/git-annex/html/todo/smudge.html">情報源</a></li>
 </ul>
 
 <h3 id="ファイルパーミッションやタイムスタンプ">ファイルパーミッションやタイムスタンプ</h3>
@@ -438,12 +448,18 @@ $ git annex fix
 タイムスタンプの違いが区別されないはずなので、そこは理解して使うのが
 良いようです。</p>
 
+<h3 id="暗号化保存">暗号化保存</h3>
+
+<p>git-remote-gcryptパッケージを導入するとgpgを使った暗号化保存ができます。
+&ndash; <a href="https://git-annex.branchable.com/tips/fully_encrypted_git_repositories_with_gcrypt/">情報源</a></p>
+
 <h3 id="metadataとview">MetadataとView</h3>
 
 <p>まだよく分からないが、Git Annexの
-<a href="https://git-annex.branchable.com/design/metadata/">MetadataとView</a>
+<a href="https://git-annex.branchable.com/design/metadata/">Metadata</a>と
+<a href="https://git-annex.branchable.com/tips/metadata_driven_views/">View</a>
 は面白そうです。GUIエディターもあるようです。
-<a href="https://github.com/alpernebbi/git-annex-metadata-gui">Git-Annex-Metadata-Gui</a></p>
+&ndash; <a href="https://github.com/alpernebbi/git-annex-metadata-gui">Git-Annex-Metadata-Gui</a></p>
 
 <!-- vim: se ai tw=79: -->
 
