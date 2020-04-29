@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>dmesg for SATA | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">dmesg for SATA</span></h1>
+
+<h2 class="date">2020/04/29</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/10/21/fish-shell-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>After having a loose SATA cable problem and fixed it, I happen to see <code>dmesg</code>
+as:</p>
+
+<pre><code>$ sudo dmesg
+ ...
+[    2.373152] sd 0:0:0:0: [sda] 937703088 512-byte logical blocks: (480 GB/447 GiB)
+[    2.373156] sd 0:0:0:0: [sda] Write Protect is off
+[    2.373158] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00
+[    2.373165] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+[    2.373173] sd 2:0:0:0: [sdb] 468862128 512-byte logical blocks: (240 GB/224 GiB)
+[    2.373179] sd 2:0:0:0: [sdb] Write Protect is off
+[    2.373180] sd 2:0:0:0: [sdb] Mode Sense: 00 3a 00 00
+[    2.373185] sd 2:0:0:0: [sdb] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
+...
+</code></pre>
+
+<p>This <code>doesn't support DPO or FUA</code> caught my attention.</p>
+
+<p>I thought this is normal but just to be absolutely sure, I googled.</p>
+
+<ul>
+<li>Conclusion: Normal and no problem</li>
+<li>Reason: <a href="https://linux-ide.vger.kernel.narkive.com/xwztlYxD/sata-is-dpo-and-fua-ever-supported">Linux has all the support code but it is disabled by default for DPO or FUA</a></li>
+</ul>
+
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2019/10/21/fish-shell-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
