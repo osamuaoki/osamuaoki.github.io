@@ -255,6 +255,9 @@ $ cd ~/annex
 $ git remote add usbdrive /media/usb/annex
 </code></pre>
 
+<p>注: 上記では分かり易い様に<code>laptop</code>という<code>remote</code>を設定しているが、わざわざ
+設定しなくとも<code>clone</code>しているので<code>origin</code>という<code>remote</code>が設定されている。</p>
+
 <h3 id="git-annexレポジトリー間の同期-sync">Git Annexレポジトリー間の同期(sync)</h3>
 
 <p>Git Annexが管理する大きなデーターのレポジトリー間の操作の前に、
@@ -510,6 +513,34 @@ gitを直接操作する手法もあります。
 <a href="https://git-annex.branchable.com/tips/metadata_driven_views/">View</a>
 は面白そうです。GUIエディターもあるようです。
 &ndash; <a href="https://github.com/alpernebbi/git-annex-metadata-gui">Git-Annex-Metadata-Gui</a></p>
+
+<h2 id="git-annexを使っての所感">Git Annexを使っての所感</h2>
+
+<p>ちょっと使ってみただけなので、判断が怪しいところがありますが、現状の所感をまとめてみました。</p>
+
+<p>Git Annexの良い点は:</p>
+
+<ul>
+<li>基本ユーザーランドコマンドだけで動く</li>
+<li>gitと透過的に連携できる分散dedup保存ができるファイルレポジトリーを提供 → source code 中に<code>git-submodule</code>の乗りで大データーを読み込みたいときに便利かな？</li>
+<li>汎用クラウドストレージを使って、改変履歴が残るファイルレポジトリーが提供できます</li>
+<li>大ファイルに便利な部分チェックアウト機能があり、保存数管理もできます</li>
+</ul>
+
+<p>ちょっと使ったあとのGit Annexの所感は:</p>
+
+<ul>
+<li>git annexのコマンド操作が複雑で、ハッシュ照合が遅く、簡単に透過的に使うのにはハードルが高い印象が残りました</li>
+<li>写真の場合ならユーザーランドのアプリ(shotwell)がデーターをimportする際に日付などを使って適当なディレクトリーに読み込みdupチェックをすれば、改変履歴対応はbtrfs等を使えるので充分の気がしました</li>
+<li>文書ファイル等などの、dedup問題・圧縮問題もファイルシステム(btrfs等)で対応可能な気がしました</li>
+<li>共有バックアップ用ファイルレポジトリーならスナップショット履歴ができるファイルシステムと、web/ssh/rsyncのいずれかのserverと、cronを組み合わせる事などでも、改変履歴対応や部分チェックアウトが可能の気がしました</li>
+</ul>
+
+<p>因みにDebianにある、バックアップツール以外の気になるdedupツールは<code>fdupes</code>, <code>jdupes</code>, <code>duperemove</code>, <code>duff</code>, <code>hardlink</code>, <code>rdfind</code>, <code>rmlint</code>, <code>rmlint-gui</code>でした。
+歴史的には圧倒的に<a href="https://qa.debian.org/popcon-graph.php?packages=fdupes+jdupes+duperemove+duff+hardlink+rdfind+rmlint+rmlint-gui&amp;show_vote=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">fdupes</a>が人気ですが、
+最近(2020年5月)は<a href="https://qa.debian.org/popcon-graph.php?packages=jdupes+duperemove+duff+hardlink+rdfind+rmlint+rmlint-gui&amp;show_vote=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">jdupesが急に伸びてきていますし、duperemoveやduffやrmlint-guiも健闘しています</a>。</p>
+
+<p>画像が同じだが日付等変更をしたEXIFファイルの重複検出は目に入らなかったので、昔書いたスクリプトをここに特化して書き直すのも良いかもと思いました。</p>
 
 <!-- vim: se ai tw=79: -->
 
