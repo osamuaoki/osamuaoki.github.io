@@ -227,49 +227,75 @@ $ git branch new_branch_name HEAD@{6}
 
 <h2 id="gitブランチ操作の応用例">GITブランチ操作の応用例</h2>
 
-<h3 id="debianのパッケージング操作">Debianのパッケージング操作</h3>
+<h3 id="作業中履歴の非公開保存">作業中履歴の非公開保存</h3>
 
-<p>Debianのパッケージング操作等では、自分が管理するリモートのレポ上の
-「<code>upstream</code>」と「<code>master</code>」というブランチ名を普通特定用途に用いて
-います。だからアップストリームの「<code>master</code>」ブランチを追跡する
-ブランチの名前をこれら以外から選ぶ必要があります。</p>
+<p>作業中履歴をそのままリモートの公開共有レポに残すと、履歴が錯綜し
+他の人に迷惑で、初歩的ミスが晒され格好も悪いし、コードをレビュー
+しにくしてしまいます。</p>
 
-<p>例えばフォークされたレポの「<code>upstream-master</code>」を追跡に用いる
-ブランチの名前とします。「<code>upstream-master</code>」ブランチのコンテント
-をアップストリームのコンテントに同期させる操作は次のようになります。</p>
+<p>作業中履歴はローカルもコミットだけにして、<code>git rebase</code>して綺麗に
+したあとの履歴をリモートの公開共有レポにアップするのが普通かと理解
+しています。ただそれだと作業途中のローカルを失うと全て無くなって
+しまいます。もちろんローカルのバックアップが残っていれば良い
+タイミングでされていれば良いのですが、それを保証するのは難しい
+面があります。またHDDやSSDというものはいつ死んでも不思議はない
+ので、同一デバイス上のスナップショット記録等は当てにすべきでは
+ありません。</p>
 
-<pre><code>$ git clone https://upstream_site/repo_name.git
+<p>そんな場合<code>master</code>にコミットする代わりに作業用のブランチとして
+例えば<code>wip</code>を作成し作業中履歴をそこにコミットし<code>git push</code>す
+る回避策が考えられます。ただそれでも他人に見られるので格好は良
+くないことは否めません。</p>
+
+<p>またDebianのパッケージング操作で、<code>gbp ...</code>等を使用する場合ツール
+インフラ上ブランチ名を作業用のブランチ名に変えるのを避けたい事も
+あります。</p>
+
+<p>そんな場合の簡単な解決法は、USBメモリー等に作った非公開レポの利用
+です。</p>
+
+<pre><code>$ cd /path/to
+$ git clone https://some_site/repo_name.git
 $ cd repo_name
-$ git branch upstream-master
-$ git remote rename origin upstream
-$ git remote set-url --push upstream DISABLED_FOR_PUSH
-$ git remote add origin git@salsa.debian.org:myname/repo_name.git
-$ git push -u origin
- ...
-$ git checkout upstream-master
-$ git fetch -p upstream
-$ git pull upstream master
-$ git push origin upstream-master
-$ git checkout master
+$ git remote set-url --push origin DISABLED_FOR_PUSH
+$ mkdir -p /media/usbmemory/repo_name
+$ cd /media/usbmemory/repo_name
+$ git init --bare
+$ cd /path/to/repo_name
+$ git remote add usbmemory /media/usbmemory/repo_name
+$ git push --all -u usbmemory
+</code></pre>
+
+<p>ここまですれば、作業中履歴がそのまま非公開レポにも記録され
+るようになっています。またうっかり公開レポに<code>git push</code>しないよ
+うに、安全錠を掛けています。</p>
+
+<pre><code>... hack source
+$ git push --all
+$ git fetch -p origin
+$ git rebase -i origin/master
+... gack more
+$ git push --all
+</code></pre>
+
+<p>上記のように作業中を進め、要点毎に非公開レポにも記録します。さらに
+念のため公開レポの<code>master</code>の最新内容に<code>git rebase</code>して同期していき
+ます。作業結果が満足となった時点で、安全錠を外して公開レポに綺麗な
+形で<code>git push</code>します。</p>
+
+<pre><code>$ git remote set-url --delete --push origin &quot;&quot;
+$ git push -u origin master
 ...
 </code></pre>
 
-<p>上記でローカルの「<code>upstream-master</code>」ブランチが、アップストリームの
-リモートの「<code>master</code>」ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」
-と表示)を追跡するようになります。</p>
+<p>ここで、２回行った<code>git remote set-url ...</code>操作は間違ってリモートの
+公開共有レポにアップするのを防ぐオプショナルな操作で必須ではありませ
+ん。ただ<code>git version 2.26.2</code>では<code>--delete</code>操作が少々トリッキーでした。
+単純に<code>.git/config</code>ファイルの<code>pushurl</code>設定行を消す方が確実な気がしま
+した。</p>
 
-<p>また、ローカルの「<code>upstream-master</code>」ブランチは、自分のリモートの
-「<code>upstream-master</code>」ブランチ(<code>gitk</code>が「<code>remotes/origin/upstream-master</code>」
-と表示)にpushされ保存されます。</p>
-
-<p>push対象のローカルの「<code>upstream-master</code>」ブランチが、現在Checkoutしている
-デフォルトブランチで、push先のリモートでもブランチ名が同じ
-「<code>upstream-master</code>」だから、pushの際のコマンドラインへの入力文字列
-をかなり省略できるので短くて済んでます。</p>
-
-<p>上記の後半の操作を繰り返すことで、ローカルの「<code>upstream-master</code>」が、
-常にアップストリームが更新するアップストリームのリモートの「<code>master</code>」
-ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」と表示)を追跡していけます。</p>
+<p>非公開レポはUSBメモリーではなく、<code>ssh</code>と<code>git</code>が使えるサーバーに作って
+も良いでしょう。</p>
 
 <h3 id="github-gitlab">GITHUB/GITLAB</h3>
 
@@ -344,6 +370,60 @@ branch.bar.merge=refs/heads/baz
 べきです。(ここで「<code>bar</code>」ブランチを同じ「<code>bar</code>」の名前でリモート
 にpushするなら、本例の<code>git push</code>コマンドラインの最後引数は<code>bar</code>と
 書くだけに省略できます。)</p>
+
+<h3 id="debianのパッケージング操作の場合">Debianのパッケージング操作の場合</h3>
+
+<p>Debianのパッケージング操作等では、自分が管理するリモートのレポ上の
+「<code>upstream</code>」と「<code>master</code>」というブランチ名を普通特定用途に用いて
+います。だからアップストリームの「<code>master</code>」ブランチを追跡する
+ブランチの名前をこれら以外から選ぶ必要があります。</p>
+
+<p>例えばフォークされたレポの「<code>upstream-master</code>」を追跡に用いる
+ブランチの名前とします。「<code>upstream-master</code>」ブランチのコンテント
+をアップストリームのコンテントに同期させる操作は次のようになります。</p>
+
+<pre><code>$ git clone https://upstream_site/repo_name.git
+$ cd repo_name
+$ git branch upstream-master
+$ git remote rename origin upstream
+$ git remote set-url --push upstream DISABLED_FOR_PUSH
+$ git remote add origin git@salsa.debian.org:myname/repo_name.git
+$ git push -u origin
+ ...
+$ git checkout upstream-master
+$ git fetch -p upstream
+$ git pull upstream master
+$ git push origin upstream-master
+$ git checkout master
+...
+</code></pre>
+
+<p>上記でローカルの「<code>upstream-master</code>」ブランチが、アップストリームの
+リモートの「<code>master</code>」ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」
+と表示)を追跡するようになります。</p>
+
+<p>また、ローカルの「<code>upstream-master</code>」ブランチは、自分のリモートの
+「<code>upstream-master</code>」ブランチ(<code>gitk</code>が「<code>remotes/origin/upstream-master</code>」
+と表示)にpushされ保存されます。</p>
+
+<p>push対象のローカルの「<code>upstream-master</code>」ブランチが、現在Checkoutしている
+デフォルトブランチで、push先のリモートでもブランチ名が同じ
+「<code>upstream-master</code>」だから、pushの際のコマンドラインへの入力文字列
+をかなり省略できるので短くて済んでます。</p>
+
+<p>上記の後半の操作を繰り返すことで、ローカルの「<code>upstream-master</code>」が、
+常にアップストリームが更新するアップストリームのリモートの「<code>master</code>」
+ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」と表示)を追跡していけます。</p>
+
+<p>実はDebianの<code>upstream</code>はアップストリームがリリースしたtarballを
+展開した内容でパッケージ用のGitレポを作ることが原則です。リリース
+されるtarballは単純にアップストリームのGitレポそのままでないことが
+とくあります。この場合は上記で行ったようにアップストリームのGitレポ
+のヒストリーとうまく繋がりません。その場合、<code>gbp import-descs ...</code>
+等をしてパッケージ用のGitレポを作成し、その中に
+<code>git checkout --orphan upstream</code>としてアップストリームのGitレポを
+<code>git fetch -p upstream</code>出来るようにし、最新アップストリーム変更から
+<code>gitk</code>等でパッチをcherry-pickして使うのも有効な方策かもしれません。</p>
 
 <h2 id="参考cookbookサイト">参考Cookbookサイト</h2>
 
