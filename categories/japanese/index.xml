@@ -6,10 +6,29 @@
     <description>Recent content in japanese on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 22 Apr 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 05 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/japanese/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Btrfs入門(1)</title>
+      <link>/jp/2020/05/05/btrfs-01/</link>
+      <pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/05/05/btrfs-01/</guid>
+      <description>先日トライしたGit Annexは不完全燃焼でしたが、これをきっかけに 世代管理・dedup・ファイル圧縮に対応できるというファイルシステムの Btrfs をもう一度見直しました。以下は自分なりの備忘録メモです。
+Btrfsをどう使うのか まずBtrfsがどこまで使えて、どういう注意が要るのかを Debianのwiki で確認しました。
+2020年5月のLinux goofy 5.4.0-0.bpo.4-amd64でも初心者が 安心して気楽に使うにはまだ制約が多いですね。
+ LVMに重ねるのは不安 RAID関連も使うのは不安 quotas/qgroupsは使わないこと Subvolume毎にbtrfs特有オプションでマウントできない制約がある 多くのbtrfs特有オプションは使わないのが無難: nodatacow, 圧縮関連, autodefrag, discard, space_cache=v2 &amp;ldquo;btrfs filesystem defrag&amp;ldquo;はソースSubvolumeにのみ実施。snapshotには実施禁止 スナップショットは12個まで(これでもLVMより状況は良い) ディスクは使用9割を越えないようにする  ここまで調べて、システムファイル/usrやログ記録/var のbtrfs移行は面倒なので、当面は無理せず以下を移行対象に 考えます。
+ データーのアーカイブ・バックアップ用の専用ドライブ /homeの専用パーティション  世代管理にはスナップショット機能を濫用しないように程々で 使い、バックアップソフトがバックアップする際にバックアップ メディア上の記録をdedupする配慮をし、ファイル圧縮は当面使 わないのはいい気がしました。
+推奨バックアップソフトはborgbackupがDebianのwikiには書か かれています。この他timeshiftやbtrbkパッケージも使えそ うです。
+単純なcp -r ...やrsync ...を、dedupのみをする--dedupe オプションのあるjdupesと組み合わせて使うのに対しての上記 専用ソフトのメリットは気になります&amp;hellip;
+Subvolume命名法 Btrfs自体は 特定のSubvolume命名法の慣習を定めていません。
+Debianでは特にどうするって言う慣習が無いようです。
+ただ、Btrfsを積極的に使うディストリビューションが Subvolume命名法に関して特定の慣習をとっているため そこで開発されているGUIツールがそれに依存してる印象 があります。
+ Ubuntu  慣習Subvolume命名法  @ @home  スナップショット: timeshift  OpenSuse  慣習Subvolume命名法 慣習Subvolume命名法(tutorial)  @/ @/home  スナップショット: snapper   最近Debianではtimeshiftの人気が出ています。 Subvolume命名は、timeshiftでシステムのロールバックをしよう をいう気は無いですが、とりあえずtimeshiftとコンパチブルな Ubuntuの命名慣習に従うのが賢明そうです。</description>
+    </item>
     
     <item>
       <title>Git Annex入門(1)</title>

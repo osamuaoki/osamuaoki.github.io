@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Btrfs入門(1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Btrfs入門(1)</span></h1>
+
+<h2 class="date">2020/05/05</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/04/22/git-annex-01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+
+
+<p>先日トライしたGit Annexは不完全燃焼でしたが、これをきっかけに
+世代管理・dedup・ファイル圧縮に対応できるというファイルシステムの
+<a href="https://btrfs.wiki.kernel.org/">Btrfs</a>
+をもう一度見直しました。以下は自分なりの備忘録メモです。</p>
+
+<h2 id="btrfsをどう使うのか">Btrfsをどう使うのか</h2>
+
+<p>まずBtrfsがどこまで使えて、どういう注意が要るのかを
+<a href="https://wiki.debian.org/Btrfs">Debianのwiki</a>
+で確認しました。</p>
+
+<p>2020年5月の<code>Linux goofy 5.4.0-0.bpo.4-amd64</code>でも初心者が
+安心して気楽に使うにはまだ制約が多いですね。</p>
+
+<ul>
+<li>LVMに重ねるのは不安</li>
+<li>RAID関連も使うのは不安</li>
+<li>quotas/qgroupsは使わないこと</li>
+<li>Subvolume毎にbtrfs特有オプションでマウントできない制約がある</li>
+<li>多くのbtrfs特有オプションは使わないのが無難: <code>nodatacow</code>, 圧縮関連, <code>autodefrag</code>, <code>discard</code>, <code>space_cache=v2</code></li>
+<li>&ldquo;<code>btrfs filesystem defrag</code>&ldquo;はソースSubvolumeにのみ実施。snapshotには実施禁止</li>
+<li>スナップショットは12個まで(これでもLVMより状況は良い)</li>
+<li>ディスクは使用9割を越えないようにする</li>
+</ul>
+
+<p>ここまで調べて、システムファイル<code>/usr</code>やログ記録<code>/var</code>
+のbtrfs移行は面倒なので、当面は無理せず以下を移行対象に
+考えます。</p>
+
+<ul>
+<li>データーのアーカイブ・バックアップ用の専用ドライブ</li>
+<li><code>/home</code>の専用パーティション</li>
+</ul>
+
+<p>世代管理にはスナップショット機能を濫用しないように程々で
+使い、バックアップソフトがバックアップする際にバックアップ
+メディア上の記録をdedupする配慮をし、ファイル圧縮は当面使
+わないのはいい気がしました。</p>
+
+<p>推奨バックアップソフトは<code>borgbackup</code>がDebianのwikiには書か
+かれています。この他<code>timeshift</code>や<code>btrbk</code>パッケージも使えそ
+うです。</p>
+
+<p>単純な<code>cp -r ...</code>や<code>rsync ...</code>を、dedupのみをする<code>--dedupe</code>
+オプションのある<code>jdupes</code>と組み合わせて使うのに対しての上記
+専用ソフトのメリットは気になります&hellip;</p>
+
+<h2 id="subvolume命名法">Subvolume命名法</h2>
+
+<p><a href="https://btrfs.wiki.kernel.org/">Btrfs</a>自体は
+<a href="https://askubuntu.com/questions/987104/why-the-in-btrfs-subvolume-names">特定のSubvolume命名法の慣習を定めていません</a>。</p>
+
+<p><a href="https://wiki.debian.org/Btrfs">Debianでは特にどうするって言う慣習が無いようです。</a></p>
+
+<p>ただ、Btrfsを積極的に使うディストリビューションが
+Subvolume命名法に関して特定の慣習をとっているため
+そこで開発されているGUIツールがそれに依存してる印象
+があります。</p>
+
+<ul>
+<li>Ubuntu
+
+<ul>
+<li><a href="https://help.ubuntu.com/community/btrfs#Ubuntu-specific_subvolume_layout_in_11.04_and_later">慣習Subvolume命名法</a>
+
+<ul>
+<li><code>@</code></li>
+<li><code>@home</code></li>
+</ul></li>
+<li>スナップショット: <a href="https://github.com/teejee2008/timeshift">timeshift</a></li>
+</ul></li>
+<li>OpenSuse
+
+<ul>
+<li><a href="https://doc.opensuse.org/documentation/leap/reference/html/book.opensuse.reference/cha-snapper.html">慣習Subvolume命名法</a></li>
+<li><a href="https://rootco.de/2018-01-19-opensuse-btrfs-subvolumes/">慣習Subvolume命名法(tutorial)</a>
+
+<ul>
+<li><code>@/</code></li>
+<li><code>@/home</code></li>
+</ul></li>
+<li>スナップショット: <a href="https://github.com/openSUSE/snapper">snapper</a></li>
+</ul></li>
+</ul>
+
+<p>最近Debianでは<a href="https://qa.debian.org/popcon-graph.php?packages=snapper+snapper-gui+timeshift&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">timeshiftの人気が出ています</a>。
+Subvolume命名は、timeshiftでシステムのロールバックをしよう
+をいう気は無いですが、とりあえずtimeshiftとコンパチブルな
+Ubuntuの命名慣習に従うのが賢明そうです。</p>
+
+<!-- vim: sw=2 sts=2 et se ai tw=79: -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/04/22/git-annex-01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
