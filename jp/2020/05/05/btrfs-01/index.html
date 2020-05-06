@@ -96,8 +96,10 @@
 わないのはいい気がしました。</p>
 
 <p>推奨バックアップソフトは<code>borgbackup</code>がDebianのwikiには書か
-かれています。この他<code>timeshift</code>や<code>btrbk</code>パッケージも使えそ
-うです。</p>
+かれています。
+<a href="https://qa.debian.org/popcon-graph.php?packages=timeshift+snapper+snapper-gui+btrbk+borgbackup&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">確かに人気がある</a>
+ようです。
+この他<code>timeshift</code>や<code>btrbk</code>パッケージも使えそうです。</p>
 
 <p>単純な<code>cp -r ...</code>や<code>rsync ...</code>を、dedupのみをする<code>--dedupe</code>
 オプションのある<code>jdupes</code>と組み合わせて使うのに対しての上記
@@ -141,9 +143,11 @@ Subvolume命名法に関して特定の慣習をとっているため
 </ul></li>
 </ul>
 
-<p>最近Debianでは<a href="https://qa.debian.org/popcon-graph.php?packages=snapper+snapper-gui+timeshift&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">timeshiftの人気が出ています</a>。
-Subvolume命名は、timeshiftでシステムのロールバックをしよう
-をいう気は無いですが、とりあえずtimeshiftとコンパチブルな
+<p>最近のDebianでは、<code>borgbackup</code>以外だと
+<a href="https://qa.debian.org/popcon-graph.php?packages=timeshift+snapper+snapper-gui+btrbk+&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">timeshiftの人気が出ています</a>。</p>
+
+<p>Subvolume命名は、timeshiftでシステムのロールバックをしよう
+をいう気は無いのですが、とりあえずtimeshiftとコンパチブルな
 Ubuntuの命名慣習に従うのが賢明そうです。</p>
 
 <!-- vim: sw=2 sts=2 et se ai tw=79: -->
