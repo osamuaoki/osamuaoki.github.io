@@ -65,23 +65,36 @@
 デフォルトの切り替えキーです。</p>
 
 <p>input methos内での切り替えは、昔のWindowsと同じ&rdquo;zenkaku-hankaku&rdquo;とか、
-うに径で良く使う&rdquo;<Shift>space&rdquo;が良くバインドされています。</p>
+Unix系では良く使う&rdquo;Shift-space&rdquo;が良くバインドされています。</p>
 
 <p>切り替えが、状態が分からなくとも一発でできるのが望ましいので、
 その設定方法を以下に記します。</p>
 
-<h3 id="日本語キーボードの設定方法">日本語キーボードの設定方法</h3>
+<h3 id="日本語キーボードのim側の設定方法">日本語キーボードのIM側の設定方法</h3>
 
 <p>日本語キーボードだと、変換と無変換キーを、Anthyの入力モード
 HiraganaとLatinへの切り替えにAnthyの中のキーバインディングで
 設定して常にibus-anthyで使うことで何とかなります。これは特に
 問題ありません。</p>
 
-<p>同じことを、WindowsのIMEでもALT-漢字、漢字、ALT-`等でのトグル
-動作が嫌いで、Macの真似でこんなキーバインディングしています。
-（最近のWindows10はどうも噂ではこんな感じのキーバインドのようですね。）</p>
+<ul>
+<li>変換キー: 全角かな入力 (hiragana mode)</li>
+<li>無変換キー:  英数半角入力 (latin mode)<br /></li>
+</ul>
 
-<h3 id="英語キーボードでの課題">英語キーボードでの課題</h3>
+<p>ALT-漢字、漢字、ALT-`等でのトグル動作が嫌いで、Macの真似でこんな
+キーバインディングしています。</p>
+
+<p>Windows10でもトグル動作が嫌いで、OS側から
+プロパティ → 詳細設定 → キー設定　変更
+として以下の設定で同様の操作感にそろえています。</p>
+
+<ul>
+<li>変換キー: IME-ON (IMEは全角かな入力モードにしておく)</li>
+<li>無変換キー:  IME-OFF</li>
+</ul>
+
+<h3 id="英語キーボードでのim側の設定方法-ibus-anthy">英語キーボードでのIM側の設定方法 (ibus+Anthy)</h3>
 
 <p>ただ、英語キーボードの場合は変換と無変換キーはありません。</p>
 
@@ -91,14 +104,30 @@ HiraganaとLatinへの切り替えにAnthyの中のキーバインディング�
 <li>ALTと普通の文字との組み合わせも、メニューへのショートカットで全部先約有り。</li>
 </ul>
 
-<p>こういったことも有り、私はCTRL-SPACE, SHIFT-SPACEを一時使っていました</p>
+<p>こういったことも有り、私はAnthyの中のキーバインディングで
+CTRL-SPACE, SHIFT-SPACEを一時使っていました。</p>
 
 <p>ところが、SHIFT-SPACEやCTRL-SPACEのどちらかをLokalizeなどのアプリ
-が使っていました。（ALT-SPACEは既にGNOMEが使っている）</p>
+が使っていました。（ALT-SPACEは既にGNOMEが使っている）こうなると、
+お手上げです。</p>
 
-<p>こうなると、お手上げです。</p>
+<p>結局今は、Anthyの中のキーバインディングは以下にしています。</p>
 
-<h3 id="英語キーボードでの設定方法-gnome-ibus-anthy">英語キーボードでの設定方法 (Gnome+ibus+Anthy)</h3>
+<ul>
+<li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キーも</li>
+<li>CTRL-SPACE:  英数半角入力 (latin mode)    無変換キーも</li>
+</ul>
+
+<p>Windows10でも英語キーボードの場合にはOS側から
+プロパティ → 詳細設定 → キー設定　変更
+として以下の設定で同様の操作感にそろえています。</p>
+
+<ul>
+<li>SHIFT-SPACE: IME-ON (IMEは全角かな入力モードにしておく) 変換キーも</li>
+<li>CTRL-SPACE:  IME-OFF                                    無変換キーも</li>
+</ul>
+
+<h3 id="英語キーボードでのos側の設定方法-gnome-ibus-anthy">英語キーボードでのOS側の設定方法 (Gnome+ibus+Anthy)</h3>
 
 <p>アプリとの喧嘩を避けるにはGUI用にリザーブされている、GUIキー（SUPERと
 かWindowsキーともいう)やMENUキー等をGNOME側からのコントロールでibusの
@@ -132,7 +161,8 @@ Shortcut SUPER-j
 （２つ以上のインプットメソッドを使うときにも便利ですね。)</p>
 
 <p>inputSources[1]がENGLISHとすると、これには安心して戻れるように
-SUPER-RETURNをあてがいましょう。</p>
+SUPER-RETURNをあてがいましょう。(SUPER-Eも考えたのですが
+アクセスが私にとって良くないので…)</p>
 
 <pre><code>Name     InputMethod_1
 Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[1].activate()&quot;
