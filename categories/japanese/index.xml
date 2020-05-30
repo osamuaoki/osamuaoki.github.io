@@ -6,10 +6,25 @@
     <description>Recent content in japanese on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 05 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Sat, 30 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="/categories/japanese/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Rescue media(1)</title>
+      <link>/jp/2020/05/30/rescue-01/</link>
+      <pubDate>Sat, 30 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/05/30/rescue-01/</guid>
+      <description>UEFIとかMBRとかいろいろある昨今のRescue mediaを探しました。
+単なるGrubを操るのは結構大変と思っていたら、を操るのは結構 大変と思っていたら、 Super Grub2 と言う便利なものがあることに気づきました。
+これはUEFIとかMBR設定が壊れたシステムを自動調査で起動できるのみ ならず、DebianやUbuntuのLIVE ISOイメージをDOSメディアに書き込む だけで選択起動できるようにしてくれる優れものです。
+これにいれるレスキュー用のLinux Live imageとして以下をUSBに入れました。
+ Rescatux boot-repair Debian live install image  いわゆる、標準のインストール用isoは上記のループマウントでは 使えないようです。これは直接全コピーで書いたものを１つ古い 小さなUSBキーに書いて手元に置いています。
+音声サポートがいらないなら、D-Iが作っている mini.iso は46MBと極端に小さいので便利です。
+実際のインストールは、キーファイル(GNUPG/SSHデーターや VIMやローカルのshellscript他)の入った小型バックアップの USBキーを準備するのが基本です。</description>
+    </item>
     
     <item>
       <title>Btrfs入門(1)</title>
@@ -23,11 +38,11 @@ Btrfsをどう使うのか まずBtrfsがどこまで使えて、どういう注
  LVMに重ねるのは不安 RAID関連も使うのは不安 quotas/qgroupsは使わないこと Subvolume毎にbtrfs特有オプションでマウントできない制約がある 多くのbtrfs特有オプションは使わないのが無難: nodatacow, 圧縮関連, autodefrag, discard, space_cache=v2 &amp;ldquo;btrfs filesystem defrag&amp;ldquo;はソースSubvolumeにのみ実施。snapshotには実施禁止 スナップショットは12個まで(これでもLVMより状況は良い) ディスクは使用9割を越えないようにする  ここまで調べて、システムファイル/usrやログ記録/var のbtrfs移行は面倒なので、当面は無理せず以下を移行対象に 考えます。
  データーのアーカイブ・バックアップ用の専用ドライブ /homeの専用パーティション  世代管理にはスナップショット機能を濫用しないように程々で 使い、バックアップソフトがバックアップする際にバックアップ メディア上の記録をdedupする配慮をし、ファイル圧縮は当面使 わないのはいい気がしました。
 推奨バックアップソフトはborgbackupがDebianのwikiには書か かれています。 確かに人気がある ようです。この他timeshiftやbtrbkやsnapperや btrfsmaintenanceパッケージも使えそうです。
-Btrfsを意識したdedupeという視点では jdupesがよく使われている ようです。単純なcp -r ...やrsync ...を、dedupをする jdupes --dedupe ...と組み合わせて使うのに対する、上記 専用ソフトのメリットは気になります&amp;hellip;
+Btrfsを意識したdedupeという視点では jdupesがよく使われている ようです。単純なcp -r ...やrsync ...を、dedupをする jdupes --dedupe ...と組み合わせて使うのに対する、上記 専用ソフトのメリットは気になります&amp;hellip;ただ、jdupesはあまりファイル数が 多くとファイルのオープン数のせいかうまく動かないことがありました。 このへんは後日の課題かな。
 Subvolume命名法 Btrfs自体は 特定のSubvolume命名法の慣習を定めていません。
 Debianでは特にどうするって言う慣習が無いようです。
 ただ、Btrfsを積極的に使うディストリビューションが Subvolume命名法に関して特定の慣習をとっているため そこで開発されているGUIツールがそれに依存してる印象 があります。
- Ubuntu  慣習Subvolume命名法  @ @home  スナップショット: timeshift  OpenSuse  慣習Subvolume命名法 慣習Subvolume命名法(tutorial)  @/ @/home  スナップショット: snapper   最近のDebianでは、borgbackup以外だと timeshiftの人気が出ています。</description>
+ Ubuntu  慣習Subvolume命名法  @ @home  スナップショット: timeshift  OpenSuse  慣習Subvolume命名法 慣習Subvolume命名法(tutorial)  @/ @/home  スナップショット: snapper   最近のDebianでは、borgbackup以外だと timeshiftの人気が出ています。 でもシステムのロールバックにフォーカスしていてユーザーデーターの スナップショットをしたいだけだと意外と使いにくくて止めました。</description>
     </item>
     
     <item>
