@@ -18,12 +18,16 @@
       
       <guid>/jp/2020/05/30/rescue-01/</guid>
       <description>UEFIとかMBRとかいろいろある昨今のRescue mediaを探しました。
-単なるGrubを操るのは結構大変と思っていたら、を操るのは結構 大変と思っていたら、 Super Grub2 と言う便利なものがあることに気づきました。
-これはUEFIとかMBR設定が壊れたシステムを自動調査で起動できるのみ ならず、DebianやUbuntuのLIVE ISOイメージをDOSメディアに書き込む だけで選択起動できるようにしてくれる優れものです。
-これにいれるレスキュー用のLinux Live imageとして以下をUSBに入れました。
- Rescatux boot-repair Debian live install image  いわゆる、標準のインストール用isoは上記のループマウントでは 使えないようです。これは直接全コピーで書いたものを１つ古い 小さなUSBキーに書いて手元に置いています。
-音声サポートがいらないなら、D-Iが作っている mini.iso は46MBと極端に小さいので便利です。
-実際のインストールは、キーファイル(GNUPG/SSHデーターや VIMやローカルのshellscript他)の入った小型バックアップの USBキーを準備するのが基本です。</description>
+Grubのレスキューイメージもありますが、これを直接操るのは結構大変 と思っていたら、 Super Grub2 と言う便利なものがあることに気づきました。
+Super Grub2はUEFIとかMBRの設定が壊れたシステムを自動調査してくれ 起動してくれるのみならず、DebianやUbuntuのLIVE ISOイメージを DOSのFATファイルシステムのメディアに複数書き込むだけで、これらを 選択起動できるようにしてくれる優れものです。
+よく分かっていませんが、ディスクの入れ替えやインストーをして、その後 戻した後にUEFIの場合ブートしなくなったことがおこりました。そんな際に Super Grub2だと素直に起動しました、ただ起動後、単にupdate-grubとし ただけでは、起動設定更新がうまく行かなかったことがありました。こんな 時にはまず以下としました。
+$ sudo dpkg-reconfigure grub-efi-amd64  NVRAM variablesの更新他いろいろするようです。さらにBIOSのブートの優先 順位をさわることも有効でした。
+実際にSuper Grub2に用意した8GBのUSBキーでは、レスキュー用のLinuxの Live imageとして以下のISOイメージを入れました。
+ Rescatux boot-repair Debian live install image  こららがあると思うだけで、UEFIとMBRの両方のシステム対応なので 安心感があります。
+ここで使うISOイメージですが、Debianの標準のインストール用の ISOイメージは、上記が用いるGrub2のループマウントでは 使えないようです。
+Debianの標準のインストール用のISOイメージは、全イメージを 生のUSBキーに直接cpかddで書いたものを準備する必要があります。 １つ古い小さなUSBキーに書いて手元に置いています。
+このDebianの標準のインストール用のISOイメージはですが、 わたしは視力があり音声サポートがいらないので、D-Iが作っている mini.iso を使っています。46MBと極端に小さいので便利です。
+実際のインストールの際には、キーファイル(GNUPG/SSHデーターや VIMやローカルのshell script他)の入った小型バックアップの USBキーを準備すると効率的です。</description>
     </item>
     
     <item>

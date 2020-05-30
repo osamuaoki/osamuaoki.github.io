@@ -56,16 +56,30 @@
 
 <p>UEFIとかMBRとかいろいろある昨今のRescue mediaを探しました。</p>
 
-<p>単なるGrubを操るのは結構大変と思っていたら、を操るのは結構
-大変と思っていたら、
+<p>Grubのレスキューイメージもありますが、これを直接操るのは結構大変
+と思っていたら、
 <a href="https://www.supergrubdisk.org/super-grub2-disk/">Super Grub2</a>
 と言う便利なものがあることに気づきました。</p>
 
-<p>これはUEFIとかMBR設定が壊れたシステムを自動調査で起動できるのみ
-ならず、DebianやUbuntuのLIVE ISOイメージをDOSメディアに書き込む
-だけで選択起動できるようにしてくれる優れものです。</p>
+<p>Super Grub2はUEFIとかMBRの設定が壊れたシステムを自動調査してくれ
+起動してくれるのみならず、DebianやUbuntuのLIVE ISOイメージを
+DOSのFATファイルシステムのメディアに複数書き込むだけで、これらを
+選択起動できるようにしてくれる優れものです。</p>
 
-<p>これにいれるレスキュー用のLinux Live imageとして以下をUSBに入れました。</p>
+<p>よく分かっていませんが、ディスクの入れ替えやインストーをして、その後
+戻した後にUEFIの場合ブートしなくなったことがおこりました。そんな際に
+Super Grub2だと素直に起動しました、ただ起動後、単に<code>update-grub</code>とし
+ただけでは、起動設定更新がうまく行かなかったことがありました。こんな
+時にはまず以下としました。</p>
+
+<pre><code>$ sudo dpkg-reconfigure grub-efi-amd64
+</code></pre>
+
+<p>NVRAM variablesの更新他いろいろするようです。さらにBIOSのブートの優先
+順位をさわることも有効でした。</p>
+
+<p>実際にSuper Grub2に用意した8GBのUSBキーでは、レスキュー用のLinuxの
+Live imageとして以下のISOイメージを入れました。</p>
 
 <ul>
 <li><a href="https://www.supergrubdisk.org/rescatux/">Rescatux</a></li>
@@ -73,17 +87,25 @@
 <li><a href="https://www.debian.org/CD/live/">Debian live install image</a></li>
 </ul>
 
-<p>いわゆる、標準のインストール用isoは上記のループマウントでは
-使えないようです。これは直接全コピーで書いたものを１つ古い
-小さなUSBキーに書いて手元に置いています。</p>
+<p>こららがあると思うだけで、UEFIとMBRの両方のシステム対応なので
+安心感があります。</p>
 
-<p>音声サポートがいらないなら、D-Iが作っている
+<p>ここで使うISOイメージですが、Debianの標準のインストール用の
+ISOイメージは、上記が用いるGrub2のループマウントでは
+使えないようです。</p>
+
+<p>Debianの標準のインストール用のISOイメージは、全イメージを
+生のUSBキーに直接<code>cp</code>か<code>dd</code>で書いたものを準備する必要があります。
+１つ古い小さなUSBキーに書いて手元に置いています。</p>
+
+<p>このDebianの標準のインストール用のISOイメージはですが、
+わたしは視力があり音声サポートがいらないので、D-Iが作っている
 <a href="https://d-i.debian.org/daily-images/amd64/daily/netboot/">mini.iso</a>
-は46MBと極端に小さいので便利です。</p>
+を使っています。46MBと極端に小さいので便利です。</p>
 
-<p>実際のインストールは、キーファイル(GNUPG/SSHデーターや
-VIMやローカルのshellscript他)の入った小型バックアップの
-USBキーを準備するのが基本です。</p>
+<p>実際のインストールの際には、キーファイル(GNUPG/SSHデーターや
+VIMやローカルのshell script他)の入った小型バックアップの
+USBキーを準備すると効率的です。</p>
 
 <!-- vim: sw=2 sts=2 et se ai tw=79: -->
 
