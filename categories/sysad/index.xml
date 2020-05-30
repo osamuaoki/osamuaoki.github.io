@@ -20,8 +20,8 @@
       <description>UEFIとかMBRとかいろいろある昨今のRescue mediaを探しました。
 Grubのレスキューイメージもありますが、これを直接操るのは結構大変 と思っていたら、 Super Grub2 と言う便利なものがあることに気づきました。
 Super Grub2はUEFIとかMBRの設定が壊れたシステムを自動調査してくれ 起動してくれるのみならず、DebianやUbuntuのLIVE ISOイメージを DOSのFATファイルシステムのメディアに複数書き込むだけで、これらを 選択起動できるようにしてくれる優れものです。
-よく分かっていませんが、ディスクの入れ替えやインストーをして、その後 戻した後にUEFIの場合ブートしなくなったことがおこりました。そんな際に Super Grub2だと素直に起動しました、ただ起動後、単にupdate-grubとし ただけでは、起動設定更新がうまく行かなかったことがありました。こんな 時にはまず以下としました。
-$ sudo dpkg-reconfigure grub-efi-amd64  NVRAM variablesの更新他いろいろするようです。さらにBIOSのブートの優先 順位をさわることも有効でした。
+よく分かっていませんが、ディスクの入れ替えやインストーをして、その後 元のディスクに戻した際にUEFIでブートしなくなったことを経験しました。 そんな際にSuper Grub2だと素直に起動しました。この際に、ただ起動後単に update-grubとしただけでは、起動設定更新がうまく行かなかったことが ありました。こんな時にはまず以下としました。
+$ sudo dpkg-reconfigure grub-efi-amd64  これだとNVRAM variablesの更新他いろいろするようです。さらにBIOSの ブートの優先順位をさわることも有効でした。古いMBなのでBIOSが賢くない 気がしました。
 実際にSuper Grub2に用意した8GBのUSBキーでは、レスキュー用のLinuxの Live imageとして以下のISOイメージを入れました。
  Rescatux boot-repair Debian live install image  こららがあると思うだけで、UEFIとMBRの両方のシステム対応なので 安心感があります。
 ここで使うISOイメージですが、Debianの標準のインストール用の ISOイメージは、上記が用いるGrub2のループマウントでは 使えないようです。
