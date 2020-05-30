@@ -68,16 +68,16 @@ DOSのFATファイルシステムのメディアに複数書き込むだけで�
 
 <p>よく分かっていませんが、ディスクの入れ替えやインストーをして、その後
 元のディスクに戻した際にUEFIでブートしなくなったことを経験しました。
-そんな際にSuper Grub2だと素直に起動しました。この際に、ただ起動後単に
+そんな際にSuper Grub2だと素直に起動しました。この際に、ただ起動後
 <code>update-grub</code>としただけでは、起動設定更新がうまく行かなかったことが
-ありました。こんな時にはまず以下としました。</p>
+ありました。こんな時にはまず以下を実行しました。</p>
 
 <pre><code>$ sudo dpkg-reconfigure grub-efi-amd64
 </code></pre>
 
 <p>これだとNVRAM variablesの更新他いろいろするようです。さらにBIOSの
-ブートの優先順位をさわることも有効でした。古いMBなのでBIOSが賢くない
-気がしました。</p>
+ブートの優先順位をさわることも有効でした。(古いMBなのでBIOSが賢くない
+気がしました。)</p>
 
 <p>実際にSuper Grub2に用意した8GBのUSBキーでは、レスキュー用のLinuxの
 Live imageとして以下のISOイメージを入れました。</p>
@@ -99,14 +99,21 @@ ISOイメージは、上記が用いるGrub2のループマウントでは
 生のUSBキーに直接<code>cp</code>か<code>dd</code>で書いたものを準備する必要があります。
 １つ古い小さなUSBキーに書いて手元に置いています。</p>
 
-<p>このDebianの標準のインストール用のISOイメージはですが、
+<p>このDebianの標準のインストール用のISOイメージですが、
 わたしは視力があり音声サポートがいらないので、D-Iが作っている
 <a href="https://d-i.debian.org/daily-images/amd64/daily/netboot/">mini.iso</a>
 を使っています。46MBと極端に小さいので便利です。</p>
 
-<p>実際のインストールの際には、キーファイル(GNUPG/SSHデーターや
-VIMやローカルのshell script他)の入った小型バックアップの
-USBキーを準備すると効率的です。</p>
+<p>実際のインストールの際には、キーファイル(GNUPG/SSHデーター)に加え
+チェックアウトされた</p>
+
+<ul>
+<li><a href="https://github.com/osamuaoki/osamu-utils">VIMの設定集</a></li>
+<li><a href="https://github.com/osamuaoki/dot-vim">ローカルのshell script集</a></li>
+</ul>
+
+<p>他のファイルの入った小型バックアップのUSBキーを準備すると効率的に
+進められます。</p>
 
 <!-- vim: sw=2 sts=2 et se ai tw=79: -->
 
