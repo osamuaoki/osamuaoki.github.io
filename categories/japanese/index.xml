@@ -13,14 +13,13 @@
       <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
       
       <guid>/jp/2020/12/13/virt-01/</guid>
-      <description>開発環境の基本 開発環境は、できるだけ安定しているほうがストレスが少ないです。stable環境が使えればそれでも いいのですが、新しいハードウエアーだとtestingぐらいは必要かもしれません。
-通常のパッケージ作成には、確実に sid/unstable 環境とするために pbuilder/cowbuilder を使って 設定 された仮想化された chroot環境 を使っています。(確かに、schroot/sbuild 系の方が良い面はあるのでしょうが、 これは私の惰性による選択です。) 開発環境をsidにしなくてもパッケージが正しいsid環境 で作成でき快適です。
-デバグ用の仮想環境作成 なるべくメインのシステムを変えずにデバグを効率的にするために、 いくつかのパッケージがインストールされたデバグ用の仮想化されたchroot環境を 上記の延長線上で準備しました。
+      <description>開発環境の基本 開発環境は、できるだけ安定しているほうがストレスが少ないです。editorを 使いメールやウエッブページを読むだけならstable環境が使えればそれでも いいのですが、新しいハードウエアー (Thinkpad T14, AMD Ryzen 5 PRO 4650U with Radeon Graphics)だとグラフィクスドライバーの問題があるので testing ぐらいは必要です。でも歳々アップデートすると不安定になったりして面倒です。
+パッケージ作成環境 一方、通常のパッケージ作成には、確実に sid/unstable 環境とするために pbuilder/cowbuilder を使って 設定 された仮想化された chroot環境 を使っています。(確かに、schroot/sbuild 系の方が良い面はあるのでしょうが、 これは私の惰性による選択です。) 開発環境をsidにしなくてもパッケージが正しいsid環境 で作成でき快適です。
+直接chrootコマンドを用いると、必要なファイルシステムを仮想環境からアクセス出来るよう にするための操作が煩雑になりますが、pbuilder系等のコマンドを用いるとこれらの 連動する付帯操作や作業用の使い捨てシステムの作成を自動的にしてくれるので便利です。
+デバグ用の仮想環境作成 なるべくメインのシステムを変えずにデバグを効率的にするために、 いくつかのパッケージがインストールされたデバグ用の仮想化されたchroot環境を 上記の延長線上で準備しました。こっちは、使い捨て環境と言うより使いまわし 環境といった感じです。
 cowbuilder を使って、~/wip以下にchrootの開発環境を作成します。
  $ sudo cowbuilder create --basepath ~/wip ... $ sudo cowbuilder login --basepath ~/wip ... root@goofy:/# apt-get install git vim mc aptitude devscripts iproute2 ... root@goofy:/# ^D 後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。
- $ sudo cowbuilder login --basepath ~/wip ... root@goofy:/# cd ... root@goofy:~# 作業用のソースはchroot環境中の/rootにコピーを置いて作業することになります。ここは ホスト環境から見ると~/wip/root以下になります。このディレクトリのパーミッションは drwx------で、オーナーがroot rootです。当然ですが、root権限がないとアクセスでき ないのでホスト環境からの操作時には配慮が必要です。
-確かにrootユーザーのままで色々やるのは「少々気持ちが悪い」ですが、 所詮chroot環境なのでダメージは限定的と考え「良」とします。
-キャラクターコンソールのみを使うコンパイル等にはchroot環境程度の簡単な仮想化で充分です。 （GUIへのアクセス等は仮想化にkvm環境が必要）</description>
+ $ sudo cowbuilder login --basepath ~/wip .</description>
     </item>
     
     <item>
