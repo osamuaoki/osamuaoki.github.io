@@ -54,20 +54,15 @@
   </tbody>
 </table>
 
-
-
 <p>今回も引き続き基本のUSB AVRの
 <a href="https://www.microchip.com/wwwproducts/en/ATmega32u4">ATmega32u4</a>
 を中心としたAVRチップのプログラム方法とその環境に関して、
 調査と情報の整理をします。</p>
-
 <h2 id="isp接続">ISP接続</h2>
-
 <p>Arduino系の開発ボードなら、6pinのICSPコネクターが付いているので
 1pin(ポチマーク)側にAVRISP mkIIからのISP接続フラットケーブルの
 <a href="https://osamuaoki.github.io/jp/2020/02/21/atmega328p-1/">赤線側を合わせて挿せば良い</a>
 ので簡単でした。</p>
-
 <p>ATmega32u4の開発ボードの
 <a href="https://www.sparkfun.com/products/12640">SparkFun Pro Micro</a>、
 <a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
@@ -75,21 +70,16 @@
 <a href="https://www.pjrc.com/store/teensypp.html">Teensy 2.0++</a>
 などやそのコンパチ品はICSPコネクターが付いていないので
 「直結接続」が必要です。</p>
-
 <p>「直結接続」のために、以下の写真のように片側にクリップ、
 片側にオスやメスのデュポンコネクターが付いたワイヤーを準備
 しました。(AVR系をAVRUSP mkIIでISP書き換えするにはオスの
 デュポンコネクター版だけで充分ですが、将来ARM系のSTM32F等を
 ST-LINK/V2等で書き換えするのにはメスのデュポンコネクター版が
 あると便利そうなので両方準備してみました。)</p>
-
-<p><img src="/img/clip-wire.jpg" alt="直結用クリップワイヤー" /></p>
-
+<p><img src="/img/clip-wire.jpg" alt="直結用クリップワイヤー"></p>
 <p>左右逆にしないことが大事なので、接続関係をここにまとめます。</p>
-
 <p>ISP接続フラットケーブルのコネクター
 （赤線側上です。コネクター穴側から見た「左図」が大事！)</p>
-
 <pre><code>                  RED SIDE 赤線側
 BTM VIEW コネクター穴側                 TOP VIEW
 VCC  2  1 MISO                        MISO 1  2 VCC
@@ -99,16 +89,12 @@ GND  6  5 RST                         RST  5  6 GND
 (こっちがメイン)
 Looking from                          Looking from the
 the hole side                         back of the connector hole
-</code></pre>
-
-<p>以下、開発ボードの端子はチップが載っている表側(TOP側)から、
+</code></pre><p>以下、開発ボードの端子はチップが載っている表側(TOP側)から、
 USBコネクターを「左」に置き見て、「半時計回り」(CCW)で
 「0スタート」(逆方向は-1スタート、角からスタート、重複命名有り)
 で位置表記し、ISPコネクターの端子は赤線側を上にして、
 コネクター穴側から見て位置表記することとします。</p>
-
 <p><a href="https://www.pjrc.com/teensy/pinout.html">Teensy 2.0開発ボード</a>の場合(所有)：</p>
-
 <ul>
 <li>ボード下0: GND</li>
 <li>ボード下2: SCLK &ndash;&gt; 3 コネクター右側中央</li>
@@ -119,11 +105,12 @@ USBコネクターを「左」に置き見て、「半時計回り」(CCW)で
 <li>ボード右3(CTR): GND  &ndash;&gt; 6 コネクター左側下</li>
 <li>ボード右4: RST  &ndash;&gt; 5 コネクター右側下（使わないときは抜く）</li>
 <li>ボード上-1(Last): VCC</li>
-<li>LEDは、D6 &ndash;&gt;|&ndash;^^^&ndash;GND (1K ohm)</li>
+<li>
+<pre><code>        LEDは、D6 --&gt;|--^^^--GND (1K ohm)
+</code></pre>
+</li>
 </ul>
-
 <p><a href="https://www.pjrc.com/teensy/pinout.html">Teensy 2.0++開発ボード</a>の場合(所有)：</p>
-
 <ul>
 <li>ボード下0: GND</li>
 <li>ボード右1: VCC  &ndash;&gt; 2 コネクター左側上(赤線側)（使わないときは抜く）</li>
@@ -134,11 +121,12 @@ USBコネクターを「左」に置き見て、「半時計回り」(CCW)で
 <li>ボード上-6: MOSI &ndash;&gt; 4 コネクター左側中央(VCC/GND間)</li>
 <li>ボード上-5: MISO &ndash;&gt; 1 コネクター右側上(赤線側)</li>
 <li>ボード上-1(Last): VCC</li>
-<li>LEDは、D6 &ndash;&gt;|&ndash;^^^&ndash;GND (1K ohm)</li>
+<li>
+<pre><code>         LEDは、D6 --&gt;|--^^^--GND (1K ohm)
+</code></pre>
+</li>
 </ul>
-
 <p>参考:<a href="https://learn.sparkfun.com/tutorials/pro-micro--fio-v3-hookup-guide/hardware-overview-pro-micro">Pro Micro開発ボード</a>の場合(非所有、推定)：</p>
-
 <ul>
 <li>ボード上1: MOSI &ndash;&gt; 4 コネクター左側中央(VCC/GND間)</li>
 <li>ボード上2: MISO &ndash;&gt; 1 コネクター右側上(赤線側)</li>
@@ -150,9 +138,7 @@ USBコネクターを「左」に置き見て、「半時計回り」(CCW)で
 <li>R-LEDは、PB3 &ndash;|&lt;&ndash;^^^&ndash;VCC (330 ohm)</li>
 <li>G-LEDは、PD5 &ndash;|&lt;&ndash;^^^&ndash;VCC (330 ohm)</li>
 </ul>
-
 <p>参考:<a href="https://content.arduino.cc/assets/Micro_Rev1j_sch.pdf">Arduino Micro開発ボード</a>の場合(非所有、推定)：</p>
-
 <ul>
 <li>ボード下-6: VCC  &ndash;&gt; 2 コネクター左側上(赤線側)（使わないときは抜く）</li>
 <li>ボード下-5: RST  &ndash;&gt; 5 コネクター右側下（使わないときは抜く）</li>
@@ -161,20 +147,18 @@ USBコネクターを「左」に置き見て、「半時計回り」(CCW)で
 <li>ボード下-1: SCLK &ndash;&gt; 3 コネクター右側中央</li>
 <li>&hellip;</li>
 <li>ボード上 0: MOSI &ndash;&gt; 4 コネクター左側中央(VCC/GND間)</li>
-<li>Y-LEDは、PB0 &ndash;&gt;|&ndash;^^^&ndash;GND (1K ohm)</li>
+<li>
+<pre><code>         Y-LEDは、PB0 --&gt;|--^^^--GND (1K ohm)
+</code></pre>
+</li>
 <li>Gボード下 0: G-LEDは、PC7 &ndash;&gt;|&ndash;^^^&ndash;GND (1L ohm)</li>
 </ul>
-
 <p>以下では、外部電源接続無しでISP接続で読み書きできるよう
 にした<a href="/jp/2020/02/27/avrisp-mod-j/">改造AVRISP mkII</a>を
 使っています。</p>
-
-<h2 id="teensy-2-0-compat">teensy 2.0 compat.</h2>
-
+<h2 id="teensy-20-compat">teensy 2.0 compat.</h2>
 <p>ブレッドボードに挿し一部クリップ接続で検査！</p>
-
-<p><img src="/img/isp-clip.jpg" alt="ISP接続 ブレッドボード+クリップ" /></p>
-
+<p><img src="/img/isp-clip.jpg" alt="ISP接続 ブレッドボード+クリップ"></p>
 <pre><code>$ sudo avrdude -c avrisp2 -P usb -p m32u4 -v
 ....
 avrdude: stk500v2_command(): command failed
@@ -185,23 +169,17 @@ avrdude: initialization failed, rc=-1
 
 
 avrdude done.  Thank you.
-</code></pre>
-
-<p>うーん、前に何か悪いことしてチップを壊したかな？ちょっと不安。
+</code></pre><p>うーん、前に何か悪いことしてチップを壊したかな？ちょっと不安。
 ブレッドボードは接触によく不安があるし、挟むタイプのクリップは
 挟む線が太いと外れやすくここも接触に不安がありました。</p>
-
 <p>そこで不安を解消するように、開発ボードがPIN付き基板なので
 メス+オスのデュポンコネクターのワイヤーでしっかり接続して、
 再チャレンジしました。</p>
-
-<p><img src="/img/isp-wire.jpg" alt="ISP接続 ワイヤー" /></p>
-
+<p><img src="/img/isp-wire.jpg" alt="ISP接続 ワイヤー"></p>
 <p>ちなみに、上の写真の左下のJフック型端子は裸ボードやPIN端子との
 結線に意外と使い勝手が良かったのが意外でした。メスデュポンと
 Jフック型端子をつないだISPコネクター線を今度の機会に作りたく
 なりました。</p>
-
 <pre><code>$ sudo avrdude -c avrisp2 -P usb -p m32u4 -v -F
 ...
 
@@ -216,12 +194,9 @@ avrdude: safemode: efuse reads as C5
 avrdude: safemode: Fuses OK (E:C5, H:D9, L:5F)
 
 avrdude done.  Thank you.
-</code></pre>
-
-<p>まずは良し良しでした。とにかく素人電子工作では接触不良に要注意です。
+</code></pre><p>まずは良し良しでした。とにかく素人電子工作では接触不良に要注意です。
 さらに<code>-U lock:r:-:h</code>をつけると、0xC5コードが出て文字化けした後、
 0xffと表示されます。</p>
-
 <ul>
 <li>CKDIV8</li>
 <li>SUT1 (16K CK)</li>
@@ -230,21 +205,16 @@ avrdude done.  Thank you.
 <li>HWBE</li>
 <li>BODLEVEL1 (BODが2.2V)</li>
 </ul>
-
 <p>ちなみに、正規品はブート領域が4KBではなく、512Bで、BOD設定も違います。</p>
-
 <ul>
 <li>LFUSE: 0x5F</li>
 <li>HFUSE: 0xDF (ブート領域512B)</li>
 <li>EFUSE: 0xF4 (BODが2.4V)</li>
 <li>LOCK:  0xCC</li>
 </ul>
-
-<h2 id="teensy-2-0-compat-1">Teensy 2.0++ compat.</h2>
-
+<h2 id="teensy-20-compat-1">Teensy 2.0++ compat.</h2>
 <p>こっちはピン無し裸ボードなので、上記の直結用クリップワイヤーを
 使ってつなぎました。</p>
-
 <pre><code>$ sudo avrdude -c avrisp2 -P usb -p usb1286 -v -F
 .....
 avrdude: AVR device initialized and ready to accept instructions
@@ -260,10 +230,7 @@ avrdude: safemode: lfuse reads as 4F
 avrdude: safemode: hfuse reads as DD
 avrdude: safemode: efuse reads as F5
 avrdude: safemode: Fuses OK (E:F5, H:DD, L:4F)
-</code></pre>
-
-<p>うまくはつながっているようですが、チョット変です。上記だと；</p>
-
+</code></pre><p>うまくはつながっているようですが、チョット変です。上記だと；</p>
 <ul>
 <li>CKDIV8</li>
 <li>SUT1, SUT0 (1K CK)</li>
@@ -272,61 +239,49 @@ avrdude: safemode: Fuses OK (E:F5, H:DD, L:4F)
 <li>HWBE</li>
 <li>BODLEVEL1</li>
 </ul>
-
 <p>正直、AtmelのDFUやLUFAのDFUが約4KBあるのに、なぜこの開発ボードの
 チップは2KBのブート領域なのかはチョット不思議です。安売りしていた
 のはこれが原因かな？(他のFUSE値は大きな問題ではないとは考えます。)</p>
-
 <p>純正Atmel DFUは4KBより少し大きいのも気になります。</p>
-
 <h2 id="fuse設定のあるべき姿の考察">Fuse設定のあるべき姿の考察</h2>
-
 <p>Fuse設定のあるべき姿を考えてみました。分かるところから押さえます。
 まずATmega32u4を考えます。</p>
-
 <p>P354-P355にかかれたチップのデフォルトは:</p>
-
 <ul>
 <li>LFUSE: 0x41</li>
 <li>HFUSE: 0x99</li>
 <li>EFUSE: 0xF3</li>
 <li>LOCK:  0xEC</li>
 </ul>
-
 <p>です。これを基本に、理由毎に変更します。</p>
-
 <p>CKDIV8は出荷時にプログラムされている(=0)がTeensyの設定でも採用
 されています。一見チョット不安になりましたが、実際にはスタート
 アップコードに<code>CLKPR = 0x80;CLKPR = 0;</code>を置くのがTeensyの標準の
 ようで分周を1に戻すのでので、これは問題ないとみました。</p>
-
-<p>まず、5V 16 MHz Crystal使用でBODをするから、以下確定です(P30,P31)。
-* CKSEL0 = 1
-* SUT1..0 = 01
-* CKSEL3..1 = 111</p>
-
+<p>まず、5V 16 MHz Crystal使用でBODをするから、以下確定です(P30,P31)。</p>
+<ul>
+<li>CKSEL0 = 1</li>
+<li>SUT1..0 = 01</li>
+<li>CKSEL3..1 = 111</li>
+</ul>
 <p>だから</p>
-
 <ul>
 <li>LFUSE: 0x5F  5V 16 MHz Crystal使用(Teensy)
-
 <ul>
 <li>CKDIV8設定で低速スタート、別途BOD設定</li>
-</ul></li>
+</ul>
+</li>
 <li>LFUSE: 0xFF  5V 16 MHz Crystal使用(Leonardo)
-
 <ul>
 <li>CKDIV8非設定で高速スタート65ms余計に待つ</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>HFUSEはJTAGは使わないので外す(これはTeensyもLeonardo等のArduino系
 も同じ設定)ことにして、後はブートローダーのサイズとリセット挙動の
 関係で決めます。</p>
-
 <p>リセットボタンは押し際には現在実行中のプログラムが止まり、さらに
 押したままでは何も起こらず、離した際にリセットがMCUにかかります。</p>
-
 <p>まず、「Teensyの環境では、電源投入時に先頭アドレス0x0000に飛び
 アプリケーションのファームウエアーが動き、リセットボタンを押して
 離した際にはHIDデバイスとなるbootloaderが始動する」というのが基本です。
@@ -336,7 +291,6 @@ PCのリセットボタンのイメージでアプリケーションが再起動
 ようです。純正のTeensyは、アドレス0x000にアプリケーションとして
 Blinkが、アドレス0x8000-0x0200 = 0x7E00 Byte (32KB - 512B) に
 bootloaderとしてHIDデバイスとなるbootloaderが導入されるようです。</p>
-
 <p>一方、「Arduinoの基本環境では、電源投入時に先頭アドレス0x0000に飛び
 アプリケーションのファームウエアーが動く」まではTeensyとも同じです
 が、「リセットボタンを押して離した際にCIDデバイス(仮想シリアル)と
@@ -355,12 +309,9 @@ SPARKFUNが公開している改良bootloader(Caterina改)では、「リセッ�
 が動くのはTeensyと同じですが、Arduino系のbootloaderは賢く条件を満たせ
 ばアプリケーションのファームウエアーがリセットされた状態で最初から
 動くようになっています。</p>
-
 <p>この辺の違いを認識しないと、各種情報を読む際に混乱します。</p>
-
 <p>チップのHFUSEとEFUSEのデフォルトはBOOTRST非設定(リセット=1)、
 HWBE設定(セット=0)となっています。</p>
-
 <p>どの開発ボード（teensy・Pro Micro・Arduino Leonardo・Arduino Micro)
 でも、ALE/HWB pinが接地されています。この場合、Boot Reset Fuse
 (BOOTRST)の設定によらず、teensyのデフォルトのようにHWBE FUSEビット
@@ -369,40 +320,30 @@ HWBE設定(セット=0)となっています。</p>
 Arduino MicroデフォルトのようにHWBE FUSEビットが非設定(リセット=1)
 でBoot Reset Fuse (BOOTRST)を設定(セット=0)としてもリセットボタンを
 押して離した際にブートローダーに飛びます。</p>
-
 <p>もしHWBE FUSEビットを非設定(リセット=1)にデフォルトから変更すると、
 Boot Reset Fuse (BOOTRST)を設定(セット=0)のままだと、リセットが
 かかるとアプリのファームウエアーのアドレス$0000に飛ぶようになり
 ます。</p>
-
 <p>ポイントは普通の開発ボードでは、TeensyかArduinoのFUSE設定の組み合
 わせ方を混ぜなければ良いようです。</p>
-
 <p>もちろん、HWBE FUSEビット非設定(リセット=1)に変更して、Boot Reset Fuse
 (BOOTRST)設定(セット=0)して、$0000に置くファームウエアーに
 ハードリセット時に飛ばせますが、かなり特殊です。$0000に置く
 ファームウエアーが、ブートローダーに後で飛べるようにでもして
 おかないと不便ですので、、、</p>
-
 <p>4KBの標準的なブートローダーだと:</p>
-
 <ul>
 <li>HFUSE: 0xD9 (BOOTRST設定 DFU?)</li>
 <li>HFUSE: 0xD8 (BOOTRST非設定　Caterina系標準) Leonardo</li>
 </ul>
-
 <p>512BのnanoBoot/teensyブートローダーだと:</p>
-
 <ul>
 <li>HFUSE: 0xDF (BOOTRST非設定 - teensy標準)</li>
 </ul>
-
 <p>さて残るはEFUSEです。ハイニブル等は変更理由はないので決めるべきは
 BOD電圧です。(EFUSEは上位４ビットは何を書いても0xF-&gt;0xCになります)
 します)</p>
-
 <p>HWBE非設定(=1 Caterina系)</p>
-
 <ul>
 <li>EFUSE: 0xFE BOD=2.0V 本当になかなかリセットがかからない</li>
 <li>EFUSE: 0xFD BOD=2.2V 本当になかなかリセットがかからない</li>
@@ -410,9 +351,7 @@ BOD電圧です。(EFUSEは上位４ビットは何を書いても0xF-&gt;0xCに
 <li>EFUSE: 0xFB BOD=2.6V Leonardo</li>
 <li>EFUSE: 0xF8 BOD=4.3V すぐリセットかかる</li>
 </ul>
-
 <p>HWBE設定(=0 Teensy系)</p>
-
 <ul>
 <li>EFUSE: 0xF6 BOD=2.0V 本当になかなかリセットがかからない</li>
 <li>EFUSE: 0xF5 BOD=2.2V 本当になかなかリセットがかからない</li>
@@ -420,51 +359,37 @@ BOD電圧です。(EFUSEは上位４ビットは何を書いても0xF-&gt;0xCに
 <li>EFUSE: 0xF3 BOD=2.6V チップのデフォルト</li>
 <li>EFUSE: 0xF0 BOD=4.3V すぐリセットかかる</li>
 </ul>
-
 <p>電圧が低くなると、最高動作周波数が落ちるのでプリスケーラー
 設定関係(CLKPRレジスターや、CKDIV8ヒューズ)も配慮がいるかな？</p>
-
 <p>落ちにくくするためにBOD=2.4V teensyを真似しましょう。</p>
-
 <p>LOCKの上２ビットは無効なのでややこしいです。</p>
-
 <p>デフォルトは0xEC=0x1Cです。ブートローダーを覗けません。書き換え禁止。
 0xFF=0x3Fは一切ロック無しです。
 0xEF=0x2FとするとブートローダーへのSPM書き込みを禁止しますね。
 0xCF=0x0FとするとブートローダーへのSPM書き込みを禁止の上にブートローダーを覗けませんね。</p>
-
 <p>アプリケーションやEEPROMの書き込み・制約・。書き換え禁止は興味無いですね。
 趣味のデバイスは基本ロック不要です。</p>
-
 <ul>
 <li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
 <li>LOCK:  0x2F=0xEF ロック(アプリ書き込み時の上書き防止)</li>
 </ul>
-
 <h2 id="atmega32u4のfuse設定のあるべき姿">ATmega32u4のFuse設定のあるべき姿</h2>
-
 <p>Caterina系 4KB</p>
-
 <ul>
 <li>LFUSE: 0xFF  5V 16 MHz Crystal使用</li>
 <li>HFUSE: 0xD8 (BOOTRST非設定　Caterina系 4KB)</li>
 <li>EFUSE: 0xFB BOD=2.6V Leonardo HWBE非設定(=1)</li>
 <li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
 </ul>
-
 <p>teensy系 512B</p>
-
 <ul>
 <li>LFUSE: 0x5F  5V 16 MHz Crystal使用でBOD</li>
 <li>HFUSE: 0xDF (BOOTRST非設定 - teensy系 512B)</li>
 <li>EFUSE: 0xF4 BOD=2.4V teensy HWBE設定(=0)</li>
 <li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
 </ul>
-
 <h2 id="at90usb1286のfuse設定のあるべき姿">AT90usb1286のFuse設定のあるべき姿</h2>
-
 <p>ブートローダーの大きさ次第です。</p>
-
 <ul>
 <li>LFUSE: 0x5F  5V 16 MHz Crystal使用でBOD</li>
 <li>HFUSE: 0xDF (BOOTRST非設定 - teensy系 1KB)</li>
@@ -474,16 +399,13 @@ BOD電圧です。(EFUSEは上位４ビットは何を書いても0xF-&gt;0xCに
 <li>EFUSE: 0xF4 BOD=2.4V teensy HWBE設定(=0)</li>
 <li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
 </ul>
-
 <p>ちなみに以下は参考情報です。</p>
-
 <ul>
 <li><a href="https://www.microchip.com/wwwproducts/en/ATmega32u4">ATmega32u4のデーターシート等</a></li>
 <li><a href="https://www.microchip.com/wwwproducts/en/AT90USB1286">AT90usb1286のデーターシート等</a></li>
 <li><a href="https://www.avrfreaks.net/forum/working-at90usb1286-bootloader">Working with AT90USB1286 bootloader</a></li>
 <li><a href="https://forum.pjrc.com/threads/34108-Teensy-reset">Teensy reset</a></li>
 </ul>
-
 <p>Fuse関連で困ったらは、
 <a href="https://eleccelerator.com/fusecalc/fusecalc.php">fusecalc</a>
 や
@@ -491,8 +413,7 @@ BOD電圧です。(EFUSEは上位４ビットは何を書いても0xF-&gt;0xCに
 や
 <a href="https://github.com/osamuaoki/avrdude-friend/wiki/AVR-fuse">AVR fuse</a>
 でも見ましょう。</p>
-
-<!-- vim: se ai tw=79: -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -515,7 +436,7 @@ BOD電圧です。(EFUSEは上位４ビットは何を書いても0xF-&gt;0xCに
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

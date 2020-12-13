@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>chroot on Goofing Osamu</title>
+    <link>/tags/chroot/</link>
+    <description>Recent content in chroot on Goofing Osamu</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sun, 13 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/chroot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>仮想環境(1)</title>
+      <link>/jp/2020/12/13/virt-01/</link>
+      <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/12/13/virt-01/</guid>
+      <description>通常のパッケージ作成には、確実に sid/unstable 環境とするために pbuilder/cowbuilder を使って 設定 された chroot環境 を使っています。(確かに、schroot/sbuild 系の方が良い面はあるのでしょうが、 これは私の惰性による選択です。)
+最近、なるべくメインのシステムを変えずにデバグを効率的にするために、 いくつかのパッケージがインストールされたデバグ用のchroot環境を上記の延長線上で 準備しました。以下は自分なりの備忘録メモです。
+デバグ用のchroot環境作成 cowbuilder を使って、~/wip以下にchrootの開発環境を作成します。
+ $ sudo cowbuilder create --basepath ~/wip ... $ sudo cowbuilder login --basepath ~/wip ... root@goofy:/# apt-get install git vim mc aptitude devscripts iproute2 ... root@goofy:/# ^D 後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。
+ $ sudo cowbuilder login --basepath ~/wip ... root@goofy:/# cd ... root@goofy:~# 作業用のソースはchroot環境中の/rootにコピーを置いて作業することになります。ここは ホスト環境から見ると~/wip/root以下になります。このディレクトリのパーミッションは drwx------で、オーナーがroot rootです。当然ですが、root権限がないとアクセスでき ないのでホスト環境からの操作時には配慮が必要です。
+確かにrootユーザーのままで色々やるのは「少々気持ちが悪い」ですが、 所詮chroot環境なのでダメージは限定的と考え「良」とします。
+キャラクターコンソールのみを使うにはこれで充分です。
+開発環境 開発環境は、できるだけ安定しているほうがストレスが少ないです。stable環境が使えればそれでも いいのですが、新しいハードウエアーだとtestingぐらいは必要かもしれません。
+pbuilderでパッケージビルドをすると、開発環境をsidにしなくてもパッケージが正しいsid環境 で作成でき快適です。</description>
+    </item>
+    
+  </channel>
+</rss>

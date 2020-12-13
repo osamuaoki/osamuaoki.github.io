@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>input-method on Goofing Osamu</title>
@@ -6,11 +6,7 @@
     <description>Recent content in input-method on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 01 Sep 2019 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/input-method/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 01 Sep 2019 00:00:00 +0000</lastBuildDate><atom:link href="/tags/input-method/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>AnthyのBuildトライ(2)</title>
       <link>/jp/2019/09/01/jpn-ime-resource-08/</link>
@@ -39,13 +35,14 @@
 いまさらanthyを触るのもという感もあるが、せめて以前程度に 動くようにはしたい。特にDebianのパッケージは完全メンテナー モードで、salsaでバグ修正優先での対応を考えます。 （githubは、いろいろ遊ぶかもしれません）
 すぐ気づいた明らかなバグ２つは解決法が見えた。
  Use UTF-8 for zipcode bug fix. Closes: #927074 Convert depgraph/master.depword to UTF-8. Closes: #923948  後者は文法係り受け定義関連を再構築必要がある。簡単にするには debian/rulesを以下としてDebianのビルドシステムでdebuildと してビルドする必要がある。
-override_dh_auto_configure: dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode  だが、上手くいかない。ソース壊れている?
+override_dh_auto_configure: dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode だが、上手くいかない。ソース壊れている?
 UTF-8 での処理のデフォルト化 まず、テスト環境で変な文字が出るので気になっていた、UTF-8廻りを 確認した。
 anthy/anthy.hに以下と定義されているので、encoding関係が 初期値の0だと、どうも出力がEUCJPになってしまうようだ。
-#define ANTHY_UTF8_ENCODING 2  これは、0にしておかないとdefault_encodingやencodingやprint_encoding などがUTF-8にならない懸念がある。2としている意味を感じなかったので これを変えた。特に以下への影響が気になる。
+#define ANTHY_UTF8_ENCODING 2 これは、0にしておかないとdefault_encodingやencodingやprint_encoding などがUTF-8にならない懸念がある。2としている意味を感じなかったので これを変えた。特に以下への影響が気になる。
  anthy_putxchar() anthy_putxstr() anthy_putxstrln()  これらは、以下で使われている。
  mkworddic/mkdic.c src-main/context.c src-splitter/metaword.c src-splitter/wordlist.c src-worddic/record.c src-util/convdb.c test/check.c  まあ、道理でparsed_data0がUTF-8環境で読めない。どうもEUCJPで文字列 をはき出しているわけです。これじゃ、まともに動かないのも納得です。 きっと連接の統計がまともにできていないので、連文節変換をすると変な 結果が出るようになったのだろう。とりあえず、修正。
-さらによく見ると、calctrans/proccorpus.cが以下になっている。</description>
+さらによく見ると、calctrans/proccorpus.cが以下になっている。
+ anthy_conf_override(&amp;quot;CONFFILE&amp;quot;, &amp;quot;../anthy-conf&amp;quot;); これは、ビルド中のソース内のファイルを見てほしいので以下にする。</description>
     </item>
     
     <item>
@@ -62,11 +59,11 @@ Anthyの文法係り受け定義 単文節内の、単語結合の遷移ルー�
 付属語グラフ 付属語ノードの結合ルールは、活用語尾や助詞や助動詞等のノードが一定の規則 にしたがって並んで、次のノードに遷移していくグラフ構造モデルです。
 この付属語グラフを規程するために読み込まれるall.depwordは、 活用語尾を定義したconjugate.tableと助詞や助動詞等のノードを定義した*.depwordを、 sedでコメント行を除き結合して生成します。
 このall.depwordは、基本的に
-@ノード名 &amp;quot;そこに続く単語1&amp;quot; &amp;quot;そこに続く単語2&amp;quot; .. &amp;quot;..n&amp;quot; \ @遷移するノード名1 @遷移するノード名2 .. @遷移するノード名m  という形式の行の繰り返しです。(読みやすいように折り返しましたが、 通常１行で記載します)
+@ノード名 &amp;quot;そこに続く単語1&amp;quot; &amp;quot;そこに続く単語2&amp;quot; .. &amp;quot;..n&amp;quot; \ @遷移するノード名1 @遷移するノード名2 .. @遷移するノード名m という形式の行の繰り返しです。(読みやすいように折り返しましたが、 通常１行で記載します)
 終端で次のノード名がない場合には、そこに@のみを遷移するノード名 として記します。
 上記では、@遷移するノード名と典型的な場合をイメージした形式で記しま したが、実際にはもう少し多くの情報を盛り込めます。具体的には {遷移の属性}{接続の強さ}@ノードの名前という形式です。
 遷移の属性は、depgraph/parse_transition()にあるtokenでswitchするcase分岐 構造のコードで扱われ、DOC/SPLITTERに説明されたアルファベット２文字の ニモニックです。ここにそれを内容をコードに揃えてアップデートし再録説明すると、
- 活用形  未然形 Cz (ct = CT_MIZEN) 連用形 Cy (ct = CT_RENYOU) 終止形 Cs (ct = CT_SYUSI) 連体形 Ct (ct = CT_RENTAI) 仮定形 Ck (ct = CT_KATEI) 命令形 Cm (ct = CT_MEIREI) 語幹形 Cg (ct = CT_HEAD)  自立語部の品詞  動詞 Hv (pos = POS_V) 名詞 Hn (pos = POS_NOUN) 形容詞 Hj (pos = POS_AJV)  文節の属性  名詞句?</description>
+ 活用形  未然形 Cz (ct = CT_MIZEN) 連用形 Cy (ct = CT_RENYOU) 終止形 Cs (ct = CT_SYUSI) 連体形 Ct (ct = CT_RENTAI) 仮定形 Ck (ct = CT_KATEI) 命令形 Cm (ct = CT_MEIREI) 語幹形 Cg (ct = CT_HEAD)   自立語部の品詞  動詞 Hv (pos = POS_V) 名詞 Hn (pos = POS_NOUN) 形容詞 Hj (pos = POS_AJV)   文節の属性  名詞句?</description>
     </item>
     
     <item>
@@ -82,17 +79,17 @@ Anthyの辞書関連定義ソースファイル 変換候補漢字が、読み�
 単純な品詞や頻度だけでは正しい漢字選択ができない場合に対応する「用例辞書」 ファイルudictはmkworddicにあります。
 Anthyの辞書ソースファイル処理機構 上記の「辞書」ファイルと「用例辞書」ファイルは、mkworddicディレクトリー 中にビルド時に生成されるmkworddicにより読み込まれ、さらに負の頻度を持つ 「逆変換用辞書」データーが追加作成されます。
 これを詳しく見ていきましょう。
-mkworddicが-fオプションでdict.argsを指定して起動されます。dict.args は通常同一ディレクトリー内のdict.args.in`からビルド時作成されます。 これを変更することで組み込まれる辞書は調節できます。
+mkworddicが-fオプションでdict.argsを指定して起動されます。dict.argsは通常同一ディレクトリー内のdict.args.in`からビルド時作成されます。 これを変更することで組み込まれる辞書は調節できます。
 dict.argsの設定内容の処理は、mkworddic/mkdic.c:execute_batch()で処理されます。
  readコマンドは指定された「辞書」ファイルをread_dict_file()で読み込みます。 read_ucコマンドは指定された「用例辞書」ファイルをread_udict_file()で読み込みます。 build_reverse_dictコマンドは「逆変換用辞書」データーをbuild_reverse_dict()で作成し追加します。 writeコマンドはメモリー中の全辞書データーを指定されたファイル（anthy.wdic）にwrite_dict_file()で書き出します。  詳細は、mkworddicのソースをmkworddic/mkdic.cから追いかけると見えてきます。
 ちなみに、anthy.wdicは、mkanthydic/ディレクトリーのファイルから生成するビルド 時用のバイナリープログラムmkfiledicにより、単語の条件付き連鎖発現頻度情報を整理 して生成する各種情報ファイルと統合され、漢字かな変換実行時に用いられるanthy.dic となります。
 Anthyの辞書ソースファイル構造(基本) mkanthydic/mkdic.c:push_back_word_entry_line()からコードを読むと辞書ファイルの 構造が分かります。
 最も典型的な辞書ソースデーターファイルの構造は、半角スペースで区切られた以下の 構造をしています。
-&amp;lt;ひらがな見出し語&amp;gt; [#&amp;lt;品詞&amp;gt;[*&amp;lt;頻度&amp;gt;] [&amp;lt;変換後文字列&amp;gt;]... ]...   &amp;lt;ひらがな見出し語&amp;gt; (index)は、全角ひらがな以外の半角・全角の数字や記号も許されます。 *&amp;lt;頻度&amp;gt;は省略可能です。 &amp;lt;変換後文字列&amp;gt;は同音異字に関して繰り返し羅列可能です。 #&amp;lt;品詞&amp;gt;*&amp;lt;頻度&amp;gt; [&amp;lt;変換後文字列&amp;gt;]...も繰り返し羅列可能です。  #&amp;lt;品詞&amp;gt;に関しては後述する。
+&amp;lt;ひらがな見出し語&amp;gt; [#&amp;lt;品詞&amp;gt;[*&amp;lt;頻度&amp;gt;] [&amp;lt;変換後文字列&amp;gt;]... ]...  &amp;lt;ひらがな見出し語&amp;gt; (index)は、全角ひらがな以外の半角・全角の数字や記号も許されます。 *&amp;lt;頻度&amp;gt;は省略可能です。 &amp;lt;変換後文字列&amp;gt;は同音異字に関して繰り返し羅列可能です。 #&amp;lt;品詞&amp;gt;*&amp;lt;頻度&amp;gt; [&amp;lt;変換後文字列&amp;gt;]... も繰り返し羅列可能です。  #&amp;lt;品詞&amp;gt;に関しては後述する。
 ただし、現在は「&amp;lt;ひらがな見出し語&amp;gt;」は30文字までに制約されています。この他、 プログラム内の各種文字列長は固定長でいろいろ制約があることが多いので要注意です。
 またindex中の濁点は通常「が」のように１文字表現をしますが、１文字表現の無い 「う゛」は２文字表記されています。
 辞書中に「う゛」を「ヴ」で置き換えた項目を入れることはDebianが使っている 0.3のソース中ではされていません。現在のanthyの入力対応は、ひらがな・ カタカナ・ローマ字で、入力はひらがなに変換してから漢字変換操作がされるので、 「ヴ」は自動的に「う゛」となります。だからたとえ、フロントエンドがibusの 場合で「ヴ」をひらがなに混ぜて返す仕様となっていても問題は起こりません。 辞書中の「&amp;lt;ひらがな見出し語&amp;gt;」に「ヴ」を書くのを加えるのは 使われない無駄なデーターとなるので好ましくありません。（辞書ファイル中の README中の文言は無視しましょう）
- src-main/main.c:need_reconvert() src-worddic/word_dic.</description>
+ src-main/main.c:need_reconvert() src-worddic/word_dic.c:anthy_get_seq_ent_from_xstr()  このソース辞書から作られるanthy.</description>
     </item>
     
     <item>
@@ -107,7 +104,7 @@ Anthyの辞書ソースファイル構造(基本) mkanthydic/mkdic.c:push_back_w
 日本人姓名をカタカナ表記化で集約統計するのは頻度情報集計時の追加後処理 操作のようです。
 mecab処理に使うunidicの元ファイルの辞書lex.csvには漢字も収録されていました。
 たとえば、「ヒロシ」だと：
-ひろし,14726,15499,7326,名詞,固有名詞,人名,名,... ヒロシ,14726,15499,1100,名詞,固有名詞,人名,名,... 博,14726,15499,5515,名詞,固有名詞,人名,名,... 博史,14726,15499,6555,名詞,固有名詞,人名,名,... 博司,14726,15499,6556,名詞,固有名詞,人名,名,... 博士,14726,15499,8204,名詞,固有名詞,人名,名,... 博師,14726,15499,6556,名詞,固有名詞,人名,名,... 博志,14726,15499,6556,名詞,固有名詞,人名,名,... 博至,14726,15499,6556,名詞,固有名詞,人名,名,... 博詞,14726,15499,6556,名詞,固有名詞,人名,名,... 博資,14726,15499,6556,名詞,固有名詞,人名,名,... 啓,14726,15499,7246,名詞,固有名詞,人名,名,... 啓史,14726,15499,6556,名詞,固有名詞,人名,名,... ...  数えると「名詞,固有名詞,人名,名」で読みが「ヒロシ」が８６ありました。 他の名前情報源の列挙数と比較して遜色なくこれだけで十分な感じです。
+ひろし,14726,15499,7326,名詞,固有名詞,人名,名,... ヒロシ,14726,15499,1100,名詞,固有名詞,人名,名,... 博,14726,15499,5515,名詞,固有名詞,人名,名,... 博史,14726,15499,6555,名詞,固有名詞,人名,名,... 博司,14726,15499,6556,名詞,固有名詞,人名,名,... 博士,14726,15499,8204,名詞,固有名詞,人名,名,... 博師,14726,15499,6556,名詞,固有名詞,人名,名,... 博志,14726,15499,6556,名詞,固有名詞,人名,名,... 博至,14726,15499,6556,名詞,固有名詞,人名,名,... 博詞,14726,15499,6556,名詞,固有名詞,人名,名,... 博資,14726,15499,6556,名詞,固有名詞,人名,名,... 啓,14726,15499,7246,名詞,固有名詞,人名,名,... 啓史,14726,15499,6556,名詞,固有名詞,人名,名,... ... 数えると「名詞,固有名詞,人名,名」で読みが「ヒロシ」が８６ありました。 他の名前情報源の列挙数と比較して遜色なくこれだけで十分な感じです。
 ちなみに、lex.csvの最初の4つは必須エントリの意味は
  表層形 左文脈ID (単語を左から見たときの文脈 ID) 右文脈ID (単語を右から見たときの文脈 ID) 単語コスト (小さいほど出現しやすい)  となっています。
 こうなると、４つ目のエントリが最小の1100の「ヒロシ」が代表とも言えるし、 漢字で選ぶなら「博」を第一番目漢字変換候補とするなどで簡単に候補序列の 設定にも対応できそうです。
@@ -126,9 +123,9 @@ mecab処理に使うunidicの元ファイルの辞書lex.csvには漢字も収�
       
       <guid>/jp/2019/05/06/jpn-ime-resource-03/</guid>
       <description>辞書のライセンス V.2.x以降の現代書き言葉UniDic（旧名：unidic-mecab）および、Ver.2.2.x以降の 現代話し言葉UniDicは、完全なフリーソフトウェアになりました。 GPL/LGPL/BSD Licenseのトリプルライセンスですので、営利目的での利用模含めて 自由に行うことができます。一番良いです。
-Jumann++ や mecab-ipadic-neologdは、&amp;rdquo;Apache License, Version 2.0&amp;rdquo; です。
+Jumann++ や mecab-ipadic-neologdは、&amp;ldquo;Apache License, Version 2.0&amp;rdquo; です。
 SJ3 は BSDライセンスのようです。
-ちなみに、&amp;rdquo;Apache License, Version 2.0&amp;rdquo;はGPLとのライセンスとしての互換性を改善 されているとのこと。
+ちなみに、&amp;ldquo;Apache License, Version 2.0&amp;quot;はGPLとのライセンスとしての互換性を改善 されているとのこと。
 これらデーターベース辞書を利用して逆変換できないところまで抽出加工処理して、 特定の目的のためのデーター構造を持った内容のデーターベース辞書を 「新たなデーターベース辞書」として作った場合、そのライセンスはどうあるべきかは、 基本的に「新たなデーターベース辞書」の作成者が設定すると考えます。
 そもそも辞書データーとは、元の著作権のある各種文書データーから、元文書での使用 例を参考に元の著作権の影響を受けないよう編集し新規に作成したもので、他の辞書 情報も作成の際に参考にして作成しるわけで、それでも新規性ある別の物として作成 される物です。
 まず、元情報を利用条件を守って利用する必要はあります。ただ、研究調査での使用 許可等があれば、それを使って「新たなデーターベース辞書」を作成した場合、 元ファイルを同梱しない限り、「新たなデーターベース辞書」の頒布に元辞書を継承 する必要は無いと考えます。
@@ -146,15 +143,13 @@ SJ3 は BSDライセンスのようです。
       
       <guid>/jp/2019/05/05/jpn-ime-resource-02/</guid>
       <description>フリー（無償）で入手し、研究用なら制約無く使用ができる各種辞書の情報です。
-Unidic  語彙数: 87万語 (2018-03版) GPL/LGPL/BSD License 新　UniDic 2.2GB 旧　UniDic MeCab で UniDic 辞書を使ってみる
-$ wc -l lex.csv 872831 lex.csv   活用形はすべて展開して、それぞれ１行のデーターとなっている。
+Unidic  語彙数: 87万語 (2018-03版) GPL/LGPL/BSD License 新　UniDic 2.2GB 旧　UniDic MeCab で UniDic 辞書を使ってみる  $ wc -l lex.csv 872831 lex.csv 活用形はすべて展開して、それぞれ１行のデーターとなっている。
 もし頻度表が全辞書形と考えると、表層形900K/辞書形180Kと大きいとも言えるが、 スマホ写真１枚分のデーターより小さいともいえる。
-canna辞書(Anthy)  語彙数: 13万の読みの異なる言葉 GPL
-$ wc -l gcanna.t 137488 gcanna.t   このファイルは現代的な感覚では、4.6MBと非常に小さい。
+canna辞書(Anthy)  語彙数: 13万の読みの異なる言葉 GPL  $ wc -l gcanna.t 137488 gcanna.t このファイルは現代的な感覚では、4.6MBと非常に小さい。
 各種情報も織り込んだBinary辞書のanthy.dicでも23MB程度。
 Mozc /usr/lib/mozc/mozc_serverは、約18MBという巨大なサイズがある。
 これは、辞書をプログラムないのメモリーイメージで静的内蔵しているためと 推察される。でも写真数枚程度で、現代的な感覚ではメモリー常駐させるのが 十分可能なサイズともいえる。
-$ du -Sh . 59M $ wc -l id.def 2652 id.def  ソース中の辞書ファイルサイズ概算59MBと６０MB近くありAnthyより１桁大ききい。 品詞分類数は2652ときめ細かい。
+$ du -Sh . 59M $ wc -l id.def 2652 id.def ソース中の辞書ファイルサイズ概算59MBと６０MB近くありAnthyより１桁大ききい。 品詞分類数は2652ときめ細かい。
 ソース中の辞書ファイルは100K行のデーターが定義されたファイルで １０個ほどあるので、展開済み登録語彙数は約１００万語程度と見受ける。 こうみてもanthy等の１０倍の単語登録がある。(ただし、Anthyは１行に複数語 登録するので実際の差は小さいかもしれない。)
 まあデーターが巨大なので変換精度は上がるが、リソース消費が大きく動作が重く なる懸念がある。
 Jumann++  基本語彙辞書 3万語 WEB等含む合計 90万語 Apache License, Version 2.</description>
@@ -166,7 +161,7 @@ Jumann++  基本語彙辞書 3万語 WEB等含む合計 90万語 Apache License,
       <pubDate>Sun, 05 May 2019 01:29:00 +0900</pubDate>
       
       <guid>/jp/2019/05/05/jpn-ime-resource-01/</guid>
-      <description>anthy 関連のリソース（日本語中心）  Original upstream  https://ja.osdn.net/projects/anthy/  Easy to read mail archive  https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd1.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd2.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd3.html  Debian (*****)  wiki: http://wiki.debian.org/Teams/DebianAnthy salsa: https://salsa.debian.org/debian/anthy/tree/debian (current)  salsa: https://salsa.debian.org/input-method-team/anthy (old)  BTS: https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=anthy  G-HAL (engine patch)  2019-04-06: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/im.html#anthy 2018-05-31: http://www.fenix.ne.jp/~G-HAL/whatsnew/20182nd.html#whatsnew2018530 2011-10-08: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/anthy.html  vagus (dictionary patch)  2012-03-10: http://vagus.seesaa.net/ https://osdn.net/projects/alt-cannadic/wiki/FrontPage  ootnegx  2011-12-03: http://ootnegx.blogspot.com/2011/12/g-hal-anthy.html  archlinux wiki  2018-08-30: https://wiki.archlinux.jp/index.php/Uim_%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B#Anthy  kakurasan  2010-11-20: https://kakurasan.hatenadiary.jp/entry/20101120/p1 2010-12-14: https://kakurasan.</description>
+      <description>anthy 関連のリソース（日本語中心）  Original upstream  https://ja.osdn.net/projects/anthy/   Easy to read mail archive  https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd1.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd2.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd3.html   Debian (*****)  wiki: http://wiki.debian.org/Teams/DebianAnthy salsa: https://salsa.debian.org/debian/anthy/tree/debian (current) salsa: https://salsa.debian.org/input-method-team/anthy (old)  BTS: https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=anthy   G-HAL (engine patch)  2019-04-06: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/im.html#anthy 2018-05-31: http://www.fenix.ne.jp/~G-HAL/whatsnew/20182nd.html#whatsnew2018530 2011-10-08: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/anthy.html   vagus (dictionary patch)  2012-03-10: http://vagus.seesaa.net/ https://osdn.net/projects/alt-cannadic/wiki/FrontPage   ootnegx  2011-12-03: http://ootnegx.blogspot.com/2011/12/g-hal-anthy.html   archlinux wiki  2018-08-30: https://wiki.archlinux.jp/index.php/Uim_%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B#Anthy   kakurasan  2010-11-20: https://kakurasan.</description>
     </item>
     
     <item>
@@ -177,11 +172,10 @@ Jumann++  基本語彙辞書 3万語 WEB等含む合計 90万語 Apache License,
       <guid>/jp/2019/03/23/gnome-uskb-im-select/</guid>
       <description>キーボード入力モード選択 Gnome等のLinuxの日本語環境でキーボード入力モード選択がトグル（ローテート） 動作（日本語/英語の交互切り替え)だと今どっちか分からなくなって結構不便です。
 SUPER-SPACEとSHIFT-SUPER-SPACEがGnomeの側でのキーボード入力ソースの デフォルトの切り替えキーです。
-input methos内での切り替えは、昔のWindowsと同じ&amp;rdquo;zenkaku-hankaku&amp;rdquo;とか、 Unix系では良く使う&amp;rdquo;Shift-space&amp;rdquo;が良くバインドされています。
+input methos内での切り替えは、昔のWindowsと同じ&amp;quot;zenkaku-hankaku&amp;quot;とか、 Unix系では良く使う&amp;quot;Shift-space&amp;quot;が良くバインドされています。
 切り替えが、状態が分からなくとも一発でできるのが望ましいので、 その設定方法を以下に記します。
 日本語キーボードのIM側の設定方法 日本語キーボードだと、変換と無変換キーを、Anthyの入力モード HiraganaとLatinへの切り替えにAnthyの中のキーバインディングで 設定して常にibus-anthyで使うことで何とかなります。これは特に 問題ありません。
- 変換キー: 全角かな入力 (hiragana mode) 無変換キー: 英数半角入力 (latin mode)
-  ALT-漢字、漢字、ALT-`等でのトグル動作が嫌いで、Macの真似でこんな キーバインディングしています。
+ 変換キー: 全角かな入力 (hiragana mode) 無変換キー: 英数半角入力 (latin mode)  ALT-漢字、漢字、ALT-`等でのトグル動作が嫌いで、Macの真似でこんな キーバインディングしています。
 Windows10でもトグル動作が嫌いで、OS側から プロパティ → 詳細設定 → キー設定　変更 として以下の設定で同様の操作感にそろえています。
  変換キー: IME-ON (IMEは全角かな入力モードにしておく) 無変換キー: IME-OFF  英語キーボードでのIM側の設定方法 (ibus+Anthy) ただ、英語キーボードの場合は変換と無変換キーはありません。
  SHIFTと普通の文字との組み合わせは論外。 CTRLと普通の文字との組み合わせも、VIM使うので全部先約有り。 ALTと普通の文字との組み合わせも、メニューへのショートカットで全部先約有り。  こういったことも有り、私はAnthyの中のキーバインディングで CTRL-SPACE, SHIFT-SPACEを一時使っていました。

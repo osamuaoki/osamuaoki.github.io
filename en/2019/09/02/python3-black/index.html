@@ -54,78 +54,52 @@
   </tbody>
 </table>
 
-
-
 <p>I see formatting consistency provided by the <code>black</code> command helps me.</p>
-
 <p>The <code>black</code> is available as Debian package and its upstream is at
 <a href="https://github.com/psf/black">https://github.com/psf/black</a></p>
-
 <h2 id="lint-tools-before-black">Lint tools before <code>black</code></h2>
-
 <p>These are basic lint tools before <code>black</code>.</p>
-
 <ul>
 <li><code>pycodestyle</code> (formerly called <code>pep8</code>)</li>
 <li><code>flake8</code> (bundle of: <code>pycodestyle</code> + <code>pyflakes</code>).</li>
 </ul>
-
 <h2 id="install-black">Install <code>black</code></h2>
-
 <pre><code> $ sudo apt install python3-black
-</code></pre>
-
-<h2 id="use-black">Use <code>black</code></h2>
-
+</code></pre><h2 id="use-black">Use <code>black</code></h2>
 <pre><code> $ black a-python-code-directory/
-</code></pre>
-
-<p>or</p>
-
+</code></pre><p>or</p>
 <pre><code> $ black a-python-code-file.py
-</code></pre>
-
-<h2 id="skip-lint-prigram">Skip Lint prigram</h2>
-
+</code></pre><h2 id="skip-lint-prigram">Skip Lint prigram</h2>
 <p>Line with <code>#NOQA</code> at the end are skipped by <code>pycodestyle</code> for PEP-8 lint.</p>
-
 <p>Lines between <code># fmt: off</code> and <code># fmt: on</code> are skipped by the <code>black</code>.</p>
-
 <h2 id="make-black-to-work-with-other-tools">Make <code>black</code> to work with other tools</h2>
-
 <p>Adding followings to <code>pyproject.toml</code> may be useful.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#66d9ef">[flake8]</span>
+<span style="color:#a6e22e">max-line-length</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">88</span>
+<span style="color:#a6e22e">select</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">C,E,F,W,B,B950</span>
+<span style="color:#a6e22e">ignore</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">E203,W503,W504</span>
 
-<pre><code class="language-ini">[flake8]
-max-line-length = 88
-select = C,E,F,W,B,B950
-ignore = E203,W503,W504
-
-[tool.isort]
-include_trailing_comma = true
-line_length = 88
-multi_line_output = 3
-</code></pre>
-
-<p>Here:</p>
-
+<span style="color:#66d9ef">[tool.isort]</span>
+<span style="color:#a6e22e">include_trailing_comma</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">true</span>
+<span style="color:#a6e22e">line_length</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">88</span>
+<span style="color:#a6e22e">multi_line_output</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">3</span>
+</code></pre></div><p>Here:</p>
 <ul>
 <li>max-line-length per line
-
 <ul>
 <li>Black default is 88 ch/line <a href="https://github.com/psf/black#line-length">https://github.com/psf/black#line-length</a></li>
 <li>Ignore <code>E501</code> for line too long (82 &gt; 79 characters)</li>
-</ul></li>
+</ul>
+</li>
 <li><a href="https://pep8.readthedocs.io/en/latest/intro.html#error-codes">pep8 Warning / Error codes</a>
-
 <ul>
 <li><code>E203</code> for <a href="https://github.com/psf/black#slices">https://github.com/psf/black#slices</a></li>
 <li><code>W503</code> for <a href="https://github.com/psf/black#line-breaks--binary-operators">https://github.com/psf/black#line-breaks--binary-operators</a></li>
 <li><code>W504</code> for line break after binary operator (default ignored)</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h2 id="other-programs">Other programs</h2>
-
 <ul>
 <li><a href="https://github.com/timothycrosley/isort">isort</a> is a Python utility /
 library to sort imports alphabetically, and automatically separated into
@@ -156,7 +130,7 @@ for validating Python code style with the command line code formatting tool
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

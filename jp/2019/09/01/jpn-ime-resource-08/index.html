@@ -54,55 +54,41 @@
   </tbody>
 </table>
 
-
-
-<!-- vim: se ai tw=79: -->
-
-<h2 id="0-4に向けた変更">0.4に向けた変更</h2>
-
+<!-- raw HTML omitted -->
+<h2 id="04に向けた変更">0.4に向けた変更</h2>
 <p>Debian Busterの(0.3系)のAnthyに関して、Busterはフリーズ中なので、
 リリースの邪魔をしない苦肉の策として、機能的に最低限必要なバグ修正のみに
 対応したパッケージをDebianのexperimentalに
 <a href="https://tracker.debian.org/news/1039742/accepted-anthy-103-9-source-all-amd64-into-experimental/">anthy 1:0.3-9</a>
 としてアップロードしました。</p>
-
 <p>その後、gniibeさんから連絡があり、私の提案とは少し違ういい感じで改訂され
 anthy 1:0.4-2 がリリースされました。これでひとまず解決したので、
 当面AnthyのBuildトライは休憩することにしました。</p>
-
 <h2 id="過去のbuildトライ時の問題点">過去のBuildトライ時の問題点</h2>
-
 <p>治ったとは思いますが、以前気になった点を備忘録でここに記します。</p>
-
 <p>「だよ～ん」無限ループ問題です。これはコーパス修正による回避ではなく、
 calctrans.cが呼ぶproccorpus.cを見直し無限ループに入らないようにしました。
 bdd71e4 (&ldquo;Ignore problematic line to avoid infinite loop&rdquo;, 2019-05-31)</p>
-
 <p>さらに、平成の市町村合併前のZIPコードのままなのは気になります。まあ、郵便局
 の元データーから作り直すのも手なんですが、実際に使えるデーターとするには
 一部手動調整があります。ライセンス的にはskkでもmozcでも、どちらのZIPデーター
 でも良かったのですが、京都市街中心部の歴史的住所がうまく手動調整されていた
 skkのデーターが気に入ったので、簡単にvimで整形して置き換えました。</p>
-
 <h2 id="波ダッシュ問題">波ダッシュ問題</h2>
-
 <p>どうも、世間の常識のようですが、「波ダッシュ問題」に気づきました。
 Buildトライ時に気づいたことをメモしておきます。</p>
-
 <p>0.3のコーパス中で問題となっていたのは
 「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。
 ibus-anthyでチルダで入力できるのは
 「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。
 ibus-mozcでチルダで入力できるのは
 「〜」(UTF-8: E3 80 9C, U+301C)波ダッシュです。</p>
-
 <p>これで気になって、波ダッシュ WAVE_DASH (Shift_JIS:0x8160, Unicode:U+301C)と
 全角チルダ FULLWIDTH_TILDE(Shift_JIS:0xFF5E, Unicode:U+FF5E)の違いや状況を
 調べてみました。結論は、日本語の文中に書く「波ダッシュ」は本来の「波ダッシュ」
 U+301Cが正しいようだ。Windows XP以前のデーターは「波ダッシュ」が見た目で文字化
 けするので、これを避けるために「全角チルダ」を本来の「波ダッシュ」の代用に使っ
 ているようです。</p>
-
 <ul>
 <li><a href="https://ja.wikipedia.org/wiki/Unicode#.E6.97.A5.E6.9C.AC.E8.AA.9E.E7.92.B0.E5.A2.83.E3.81.A7.E3.81.AEUnicode.E3.81.AE.E8.AB.B8.E5.95.8F.E9.A1.8C">波ダッシュ・全角チルダ問題</a></li>
 <li><a href="https://ja.wikipedia.org/wiki/%E6%B3%A2%E3%83%80%E3%83%83%E3%82%B7%E3%83%A5">波ダッシュ</a></li>
@@ -113,41 +99,31 @@ U+301Cが正しいようだ。Windows XP以前のデーターは「波ダッシ�
 <li><a href="http://software.fujitsu.com/jp/manual/manualfiles/M060036/J2S19850/01Z2B/note03/note0117.htm">http://software.fujitsu.com/jp/manual/manualfiles/M060036/J2S19850/01Z2B/note03/note0117.htm</a></li>
 <li><a href="https://srkzhr.hatenadiary.org/entry/20090617/1245254444">https://srkzhr.hatenadiary.org/entry/20090617/1245254444</a></li>
 </ul>
-
 <p>今後はanthyも、かな入力時は「〜」(UTF-8: E3 80 9C, U+301C)「波ダッシュ」に揃えて行く方が良さ
 そうですね。英数記号入力時は「全角チルダ」とするのでしょうね。</p>
-
 <p>これで思い出したのは「う゛」である。もうそろそろ Diacriticを使わずに、「ゔ」(U+3094)
 を内部的に使った方がすっきりする気もします。</p>
-
 <h2 id="辞書ファイルの内部構造のメモ">辞書ファイルの内部構造のメモ</h2>
-
 <p>gniibeさんは、旧コードの辞書のバグが嫌になり、システム辞書はハッシュを使う
 新データーベースのコードに置き換え、ユーザー辞書は単純リニアサーチのコード
 を使っているようです。変更履歴にtrieデーター構造は捨ているとも書かれています。</p>
-
 <p>一方、G-HALさんは、どうも旧コードをバグ修正などをしながら使い続けているようです。
 さらにどこかでtokyocabinetをデーターベースで使っているようだし、ユーザー辞書は
 trieデーター構造のコードが使われているようでもあります。</p>
-
 <p>よく読んだわけでは無いので自信は無いですが、anthyに入っているtrieデーター構造は
 base/next/chack等の表現が見当たらず、メモリーフットプリントを心配しているので、
 ナイーブなtrieデーター構造のような気がしています。</p>
-
 <p>この手の辞書は、やはりtrieデーター構造を使うのが一番いい気がします。mozcは、C++
 でかかれていてtrieデーター構造を使っています。意外と大きなデーターを扱う
 のに比較的小さなメモリフットプリントなのは、メモリ使用に配慮したデーター構造
 <a href="http://chasen.org/~taku/software/darts/">Darts</a>
 だからと感じています。</p>
-
 <p>anthyはCコードなので、Cでかかれた同様のものが無いかと見渡していたらありました。
 <a href="https://linux.thai.net/~thep/datrie/">An Implementation of Double-Array Trie</a>
 というタイ語の処理系で使われてきたDouble-Array Trieコードがあり、かなりこなれ
 たもののようです。UpstreamはDDで、パッケージ化済みなようなので、魅力的です。</p>
-
 <p>ただ、この手のスピードやメモリフットプリントの最適化は、現状を見ると優先順位は
 あまり高くないですね。</p>
-
 <p>とりあえずは、もう少しバカなことを提案しない「かな漢字変換」が当面の最重要課題
 の気がします。そういった意味でも、「変換結果の客観評価」が大事です。</p>
 
@@ -172,7 +148,7 @@ base/next/chack等の表現が見当たらず、メモリーフットプリン�
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

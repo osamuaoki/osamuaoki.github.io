@@ -54,24 +54,15 @@
   </tbody>
 </table>
 
-
-
 <p>Arduino Uno/Nano に使われている基本のシリアルAVRの
 <a href="https://www.microchip.com/wwwproducts/en/ATmega328p">ATmega328P</a>
 を中心としてAVRチップのプログラムの練習の続きをしました。</p>
-
 <p>確かにハードとして少々古い感はありますが、５V仕様で安価で入手簡単な開発
 ボードがあるのが練習用にいい感じです。</p>
-
 <h2 id="開発環境">開発環境</h2>
-
 <p>クロスコンパイル開発環境は以下でOK（2020/03, Debian stable buster）</p>
-
 <pre><code> $ sudo apt install gcc-avr avr-libc binutils-avr
-</code></pre>
-
-<h2 id="コードスタイル">コードスタイル</h2>
-
+</code></pre><h2 id="コードスタイル">コードスタイル</h2>
 <p>以下色々なところからコードを引っ張ってくると、コードスタイルが混じって
 見づらくなるし、手動で直すのもばかばかしいのでちょっとコードスタイル関係を
 調べました。もともとK&amp;R系のTAB無し2-4スペースインデントの
@@ -79,60 +70,35 @@
 なので、色々のスタイルガイドを見て、結局
 <a href="https://github.com/google/styleguide/">GOOGLEスタイル</a>
 に最も共感しました。</p>
-
 <p>今後はPython以外は全言語基本2スペースインデントにします。</p>
-
-<p>VIMのモードライン&copy;</p>
-
+<p>VIMのモードライン(C)</p>
 <pre><code>// vim: set sts=2 sw=2 ft=c ai si et tw=80:
-</code></pre>
-
-<p>VIMのモードライン(SH)</p>
-
+</code></pre><p>VIMのモードライン(SH)</p>
 <pre><code># vim: set sts=2 sw=2 ft=sh ai si et tw=80:
-</code></pre>
-
-<p>VIMのモードライン(PYTHON)</p>
-
+</code></pre><p>VIMのモードライン(PYTHON)</p>
 <pre><code># vim: set sts=4 sw=4 ft=python ai si et:
-</code></pre>
-
-<p>Cの自動リフォーマットは</p>
-
+</code></pre><p>Cの自動リフォーマットは</p>
 <pre><code> $ clang-format -style=Google -i filename.c
-</code></pre>
-
-<p>SHELLの全文リフォーマットはVIMで(modelineが無い場合は<code>:set syntax=sh</code>の後)<code>gg=G</code>とする。</p>
-
+</code></pre><p>SHELLの全文リフォーマットはVIMで(modelineが無い場合は<code>:set syntax=sh</code>の後)<code>gg=G</code>とする。</p>
 <p>PYTHONの全文リフォーマットは「black」を使います。</p>
-
 <h2 id="レファレンス文書">レファレンス文書</h2>
-
 <p>MICROCHIP社（AVRを作っていた旧Atmel社はPICを作っていた旧MICROCHIP社と合併
 して、現在MICROCHIP社をして両方を供給中）の
 <a href="https://www.microchip.com/webdoc/index.html">AVR関連英文サイト</a>
 が基本の開発関連レファレンス文書を広くカバーしています。</p>
-
 <p>日本語資料は、<a href="https://avr.jp/">ＡＶＲ日本語情報サイト</a>に素晴らしい
 公式文書の翻訳資料群があります。</p>
-
 <p>特にソフトに関しては
 <a href="https://onlinedocs.microchip.com/pr/GUID-317042D4-BCCE-4065-BB05-AC4312DBC2C4-en-US-1/index.html">AVR Libc Reference Manual 英文 MICROCHIPサイト</a>・
 <a href="https://www.nongnu.org/avr-libc/user-manual/">AVR Libc Reference Manual 英文 NONGNUサイト</a>。<a href="https://cega.jp/avr-libc-jp/">AVR Libc 日本語版</a>もあります。
 は重要です。</p>
-
 <p>もちろん対象ハードである<a href="http://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061A.pdf">ATmega328Pのデーターシート</a>
 も重要です。<a href="https://avr.jp/user/DS/PDF/mega328P.pdf">ATmega328/328Pのデーターシート 日本語版</a></p>
-
 <h2 id="例-led点滅-lチカ">例: LED点滅 (Lチカ)</h2>
-
 <p>まず、単純なLEDの点滅（通称Lチカ）を例にプログラム開発を示します。</p>
-
 <h3 id="cのソースコード">Cのソースコード</h3>
-
 <p>以下にLチカのCのソースコード <code>blink.c</code>を示します。
 これでNanoのPB5ピンにぶら下がっているLEDを0.5秒間隔でON/OFFします。</p>
-
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
@@ -148,79 +114,63 @@ int main(void) {
     _delay_ms(500);  // 500 ms delay
   }
 }
-</code></pre>
-
-<p>ここで普通のCのプログラムでは見かけないマクロの<code>_BV()</code>や、
+</code></pre><p>ここで普通のCのプログラムでは見かけないマクロの<code>_BV()</code>や、
 よく分からない変数<code>DDRB</code>等が気になります。</p>
-
 <p>AVRクロスコンパイル開発環境では、普通を違い<code>/usr/lib/avr/include/</code>下に
 inclideファイルがあります。これさえ分かれば後はコードを見ればほぼ自明です。</p>
-
 <p>例えば<code>_BV()</code>は、基本のヘッダーファイル<code>avr/io.h</code>が読み込む
 <code>avr/sfr_defs.h</code>中に定義されています。</p>
-
 <pre><code>#define _BV(bit) (1 &lt;&lt; (bit))
-</code></pre>
-
-<p>ところで、見慣れない変数名ですがその答えは、<code>avr/io.h</code>や<code>avr/sfr_defs.h</code>
+</code></pre><p>ところで、見慣れない変数名ですがその答えは、<code>avr/io.h</code>や<code>avr/sfr_defs.h</code>
 を読むと見えてきます。ちなみに、<code>avr/io.h</code>はチップのIO（入出力）の定義の
 ヘッダーファイルで、<code>avr/sfr_defs.h</code>は「AVR special function registers」
 の定義のヘッダーファイルです。</p>
-
 <p>これらのヘッダーファイルは、xmega等もサポートするために少々複雑になって
 いますが、ザックリは対象chipのdatasheetを読んでIOポートの物理アドレスを
 手動で調べてそのアドレス値を数値でプログラムを書かなくとも、データーシー
 トの「ポートの名前」等をCの変数名として直接使えるようにするCマクロの
 仕組みです。</p>
-
 <p><code>io.h</code>がコンパイル時に<code>-mmcu=atmega328p</code>で選ばれたチップ毎に合わせて
 <code>iom328p.h</code>などの対応する定義ファイルをinclideすることで異なるハード
 ウエアーへの対応を実現しています。</p>
-
 <p>ポートの名前は、
 <a href="http://ww1.microchip.com/downloads/en/DeviceDoc/ATmega48A-PA-88A-PA-168A-PA-328-P-DS-DS40002061A.pdf">ATmega328Pのデーターシート</a>
 の「Register Description」の章を見ましょう。例えば：</p>
-
 <ul>
 <li><code>DDRB</code>は、Port B の Data Direction Register（データー入出力方向レジスター）
-
 <ul>
 <li>「0」WRITE、入力ポートに設定 (デフォルト)</li>
 <li>「1」WRITE、出力ポートに設定</li>
 <li>READ:　入出力方向設定値の読み出し</li>
-</ul></li>
+</ul>
+</li>
 <li><code>PORTB</code>は、Port B の Data Register (出力レジスター)
-
 <ul>
 <li>「0」WRITE、出力ポート: LOW (0V)設定  / 入力ポート: Pull-up OFF 設定 (デフォルト)</li>
 <li>「1」WRITE、出力ポート: HIGH (VCC)設定 / 入力ポート: Pull-up ON 設定</li>
 <li>READ:　出力設定値の読み出し</li>
-</ul></li>
+</ul>
+</li>
 <li><code>PINB</code>は、Port B の Input Pins Address (入力レジスター)　入力・出力ポートとも有効
-
 <ul>
 <li>「0」WRITE: 出力ビット設定値の無変更</li>
 <li>「1」WRITE: 出力ビット設定値の変更（トグル）</li>
 <li>READ:　入力値の読み出し</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>一方<code>_BV(bit)</code>の<code>bit</code>に書かれるマクロの値は文字列の最後の数字その物
 のことが多いです。データーシート中のビットの名前に合わせてあるので
 チップ間で一見命名が不規則な面があります。ただコードのポータビリティー
 のための変数名エリアスが<code>io*.h</code>にある程度定義されています。</p>
-
 <p>この他のマニュアル、特に
 <a href="http://ww1.microchip.com/downloads/en/Appnotes/Atmel-42787-AVR-Software-User-Guide_ApplicationNote_AVR42787.pdf">AVR42787: AVR Software User Guide</a>
 や
 <a href="http://ww1.microchip.com/downloads/en/Appnotes/doc1497.pdf">AVR035: Efficient C Coding for AVR</a>
 等にも目を通しましょう。</p>
-
-<h3 id="コンパイル-リンク-プログラム">コンパイル・リンク・プログラム</h3>
-
+<h3 id="コンパイルリンクプログラム">コンパイル・リンク・プログラム</h3>
 <p><a href="/jp/2020/02/21/atmega328p-1/">AVRISP mkII をISP接続</a>した上で
 コンパイル・リンク・プログラムは次の様に進めます。</p>
-
 <pre><code> $ avr-gcc -mmcu=atmega328p -Wall -Os -o blink.elf blink.c
  $ avr-size --mcu=atmega328p --format=avr blink.elf
 Program:     162 bytes (0.5% Full)
@@ -230,17 +180,11 @@ Data:          0 bytes (0.0% Full)
 (.data + .bss + .noinit
  $ avr-objcopy -j .text -j .data -O ihex blink.elf blink.hex
  $ sudo avrdude -p m328p -c avrisp2 -U flash:w:blink.hex
-</code></pre>
-
-<p>どうですか、Lチカしていますね。</p>
-
+</code></pre><p>どうですか、Lチカしていますね。</p>
 <p>小さなプログラムで、フラッシュ使用は162バイトで、SRAM使用は0バイトです。</p>
-
 <h2 id="例-led点灯">例: LED点灯</h2>
-
 <p>ビット値が1が、出力がHIGHであることを確認しましょう。上記ソースコードを
 以下の様に変更します。</p>
-
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
@@ -254,19 +198,12 @@ int main(void) {
   while (1) {
   }
 }
-</code></pre>
-
-<p>同様のコンパイル・リンク・プログラムをします。</p>
-
+</code></pre><p>同様のコンパイル・リンク・プログラムをします。</p>
 <p>どうですか、今度はLEDが付きっぱなしですね。</p>
-
 <p>さらに小さなプログラムで、フラッシュ使用は138バイトで、SRAM使用は0バイトです。</p>
-
-<h2 id="例-led点滅-lチカ-の別の方法">例: LED点滅 (Lチカ)の別の方法</h2>
-
+<h2 id="例-led点滅-lチカの別の方法">例: LED点滅 (Lチカ)の別の方法</h2>
 <p>PINへの書き込みによる、トグルを使うようにオリジナルのLED点滅ソースコードを
 以下の様に変更します。</p>
-
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
@@ -282,20 +219,13 @@ int main(void) {
     _delay_ms(500);  // 500 ms delay
   }
 }
-</code></pre>
-
-<p>同様のコンパイル・リンク・プログラムをします。</p>
-
+</code></pre><p>同様のコンパイル・リンク・プログラムをします。</p>
 <p>どうですか、Lチカしていますね。</p>
-
 <p>これも小さなプログラムで、フラッシュ使用は158バイトで、SRAM使用は0バイトです。
 同一機能を4バイト少なくして実現しました。</p>
-
 <h2 id="例-端子入力にあわせてled点滅">例: 端子入力にあわせてLED点滅</h2>
-
 <p>端子入力にあわせてLED点滅させるようにオリジナルのLED点滅ソースコードを
 以下の様に変更します。</p>
-
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
@@ -317,24 +247,15 @@ int main(void) {
     }
   }
 }
-</code></pre>
-
-<p>今回はビット値の設定をマクロではなく直接２進表記の数値でしました。</p>
-
+</code></pre><p>今回はビット値の設定をマクロではなく直接２進表記の数値でしました。</p>
 <p>同様のコンパイル・リンク・プログラムをします。</p>
-
 <p>どうですか、LEDが付いていますね。</p>
-
 <p>ここでPORTBの01234の5つのPIN(USBコネクターを右に置いた際に、手前
 USBコネクター側の端子)のどれかを接地(ground)するとLEDが消えますね。</p>
-
 <p>これも小さなプログラムで、フラッシュ使用は156バイトで、SRAM使用は0バイトです。</p>
-
 <h2 id="例-端子入力にあわせてledタイマー点灯">例: 端子入力にあわせてLEDタイマー点灯</h2>
-
 <p>端子入力にあわせてLEDを3秒間タイマー点灯させるようにオリジナルの
 LED点滅ソースコードを以下の様に変更します。</p>
-
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
@@ -382,73 +303,50 @@ int main(void) {
     }
   }
 }
-</code></pre>
-
-<p>ここでPORTBの01234の5つのPIN(USBコネクターを右に置いた際に、手前
+</code></pre><p>ここでPORTBの01234の5つのPIN(USBコネクターを右に置いた際に、手前
 USBコネクター側の端子)のどれかを接地(ground)するとLEDが3秒間点灯
 します。</p>
-
 <p>ちょっと大きくはなったとは言えまだ小さなプログラムで、
 フラッシュ使用は286バイトで、SRAM使用は0バイトです。</p>
-
 <h2 id="シリアル経由のプログラム">シリアル経由のプログラム</h2>
-
 <p>Optibootが入っていればシリアル経由のプログラムができます。</p>
-
-<p>入れ方は、<a href="https://osamuaoki.github.io/jp/2020/02/21/atmega328p-1/">https://osamuaoki.github.io/jp/2020/02/21/atmega328p-1/</a>
+<p>入れ方は、https://osamuaoki.github.io/jp/2020/02/21/atmega328p-1/
 の最後の「Optiboot プログラムのインストール」を参照下さい</p>
-
 <p><code>avrdude</code>を<code>-e</code>付きで実行するような乱暴なことをせず、
 上記の様にISPからの書き込みが下位アドレスに留まれば、高位
 アドレスのOptibootは温存されます。</p>
-
 <p>Optibootが入っていることは、電源供給時にRESETを押すと、ピカピカ
 とLEDが2回光るので確認できます。</p>
-
 <p>ホストPCから開発ボードのUSBポートにUSBケーブルをつなぎ、
 USB-Serial変換器（Arduino UnoはFT232Rが、Arduino Nano互換機では
 CH340がその役割）経由でATmega328PのD0/D1ピンにシリアルにデーター
 を流し込みプログラムするには、上記のISP経由の書き込みに換え、
 以下をホストPCから実行します。</p>
-
 <pre><code> $ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:blink.hex
-</code></pre>
-
-<p>この方がプログラム更新にはISPよりはるかに手軽です。</p>
-
+</code></pre><p>この方がプログラム更新にはISPよりはるかに手軽です。</p>
 <p>もちろんFUSE操作などにはISPは不可欠です。</p>
-
 <p>TIP: 上記で使用したシリアルデバイス名「ttyUSB0」は<code>sudo dmesg</code>などとして探します。</p>
-
 <h2 id="makefile">Makefile</h2>
-
 <p>毎回シェルにコマンドを打ち込むのも面倒です。</p>
-
 <p>こういった基本的な開発環境では、<code>Makefile</code>を使いたいですよね。
 <code>Makefile</code>の基本テンプレートは以下がよく使われます。</p>
-
 <pre><code> $ sudo apt install subversion
  $ svn checkout https://svn.code.sf.net/p/winavr/code/trunk winavr-code
-</code></pre>
-
-<p>Linux系の開発環境だとGNU Make を使うので、この中の
+</code></pre><p>Linux系の開発環境だとGNU Make を使うので、この中の
 <code>winavr-code/Mfile/data/makefile_template.winavr</code>
 が基本テンプレートとなります。これをソース内に
 <code>Makefile</code>にコピーして、周波数・チップ種・プログラマーなどに合わせ
 変数を書き換えて使います。</p>
-
 <h3 id="make関連参考情報">make関連参考情報</h3>
-
 <ul>
 <li><a href="https://www.avrfreaks.net/forum/there-winavr-makefile-template">Wimavr Makefileの経緯情報</a></li>
 <li><a href="https://github.com/sudar/Arduino-Makefile">arduino-mk &ndash; Makefile for Arduino sketches</a> &ndash; Debian arduino-mk パッケージの元ネタ
-
 <ul>
 <li>使用例: <a href="https://blog.myon.info/entry/2013/08/02/entry/">Linuxで快適Arduino開発（Vim + Makefile）</a></li>
-</ul></li>
 </ul>
-
-<!-- vim: set sts=2 sw=2 ai et si tw=80: -->
+</li>
+</ul>
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -471,7 +369,7 @@ CH340がその役割）経由でATmega328PのD0/D1ピンにシリアルにデー
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

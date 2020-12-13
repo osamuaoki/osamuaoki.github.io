@@ -54,68 +54,50 @@
   </tbody>
 </table>
 
-
-
 <p>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの
 <a href="https://www.microchip.com/wwwproducts/en/ATmega328p">ATmega328P</a>
 を中心としてAVRチップのプログラムの勉強・練習の続きとして、
 「AVR Libc Reference Manual」を読み込んでAVR独特の世界をみました。</p>
-
 <h2 id="メモリー">メモリー</h2>
-
 <p>PCでのプログラムとはメモリー関係は、少々勝手が違い、IO関係を直接触る上、
 メモリー空間も狭いので要注意です。</p>
-
 <p>さらにATmega328Pを含むAVRはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀに対してﾒﾓﾘとﾊﾞｽを分離する
 ﾊｰﾊﾞｰﾄﾞ構造を使用し、メモリーアドレス空間もそれぞれ別です。
 （PCはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀがメモリーアドレス空間を共有するノイマン構造。）</p>
-
 <ul>
 <li>ﾌﾟﾛｸﾞﾗﾑは不揮発性のフラッシュに格納されます。</li>
 <li>ﾃﾞｰﾀは通常の揮発性のSRAMに格納されます。</li>
 <li>不揮発データーを格納する別のEEPROMもあります。</li>
 </ul>
-
 <p>ATmega328Pだと：</p>
-
 <ul>
 <li>ﾌﾗｯｼｭ ﾒﾓﾘ容量 (ﾊﾞｲﾄ) 32K</li>
 <li>SRAM容量 (ﾊﾞｲﾄ) 2K</li>
 <li>EEPROM容量 (ﾊﾞｲﾄ) 1K</li>
 </ul>
-
 <p>実際のデーターメモリー領域は以下です。</p>
-
 <ul>
 <li>ﾚｼﾞｽﾀ ﾌｧｲﾙ    (32: 0x00-0x1F)　ーALUの汎用レジスタ</li>
 <li>I/Oﾚｼﾞｽﾀ      (64: 0x20-0x5F) - アセンブラIN/OUT命令は0x20オフセットしたLDS/STS</li>
 <li>拡張I/Oﾚｼﾞｽﾀ (160: 0x60-0xFF)</li>
 <li>内蔵SRAM      (2K: 0x100-0x3FFF)</li>
 </ul>
-
 <p>IN/OUT命令関連のことがよく分からない。どうもAVRの前の世代のマイコン8051の命令
 のことのようだ。アセンブラコード移植を意識しているようだ。INTEL系はIOは0x00から
 始まる独立アドレス空間なので、アセンブラコードは0x20オフセットした
 LDS/STS命令に置き換えると言っているようです。</p>
-
 <p>ﾌﾟﾛｸﾞﾗﾑ領域（フラッシュ）へのアクセスには専用のアセンブラコードLPM/SPMがあります。</p>
-
 <p>EEPROM領域へのアクセスは専用のI/Oﾚｼﾞｽﾀ経由で行うようです。</p>
-
 <p>Cコードからは、マクロが準備されているので、ﾌﾟﾛｸﾞﾗﾑ領域たやEEPROM領域へのアクセス
 には専用マクロ等を使うようだ。詳しくは「ATmega328Pマニュアル」の「ﾃﾞｰﾀ用EEPROMﾒﾓﾘ」や、
 「AVR Libc Reference Manual」の「Data in Program Space」や、
 <code>avr/eeprom.h</code> や <code>avr/pgmspace.h</code>を参照しましょう。</p>
-
 <p>また、AVRはﾊｰﾊﾞｰﾄﾞ構造なので、リンカーに渡すデーターメモリーの開始アドレス
 は実際のアドレスに0x800000 を手動で加えることも要注意です。</p>
-
 <h2 id="メモリー消費の確認">メモリー消費の確認</h2>
-
 <p>メモリー消費は、<code>avr-size</code>コマンドで調べます。フラッシュ消費は「Program」、
 SRAM消費は「Data」で示されます。SRAMの初期化データーをフラッシュが
 保持するため、「.data」が両方でカウントされます。</p>
-
 <pre><code> $ avr-size --mcu=atmega328p --format=avr blink.elf
 AVR Memory Usage
 ----------------
@@ -126,70 +108,49 @@ Program:     162 bytes (0.5% Full)
 
 Data:          0 bytes (0.0% Full)
 (.data + .bss + .noinit)
-</code></pre>
-
-<h2 id="メモリー消費の節約">メモリー消費の節約</h2>
-
+</code></pre><h2 id="メモリー消費の節約">メモリー消費の節約</h2>
 <p>通常変数はデーターメモリー領域に置かれますが、場所をとる文字定数や
 配列となったデーターベースはプログラムメモリー領域のフラッシュに置き
 貴重なSRAMの使用を節約したいころです。</p>
-
 <p><code>PROGMEM</code>マクロや <code>PSTR</code>マクロや <code>PGM_P</code>マクロや <code>pgm_read_byte()</code>
 関数はそのためにあります。これらは「Program Space Utilities」として
 <code>avr/pgmspace.h</code>により提供されています。</p>
-
 <p><code>puts_P()</code> や <code>fprint_P()</code>等というサフックス付き変種関数は、
 ﾌﾟﾛｸﾞﾗﾑ領域（フラッシュ）に置いた文字列を出力文字列やフォーマット
 文字列として利用しながら<code>puts()</code> や <code>fprint()</code>という相当する標準
 関数と同等の機能を提供します。これらの変種関数も含めて
 標準の「Standard IO facilities」として<code>stdio.h</code>により提供されています。</p>
-
 <p>この辺はAVR独特の世界の詳細なので、他と併せて実例で学びましょう。</p>
-
 <h2 id="標準ストリーム">標準ストリーム</h2>
-
 <p>もうひとつのAVR独特の世界は標準ストリームです。</p>
-
 <p>C標準とは違い、avr-libcには適用できるデバイス情報がないため、
 標準ストリーム<code>stdin</code>、<code>stdout</code>と<code>stderr</code>のストリームは
 アプリケーション起動時に事前に初期化されません。</p>
-
 <p>また、<code>stdio.h</code>は、<code>malloc()</code>を使用するのはメモリー消費の節約の点で
 好ましく無いのでこれを避ける標準入出力を作る仕組みを提供するために
 <code>FDEV_SETUP_STREAM()</code>マクロなどが提供されています。</p>
-
 <p>これらもAVR独特の世界の詳細なので、他と併せて実例で学びましょう。</p>
-
-<h2 id="標準ライブラリの機能の制限-拡張">標準ライブラリの機能の制限・拡張</h2>
-
+<h2 id="標準ライブラリの機能の制限拡張">標準ライブラリの機能の制限・拡張</h2>
 <p>ATmega328Pはavr5なので、リンクされる標準ライブラリのバイナリは
 <code>/usr/lib/avr/lib/avr5/</code>にあります。ライブラリが標準ライブラリの
 <code>libc.a</code>と数学関数ライブラリの<code>libm.a</code>と分かれているのは普通だし
 チップ対応の<code>libatmega328p.a</code>があるのは分かりますが、
 <code>libprintf_flt.a</code>や<code>libprintf_min.a</code>や<code>libscanf_flt.a</code>や
 <code>libscanf_min.a</code>が気になります。</p>
-
 <p>これらは、<code>printf()</code>や<code>scanf()</code>関連機能をコンパイラオプションで
 制限・拡張することで、無駄にメモリー消費しないために存在します。
 標準では使いそうにない浮動小数点関係のフォーマット機能は削られ
 ています。まあ普通のAVR使用環境ではデフォルトで充分です。</p>
-
 <p>必要になったら「AVR Libc Reference Manual」の「Standard IO facilities」の
 <code>vfprintf()</code>と<code>vfscanf()</code>の説明のそれぞれの最後の部分を精読しましょう。</p>
-
 <h2 id="avr独特の世界の例">AVR独特の世界の例</h2>
-
-<h3 id="コンソールターミナルへの出力-stdio-h">コンソールターミナルへの出力(<code>stdio.h</code>)</h3>
-
+<h3 id="コンソールターミナルへの出力stdioh">コンソールターミナルへの出力(<code>stdio.h</code>)</h3>
 <p>「AVR Libc Reference Manual」のデモプロジェクトは、
 <code>/usr/share/doc/avr-libc/examples/</code>にあります。</p>
-
 <p>これを参考に、「LEDタイマー点灯」に加筆して、端子入力に合わせて
 シリアルに端子の接地状況を出力し、接続したPCのコンソールターミナルへ
 AVRの状態を出力する簡単なプログラムの<code>hello.c</code>を作成しました。</p>
-
 <p>（シリアル入力なしで、デモコードより簡単なところからスタートです。）</p>
-
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 // Usable Baud Rate ... 9600 14400 19200 28800 38400 57600 2%
@@ -276,31 +237,22 @@ int main(void) {
     }
   }
 }
-</code></pre>
-
-<p>実はこのような動くコードになるまでは手間がかなりかかりました。それと
+</code></pre><p>実はこのような動くコードになるまでは手間がかなりかかりました。それと
 言うのも現在の<code>avr-libc</code>は、最近の同一機能レジスターが複数ある他の
 AVRのサポートを考えてか、そのヘッダーで提供するハードウエアーに対応
 するレジスター名やビットの名前に、データーシートに無い「0」という
 数字を加えたデーターシートと違う名前を採用しているようです。</p>
-
 <p>そのため、「AVR Libc Reference Manual」にあるデモプロジェクトのコードは、
 どうもそのままではATmega328Pでは動かなくなっているようです。ヘッダー
 ファイルの定義とデーターシートを見比べて、レジスター名を合わせ込んで
 対応しました。</p>
-
 <p>さらにデモコードより正確なボーレート計算法をすべく、丸め誤差に配慮する
 <code>util/setbaud.h</code>を使いました。</p>
-
 <p>さて、これをコンパイルしてできる<code>hello.hex</code>を、USB経由でチップに以下で
 プログラムしました。</p>
-
 <pre><code>$ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:hello.hex
-</code></pre>
-
-<p>USBをつないだまま、以下を実行し、B端子や他の端子を接地したりすると、
+</code></pre><p>USBをつないだまま、以下を実行し、B端子や他の端子を接地したりすると、
 ターミナルプログラムを起動したホストPCに端子の接地状況が表示されます。</p>
-
 <pre><code>$ picocom -b 19200 /dev/ttyUSB0
  ... (snip) ...
 Terminal ready
@@ -309,10 +261,7 @@ PINB=3D PINC=3D PIND=FF
 PINB=3D PINC=3D PIND=FF
 PINB=3D PINC=3B PIND=FF
 PINB=3B PINC=3B PIND=FF
-</code></pre>
-
-<p>メモリー消費を見てみましょう。</p>
-
+</code></pre><p>メモリー消費を見てみましょう。</p>
 <pre><code> $ avr-size --mcu=atmega328p --format=avr hello.elf
 Device: atmega328p
 
@@ -321,31 +270,22 @@ Program:    2038 bytes (6.2% Full)
 
 Data:         20 bytes (1.0% Full)
 (.data + .bss + .noinit)
-</code></pre>
-
-<p>なんと<code>stdio.h</code>の<code>printf()</code>関連を使った途端、10倍以上の
+</code></pre><p>なんと<code>stdio.h</code>の<code>printf()</code>関連を使った途端、10倍以上の
 2KBもメモリーを消費してしまいました。大きなATmega328Pだと
 収まっていますが、<code>printf()</code>の重さは要注意です。</p>
-
 <p>ちなみに、小さなATtiny13Aだと使えるメモリー容量はずっと小さく：</p>
-
 <ul>
 <li>ﾌﾗｯｼｭ ﾒﾓﾘ容量 (ﾊﾞｲﾄ) 1K</li>
 <li>SRAM容量 (ﾊﾞｲﾄ) 64</li>
 <li>EEPROM容量 (ﾊﾞｲﾄ) 64</li>
 </ul>
-
 <p>なので、<code>printf()</code>はコード中に絶対に使えません。</p>
-
 <p>ちなみにシリアル入力を<code>scanf</code>で処理するようなコードを足したら
 4KB以上メモリー消費してしまいました。</p>
-
-<h3 id="コンソールターミナルへの出力-コンパクト">コンソールターミナルへの出力(コンパクト)</h3>
-
+<h3 id="コンソールターミナルへの出力コンパクト">コンソールターミナルへの出力(コンパクト)</h3>
 <p>そもそも16進表示では見にくいのと、各端子の入出力やプルアップ設定も表示
 させたいし、メモリー消費も抑えたいので<code>printf()</code>を使わずにプログラムを
 書き直しました。</p>
-
 <pre><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 // Usable Baud Rate ... 9600 14400 19200 28800 38400 57600 2%
@@ -472,11 +412,8 @@ int main(void) {
     }
   }
 }
-</code></pre>
-
-<p>USBをつないだまま、以下を実行し、B端子や他の端子を接地したりすると、
+</code></pre><p>USBをつないだまま、以下を実行し、B端子や他の端子を接地したりすると、
 ターミナルプログラムを起動したホストPCに端子の接地状況が表示されます。</p>
-
 <pre><code>$ picocom -b 19200 /dev/ttyUSB0
 ... (snip) ...
 Terminal ready
@@ -497,13 +434,9 @@ DDRB =IIOIIIII DDRC =IIIIIIII DDRD =IIIIIIII
 PORTB=******** PORTC=_******* PORTD=********
 PINB =00110111 PINC =00110111 PIND =11111101
 .....................
-</code></pre>
-
-<!-- xxx******** -->
-
+</code></pre><!-- raw HTML omitted -->
 <p>ソースコードが大幅に増え、表示する情報量も<code>printf()</code>を使う場合の
 約3倍となっています。</p>
-
 <pre><code> $ avr-size --mcu=atmega328p --format=avr hello.elf
 AVR Memory Usage
 ----------------
@@ -514,35 +447,26 @@ Program:     754 bytes (2.4% Full)
 
 Data:          0 bytes (0.0% Full)
 (.data + .bss + .noinit)
-</code></pre>
-
-<p>でも一方メモリー消費は<code>printf()</code>を使う場合の3分の1に収まっています。
+</code></pre><p>でも一方メモリー消費は<code>printf()</code>を使う場合の3分の1に収まっています。
 この目的に特化したコードを書くこのアプローチなら小さなATtiny13Aでも
 使えそうです。</p>
-
 <h3 id="後日追記-avrmon">後日追記: avrmon</h3>
-
 <p>チップ周辺の配線状態確認をホストPCのターミナルからするシェルのような
 <a href="https://github.com/osamuaoki/avrmon">avrmon</a> をこの延長線上に書きま
 した。全デジタルピンの変更追跡、全デジタルピン間のマトリクススキャン
 追跡、全アナログピンの変更追跡、全I/Oレジスターの読み書き機能等まで
 入れメッセージ関連の文字列が増えたのもあり、10KB近くまでプログラムが
 大きくなりましたが、まだフラッシュ全容量の1/3も使っていません。</p>
-
 <p>winavr由来のMakefileもカスタマイズして、クロックをArduino Uno/Nano に
 合わせ、ソースコードの自動整形やconfig.h.inのサポートやターミナル
 プログラム立ち上げなどの機能追加をしています。</p>
-
 <h2 id="アセンブラー">アセンブラー</h2>
-
 <p>winavr由来のMakefileを使ってコンパイルしたら、<code>hello.lst</code>といった
 コンパイル結果のアセンブラーで書かれたダンプリストが作成されています。</p>
-
 <p>細かなことはマニュアルを読むしか無いのですが、avr-gccは、GNU cc/asでは
 ありますが、アセンブラーはGNU標準のATT式ではなくINTEL式の代入される方が
 前にオペランド記述される順であることに注意がいります。</p>
-
-<!-- vim: se ai tw=79: -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -565,7 +489,7 @@ Data:          0 bytes (0.0% Full)
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

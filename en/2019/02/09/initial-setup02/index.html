@@ -54,28 +54,20 @@
   </tbody>
 </table>
 
-
-
 <p>Let&rsquo;s customize web site contents.</p>
-
 <ol>
 <li>I want to have 2 separate directories for English and Japanese contents.</li>
 <li>Main menu should have link to the list of contents dedicated for English
- and Japanese contents</li>
+and Japanese contents</li>
 <li>The list of contents needs to be customized.</li>
 </ol>
-
 <p>The following pages gave me good starting points.</p>
-
 <ul>
 <li><a href="https://www.jakewiesler.com/blog/hugo-directory-structure/">https://www.jakewiesler.com/blog/hugo-directory-structure/</a></li>
 <li><a href="https://sourceforge.net/p/hugo-generator/wiki/markdown_syntax/">https://sourceforge.net/p/hugo-generator/wiki/markdown_syntax/</a></li>
 </ul>
-
 <h2 id="customization">Customization</h2>
-
 <p>Here are what I did:</p>
-
 <ul>
 <li>Since I don&rsquo;t use <code>content/_index.Rmarkdown</code>, I erased it.</li>
 <li>In order to save typing, I renamed <code>content/_index.markdown</code> to
@@ -87,27 +79,19 @@
 <li><code>content/en/_index.md</code> and <code>content/jp/_index.md</code> are added to customize the
 list of contents.</li>
 </ul>
-
 <p>Then create a github repository <code>osamuaoki-hugo</code> via github GUI and commit this
 source for hugo.</p>
-
 <pre><code> $ git add -A .
  $ git commit -m &quot;updated webpage source&quot;
  $ git remote add origin git@github.com:osamuaoki/osamuaoki-hugo.git
  $ git push -u origin master
-</code></pre>
-
-<p>See published source of this site at
+</code></pre><p>See published source of this site at
 <a href="https://github.com/osamuaoki/osamuaoki-hugo">https://github.com/osamuaoki/osamuaoki-hugo</a></p>
-
 <h2 id="publishing-html-pages">Publishing HTML pages</h2>
-
 <p>At <code>/path/to/&lt;webbuildtree&gt;</code>, execute <code>hugo</code> to build HTML files under
 <code>/path/to/&lt;webbuildtree&gt;/publish</code> directory.</p>
-
 <p>Then create a github repository <code>osamuaoki.github.io</code> via github GUI and commit
 this generated HTML files.</p>
-
 <pre><code> $ hugo
  $ cd public
  $ git init
@@ -115,51 +99,39 @@ this generated HTML files.</p>
  $ git commit -m &quot;built webpages&quot;
  $ git remote add origin git@github.com:osamuaoki/osamuaoki.github.io.git
  $ git push -u origin master
-</code></pre>
-
-<p>This publishes web page at <a href="https://osamuaoki.github.io/">https://osamuaoki.github.io/</a></p>
-
+</code></pre><p>This publishes web page at <a href="https://osamuaoki.github.io/">https://osamuaoki.github.io/</a></p>
 <p>Let&rsquo;s use  <code>git submodule</code> to manage these 2 repositories.</p>
-
 <pre><code> $ cd ..
  $ rm -rf public
  $ git submodule add git@github.com:osamuaoki/osamuaoki.github.io.git public
  $ git add .
  $ git commit -m &quot;add submodule&quot;
-</code></pre>
-
-<p>Here, publication of github pages is realized by committing static HTML pages
+</code></pre><p>Here, publication of github pages is realized by committing static HTML pages
 to a certain branch of a certain github repository to enable github pages.</p>
-
 <table>
 <thead>
 <tr>
-<th align="left">repository</th>
-<th align="left">branch</th>
-<th align="left">URL used to publish web pages</th>
+<th style="text-align:left">repository</th>
+<th style="text-align:left">branch</th>
+<th style="text-align:left">URL used to publish web pages</th>
 </tr>
 </thead>
-
 <tbody>
 <tr>
-<td align="left"><code>&lt;username&gt;.github.io</code></td>
-<td align="left"><code>master</code></td>
-<td align="left"><code>https://&lt;username&gt;.github.io</code></td>
+<td style="text-align:left"><code>&lt;username&gt;.github.io</code></td>
+<td style="text-align:left"><code>master</code></td>
+<td style="text-align:left"><code>https://&lt;username&gt;.github.io</code></td>
 </tr>
-
 <tr>
-<td align="left"><code>&lt;project&gt;</code></td>
-<td align="left"><code>gh-pages</code></td>
-<td align="left"><code>https://&lt;username&gt;.github.io/&lt;project&gt;</code></td>
+<td style="text-align:left"><code>&lt;project&gt;</code></td>
+<td style="text-align:left"><code>gh-pages</code></td>
+<td style="text-align:left"><code>https://&lt;username&gt;.github.io/&lt;project&gt;</code></td>
 </tr>
 </tbody>
 </table>
-
 <p>For more, follow
 <a href="https://gohugo.io/hosting-and-deployment/hosting-on-github/">Host on GitHub</a></p>
-
 <h2 id="updating-webpages">Updating webpages</h2>
-
 <pre><code> $ cd /path/to/&lt;webbuildtree&gt;/content
   ... hack source
  $ cd /path/to/&lt;webbuildtree&gt;
@@ -171,18 +143,13 @@ to a certain branch of a certain github repository to enable github pages.</p>
  $ git commit -m &quot;updated webpages&quot;
  $ cd ..
  $ git commit -a -m &quot;updated submodule for webpages&quot;
-</code></pre>
-
-<h2 id="salsa-debian-page">salsa (debian) page</h2>
-
+</code></pre><h2 id="salsa-debian-page">salsa (debian) page</h2>
 <p><strong>TODO</strong></p>
-
 <p>For more, follow
 <a href="https://gohugo.io/hosting-and-deployment/hosting-on-gitlab/">Host on GitLab</a>
 while using <code>pages.debian.net</code> instead of <code>gitlab.io</code> and <a href="https://wiki.debian.org/Salsa/Doc#Web_page_hosting">Web page
 hosting</a>.</p>
-
-<!-- vim: se ai tw=79: -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -205,7 +172,7 @@ hosting</a>.</p>
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

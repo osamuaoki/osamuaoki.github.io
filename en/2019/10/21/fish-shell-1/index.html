@@ -54,27 +54,23 @@
   </tbody>
 </table>
 
-
-
 <p>Fish shell looks interesting to me since it makes handling of space in the
 filename a lot simpler and have simple but powerful string manipulation with
 PCRE2.</p>
-
 <ul>
 <li><a href="https://fishshell.com/">Fish shell</a>
-
 <ul>
 <li><a href="https://fishshell.com/docs/current/index.html">Fish Documentation</a></li>
 <li><a href="https://fishshell.com/docs/current/tutorial.html">Fish Tutorial</a></li>
 <li><a href="https://fishshell.com/docs/current/commands.html">Fish Command reference</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="https://github.com/jorgebucaran/fisher">Fisher</a>
-
 <ul>
 <li><a href="https://github.com/jorgebucaran/awesome-fish">Awesome fish</a></li>
-</ul></li>
+</ul>
+</li>
 <li>Other resources
-
 <ul>
 <li><a href="https://github.com/fish-shell/fish-shell/issues/2382">differences from bash</a></li>
 <li><a href="https://blog.nijohando.jp/post/starting-fishshell/">fish shellを使う</a></li>
@@ -82,83 +78,56 @@ PCRE2.</p>
 <li><a href="https://debimate.jp/2019/06/15/%E7%92%B0%E5%A2%83%E6%A7%8B%E7%AF%89%EF%BC%9A%E3%83%A6%E3%83%BC%E3%82%B6%E3%83%95%E3%83%AC%E3%83%B3%E3%83%89%E3%83%AA%E3%83%BC%E3%81%A7%E8%A3%9C%E5%AE%8C%E6%A9%9F%E8%83%BD%E3%81%AE%E5%BC%B7%E5%8A%9B/">Debimate &hellip; fishへ移行</a></li>
 <li><a href="http://g-hyoga.hatenablog.com/entry/2016/09/23/233548">fish shellのconfig.fish</a></li>
 <li><a href="https://qiita.com/naoyoshinori/items/3a7ae1d00531e7c1a5d4">fish_configでブラウザが起動しない</a></li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>Let me make a simple deployment memo for Debian.</p>
-
 <h2 id="set-up-fish-shell-for-gui-consoles">Set up Fish shell for GUI consoles</h2>
-
 <h3 id="official-way-to-set-the-shell">Official way to set the shell</h3>
-
 <p>Although <code>chsh</code> is the official way to switch the system default shell recorded
 in <code>/etc/passwd</code>, this is not always the robust approach to switch shell used
 in GUI consoles to the non-POSIX shells such as Csh and Fish under some Linux
 GUI environment.  This is because some GUI initialization codes assume the
 system default shell to be a POSIX shell.</p>
-
 <p>(For GNOME environment with &ldquo;GNOME terminal&rdquo;, it seems <code>chsh</code> works.  But the
 started fish shell has <code>$SHLVL</code> to be <code>2</code> and <code>$SHELL</code> to be <code>/bin/bash</code>
 which are a bit awkward.  KDE seems to have problem.)</p>
-
 <h3 id="robust-way-to-set-the-shell">Robust way to set the shell</h3>
-
 <p>The robust way to start Fish shell is to start it from modern terminal emulator
 programs such as &ldquo;GNOME terminal&rdquo;, &ldquo;Konsole&rdquo;, &ldquo;xfce4-terminal&rdquo;, and &ldquo;MATE
 Terminal&rdquo;.  For them, there is a way to run a custom command as your shell from
 the menu. So set this custom command to <code>/usr/bin/fish</code>.  With this approach,
 you can select the started shell from the menu.</p>
-
 <h3 id="workaround-to-set-the-shell">Workaround to set the shell</h3>
-
 <p>If you can&rsquo;t easily find a way to set up the custom command for other
 situations such as the &ldquo;xterm&rdquo;, &ldquo;rxvt&rdquo;, &ldquo;LXterminal&rdquo;, and &ldquo;Qterminal&rdquo;, one
 workaround is to select Bash as the system default shell and to place the
 following at the first line of your <code>~/.bashrc</code> to start Fish:</p>
-
 <pre><code>exec /usr/bin/fish
-</code></pre>
-
-<p>When you really need to start Bash, you can comment out this line to regain the
+</code></pre><p>When you really need to start Bash, you can comment out this line to regain the
 normal Bash behavior.</p>
-
 <h2 id="gui-setup-of-fish">GUI setup of Fish</h2>
-
 <p>Executing <code>fish_config</code> on the Fish shell command prompt starts browser to
 set up Fish.  This sets up 2 files:</p>
-
 <ul>
 <li><code>$XDG_CONFIG_HOME/fish/fish_variables</code></li>
 <li><code>$XDG_CONFIG_HOME/fish/functions/fish_prompt.fish</code></li>
 </ul>
-
 <p>Here, <code>$XDG_CONFIG_HOME</code> is usually <code>~/.config</code>.</p>
-
 <h2 id="initializing-setup-for-fish">Initializing setup for Fish</h2>
-
 <p>User initialization setup for Fish is at <code>$XDG_CONFIG_HOME/fish/config.fish</code>
 which works like <code>~/.bashrc</code> and <code>~/.zshrc</code>.</p>
-
 <p>I will list code snippets used in my <code>~/.config/fish/config.fish</code> as below.</p>
-
 <h3 id="shell-environment-variable"><code>SHELL</code> environment variable</h3>
-
 <p>Although Bash and the original Ksh set the <code>$SHELL</code> environment variable, not
 all shell programs set it.  Fish shell is no exception.  Some programs such as
 <code>mc</code> (Midnight Commander), <code>screen</code>, and <code>tmux</code> rely on the <code>$SHELL</code> environment
 variable to override the shell setting of of <code>/etc/passwd</code> updated by <code>chsh</code>.</p>
-
 <p>Set the <code>$SHELL</code> environment variable for Fish:</p>
-
 <pre><code>set -x SHELL /usr/bin/fish
-</code></pre>
-
-<p>Here, <code>set -x</code> is used to export the environment variable.</p>
-
+</code></pre><p>Here, <code>set -x</code> is used to export the environment variable.</p>
 <h3 id="other-environment-variables">Other environment variables</h3>
-
 <p>The next step is to migrate your old settings in <code>~/.bashrc</code>.</p>
-
 <pre><code># Always override SHELL=/bin/bash and make mc/screen/tmux happy
 set -x SHELL /usr/bin/fish
 
@@ -186,27 +155,18 @@ end
 if test -d ~/bin
   set -x PATH ~/bin $PATH
 end
-</code></pre>
-
-<h3 id="initializing-builtin-commands">Initializing Builtin commands</h3>
-
+</code></pre><h3 id="initializing-builtin-commands">Initializing Builtin commands</h3>
 <p>The next step is to initialize Fish sell using builtin commands.</p>
-
 <pre><code># User Private Groups: http://wiki.debian.org/UserPrivateGroups
 umask 002
 # make core file
 ulimit -c unlimited
-</code></pre>
-
-<p>Here, I skipped <code>fish_vi_key_bindings</code> since web based configuration already
+</code></pre><p>Here, I skipped <code>fish_vi_key_bindings</code> since web based configuration already
 set it up.</p>
-
 <h3 id="configuring-mc">Configuring <code>mc</code></h3>
-
 <p>Let&rsquo;s make <code>mc</code> (Midnight Commander) to change directory upon exit by
 translating <code>/usr/lib/mc/mc.sh</code> to create an auto-loading function
 <code>$XDG_CONFIG_HOME/fish/functions/mc.fish</code>:</p>
-
 <pre><code># Equivalent of /usr/lib/mc/mc.sh
 function mc --description Midnight\ Commander\ which\ changes\ directory\ upon\ exit.
   set -l SHELL_PID %self
@@ -227,45 +187,30 @@ function mc --description Midnight\ Commander\ which\ changes\ directory\ upon\ 
   end
 end
 
-</code></pre>
-
-<p>Please note:</p>
-
+</code></pre><p>Please note:</p>
 <ul>
 <li><code>${TMPDIR-/tmp}</code> is changed to <code>if set -q TMPDIR ...</code>.</li>
 <li><code>$$</code> is changed to <code>set -l SHELL_PID %self</code>.</li>
 </ul>
-
 <h3 id="configuring-fzf">Configuring <code>fzf</code></h3>
-
 <p>Let&rsquo;s make <code>fzf</code> work well with Fish shell.  The <code>fzf</code> package on Debian comes
 with a glue code in <code>/usr/share/doc/fzf/examples</code> but there is a better
 solution which uses auto-loading:</p>
-
 <ul>
 <li><a href="https://github.com/jethrokuan/fzf">https://github.com/jethrokuan/fzf</a></li>
 </ul>
-
 <p>This requires to use package manager fisher.</p>
-
 <ul>
 <li><a href="https://github.com/jorgebucaran/fisher">https://github.com/jorgebucaran/fisher</a></li>
 </ul>
-
-<p><strong><em>FIXME</em></strong> fisher dosen&rsquo;t work right (2019-12)</p>
-
+<p><em><strong>FIXME</strong></em> fisher dosen&rsquo;t work right (2019-12)</p>
 <p><strong>TODO</strong></p>
-
 <h3 id="configuring-less">Configuring <code>less</code></h3>
-
 <p><strong>TODO</strong></p>
-
 <pre><code># make less more friendly for non-text input files, see lesspipe(1)
 #[ -x /usr/bin/lesspipe ] &amp;&amp; eval &quot;$(SHELL=/bin/sh lesspipe)&quot;
 
-</code></pre>
-
-<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
+</code></pre><!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -288,7 +233,7 @@ solution which uses auto-loading:</p>
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

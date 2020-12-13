@@ -54,52 +54,33 @@
   </tbody>
 </table>
 
-
-
 <p>AVRチップのISP経由プログラムの練習をします。</p>
-
 <p>ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoのコンパチボードや本物の
 Uno等を使ってます。</p>
-
 <h2 id="プロクラマー">プロクラマー</h2>
-
 <p>これには、
 <a href="https://github.com/osamuaoki/avrdude-friend">TTL-232R-5V を使った自作プロクラマー</a>
 を使うのも良いのですが、最近Atmel AVR ISP mkIIをただで人からもらったので
 それを使います。</p>
-
 <p>詳細な使用説明書（英文）：
 <a href="https://www.microchip.com/webdoc/GUID-BEB648AA-8539-418A-9EFB-118BDC9DC77B/index.html">AVR ISP mkII User Guide</a></p>
-
 <h2 id="ソフト環境">ソフト環境</h2>
-
 <p>Debian GNU/Linux buster=stable 環境です。</p>
-
 <pre><code>$ sudo apt install avrdude
-</code></pre>
-
-<h2 id="接続">接続</h2>
-
+</code></pre><h2 id="接続">接続</h2>
 <p>AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、
 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。</p>
-
 <p>ちなみに、
 <a href="https://github.com/osamuaoki/avrdude-friend">TTL-232R-5V を使った自作プロクラマー</a>
 は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と
 PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、
 これはあとで考えましょう。</p>
-
 <p>ISPケーブルの赤線は１ピン側です。</p>
-
-<p>Uno <img src="/img/UNO-AVRISP2.jpg" alt="Uno ISPケーブル接続" />
-Nano <img src="/img/NANO-AVRISP2.jpg" alt="Nano ISPケーブル接続" /></p>
-
+<p>Uno <img src="/img/UNO-AVRISP2.jpg" alt="Uno ISPケーブル接続">
+Nano <img src="/img/NANO-AVRISP2.jpg" alt="Nano ISPケーブル接続"></p>
 <p>AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。</p>
-
 <p>AVRISP mkII に赤いLEDが点滅は、ISPコネクター「逆差し」です。</p>
-
 <h3 id="uno">Uno</h3>
-
 <pre><code>$ sudo avrdude -c avrisp2 -P usb -p m328p -v
 
 avrdude: Version 6.3-20171130
@@ -194,12 +175,8 @@ avrdude: writing output file &quot;&lt;stdout&gt;&quot;
 avrdude: safemode: Fuses OK (E:FD, H:DE, L:FF)
 
 avrdude done.  Thank you.
-</code></pre>
-
-<h3 id="nano">Nano</h3>
-
+</code></pre><h3 id="nano">Nano</h3>
 <p>ISP ケーブルが、ボード上をUSB向けに伸びるので挿しにくいので注意。</p>
-
 <pre><code>$ sudo avrdude -c avrisp2 -P usb -p m328p -v
 
 avrdude: Version 6.3-20171130
@@ -295,92 +272,67 @@ avrdude: safemode: Fuses OK (E:FD, H:DA, L:FF)
 
 avrdude done.  Thank you.
 
-</code></pre>
-
-<h3 id="fuse">Fuse</h3>
-
+</code></pre><h3 id="fuse">Fuse</h3>
 <p>なぜかFuseが違います:</p>
-
 <ul>
 <li>Uno:  E:FD, H:DE, L:FF
-
 <ul>
 <li>SPIEN (Enable Serial programming and Data Downloading) On = 0</li>
-</ul></li>
+</ul>
+</li>
 <li>Nano: E:FD, H:DA, L:FF
-
 <ul>
 <li>SPIEN (Enable Serial programming and Data Downloading) Off = 1</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>確かNano互換ボードは購入時は特にArduinoとしてチップが初期化されて
 いなかったので自分で初期化しました。それが良くなかったかも知れないので、
 とりあえずNanoのFUSEをISPで修正しました:</p>
-
 <pre><code> $ sudo avrdude -c avrisp2 -P usb -p m328p -F  \
                 -U efuse:w:0xfd:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m
-</code></pre>
-
-<p>なぜか書き換えられました。</p>
-
+</code></pre><p>なぜか書き換えられました。</p>
 <p>ともに、ブート領域設定をチップデフォルトのBOOTSZ00= 2048ワード（4K BYTE）から
 BOOTSZ=11 256ワード（512BYTE）に変更されています。どうもちゃんとoptiBootが
 入っています。互換ボードの場合最初に自分で書き換える必要があることもあると
 覚悟しておきましょう。</p>
-
 <p><a href="https://github.com/osamuaoki/avrdude-friend/wiki/Serial-AVR-chips">Serial AVR chips</a>
 に基本的な情報を英語で纏めました。</p>
-
 <p>FUSE設定の詳細状況は
 <a href="https://eleccelerator.com/fusecalc/fusecalc.php?chip=atmega328p">FUSECALC</a>
 をみて確認しましょう。</p>
-
 <h2 id="optiboot-プログラムのインストール">Optiboot プログラムのインストール</h2>
-
 <p>シリアルAVRで、ISPプログラマーを使わず、シリアル接続からのプログラムを可能にする
 Arduino用bootloaderのなかで一番小さな　Optiboot インストール法のメモです。</p>
-
 <p>Arduinoとして初期化されていないNano互換ボード等だと購入後この作業が必要です。</p>
-
-<p>Optiboot のアップストリームのソースは　<a href="https://github.com/Optiboot/optiboot">https://github.com/Optiboot/optiboot</a>
+<p>Optiboot のアップストリームのソースは　https://github.com/Optiboot/optiboot
 にあります。ここには色々の情報があるので一度見てください。</p>
-
 <p>ただ、bootloaderをチップに焼き込むにはHEXのバイナリーがあれば充分です。</p>
-
 <p>ちなみに、Debian/Ubuntuなら、少々古いソースコードから作られた
 パッケージですが<code>arduino-core</code>パッケージがインストールされていれば
 <code>/usr/share/arduino/hardware/arduino/bootloaders/optiboot/optiboot_atmega328.hex</code>
 にHEXのバイナリーがあります。</p>
-
 <p>最新のArduino配布のOptibootのHEXのバイナリーの<code>optiboot_atmega328.hex</code>は、
 <a href="https://github.com/arduino/ArduinoCore-avr/tree/master/bootloaders/optiboot">https://github.com/arduino/ArduinoCore-avr/tree/master/bootloaders/optiboot</a>
 からダウンロードできます。</p>
-
 <p>上記の方法で<code>optiboot_atmega328.hex</code>が手に入れば、ボード上のATmega328pに、
 ISPプログラマーのAVRISP mkII を用い、まずFUSEを完全消去初期化（ロック解除）し、
 さらに<code>optiboot_atmega328.hex</code>をフラッシュメモリーに強引に書き込むことで
 Optiboot プログラムのインストールができます。</p>
-
 <pre><code> $ sudo avrdude -p m328p -c avrisp2 -e -F -U lock:w:0xFF:m \
                 -U efuse:w:0xfd:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m
  $ sudo avrdude -p m328p -c avrisp2 -U flash:w:/path/to/optiboot_atmega328.hex
 
-</code></pre>
-
-<p>FUSE設定は　<a href="https://eleccelerator.com/fusecalc/fusecalc.php">fusecalc</a>
+</code></pre><p>FUSE設定は　<a href="https://eleccelerator.com/fusecalc/fusecalc.php">fusecalc</a>
 を見て下さい。以下の記事も参考にして下さい。</p>
-
 <ul>
 <li><a href="https://nagayasu-shinya.com/arduino-bootloader-writer/#toc6">ArduinoのBootloaderを修復する</a></li>
 <li><a href="http://blog-yama.a-quest.com/?eid=970124">簡単！ATmega328Pにブートローダを書きこむ</a></li>
 </ul>
-
 <p>TIP: LOCK FUSEの設定値は、単純に考えると0x3F=0b00111111です。ただ未使用ビット
 の6,7-bitは、読むと1を返すので書き込み内容確認が成立する0xFF=0b11111111を設定値
 にします。</p>
-
-<!-- vim: se ai tw=79: -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -403,7 +355,7 @@ Optiboot プログラムのインストールができます。</p>
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

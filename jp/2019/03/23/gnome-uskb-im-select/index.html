@@ -54,133 +54,95 @@
   </tbody>
 </table>
 
-
-
 <h2 id="キーボード入力モード選択">キーボード入力モード選択</h2>
-
 <p>Gnome等のLinuxの日本語環境でキーボード入力モード選択がトグル（ローテート）
 動作（日本語/英語の交互切り替え)だと今どっちか分からなくなって結構不便です。</p>
-
 <p>SUPER-SPACEとSHIFT-SUPER-SPACEがGnomeの側でのキーボード入力ソースの
 デフォルトの切り替えキーです。</p>
-
-<p>input methos内での切り替えは、昔のWindowsと同じ&rdquo;zenkaku-hankaku&rdquo;とか、
-Unix系では良く使う&rdquo;Shift-space&rdquo;が良くバインドされています。</p>
-
+<p>input methos内での切り替えは、昔のWindowsと同じ&quot;zenkaku-hankaku&quot;とか、
+Unix系では良く使う&quot;Shift-space&quot;が良くバインドされています。</p>
 <p>切り替えが、状態が分からなくとも一発でできるのが望ましいので、
 その設定方法を以下に記します。</p>
-
 <h3 id="日本語キーボードのim側の設定方法">日本語キーボードのIM側の設定方法</h3>
-
 <p>日本語キーボードだと、変換と無変換キーを、Anthyの入力モード
 HiraganaとLatinへの切り替えにAnthyの中のキーバインディングで
 設定して常にibus-anthyで使うことで何とかなります。これは特に
 問題ありません。</p>
-
 <ul>
 <li>変換キー: 全角かな入力 (hiragana mode)</li>
-<li>無変換キー:  英数半角入力 (latin mode)<br /></li>
+<li>無変換キー:  英数半角入力 (latin mode)</li>
 </ul>
-
 <p>ALT-漢字、漢字、ALT-`等でのトグル動作が嫌いで、Macの真似でこんな
 キーバインディングしています。</p>
-
 <p>Windows10でもトグル動作が嫌いで、OS側から
 プロパティ → 詳細設定 → キー設定　変更
 として以下の設定で同様の操作感にそろえています。</p>
-
 <ul>
 <li>変換キー: IME-ON (IMEは全角かな入力モードにしておく)</li>
 <li>無変換キー:  IME-OFF</li>
 </ul>
-
-<h3 id="英語キーボードでのim側の設定方法-ibus-anthy">英語キーボードでのIM側の設定方法 (ibus+Anthy)</h3>
-
+<h3 id="英語キーボードでのim側の設定方法-ibusanthy">英語キーボードでのIM側の設定方法 (ibus+Anthy)</h3>
 <p>ただ、英語キーボードの場合は変換と無変換キーはありません。</p>
-
 <ul>
 <li>SHIFTと普通の文字との組み合わせは論外。</li>
 <li>CTRLと普通の文字との組み合わせも、VIM使うので全部先約有り。</li>
 <li>ALTと普通の文字との組み合わせも、メニューへのショートカットで全部先約有り。</li>
 </ul>
-
 <p>こういったことも有り、私はAnthyの中のキーバインディングで
 CTRL-SPACE, SHIFT-SPACEを一時使っていました。</p>
-
 <p>ところが、SHIFT-SPACEやCTRL-SPACEのどちらかをLokalizeなどのアプリ
 が使っていました。（ALT-SPACEは既にGNOMEが使っている）こうなると、
 お手上げです。</p>
-
 <p>結局今は、Anthyの中のキーバインディングは以下にしています。</p>
-
 <ul>
 <li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キーも</li>
 <li>CTRL-SPACE:  英数半角入力 (latin mode)    無変換キーも</li>
 </ul>
-
 <p>Windows10でも英語キーボードの場合にはOS側から
 プロパティ → 詳細設定 → キー設定　変更
 として以下の設定で同様の操作感にそろえています。</p>
-
 <ul>
 <li>SHIFT-SPACE: IME-ON (IMEは全角かな入力モードにしておく) 変換キーも</li>
 <li>CTRL-SPACE:  IME-OFF                                    無変換キーも</li>
 </ul>
-
-<h3 id="英語キーボードでのos側の設定方法-gnome-ibus-anthy">英語キーボードでのOS側の設定方法 (Gnome+ibus+Anthy)</h3>
-
+<h3 id="英語キーボードでのos側の設定方法-gnomeibusanthy">英語キーボードでのOS側の設定方法 (Gnome+ibus+Anthy)</h3>
 <p>アプリとの喧嘩を避けるにはGUI用にリザーブされている、GUIキー（SUPERと
 かWindowsキーともいう)やMENUキー等をGNOME側からのコントロールでibusの
 各入力エンジン選択に使うのが良いわけです。（GUIキーはAnthyなどのアプリ
 のパネルからは使えません。）</p>
-
 <p>そこで、GNOMEの設定→デバイス→キーボードの登場です。Gnomeは内部では通常
 ibusしかサポートしていないので、ここに書いてあることは他のuim,fcitx,scim
 ではそのまま使えません。ここで、使用するINPUT METHODが２つしか無いとします。
 英語とANTHYとしましょう。</p>
-
 <p>設定リストの一番下のプラスをたたき、新規定義を追加します。</p>
-
-<p>キーとして使えそうなのはSUPER-,、SUPER-.、SUPER-/、SUPER-&lsquo;、SUPER-\、
+<p>キーとして使えそうなのはSUPER-,、SUPER-.、SUPER-/、SUPER-'、SUPER-\、
 SUPER-RETURNあたりです。SUPER-jもあいてますね。
 SUPER-lで画面ロックなので、このまわりのSUPER-k、SUPER-;、は避けたいですね。
 SUPER-a、SUPER-s、SUPER-n、SUPER-m、SUPER-TAB、SUPER-vも先約があるので
 使えません。SUPERが左手なので右手のキーとの組み合わせが使いやすいかな。</p>
-
-<p>inputSources<a href="GNOMEのキーボード入力ソース選択画面で最初の項目">0</a>
+<p>inputSources<a href="GNOME%E3%81%AE%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E5%85%A5%E5%8A%9B%E3%82%BD%E3%83%BC%E3%82%B9%E9%81%B8%E6%8A%9E%E7%94%BB%E9%9D%A2%E3%81%A7%E6%9C%80%E5%88%9D%E3%81%AE%E9%A0%85%E7%9B%AE">0</a>
 がANTHYとすると、変換キーはないのでSUPER-j (Japanese)
 をあてがいましょう。Commandは長いけど１行で入れてください。</p>
-
 <pre><code>Name     InputMethod_0
 Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&quot;
 Shortcut SUPER-j
-</code></pre>
-
-<p>もし、これが嫌ならSUPER-,、SUPER-.、SUPER-/などの右下のキーとSUPERの
+</code></pre><p>もし、これが嫌ならSUPER-,、SUPER-.、SUPER-/などの右下のキーとSUPERの
 組み合わせが使いやすい気がします。
 （２つ以上のインプットメソッドを使うときにも便利ですね。)</p>
-
 <p>inputSources[1]がENGLISHとすると、これには安心して戻れるように
 SUPER-RETURNをあてがいましょう。(SUPER-Eも考えたのですが
 アクセスが私にとって良くないので…)</p>
-
 <pre><code>Name     InputMethod_1
 Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[1].activate()&quot;
 Shortcut SUPER-RETURN
-</code></pre>
-
-<p>そしてANTHYは常にHiraganaとしておけばよしです。</p>
-
+</code></pre><p>そしてANTHYは常にHiraganaとしておけばよしです。</p>
 <p>ちょっとこれで使ってみましょう。</p>
-
 <p>実は、ANTHY選択をSUPER-jとSUPER-/の両方の設定にして、
 英語もSUPER-RETURNとSUPER-,の両方の設定にして、
 どのキーが使いやすいかは比較検討中です。</p>
-
 <p>ちなみに、デフォルト設定されているSUPER-SPACEやSUPER-SHIFT-SPACEを使い
 たくなければ、TYPINGにある設定から選び、出てきた設定変更の画面で
 バックスペースを用いてともに無効すれば、これらは使いまわしができます。</p>
-
 <p>やはり、システムのデフォルト関係は変えたくないので、
 右にあってまず使わないMENUキーの利用や、機能が重なり
 使いまわせそうなSUPER-SPACEは使いませんでした。</p>
@@ -206,7 +168,7 @@ Shortcut SUPER-RETURN
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

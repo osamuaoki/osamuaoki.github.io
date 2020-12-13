@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>programming on Goofing Osamu</title>
@@ -6,11 +6,7 @@
     <description>Recent content in programming on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 02 Apr 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/categories/programming/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Thu, 02 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/programming/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>GITを使うフォークの管理</title>
       <link>/jp/2020/04/02/git-fork/</link>
@@ -21,8 +17,7 @@
 備忘録を兼ねて、アップストリームがGITHUBを使っている 場合を軸にメモを作成します。
 GITを使うフォークの管理手順(基本) 簡単のために以下の前提を置きます。（追跡＝tracking）
  他人が管理する、アップストリームのリモートのレポ名を、「upstream」(任意名ですが慣習名)とします。 他人が管理する、アップストリームのリモートのレポ上の「master」ブランチを追跡します。（コピー元） 自分が管理する、フォークしたリモートのレポ名を、「origin」とします。 自分が管理する、フォークしたリモートのレポ上の「master」ブランチに追跡コピーを保管します。（コピー先） アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を、フォークしたレポに勝手に作らないようにします。  この際の、GITを使うフォークの管理手順は以下です。
- アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、 自分のアカウントにフォークされたリモートのレポを作成 フォークされたレポをローカルに「git clone」して、ローカルのレポを作成  $ git clone git@github.com:my_name/project_name.git ; cd project_name  自分が書き換える開発ブランチ(ここでは「devel」)を作成  $ git checkout -b devel  ファイルを編集し、開発ブランチにコミット アップストリームのリモートのレポをローカルにリモート「upstream」として追加。  $ git remote add upstream https://github.com/upstream_name/project_name.git  フォークされたレポの「master」ブランチをアップストリームのレポの「master」ブランチに同期
- $ git checkout master $ git fetch -p upstream $ git pull upstream master $ git push origin master  -pは--pruneのショートハンドで、不要なリモート追跡ブランチを削除し てくれます。</description>
+ アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、 自分のアカウントにフォークされたリモートのレポを作成 フォークされたレポをローカルに「git clone」して、ローカルのレポを作成  $ git clone git@github.com:my_name/project_name.git ; cd project_name   自分が書き換える開発ブランチ(ここでは「devel」)を作成  $ git checkout -b devel   ファイルを編集し、開発ブランチにコミット アップストリームのリモートのレポをローカルにリモート「upstream」として追加。  $ git remote add upstream https://github.com/upstream_name/project_name.git   フォークされたレポの「master」ブランチをアップストリームのレポの「master」ブランチに同期       $ git checkout master $ git fetch -p upstream $ git pull upstream master $ git push origin master -pは--pruneのショートハンドで、不要なリモート追跡ブランチを削除し てくれます。 7.</description>
     </item>
     
   </channel>

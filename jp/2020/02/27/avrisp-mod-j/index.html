@@ -54,22 +54,16 @@
   </tbody>
 </table>
 
-
-
 <p>AVRチップのISPプログラマにAVR ISP markIIを使うと、対象AVRチップに別途電源供給
 する必要があり、ISP出力のPIN#2にVCCを供給していた以前の
 <a href="https://github.com/osamuaoki/avrdude-friend">TTL-232R-5V を使った自作プロクラマー</a>
 を使うより煩雑でした。</p>
-
 <p>そこで、AVR ISP markIIを改造し、ISP出力のPIN#2からVCCを供給出きるように改造し
 ました。</p>
-
 <h2 id="参考情報">参考情報</h2>
-
 <p>いろんな人が同様の不便を感じ、AVRISP mkIIのUSB から電源を取り、ISP出力のPIN#2 に
 つなぎVCC電源供給ソースとする改造記事を書いています。以下の改造記事を参考に
 しました。</p>
-
 <ul>
 <li><a href="http://www.webx.dk/avrisp-mk2-modding/">http://www.webx.dk/avrisp-mk2-modding/</a> (3V/5V selectable, use own fuse, easy output)</li>
 <li><a href="https://jeelabs.org/2010/04/02/avrisp-mkii-w-5v-power/">https://jeelabs.org/2010/04/02/avrisp-mkii-w-5v-power/</a> (nice input after poly fuse)</li>
@@ -82,23 +76,16 @@ interesting use reminder)</li>
 (Nice pics of wiring, not the same purpose, fix by bypassing broken
 DC/DC)　これは本改造とは違う修理改造。</li>
 </ul>
-
 <p>どうもこれらの記事の基板の方が私の持っている基板より配線が太く見やすいです。</p>
-
 <p>これらを読んでの本改造の利用上の注意点は、裸のチップにつなぐ際に電源からの
 ノイズまわりこみ防止に、チップ側にパスコン（0.1uF+10uF）を付けるのが賢明の
 ようです。普通の開発ボードだとパスコンは付いているので心配ないでしょう。</p>
-
 <p>保安回路ですが、過去事例にあったダイオード法は負の高圧には効ず、正の高圧
 がかかる事例がが想定できなかったので、半田付け点をUSBコネクターにした
 ため必要となるUSBからの５V入力側にポリスイッチを導入しました。</p>
-
 <h2 id="作成">作成</h2>
-
 <h3 id="設計方針">設計方針</h3>
-
 <p>私としては、以下の方針で改造設計しました。</p>
-
 <ul>
 <li>外部からチップに電源供給し、AVRISP2はその電圧を検出し信号レベルを合わせる
 という本来の使い方ができる</li>
@@ -109,9 +96,7 @@ DC/DC)　これは本改造とは違う修理改造。</li>
 <li>保安部品のポリヒューズはホストPCとつなぐUSBコネクター側に設置</li>
 <li>3.3Vは専用LDOを利用し回路を簡素化</li>
 </ul>
-
 <h3 id="使用部品">使用部品</h3>
-
 <ul>
 <li><a href="http://akizukidenshi.com/catalog/g/gI-00432/">NJU7223F33　3.3V専用LDO</a></li>
 <li><a href="http://akizukidenshi.com/catalog/g/gP-01316/">表面実装ポリスイッチ　１００ｍＡ</a></li>
@@ -122,58 +107,41 @@ DC/DC)　これは本改造とは違う修理改造。</li>
 <li>AWG24単線（CAT５の芯線）</li>
 <li>エポキシ接着剤</li>
 </ul>
-
 <h3 id="改造法">改造法</h3>
-
 <p>AVRISPのケース裏の穴から爪の引っかかりを外して上下に開け、さらに
 基板をAVRISPのフラットケーブルにつながる６ピン出力側の爪の引っか
 かりを外して上に外します。</p>
-
 <p>USB-Bコネクターの後ろから見て最左のピン（５Vがきている）にAWG30の絶縁線を
 半田付けします。</p>
-
 <p>基板の裏から、AVRISPの６ピン出力の、VTG（２ピン）とGND（６ピン）に
 AWG30の絶縁線を半田付けします。</p>
-
 <p>完成写真で分かりづらいら部分を以下に簡単に記します。</p>
-
 <p>ピンソケットを５ピン分切り出し、USB-Bコネクターの上の外側に差し込み口を
 合わせてエポキシ接着剤で貼り付けます。完全に固定後、片面基板の切り端を
 銅箔面を上にしてUSB-Bコネクターの上の内側にはみ出すようにエポキシ接着剤
 で貼り付けます。</p>
-
 <p>片面基板の裏からリード線を差し込み、３端子LDOの印字面が基板の外に
 見えるように半田付けします。(LDOは左=外側から1=Vout, 2=Vin, 3=GND)
-<img src="/img/LDO3V3.jpg" alt="LDO PIN" /></p>
-
+<img src="/img/LDO3V3.jpg" alt="LDO PIN"></p>
 <p>極性を間違え無いように！（私は一度失敗しました）</p>
-
 <p>本改造の追加回路は以下：</p>
-
-<p><img src="/img/AVRISP2-mod.png" alt="追加回路図" /></p>
-
+<p><img src="/img/AVRISP2-mod.png" alt="追加回路図"></p>
 <p>ピンヘッダのカット片（２ピン分）をショート用のプラグとして
 用いています。２ー３ショートで２ピンに５V出力、
 ３ー４ショートで２ピンに3.3V出力、引き抜くか１ー２にさすと
 ２ピンは本来の外部電源供給と検出となり出力レベルも
 それにあわされます。</p>
-
-<p>詳しくは<a href="/img/AVRISP2-mod.pdf">追加回路図 PDF</a>や<br />
+<p>詳しくは<a href="/img/AVRISP2-mod.pdf">追加回路図 PDF</a>や<br>
 <a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/002_avrisp2_mod">そのソース</a>
 を参照下さい。</p>
-
 <p>ラフな動作確認はUSBをPCを使わず、安いUSB充電器にUSBをつないで
 するほうが安心です。</p>
-
 <h3 id="完成写真">完成写真</h3>
-
-<p>全体 <img src="/img/AVRISP2-mod.jpg" alt="全体" />
-中の上から <img src="/img/AVRISP2-mod-top.jpg" alt="中の上から" /></p>
-
-<p>中のISP裏 <img src="/img/AVRISP2-mod-isp.jpg" alt="中のISP裏" />
-中のUSB裏<img src="/img/AVRISP2-mod-usb.jpg" alt="USB裏" /></p>
-
-<!-- vim: se ai tw=79: -->
+<p>全体 <img src="/img/AVRISP2-mod.jpg" alt="全体">
+中の上から <img src="/img/AVRISP2-mod-top.jpg" alt="中の上から"></p>
+<p>中のISP裏 <img src="/img/AVRISP2-mod-isp.jpg" alt="中のISP裏">
+中のUSB裏<img src="/img/AVRISP2-mod-usb.jpg" alt="USB裏"></p>
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -196,7 +164,7 @@ AWG30の絶縁線を半田付けします。</p>
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

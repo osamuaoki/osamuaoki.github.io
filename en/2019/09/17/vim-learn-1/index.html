@@ -54,73 +54,56 @@
   </tbody>
 </table>
 
-
-
 <p>I could use Vim as a basic editor with TKL-keyboard while tapping some keys
 multiple times.  This was functional but not so elegant!</p>
-
 <p>I decided to re-learn Vim to use it <strong>properly</strong>.  Here is my learning memo.</p>
-
 <p>For simplicity, I use <code>^F</code> to mean <code>CTRL-F</code>.</p>
-
 <h2 id="concept">Concept</h2>
-
 <ul>
 <li>Use default vim (minimum configuration, if possible).
-
 <ul>
 <li>Use as much native functionalities.</li>
 <li>Don&rsquo;t force Vim to behave like another program.</li>
-</ul></li>
+</ul>
+</li>
 <li>50%/60%-keyboard ready.
-
 <ul>
 <li>Use no cursor keys, if possible.</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h2 id="guiding-voice">Guiding voice</h2>
-
 <p>Here are a few insightful recommendations on the best practices for Vim.</p>
-
 <ul>
 <li>Voice of Vim God (Vim upstream: Bram Moolenaar): <a href="https://www.moolenaar.net/habits.html">Seven habits of effective text editing</a></li>
 <li><a href="https://vimhelp.org/">RTFM</a> or type &ldquo;<code>vim '+h|only'</code>&rdquo;.</li>
 <li>Voice of Vim Gurus (April, 2016): <a href="https://www.vi-improved.org/recommendations/">#vim Recommendations</a></li>
 <li>Some interesting hints found:
-
 <ul>
 <li><a href="http://learnvimscriptthehardway.stevelosh.com/">Learn Vimscript the Hard Way</a></li>
 <li><a href="https://github.com/mhinz/vim-galore">vim-galore</a></li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>Here, I summarized my rationale behind my configuration decisions for me to
 remember them.</p>
-
 <p>I follow the voice if Vim Gurus from April 2016 (based probably on Vim version
 7.4) as much as possible.  Back then, Vimscript was becoming more like a real
 language but we didn&rsquo;t have native support to the asynchronously executing
 background process.  Now the asynchronously executing background process
 offering spell checker, lint, git monitoring, etc.  are widely used useful
 features.  So I have some deviations.</p>
-
 <p>Please note that I am publishing my current <code>~/.vim/</code> directory implementation
 at <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a> .  This is not a general purpose plugin
 managing system but if you are manually managing Vim plugins with Vim 8&rsquo;s
 native package management infrastructure, and <code>git submodule</code>, this may give
 you interesting hints how you want to start.</p>
-
 <h2 id="normal-mode">NORMAL MODE</h2>
-
 <p>Unlike other editors, the existence of NORMAL MODE is what makes Vim as the
 great editor which allows the minimum usage of the ALT-key and CTRL-key.</p>
-
 <h3 id="cheat-sheet">Cheat sheet</h3>
-
 <p>Here is my cheat sheet to remind me of all the important key strokes used
 around NORMAL MODE with emphasis on motion keys:</p>
-
 <pre><code> NORMAL MODE &lt;ESC&gt;:  Goto BOF → gg      r +--- Next Char
  screen                   n N # ?ααα   e / +-- End of Word (non-alnum)
  scroll        ai+wW({[&lt;sp&quot;'`↓  ^B    t / / +- Word Next (non-alnum)
@@ -143,86 +126,62 @@ around NORMAL MODE with emphasis on motion keys:</p>
  Undo: u, Redo: ^R, Repeat: . , Fold: Open zo/zO/zr/zR, Close zc/zC/zm/zM
  Insert Mode: i/a Before/After Char, I/A Before/After Line, O/o above/below
  Visual Mode: v Char V Line ^V Block, Replace Mode: R, Ex Mode: : or q:
-</code></pre>
-
-<p>This is intentionally terse.  <code>^</code> is used as prefix for CTRL-key.</p>
-
+</code></pre><p>This is intentionally terse.  <code>^</code> is used as prefix for CTRL-key.</p>
 <p>I found some key sequences such as <code>3w</code>, <code>bc$</code>, <code>ciw</code>, <code>3yaw</code>, … quite useful,
 now.</p>
-
 <h3 id="hints-for-memorizing-key-strokes">Hints for memorizing key strokes</h3>
-
 <p>Since most key assignments are chosen from the initial of the corresponding
 English word, they are quite intuitive.  But, some key assignments look
 confusing.  Here are my hints for memorizing such key strokes.</p>
-
 <ul>
 <li>Cursor move keys
-
 <ul>
 <li><code>j</code> shape points to downward.</li>
 <li><code>k</code> shape points to upward.</li>
-</ul></li>
+</ul>
+</li>
 <li>Screen scroll keys:
-
 <ul>
 <li><code>^B</code>: Backward page</li>
-<li><code>^U</code>: Upward <sup>1</sup>&frasl;<sub>2</sub> page</li>
+<li><code>^U</code>: Upward 1/2 page</li>
 <li><code>^Y</code>: expose up 1 line == Yester(day)-line, next to ^u (Keep cursor)</li>
 <li><code>^F</code>: Forward  page</li>
-<li><code>^D</code>: Downward <sup>1</sup>&frasl;<sub>2</sub> page</li>
+<li><code>^D</code>: Downward 1/2 page</li>
 <li><code>^E</code>: Expose down 1 line, next to ^d (Keep cursor)</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h3 id="interesting-commands">Interesting commands</h3>
-
 <ul>
 <li><code>ga</code>: Get Unicode point (HEX etc.)</li>
 <li><code>g8</code>: Get Binary data HEX sequence</li>
-<li><code>^G</code>: Get filename and cursor position (see &ldquo;<code>:h 'ruler'</code>&rdquo;)</li>
+<li><code>^G</code>: Get filename and cursor position (see &ldquo;<code>:h 'ruler'</code>&quot;)</li>
 <li><code>g^G</code>: Get cursor position in column, line, word, character and byte</li>
 <li><code>{visual}g?</code>: ROT13 (Super insecure encryption)</li>
 </ul>
-
 <h3 id="map-leader-key">Map leader key</h3>
-
 <p>I map SPACE-key as leader-key in NORMAL MODE since it has no practical use and
 easier access than default <code>\</code>-key.</p>
-
 <pre><code>let mapleader = ' '
-</code></pre>
-
-<h3 id="some-options">Some options</h3>
-
+</code></pre><h3 id="some-options">Some options</h3>
 <p>I tend to set as follows in the vim startup file (<code>~/.vimrc</code> or its equivalent):</p>
-
 <pre><code>&quot; make vim copy buffer bigger (default 50 lines: viminfo='100,&lt;50,s10,h)
 set viminfo='100,&lt;5000,s100,h
 
 &quot; Allow to move cursor beyond for block
 set virtualedit=block
 
-</code></pre>
-
-<h2 id="insert-mode-and-command-mode">INSERT MODE and COMMAND MODE</h2>
-
+</code></pre><h2 id="insert-mode-and-command-mode">INSERT MODE and COMMAND MODE</h2>
 <p>INSERT MODE and COMMAND MODE are intuitive with cursor keys.</p>
-
 <p>INSERT MODE is started from NORMAL MODE by pressing <code>i</code>, <code>I</code>,<code>a</code>,<code>A</code>,<code>o</code>, <code>O</code>,
 etc.</p>
-
 <p>COMMAND MODE is started from NORMAL MODE by pressing <code>:</code> or <code>/</code> or <code>?</code>.</p>
-
 <p>You can use NORMAL-MODE-like editing for COMMAND MODE situation by starting it
 with <code>q:</code> or <code>q/</code> or <code>q?</code>.  Alternatively, typing <code>^F</code> in COMMAND MODE
 situation also starts NORMAL-MODE-like editing.</p>
-
 <h3 id="last-resort-inputs-with-ctrl-keys">Last resort inputs with <code>CTRL</code>-keys</h3>
-
 <p>Here are some non-intuitive key sequences used by INSERT MODE used by INSERT
 MODE.  Some key sequences are also valid for COMMAND MODE.</p>
-
 <ul>
 <li><code>^H</code>: Delete a character before the cursor. (same as <code>&lt;BS&gt;</code>)</li>
 <li><code>^W</code>: Delete the word before the cursor.</li>
@@ -241,18 +200,13 @@ MODE.  Some key sequences are also valid for COMMAND MODE.</p>
 <li><code>^Vuαααα</code>: insert unicode character at <code>0xαααα</code>. (command mode)</li>
 <li><code>^Vuαααααα</code>: insert unicode character at <code>0xαααααααα</code>. (command mode)</li>
 </ul>
-
 <p>Although it is tempting to map some CONTROL-key sequences to some cursor keys,
 don&rsquo;t bother to do so since they are most likely used by Vim.  Use NORMAL MODE
 and COMMAND NORMAL MODE and native cursor keys.</p>
-
 <h3 id="tab-in-command-mode">TAB in COMMAND MODE</h3>
-
 <p>Normally, <code>TAB</code> in COMMAND MODE starts <strong>wildmenu</strong> under <code>:set wildmenu</code>.  You
 can use <code>TAB</code> and <code>S-TAB</code> to chose the one you want.</p>
-
 <h3 id="basics-in-command-mode">Basics in COMMAND MODE</h3>
-
 <ul>
 <li><code>:e ααα</code>: Edit ααα file</li>
 <li><code>:w</code>: Write file</li>
@@ -268,17 +222,12 @@ can use <code>TAB</code> and <code>S-TAB</code> to chose the one you want.</p>
 <li><code>:%s/ααα/βββ/gc</code>: Replace ααα with βββ for all lines with confirmation</li>
 <li><code>:bufdo ααα</code>: Execute ααα in each buffer in the buffer list.</li>
 </ul>
-
 <p>Use <code>|</code> as in-line command separator.</p>
-
 <h2 id="quickfix-mode">QUICKFIX MODE</h2>
-
 <p>If you have a task to search some text to make Vim to jump to particular places
 in its buffer, QUICKFIX MODE is the one to automate your process.  No more
 <code>grep</code> on another terminal window.</p>
-
 <p>There are 4 basic commands to start preparing jump list data.</p>
-
 <ul>
 <li><code>:mak[e]</code>: Run <code>make</code> for compile-jump-edit cycle. (<code>:h :make</code>)</li>
 <li><code>:gr[ep]</code>: Run system-<code>grep</code> for search-jump-edit cycle. (<code>:h :grep</code>)</li>
@@ -286,9 +235,7 @@ in its buffer, QUICKFIX MODE is the one to automate your process.  No more
 <li><code>:helpg[rep]</code>: Run internal-<code>grep</code> on all help text files for
 search-jump-read cycle. (<code>:h :helpgrep</code>)</li>
 </ul>
-
 <p>Then you access and use the jump listi from COMMAND MODE.</p>
-
 <ul>
 <li><code>:cw[indow]</code>: Open the quickfix window if error.</li>
 <li><code>:cope[n]</code>: Open a window to show the current list of errors.</li>
@@ -296,14 +243,10 @@ search-jump-read cycle. (<code>:h :helpgrep</code>)</li>
 <li><code>:cn[ext]</code>: Jump to next quickfix item location.</li>
 <li><code>:cp[rev]</code>: Jump to previous quickfix item location.</li>
 </ul>
-
 <p>Please note there are <code>l...</code> variants of above commands.</p>
-
 <h2 id="terminal-mode">TERMINAL MODE</h2>
-
 <p>This is a new Vim/NVim feature.  Now capturing shell session is as easy.  No
 more envying EMACS terminal mode.</p>
-
 <ul>
 <li><code>:ter[minal]</code>: Start TERMINAL MODE. (<code>:h :terminal</code>)</li>
 <li><code>^WN</code> or <code>^\^N</code>: Switch to TERMINAL-NORMAL MODE.</li>
@@ -313,10 +256,8 @@ more envying EMACS terminal mode.</p>
 <li><code>^W^\</code>: Send a <code>^\</code> to the job in the terminal.</li>
 <li><code>^W^C</code>: Send a <code>^C</code> to the job in the terminal.</li>
 </ul>
-
 <p>Typing <code>i</code> etc. will get you back to TERMINAL MODE from TERMINAL-NORMAL MODE.</p>
-
-<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -339,7 +280,7 @@ more envying EMACS terminal mode.</p>
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

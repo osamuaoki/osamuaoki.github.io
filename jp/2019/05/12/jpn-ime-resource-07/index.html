@@ -54,62 +54,42 @@
   </tbody>
 </table>
 
-
-
-<!-- vim: se ai tw=79: -->
-
+<!-- raw HTML omitted -->
 <p>Debian Busterの(0.3系)のAnthyは問題がある。</p>
-
 <p>一方、mozcの最新コードや辞書を見たら、昔よりかなり整理され
 変なデーターで無理やり特定コーパスのみの最適化というか過学習
 の結果のような辞書データーもない。使ってみると正直悪くない。</p>
-
 <p>いまさらanthyを触るのもという感もあるが、せめて以前程度に
 動くようにはしたい。特にDebianのパッケージは完全メンテナー
 モードで、salsaでバグ修正優先での対応を考えます。
 （githubは、いろいろ遊ぶかもしれません）</p>
-
 <p>すぐ気づいた明らかなバグ２つは解決法が見えた。</p>
-
 <ul>
 <li>Use UTF-8 for zipcode bug fix. Closes: #927074</li>
 <li>Convert depgraph/master.depword to UTF-8.  Closes: #923948</li>
 </ul>
-
 <p>後者は文法係り受け定義関連を再構築必要がある。簡単にするには
 <code>debian/rules</code>を以下としてDebianのビルドシステムで<code>debuild</code>と
 してビルドする必要がある。</p>
-
 <pre><code>override_dh_auto_configure:
         dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode
 
-</code></pre>
-
-<p>だが、上手くいかない。ソース壊れている?</p>
-
+</code></pre><p>だが、上手くいかない。ソース壊れている?</p>
 <h2 id="utf-8-での処理のデフォルト化">UTF-8 での処理のデフォルト化</h2>
-
 <p>まず、テスト環境で変な文字が出るので気になっていた、UTF-8廻りを
 確認した。</p>
-
 <p><code>anthy/anthy.h</code>に以下と定義されているので、<code>encoding</code>関係が
 初期値の0だと、どうも出力がEUCJPになってしまうようだ。</p>
-
 <pre><code>#define ANTHY_UTF8_ENCODING 2
-</code></pre>
-
-<p>これは、0にしておかないとdefault_encodingやencodingやprint_encoding
+</code></pre><p>これは、0にしておかないとdefault_encodingやencodingやprint_encoding
 などがUTF-8にならない懸念がある。2としている意味を感じなかったので
 これを変えた。特に以下への影響が気になる。</p>
-
 <ul>
 <li><code>anthy_putxchar()</code></li>
 <li><code>anthy_putxstr()</code></li>
 <li><code>anthy_putxstrln()</code></li>
 </ul>
-
 <p>これらは、以下で使われている。</p>
-
 <ul>
 <li><code>mkworddic/mkdic.c</code></li>
 <li><code>src-main/context.c</code></li>
@@ -119,32 +99,20 @@
 <li><code>src-util/convdb.c</code></li>
 <li><code>test/check.c</code></li>
 </ul>
-
 <p>まあ、道理で<code>parsed_data0</code>がUTF-8環境で読めない。どうもEUCJPで文字列
 をはき出しているわけです。これじゃ、まともに動かないのも納得です。
 きっと連接の統計がまともにできていないので、連文節変換をすると変な
 結果が出るようになったのだろう。とりあえず、修正。</p>
-
 <p>さらによく見ると、<code>calctrans/proccorpus.c</code>が以下になっている。</p>
-
 <pre><code>  anthy_conf_override(&quot;CONFFILE&quot;, &quot;../anthy-conf&quot;);
-</code></pre>
-
-<p>これは、ビルド中のソース内のファイルを見てほしいので以下にする。</p>
-
+</code></pre><p>これは、ビルド中のソース内のファイルを見てほしいので以下にする。</p>
 <pre><code>  anthy_conf_override(&quot;CONFFILE&quot;, &quot;../anthy-test-conf&quot;);
-</code></pre>
-
-<h2 id="無限ループ">無限ループ</h2>
-
+</code></pre><h2 id="無限ループ">無限ループ</h2>
 <p>上記を対策しても上手くビルドしない。</p>
-
 <p><code>proccorpus</code>は、たしかに読める<code>parsed_data0</code>を生成するが処理が止まってしまう。
 何か無限ループに落ち込んでいる感じ。</p>
-
 <p>こうなったら素人デバグの常套手段の「printf(stderr,&hellip;)」の嵐だ！
 すると見えてきた。</p>
-
 <pre><code>...
 step=8783
 proc_sentence=(あっぷでーとだよ〜ん)
@@ -164,48 +132,29 @@ trim segment 10 12 1 (だよ~ん)
 trim segment 10 12 1 (だよ~ん)
 trim segment 10 12 1 (だよ~ん)
 ...
-</code></pre>
-
-<p>もとのコーパスのかな文字は全角の<code>〜</code>だが、以下
+</code></pre><p>もとのコーパスのかな文字は全角の<code>〜</code>だが、以下
 が返す文字列は半角の<code>~</code>になっている。
 <code>calctrans/proccorpus.c:trim_segment()</code>の中の以下が半角文字化して
 返すようだ。</p>
-
 <pre><code>anthy_get_segment(ac, nth, NTH_UNCONVERTED_CANDIDATE, seg_buf, 1024);
-</code></pre>
-
-<p>anthyは入力文字をいろいろ正規化してからかな漢字変換をするので、
+</code></pre><p>anthyは入力文字をいろいろ正規化してからかな漢字変換をするので、
 テストコーパスの右は正規化された表現じゃないといけないね。
 もしかしたら逆変換問題？正確な問題の原因はもう少し調べる
 必要があるけれど、抜け出せなくなったのは納得。</p>
-
 <p>この変もう少しロバストにしないと、少し問題があるコーパスを使った
 際に今回のように壷にはまる。</p>
-
-<h2 id="応急措置-失敗例">応急措置（失敗例）</h2>
-
+<h2 id="応急措置失敗例">応急措置（失敗例）</h2>
 <p>さて、とりあえず回避のためにデーターの問題部分を触ってみる。</p>
-
 <pre><code>-|あっぷでーと|だよ〜ん| |アップデート|だよ〜ん|
 +|あっぷでーと|だよ~ん| |アップデート|だよ~ん|
-</code></pre>
-
-<p>おー、変換入力文字から半角<code>~</code>が落ちている、、、ので以下が<code>fprint()</code>とされた。</p>
-
+</code></pre><p>おー、変換入力文字から半角<code>~</code>が落ちている、、、ので以下が<code>fprint()</code>とされた。</p>
 <pre><code>proc_sentence=(あっぷでーとだよん)
 res_str=(|あっぷでーと|だよ~ん|)
-</code></pre>
-
-<h2 id="応急措置-成功例">応急措置（成功例）</h2>
-
+</code></pre><h2 id="応急措置成功例">応急措置（成功例）</h2>
 <p>とりあえず回避のためにデーターの問題部分を以下にした。</p>
-
 <pre><code>-|あっぷでーと|だよ〜ん| |アップデート|だよ〜ん|
 +|あっぷでーと|だよ～ん| |アップデート|だよ~ん|
-</code></pre>
-
-<p>すると、</p>
-
+</code></pre><p>すると、</p>
 <pre><code>step=8783
 proc_sentence=(あっぷでーとだよ～ん)
 res_str=(|あっぷでーと|だよ～ん|)
@@ -245,24 +194,17 @@ find_candidate 1 (だよ～ん)
 for_each_segment -- if true
 before output
 ...
-</code></pre>
-
-<p>これで、文法係り受け定義関連を再構築は何とか動いているようだ。</p>
-
+</code></pre><p>これで、文法係り受け定義関連を再構築は何とか動いているようだ。</p>
 <p>とりあえず、今日はここ迄。</p>
-
 <p>インストールしたら、ちょっとは変な動きがなくなるかな?</p>
-
 <p>PS: 「なくなるかな」や「なるかなど」といれると、
 「なくなるか名」や「なるな度」となるのが 1:0.3-8.1までの
 問題でした。特に語尾が変になります。</p>
-
 <p>2019-05-13追記: Debianのexperimentalに
 <a href="https://tracker.debian.org/news/1039742/accepted-anthy-103-9-source-all-amd64-into-experimental/">anthy 1:0.3-9</a>
 としてアップロード。（Busterはフリーズされたのでリリースの邪魔をしない苦肉の策)
 0.3-9に変更後は「無くなるかな」とまともですが、一方「奈留など。」と変な候補も
 示されます。まだ、他にもおかしいところがあるかもしれませんね。</p>
-
 <p><a href="/jp/2019/09/01/jpn-ime-resource-08/">2019-06-01: 追加関連記事</a></p>
 
 
@@ -286,7 +228,7 @@ before output
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

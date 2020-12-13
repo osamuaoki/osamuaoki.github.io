@@ -55,68 +55,51 @@
 </table>
 
 <p>2019-05-11:加筆修正。</p>
-
 <p><a href="https://salsa.debian.org/debian/anthy">Anthyのソース</a>を見るとメイン
 辞書以外のユーザー辞書は、単漢字入力などの入力文字列として半角tを最後
 につけた辞書が、ファイル名「*.t」で多数含まれ配布されています。</p>
-
 <p>（もっとも、現在のDebianのソースは NIIBE Yutakaさんが最近再構成したので、
 ファイルの起源はどうもalt-cannadicは由来かもしれません）</p>
-
 <p>これらは個人用辞書用と言うことですが、現在（２０１９年２月）の時点では
 「郵便番号→住所」変換をするためのzipcode.t以外はバイナリーパッケージに
 コピーされていないので直接システムに導入するようにはなっていません。</p>
-
 <p>ただ同梱された「郵便番号→住所」変換をするための辞書は「７桁半角数字」
 を入力すると郵便番号に対応する住所の文字列を吐き出すようになっているように
 見受けます。&ndash;&gt; ７桁半角数字が変換されないように見えたのはDEBIANのバグでし
 た。
 <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=927074">2019-05-06: Debian BTS</a></p>
-
 <p>実際にanthyをibus-anthyの下で動作させると「７桁半角数字」を入れても何も起こりません。
 ibus-anthyの下では、現在このzipcode.tは明らかに使えません。Busterは既にフリーズ中
 なのでこの修正は次回リリースやバックポートで入るように提案していきます。</p>
-
 <p>（zipcode.tは「t」で終わるトリックは使っていません。）</p>
-
 <p>良く見るとibus-anthyが</p>
-
 <pre><code>/usr/share/ibus-anthy/dicts/emoji.t
 /usr/share/ibus-anthy/dicts/era.t
 /usr/share/ibus-anthy/dicts/oldchar.t
 /usr/share/ibus-anthy/dicts/symbol.t
 /usr/share/ibus-anthy/dicts/zipcode.t
-</code></pre>
-
-<p>をインストールして、GUIの設定が「<code>~/.anthy/*.t</code>」からシムリンクをはるなど
+</code></pre><p>をインストールして、GUIの設定が「<code>~/.anthy/*.t</code>」からシムリンクをはるなど
 してこれらをibus-anthyのGUIでユーザー辞書として使えるようにしているようです。</p>
-
 <p>ただこれらのユーザー辞書では、入力文字列として半角tを最後つけることはされて
 いません。「郵便番号→住所」変換をするための辞書は「３桁全角数字、
 全角の長音(UTF-8=E383BC, Unicode=U+30FC)、４桁全角数字」を入力すると、
 郵便番号に対応する住所の文字列を対応させるようになっていますし、実際の
 動作もそうです。</p>
-
 <p>どうもこの違いは、使うフロントエンドによって提供されるローマ字入力からかな
 に変換される際のルールが異なるので、ibusでは小文字のtが入れにくいことにある
 ようです。（「uim」は使っていないのであくまで推測です）</p>
-
 <ul>
 <li>「ibus-anthy」 数字・記号入力は全角数字・記号、単ローマ字入力は大文字半角</li>
 <li>「uim」        数字・記号入力は半角数字・記号、単ローマ字入力は小文字半角</li>
 </ul>
-
 <p>ローマ字入力からのかな漢字変換は、どうも使うフロントエンドによって少々動作が
 違うので要注意です。</p>
-
 <p>そもそもこの変な小文字のtを末尾に入れる変換辞書スタイルは、
 昔の「<code>canna</code>辞書」由来かもしれません。</p>
-
 <p>2019-05-22: 上記メモを書いた後いろいろ試して、FREEZE中なのでDebianの
 experimentalにバグ修正版1:0.3-9をアップロードしています。７桁数字での
 郵便番号はちゃんと出るようになりました。</p>
-
-<!-- vim: se ai tw=79: -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -139,7 +122,7 @@ experimentalにバグ修正版1:0.3-9をアップロードしています。７�
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

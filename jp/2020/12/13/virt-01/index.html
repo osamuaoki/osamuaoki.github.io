@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>仮想環境(1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">仮想環境(1)</span></h1>
+
+<h2 class="date">2020/12/13</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/05/30/rescue-01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>通常のパッケージ作成には、確実に sid/unstable 環境とするために
+<code>pbuilder</code>/<code>cowbuilder</code> を使って
+<a href="https://www.debian.org/doc/manuals/debmake-doc/ch03.en.html#pbuilder-setup">設定</a>
+された
+<a href="https://www.debian.org/doc/manuals/debmake-doc/ch07.en.html#chroot">chroot環境</a>
+を使っています。(確かに、<code>schroot</code>/<code>sbuild</code> 系の方が良い面はあるのでしょうが、
+これは私の惰性による選択です。)</p>
+<p>最近、なるべくメインのシステムを変えずにデバグを効率的にするために、
+いくつかのパッケージがインストールされたデバグ用のchroot環境を上記の延長線上で
+準備しました。以下は自分なりの備忘録メモです。</p>
+<h2 id="デバグ用のchroot環境作成">デバグ用のchroot環境作成</h2>
+<p><code>cowbuilder</code> を使って、<code>~/wip</code>以下にchrootの開発環境を作成します。</p>
+<pre><code> $ sudo cowbuilder create --basepath ~/wip
+...
+ $ sudo cowbuilder login --basepath ~/wip
+...
+ root@goofy:/# apt-get install git vim mc aptitude devscripts iproute2
+...
+ root@goofy:/# ^D
+</code></pre><p>後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。</p>
+<pre><code> $ sudo cowbuilder login --basepath ~/wip
+...
+ root@goofy:/# cd
+...
+ root@goofy:~#
+</code></pre><p>作業用のソースはchroot環境中の<code>/root</code>にコピーを置いて作業することになります。ここは
+ホスト環境から見ると<code>~/wip/root</code>以下になります。このディレクトリのパーミッションは
+<code>drwx------</code>で、オーナーが<code>root root</code>です。当然ですが、root権限がないとアクセスでき
+ないのでホスト環境からの操作時には配慮が必要です。</p>
+<p>確かにrootユーザーのままで色々やるのは「少々気持ちが悪い」ですが、
+所詮chroot環境なのでダメージは限定的と考え「良」とします。</p>
+<p>キャラクターコンソールのみを使うにはこれで充分です。</p>
+<h2 id="開発環境">開発環境</h2>
+<p>開発環境は、できるだけ安定しているほうがストレスが少ないです。stable環境が使えればそれでも
+いいのですが、新しいハードウエアーだとtestingぐらいは必要かもしれません。</p>
+<p>pbuilderでパッケージビルドをすると、開発環境をsidにしなくてもパッケージが正しいsid環境
+で作成でき快適です。</p>
+<p>最近のsource only uploadのためには ソースに対して<code>dpkg-buildpackage -S --no-sign</code>
+を実行する必要があります。このためだけに開発のホストシステム全体をSid環境にして
+依存関係で必要とされる関連パッケージを大量インストールするのは気が向きません。
+この実行を開発環境デバグ用のchroot環境ですれば、開発環境を肥大化させずに開発環境を
+安定して確保できます。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2020/05/30/rescue-01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

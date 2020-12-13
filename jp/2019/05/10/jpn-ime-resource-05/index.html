@@ -54,84 +54,56 @@
   </tbody>
 </table>
 
-
-
-<!-- vim: se ai tw=79: -->
-
+<!-- raw HTML omitted -->
 <p>まず、辞書関連ファイルの要点をレビューしました。</p>
-
 <p>使ったanthyのソースはDebian BusterのベースとなるgniibeさんがUTF-8化パッチ
 を掛けかなり変更した0.3です。</p>
-
 <h2 id="anthyの辞書関連定義ソースファイル">Anthyの辞書関連定義ソースファイル</h2>
-
 <p>変換候補漢字が、読みに対して、その品詞、頻度とともに定義される「辞書」ファイルは、
 その作成経緯により2種類の拡張子が使われています。</p>
-
 <ul>
 <li>Anthy用辞書: <code>*.t</code></li>
 <li>Canna用辞書: <code>*.ctd</code></li>
 </ul>
-
 <p>これらはすべて<code>alt-cannadic</code>と<code>mkworddic</code>にあります。</p>
-
 <p>単純な品詞や頻度だけでは正しい漢字選択ができない場合に対応する「用例辞書」
 ファイル<code>udict</code>は<code>mkworddic</code>にあります。</p>
-
 <h2 id="anthyの辞書ソースファイル処理機構">Anthyの辞書ソースファイル処理機構</h2>
-
 <p>上記の「辞書」ファイルと「用例辞書」ファイルは、<code>mkworddic</code>ディレクトリー
 中にビルド時に生成される<code>mkworddic</code>により読み込まれ、さらに負の頻度を持つ
 「逆変換用辞書」データーが追加作成されます。</p>
-
 <p>これを詳しく見ていきましょう。</p>
-
-<p><code>mkworddic</code>が-f<code>オプションで</code>dict.args<code>を指定して起動されます。</code>dict.args<code>
-は通常同一ディレクトリー内の</code>dict.args.in`からビルド時作成されます。
+<p><code>mkworddic</code>が-f<code>オプションで</code>dict.args<code>を指定して起動されます。</code>dict.args<code>は通常同一ディレクトリー内の</code>dict.args.in`からビルド時作成されます。
 これを変更することで組み込まれる辞書は調節できます。</p>
-
 <p><code>dict.args</code>の設定内容の処理は、mkworddic/mkdic.c:execute_batch()で処理されます。</p>
-
 <ul>
 <li><code>read</code>コマンドは指定された「辞書」ファイルを<code>read_dict_file()</code>で読み込みます。</li>
 <li><code>read_uc</code>コマンドは指定された「用例辞書」ファイルを<code>read_udict_file()</code>で読み込みます。</li>
 <li><code>build_reverse_dict</code>コマンドは「逆変換用辞書」データーを<code>build_reverse_dict()</code>で作成し追加します。</li>
 <li><code>write</code>コマンドはメモリー中の全辞書データーを指定されたファイル（<code>anthy.wdic</code>）に<code>write_dict_file()</code>で書き出します。</li>
 </ul>
-
 <p>詳細は、<code>mkworddic</code>のソースを<code>mkworddic/mkdic.c</code>から追いかけると見えてきます。</p>
-
 <p>ちなみに、<code>anthy.wdic</code>は、<code>mkanthydic/</code>ディレクトリーのファイルから生成するビルド
 時用のバイナリープログラム<code>mkfiledic</code>により、単語の条件付き連鎖発現頻度情報を整理
 して生成する各種情報ファイルと統合され、漢字かな変換実行時に用いられる<code>anthy.dic</code>
 となります。</p>
-
-<h2 id="anthyの辞書ソースファイル構造-基本">Anthyの辞書ソースファイル構造(基本)</h2>
-
+<h2 id="anthyの辞書ソースファイル構造基本">Anthyの辞書ソースファイル構造(基本)</h2>
 <p><code>mkanthydic/mkdic.c:push_back_word_entry_line()</code>からコードを読むと辞書ファイルの
 構造が分かります。</p>
-
 <p>最も典型的な辞書ソースデーターファイルの構造は、半角スペースで区切られた以下の
 構造をしています。</p>
-
 <pre><code>&lt;ひらがな見出し語&gt; [#&lt;品詞&gt;[*&lt;頻度&gt;] [&lt;変換後文字列&gt;]... ]...
-</code></pre>
-
-<ul>
+</code></pre><ul>
 <li><code>&lt;ひらがな見出し語&gt;</code> (index)は、全角ひらがな以外の半角・全角の数字や記号も許されます。</li>
 <li><code>*&lt;頻度&gt;</code>は省略可能です。</li>
 <li><code>&lt;変換後文字列&gt;</code>は同音異字に関して繰り返し羅列可能です。</li>
-<li><code>#&lt;品詞&gt;*&lt;頻度&gt; [&lt;変換後文字列&gt;]...</code>も繰り返し羅列可能です。</li>
+<li><code>#&lt;品詞&gt;*&lt;頻度&gt; [&lt;変換後文字列&gt;]... </code>も繰り返し羅列可能です。</li>
 </ul>
-
 <p><code>#&lt;品詞&gt;</code>に関しては後述する。</p>
-
 <p>ただし、現在は「&lt;ひらがな見出し語&gt;」は30文字までに制約されています。この他、
 プログラム内の各種文字列長は固定長でいろいろ制約があることが多いので要注意です。</p>
-
 <p>またindex中の濁点は通常「が」のように１文字表現をしますが、１文字表現の無い
 「う゛」は２文字表記されています。</p>
-
 <p>辞書中に「う゛」を「ヴ」で置き換えた項目を入れることはDebianが使っている
 0.3のソース中ではされていません。現在のanthyの入力対応は、ひらがな・
 カタカナ・ローマ字で、入力はひらがなに変換してから漢字変換操作がされるので、
@@ -140,57 +112,40 @@
 辞書中の「&lt;ひらがな見出し語&gt;」に「ヴ」を書くのを加えるのは
 使われない無駄なデーターとなるので好ましくありません。（辞書ファイル中の
 README中の文言は無視しましょう）</p>
-
 <ul>
 <li>src-main/main.c:need_reconvert()</li>
 <li>src-worddic/word_dic.c:anthy_get_seq_ent_from_xstr()</li>
 </ul>
-
 <p>このソース辞書から作られるanthy.dic辞書中の、素（raw）の「&lt;頻度&gt;」の
 典型的値は以下です：</p>
-
 <ul>
 <li>良く使われる言葉は大きく、５００ー６００程度</li>
 <li>普通の言葉は、１００ー２００程度</li>
 <li>単漢字などは、１０ー３０程度</li>
 <li>指定が無い場合には、１</li>
 </ul>
-
-<h2 id="anthyの辞書ソースファイル構造-複合語">Anthyの辞書ソースファイル構造（複合語）</h2>
-
+<h2 id="anthyの辞書ソースファイル構造複合語">Anthyの辞書ソースファイル構造（複合語）</h2>
 <p>複合語の収録のために、「&lt;変換後文字列&gt;」には特別の記述法があります。</p>
-
 <pre><code>かなかんじへんかんえんじん #T35 #_2仮名_3漢字_4変換_4エンジン
-</code></pre>
-
-<p>見てわかるように、<code>_</code>の後ろの数字は対応するindex中文字の字数です。
+</code></pre><p>見てわかるように、<code>_</code>の後ろの数字は対応するindex中文字の字数です。
 「う゛」は2文字扱いとなります。頻度情報は省略されているので１です。
 当然ですが、index側や変換先文字列の有効部分には、半角数字や<code>#</code>
 や<code>_</code>は含められまれません。</p>
-
 <p><code>mkanthydic/mkdic.c:push_back_word_entry()</code>を見たらわかるように、
 複合語の収録情報の<code>#_2仮名_3漢字_4変換_4エンジン</code>は、そのまま
 辞書中に記録されています。</p>
-
 <p>この複合語の数字は<code>mkworddic/mkdic.c:reverse_multi_segment_word()</code>の
 複合語の逆変換でも利用され以下の逆変換辞書が生成されています。</p>
-
 <pre><code>仮名漢字変換エンジン #T35 #_2かな_2かんじ_2へんかん_4えんじん
-</code></pre>
-
-<h2 id="anthyの用例辞書ソースファイル">Anthyの用例辞書ソースファイル</h2>
-
+</code></pre><h2 id="anthyの用例辞書ソースファイル">Anthyの用例辞書ソースファイル</h2>
 <p>Anthyの用例辞書（<code>udict</code>）ファイルは、以下の意味がある。</p>
-
 <ul>
 <li><code>#</code>で始まる行はコメント</li>
 <li>１行めが、注目する単語（読み、活用部、品詞、漢字）</li>
 <li>２行め以降が、それと用法上関連が強い単語（読み、活用部、品詞、漢字）</li>
 <li><code>-</code>で始まる行は用例の区切り</li>
 </ul>
-
 <p>だから、以下のような感じとなる。</p>
-
 <pre><code># Comment
 あ (く) #K5r 空
 ばしょ () #T35 場所
@@ -202,25 +157,18 @@ README中の文言は無視しましょう）</p>
 ひきだし () #T35 引き出し
 -------------------
 ...
-</code></pre>
-
-<h2 id="品詞">品詞</h2>
-
+</code></pre><h2 id="品詞">品詞</h2>
 <p>例えば、辞書データーソースファイル中で品詞を示す<code>K5r</code>は、辞書データーソース以外のソースの数ヶ所で定義・説明・使用されています。</p>
-
 <ul>
 <li>定義: <code>src-worddic/wtab.h:{&quot;#K5r&quot;,POS_V,COS_NONE,SCOS_NONE,CC_K5,CT_HEAD,WF_INDEP|WF_MEISI   /* &quot;カ行五段(連用形名詞)&quot;*/},</code> &mdash; 品詞の属性定義</li>
 <li>説明: <code>src-util/typetab:K5r</code> &mdash; ユーザー辞書登録で普通の人にわかる定義と関連付ける説明テンプレート</li>
 <li>使用: <code>depgraph/indepword-wt.txt:#K5r @カ行5段活用動詞語幹 @カ行5段活用動詞名詞化語幹</code> &mdash; 文法係り受け定義に使用</li>
 </ul>
-
 <p><code>src-worddic/wtab.h</code>中で用いられている定数は<code>anthy/wtype.h</code>中に定義されていて、
 その説明は<code>doc/POS</code>をまず読むと良いでしょう。他の品詞も同様です。</p>
-
 <p>この、<code>src-worddic/wtab.h</code>は<code>src-worddic/wtype.c</code>の中で次のように利用され、
 <code>wttable wt_name_tab[]</code>という配列に読み込まれて、辞書内の品詞ニモニック文字列
 と品詞の属性ベクトル量を関連付けます。</p>
-
 <pre><code>struct wttable {
   const char *name;
   int pos;
@@ -235,13 +183,10 @@ README中の文言は無視しましょう）</p>
 static struct wttable wt_name_tab[]= {
 #include &quot;wtab.h&quot;
 };
-</code></pre>
-
-<p>ただ、品詞の属性ベクトル量である<code>struct wttable</code>は、6*8=48バイトもの
+</code></pre><p>ただ、品詞の属性ベクトル量である<code>struct wttable</code>は、6*8=48バイトもの
 大きさなので、<code>anthy/wtype.h</code>の中で定義された以下の構造体<code>wtype_t</code>を用いて
 29bit(4バイト以下なので8バイトの整数１つに収まる)のコンパクトな
 ビットフィールド表現でメモリー中に保持されます。</p>
-
 <pre><code>/** 品詞 */
 struct wtype{
   unsigned int pos  : POS_BITS;
@@ -253,29 +198,22 @@ struct wtype{
 };
 
 typedef struct wtype wtype_t;
-</code></pre>
-
-<p>この、辞書内の品詞ニモニック文字列から<code>wtype_t</code>で表現された品詞のメモリー内
+</code></pre><p>この、辞書内の品詞ニモニック文字列から<code>wtype_t</code>で表現された品詞のメモリー内
 表現形式への変換は、<code>src-worddic/wtype.c:anthy_type_to_wtype()</code>で行われます。
 この関数は与えた品詞ニモニック文字列によって以下の挙動をします。</p>
-
 <ul>
 <li><code>#</code>で始まらない場合には返り値がNULLで、<code>wtype_t</code>は<code>anthy_wt_none</code>を返します。</li>
 <li>品詞の属性ベクトル量に変換するテーブル内に存在した場合には返り値が品詞ニモニック文字列で、<code>wtype_t</code>はテーブル変換ルールで定義される値を返します。</li>
 <li>品詞の属性ベクトル量に変換するテーブル内に存在しない場合には返り値がNULLで、<code>wtype_t</code>は<code>anthy_wt_all</code>を返します。</li>
 </ul>
-
 <p>この、<code>wtype_t</code>の形式に収まったデーターは直接触りにくいので、
 <code>anthy_wtype_get_*()</code>という各品詞の属性毎のアクセス関数があります。</p>
-
 <p>ここでちょっと注意すべきは、品詞を読み込む際に、
 <code>mkworddic/mkdic.c:  if (!strcmp(name, &quot;#T35&quot;)) {</code>
 ですべての<code>#T35</code>を<code>#T</code>と変換してからメモリーに読み込み処理を行っていることです。</p>
-
 <p>また、この<code>#T35</code>は多用されています。<code>src-util/typetab</code>を見ると以下とあり、
 所謂、形容動詞語幹でも無く、形容詞語幹でも無く、サ変動詞の語幹でもない、
 平凡な「名詞」のようです。</p>
-
 <pre><code>T35
 品詞            =       名詞
 な接続          =       n
@@ -283,19 +221,14 @@ typedef struct wtype wtype_t;
 する接続        =       n
 語幹のみで文節  =       y
 格助詞接続      =       y
-</code></pre>
-
-<p>文法係り受け定義関連は、またこの次に読んで行きましょう。</p>
-
-<h2 id="anthyの辞書ファイル-実行時">Anthyの辞書ファイル（実行時）</h2>
-
+</code></pre><p>文法係り受け定義関連は、またこの次に読んで行きましょう。</p>
+<h2 id="anthyの辞書ファイル実行時">Anthyの辞書ファイル（実行時）</h2>
 <p><code>anthy.dic</code>辞書は、実際のかな漢字変換の実行時には
 src-worddic/word_lookup.c:parse_wtype_strにより、プログラム中に読み込まれ
 れます。その際「&lt;頻度&gt;」は８倍されます。指定が無い場合には８ー２＝６とな
 ります。これは<code>libanthydic</code>内の話です。またこの８倍というのは、
 <code>src-worddic/dic_main.h:#define FREQ_RATIO 8</code>で定義されています。
 あと、いろいろ細かな調整もあるようにも見受けます。</p>
-
 <p>デバグなどで実行時の「&lt;頻度&gt;」を出力する際には、この点要注意です。</p>
 
 
@@ -319,7 +252,7 @@ src-worddic/word_lookup.c:parse_wtype_strにより、プログラム中に読み
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

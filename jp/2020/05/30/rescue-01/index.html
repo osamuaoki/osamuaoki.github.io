@@ -48,74 +48,58 @@
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2020/12/13/virt-01/">Next Post</a></td>
   
   </tr>
   </tbody>
 </table>
 
 <p>UEFIとかMBRとかいろいろある昨今のRescue mediaを探しました。</p>
-
 <p>Grubのレスキューイメージもありますが、これを直接操るのは結構大変
 と思っていたら、
 <a href="https://www.supergrubdisk.org/super-grub2-disk/">Super Grub2</a>
 と言う便利なものがあることに気づきました。</p>
-
 <p>Super Grub2はUEFIとかMBRの設定が壊れたシステムを自動調査してくれ
 起動してくれるのみならず、DebianやUbuntuのLIVE ISOイメージを
 DOSのFATファイルシステムのメディアに複数書き込むだけで、これらを
 選択起動できるようにしてくれる優れものです。</p>
-
 <p>よく分かっていませんが、ディスクの入れ替えやインストーをして、その後
 元のディスクに戻した際にUEFIでブートしなくなったことを経験しました。
 そんな際にSuper Grub2だと素直に起動しました。この際に、ただ起動後
 <code>update-grub</code>としただけでは、起動設定更新がうまく行かなかったことが
 ありました。こんな時にはまず以下を実行しました。</p>
-
 <pre><code>$ sudo dpkg-reconfigure grub-efi-amd64
-</code></pre>
-
-<p>これだとNVRAM variablesの更新他いろいろするようです。さらにBIOSの
+</code></pre><p>これだとNVRAM variablesの更新他いろいろするようです。さらにBIOSの
 ブートの優先順位をさわることも有効でした。(古いMBなのでBIOSが賢くない
 気がしました。)</p>
-
 <p>実際にSuper Grub2に用意した8GBのUSBキーでは、レスキュー用のLinuxの
 Live imageとして以下のISOイメージを入れました。</p>
-
 <ul>
 <li><a href="https://www.supergrubdisk.org/rescatux/">Rescatux</a></li>
 <li><a href="https://sourceforge.net/projects/boot-repair/">boot-repair</a></li>
 <li><a href="https://www.debian.org/CD/live/">Debian live install image</a></li>
 </ul>
-
 <p>こららがあると思うだけで、UEFIとMBRの両方のシステム対応なので
 安心感があります。</p>
-
 <p>ここで使うISOイメージですが、Debianの標準のインストール用の
 ISOイメージは、上記が用いるGrub2のループマウントでは
 使えないようです。</p>
-
 <p>Debianの標準のインストール用のISOイメージは、全イメージを
 生のUSBキーに直接<code>cp</code>か<code>dd</code>で書いたものを準備する必要があります。
 １つ古い小さなUSBキーに書いて手元に置いています。</p>
-
 <p>このDebianの標準のインストール用のISOイメージですが、
 わたしは視力があり音声サポートがいらないので、D-Iが作っている
 <a href="https://d-i.debian.org/daily-images/amd64/daily/netboot/">mini.iso</a>
 を使っています。46MBと極端に小さいので便利です。</p>
-
 <p>実際のインストールの際には、キーファイル(GNUPG/SSHデーター)に加え
 チェックアウトされた</p>
-
 <ul>
 <li><a href="https://github.com/osamuaoki/osamu-utils">VIMの設定集</a></li>
 <li><a href="https://github.com/osamuaoki/dot-vim">ローカルのshell script集</a></li>
 </ul>
-
 <p>他のファイルの入った小型バックアップのUSBキーを準備すると効率的に
 進められます。</p>
-
-<!-- vim: sw=2 sts=2 et se ai tw=79: -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -126,7 +110,7 @@ ISOイメージは、上記が用いるGrub2のループマウントでは
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2020/12/13/virt-01/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -138,7 +122,7 @@ ISOイメージは、上記が用いるGrub2のループマウントでは
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

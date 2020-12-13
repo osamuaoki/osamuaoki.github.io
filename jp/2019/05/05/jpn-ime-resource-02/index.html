@@ -54,81 +54,53 @@
   </tbody>
 </table>
 
-
-
 <p>フリー（無償）で入手し、研究用なら制約無く使用ができる各種辞書の情報です。</p>
-
 <h2 id="unidic">Unidic</h2>
-
 <ul>
 <li>語彙数: 87万語 (2018-03版)</li>
 <li>GPL/LGPL/BSD License</li>
 <li><a href="https://unidic.ninjal.ac.jp/download#unidic_bccwj">新　UniDic 2.2GB</a></li>
 <li><a href="https://ja.osdn.net/projects/unidic/">旧　UniDic</a></li>
-
-<li><p><a href="https://blog.chocolapod.net/momokan/entry/56">MeCab で UniDic 辞書を使ってみる</a></p>
-
+<li><a href="https://blog.chocolapod.net/momokan/entry/56">MeCab で UniDic 辞書を使ってみる</a></li>
+</ul>
 <pre><code>$ wc -l lex.csv
 872831 lex.csv
-</code></pre></li>
-</ul>
-
-<p>活用形はすべて展開して、それぞれ１行のデーターとなっている。</p>
-
+</code></pre><p>活用形はすべて展開して、それぞれ１行のデーターとなっている。</p>
 <p>もし頻度表が全辞書形と考えると、表層形900K/辞書形180Kと大きいとも言えるが、
 スマホ写真１枚分のデーターより小さいともいえる。</p>
-
-<h2 id="canna辞書-anthy">canna辞書(Anthy)</h2>
-
+<h2 id="canna辞書anthy">canna辞書(Anthy)</h2>
 <ul>
 <li>語彙数: 13万の読みの異なる言葉</li>
-
-<li><p>GPL</p>
-
+<li>GPL</li>
+</ul>
 <pre><code>$ wc -l gcanna.t
 137488 gcanna.t
-</code></pre></li>
-</ul>
-
-<p>このファイルは現代的な感覚では、4.6MBと非常に小さい。</p>
-
+</code></pre><p>このファイルは現代的な感覚では、4.6MBと非常に小さい。</p>
 <p>各種情報も織り込んだBinary辞書のanthy.dicでも23MB程度。</p>
-
 <h2 id="mozc">Mozc</h2>
-
 <p><code>/usr/lib/mozc/mozc_server</code>は、約18MBという巨大なサイズがある。</p>
-
 <p>これは、辞書をプログラムないのメモリーイメージで静的内蔵しているためと
 推察される。でも写真数枚程度で、現代的な感覚ではメモリー常駐させるのが
 十分可能なサイズともいえる。</p>
-
 <pre><code>$ du -Sh .
 59M
 $ wc -l id.def
 2652 id.def
-</code></pre>
-
-<p>ソース中の辞書ファイルサイズ概算59MBと６０MB近くありAnthyより１桁大ききい。
+</code></pre><p>ソース中の辞書ファイルサイズ概算59MBと６０MB近くありAnthyより１桁大ききい。
 品詞分類数は2652ときめ細かい。</p>
-
 <p>ソース中の辞書ファイルは100K行のデーターが定義されたファイルで
 １０個ほどあるので、展開済み登録語彙数は約１００万語程度と見受ける。
 こうみてもanthy等の１０倍の単語登録がある。(ただし、Anthyは１行に複数語
 登録するので実際の差は小さいかもしれない。)</p>
-
 <p>まあデーターが巨大なので変換精度は上がるが、リソース消費が大きく動作が重く
 なる懸念がある。</p>
-
 <h2 id="jumann">Jumann++</h2>
-
 <ul>
 <li>基本語彙辞書 3万語</li>
 <li>WEB等含む合計 90万語</li>
 <li>Apache License, Version 2.0</li>
 </ul>
-
 <h2 id="mecab-ipadic-neologd">mecab-ipadic-neologd</h2>
-
 <ul>
 <li>語彙数: 55万語</li>
 <li><a href="https://github.com/neologd">https://github.com/neologd</a></li>
@@ -137,47 +109,37 @@ $ wc -l id.def
 <li><a href="http://www.anlp.jp/proceedings/annual_meeting/2017/pdf_dir/B6-1.pdf">http://www.anlp.jp/proceedings/annual_meeting/2017/pdf_dir/B6-1.pdf</a></li>
 <li>Apache License, Version 2.0</li>
 </ul>
-
 <h2 id="mecab-unidic-neologd">mecab-unidic-neologd</h2>
-
 <ul>
 <li>語彙数: 325万語</li>
 <li><a href="https://github.com/neologd/mecab-unidic-neologd">https://github.com/neologd/mecab-unidic-neologd</a></li>
 <li><a href="https://github.com/neologd/mecab-unidic-neologd/blob/master/README.ja.md">https://github.com/neologd/mecab-unidic-neologd/blob/master/README.ja.md</a></li>
 <li>Apache License, Version 2.0</li>
 </ul>
-
 <h2 id="sj3-辞書">SJ3 辞書</h2>
-
 <ul>
 <li>rikuku
-
 <ul>
 <li>article: <a href="http://poiut.web.fc2.com/computer/sj3/sj3public.html">http://poiut.web.fc2.com/computer/sj3/sj3public.html</a></li>
 <li>BSD</li>
 <li>Sj3のシステム辞書(バイナリ) sj3main.dic (約３万語)</li>
 <li>Sj3システム辞書増補版(約９万語) visual+.dic.gz (gzipped euc-jp) (1.8MB)</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>SJ3はBSDなので使いやすいですね。</p>
-
-<h2 id="jdicと-リンクされた辞書情報サイト">Jdicと、リンクされた辞書情報サイト</h2>
-
+<h2 id="jdicとリンクされた辞書情報サイト">Jdicと、リンクされた辞書情報サイト</h2>
 <ul>
 <li>Online Japanese Dictionaries and Glossaries <a href="http://nihongo.monash.edu/onlinejdic.html">http://nihongo.monash.edu/onlinejdic.html</a></li>
 <li>慣用句 <a href="http://buna.yorku.ca/japanese/idiom_all.html">http://buna.yorku.ca/japanese/idiom_all.html</a></li>
 <li>EDICT等はCreative Commons Attribution-ShareAlike Licence (V3.0) <a href="https://www.edrdg.org/edrdg/licence.html">https://www.edrdg.org/edrdg/licence.html</a></li>
 </ul>
-
 <h2 id="日本語用例辞書">日本語用例辞書</h2>
-
 <ul>
 <li>日本語用例辞書: <a href="https://github.com/hiroyuki-komatsu/japanese-usage-dictionary/">https://github.com/hiroyuki-komatsu/japanese-usage-dictionary/</a></li>
 <li>BSD 2-Clause &ldquo;Simplified&rdquo; License</li>
 </ul>
-
-<!-- vim: se ai tw=79: -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -200,7 +162,7 @@ $ wc -l id.def
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>avrdude on Goofing Osamu</title>
@@ -6,11 +6,7 @@
     <description>Recent content in avrdude on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 05 Apr 2020 00:00:00 +0000</lastBuildDate>
-    
-	<atom:link href="/tags/avrdude/index.xml" rel="self" type="application/rss+xml" />
-    
-    
+    <lastBuildDate>Sun, 05 Apr 2020 00:00:00 +0000</lastBuildDate><atom:link href="/tags/avrdude/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>ATmega32u4 (3)</title>
       <link>/jp/2020/04/05/atmega32u4-3/</link>
@@ -40,7 +36,7 @@ ATmega32u4の開発ボードの SparkFun Pro Micro、 Teensy 2.0 や、AT90USB12
 「直結接続」のために、以下の写真のように片側にクリップ、 片側にオスやメスのデュポンコネクターが付いたワイヤーを準備 しました。(AVR系をAVRUSP mkIIでISP書き換えするにはオスの デュポンコネクター版だけで充分ですが、将来ARM系のSTM32F等を ST-LINK/V2等で書き換えするのにはメスのデュポンコネクター版が あると便利そうなので両方準備してみました。)
 左右逆にしないことが大事なので、接続関係をここにまとめます。
 ISP接続フラットケーブルのコネクター （赤線側上です。コネクター穴側から見た「左図」が大事！)
- RED SIDE 赤線側 BTM VIEW コネクター穴側 TOP VIEW VCC 2 1 MISO MISO 1 2 VCC MOSI 4 3 SCK SCK 3 4 MOSI GND 6 5 RST RST 5 6 GND (こっちがメイン) Looking from Looking from the the hole side back of the connector hole  以下、開発ボードの端子はチップが載っている表側(TOP側)から、 USBコネクターを「左」に置き見て、「半時計回り」(CCW)で 「0スタート」(逆方向は-1スタート、角からスタート、重複命名有り) で位置表記し、ISPコネクターの端子は赤線側を上にして、 コネクター穴側から見て位置表記することとします。</description>
+ RED SIDE 赤線側 BTM VIEW コネクター穴側 TOP VIEW VCC 2 1 MISO MISO 1 2 VCC MOSI 4 3 SCK SCK 3 4 MOSI GND 6 5 RST RST 5 6 GND (こっちがメイン) Looking from Looking from the the hole side back of the connector hole 以下、開発ボードの端子はチップが載っている表側(TOP側)から、 USBコネクターを「左」に置き見て、「半時計回り」(CCW)で 「0スタート」(逆方向は-1スタート、角からスタート、重複命名有り) で位置表記し、ISPコネクターの端子は赤線側を上にして、 コネクター穴側から見て位置表記することとします。</description>
     </item>
     
     <item>
@@ -54,7 +50,7 @@ ISP接続フラットケーブルのコネクター （赤線側上です。コ�
 ATmega32u4開発ボード ATmega32u4を5V 16MHzで使う開発ボードをしては、 Arduino Leonardo、 Arduino micro、 SparkFun Pro Micro、 RobotDyn Micro ATmega32U4-MU、 Teensy 2.0などや そのコンパチ品が通販サイト(例えば、 banggood、 aliexpress、 ebay )で出回っています。私はTeensy 2.0のコンパチ品を入手しました。
 AVRへのプログラム導入 ATmega32u4へのプログラム導入アプローチは、 ATmega328Pへのプログラム導入アプローチ より選択肢が多く混乱しがちなので、以前書いた英語のメモ( Serial AVRや USB AVR )をベースに、日本語で以下に比較しながら状況を確認と整理をします。
 Serial AVR Serial AVR (ATmega328P等) では、チップにプログラムを導入するのに 主に２つのアプローチがあります:
- ISP:  ホストPC上でavrdudeをISPモードで走らせ、AVR ISP mkII等の プログラマー経由でSPIポートに接続しATmega328Pを、ハードウエアー だけを用いチップを書き換えます。  Serial:  ホストPC上でavrdudeをArduinoモードで走らせ、D0/D1ピンに TTLレベルのRS-232C接続経由で、チップの上位アドレスに置かれた ブートローダーソフトの助けを受け、チップを書き換えます。 開発ボード上に、FT-232R や CH340 等のUSB-Serial変換チップが 載っている場合、ホストPCから外見的にはUSB接続に見えます。 昔のAtmel STK500 や、昔のArduinoにはブートローダー(4KB)が導入済みです。 Firmwareを探すときにこれらの古いのを踏まないように要注意です。 最近のArduino系の開発ボードでは、サイズを小さくしたブートローダー のOptiboot(512B)が導入済みです。(一押し！)   USB AVR USB AVR (ATmega32u4等) では、チップにプログラムを導入するのに 主に4つのアプローチがあります:</description>
+ ISP:  ホストPC上でavrdudeをISPモードで走らせ、AVR ISP mkII等の プログラマー経由でSPIポートに接続しATmega328Pを、ハードウエアー だけを用いチップを書き換えます。   Serial:  ホストPC上でavrdudeをArduinoモードで走らせ、D0/D1ピンに TTLレベルのRS-232C接続経由で、チップの上位アドレスに置かれた ブートローダーソフトの助けを受け、チップを書き換えます。 開発ボード上に、FT-232R や CH340 等のUSB-Serial変換チップが 載っている場合、ホストPCから外見的にはUSB接続に見えます。 昔のAtmel STK500 や、昔のArduinoにはブートローダー(4KB)が導入済みです。 Firmwareを探すときにこれらの古いのを踏まないように要注意です。 最近のArduino系の開発ボードでは、サイズを小さくしたブートローダー のOptiboot(512B)が導入済みです。(一押し！)    USB AVR USB AVR (ATmega32u4等) では、チップにプログラムを導入するのに 主に4つのアプローチがあります:</description>
     </item>
     
     <item>
@@ -65,7 +61,7 @@ Serial AVR Serial AVR (ATmega328P等) では、チップにプログラムを導
       <guid>/jp/2020/03/10/atmega328p-4/</guid>
       <description>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの勉強・練習の続きをしました。
 AVRのコーディング上の注意点 以下をAVRのコーディング上の注意点の参考にしました。
- 2003年出版のIAR CベースのAVR035: Efficient C Coding for AVR 2011年出版のGCC4.5ベースのAtmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers  わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。&amp;rdquo;c99 plus GCC extensions&amp;rdquo;となるように-std=gnu99をWinAvrベースのMakefileに指定してます。 ちなみに、avr-gcc (GCC) 5.4.0では-std=C99は&amp;rdquo;ISO C99 standard&amp;rdquo;完全準拠の はずです。avr-gcc helpの記述に-std=c11、-std=c++11がありISO 2011 C/C++ まで完全準拠が選べるようです。WinAvrのMakefile内に書かれた 「ISO C99準拠が不完全」とのコメントは古いバージョンのavr-gccに基づいている ようですね。確かGCCは4以降では&amp;rdquo;ISO C99 standard&amp;rdquo;完全準拠だった気がします。
+ 2003年出版のIAR CベースのAVR035: Efficient C Coding for AVR 2011年出版のGCC4.5ベースのAtmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers  わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。&amp;ldquo;c99 plus GCC extensions&amp;quot;となるように-std=gnu99をWinAvrベースのMakefileに指定してます。 ちなみに、avr-gcc (GCC) 5.4.0では-std=C99は&amp;quot;ISO C99 standard&amp;quot;完全準拠の はずです。avr-gcc helpの記述に-std=c11、-std=c++11がありISO 2011 C/C++ まで完全準拠が選べるようです。WinAvrのMakefile内に書かれた 「ISO C99準拠が不完全」とのコメントは古いバージョンのavr-gccに基づいている ようですね。確かGCCは4以降では&amp;quot;ISO C99 standard&amp;quot;完全準拠だった気がします。
 ちなみに、-std=gnu99では、-std=c11で導入された0b10111011と言った ２進表記での整数定数表記ができます。これが便利です。
 8 bitのATmega328Pぐらいにフォーカスして、現在の開発環境下で私なりに検討して、 ある程度の憶測も折り込み、よくまとまっていたAVR035文書の結論を以下に書きなお して見ました。
 あまりコードサイズの最適化に頑張り過ぎることは無いと考えています。無理がある 時には、コードを凝るのではなく、所詮趣味でなので実現する機能を削るとか、値段 は知れているので高性能のチップに乗り換えるとかする方が良いのでしょう。実際 Arduino Nanoに載っているATmega328pですらかなり余裕があるので、読みやすくバグ 発生しにくいコーディングを心がけ、デバグしやすいように部分・部分をテストでき るモジュラーな構成を念頭にするもがいい気がします。
@@ -87,7 +83,7 @@ Hints to Reduce Code Size  Compile with full size optimization.</description>
  ﾚｼﾞｽﾀ ﾌｧｲﾙ (32: 0x00-0x1F)　ーALUの汎用レジスタ I/Oﾚｼﾞｽﾀ (64: 0x20-0x5F) - アセンブラIN/OUT命令は0x20オフセットしたLDS/STS 拡張I/Oﾚｼﾞｽﾀ (160: 0x60-0xFF) 内蔵SRAM (2K: 0x100-0x3FFF)  IN/OUT命令関連のことがよく分からない。どうもAVRの前の世代のマイコン8051の命令 のことのようだ。アセンブラコード移植を意識しているようだ。INTEL系はIOは0x00から 始まる独立アドレス空間なので、アセンブラコードは0x20オフセットした LDS/STS命令に置き換えると言っているようです。
 ﾌﾟﾛｸﾞﾗﾑ領域（フラッシュ）へのアクセスには専用のアセンブラコードLPM/SPMがあります。
 EEPROM領域へのアクセスは専用のI/Oﾚｼﾞｽﾀ経由で行うようです。
-Cコードからは、マクロが準備されているので、ﾌﾟﾛｸﾞﾗﾑ領域たやEEPROM領域へのアクセス には専用マクロ等を使うようだ。詳しくは「ATmega328Pマニュアル」の「ﾃﾞｰﾀ用EEPROMﾒﾓﾘ」や、 「AVR Libc Reference Manual」の「Data in Program Space」や、 avr/eeprom.h や avr/pgmspace.</description>
+Cコードからは、マクロが準備されているので、ﾌﾟﾛｸﾞﾗﾑ領域たやEEPROM領域へのアクセス には専用マクロ等を使うようだ。詳しくは「ATmega328Pマニュアル」の「ﾃﾞｰﾀ用EEPROMﾒﾓﾘ」や、 「AVR Libc Reference Manual」の「Data in Program Space」や、 avr/eeprom.h や avr/pgmspace.hを参照しましょう。</description>
     </item>
     
     <item>
@@ -99,13 +95,13 @@ Cコードからは、マクロが準備されているので、ﾌﾟﾛｸﾞ�
       <description>Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの練習の続きをしました。
 確かにハードとして少々古い感はありますが、５V仕様で安価で入手簡単な開発 ボードがあるのが練習用にいい感じです。
 開発環境 クロスコンパイル開発環境は以下でOK（2020/03, Debian stable buster）
- $ sudo apt install gcc-avr avr-libc binutils-avr  コードスタイル 以下色々なところからコードを引っ張ってくると、コードスタイルが混じって 見づらくなるし、手動で直すのもばかばかしいのでちょっとコードスタイル関係を 調べました。もともとK&amp;amp;R系のTAB無し2-4スペースインデントの 1TBS なので、色々のスタイルガイドを見て、結局 GOOGLEスタイル に最も共感しました。
+ $ sudo apt install gcc-avr avr-libc binutils-avr コードスタイル 以下色々なところからコードを引っ張ってくると、コードスタイルが混じって 見づらくなるし、手動で直すのもばかばかしいのでちょっとコードスタイル関係を 調べました。もともとK&amp;amp;R系のTAB無し2-4スペースインデントの 1TBS なので、色々のスタイルガイドを見て、結局 GOOGLEスタイル に最も共感しました。
 今後はPython以外は全言語基本2スペースインデントにします。
-VIMのモードライン&amp;copy;
-// vim: set sts=2 sw=2 ft=c ai si et tw=80:  VIMのモードライン(SH)
-# vim: set sts=2 sw=2 ft=sh ai si et tw=80:  VIMのモードライン(PYTHON)
-# vim: set sts=4 sw=4 ft=python ai si et:  Cの自動リフォーマットは
- $ clang-format -style=Google -i filename.</description>
+VIMのモードライン(C)
+// vim: set sts=2 sw=2 ft=c ai si et tw=80: VIMのモードライン(SH)
+# vim: set sts=2 sw=2 ft=sh ai si et tw=80: VIMのモードライン(PYTHON)
+# vim: set sts=4 sw=4 ft=python ai si et: Cの自動リフォーマットは
+ $ clang-format -style=Google -i filename.c SHELLの全文リフォーマットはVIMで(modelineが無い場合は:set syntax=shの後)gg=Gとする。</description>
     </item>
     
     <item>
@@ -131,12 +127,12 @@ ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoの
 プロクラマー これには、 TTL-232R-5V を使った自作プロクラマー を使うのも良いのですが、最近Atmel AVR ISP mkIIをただで人からもらったので それを使います。
 詳細な使用説明書（英文）： AVR ISP mkII User Guide
 ソフト環境 Debian GNU/Linux buster=stable 環境です。
-$ sudo apt install avrdude  接続 AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
+$ sudo apt install avrdude 接続 AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
 ちなみに、 TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、 これはあとで考えましょう。
 ISPケーブルの赤線は１ピン側です。
 Uno Nano AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。
 AVRISP mkII に赤いLEDが点滅は、ISPコネクター「逆差し」です。
-Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.</description>
+Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.</description>
     </item>
     
   </channel>

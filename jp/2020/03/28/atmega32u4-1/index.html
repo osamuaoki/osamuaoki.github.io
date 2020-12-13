@@ -54,21 +54,16 @@
   </tbody>
 </table>
 
-
-
 <p>前々回・前回は、Arduino Uno/Nano に使われている基本のシリアルAVRの
 <a href="https://www.microchip.com/wwwproducts/en/ATmega328p">ATmega328P</a>
 のプログラムの勉強・練習をしました。その結果チップ周辺の配線状態
 確認をホストPCのターミナルからするシェルのような
 <a href="https://github.com/osamuaoki/avrmon">avrmon</a> を書きました。</p>
-
 <p>今回は基本のUSB AVRの
 <a href="https://www.microchip.com/wwwproducts/en/ATmega32u4">ATmega32u4</a>
 を中心としたAVRチップのプログラム方法とその環境に関して、
 調査と情報の整理をします。</p>
-
 <h2 id="atmega32u4開発ボード">ATmega32u4開発ボード</h2>
-
 <p>ATmega32u4を5V 16MHzで使う開発ボードをしては、
 <a href="https://store.arduino.cc/usa/leonardo">Arduino Leonardo</a>、
 <a href="https://store.arduino.cc/usa/arduino-micro">Arduino micro</a>、
@@ -80,31 +75,25 @@
 <a href="https://www.aliexpress.com/wholesale?catId=r&amp;SearchText=atmega32u4">aliexpress</a>、
 <a href="https://www.ebay.com/sch/i.html?_nkw=atmega32u4">ebay</a>
 )で出回っています。私はTeensy 2.0のコンパチ品を入手しました。</p>
-
 <h2 id="avrへのプログラム導入">AVRへのプログラム導入</h2>
-
 <p>ATmega32u4へのプログラム導入アプローチは、
 <a href="https://osamuaoki.github.io/jp/2020/02/21/atmega328p-1/">ATmega328Pへのプログラム導入アプローチ</a>
 より選択肢が多く混乱しがちなので、以前書いた英語のメモ(
 <a href="https://github.com/osamuaoki/avrdude-friend/wiki/Serial-AVR-chips">Serial AVR</a>や
 <a href="https://github.com/osamuaoki/avrdude-friend/wiki/USB-AVR-chips">USB AVR</a>
 )をベースに、日本語で以下に比較しながら状況を確認と整理をします。</p>
-
 <h3 id="serial-avr">Serial AVR</h3>
-
 <p>Serial AVR (ATmega328P等) では、チップにプログラムを導入するのに
 主に２つのアプローチがあります:</p>
-
 <ul>
 <li>ISP:
-
 <ul>
 <li>ホストPC上で<code>avrdude</code>をISPモードで走らせ、AVR ISP mkII等の
 プログラマー経由でSPIポートに接続しATmega328Pを、ハードウエアー
 だけを用いチップを書き換えます。</li>
-</ul></li>
+</ul>
+</li>
 <li>Serial:
-
 <ul>
 <li>ホストPC上で<code>avrdude</code>をArduinoモードで走らせ、D0/D1ピンに
 TTLレベルのRS-232C接続経由で、チップの上位アドレスに置かれた
@@ -115,23 +104,20 @@ TTLレベルのRS-232C接続経由で、チップの上位アドレスに置か�
 Firmwareを探すときにこれらの古いのを踏まないように要注意です。</li>
 <li>最近のArduino系の開発ボードでは、サイズを小さくしたブートローダー
 のOptiboot(512B)が導入済みです。(一押し！)</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h3 id="usb-avr">USB AVR</h3>
-
 <p>USB AVR (ATmega32u4等) では、チップにプログラムを導入するのに
 主に4つのアプローチがあります:</p>
-
 <ul>
 <li>ISP:
-
 <ul>
 <li>ATmega328Pと全く同じ流れで、ハードウエアーだけを用いチップ
 を書き換えます。</li>
-</ul></li>
+</ul>
+</li>
 <li>USB CDC:
-
 <ul>
 <li>ATmega328PでのUSB-Serial変換チップ経由でのSerialアプローチと
 全く同じ流れで、ブートローダーソフトの助けを受けて書き換えます。</li>
@@ -141,9 +127,9 @@ Caterina(4KB, LUFAのCDCのブートローダーソースと同等品)が
 <li>SparkFun社は<a href="https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/32U4Note.pdf">リセット挙動を改良した</a>
 <a href="https://github.com/sparkfun/Arduino_Boards/tree/master/sparkfun/avr/bootloaders/caterina">Caterinaブートローダー</a>
 を公開しています。(一押し！)</li>
-</ul></li>
+</ul>
+</li>
 <li>USB HID:
-
 <ul>
 <li>USB接続のHID(キーボード・マウス等)デバイスとして認識される
 ブートローダーソフトの助けを受けてチップを書き換えます。</li>
@@ -162,9 +148,9 @@ IDを書き換えたLUFAの<code>hid_bootloader_cli</code>を走らせ、USB接�
 <li>HIDデバイスはドライバー導入がWINDOWS環境で不要でシステムへの
 導入が楽だというメリットがあると聞きます。
 (Linux環境ではあんまり関係無いです。)</li>
-</ul></li>
+</ul>
+</li>
 <li>USB DFU:
-
 <ul>
 <li>USBデバイスのファームウエアー更新専用プロトコルのDFUを用い
 USB接続でチップを書き換えます。</li>
@@ -178,11 +164,10 @@ Windows系ホストPC上では<code>FLIP</code>を走らせます。最近の<co
 )が導入済み(?)です。</li>
 <li>LUFAのDFUのブートローダーソースはコンパイルすると4KB
 のブートローダーが作成可能です。</li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h2 id="avrのプログラム環境">AVRのプログラム環境</h2>
-
 <p>AVRのプログラム環境としては、いわゆるArduino環境がよく使われます。
 ここでは深入りしませんが、Arduino環境はSTLを使わないC++言語環境で
 独自のArduinoライブラリーを使うことで、ハードウエアーの細かな相違
@@ -196,27 +181,22 @@ Serial AVRとUSB AVRの違いはもとより、ARM系のMCUまでほぼ同じコ
 )を使えば普通のエディターでソースが書けコマンドラインから各種処理
 ができます。この様にArduino環境は非常に便利なプログラム環境なんで
 すが、今私がしたいこととずれてます。</p>
-
 <p>今の私のAVRのプログラム環境としては、PUREなC言語環境が良いです。
 具体的には、avr-gcc をGNU拡張機能したC99環境で、avr-libcとともに
 使うのが、コンパクトで分かりやすく勝手が良い気がします。これなら
 ハードウエアーに何をさせるのかを、PUREなC言語しか慣れていない初心
 者の私にでも直截的に理解できます。</p>
-
 <p>ATmega328Pをターゲットをした<a href="https://github.com/osamuaoki/avrmon">avrmon</a>
 を書いた際にはまさにこれで充分でした。実際には、最も複雑なホストPCと
 の通信がシリアル通信で、それが、UARTポートの状態を繰り返し読み確認する
 POLLING操作と、UARTポートへの直接書き込み・読み出し操作だけで簡単に実現
 できたというのも、このアプローチがとれた背景ではあります。</p>
-
 <p>まあ、現行プログラムの機能アップを狙い、シリアル通信を割り込み処理にして、
 リングバッファー使用するようにしようとしても、比較的簡単にPUREなC言語で
 実現できます。</p>
-
 <p>ただ、<a href="https://github.com/osamuaoki/avrmon">avrmon</a>のターゲットに
 ATmega32u4も加えようとしたら、USB関連の複雑な処理をどうするのかで
 迷いました。</p>
-
 <p>進むべき方向を探す参考にとPUREなC言語で書かれた、カスタムキーボード
 ファームウエアーの<a href="https://github.com/qmk/qmk_firmware">QMK Firmware</a>
 を見てみると、USB関連の複雑な処理に
@@ -226,46 +206,44 @@ ATmega32u4も加えようとしたら、USB関連の複雑な処理をどうす�
 USBデバイス関連のライブラリーや、さらに多くの例示アプリケーション
 ソースとてんこ盛りです。素晴らしい内容ですが、大きすぎて食傷ぎみな
 ので、まずは将来の課題としておきます。</p>
-
 <p>比較的コンパクトなATmega32u4を対象としたPUREなC言語でのプログラム
 関連情報を探し他の参考情報源を調べました。</p>
-
 <ul>
 <li>MICROCHIP(旧ATMEL)の
 <a href="https://www.microchip.com/wwwproducts/en/ATmega32u4">ATmega32U4のDocuments</a>
 の中にも埋もれていたり、その次の世代のチップのソフトに関する
 <a href="https://www.microchip.com/developmenttools/ProductDetails/AVR%20USB%20Series6%20Software%20Packages">AVR USB Series6 Software Packages</a>
 サイトにまとめて出ている、以下の情報が特に気になります
-
 <ul>
 <li>AN_7619 - AVR272: USB CDC Demonstration: UART to USB Bridge, on megaAVR with USB</li>
 <li>AN_7675 - AVR276: USB Software Library for megaAVR with USB Microcontrollers</li>
-</ul></li>
+</ul>
+</li>
 <li>PJRCの<a href="https://www.pjrc.com/teensy/">Teensy USB Development Board</a>
 の中の「Code Library」埋もれているArduino系のTeensyduinoに
 開発環境を移行する前のPUREなC言語環境のコード群(現在はobsolete扱い)
 は参考になります。フリーなMITライセンスもキチッと表示されているので
 使い安いです。
-
 <ul>
 <li><a href="https://www.pjrc.com/teensy/usb_debug_only.html">USB: Debug Messages Only</a>
-
 <ul>
 <li><a href="https://www.pjrc.com/teensy/usb_debug_only.zip">USB Debug Only, Version 1.1, source zip</a></li>
-</ul></li>
+</ul>
+</li>
 <li><a href="https://www.pjrc.com/teensy/usb_serial.html">USB: Virtual Serial Port</a>
-
 <ul>
 <li><a href="https://www.pjrc.com/teensy/usb_serial.zip">USB Serial, Version 1.7, source zip</a>
 割り込み処理は使っているがコンパクト。</li>
-</ul></li>
+</ul>
+</li>
 <li><a href="https://www.pjrc.com/teensy/usb_keyboard.html">USB: Keyboard</a></li>
 <li>&hellip;</li>
 <li>ホスト側PCの<a href="https://www.pjrc.com/teensy/hid_listen.html">The HID Listen Program</a>
 の<a href="https://www.pjrc.com/teensy/hid_listen_1.01.zip">ソースコード</a>も気になる。</li>
-</ul></li>
+</ul>
+</li>
 <li><a href="http://medesign.seas.upenn.edu/">MEAM.Design : HomePage</a>
-(サーバーは有名大学の&rdquo;UNIVERSITY OF PENNSYLVANIA&rdquo; の所謂工学部&rdquo;SCHOOL OF ENGINEERING AND APPLIED SCIENCE&rdquo;所属)
+(サーバーは有名大学の&quot;UNIVERSITY OF PENNSYLVANIA&quot; の所謂工学部&quot;SCHOOL OF ENGINEERING AND APPLIED SCIENCE&quot;所属)
 にある、
 <a href="http://medesign.seas.upenn.edu/index.php/Guides/MaEvArM">The MAEVARM (M1 &amp; M2) Project</a>や
 <a href="http://medesign.seas.upenn.edu/index.php/Guides/Teensy">The Teensy 2.0</a>
@@ -278,40 +256,32 @@ AtmelのAVRデモコードにはいずれも<code>scheduler.c</code>というフ
 簡単なUSBドライバーのソースとしてコンパクトな以下が挙げられてました。
 （ライセンス表記無し。)これは、よく見ると実質は旧teensyと同じコードに、
 一部の出力ヘルパー関数を足しただけです。
-
 <ul>
 <li><a href="http://medesign.seas.upenn.edu/uploads/Guides/m_usb.c">m_usb.c</a></li>
 <li><a href="http://medesign.seas.upenn.edu/uploads/Guides/m_usb.h">m_usb.h</a></li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <p>以上の観察から、<a href="https://github.com/osamuaoki/avrmon">avrmon</a>の拡張は、
 まずは、旧teensyのデモコードをベースにするのが良さそうです。
 ただ、最近の開発環境に合わせてアップデートされていないので一部「const」
 の追加等のタッチアップが必要です。
 <a href="https://github.com/arduino/Arduino/wiki/1.6-Frequently-Asked-Questions">ArduinoのFAQ</a>
 を参考にしてください。</p>
-
 <p>ただ、将来は<a href="https://github.com/abcminiuser/lufa">LUFA</a>
 を利用すべきでしょう。その時はLUFA自体や
 <a href="http://fab.cba.mit.edu/classes/863.14/people/andrew_mao/week11/">AVR USB Devices and Programming</a>
 等を参考にします。</p>
-
 <h2 id="usb-avrのシリーズ">USB AVRのシリーズ</h2>
-
 <p>末尾の数字がデバイスの世代、その前の数桁の数字がフラッシュのKBサイズ</p>
-
 <p>世代</p>
-
 <ul>
 <li>シリーズ 2: AT90USB162,AT90USB82, ATmega32U2, ATmega16U2, ATmega8U2 (メモリー・IOピン最小)</li>
 <li>シリーズ 4: ATmega32U4, ATmega16U4</li>
 <li>シリーズ 6: AT90USB1286, AT90USB646, ATmega32U6 (メモリー・IOピン増強)</li>
 <li>シリーズ 7: AT90USB1287, AT90USB647 (USBがホスト側にもなるOTG対応)</li>
 </ul>
-
 <p>サイズ</p>
-
 <pre><code>              Flash  page     SRAM   コメント
 AT90USB82       8KB  128B   0.5 KB   PS/2とUSBの兼用端子
 AT90USB162     16KB  128B   0.5 KB   PS/2とUSBの兼用端子
@@ -319,9 +289,7 @@ ATmega16u4     16KB  128B   1.25KB   Arduino Uno (USB変換部分)
 ATmega32u4     32KB  128B   2.5 KB   Leonaldo, micro, teensy2.0、すべてHWB端子を接地
 AT90USB646     64KB  256B   4   KB
 AT90USB1286   128KB  256B   8   KB   teensy2.0++
-</code></pre>
-
-<!-- vim: se ai tw=79: -->
+</code></pre><!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -344,7 +312,7 @@ AT90USB1286   128KB  256B   8   KB   teensy2.0++
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

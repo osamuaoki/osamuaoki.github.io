@@ -54,21 +54,15 @@
   </tbody>
 </table>
 
-
-
 <p>Gitを使う際に、アップストリームのレポの更新に合わせて、
 自分がフォークしたレポを如何にスムーズに更新していくかは、
 フォークしたレポの開始方法やブランチ名の設定や実行するコマンド
 手順に複数のアプローチや複数の対応方法があるだけに、いつも
 混乱して悩まされます。</p>
-
 <p>備忘録を兼ねて、アップストリームがGITHUBを使っている
 場合を軸にメモを作成します。</p>
-
-<h2 id="gitを使うフォークの管理手順-基本">GITを使うフォークの管理手順(基本)</h2>
-
+<h2 id="gitを使うフォークの管理手順基本">GITを使うフォークの管理手順(基本)</h2>
 <p>簡単のために以下の前提を置きます。（追跡＝tracking）</p>
-
 <ul>
 <li>他人が管理する、アップストリームのリモートのレポ名を、「<code>upstream</code>」(任意名ですが慣習名)とします。</li>
 <li>他人が管理する、アップストリームのリモートのレポ上の「<code>master</code>」ブランチを追跡します。（コピー元）</li>
@@ -76,163 +70,139 @@
 <li>自分が管理する、フォークしたリモートのレポ上の「<code>master</code>」ブランチに追跡コピーを保管します。（コピー先）</li>
 <li>アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を、フォークしたレポに勝手に作らないようにします。</li>
 </ul>
-
 <p>この際の、GITを使うフォークの管理手順は以下です。</p>
-
 <ol>
 <li>アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、
 自分のアカウントにフォークされたリモートのレポを作成</li>
 <li>フォークされたレポをローカルに「<code>git clone</code>」して、ローカルのレポを作成
-
 <ul>
 <li><code>$ git clone git@github.com:my_name/project_name.git ; cd project_name</code></li>
-</ul></li>
+</ul>
+</li>
 <li>自分が書き換える開発ブランチ(ここでは「<code>devel</code>」)を作成
-
 <ul>
 <li><code>$ git checkout -b devel</code></li>
-</ul></li>
+</ul>
+</li>
 <li>ファイルを編集し、開発ブランチにコミット</li>
 <li>アップストリームのリモートのレポをローカルにリモート「<code>upstream</code>」として追加。
-
 <ul>
 <li><code>$ git remote add upstream https://github.com/upstream_name/project_name.git</code></li>
-</ul></li>
-
-<li><p>フォークされたレポの「<code>master</code>」ブランチをアップストリームのレポの「<code>master</code>」ブランチに同期</p>
-
+</ul>
+</li>
+<li>フォークされたレポの「<code>master</code>」ブランチをアップストリームのレポの「<code>master</code>」ブランチに同期
 <ul>
-<li><!-- dummy -->
-
+<li>
+<!-- raw HTML omitted -->
+</li>
+</ul>
+</li>
+</ol>
 <pre><code>$ git checkout master
 $ git fetch -p upstream
 $ git pull upstream master
 $ git push origin master
-</code></pre>
-
-<p><code>-p</code>は<code>--prune</code>のショートハンドで、不要なリモート追跡ブランチを削除し
-てくれます。</p></li>
-</ul></li>
-
-<li><p>開発ブランチに戻り、開発再開</p>
-
-<ul>
-<li><code>$ git checkout devel</code></li>
-</ul></li>
-
-<li><p>状況に合わせて、merge/rebase等をする。(<code>rebase</code>したブランチのpushは要注意)</p>
-
-<ul>
-<li><code>$ git merge master</code></li>
-<li><code>$ git rebase -i master</code></li>
-</ul></li>
-</ol>
-
+</code></pre><p><code>-p</code>は<code>--prune</code>のショートハンドで、不要なリモート追跡ブランチを削除し
+てくれます。
+7. 開発ブランチに戻り、開発再開
+* <code>$ git checkout devel</code>
+8. 状況に合わせて、merge/rebase等をする。(<code>rebase</code>したブランチのpushは要注意)
+* <code>$ git merge master</code>
+* <code>$ git rebase -i master</code></p>
 <p>これは
 <a href="https://docs.qmk.fm/#/newbs_git_using_your_master_branch">QMKプロジェクト</a>
 等で推奨されるフォーク手順です。</p>
-
 <h3 id="gitブランチ操作のヒント集">GITブランチ操作のヒント集</h3>
-
 <p>GITのブランチの作成・ブランチ間の移動・ブランチのチェックアウト等の
 多くの操作は、<code>gitk --all</code>をした後、右マウスクリックで表示される
 GUIメニューから出来ます。</p>
-
 <p>ただリモートレポURLの登録・変更や、リモートのレポ上のブランチの作成・設定変更
 等にはコマンドライン入力操作が必要です。</p>
-
 <ul>
 <li>リモートレポの名前を<code>origin</code>から<code>upstream</code>に変更
-
 <ul>
 <li><code>$ git remote rename origin upstream</code></li>
-</ul></li>
+</ul>
+</li>
 <li><code>origin</code>という名前をつけたリモートのURLを<code>https://foo/bar.git</code>に変更
-
 <ul>
 <li><code>$ git remote set-url origin https://foo/bar.git</code></li>
-</ul></li>
+</ul>
+</li>
 <li><code>upstream</code>という名前をつけたリモートへのpushの禁止
-
 <ul>
 <li><code>$ git remote set-url --push upstream DISABLED_FOR_PUSH</code></li>
 <li>上記操作で<code>.git/config</code>ファイルに「<code>pushurl = DISABLED_FOR_PUSH</code>」
 というラインが追加されます
 この行頭に<code>#</code>を挿入しコメントアウトすると、この設定を無効化できます。</li>
-</ul></li>
-
-<li><p>ローカルのブランチ<code>dev_branch</code>を作成後、それをリモート<code>origin</code>へ
-pushできるように設定</p>
-
+</ul>
+</li>
+<li>ローカルのブランチ<code>dev_branch</code>を作成後、それをリモート<code>origin</code>へ
+pushできるように設定
 <ul>
-<li><!-- dummy -->
-
+<li>
+<!-- raw HTML omitted -->
+</li>
+</ul>
+</li>
+</ul>
 <pre><code>$ git checkout -b dev_branch
 $ git push -u origin dev_branch
-</code></pre>
-
-<p><code>-u</code> は<code>--set-upstream</code>のショートハンド</p></li>
-</ul></li>
-
-<li><p>ローカルのブランチ名を<code>oldname</code>から<code>newname</code>に変更</p>
-
+</code></pre><p><code>-u</code> は<code>--set-upstream</code>のショートハンド</p>
 <ul>
-<li><!-- dummy -->
-
+<li>ローカルのブランチ名を<code>oldname</code>から<code>newname</code>に変更
+<ul>
+<li>
+<!-- raw HTML omitted -->
+</li>
+</ul>
+</li>
+</ul>
 <pre><code>$ git branch -m oldname newname
-</code></pre>
-
-<p>(<code>-m</code> は<code>--move</code>のショートハンド)</p></li>
-</ul></li>
-
-<li><p>リモートブランチを削除する(新・旧の2アプローチ有り)</p>
-
+</code></pre><p>(<code>-m</code> は<code>--move</code>のショートハンド)</p>
+<ul>
+<li>リモートブランチを削除する(新・旧の2アプローチ有り)
 <ul>
 <li><code>$ git push -d origin remote_branch_name</code> (注、<code>-d</code>は<code>--delete</code>のショートハンド)</li>
 <li><code>$ git push origin :remote_branch_name</code> (注、<code>:</code>の前はスペース)</li>
-</ul></li>
-
-<li><p>削除したブランチを復活</p>
-
+</ul>
+</li>
+<li>削除したブランチを復活
 <ul>
-<li><!-- dummy -->
-
+<li>
+<!-- raw HTML omitted -->
+</li>
+</ul>
+</li>
+</ul>
 <pre><code>$ git reflog
-...git remote set-url --push upstream DISABLED_FOR_PUSH
+ ...git remote set-url --push upstream DISABLED_FOR_PUSH
 $ git branch new_branch_name HEAD@{6}
-</code></pre></li>
-</ul></li>
-
-<li><p>間違って<code>git add filename</code>だけをしたが、まだコミット無しの状態
+</code></pre><ul>
+<li>間違って<code>git add filename</code>だけをしたが、まだコミット無しの状態
 の場合に、ユーザー編集中のファイルに手を付けずに、レポの状態をadd前の
-状態に復元</p>
-
+状態に復元
 <ul>
 <li><code>$ git rm --cached filename</code></li>
-</ul></li>
-
-<li><p>レポ中に存在するコミットと直接の親子関係のないコミットのためのブランチ
-<code>unconnected</code>を作成</p>
-
+</ul>
+</li>
+<li>レポ中に存在するコミットと直接の親子関係のないコミットのためのブランチ
+<code>unconnected</code>を作成
 <ul>
 <li><code>$ git checkout --orphan unconnected</code></li>
-</ul></li>
-
-<li><p>レポのリモートとの関連状況を確認</p>
-
+</ul>
+</li>
+<li>レポのリモートとの関連状況を確認
 <ul>
 <li><code>$ git remote -v</code></li>
-</ul></li>
 </ul>
-
+</li>
+</ul>
 <h2 id="gitブランチ関連操作の応用例">GITブランチ関連操作の応用例</h2>
-
 <h3 id="作業中のブランチ履歴の非公開保存">作業中のブランチ履歴の非公開保存</h3>
-
 <p>作業中履歴をそのままリモートの公開共有レポに残すと、履歴が錯綜し
 他の人に迷惑で、初歩的ミスが晒され格好も悪いし、コード変更の
 レビューも困難にします。</p>
-
 <p>作業中履歴はローカルへのコミットだけにして、<code>git rebase</code>操作で
 綺麗に整理されたあとの履歴をリモートの公開共有レポにアップする
 のが普通かと理解しています。ただこれだと、何らかの事故で作業途中の
@@ -242,20 +212,16 @@ $ git branch new_branch_name HEAD@{6}
 あります。またHDDやSSDというものはいつ死んでも不思議はない
 ので、同一デバイス上のスナップショット記録等は当てにすべきでは
 ありません。</p>
-
 <p>こんな場合には、共有の<code>master</code>にコミットする代わりに作業用のブランチ
 として例えば<code>wip</code>を作成し作業中履歴をそこにコミットし<code>git push</code>
 する回避策等が考えられます。ただそれでも他人に見られるので格好が
 良くないことは否めません。</p>
-
 <p>またDebianのパッケージング操作で、<code>gbp ...</code>等を使用する場合ツール
 インフラ上ブランチ名を作業用のブランチ名に変えるのを避けたい事も
 あります。</p>
-
 <p>ブランチ名を変えたくないが作業中履歴を簡単に保存したい時には、
 リモートを変更する策があります。例えば、USBメモリー等に作った
 非公開レポをリモートに設定します。</p>
-
 <pre><code>$ cd /path/to
 $ git clone https://some_site/repo_name.git
 $ cd repo_name
@@ -266,50 +232,37 @@ $ git init --bare
 $ cd /path/to/repo_name
 $ git remote add usbmemory /media/usbmemory/repo_name
 $ git push --all -u usbmemory
-</code></pre>
-
-<p>ここまですれば、作業中履歴がそのまま非公開レポにも記録され
+</code></pre><p>ここまですれば、作業中履歴がそのまま非公開レポにも記録され
 るようになっています。ここでは、うっかり公開レポに<code>git push</code>しな
 いように、<code>git remote set-url ...</code>操作で安全錠を掛けています。</p>
-
 <pre><code>... hack source
 $ git push --all
 $ git fetch -p origin
 $ git rebase -i origin/master
 ... gack more
 $ git push --all
-</code></pre>
-
-<p>上記のように作業を進め、要点毎に非公開レポにも<code>git push</code>記録します。
+</code></pre><p>上記のように作業を進め、要点毎に非公開レポにも<code>git push</code>記録します。
 さらに念のため公開レポの<code>master</code>の最新内容に<code>git rebase</code>して同期して
 いきます。作業結果が満足となった時点で、安全錠を外して公開レポに綺麗な
 形で<code>git push</code>します。</p>
-
 <pre><code>$ git remote set-url --delete --push origin &quot;&quot;
 $ git push -u origin master
 ...
-</code></pre>
-
-<p>ここで、合計２回行った<code>git remote set-url ...</code>操作は間違ってリモートの
+</code></pre><p>ここで、合計２回行った<code>git remote set-url ...</code>操作は間違ってリモートの
 公開共有レポにアップするのを防ぐオプショナルな操作で必須ではありませ
 ん。ただ今回使った<code>git version 2.26.2</code>では<code>--delete</code>操作が少々
 トリッキーでした。ここは、単純に<code>.git/config</code>ファイルの<code>pushurl</code>設定行
 をエディターで直接消す方が確実な気がしました。</p>
-
 <p>非公開レポはUSBメモリーではなく、<code>ssh</code>と<code>git</code>が使えるサーバーに作って
 も良いでしょう。</p>
-
 <h3 id="debianのパッケージング操作の場合">Debianのパッケージング操作の場合</h3>
-
 <p>Debianのパッケージング操作等では、自分が管理するリモートのレポ上の
 「<code>upstream</code>」と「<code>master</code>」というブランチ名を普通特定用途に用いて
 います。だからアップストリームの「<code>master</code>」ブランチを追跡する
 ブランチの名前をこれら以外から選ぶ必要があります。</p>
-
 <p>例えばフォークされたレポの「<code>upstream-master</code>」を追跡に用いる
 ブランチの名前とします。「<code>upstream-master</code>」ブランチのコンテント
 をアップストリームのコンテントに同期させる操作は次のようになります。</p>
-
 <pre><code>$ git clone https://upstream_site/repo_name.git
 $ cd repo_name
 $ git branch upstream-master
@@ -324,25 +277,19 @@ $ git pull upstream master
 $ git push origin upstream-master
 $ git checkout master
 ...
-</code></pre>
-
-<p>上記でローカルの「<code>upstream-master</code>」ブランチが、アップストリームの
+</code></pre><p>上記でローカルの「<code>upstream-master</code>」ブランチが、アップストリームの
 リモートの「<code>master</code>」ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」
 と表示)を追跡するようになります。</p>
-
 <p>また、ローカルの「<code>upstream-master</code>」ブランチは、自分のリモートの
 「<code>upstream-master</code>」ブランチ(<code>gitk</code>が「<code>remotes/origin/upstream-master</code>」
 と表示)にpushされ保存されます。</p>
-
 <p>push対象のローカルの「<code>upstream-master</code>」ブランチが、現在Checkoutしている
 デフォルトブランチで、push先のリモートでもブランチ名が同じ
 「<code>upstream-master</code>」だから、pushの際のコマンドラインへの入力文字列
 をかなり省略できるので短くて済んでます。</p>
-
 <p>上記の後半の操作を繰り返すことで、ローカルの「<code>upstream-master</code>」が、
 常にアップストリームが更新するアップストリームのリモートの「<code>master</code>」
 ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」と表示)を追跡していけます。</p>
-
 <p>実はDebianの<code>upstream</code>はアップストリームがリリースしたtarballを
 展開した内容でパッケージ用のGitレポを作ることが原則です。リリース
 されるtarballは単純にアップストリームのGitレポそのままでないことが
@@ -353,91 +300,70 @@ $ git checkout master
 <code>git fetch -p upstream</code>出来るようにし、<code>gitk</code>で<code>upstream/master</code>にある
 最新のアップストリーム変更からパッチをcherry-pickして使うのが有効な方策
 かもしれません。</p>
-
-<h3 id="github-gitlab">GITHUB/GITLAB</h3>
-
+<h3 id="githubgitlab">GITHUB/GITLAB</h3>
 <p>GITHUBとGITLABは、ともに類似の無償のGITレポのホスティングを提供している
 非常にポピュラーなWEBサービスです。ここではGITHUBとGITLABの
 <a href="https://about.gitlab.com/devops-tools/github-vs-gitlab.html">サービスの細かな違い</a>
 や
 <a href="https://medium.com/@patrickporto/4-branching-workflows-for-git-30d0aaee7bf">ワークフロー流儀の細かな違い</a>
 には深入りしません。</p>
-
 <p>簡単に特徴をまとめると、GITHUBは先発のクローズドソフトプラットフォーム
 でユーザー数が多いのが特徴で、GITLABは後発ですが基本のソフトプラット
 フォームがオープンなFLOSS(Free and open-source software)として開放され
 ていて、Debian等のFLOSSプロジェクトが自らのソースコードWEBサービスの
 ホスティングに採用してているのが特徴です。</p>
-
 <p>「Debianのパッケージング操作」で行ったGITHUBやGITLABのウエッブページ
 を使わずにフォークしたレポを、<code>git clone ...</code>経由でDebianのサーバー上
 に作成した操作手法は、コマンドライン環境だけでアップストリームと交流
 することが前提です。</p>
-
 <p>GITHUBやGITLAB上のウエッブサービスを利用する場合には状況によっては
 別の配慮が必要です。例えばGITHUBやGITLAB内のレポ間フォークの場合、
 GITHUBやGITLAB上でウエッブページを使いフォークしないとPULL request等
 のウエッブ連携操作に支障がでる恐れがあります。</p>
-
 <h4 id="default-branch">Default branch</h4>
-
 <p>ブランチ名を変えずにフォークしたレポの「<code>master</code>」は、アップストリーム
 の「<code>master</code>」を同じ内容なので、オープニングのページで表示される
 <code>README.MD</code>がアップストリームを同じ内容になります。これでは折角のフォークが
 隠れてしまいます。これは、ログインしてGITHUBやGITLABの設定に入り、
 Default branch（デフォルトのブランチ）をもとの「<code>master</code>」ではない、
 フォークした内容がコミットされたブランチに設定することで解決します。</p>
-
 <h3 id="自由なブランチ名の設定">自由なブランチ名の設定</h3>
-
 <p>また、例えば<code>gitk</code>で見つけた既存のリモートブランチ（例えば<code>gitk</code>が
 「<code>remotes/upstream/foo</code>」と表示するブランチ）のある最終コミットに
 GUIでローカルのブランチ（例えば「<code>bar</code>」）を新規追加した場合を考え
 ましょう。</p>
-
 <p>この「<code>bar</code>」ブランチを、自分が公開している<code>origin</code>という
 リモートレポに、他人からは「<code>baz</code>」ブランチと呼ばれることと
 なるブランチとして、(別の見方では自分の<code>gitk</code>で「<code>remotes/origin/baz</code>」
 と表示されるブランチとして)、pushするには以下の操作をします。</p>
-
 <pre><code>$ git checkout bar
 $ git push -u origin bar:baz
-</code></pre>
-
-<p>一度この操作をすると、<code>.git/comfig</code>ファイルにこの設定が記録され
+</code></pre><p>一度この操作をすると、<code>.git/comfig</code>ファイルにこの設定が記録され
 ます。この設定は<code>git comfig</code>コマンドで調整できますし、また
 エディターで<code>.git/comfig</code>ファイルを直接編集しても調整できます。</p>
-
 <p>さらにこの状況は以下のようにして確認できます。</p>
-
 <pre><code>$ git config --list
 ...
 branch.bar.remote=origin
 branch.bar.merge=refs/heads/baz
-</code></pre>
-
-<p>こう設定した後、「<code>bar</code>」ブランチをチェックアウトして、ファイル
+</code></pre><p>こう設定した後、「<code>bar</code>」ブランチをチェックアウトして、ファイル
 を変更後GITレポにコミットすると、この後は単に<code>git push</code>とするだ
 けで、「<code>bar</code>」ブランチの最新コミットが<code>gitk</code>で
 「<code>remotes/origin/baz</code>」と表示される<code>origin</code>というリモートレポ上
 のリモートブランチ「<code>baz</code>」にpushされます。（ややこしい！）</p>
-
 <p>もちろん、特段の理由なくローカルやリモートでブランチ名がコロコロ
 変わる複雑な設定をするのは無用な混乱を起こすのでできるだけ避ける
 べきです。(ここで「<code>bar</code>」ブランチを同じ「<code>bar</code>」の名前でリモート
 にpushするなら、本例の<code>git push</code>コマンドラインの最後引数は<code>bar</code>と
 書くだけに省略できます。)</p>
-
 <h2 id="参考cookbookサイト">参考Cookbookサイト</h2>
-
 <ul>
 <li><a href="https://github.com/k88hudson/git-flight-rules">Flight rules for Git</a></li>
 <li><a href="https://stackoverflow.com/questions/30590083/how-do-i-rename-both-a-git-local-and-remote-branch-name">rename both a Git local and remote branch name</a></li>
 <li><a href="https://stackoverflow.com/questions/6591213/how-do-i-rename-a-local-git-branch">rename a Git local branch name</a></li>
 <li><a href="https://stackoverflow.com/questions/9524933/renaming-a-branch-in-github">rename a Git remote branch name</a></li>
 </ul>
-
-<!-- vim: se ai tw=79: -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -460,7 +386,7 @@ branch.bar.merge=refs/heads/baz
   
   
   <hr/>
-  &copy; 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>
