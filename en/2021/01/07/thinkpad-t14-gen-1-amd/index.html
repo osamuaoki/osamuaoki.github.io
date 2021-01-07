@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ThinkPad T14 Gen 1 (AMD) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">ThinkPad T14 Gen 1 (AMD)</span></h1>
+
+<h2 class="date">2021/01/07</h2>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2020/04/29/dmesg-sata/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>Let me keep up note on configuring and administrating my ThinkPad T14 Gen 1
+(AMD) under Debian GNU/Linux.  My system has 2 NVMe SSDs:</p>
+<ul>
+<li>AMD Ryzen™ 5 PRO 4650U &ndash; 6 cores, 12 threads</li>
+<li>32GB (PC4-25600 DDR4 SDRAM) &ndash; after adding aftermarket 16GB SDRAM</li>
+<li>WDC PC SN520 SDAPMUW-128G-1001 (20370001) &ndash; Moved to unused PCIe slot for WAN card slot.</li>
+<li>TS2TMTE220S (42B8T4EA) &ndash; Aftermarket 2TB into original PCIe SSD slot.</li>
+</ul>
+<h2 id="distribution-selection">Distribution selection</h2>
+<p>In order to have decent graphics support easily, current testing distribution
+(bullseye) is used.</p>
+<pre><code>$ uname -a
+Linux goofy 5.9.0-5-amd64 #1 SMP Debian 5.9.15-1 (2020-12-17) x86_64 GNU/Linux
+</code></pre><h2 id="non-free-firmwares">Non-free firmwares</h2>
+<p>I think we need some non-free drivers.</p>
+<ul>
+<li><code>firmware-amd-graphics</code>  &mdash; GPU</li>
+<li><code>firmware-iwlwifi</code>  &mdash; WIFI ?</li>
+<li><code>firmware-misc-nonfree</code>  &mdash; ?</li>
+<li><code>firmware-realtek</code>  &mdash; NIC ?</li>
+<li><code>amd64-microcode</code>  &mdash; CPU</li>
+</ul>
+<h2 id="efi-based-firmware-updates">EFI-based firmware updates</h2>
+<p>Install <code>gnome-firmware</code> package and update firmware on devices supported by
+<code>fwupd</code> via GUI.</p>
+<h2 id="network-configuration">Network configuration</h2>
+<p>Since there are 2 Ethernet devices (one on right side and one accessible from
+docking station), I updated <code>/etc/network/interfaces</code> as follows to make them
+hot-pluggable.</p>
+<pre><code># This file describes the network interfaces available on your system
+# and how to activate them. For more information, see interfaces(5).
+
+source /etc/network/interfaces.d/*
+
+# The loopback network interface
+auto lo
+iface lo inet loopback
+
+# GNOME
+### The network interface on normal port
+allow-hotplug enp2s0
+# This is an autoconfigured IPv4 interface
+iface enp2s0 inet dhcp
+# This is an autoconfigured IPv6 interface
+iface enp2s0 inet6 auto
+
+### The network interface on extra port
+allow-hotplug enp2s0f0
+# This is an autoconfigured IPv4 interface
+iface enp2s0f0 inet dhcp
+# This is an autoconfigured IPv6 interface
+iface enp2s0f0 inet6 auto
+</code></pre><h2 id="audio-configuration">Audio configuration</h2>
+<p>For the regression of missing analog audio output incident experienced from
+late-2020 (now 2021-Jan), my workaround is to run the following from console
+after installing <code>pulseaudio-utils</code> once for every booting:</p>
+<pre><code> $ pactl load-module module-detect
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2020/04/29/dmesg-sata/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
