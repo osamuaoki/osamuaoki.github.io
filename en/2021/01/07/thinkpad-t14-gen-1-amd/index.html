@@ -107,6 +107,7 @@ iface enp2s0f0 inet dhcp
 # This is an autoconfigured IPv6 interface
 iface enp2s0f0 inet6 auto
 </code></pre><h2 id="audio-configuration">Audio configuration</h2>
+<p>REFERENCE: <a href="https://yoshimemo.com/post-889/">https://yoshimemo.com/post-889/</a></p>
 <h3 id="workaround-rev-1-manual">Workaround (rev. 1: manual)</h3>
 <p>For the regression of missing analog audio output incident experienced from
 late-2020 (now 2021-Jan), my workaround is to run the following from console
@@ -144,6 +145,16 @@ $ diff -u default.pa.orig  default.pa
 <ul>
 <li><code>F6</code> -&gt; <code>1  HD-Audio Generic</code> -&gt; <code>Master</code> -&gt; Up-arrows to 100</li>
 </ul>
+<h2 id="libreoffice">LibreOffice</h2>
+<p>The version of LibreOffice available on Debian testing environment has some
+glitches more often than the version available on Debian stable environment.
+Issues for printing to Hagaki was the killer bug for me.</p>
+<p>I find that the installation of <a href="https://www.libreoffice.org/download/download/?type=deb-x86_64&amp;lang=en">LibreOffice Debian
+packages</a>
+available from <a href="https://www.libreoffice.org/">the upstream LibreOffice site</a> on
+Debian testing environment is the least effort solution for me.  For stability,
+I chose older stable 6.4.7.2-2 version aimed for business deployments (2021/12).
+This enabled me to print nicely to Hagaki.</p>
 <!-- raw HTML omitted -->
 
 
