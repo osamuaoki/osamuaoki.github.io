@@ -116,26 +116,27 @@ after installing <code>pulseaudio-utils</code> once for every booting manually:<
 <p>Although modifying a distribution provided file as workaround is not my
 favorite move, I did it anyway to make this workarund automatic.</p>
 <p>Modify <code>/etc/pulse/default.pa</code> as follows:</p>
-<pre><code>$ diff -u default.pa   default.pa.orig
---- default.pa	2021-01-08 11:15:09.001167903 +0900
-+++ default.pa.orig	2020-02-06 11:06:41.000000000 +0900
-@@ -42,14 +42,13 @@
+<pre><code>$ cd /etc/pulse/
+$ diff -u default.pa.orig  default.pa
+--- default.pa.orig	2020-02-06 11:06:41.000000000 +0900
++++ default.pa	2021-01-08 11:15:09.001167903 +0900
+@@ -42,13 +42,14 @@
  #load-module module-null-sink
  #load-module module-pipe-sink
- 
--###### All lines lead by 6 #s are workaround to address missing analog output
+
++###### All lines lead by 6 #s are workaround to address missing analog output
  ### Automatically load driver modules depending on the hardware available
--######.ifexists module-udev-detect.so
--######load-module module-udev-detect
--######.else
-+.ifexists module-udev-detect.so
-+load-module module-udev-detect
-+.else
+-.ifexists module-udev-detect.so
+-load-module module-udev-detect
+-.else
++######.ifexists module-udev-detect.so
++######load-module module-udev-detect
++######.else
  ### Use the static hardware detection module (for systems that lack udev support)
  load-module module-detect
--######.endif
-+.endif
- 
+-.endif
++######.endif
+
  ### Automatically connect sink and source if JACK server is present
  .ifexists module-jackdbus-detect.so
 </code></pre><h3 id="adjusting-sound-level">Adjusting sound level</h3>
