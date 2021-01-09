@@ -6,7 +6,24 @@
     <description>Recent content in japanese on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sun, 13 Dec 2020 00:00:00 +0000</lastBuildDate><atom:link href="/categories/japanese/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 08 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/japanese/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>仮想環境(2)</title>
+      <link>/jp/2021/01/08/virt-02/</link>
+      <pubDate>Fri, 08 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/01/08/virt-02/</guid>
+      <description>デバグ用の仮想環境作成 (LXC) chrootを使ってのデバグ用の仮想環境作成をpbuilder/cowbuilderでと言うのは 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも 面倒です。そこで、LXCを使ってのデバグ用の仮想環境作成を試みました。
+ $ sudo lxc-create -n development-sid -t debian -- -r sid ... もし、ミラーが不調なら、安定そうなUSミラーを使います。
+ $ sudo lxc-create -n development-sid -t debian -- -r sid \\ --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/development-sid/ 以下のディレクトリーに デバグ用の仮想環境が作成されます。
+後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。
+ $ sudo ... root@goofy:/# cd ... root@goofy:~# 作業用のソースはchroot環境中の/rootにコピーを置いて作業することになります。ここは ホスト環境から見ると~/wip/root以下になります。このディレクトリのパーミッションは drwx------で、オーナーがroot rootです。当然ですが、root権限がないとアクセスでき ないのでホスト環境からの操作時には配慮が必要です。
+確かにrootユーザーのままで色々やるのは「少々気持ちが悪い」ですが、 所詮chroot環境なのでダメージは限定的と考え開発デバグ環境で使うという範囲で 「良」とします。
+実際キャラクターコンソールのみを使うコンパイル等にはchroot環境程度の簡単な仮想化で 充分です。（GUIへのアクセス等は仮想化にkvm環境が必要です。これは後ほど、、、）
+この様な環境へのアクセスを楽にする一手法はaliasを設定することです。たとえば以下を ~/.bash_alias に入れるのも一策です。
+alias up-wip=&amp;quot;set -x; date --iso=sec;sudo cowbuilder update --basepath ~/wip &amp;amp;&amp;amp; set +x; sync&amp;quot; alias wip=&amp;quot;date --iso=sec;sudo cowbuilder login --basepath ~/wip&amp;quot; ソースパッケージ作成作業 最近のsource only uploadのためには ソースに対して別途dpkg-buildpackage -S --no-sign をした後でdebsign &amp;lt;packagename&amp;gt;_&amp;lt;version&amp;gt;_&amp;lt;arch&amp;gt;.</description>
+    </item>
+    
     <item>
       <title>仮想環境(1)</title>
       <link>/jp/2020/12/13/virt-01/</link>
@@ -16,7 +33,7 @@
       <description>開発環境の基本 開発環境は、できるだけ安定しているほうがストレスが少ないです。editorを 使いメールやウエッブページを読むだけならstable環境が使えればそれでも いいのですが、新しいハードウエアー (Thinkpad T14, AMD Ryzen 5 PRO 4650U with Radeon Graphics)だとグラフィクスドライバーの問題があるので testing ぐらいは必要です。でも歳々アップデートすると不安定になったりして面倒です。
 パッケージ作成環境 一方、通常のパッケージ作成には、確実に sid/unstable 環境とするために pbuilder/cowbuilder を使って 設定 された仮想化された chroot環境 を使っています。(確かに、schroot/sbuild 系の方が良い面はあるのでしょうが、 これは私の惰性による選択です。) 開発環境をsidにしなくてもパッケージが正しいsid環境 で作成でき快適です。
 直接chrootコマンドを用いると、必要なファイルシステムを仮想環境からアクセス出来るよう にするための操作が煩雑になりますが、pbuilder系等のコマンドを用いるとこれらの 連動する付帯操作や作業用の使い捨てシステムの作成を自動的にしてくれるので便利です。
-デバグ用の仮想環境作成 なるべくメインのシステムを変えずにデバグを効率的にするために、 いくつかのパッケージがインストールされたデバグ用の仮想化されたchroot環境を 上記の延長線上で準備しました。こっちは、使い捨て環境と言うより使いまわし 環境といった感じです。
+デバグ用の仮想環境作成 (chroot) なるべくメインのシステムを変えずにデバグを効率的にするために、 いくつかのパッケージがインストールされたデバグ用の仮想化されたchroot環境を 上記の延長線上で準備しました。こっちは、使い捨て環境と言うより使いまわし 環境といった感じです。
 cowbuilder を使って、~/wip以下にchrootの開発環境を作成します。
  $ sudo cowbuilder create --basepath ~/wip ... $ sudo cowbuilder login --basepath ~/wip ... root@goofy:/# apt-get install git vim mc aptitude devscripts iproute2 ... root@goofy:/# ^D 後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。
  $ sudo cowbuilder login --basepath ~/wip .</description>

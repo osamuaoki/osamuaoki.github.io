@@ -64,7 +64,7 @@
 </ul>
 <h2 id="official-information-sources">Official Information Sources</h2>
 <ul>
-<li>[T14 Gen 1 (type 20UD, 20UE) Laptop (ThinkPad) Product Home](<a href="https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue">https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue</a></li>
+<li><a href="https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue">T14 Gen 1 (type 20UD, 20UE) Laptop (ThinkPad) Product Home</a></li>
 <li><a href="https://support.lenovo.com/jp/en/solutions/ht510512">Removal and Replacement Videos - ThinkPad T14 Gen 1</a></li>
 <li><a href="https://forums.lenovo.com/t5/English-Community/ct-p/Community-EN">Forum</a></li>
 </ul>
@@ -94,9 +94,6 @@ Linux goofy 5.9.0-5-amd64 #1 SMP Debian 5.9.15-1 (2020-12-17) x86_64 GNU/Linux
 <li><code>firmware-realtek</code>  &mdash; NIC ?</li>
 <li><code>amd64-microcode</code>  &mdash; CPU</li>
 </ul>
-<h2 id="efi-based-firmware-updates">EFI-based firmware updates</h2>
-<p>Install <code>gnome-firmware</code> package and update firmware on devices supported by
-<code>fwupd</code> via GUI.</p>
 <h2 id="network-configuration">Network configuration</h2>
 <p>Since there are 2 Ethernet devices (one on right side and one accessible from
 docking station), I updated <code>/etc/network/interfaces</code> as follows to make them
@@ -163,6 +160,21 @@ $ diff -u default.pa.orig  default.pa
 <ul>
 <li><code>F6</code> -&gt; <code>1  HD-Audio Generic</code> -&gt; <code>Master</code> -&gt; Up-arrows to 100</li>
 </ul>
+<h2 id="gnome">GNOME</h2>
+<h3 id="efi-based-firmware-updates">EFI-based firmware updates</h3>
+<p>Install <code>gnome-firmware</code> package and update firmware on devices supported by
+<code>fwupd</code> via GUI using <a href="https://fwupd.org/">Linux Vendor Firmware Service</a>.</p>
+<h3 id="ui-customization">UI Customization</h3>
+<p>Install <code>gnome-tweak</code> package to the system and tweaked to add &ldquo;Applications&rdquo;
+to top bar etc.</p>
+<p>After installing
+<a href="https://chrome.google.com/webstore/detail/gnome-shell-integration/gphhapmejobijbbhgpjhcjognlahblep">GNOME Shell integration</a>
+to the Chrome browser, I installed following extensions:</p>
+<ul>
+<li><a href="https://extensions.gnome.org/extension/744/hide-activities-button/">Hide Activities Button</a></li>
+</ul>
+<p>Adjust locally installed GNOME extensions via browser from <a href="https://extensions.gnome.org/local/">GNOME Extension web
+site</a>.</p>
 <h2 id="libreoffice">LibreOffice</h2>
 <p>The version of LibreOffice available on Debian testing environment has some
 glitches more often than the version available on Debian stable environment.

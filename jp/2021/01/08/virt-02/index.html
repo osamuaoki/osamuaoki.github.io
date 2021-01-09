@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>仮想環境(1) | Goofing Osamu</title>
+    <title>仮想環境(2) | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,9 +32,9 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">仮想環境(1)</span></h1>
+<h1><span class="title">仮想環境(2)</span></h1>
 
-<h2 class="date">2020/12/13</h2>
+<h2 class="date">2021/01/08</h2>
 </div>
 
 <main>
@@ -44,49 +44,29 @@
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/jp/2020/05/30/rescue-01/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/jp/2020/12/13/virt-01/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/jp/2021/01/08/virt-02/">Next Post</a></td>
+  <td align="right" width="33%"><a href="#">***</a></td>
   
   </tr>
   </tbody>
 </table>
 
-<h2 id="開発環境の基本">開発環境の基本</h2>
-<p>開発環境は、できるだけ安定しているほうがストレスが少ないです。editorを
-使いメールやウエッブページを読むだけならstable環境が使えればそれでも
-いいのですが、新しいハードウエアー (Thinkpad T14, AMD Ryzen 5 PRO 4650U
-with Radeon Graphics)だとグラフィクスドライバーの問題があるので testing
-ぐらいは必要です。でも歳々アップデートすると不安定になったりして面倒です。</p>
-<h2 id="パッケージ作成環境">パッケージ作成環境</h2>
-<p>一方、通常のパッケージ作成には、確実に sid/unstable 環境とするために
-<code>pbuilder</code>/<code>cowbuilder</code> を使って
-<a href="https://www.debian.org/doc/manuals/debmake-doc/ch03.en.html#pbuilder-setup">設定</a>
-された仮想化された
-<a href="https://www.debian.org/doc/manuals/debmake-doc/ch07.en.html#chroot">chroot環境</a>
-を使っています。(確かに、<code>schroot</code>/<code>sbuild</code> 系の方が良い面はあるのでしょうが、
-これは私の惰性による選択です。) 開発環境をsidにしなくてもパッケージが正しいsid環境
-で作成でき快適です。</p>
-<p>直接chrootコマンドを用いると、必要なファイルシステムを仮想環境からアクセス出来るよう
-にするための操作が煩雑になりますが、pbuilder系等のコマンドを用いるとこれらの
-連動する付帯操作や作業用の使い捨てシステムの作成を自動的にしてくれるので便利です。</p>
-<h2 id="デバグ用の仮想環境作成-chroot">デバグ用の仮想環境作成 (chroot)</h2>
-<p>なるべくメインのシステムを変えずにデバグを効率的にするために、
-いくつかのパッケージがインストールされたデバグ用の仮想化されたchroot環境を
-上記の延長線上で準備しました。こっちは、使い捨て環境と言うより使いまわし
-環境といった感じです。</p>
-<p><code>cowbuilder</code> を使って、<code>~/wip</code>以下にchrootの開発環境を作成します。</p>
-<pre><code> $ sudo cowbuilder create --basepath ~/wip
+<h2 id="デバグ用の仮想環境作成-lxc">デバグ用の仮想環境作成 (LXC)</h2>
+<p>chrootを使ってのデバグ用の仮想環境作成をpbuilder/cowbuilderでと言うのは
+少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも
+面倒です。そこで、LXCを使ってのデバグ用の仮想環境作成を試みました。</p>
+<pre><code> $ sudo lxc-create -n development-sid -t debian -- -r sid
 ...
- $ sudo cowbuilder login --basepath ~/wip
-...
- root@goofy:/# apt-get install git vim mc aptitude devscripts iproute2
-...
- root@goofy:/# ^D
-</code></pre><p>後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。</p>
-<pre><code> $ sudo cowbuilder login --basepath ~/wip
+</code></pre><p>もし、ミラーが不調なら、安定そうなUSミラーを使います。</p>
+<pre><code> $ sudo lxc-create -n development-sid -t debian -- -r sid \\
+   --mirror=http://ftp.us.debian.org
+</code></pre><p>意外と簡単です。これで、<code>/var/lib/lxc/development-sid/</code> 以下のディレクトリーに
+デバグ用の仮想環境が作成されます。</p>
+<p>後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。</p>
+<pre><code> $ sudo 
 ...
  root@goofy:/# cd
 ...
@@ -120,11 +100,11 @@ alias wip=&quot;date --iso=sec;sudo cowbuilder login --basepath ~/wip&quot;
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/jp/2020/05/30/rescue-01/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/jp/2020/12/13/virt-01/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/jp/2021/01/08/virt-02/">Next Post</a></td>
+  <td align="right" width="33%"><a href="#">***</a></td>
   
   </tr>
   </tbody>
