@@ -16,6 +16,7 @@
  $ sudo lxc-create -n development-sid -t debian -- -r sid ... もし、ミラーが不調なら、安定そうなUSミラーを使います。
  $ sudo lxc-create -n development-sid -t debian -- -r sid \\ --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/development-sid/ 以下のディレクトリーに デバグ用の仮想環境が作成されます。
 後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。
+XXX FIXME BELOW XXX
  $ sudo ... root@goofy:/# cd ... root@goofy:~# 作業用のソースはchroot環境中の/rootにコピーを置いて作業することになります。ここは ホスト環境から見ると~/wip/root以下になります。このディレクトリのパーミッションは drwx------で、オーナーがroot rootです。当然ですが、root権限がないとアクセスでき ないのでホスト環境からの操作時には配慮が必要です。
 確かにrootユーザーのままで色々やるのは「少々気持ちが悪い」ですが、 所詮chroot環境なのでダメージは限定的と考え開発デバグ環境で使うという範囲で 「良」とします。
 実際キャラクターコンソールのみを使うコンパイル等にはchroot環境程度の簡単な仮想化で 充分です。（GUIへのアクセス等は仮想化にkvm環境が必要です。これは後ほど、、、）
