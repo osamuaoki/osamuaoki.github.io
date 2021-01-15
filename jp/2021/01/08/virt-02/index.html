@@ -64,37 +64,30 @@
 <pre><code> $ sudo lxc-create -n development-sid -t debian -- -r sid \\
    --mirror=http://ftp.us.debian.org
 </code></pre><p>意外と簡単です。これで、<code>/var/lib/lxc/development-sid/</code> 以下のディレクトリーに
-デバグ用の仮想環境が作成されます。</p>
-<p>後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。</p>
-<p>XXX FIXME BELOW XXX</p>
-<pre><code> $ sudo 
-...
- root@goofy:/# cd
-...
- root@goofy:~#
-</code></pre><p>作業用のソースはchroot環境中の<code>/root</code>にコピーを置いて作業することになります。ここは
-ホスト環境から見ると<code>~/wip/root</code>以下になります。このディレクトリのパーミッションは
-<code>drwx------</code>で、オーナーが<code>root root</code>です。当然ですが、root権限がないとアクセスでき
-ないのでホスト環境からの操作時には配慮が必要です。</p>
-<p>確かにrootユーザーのままで色々やるのは「少々気持ちが悪い」ですが、
-所詮chroot環境なのでダメージは限定的と考え開発デバグ環境で使うという範囲で
-「良」とします。</p>
-<p>実際キャラクターコンソールのみを使うコンパイル等にはchroot環境程度の簡単な仮想化で
-充分です。（GUIへのアクセス等は仮想化に<code>kvm</code>環境が必要です。これは後ほど、、、）</p>
-<p>この様な環境へのアクセスを楽にする一手法はaliasを設定することです。たとえば以下を
-~/.bash_alias に入れるのも一策です。</p>
-<pre><code>alias up-wip=&quot;set -x; date --iso=sec;sudo cowbuilder update --basepath ~/wip &amp;&amp; set +x; sync&quot;
-alias wip=&quot;date --iso=sec;sudo cowbuilder login --basepath ~/wip&quot;
-</code></pre><h2 id="ソースパッケージ作成作業">ソースパッケージ作成作業</h2>
-<p>最近のsource only uploadのためには ソースに対して別途<code>dpkg-buildpackage -S --no-sign</code>
-をした後で<code>debsign &lt;packagename&gt;_&lt;version&gt;_&lt;arch&gt;.changes</code>で署名を実行する必要があります。
-（こうしないと古いGPGキーがどういうわけか使われます）さらにこれをSid環境で依存パーケージを
-導入して実行する必要があります。まさか、このためだけに開発のホストシステム全体をSid環境にして
-依存関係で必要とされる関連パッケージを大量インストールするのは気が向きません。</p>
-<p>ソースパッケージ作成作業は必要なソースファイルを開発環境デバグ用のchroot環境にコピーして、
-そのchrootで確保された仮想Sid環境下で実行でするてがあります。こうすることで、メインの
-開発環境を肥大化させずに安定し運営できます。</p>
-<!-- raw HTML omitted -->
+デバグ用のコンテナ環境のファイルシステムが作成されます。</p>
+<p><code>lxc-start</code>でコンテナ環境をシステムとして起動するために、ファイルシステム
+に追加の変更をします。</p>
+<p>XXX FIXME XXX BELOW</p>
+<ul>
+<li><code>/etc/fstab</code></li>
+</ul>
+<pre><code>/dev    /home/root/debian/rootfs/dev none bind 0 0
+/dev/pts /home/root/debian/rootfs/dev/pts  none bind 0 0
+</code></pre><p>copy from main system</p>
+<ul>
+<li><code>/etc/passwd</code></li>
+<li><code>/etc/group</code></li>
+<li><code>/etc/shadow</code></li>
+<li><code>/etc/gshadow</code></li>
+</ul>
+<p>bind mount from main system</p>
+<ul>
+<li><code>/root</code></li>
+<li><code>/home</code></li>
+</ul>
+<pre><code> $ sudo lxc-start -n development-sid
+</code></pre><pre><code> $ lxc-console -n development-sid -t 0
+</code></pre><!-- raw HTML omitted -->
 
 
 <table width="100%">

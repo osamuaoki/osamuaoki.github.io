@@ -14,14 +14,11 @@
       <guid>/jp/2021/01/08/virt-02/</guid>
       <description>デバグ用の仮想環境作成 (LXC) chrootを使ってのデバグ用の仮想環境作成をpbuilder/cowbuilderでと言うのは 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも 面倒です。そこで、LXCを使ってのデバグ用の仮想環境作成を試みました。
  $ sudo lxc-create -n development-sid -t debian -- -r sid ... もし、ミラーが不調なら、安定そうなUSミラーを使います。
- $ sudo lxc-create -n development-sid -t debian -- -r sid \\ --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/development-sid/ 以下のディレクトリーに デバグ用の仮想環境が作成されます。
-後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。
-XXX FIXME BELOW XXX
- $ sudo ... root@goofy:/# cd ... root@goofy:~# 作業用のソースはchroot環境中の/rootにコピーを置いて作業することになります。ここは ホスト環境から見ると~/wip/root以下になります。このディレクトリのパーミッションは drwx------で、オーナーがroot rootです。当然ですが、root権限がないとアクセスでき ないのでホスト環境からの操作時には配慮が必要です。
-確かにrootユーザーのままで色々やるのは「少々気持ちが悪い」ですが、 所詮chroot環境なのでダメージは限定的と考え開発デバグ環境で使うという範囲で 「良」とします。
-実際キャラクターコンソールのみを使うコンパイル等にはchroot環境程度の簡単な仮想化で 充分です。（GUIへのアクセス等は仮想化にkvm環境が必要です。これは後ほど、、、）
-この様な環境へのアクセスを楽にする一手法はaliasを設定することです。たとえば以下を ~/.bash_alias に入れるのも一策です。
-alias up-wip=&amp;quot;set -x; date --iso=sec;sudo cowbuilder update --basepath ~/wip &amp;amp;&amp;amp; set +x; sync&amp;quot; alias wip=&amp;quot;date --iso=sec;sudo cowbuilder login --basepath ~/wip&amp;quot; ソースパッケージ作成作業 最近のsource only uploadのためには ソースに対して別途dpkg-buildpackage -S --no-sign をした後でdebsign &amp;lt;packagename&amp;gt;_&amp;lt;version&amp;gt;_&amp;lt;arch&amp;gt;.</description>
+ $ sudo lxc-create -n development-sid -t debian -- -r sid \\ --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/development-sid/ 以下のディレクトリーに デバグ用のコンテナ環境のファイルシステムが作成されます。
+lxc-startでコンテナ環境をシステムとして起動するために、ファイルシステム に追加の変更をします。
+XXX FIXME XXX BELOW
+ /etc/fstab  /dev /home/root/debian/rootfs/dev none bind 0 0 /dev/pts /home/root/debian/rootfs/dev/pts none bind 0 0 copy from main system
+ /etc/passwd /etc/group /etc/shadow /etc/gshadow  bind mount from main system</description>
     </item>
     
     <item>
