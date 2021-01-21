@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Workstation usability tips | Goofing Osamu</title>
+    <title>Usability tips: Debian GNOME Workstation | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,7 +32,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Workstation usability tips</span></h1>
+<h1><span class="title">Usability tips: Debian GNOME Workstation</span></h1>
 
 <h2 class="date">2021/01/15</h2>
 </div>
@@ -131,7 +131,7 @@ accounts and Evolution.  This approach works for Gmail etc. and compatible with
 using other devices such as smart phones.  Evolution can also be configured to
 read locally delivered mails to mbox too.  (send+recieve).</p>
 <p>For the command line such as <code>reportbug</code> and daemon programs such as <code>cron</code> to
-send mails to external hosts and local accounts, Use of <code>exim4</code> as the locally
+send mails to external hosts and local accounts, use of <code>exim4</code> as the locally
 installed MTA is good idea.  With &ldquo;sudo dpkg-reconfigure exim4-config&rdquo;, Select
 &ldquo;mail sent by smarthost; received via SMTP or fetchmail&rdquo;.  Everything else can
 be default.</p>
@@ -141,7 +141,16 @@ be default.</p>
 <code>/etc/exim4/passwd.client</code> as:
 <code>smtp.gmail.com:foo.bar@gmail.com:application_password</code> (You need to create
 <code>application_password</code> in advance.)</p>
+<p>To send mails with &ldquo;@debian.org&rdquo; address, I use ssh+sendmail (created shell
+script <code>~/bin/sendmail-p.d.o</code>).</p>
 <p>I usually don&rsquo;t bother with fetchmail these days.</p>
+<h2 id="command-line">Command line</h2>
+<ul>
+<li><code>hal</code>: <a href="https://github.com/osamuaoki/osamu-utils">https://github.com/osamuaoki/osamu-utils</a></li>
+<li><code>vim</code>: <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a></li>
+<li><code>fzf</code></li>
+<li><code>hardlink</code></li>
+</ul>
 <!-- raw HTML omitted -->
 
 
