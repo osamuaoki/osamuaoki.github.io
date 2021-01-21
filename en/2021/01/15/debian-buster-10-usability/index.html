@@ -122,9 +122,26 @@ This enabled me to print nicely to Hagaki.</p>
 <p>Lock Screen: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Lock Screen</code></p>
 </li>
 <li>
-<p>GDM3: &mdash; Not easy</p>
+<p>GDM3: &mdash; Not so easy (leave this as is)</p>
 </li>
 </ul>
+<h2 id="mail">Mail</h2>
+<p>For the GUI access to the remotely hosted IMAP4 mail services, use GNOME Online
+accounts and Evolution.  This approach works for Gmail etc. and compatible with
+using other devices such as smart phones.  Evolution can also be configured to
+read locally delivered mails to mbox too.  (send+recieve).</p>
+<p>For the command line such as <code>reportbug</code> and daemon programs such as <code>cron</code> to
+send mails to external hosts and local accounts, Use of <code>exim4</code> as the locally
+installed MTA is good idea.  With &ldquo;sudo dpkg-reconfigure exim4-config&rdquo;, Select
+&ldquo;mail sent by smarthost; received via SMTP or fetchmail&rdquo;.  Everything else can
+be default.</p>
+<p>To use Gmail for smarthost, set up &ldquo;Mail Server configuration&rdquo; as
+&ldquo;smtp.gmail.com::587&rdquo;.  It is irrelevant for us to worry &ldquo;Hide local mail name
+&hellip;&rdquo; since the smarthost service rewrites it anyway.  Edit
+<code>/etc/exim4/passwd.client</code> as:
+<code>smtp.gmail.com:foo.bar@gmail.com:application_password</code> (You need to create
+<code>application_password</code> in advance.)</p>
+<p>I usually don&rsquo;t bother with fetchmail these days.</p>
 <!-- raw HTML omitted -->
 
 
