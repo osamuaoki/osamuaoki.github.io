@@ -34,7 +34,10 @@
 <div class="article-meta">
 <h1><span class="title">Re-learning Vim (2)</span></h1>
 
-<h2 class="date">2019/09/24</h2>
+<h3 class="date">Date:
+2019/09/24 (initial),
+2021/01/24 (last modified)
+</h3>
 </div>
 
 <main>
@@ -68,9 +71,10 @@ is not the main stream one.</p>
 <p>Let&rsquo;s list its highlights.</p>
 <h3 id="map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</h3>
 <p>Adjust PASTE MODE by <code>F2</code>-key.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">nopaste</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">pastetoggle</span>=&lt;<span style="color:#a6e22e">f2</span>&gt;<span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><h3 id="map-kj-key-sequence-to-esc-in-insert-mode">Map <code>kj</code>-key sequence to ESC in INSERT MODE</h3>
+<pre><code>set nopaste
+set pastetoggle=&lt;f2&gt;
+</code></pre><h3 id="map-kj-key-sequence-to-esc-in-insert-mode">Map <code>kj</code>-key sequence to ESC in INSERT MODE</h3>
+<p><strong>This is not used any more</strong> -&gt; map Caps to Esc by GNOME tweaks</p>
 <p>Pressing <code>ESC</code>-key to get back to NORMAL MODE from INSERT MODE is a bit
 stressful since it is far from the finger home position.  I map a quick key
 sequence of &ldquo;<code>kj</code>&rdquo; to <code>ESC</code>-key.</p>
@@ -81,6 +85,7 @@ need to wait a second after entering <code>k</code> to enter <code>kj</code>.</p
 <p><code>k</code> and <code>j</code> are easiest to type and unlikely under normal input situation.  I
 remember this as my <strong>Knee-Jerk-reaction</strong> to the distant <code>ESC</code>-key.</p>
 <h3 id="map-kj-key-sequence-to-wn-in-terminal-mode">Map <code>kj</code>-key sequence to <code>^WN</code> in TERMINAL MODE</h3>
+<p><strong>This is not used any more</strong></p>
 <p>Similar key sequence trick proposed for INSERT MODE can also be implemented</p>
 <pre><code>tnoremap kj  &lt;C-W&gt;N
 tnoremap kjk kj
@@ -91,37 +96,37 @@ MACRO, &ldquo;qq&rdquo; to quit recording MACRO, &ldquo;Q&rdquo; to apply MACRO)
 xnoremap Q :norm @q&lt;cr&gt;
 </code></pre><h3 id="map-non-starter-tab-in-insert-mode">Map non-starter TAB in INSERT MODE</h3>
 <p>I follow the vim manual with some twist to map non-starter <code>TAB</code>. (<code>:h ins-completion</code>):</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#75715e">&#34; Auto complete &lt;C-N&gt; with &lt;TAB&gt; if tailing non-space character</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">function</span>! <span style="color:#a6e22e">CleverTab</span>()<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">strpart</span>( <span style="color:#a6e22e">getline</span>(<span style="color:#e6db74">&#39;.&#39;</span>), <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">col</span>(<span style="color:#e6db74">&#39;.&#39;</span>)<span style="color:#ae81ff">-1</span> ) =~ <span style="color:#e6db74">&#39;\(^\|\s\)$&#39;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#a6e22e">return</span> <span style="color:#e6db74">&#34;\&lt;Tab&gt;&#34;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">else</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#a6e22e">return</span> <span style="color:#e6db74">&#34;\&lt;C-N&gt;&#34;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">endif</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">endfunction</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">inoremap</span> &lt;<span style="color:#a6e22e">Tab</span>&gt; &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">R</span>&gt;=<span style="color:#a6e22e">CleverTab</span>()&lt;<span style="color:#a6e22e">CR</span>&gt;<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">
-</span><span style="color:#75715e">&#34; Auto complete &lt;C-P&gt; with &lt;S-TAB&gt; if tailing non-space character</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">function</span>! <span style="color:#a6e22e">CleverSTab</span>()<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">strpart</span>( <span style="color:#a6e22e">getline</span>(<span style="color:#e6db74">&#39;.&#39;</span>), <span style="color:#ae81ff">0</span>, <span style="color:#a6e22e">col</span>(<span style="color:#e6db74">&#39;.&#39;</span>)<span style="color:#ae81ff">-1</span> ) =~ <span style="color:#e6db74">&#39;\(^\|\s\)$&#39;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#a6e22e">return</span> <span style="color:#e6db74">&#34;\&lt;S-Tab&gt;&#34;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">else</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>    <span style="color:#a6e22e">return</span> <span style="color:#e6db74">&#34;\&lt;C-P&gt;&#34;</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#66d9ef">endif</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">endfunction</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">inoremap</span> &lt;<span style="color:#a6e22e">S</span>-<span style="color:#a6e22e">Tab</span>&gt; &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">R</span>&gt;=<span style="color:#a6e22e">CleverSTab</span>()&lt;<span style="color:#a6e22e">CR</span>&gt;<span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><h3 id="indentation-changes-in-visual-mode">Indentation changes in VISUAL MODE</h3>
+<pre><code>&quot; Auto complete &lt;C-N&gt; with &lt;TAB&gt; if tailing non-space character
+function! CleverTab()
+  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
+    return &quot;\&lt;Tab&gt;&quot;
+  else
+    return &quot;\&lt;C-N&gt;&quot;
+  endif
+endfunction
+inoremap &lt;Tab&gt; &lt;C-R&gt;=CleverTab()&lt;CR&gt;
+
+&quot; Auto complete &lt;C-P&gt; with &lt;S-TAB&gt; if tailing non-space character
+function! CleverSTab()
+  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
+    return &quot;\&lt;S-Tab&gt;&quot;
+  else
+    return &quot;\&lt;C-P&gt;&quot;
+  endif
+endfunction
+inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
+</code></pre><h3 id="indentation-changes-in-visual-mode">Indentation changes in VISUAL MODE</h3>
 <p>Remap to keep VISUAL MODE selection for <code>&lt;</code> and <code>&gt;</code>.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#a6e22e">xnoremap</span> &gt; &gt;<span style="color:#a6e22e">gv</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">xnoremap</span> &lt; &lt;<span style="color:#a6e22e">gv</span><span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><h3 id="set-cursorline-in-normal-mode">Set cursorline in NORMAL MODE</h3>
+<pre><code>xnoremap &gt; &gt;gv
+xnoremap &lt; &lt;gv
+</code></pre><h3 id="set-cursorline-in-normal-mode">Set cursorline in NORMAL MODE</h3>
 <p>Let&rsquo;s set cursorline in NORMAL MODE (and starting)</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-vim" data-lang="vim"><span style="color:#a6e22e">augroup</span> <span style="color:#a6e22e">MyCursor</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">au</span>!<span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">autocmd</span> <span style="color:#a6e22e">InsertLeave</span>,<span style="color:#a6e22e">WinEnter</span>,<span style="color:#a6e22e">VimEnter</span> * <span style="color:#a6e22e">set</span> <span style="color:#a6e22e">cursorline</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">autocmd</span> <span style="color:#a6e22e">InsertEnter</span>,<span style="color:#a6e22e">WinLeave</span> * <span style="color:#a6e22e">set</span> <span style="color:#a6e22e">nocursorline</span><span style="color:#960050;background-color:#1e0010">
-</span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">augroup</span> <span style="color:#a6e22e">END</span><span style="color:#960050;background-color:#1e0010">
-</span></code></pre></div><h2 id="ciaranmsecuremodelines"><code>ciaranm/securemodelines</code></h2>
+<pre><code>augroup MyCursor
+  au!
+  autocmd InsertLeave,WinEnter,VimEnter * set cursorline
+  autocmd InsertEnter,WinLeave * set nocursorline
+augroup END
+</code></pre><h2 id="ciaranmsecuremodelines"><code>ciaranm/securemodelines</code></h2>
 <p>Features like &ldquo;modeline&rdquo; is very convenient but it may become source of
 security concern.  This plugin disables Vim&rsquo;s native capability for &ldquo;modeline&rdquo;
 but still enables very limited commands to be parsed.</p>
