@@ -88,7 +88,7 @@ with <code>dgit</code>.  Let me get all key points of manpages.</p>
 <td>upstream git</td>
 <td>applied</td>
 <td>merged</td>
-<td>upstream</td>
+<td>upstream involved</td>
 </tr>
 <tr>
 <td>dgit-maint-debrebase(7)</td>
@@ -97,7 +97,7 @@ with <code>dgit</code>.  Let me get all key points of manpages.</p>
 <td>upstream git</td>
 <td>applied</td>
 <td>series</td>
-<td>downstream</td>
+<td>pure downstream</td>
 </tr>
 <tr>
 <td>dgit-maint-gbp(7)</td>
@@ -106,7 +106,7 @@ with <code>dgit</code>.  Let me get all key points of manpages.</p>
 <td>upstream tar</td>
 <td>unapplied</td>
 <td>series</td>
-<td>downstream</td>
+<td>pure downstream</td>
 </tr>
 </tbody>
 </table>
@@ -117,53 +117,43 @@ with <code>dgit</code>.  Let me get all key points of manpages.</p>
 maintain a Debian package that uses one of the native source formats
 (&ldquo;1.0&rdquo; &amp; &ldquo;3.0 (native)&quot;).</p>
 <ul>
-<li>
-<p>We expect that your git history is fast-forwarding.</p>
-</li>
-<li>
-<p>You should be prepared to tolerate a small amount of ugliness in
+<li>We expect that your git history is fast-forwarding.</li>
+<li>You should be prepared to tolerate a small amount of ugliness in
 your git history in the form of merges which stitch the dgit-
-generated archive view into your maintainer history.</p>
-<p>This is to handle uploads that were not made with dgit, such as the
-uploads you made before switching to this workflow, or NMUs.</p>
+generated archive view into your maintainer history.
+<ul>
+<li>This is to handle uploads that were not made with dgit, such as the
+uploads you made before switching to this workflow, or NMUs.</li>
+</ul>
 </li>
 </ul>
 <p>Benefits</p>
 <ul>
-<li>
-<p>Benefit from dgit&rsquo;s safety catches.  In particular, ensure that
-your upload always matches exactly your git HEAD.</p>
-</li>
-<li>
-<p>Provide a better, more detailed history to downstream dgit users.</p>
-</li>
-<li>
-<p>Incorporate an NMU with one command.</p>
-</li>
+<li>Benefit from dgit&rsquo;s safety catches.  In particular, ensure that
+your upload always matches exactly your git HEAD.</li>
+<li>Provide a better, more detailed history to downstream dgit users.</li>
+<li>Incorporate an NMU with one command.</li>
 </ul>
 <h2 id="dgit-maint-merge7">dgit-maint-merge(7)</h2>
 <p>This document describes elements of a workflow for maintaining a non-
 native Debian package using dgit.  The workflow makes the following
 opinionated assumptions:</p>
 <ul>
-<li>
-<p>Git histories should be the non-linear histories produced by
+<li>Git histories should be the non-linear histories produced by
 git-merge(1), preserving all information about divergent
-development that was later brought together.</p>
-</li>
-<li>
-<p>Maintaining convenient and powerful git workflows takes priority
+development that was later brought together.</li>
+<li>Maintaining convenient and powerful git workflows takes priority
 over the usefulness of the raw Debian source package.  The Debian
-archive is thought of as an output format.</p>
-<p>For example, we don&rsquo;t spend time curating a series of quilt
-patches.  However, in straightforward cases, the information such a
-series would contain is readily available from dgit-repos.</p>
+archive is thought of as an output format.
+<ul>
+<li>For example, we don&rsquo;t spend time curating a series of quilt patches.
+However, in straightforward cases, the information such a series would
+contain is readily available from dgit-repos.</li>
+</ul>
 </li>
-<li>
-<p>It is more important to have the Debian package&rsquo;s git history be a
+<li>It is more important to have the Debian package&rsquo;s git history be a
 descendent of upstream&rsquo;s git history than to use exactly the
-orig.tar that upstream makes available for download.</p>
-</li>
+orig.tar that upstream makes available for download.</li>
 </ul>
 <p>This workflow is less suitable for some packages.  When the Debian
 delta contains multiple pieces which interact, or which you aren&rsquo;t
@@ -179,34 +169,22 @@ end of the branch.  All the public git history is fast-forwarding,
 i.e., we do not rewrite and force-push.</p>
 <p>Some advantages of this workflow:</p>
 <ul>
-<li>
-<p>Manipulate the delta queue using the full power of git-rebase(1),
+<li>Manipulate the delta queue using the full power of git-rebase(1),
 instead of relying on quilt(1), and without having to switch back
 and forth between patches-applied and patches-unapplied branches
-when committing changes and trying to build, as with gbp-pq(1).</p>
-</li>
-<li>
-<p>If you are using 3.0 (quilt), provide your delta queue as a
+when committing changes and trying to build, as with gbp-pq(1).</li>
+<li>If you are using 3.0 (quilt), provide your delta queue as a
 properly separated series of quilt patches in the source package
-that you upload to the archive (unlike with dgit-maint-merge(7)).</p>
-</li>
-<li>
-<p>Avoid the git tree being dirtied by the application or
-unapplication of patches, as they are always applied.</p>
-</li>
-<li>
-<p>Benefit from dgit&rsquo;s safety catches.  In particular, ensure that
-your upload always matches exactly your git HEAD.</p>
-</li>
-<li>
-<p>Provide your full git history in a standard format on dgit-repos,
+that you upload to the archive (unlike with dgit-maint-merge(7)).</li>
+<li>Avoid the git tree being dirtied by the application or
+unapplication of patches, as they are always applied.</li>
+<li>Benefit from dgit&rsquo;s safety catches.  In particular, ensure that
+your upload always matches exactly your git HEAD.</li>
+<li>Provide your full git history in a standard format on dgit-repos,
 where it can benefit downstream dgit users, such as people using
-dgit to do an NMU (see dgit-nmu-simple(7) and dgit-user(7)).</p>
-</li>
-<li>
-<p>Minimise the amount you need to know about 3.0 (quilt) in order to
-maintain Debian source packages which use that format.</p>
-</li>
+dgit to do an NMU (see dgit-nmu-simple(7) and dgit-user(7)).</li>
+<li>Minimise the amount you need to know about 3.0 (quilt) in order to
+maintain Debian source packages which use that format.</li>
 </ul>
 <p>This workflow is appropriate for packages where the Debian delta
 contains multiple pieces which interact, or which you don&rsquo;t expect to
@@ -220,20 +198,87 @@ git-buildpackage(1) package-maintenance workflow.  This should be read
 jointly with git-buildpackage(1)&rsquo;s documentation.  Some reasons why you
 might want to incorporate dgit into your existing workflow:</p>
 <ul>
-<li>
-<p>Benefit from dgit&rsquo;s safety catches.  In particular, ensure that
-your upload always matches exactly your git HEAD.</p>
-</li>
-<li>
-<p>Provide a better, more detailed git history to downstream dgit
+<li>Benefit from dgit&rsquo;s safety catches.  In particular, ensure that
+your upload always matches exactly your git HEAD.</li>
+<li>Provide a better, more detailed git history to downstream dgit
 users, such as people using dgit to do an NMU (see
-dgit-nmu-simple(7) and dgit-user(7)).</p>
-</li>
+dgit-nmu-simple(7) and dgit-user(7)).</li>
 </ul>
 <p>Note that we assume a patches-unapplied repository: the upstream source
 committed to the git repository is unpatched.  git-buildpackage(1) can
 work with patched-applied repositories, but is normally used with
 patches-unapplied.</p>
+<h2 id="gbp-import-orig-usage-with-dgit"><code>gbp-import-orig</code> usage with <code>dgit</code></h2>
+<p><code>debian/gbp.conf</code></p>
+<table>
+<thead>
+<tr>
+<th>Stanza \ Strategy</th>
+<th><code>dgit-maint-merge</code></th>
+<th><code>dgit-maint-debrebase</code></th>
+<th><code>dgit-maint-gbp</code></th>
+<th><code>dgit-maint-native</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>upstream-branch</code></td>
+<td><code>upstream</code></td>
+<td><code>upstream</code></td>
+<td><code>upstream</code></td>
+<td><code>--</code></td>
+</tr>
+<tr>
+<td><code>debian-branch</code></td>
+<td><code>master</code></td>
+<td><code>master</code></td>
+<td><code>master</code></td>
+<td><code>master</code></td>
+</tr>
+<tr>
+<td><code>upstream-tag</code></td>
+<td><code>upstream/%(version)s</code></td>
+<td><code>upstream/%(version)s</code></td>
+<td><code>upstream/%(version)s</code></td>
+<td><code>%(version)s</code> ???</td>
+</tr>
+<tr>
+<td><code>sign-tags</code></td>
+<td><code>True</code></td>
+<td><code>True</code></td>
+<td><code>True</code></td>
+<td><code>True</code></td>
+</tr>
+<tr>
+<td><code>pristine-tar</code></td>
+<td><code>False</code></td>
+<td><code>False</code></td>
+<td><code>True</code> *</td>
+<td><code>--</code> (N/A)</td>
+</tr>
+<tr>
+<td><code>pristine-tar-commit</code></td>
+<td><code>False</code></td>
+<td><code>False</code></td>
+<td><code>True</code> *</td>
+<td><code>--</code> (N/A)</td>
+</tr>
+<tr>
+<td><code>merge-mode</code></td>
+<td><code>merge</code></td>
+<td><code>merge</code></td>
+<td><code>replace</code> &lt;- 3.0 (quilt)</td>
+<td><code>--</code> (N/A)</td>
+</tr>
+<tr>
+<td><code>merge</code></td>
+<td><code>False</code></td>
+<td><code>True</code> *</td>
+<td><code>True</code> *</td>
+<td><code>--</code> (N/A)</td>
+</tr>
+</tbody>
+</table>
 
 
 <table width="100%">
