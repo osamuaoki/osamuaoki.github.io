@@ -60,19 +60,31 @@
 <p>Standard GNOME desktop under Debian Buster 10 has moved to use Wayland.</p>
 <p>Although the migration from X to Wayland is mostly transparent to the end-user
 like me, there are some exceptions.</p>
-<h2 id="how-to-check-if-an-application-uses-wayland-or-x">How to check if an application uses wayland or X</h2>
+<h2 id="how-to-check-if-an-application-uses-wayland-or-x">How to check if an application uses Wayland or X</h2>
 <ul>
 <li>Execute &ldquo;<code>xeyes &amp;</code>&rdquo; from a terminal console .</li>
 <li>Move mouse pointer over to an application in question.</li>
 <li>If eyes are responsive, it&rsquo;s an X application.</li>
-<li>If eyes aren&rsquo;t responsive, it&rsquo;s a wayland application.</li>
+<li>If eyes aren&rsquo;t responsive, it&rsquo;s a Wayland application.</li>
 </ul>
 <p>You need to have <code>x11-apps</code> package installed.</p>
-<h2 id="how-to-reassign-caps-key-as-ctrl-key-under-wayland">How to reassign Caps-key as CTRL-key under Wayland.</h2>
-<p>GNOME Tweaks does the job for you.</p>
-<p>Please don&rsquo;t try to do this via <code>xmodmap</code>(1). (gnome-terminal is
-not a X application but Wayland application)</p>
-<p>For Linux console, you need to change via <code>loadkeys</code>(1) as usual.</p>
+<h2 id="how-to-reassign-caps-key-as-esc-key-under-wayland">How to reassign Caps-key as ESC-key under Wayland.</h2>
+<p>For GNOME, GNOME Tweaks can reassign Caps-key as ESC-key for Wayland
+applications such as gnome-terminal.</p>
+<p>Old tricks based on X doesn&rsquo;t work any more.</p>
+<h2 id="how-to-reassign-caps-key-as-esc-key-under-linux-console">How to reassign Caps-key as ESC-key under Linux console</h2>
+<p>For <strong>Linux console</strong>, the default keyboard layout is shared with X and
+described in <code>/etc/default/keyboard</code> on somewhat recent Debian.</p>
+<pre><code>...
+XKBOPTIONS=caps:escape
+</code></pre><p>Values used here can be found in <code>/usr/share/X11/xkb/rules/base.lst</code>.</p>
+<p>For Bulleseye 11, changing this only doesn&rsquo;t change actual keyboard layout
+behavior of Linux console upon reboot.  I needed to run the following command
+manually in Linux console to activate this configuration:</p>
+<pre><code> $ sudo setupcon -v -k
+...
+</code></pre><p>I suppose, Wayland system doesn&rsquo;t run keyboard initialization code for Linux
+console upon reboot.</p>
 <!-- raw HTML omitted -->
 
 
