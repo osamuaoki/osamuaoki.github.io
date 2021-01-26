@@ -24,9 +24,10 @@ GUI Desktop customization Install gnome-tweak package to the system and tweaked 
       <pubDate>Fri, 08 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/jp/2021/01/08/virt-02/</guid>
-      <description>DebianではLXDはまだパッケージされていないので、裸のLXCのインフラを 使います。
-デバグ用の仮想環境作成 (LXC) chrootを使ってのデバグ用の仮想環境作成をpbuilder/cowbuilderでと言うのは 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも 面倒です。そこで、LXCを使ってのデバグ用の仮想環境作成を試みました。
- $ sudo lxc-create -n development-sid -t debian -- -r sid ... もし、ミラーが不調なら、安定そうなUSミラーを使います。
+      <description>chrootを使ってのデバグ用の仮想環境作成をpbuilder/cowbuilderでと言うのは 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも 面倒です。そこで、chrootの強化版のようなLXCを使ってのデバグ用の仮想環境 作成を試みます。
+ちなみに、DebianではLXDはまだパッケージされていないので、ここでは裸の LXCのインフラを使います。
+デバグ用の仮想環境作成 (LXC) LXCを使ってのデバグ用のsid環境の仮想環境作成を試みます。
+ $ sudo lxc-create -n development-sid -t debian -- -r sid もし、ミラーが不調なら、安定そうなUSミラーを使います。
  $ sudo lxc-create -n development-sid -t debian -- -r sid \\ --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/development-sid/ 以下のディレクトリーにデバグ用の rootfs以下にコンテナ環境の ファイルシステムとコンテナ環境の設定ファイルconfig が 作成されます。
 コンテナ環境のファイルシステム:
  # root@goofy:/var/lib/lxc/development-sid# tree -L 2 -F . ├── config └── rootfs/ ├── bin -&amp;gt; usr/bin/ ├── boot/ ├── dev/ ├── etc/ ├── home/ ├── lib -&amp;gt; usr/lib/ ├── lib32 -&amp;gt; usr/lib32/ ├── lib64 -&amp;gt; usr/lib64/ ├── libx32 -&amp;gt; usr/libx32/ ├── media/ ├── mnt/ ├── opt/ ├── proc/ ├── root/ ├── run/ ├── sbin -&amp;gt; usr/sbin/ ├── selinux/ ├── srv/ ├── sys/ ├── tmp/ ├── usr/ └── var/ コンテナ環境の設定ファイルconfig:</description>

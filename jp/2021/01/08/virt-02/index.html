@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/08 (initial publish),
-2021/01/26 (last update)
+2021/01/27 (last update)
 </h3>
 </div>
 
@@ -57,14 +57,15 @@
   </tbody>
 </table>
 
-<p>DebianではLXDはまだパッケージされていないので、裸のLXCのインフラを
-使います。</p>
-<h2 id="デバグ用の仮想環境作成-lxc">デバグ用の仮想環境作成 (LXC)</h2>
 <p>chrootを使ってのデバグ用の仮想環境作成をpbuilder/cowbuilderでと言うのは
 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも
-面倒です。そこで、LXCを使ってのデバグ用の仮想環境作成を試みました。</p>
+面倒です。そこで、chrootの強化版のようなLXCを使ってのデバグ用の仮想環境
+作成を試みます。</p>
+<p>ちなみに、DebianではLXDはまだパッケージされていないので、ここでは裸の
+LXCのインフラを使います。</p>
+<h2 id="デバグ用の仮想環境作成-lxc">デバグ用の仮想環境作成 (LXC)</h2>
+<p>LXCを使ってのデバグ用のsid環境の仮想環境作成を試みます。</p>
 <pre><code> $ sudo lxc-create -n development-sid -t debian -- -r sid
-...
 </code></pre><p>もし、ミラーが不調なら、安定そうなUSミラーを使います。</p>
 <pre><code> $ sudo lxc-create -n development-sid -t debian -- -r sid \\
    --mirror=http://ftp.us.debian.org
@@ -130,7 +131,6 @@ lxc.pty.max = 1024
 <h2 id="デバグ用の仮想環境のシステムとして起動-lxc">デバグ用の仮想環境のシステムとして起動 (LXC)</h2>
 <p>このデバグ用の仮想コンテナ環境をシステムとして起動します。</p>
 <pre><code>$ sudo lxc-start -n development-sid
-
 </code></pre><p>上記で<code>lxc-start</code>を実行をすると、起動された仮想環境コンテナのプロセスは
 daemon化してバックグラウンドで実行されつづけています。</p>
 <p>起動された仮想環境コンテナのプロセスの状態は以下で確認できます。</p>
@@ -146,8 +146,9 @@ Link:           vethpRy1Bk
 </code></pre><p>この起動された仮想環境コンテナ内にシェルアクセスします。</p>
 <pre><code>$ sudo lxc-attach -n development-sid
 root@development-sid:/#
-</code></pre><p>この仮想環境コンテナ内のshellプロセスを終了し、親システムのshellプロンプトに
-戻るのは普通に<code>CTRL-D</code>とします。</p>
+</code></pre><p>このshellプロンプトから好きなコマンドが純粋のsid環境下で実行できます。</p>
+<p>この仮想環境コンテナ内のshellプロセスを終了し、親システムのshellプロンプトに
+戻るのは、普通に<code>CTRL-D</code>とします。</p>
 <h2 id="デバグ用の仮想環境のリストや状況の確認-lxc">デバグ用の仮想環境のリストや状況の確認 (LXC)</h2>
 <p>上記の<code>lxc-create</code>の実行の際に、<code>sid</code>と指定したところで、他の<code>testing</code>や<code>buster</code>等
 を指定すると対応するリリースのコンテナ環境が作成できます。</p>
