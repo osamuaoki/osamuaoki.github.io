@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/02 (initial publish),
-2019/09/03 (last update)
+2021/01/26 (last update)
 </h3>
 </div>
 
@@ -77,16 +77,16 @@
 <p>Lines between <code># fmt: off</code> and <code># fmt: on</code> are skipped by the <code>black</code>.</p>
 <h2 id="make-black-to-work-with-other-tools">Make <code>black</code> to work with other tools</h2>
 <p>Adding followings to <code>pyproject.toml</code> may be useful.</p>
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-ini" data-lang="ini"><span style="color:#66d9ef">[flake8]</span>
-<span style="color:#a6e22e">max-line-length</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">88</span>
-<span style="color:#a6e22e">select</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">C,E,F,W,B,B950</span>
-<span style="color:#a6e22e">ignore</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">E203,W503,W504</span>
+<pre><code>[flake8]
+max-line-length = 88
+select = C,E,F,W,B,B950
+ignore = E203,W503,W504
 
-<span style="color:#66d9ef">[tool.isort]</span>
-<span style="color:#a6e22e">include_trailing_comma</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">true</span>
-<span style="color:#a6e22e">line_length</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">88</span>
-<span style="color:#a6e22e">multi_line_output</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">3</span>
-</code></pre></div><p>Here:</p>
+[tool.isort]
+include_trailing_comma = true
+line_length = 88
+multi_line_output = 3
+</code></pre><p>Here:</p>
 <ul>
 <li>max-line-length per line
 <ul>
