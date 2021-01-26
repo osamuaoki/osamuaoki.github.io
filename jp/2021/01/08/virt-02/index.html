@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/08 (initial publish),
-2021/01/15 (last update)
+2021/01/26 (last update)
 </h3>
 </div>
 
@@ -57,6 +57,8 @@
   </tbody>
 </table>
 
+<p>DebianではLXDはまだパッケージされていないので、裸のLXCのインフラを
+使います。</p>
 <h2 id="デバグ用の仮想環境作成-lxc">デバグ用の仮想環境作成 (LXC)</h2>
 <p>chrootを使ってのデバグ用の仮想環境作成をpbuilder/cowbuilderでと言うのは
 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも
@@ -66,31 +68,136 @@
 </code></pre><p>もし、ミラーが不調なら、安定そうなUSミラーを使います。</p>
 <pre><code> $ sudo lxc-create -n development-sid -t debian -- -r sid \\
    --mirror=http://ftp.us.debian.org
-</code></pre><p>意外と簡単です。これで、<code>/var/lib/lxc/development-sid/</code> 以下のディレクトリーに
-デバグ用のコンテナ環境のファイルシステムが作成されます。</p>
-<p><code>lxc-start</code>でコンテナ環境をシステムとして起動するために、ファイルシステム
-に追加の変更をします。</p>
-<p>XXX FIXME XXX BELOW</p>
+</code></pre><p>意外と簡単です。これで、<code>/var/lib/lxc/development-sid/</code>
+以下のディレクトリーにデバグ用の <code>rootfs</code>以下にコンテナ環境の
+ファイルシステムとコンテナ環境の設定ファイル<code>config</code> が
+作成されます。</p>
+<p>コンテナ環境のファイルシステム:</p>
+<pre><code> # root@goofy:/var/lib/lxc/development-sid# tree -L 2 -F
+.
+├── config
+└── rootfs/
+    ├── bin -&gt; usr/bin/
+    ├── boot/
+    ├── dev/
+    ├── etc/
+    ├── home/
+    ├── lib -&gt; usr/lib/
+    ├── lib32 -&gt; usr/lib32/
+    ├── lib64 -&gt; usr/lib64/
+    ├── libx32 -&gt; usr/libx32/
+    ├── media/
+    ├── mnt/
+    ├── opt/
+    ├── proc/
+    ├── root/
+    ├── run/
+    ├── sbin -&gt; usr/sbin/
+    ├── selinux/
+    ├── srv/
+    ├── sys/
+    ├── tmp/
+    ├── usr/
+    └── var/
+</code></pre><p>コンテナ環境の設定ファイル<code>config</code>:</p>
+<pre><code>root@goofy:/var/lib/lxc/development-sid# cat config
+# Template used to create this container: /usr/share/lxc/templates/lxc-debian
+# Parameters passed to the template: -r sid --mirror=http://ftp.us.debian.org/debian
+# For additional config options, please look at lxc.container.conf(5)
+
+# Uncomment the following line to support nesting containers:
+#lxc.include = /usr/share/lxc/config/nesting.conf
+# (Be aware this has security implications)
+
+lxc.net.0.type = veth
+lxc.net.0.hwaddr = 00:16:3e:c6:d4:c8
+lxc.net.0.link = lxcbr0
+lxc.net.0.flags = up
+lxc.apparmor.profile = generated
+lxc.apparmor.allow_nesting = 1
+lxc.rootfs.path = dir:/var/lib/lxc/development-sid/rootfs
+
+# Common configuration
+lxc.include = /usr/share/lxc/config/debian.common.conf
+
+# Container specific configuration
+lxc.tty.max = 4
+lxc.uts.name = development-sid
+lxc.arch = amd64
+lxc.pty.max = 1024
+</code></pre><p>この各設定パラメーターの意味は<code>lxc.conf</code>(5)や<code>lxc.container.conf</code>(5)や
+<code>lxc.system.conf</code>(5)で確認しましょう。</p>
+<h2 id="デバグ用の仮想環境のシステムとして起動-lxc">デバグ用の仮想環境のシステムとして起動 (LXC)</h2>
+<p>このデバグ用の仮想コンテナ環境をシステムとして起動します。</p>
+<pre><code>$ sudo lxc-start -n development-sid
+
+</code></pre><p>上記で<code>lxc-start</code>を実行をすると、起動された仮想環境コンテナのプロセスは
+daemon化してバックグラウンドで実行されつづけています。</p>
+<p>起動された仮想環境コンテナのプロセスの状態は以下で確認できます。</p>
+<pre><code>$ sudo lxc-info -n development-sid
+Name:           development-sid
+State:          RUNNING
+PID:            149576
+IP:             10.0.3.212
+Link:           vethpRy1Bk
+ TX bytes:      1.18 KiB
+ RX bytes:      3.20 KiB
+ Total bytes:   4.39 KiB
+</code></pre><p>この起動された仮想環境コンテナ内にシェルアクセスします。</p>
+<pre><code>$ sudo lxc-attach -n development-sid
+root@development-sid:/#
+</code></pre><p>この仮想環境コンテナ内のshellプロセスを終了し、親システムのshellプロンプトに
+戻るのは普通に<code>CTRL-D</code>とします。</p>
+<h2 id="デバグ用の仮想環境のリストや状況の確認-lxc">デバグ用の仮想環境のリストや状況の確認 (LXC)</h2>
+<p>上記の<code>lxc-create</code>の実行の際に、<code>sid</code>と指定したところで、他の<code>testing</code>や<code>buster</code>等
+を指定すると対応するリリースのコンテナ環境が作成できます。</p>
+<p>システム上に作成されたアクセス可能なコンテナ環境のリストと、その情報の確認は、
+親システムから以下とすると可能です。</p>
+<pre><code>$ sudo lxc-ls
+development-buster  development-sid     development-testing
+$ for l in `sudo lxc-ls` ; do sudo lxc-info info -n $l ; echo &quot;----&quot;; done
+Name:           development-buster
+State:          STOPPED
+----
+Name:           development-sid
+State:          RUNNING
+PID:            149576
+IP:             10.0.3.212
+Link:           vethpRy1Bk
+ TX bytes:      1.63 KiB
+ RX bytes:      4.47 KiB
+ Total bytes:   6.11 KiB
+----
+Name:           development-testing
+State:          STOPPED
+----
+</code></pre><p>ここで、３つのアクセス可能なコンテナ環境があり、その内１つが実行中(RUNNING)で
+他の２つが停止中(STOPPED)です。</p>
+<p>実は、アクセス可能なコンテナ環境の俯瞰的リストを得るだけなら、もう少し簡単に
+できます。</p>
+<pre><code>$ sudo lxc-ls -f
+development-buster  STOPPED 0         -      -          -    false
+development-sid     RUNNING 0         -      10.0.3.212 -    false
+development-testing STOPPED 0         -      -          -    false
+</code></pre><p>ちなみに、コンテナ環境の特定の設定パラメーターの個別確認もできます。</p>
+<pre><code>$ sudo lxc-info -n development-sid -c lxc.uts.name -c lxc.rootfs.path -c lxc.rootfs.mount -c lxc.net.0.link
+lxc.uts.name = development-sid
+lxc.rootfs.path = /var/lib/lxc/development-sid/rootfs
+lxc.rootfs.mount = /usr/lib/x86_64-linux-gnu/lxc/rootfs
+lxc.net.0.link = lxcbr0
+</code></pre><h2 id="他のコンテナ環境の基本操作-lxc">他のコンテナ環境の基本操作 (LXC)</h2>
 <ul>
-<li><code>/etc/fstab</code></li>
+<li><code>lxc-stop</code>: コンテナ環境の停止 (<code>lxc-start</code>の逆)</li>
+<li><code>lxc-freeze</code>: コンテナ環境の凍結</li>
+<li><code>lxc-unfreeze</code>: コンテナ環境の凍結解除</li>
+<li><code>lxc-destroy</code>: コンテナ環境の消去(<code>lxc-create</code>の逆)</li>
+<li><code>lxc-copy</code>: コンテナ環境の複製</li>
+<li><code>lxc-monitor</code>: コンテナ環境の監視</li>
+<li><code>lxc-wait</code>: 特定コンテナ環境状態の監視待機</li>
 </ul>
-<pre><code>/dev    /home/root/debian/rootfs/dev none bind 0 0
-/dev/pts /home/root/debian/rootfs/dev/pts  none bind 0 0
-</code></pre><p>copy from main system</p>
-<ul>
-<li><code>/etc/passwd</code></li>
-<li><code>/etc/group</code></li>
-<li><code>/etc/shadow</code></li>
-<li><code>/etc/gshadow</code></li>
-</ul>
-<p>bind mount from main system</p>
-<ul>
-<li><code>/root</code></li>
-<li><code>/home</code></li>
-</ul>
-<pre><code> $ sudo lxc-start -n development-sid
-</code></pre><pre><code> $ lxc-console -n development-sid -t 0
-</code></pre><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
