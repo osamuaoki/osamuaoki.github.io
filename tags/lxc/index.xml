@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>virtual on Goofing Osamu</title>
-    <link>/categories/virtual/</link>
-    <description>Recent content in virtual on Goofing Osamu</description>
+    <title>lxc on Goofing Osamu</title>
+    <link>/tags/lxc/</link>
+    <description>Recent content in lxc on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/virtual/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/lxc/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>仮想環境(3)</title>
       <link>/jp/2021/01/27/virt-03/</link>
@@ -32,21 +32,6 @@ root@development-sid:/# adduser -uid 1000 fish ... root@development-sid:/# apt-g
  $ sudo lxc-create -n development-sid -t debian -- -r sid \\ --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/development-sid/ 以下のディレクトリーにデバグ用の rootfs以下にコンテナ環境の ファイルシステムとコンテナ環境の設定ファイルconfig が 作成されます。
 コンテナ環境のファイルシステム:
  # root@goofy:/var/lib/lxc/development-sid# tree -L 2 -F . ├── config └── rootfs/ ├── bin -&amp;gt; usr/bin/ ├── boot/ ├── dev/ ├── etc/ ├── home/ ├── lib -&amp;gt; usr/lib/ ├── lib32 -&amp;gt; usr/lib32/ ├── lib64 -&amp;gt; usr/lib64/ ├── libx32 -&amp;gt; usr/libx32/ ├── media/ ├── mnt/ ├── opt/ ├── proc/ ├── root/ ├── run/ ├── sbin -&amp;gt; usr/sbin/ ├── selinux/ ├── srv/ ├── sys/ ├── tmp/ ├── usr/ └── var/ コンテナ環境の設定ファイルconfig:</description>
-    </item>
-    
-    <item>
-      <title>仮想環境(1)</title>
-      <link>/jp/2020/12/13/virt-01/</link>
-      <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
-      
-      <guid>/jp/2020/12/13/virt-01/</guid>
-      <description>開発環境の基本 開発環境は、できるだけ安定しているほうがストレスが少ないです。editorを 使いメールやウエッブページを読むだけならstable環境が使えればそれでも いいのですが、新しいハードウエアー (Thinkpad T14, AMD Ryzen 5 PRO 4650U with Radeon Graphics)だとグラフィクスドライバーの問題があるので testing ぐらいは必要です。でも歳々アップデートすると不安定になったりして面倒です。
-パッケージ作成環境 一方、通常のパッケージ作成には、確実に sid/unstable 環境とするために pbuilder/cowbuilder を使って 設定 された仮想化された chroot環境 を使っています。(確かに、schroot/sbuild 系の方が良い面はあるのでしょうが、 これは私の惰性による選択です。) 開発環境をsidにしなくてもパッケージが正しいsid環境 で作成でき快適です。
-直接chrootコマンドを用いると、必要なファイルシステムを仮想環境からアクセス出来るよう にするための操作が煩雑になりますが、pbuilder系等のコマンドを用いるとこれらの 連動する付帯操作や作業用の使い捨てシステムの作成を自動的にしてくれるので便利です。
-デバグ用の仮想環境作成 (chroot) なるべくメインのシステムを変えずにデバグを効率的にするために、 いくつかのパッケージがインストールされたデバグ用の仮想化されたchroot環境を 上記の延長線上で準備しました。こっちは、使い捨て環境と言うより使いまわし 環境といった感じです。
-cowbuilder を使って、~/wip以下にchrootの開発環境を作成します。
- $ sudo cowbuilder create --basepath ~/wip ... $ sudo cowbuilder login --basepath ~/wip ... root@goofy:/# apt-get install git vim mc aptitude devscripts iproute2 ... root@goofy:/# ^D 後は、この環境に以下で使う度にログインして、root環境で各種コマンドを使います。
- $ sudo cowbuilder login --basepath ~/wip .</description>
     </item>
     
   </channel>

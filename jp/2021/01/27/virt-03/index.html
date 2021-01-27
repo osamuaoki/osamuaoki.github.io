@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>仮想環境(3) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">仮想環境(3)</span></h1>
+
+<h3 class="date">Date:
+2021/01/27 (initial publish),
+2021/01/27 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/01/08/virt-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/jp/2021/01/27/git-master-main/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>chrootの強化版のようなLXCを使ってのデバグ用の仮想環境作成をさらに
+深堀りします。</p>
+<h2 id="仮想環境とのデーター共有-lxc">仮想環境とのデーター共有 (LXC)</h2>
+<p>仮想環境内(<code>development-sid</code>)にホスト側で通常ログインしているのと同じ
+uid=1000のユーザーを作成します。</p>
+<pre><code>$ sudo lxc-start -n development-sid
+$ sudo lxc-ls -f
+NAME                STATE   AUTOSTART GROUPS IPV4       IPV6 UNPRIVILEGED
+development-buster  STOPPED 0         -      -          -    false
+development-sid     RUNNING 0         -      10.0.3.212 -    false
+development-testing STOPPED 0         -      -          -    false
+$ sudo lxc-attach -n development-sid
+</code></pre><p>このユーザーを<code>fish</code>とし、仮想環境内に同一ユーザーアカウントを作成し
+基本開発環境を作成し、ログアウトします。</p>
+<pre><code>root@development-sid:/# adduser -uid 1000 fish
+ ...
+root@development-sid:/# apt-get update
+ ...
+root@development-sid:/# apt-get install mc vim nano- aptitude devscripts
+ ...
+root@development-sid:/home/fish/# ^D
+</code></pre><p>仮想環境内にインストールされるパッケージは上記でログアウトする前に追加操作
+することでカスタマイズ自在に設定できます。</p>
+<p>さて、一旦作成した仮想環境を停止し、ホスト側の<code>/home/fish/src</code>を仮想環境内の
+<code>/home/fish</code>としてアクセスできるように共有化した仮想環境として再立ち上げ、
+この仮想環境環境にログインします。</p>
+<pre><code>$ sudo lxc-stop -n development-sid
+$ sudo lxc-start -n development-sid \
+  -s &quot;lxc.mount.entry=/home/fish/src home/fish none bind 0 0&quot;
+$ sudo lxc-attach -n development-sid
+root@development-sid:/#
+</code></pre><p>各種操作をこのまま続けても良いのですが、ホスト側の<code>/home/fish/src</code>から見ると
+ルート所有ファイルができて面倒です。そこで仮想環境内の対応する非ルートユーザー
+にログインし操作します。</p>
+<pre><code>root@development-sid:/# login
+development-sid login: fish
+Password:
+Linux development-sid 5.10.0-1-amd64 #1 SMP Debian 5.10.4-1 (2020-12-31) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+Last login: Wed Jan 27 11:33:27 UTC 2021 on pts/5
+samu@development-sid:~$
+...
+</code></pre><p>ここで仮想環境内のホームディレクトリーで見えるのは<code>/home/fish/src</code>と同一デバイス上の
+ファイルだけです。(再帰的マウントはされません。)</p>
+<p>この状態でパッケージビルドなどをすれば綺麗な環境でできます。</p>
+<h2 id="使い捨ての仮想環境-lxc">使い捨ての仮想環境 (LXC)</h2>
+<p><code>pbuilder</code>でコアのシステム環境のコピーをベースにした使い捨ての仮想環境をcherootで準備するように、
+LXCででもコアのシステム環境のコピーをベースにした使い捨ての仮想環境を準備するには、
+<code>lxc-copy</code>を<code>-e</code>フラグとともに使うようです。ここで聞きなれない&quot;ephemeral&quot;というのは「儚い」
+「束の間であっけない」と言うことです。</p>
+<p>上述のような仮想環境とのデーター共有をコピーし作成した使い捨ての環境で実現するには
+<code>lxc-start</code>でバインドマウントしてシステム環境を立ち上げる代わりに<code>lxc-copy</code>を用いて
+<code>-e -m bind=/home/fish/src:/home/fish:rw</code>等として使い捨ての仮想環境を立ち上げればいいようです。</p>
+<p>XXX FIXME XXX 上記は要確認</p>
+<h2 id="参考情報">参考情報</h2>
+<ul>
+<li><a href="https://linuxcontainers.org/">https://linuxcontainers.org/</a></li>
+<li><a href="https://wiki.debian.org/LXC">https://wiki.debian.org/LXC</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/01/08/virt-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/jp/2021/01/27/git-master-main/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

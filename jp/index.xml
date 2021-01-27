@@ -21,6 +21,18 @@ $ git fetch origin From github.com:&amp;lt;user_name&amp;gt;/&amp;lt;project_nam
     </item>
     
     <item>
+      <title>仮想環境(3)</title>
+      <link>/jp/2021/01/27/virt-03/</link>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/01/27/virt-03/</guid>
+      <description>chrootの強化版のようなLXCを使ってのデバグ用の仮想環境作成をさらに 深堀りします。
+仮想環境とのデーター共有 (LXC) 仮想環境内(development-sid)にホスト側で通常ログインしているのと同じ uid=1000のユーザーを作成します。
+$ sudo lxc-start -n development-sid $ sudo lxc-ls -f NAME STATE AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED development-buster STOPPED 0 - - - false development-sid RUNNING 0 - 10.0.3.212 - false development-testing STOPPED 0 - - - false $ sudo lxc-attach -n development-sid このユーザーをfishとし、仮想環境内に同一ユーザーアカウントを作成し 基本開発環境を作成し、ログアウトします。
+root@development-sid:/# adduser -uid 1000 fish ... root@development-sid:/# apt-get update ... root@development-sid:/# apt-get install mc vim nano- aptitude devscripts ... root@development-sid:/home/fish/# ^D 仮想環境内にインストールされるパッケージは上記でログアウトする前に追加操作 することでカスタマイズ自在に設定できます。</description>
+    </item>
+    
+    <item>
       <title>仮想環境(2)</title>
       <link>/jp/2021/01/08/virt-02/</link>
       <pubDate>Fri, 08 Jan 2021 00:00:00 +0000</pubDate>
