@@ -105,11 +105,25 @@ $ git status -sb
 <p>上記で新ブランチ名で使えるのですが、<code>remotes/origin/master</code>が残っているのが
 目障りです。綺麗に新ブランチ名に移行するには、これを消してHEADの整合性を確保
 します。</p>
-<pre><code>$ git branch -r -D origin/master
-Deleted remote-tracking branch origin/master (was ???????).
-$ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+<pre><code>$ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+$ git branch -a
+* main
+  remotes/origin/HEAD -&gt; origin/main
+  remotes/origin/main
+  remotes/origin/master
+$ git branch -r -D origin/master
+eleted remote-tracking branch origin/master (was ???????).
+$ git branch -a
+* main
+  remotes/origin/HEAD -&gt; origin/main
+  remotes/origin/main
 
-</code></pre><p>ここで、上記の最後の処理は、以下のコマンド実行時のWARNINGの解消をしてくれます。</p>
+</code></pre><p>上記の最初の操作のHEADの関連付け先変更処理は、<code>git remote</code>を使ってすると、
+見通しよくできます。</p>
+<pre><code>$ git remote set-head origin main
+... (以下同様)
+</code></pre><p>ここで行ったHEADの関連付け先変更処理は、以下のコマンド実行時のWARNINGの解消
+をしてくれます。</p>
 <pre><code>$ git branch -a
 warning: ignoring broken ref refs/remotes/origin/HEAD
 ...
