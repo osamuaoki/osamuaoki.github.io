@@ -7,6 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>GITの「`main`」への移行</title>
+      <link>/jp/2021/01/27/git-master-main/</link>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/01/27/git-master-main/</guid>
+      <description>２１世紀の世情の反映で、 PC の視点から、デフォールトのブランチ名は、「master」に代わり、新規のプロジェクトでは 「main」が使われていきます。
+過去のプロジェクトでも同様にするべく、「master」から「main」へのデフォールト ブランチ名を移行する手順を備忘録を兼ねたメモを作成します。
+GITHUBサーバーの変更 GithubのWeb interfaceで、Settings -&amp;gt; Branches -&amp;gt; Default branch から 「master」を「main」と変更します。
+ローカルのrepoの変更 ローカルブランチ名の変更 次に、以下の手順でローカルのrepoのブランチ名の変更し状態を確認します。
+$ git branch -a * master remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git branch -m master main $ git branch -a * main remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git status -sb ## main...origin/master トラッキングの移行 上記だけでは、リモートのトラッキングがうまくできません。そこで追加の 関連設定をします。
+$ git fetch origin From github.com:&amp;lt;user_name&amp;gt;/&amp;lt;project_name&amp;gt; * [new branch] main -&amp;gt; origin/main $ git branch -a * main remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/main remotes/origin/master $ git status -sb ## main.</description>
+    </item>
+    
+    <item>
       <title>Usability tips: Debian GNOME Workstation</title>
       <link>/en/2021/01/15/debian-buster-10-usability/</link>
       <pubDate>Fri, 15 Jan 2021 00:00:00 +0000</pubDate>

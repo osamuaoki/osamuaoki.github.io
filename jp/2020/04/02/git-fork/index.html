@@ -368,66 +368,12 @@ branch.bar.merge=refs/heads/baz
 べきです。(ここで「<code>bar</code>」ブランチを同じ「<code>bar</code>」の名前でリモート
 にpushするなら、本例の<code>git push</code>コマンドラインの最後引数は<code>bar</code>と
 書くだけに省略できます。)</p>
-<h2 id="デフォールトのブランチ名のmainへの移行">デフォールトのブランチ名の「<code>main</code>」への移行</h2>
-<p>２１世紀の世情の反映で、 <a href="https://en.wikipedia.org/wiki/Political_correctness">PC</a>
-の視点から、デフォールトのブランチ名は、「<code>master</code>」に代わり、新規のプロジェクトでは
-「<code>main</code>」が使われていきます。</p>
-<p>そういった意味で、上記は「<code>master</code>」を「<code>main</code>」と読み替えていく必要があります。</p>
-<p>そのために、GithubのWeb interfaceのSettings -&gt; Branches -&gt; Default branch で
-「<code>master</code>」を「<code>main</code>」と変更します。</p>
-<p>次に、以下の手順でローカルのrepoのブランチ名の変更し状態を確認します。</p>
-<pre><code>$ git branch -a
-* master
-  remotes/origin/HEAD -&gt; origin/master
-  remotes/origin/master
-$ git branch -m master main
-$ git branch -a
-* main
-  remotes/origin/HEAD -&gt; origin/master
-  remotes/origin/master
-$ git status -sb
-## main...origin/master
-</code></pre><p>これだけでは、リモートのトラッキングがうまくできません。そこで追加の
-関連設定をします。</p>
-<pre><code>$ git fetch origin
-From github.com:&lt;user_name&gt;/&lt;project_name&gt;
- * [new branch]      main       -&gt; origin/main
-$ git branch -a
-* main
-  remotes/origin/HEAD -&gt; origin/master
-  remotes/origin/main
-  remotes/origin/master
-$ git status -sb
-## main...origin/master
-$ git branch -u origin/main main
-Branch 'main' set up to track remote branch 'main' from 'origin'.
-$ git branch -a
-* main
-  remotes/origin/HEAD -&gt; origin/master
-  remotes/origin/main
-  remotes/origin/master
-$ git status -sb
-## main...origin/main
-</code></pre><p>これで新ブランチ名で使えるのですが、<code>remotes/origin/master</code>が残っているのが
-目障りです。綺麗に新ブランチ名に移行するには、これを消してHEADの整合性を確保
-します。</p>
-<pre><code>$ git branch -r -D origin/master
-Deleted remote-tracking branch origin/master (was ???????).
-$ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
-
-</code></pre><p>ここで、上記の最後の処理は、以下のコマンド実行時のWARNINGの解消をしてくれます。</p>
-<pre><code>$ git branch -a
-warning: ignoring broken ref refs/remotes/origin/HEAD
-...
-</code></pre><p>綺麗に新ブランチ名に移行するのは結構大変です。</p>
 <h2 id="参考cookbookサイト">参考Cookbookサイト</h2>
 <ul>
 <li><a href="https://github.com/k88hudson/git-flight-rules">Flight rules for Git</a></li>
 <li><a href="https://stackoverflow.com/questions/30590083/how-do-i-rename-both-a-git-local-and-remote-branch-name">rename both a Git local and remote branch name</a></li>
 <li><a href="https://stackoverflow.com/questions/6591213/how-do-i-rename-a-local-git-branch">rename a Git local branch name</a></li>
 <li><a href="https://stackoverflow.com/questions/9524933/renaming-a-branch-in-github">rename a Git remote branch name</a></li>
-<li><a href="https://github.com/github/renaming">github.comの状況</a></li>
-<li><a href="https://tools.ietf.org/id/draft-knodel-terminology-00.html">総論としての背景</a>、</li>
 </ul>
 <!-- raw HTML omitted -->
 

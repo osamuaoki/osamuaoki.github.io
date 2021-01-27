@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GITの「`main`」への移行 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GITの「<code>main</code>」への移行</span></h1>
+
+<h3 class="date">Date:
+2021/01/27 (initial publish),
+2021/01/27 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/01/08/virt-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>２１世紀の世情の反映で、 <a href="https://en.wikipedia.org/wiki/Political_correctness">PC</a>
+の視点から、デフォールトのブランチ名は、「<code>master</code>」に代わり、新規のプロジェクトでは
+「<code>main</code>」が使われていきます。</p>
+<p>過去のプロジェクトでも同様にするべく、「<code>master</code>」から「<code>main</code>」へのデフォールト
+ブランチ名を移行する手順を備忘録を兼ねたメモを作成します。</p>
+<h2 id="githubサーバーの変更">GITHUBサーバーの変更</h2>
+<p>GithubのWeb interfaceで、Settings -&gt; Branches -&gt; Default branch から
+「<code>master</code>」を「<code>main</code>」と変更します。</p>
+<h2 id="ローカルのrepoの変更">ローカルのrepoの変更</h2>
+<h3 id="ローカルブランチ名の変更">ローカルブランチ名の変更</h3>
+<p>次に、以下の手順でローカルのrepoのブランチ名の変更し状態を確認します。</p>
+<pre><code>$ git branch -a
+* master
+  remotes/origin/HEAD -&gt; origin/master
+  remotes/origin/master
+$ git branch -m master main
+$ git branch -a
+* main
+  remotes/origin/HEAD -&gt; origin/master
+  remotes/origin/master
+$ git status -sb
+## main...origin/master
+</code></pre><h3 id="トラッキングの移行">トラッキングの移行</h3>
+<p>上記だけでは、リモートのトラッキングがうまくできません。そこで追加の
+関連設定をします。</p>
+<pre><code>$ git fetch origin
+From github.com:&lt;user_name&gt;/&lt;project_name&gt;
+ * [new branch]      main       -&gt; origin/main
+$ git branch -a
+* main
+  remotes/origin/HEAD -&gt; origin/master
+  remotes/origin/main
+  remotes/origin/master
+$ git status -sb
+## main...origin/master
+$ git branch -u origin/main main
+Branch 'main' set up to track remote branch 'main' from 'origin'.
+$ git branch -a
+* main
+  remotes/origin/HEAD -&gt; origin/master
+  remotes/origin/main
+  remotes/origin/master
+$ git status -sb
+## main...origin/main
+</code></pre><h3 id="整合性の確保">整合性の確保</h3>
+<p>上記で新ブランチ名で使えるのですが、<code>remotes/origin/master</code>が残っているのが
+目障りです。綺麗に新ブランチ名に移行するには、これを消してHEADの整合性を確保
+します。</p>
+<pre><code>$ git branch -r -D origin/master
+Deleted remote-tracking branch origin/master (was ???????).
+$ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+
+</code></pre><p>ここで、上記の最後の処理は、以下のコマンド実行時のWARNINGの解消をしてくれます。</p>
+<pre><code>$ git branch -a
+warning: ignoring broken ref refs/remotes/origin/HEAD
+...
+</code></pre><p>綺麗に新ブランチ名に移行するのは結構大変です。</p>
+<h2 id="参考cookbookサイト">参考Cookbookサイト</h2>
+<ul>
+<li><a href="https://github.com/github/renaming">github.comの状況</a></li>
+<li><a href="https://tools.ietf.org/id/draft-knodel-terminology-00.html">総論としての背景</a>、</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/01/08/virt-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
