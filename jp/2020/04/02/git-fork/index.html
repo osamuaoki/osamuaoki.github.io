@@ -73,46 +73,54 @@
 <li>自分が管理する、フォークしたリモートのレポ上の「<code>master</code>」ブランチに追跡コピーを保管します。（コピー先）</li>
 <li>アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を、フォークしたレポに勝手に作らないようにします。</li>
 </ul>
-<p>NOTE: <a href="https://en.wikipedia.org/wiki/Political_correctness">PC</a>の視点から、デフォールトのブランチ名は、「<code>master</code>」に代わり、新規のプロジェクトでは「<code>main</code>」が使われていきます。<a href="https://tools.ietf.org/id/draft-knodel-terminology-00.html">背景総論</a>、<a href="https://github.com/github/renaming">背景github.com</a></p>
 <p>この際の、GITを使うフォークの管理手順は以下です。</p>
 <ol>
-<li>アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、
-自分のアカウントにフォークされたリモートのレポを作成</li>
-<li>フォークされたレポをローカルに「<code>git clone</code>」して、ローカルのレポを作成
+<li>
+<p>アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、
+自分のアカウントにフォークされたリモートのレポを作成</p>
+</li>
+<li>
+<p>フォークされたレポをローカルに「<code>git clone</code>」して、ローカルのレポを作成</p>
 <ul>
 <li><code>$ git clone git@github.com:my_name/project_name.git ; cd project_name</code></li>
 </ul>
 </li>
-<li>自分が書き換える開発ブランチ(ここでは「<code>devel</code>」)を作成
+<li>
+<p>自分が書き換える開発ブランチ(ここでは「<code>devel</code>」)を作成</p>
 <ul>
 <li><code>$ git checkout -b devel</code></li>
 </ul>
 </li>
-<li>ファイルを編集し、開発ブランチにコミット</li>
-<li>アップストリームのリモートのレポをローカルにリモート「<code>upstream</code>」として追加。
+<li>
+<p>ファイルを編集し、開発ブランチにコミット</p>
+</li>
+<li>
+<p>アップストリームのリモートのレポをローカルにリモート「<code>upstream</code>」として追加。</p>
 <ul>
 <li><code>$ git remote add upstream https://github.com/upstream_name/project_name.git</code></li>
 </ul>
 </li>
-<li>フォークされたレポの「<code>master</code>」ブランチをアップストリームのレポの「<code>master</code>」ブランチに同期
-<ul>
 <li>
-<!-- raw HTML omitted -->
+<p>フォークされたレポの「<code>master</code>」ブランチをアップストリームのレポの「<code>master</code>」ブランチに同期</p>
+<ul>
+<li><code> $ git checkout master ; git fetch -p upstream ; git pull upstream master ; git push origin master</code></li>
+</ul>
+<p><code>-p</code>は<code>--prune</code>のショートハンドで、不要なリモート追跡ブランチを削除してくれます。</p>
 </li>
+<li>
+<p>開発ブランチに戻り、開発再開</p>
+<ul>
+<li><code>$ git checkout devel</code></li>
+</ul>
+</li>
+<li>
+<p>状況に合わせて、merge/rebase等をする。(<code>rebase</code>したブランチのpushは要注意)</p>
+<ul>
+<li><code>$ git merge master</code></li>
+<li><code>$ git rebase -i master</code></li>
 </ul>
 </li>
 </ol>
-<pre><code>$ git checkout master
-$ git fetch -p upstream
-$ git pull upstream master
-$ git push origin master
-</code></pre><p><code>-p</code>は<code>--prune</code>のショートハンドで、不要なリモート追跡ブランチを削除し
-てくれます。
-7. 開発ブランチに戻り、開発再開
-* <code>$ git checkout devel</code>
-8. 状況に合わせて、merge/rebase等をする。(<code>rebase</code>したブランチのpushは要注意)
-* <code>$ git merge master</code>
-* <code>$ git rebase -i master</code></p>
 <p>これは
 <a href="https://docs.qmk.fm/#/newbs_git_using_your_master_branch">QMKプロジェクト</a>
 等で推奨されるフォーク手順です。</p>
@@ -324,7 +332,7 @@ $ git checkout master
 別の配慮が必要です。例えばGITHUBやGITLAB内のレポ間フォークの場合、
 GITHUBやGITLAB上でウエッブページを使いフォークしないとPULL request等
 のウエッブ連携操作に支障がでる恐れがあります。</p>
-<h4 id="default-branch">Default branch</h4>
+<h4 id="デフォールトのブランチ名">デフォールトのブランチ名</h4>
 <p>ブランチ名を変えずにフォークしたレポの「<code>master</code>」は、アップストリーム
 の「<code>master</code>」を同じ内容なので、オープニングのページで表示される
 <code>README.MD</code>がアップストリームを同じ内容になります。これでは折角のフォークが
@@ -360,6 +368,15 @@ branch.bar.merge=refs/heads/baz
 べきです。(ここで「<code>bar</code>」ブランチを同じ「<code>bar</code>」の名前でリモート
 にpushするなら、本例の<code>git push</code>コマンドラインの最後引数は<code>bar</code>と
 書くだけに省略できます。)</p>
+<h2 id="デフォールトのブランチ名のmainへの移行">デフォールトのブランチ名の「<code>main</code>」への移行</h2>
+<p>２１世紀の世情の反映で、 <a href="https://en.wikipedia.org/wiki/Political_correctness">PC</a>
+の視点から、デフォールトのブランチ名は、「<code>master</code>」に代わり、新規のプロジェクトでは
+「<code>main</code>」が使われていきます。</p>
+<p>そういった意味で、上記は「<code>master</code>」を「<code>main</code>」と読み替えていく必要があります。</p>
+<ul>
+<li><a href="https://github.com/github/renaming">github.comの状況</a></li>
+<li><a href="https://tools.ietf.org/id/draft-knodel-terminology-00.html">総論としての背景</a>、</li>
+</ul>
 <h2 id="参考cookbookサイト">参考Cookbookサイト</h2>
 <ul>
 <li><a href="https://github.com/k88hudson/git-flight-rules">Flight rules for Git</a></li>
