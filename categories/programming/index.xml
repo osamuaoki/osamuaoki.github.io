@@ -8,13 +8,13 @@
     <language>en-us</language>
     <lastBuildDate>Wed, 27 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/programming/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>GITの「`main`」への移行</title>
+      <title>GITデフォルトブランチの`main`への移行</title>
       <link>/jp/2021/01/27/git-master-main/</link>
       <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/jp/2021/01/27/git-master-main/</guid>
-      <description>２１世紀の世情の反映で、 PC の視点から、デフォールトのブランチ名は、「master」に代わり、新規のプロジェクトでは 「main」が使われていきます。
-過去のプロジェクトでも同様にするべく、「master」から「main」へのデフォールト ブランチ名を移行する手順を備忘録を兼ねたメモを作成します。
+      <description>２１世紀の世情の反映で、 PC の視点から、デフォールトのブランチ名は、masterに代わり、新規のプロジェクトでは mainが使われていきます。
+人を不愉快にすることを続けたく無いので、折に触れ過去のプロジェクトでも同様にするべく、 masterからmainへのデフォールトブランチ名を移行するための手順を、備忘録を兼ねたメモ としてここに作成します。
 GITHUBサーバーの変更 GithubのWeb interfaceで、Settings -&amp;gt; Branches -&amp;gt; Default branch から 「master」を「main」と変更します。
 ローカルのrepoの変更 ローカルブランチ名の変更 次に、GITHUBのWEBインターフェースの吹き出しにある指示手順で、ローカルの repoのブランチ名を状態を確認しながら変更します。
 $ git branch -a * master remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git branch -m master main $ git branch -a * main remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git status -sb ## main...origin/master トラッキングの移行 さらに、GITHUBのWEBインターフェースの吹き出しにある指示手順で リモートのトラッキングがうまくするための追加の関連設定を 状態を確認しながらします。
