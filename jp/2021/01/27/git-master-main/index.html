@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/27 (initial publish),
-2021/01/27 (last update)
+2021/01/29 (last update)
 </h3>
 </div>
 
@@ -67,7 +67,8 @@
 「<code>master</code>」を「<code>main</code>」と変更します。</p>
 <h2 id="ローカルのrepoの変更">ローカルのrepoの変更</h2>
 <h3 id="ローカルブランチ名の変更">ローカルブランチ名の変更</h3>
-<p>次に、以下の手順でローカルのrepoのブランチ名の変更し状態を確認します。</p>
+<p>次に、GITHUBのWEBインターフェースの吹き出しにある指示手順で、ローカルの
+repoのブランチ名を状態を確認しながら変更します。</p>
 <pre><code>$ git branch -a
 * master
   remotes/origin/HEAD -&gt; origin/master
@@ -80,8 +81,9 @@ $ git branch -a
 $ git status -sb
 ## main...origin/master
 </code></pre><h3 id="トラッキングの移行">トラッキングの移行</h3>
-<p>上記だけでは、リモートのトラッキングがうまくできません。そこで追加の
-関連設定をします。</p>
+<p>さらに、GITHUBのWEBインターフェースの吹き出しにある指示手順で
+リモートのトラッキングがうまくするための追加の関連設定を
+状態を確認しながらします。</p>
 <pre><code>$ git fetch origin
 From github.com:&lt;user_name&gt;/&lt;project_name&gt;
  * [new branch]      main       -&gt; origin/main
@@ -102,9 +104,9 @@ $ git branch -a
 $ git status -sb
 ## main...origin/main
 </code></pre><h3 id="整合性の確保">整合性の確保</h3>
-<p>上記で新ブランチ名で使えるのですが、<code>remotes/origin/master</code>が残っているのが
-目障りです。綺麗に新ブランチ名に移行するには、これを消してHEADの整合性を確保
-します。</p>
+<p>上記でGITHUBのWEBインターフェースの吹き出しにある指示手順は終了し新ブランチ名で使えます。</p>
+<p>ただ、<code>remotes/origin/master</code>が残っているのが目障りです。綺麗に新ブランチ名に移行するには、
+これを消してHEADの整合性を確保します。</p>
 <pre><code>$ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
 $ git branch -a
 * main
@@ -112,14 +114,14 @@ $ git branch -a
   remotes/origin/main
   remotes/origin/master
 $ git branch -r -D origin/master
-eleted remote-tracking branch origin/master (was ???????).
+deleted remote-tracking branch origin/master (was ???????).
 $ git branch -a
 * main
   remotes/origin/HEAD -&gt; origin/main
   remotes/origin/main
 
-</code></pre><p>上記の最初の操作のHEADの関連付け先変更処理は、<code>git remote</code>を使ってすると、
-見通しよくできます。</p>
+</code></pre><p>上記の最初の操作のHEADの関連付け先変更処理は、<code>git remote</code>を使っても
+できます。この方が見通し良いかもしれません。</p>
 <pre><code>$ git remote set-head origin main
 ... (以下同様)
 </code></pre><p>ここで行ったHEADの関連付け先変更処理は、以下のコマンド実行時のWARNINGの解消
