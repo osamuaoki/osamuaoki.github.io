@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/08 (initial publish),
-2021/01/27 (last update)
+2021/01/29 (last update)
 </h3>
 </div>
 
@@ -51,30 +51,32 @@
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/jp/2021/01/27/virt-03/">Next Post</a></td>
+  <td align="right" width="33%"><a href="/jp/2021/01/27/git-master-main/">Next Post</a></td>
   
   </tr>
   </tbody>
 </table>
 
-<p>chrootを使ってのデバグ用の仮想環境作成をpbuilder/cowbuilderでと言うのは
+<p>chrootを使ってのデバグ用のsid仮想環境作成をpbuilder/cowbuilderでと言うのは
 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも
-面倒です。そこで、chrootの強化版のようなLXCを使ってのデバグ用の仮想環境
-作成を試みます。</p>
+面倒です。</p>
+<p>そこで、chrootの強化版のような環境設定インフラが整ったLXCを使ってのパッケージ
+作成やデバグ用や古い環境下での動作確認等に使え、システムの立ち上げや動作が
+軽快な仮想環境作成を試みます。(KVMは悪くは無いですが、重いことは否めません)</p>
 <p>ちなみに、DebianではLXDはまだパッケージされていないので、ここでは裸の
-LXCのインフラを使います。</p>
-<h2 id="デバグ用の仮想環境作成-lxc">デバグ用の仮想環境作成 (LXC)</h2>
-<p>LXCを使ってのデバグ用のsid環境の仮想環境作成を試みます。</p>
-<pre><code> $ sudo lxc-create -n development-sid -t debian -- -r sid
+LXC 4.0 のインフラを使います。</p>
+<p>WEB上のLXCの情報は古い1.0や2.0の情報とか、新規のUIを提供するLXDの情報が多い
+ので、bulleseyeベースの現行testing環境で基本操作を行って詳細の確認しています。</p>
+<h2 id="lxc仮想環境作成">LXC仮想環境作成</h2>
+<p>LXCを使ってのパッケージ作成やデバグ用等に使うsid環境の仮想環境作成を試みます。</p>
+<pre><code> $ sudo lxc-create -n sid -t debian -- -r sid
 </code></pre><p>もし、ミラーが不調なら、安定そうなUSミラーを使います。</p>
-<pre><code> $ sudo lxc-create -n development-sid -t debian -- -r sid \\
-   --mirror=http://ftp.us.debian.org
-</code></pre><p>意外と簡単です。これで、<code>/var/lib/lxc/development-sid/</code>
-以下のディレクトリーにデバグ用の <code>rootfs</code>以下にコンテナ環境の
-ファイルシステムとコンテナ環境の設定ファイル<code>config</code> が
-作成されます。</p>
+<pre><code> $ sudo lxc-create -n sid -t debian -- -r sid --mirror=http://ftp.us.debian.org
+</code></pre><p>意外と簡単です。これで、<code>/var/lib/lxc/sid/</code>が作成されます。この中に、sidコンテナ
+環境のファイルシステムが<code>rootfs</code>ディレクトリー以下に、またそのコンテナ環境の設定
+ファイル<code>config</code> が作成されています。</p>
 <p>コンテナ環境のファイルシステム:</p>
-<pre><code> # root@goofy:/var/lib/lxc/development-sid# tree -L 2 -F
+<pre><code> # root@goofy:/var/lib/lxc/sid# tree -L 2 -F
 .
 ├── config
 └── rootfs/
@@ -101,7 +103,7 @@ LXCのインフラを使います。</p>
     ├── usr/
     └── var/
 </code></pre><p>コンテナ環境の設定ファイル<code>config</code>:</p>
-<pre><code>root@goofy:/var/lib/lxc/development-sid# cat config
+<pre><code>root@goofy:/var/lib/lxc/sid# cat config
 # Template used to create this container: /usr/share/lxc/templates/lxc-debian
 # Parameters passed to the template: -r sid --mirror=http://ftp.us.debian.org/debian
 # For additional config options, please look at lxc.container.conf(5)
@@ -116,26 +118,28 @@ lxc.net.0.link = lxcbr0
 lxc.net.0.flags = up
 lxc.apparmor.profile = generated
 lxc.apparmor.allow_nesting = 1
-lxc.rootfs.path = dir:/var/lib/lxc/development-sid/rootfs
+lxc.rootfs.path = dir:/var/lib/lxc/sid/rootfs
 
 # Common configuration
 lxc.include = /usr/share/lxc/config/debian.common.conf
 
 # Container specific configuration
 lxc.tty.max = 4
-lxc.uts.name = development-sid
+lxc.uts.name = sid
 lxc.arch = amd64
 lxc.pty.max = 1024
 </code></pre><p>この各設定パラメーターの意味は<code>lxc.conf</code>(5)や<code>lxc.container.conf</code>(5)や
 <code>lxc.system.conf</code>(5)で確認しましょう。</p>
-<h2 id="デバグ用の仮想環境のシステムとして起動-lxc">デバグ用の仮想環境のシステムとして起動 (LXC)</h2>
-<p>このデバグ用の仮想コンテナ環境をシステムとして起動します。</p>
-<pre><code>$ sudo lxc-start -n development-sid
+<p>上記の<code>lxc-create</code>の実行の際に、<code>sid</code>と指定したところで、他の<code>buster</code>等
+を指定すると対応するリリースのコンテナ環境が作成できます。</p>
+<h2 id="lxc仮想環境をシステムとして起動">LXC仮想環境をシステムとして起動</h2>
+<p>このsid仮想コンテナ環境をシステムとして起動します。</p>
+<pre><code>$ sudo lxc-start -n sid
 </code></pre><p>上記で<code>lxc-start</code>を実行をすると、起動された仮想環境コンテナのプロセスは
 daemon化してバックグラウンドで実行されつづけています。</p>
 <p>起動された仮想環境コンテナのプロセスの状態は以下で確認できます。</p>
-<pre><code>$ sudo lxc-info -n development-sid
-Name:           development-sid
+<pre><code>$ sudo lxc-info -n sid
+Name:           sid
 State:          RUNNING
 PID:            149576
 IP:             10.0.3.212
@@ -143,61 +147,118 @@ Link:           vethpRy1Bk
  TX bytes:      1.18 KiB
  RX bytes:      3.20 KiB
  Total bytes:   4.39 KiB
-</code></pre><p>この起動された仮想環境コンテナ内にシェルアクセスします。</p>
-<pre><code>$ sudo lxc-attach -n development-sid
-root@development-sid:/#
-</code></pre><p>このshellプロンプトから好きなコマンドが純粋のsid環境下で実行できます。</p>
+</code></pre><h2 id="lxc仮想環境にシェルアクセス">LXC仮想環境にシェルアクセス</h2>
+<p>よく<code>lxc-console</code>を使いLXC仮想環境システムに入るHOWTOをWEB上に見かけますが、
+現在のテンプレートファイルで作成されるDebianのLXC仮想環境では無理です。それは、
+rootを含めた全アカウントがデフォルトではログインできないように<code>/etc/passwd</code>が
+設定されているからです。</p>
+<p>この起動された仮想環境コンテナ内にroot権限のシェルアクセスは以下でします。</p>
+<pre><code>$ LC_ALL=en_US.UTF-8 sudo lxc-attach -n sid
+root@sid:/#
+</code></pre><p>このshellプロンプトから好きなコマンドが純粋の英語のsid環境下で実行できます。</p>
+<h2 id="lxc仮想環境のカスタマイズ例">LXC仮想環境のカスタマイズ例</h2>
+<p>さすがにデフォールトインストールのLXCコンテナーのままでは使いにくいので
+いくつかのパッケージをインストールしてみます。</p>
+<pre><code>root@sid:/# apt update; apt full-upgrade
+ ...
+root@sid:/# apt install aptitude mc vim nano-
+ ...
+root@sid:/# apt install build-essential devscripts debhelper
+ ...
+</code></pre><p>ここでは、以下をしています。</p>
+<ul>
+<li>最新パッケージへの更新で、システム環境整備</li>
+<li>パッケージ追加で、シェル操作環境整備 (好みに合わせ<code>vim</code>は<code>emacs</code>でも可)</li>
+<li>パッケージ追加で、Debianパッケージ作成環境整備</li>
+</ul>
+<p>ホストシステムのuid=1000のアカウントとの連携を考え同名のアカウント
+(ここでは、<code>fish</code>)を作成します。</p>
+<pre><code>root@sid:/# adduser fish
+Adding user `fish' ...
+Adding new group `fish' (1000) ...
+Adding new user `fish' (1000) with group `fish' ...
+New password:
+Retype new password:
+passwd: password updated successfully
+Changing the user information for fish
+Enter the new value, or press ENTER for the default
+	Full Name []: Fish Eater
+	Room Number []:
+	Work Phone []:
+	Home Phone []:
+	Other []:
+Is the information correct? [Y/n] y
+root@sid:/#
+</code></pre><p>これで開発用に使いやすそうな環境が準備できました。</p>
+<p>ここで、rootのパスワードを設定するか、<code>sudo</code>パッケージを導入しユーザー
+アカウントからrootへ移行できるように設定しておくのも一案です。</p>
 <p>この仮想環境コンテナ内のshellプロセスを終了し、親システムのshellプロンプトに
-戻るのは、普通に<code>CTRL-D</code>とします。</p>
-<h2 id="デバグ用の仮想環境のリストや状況の確認-lxc">デバグ用の仮想環境のリストや状況の確認 (LXC)</h2>
-<p>上記の<code>lxc-create</code>の実行の際に、<code>sid</code>と指定したところで、他の<code>testing</code>や<code>buster</code>等
-を指定すると対応するリリースのコンテナ環境が作成できます。</p>
+戻るのは、普通にここで<code>CTRL-D</code>とプロンプトに入力します。</p>
+<h2 id="lxc仮想環境にlxc-console経由でシェルアクセス">LXC仮想環境に<code>lxc-console</code>経由でシェルアクセス</h2>
+<p>上記でパスワードがあるユーザーアカウントができたのでLOGINが出きるようにな
+っています。</p>
+<pre><code>$ sudo lxc-console -n sid -t 0
+
+Connected to tty 0
+Type &lt;Ctrl+a q&gt; to exit the console, &lt;Ctrl+a Ctrl+a&gt; to enter Ctrl+a itself
+fish
+Password:
+Linux sid 5.10.0-1-amd64 #1 SMP Debian 5.10.4-1 (2020-12-31) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+fish@sid:~$
+</code></pre><p>ここで<code>sid login:</code>と言ったプロンプトが見えませんが、アカウント名<code>fish</code>を入力すると
+ちゃんとログインできています。</p>
+<p>この仮想環境コンテナ内のshellプロセスを終了し、親システムのshellプロンプトに
+戻るのは、ここで<code>CTRL-A</code>の後<code>q</code>と2つのキーをプロンプトに入力します。</p>
+<p>ここで上記コマンド実行時は<code>-t 0</code>を忘れずにつけ<code>/dev/console</code>を利用するようにします。
+ここは気付かないと意外と悩みます。</p>
+<h2 id="仮想環境のリストや状況の確認">仮想環境のリストや状況の確認</h2>
 <p>システム上に作成されたアクセス可能なコンテナ環境のリストと、その情報の確認は、
-親システムから以下とすると可能です。</p>
+親システムから例えば以下とすると可能です。</p>
 <pre><code>$ sudo lxc-ls
-development-buster  development-sid     development-testing
+buster sid
 $ for l in `sudo lxc-ls` ; do sudo lxc-info info -n $l ; echo &quot;----&quot;; done
-Name:           development-buster
+Name:           buster
 State:          STOPPED
 ----
-Name:           development-sid
+Name:           sid
 State:          RUNNING
-PID:            149576
-IP:             10.0.3.212
-Link:           vethpRy1Bk
- TX bytes:      1.63 KiB
- RX bytes:      4.47 KiB
- Total bytes:   6.11 KiB
-----
-Name:           development-testing
-State:          STOPPED
-----
-</code></pre><p>ここで、３つのアクセス可能なコンテナ環境があり、その内１つが実行中(RUNNING)で
-他の２つが停止中(STOPPED)です。</p>
+PID:            786174
+IP:             10.0.3.219
+Link:           vethE48S2c
+ TX bytes:      3.08 MiB
+ RX bytes:      216.65 MiB
+ Total bytes:   219.73 MiB
+</code></pre><p>この例では、2つのアクセス可能なコンテナ環境があり、その内１つが実行中(RUNNING)で
+他の１つが停止中(STOPPED)です。</p>
 <p>実は、アクセス可能なコンテナ環境の俯瞰的リストを得るだけなら、もう少し簡単に
 できます。</p>
 <pre><code>$ sudo lxc-ls -f
-development-buster  STOPPED 0         -      -          -    false
-development-sid     RUNNING 0         -      10.0.3.212 -    false
-development-testing STOPPED 0         -      -          -    false
+NAME   STATE   AUTOSTART GROUPS IPV4       IPV6 UNPRIVILEGED
+buster STOPPED 0         -      -          -    false
+sid    RUNNING 0         -      10.0.3.219 -    false
 </code></pre><p>ちなみに、コンテナ環境の特定の設定パラメーターの個別確認もできます。</p>
-<pre><code>$ sudo lxc-info -n development-sid -c lxc.uts.name -c lxc.rootfs.path -c lxc.rootfs.mount -c lxc.net.0.link
-lxc.uts.name = development-sid
-lxc.rootfs.path = /var/lib/lxc/development-sid/rootfs
+<pre><code>$ sudo lxc-info -n sid -c lxc.uts.name -c lxc.rootfs.path -c lxc.rootfs.mount -c lxc.net.0.link
+lxc.uts.name = sid
+lxc.rootfs.path = /var/lib/lxc/sid/rootfs
 lxc.rootfs.mount = /usr/lib/x86_64-linux-gnu/lxc/rootfs
 lxc.net.0.link = lxcbr0
-</code></pre><h2 id="他のコンテナ環境の基本操作-lxc">他のコンテナ環境の基本操作 (LXC)</h2>
+</code></pre><h2 id="他のlxcコンテナ環境の基本操作">他のLXCコンテナ環境の基本操作</h2>
 <ul>
 <li><code>lxc-stop</code>: コンテナ環境の停止 (<code>lxc-start</code>の逆)</li>
 <li><code>lxc-freeze</code>: コンテナ環境の凍結</li>
 <li><code>lxc-unfreeze</code>: コンテナ環境の凍結解除</li>
-<li><code>lxc-destroy</code>: コンテナ環境の消去(<code>lxc-create</code>の逆)</li>
-<li><code>lxc-copy</code>: コンテナ環境の複製</li>
+<li><code>lxc-destroy</code>: コンテナ環境の消去 (<code>lxc-create</code>の逆)</li>
+<li><code>lxc-copy</code>: コンテナ環境の複製と起動 (使い捨てLXCコンテナ環境用)</li>
 <li><code>lxc-monitor</code>: コンテナ環境の監視</li>
 <li><code>lxc-wait</code>: 特定コンテナ環境状態の監視待機</li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
@@ -209,7 +270,7 @@ lxc.net.0.link = lxcbr0
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/jp/2021/01/27/virt-03/">Next Post</a></td>
+  <td align="right" width="33%"><a href="/jp/2021/01/27/git-master-main/">Next Post</a></td>
   
   </tr>
   </tbody>

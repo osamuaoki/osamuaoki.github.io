@@ -7,6 +7,20 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/jp/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>仮想環境(3)</title>
+      <link>/jp/2021/01/28/virt-03/</link>
+      <pubDate>Thu, 28 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/01/28/virt-03/</guid>
+      <description>引き続きchrootの強化版のようなLXCを使っての仮想環境作成を深堀りします。
+LXC仮想環境の停止 仮想環境のカスタマイズした起動をするためには、作成し起動した仮想環境のSTATEを STOPPED(停止)に確実にします。
+$ sudo lxc-stop -n sid $ sudo lxc-ls -f NAME STATE AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED buster STOPPED 0 - - - false sid STOPPED 0 - - - false LXC仮想環境とのデーター共有起動 仮想環境のカスタマイズした起動時に、設定変数を指定することで、ホスト側の /home/fish/srcを仮想環境内の/home/fishとしてアクセスできるように共有化 された仮想環境として起動できます。この仮想環境環境にユーザーアカウントに ログインするまでの手順は以下です。
+$ sudo lxc-start -n sid \ -s &amp;quot;lxc.mount.entry=/home/fish/src home/fish none bind 0 0&amp;quot; $ sudo lxc-attach -n sid root@sid:/# login sid login: fish Password: ... fish@sid:~$ ここで仮想環境内のホームディレクトリーで見えるのは/home/fish/srcと同一デバイス上の ファイルだけです。(再帰的マウントはされません。)
+このLXC仮想環境内でパッケージビルドなどをすれば綺麗な環境ででき、さらにその結果に ホスト側から直接アクセスできます。
+ここでは、lxc-attach+loginでユーザーアカウントに入っていますが、lxc-consoleを 使っても良いです.</description>
+    </item>
+    
+    <item>
       <title>GITの「`main`」への移行</title>
       <link>/jp/2021/01/27/git-master-main/</link>
       <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
@@ -21,30 +35,20 @@ $ git fetch origin From github.com:&amp;lt;user_name&amp;gt;/&amp;lt;project_nam
     </item>
     
     <item>
-      <title>仮想環境(3)</title>
-      <link>/jp/2021/01/27/virt-03/</link>
-      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/jp/2021/01/27/virt-03/</guid>
-      <description>chrootの強化版のようなLXCを使ってのデバグ用の仮想環境作成をさらに 深堀りします。
-仮想環境とのデーター共有 (LXC) 仮想環境内(development-sid)にホスト側で通常ログインしているのと同じ uid=1000のユーザーを作成します。
-$ sudo lxc-start -n development-sid $ sudo lxc-ls -f NAME STATE AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED development-buster STOPPED 0 - - - false development-sid RUNNING 0 - 10.0.3.212 - false development-testing STOPPED 0 - - - false $ sudo lxc-attach -n development-sid このユーザーをfishとし、仮想環境内に同一ユーザーアカウントを作成し 基本開発環境を作成し、ログアウトします。
-root@development-sid:/# adduser -uid 1000 fish ... root@development-sid:/# apt-get update ... root@development-sid:/# apt-get install mc vim nano- aptitude devscripts ... root@development-sid:/home/fish/# ^D 仮想環境内にインストールされるパッケージは上記でログアウトする前に追加操作 することでカスタマイズ自在に設定できます。</description>
-    </item>
-    
-    <item>
       <title>仮想環境(2)</title>
       <link>/jp/2021/01/08/virt-02/</link>
       <pubDate>Fri, 08 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/jp/2021/01/08/virt-02/</guid>
-      <description>chrootを使ってのデバグ用の仮想環境作成をpbuilder/cowbuilderでと言うのは 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも 面倒です。そこで、chrootの強化版のようなLXCを使ってのデバグ用の仮想環境 作成を試みます。
-ちなみに、DebianではLXDはまだパッケージされていないので、ここでは裸の LXCのインフラを使います。
-デバグ用の仮想環境作成 (LXC) LXCを使ってのデバグ用のsid環境の仮想環境作成を試みます。
- $ sudo lxc-create -n development-sid -t debian -- -r sid もし、ミラーが不調なら、安定そうなUSミラーを使います。
- $ sudo lxc-create -n development-sid -t debian -- -r sid \\ --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/development-sid/ 以下のディレクトリーにデバグ用の rootfs以下にコンテナ環境の ファイルシステムとコンテナ環境の設定ファイルconfig が 作成されます。
+      <description>chrootを使ってのデバグ用のsid仮想環境作成をpbuilder/cowbuilderでと言うのは 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも 面倒です。
+そこで、chrootの強化版のような環境設定インフラが整ったLXCを使ってのパッケージ 作成やデバグ用や古い環境下での動作確認等に使え、システムの立ち上げや動作が 軽快な仮想環境作成を試みます。(KVMは悪くは無いですが、重いことは否めません)
+ちなみに、DebianではLXDはまだパッケージされていないので、ここでは裸の LXC 4.0 のインフラを使います。
+WEB上のLXCの情報は古い1.0や2.0の情報とか、新規のUIを提供するLXDの情報が多い ので、bulleseyeベースの現行testing環境で基本操作を行って詳細の確認しています。
+LXC仮想環境作成 LXCを使ってのパッケージ作成やデバグ用等に使うsid環境の仮想環境作成を試みます。
+ $ sudo lxc-create -n sid -t debian -- -r sid もし、ミラーが不調なら、安定そうなUSミラーを使います。
+ $ sudo lxc-create -n sid -t debian -- -r sid --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/sid/が作成されます。この中に、sidコンテナ 環境のファイルシステムがrootfsディレクトリー以下に、またそのコンテナ環境の設定 ファイルconfig が作成されています。
 コンテナ環境のファイルシステム:
- # root@goofy:/var/lib/lxc/development-sid# tree -L 2 -F . ├── config └── rootfs/ ├── bin -&amp;gt; usr/bin/ ├── boot/ ├── dev/ ├── etc/ ├── home/ ├── lib -&amp;gt; usr/lib/ ├── lib32 -&amp;gt; usr/lib32/ ├── lib64 -&amp;gt; usr/lib64/ ├── libx32 -&amp;gt; usr/libx32/ ├── media/ ├── mnt/ ├── opt/ ├── proc/ ├── root/ ├── run/ ├── sbin -&amp;gt; usr/sbin/ ├── selinux/ ├── srv/ ├── sys/ ├── tmp/ ├── usr/ └── var/ コンテナ環境の設定ファイルconfig:</description>
+ # root@goofy:/var/lib/lxc/sid# tree -L 2 -F . ├── config └── rootfs/ ├── bin -&amp;gt; usr/bin/ ├── boot/ ├── dev/ ├── etc/ ├── home/ ├── lib -&amp;gt; usr/lib/ ├── lib32 -&amp;gt; usr/lib32/ ├── lib64 -&amp;gt; usr/lib64/ ├── libx32 -&amp;gt; usr/libx32/ ├── media/ ├── mnt/ ├── opt/ ├── proc/ ├── root/ ├── run/ ├── sbin -&amp;gt; usr/sbin/ ├── selinux/ ├── srv/ ├── sys/ ├── tmp/ ├── usr/ └── var/ コンテナ環境の設定ファイルconfig:</description>
     </item>
     
     <item>

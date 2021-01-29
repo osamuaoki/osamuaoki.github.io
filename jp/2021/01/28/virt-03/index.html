@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>仮想環境(3) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">仮想環境(3)</span></h1>
+
+<h3 class="date">Date:
+2021/01/28 (initial publish),
+2021/01/29 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/01/27/git-master-main/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>引き続きchrootの強化版のようなLXCを使っての仮想環境作成を深堀りします。</p>
+<h2 id="lxc仮想環境の停止">LXC仮想環境の停止</h2>
+<p>仮想環境のカスタマイズした起動をするためには、作成し起動した仮想環境の<code>STATE</code>を
+<code>STOPPED</code>(停止)に確実にします。</p>
+<pre><code>$ sudo lxc-stop -n sid
+$ sudo lxc-ls -f
+NAME   STATE   AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED
+buster STOPPED 0         -      -    -    false
+sid    STOPPED 0         -      -    -    false
+</code></pre><h2 id="lxc仮想環境とのデーター共有起動">LXC仮想環境とのデーター共有起動</h2>
+<p>仮想環境のカスタマイズした起動時に、設定変数を指定することで、ホスト側の
+<code>/home/fish/src</code>を仮想環境内の<code>/home/fish</code>としてアクセスできるように共有化
+された仮想環境として起動できます。この仮想環境環境にユーザーアカウントに
+ログインするまでの手順は以下です。</p>
+<pre><code>$ sudo lxc-start -n sid \
+  -s &quot;lxc.mount.entry=/home/fish/src home/fish none bind 0 0&quot;
+$ sudo lxc-attach -n sid
+root@sid:/# login
+sid login: fish
+Password:
+ ...
+fish@sid:~$
+</code></pre><p>ここで仮想環境内のホームディレクトリーで見えるのは<code>/home/fish/src</code>と同一デバイス上の
+ファイルだけです。(再帰的マウントはされません。)</p>
+<p>このLXC仮想環境内でパッケージビルドなどをすれば綺麗な環境ででき、さらにその結果に
+ホスト側から直接アクセスできます。</p>
+<p>ここでは、<code>lxc-attach</code>+<code>login</code>でユーザーアカウントに入っていますが、<code>lxc-console</code>を
+使っても良いです.</p>
+<h2 id="lxc仮想環境とのデーター共有設定">LXC仮想環境とのデーター共有設定</h2>
+<p>立ち上げ毎に長い<code>-s</code>オプションを使ってのbindマウント指定をなくするには、<code>lxc-create</code>
+コマンドが作った基本の仮想環境の設定ファイル<code>config</code>を編集し、設定します。</p>
+<pre><code># cd /var/lib/lxc/sid
+# cp config config.orig
+# vim config
+ ...
+# diff -u config.orig config
+--- config.orig	2021-01-29 09:34:50.520450872 +0900
++++ config	2021-01-29 00:30:53.868368439 +0900
+@@ -13,6 +13,7 @@
+ lxc.apparmor.profile = generated
+ lxc.apparmor.allow_nesting = 1
+ lxc.rootfs.path = dir:/var/lib/lxc/sid/rootfs
++lxc.mount.entry=/home/fish/src/public home/fish/mnt none bind 0 0
+
+ # Common configuration
+ lxc.include = /usr/share/lxc/config/debian.common.conf
+</code></pre><p>これでホスト側の<code>/home/fish/src</code>を仮想環境内の<code>/home/fish</code>としてアクセス
+できるように共有化した仮想環境として立ち上げが、単純な以下の操作でできる
+ようになります。</p>
+<pre><code>$ sudo lxc-start -n sid
+</code></pre><h2 id="使い捨てのlxc仮想環境">使い捨てのLXC仮想環境</h2>
+<p><code>pbuilder</code>でコアのシステム環境のコピーをベースにした使い捨ての仮想環境をchrootで準備し
+パッケージを作成するように、LXCででもコアのシステム環境のコピーをベースにした使い捨ての
+仮想環境を準備してみましょう。</p>
+<p>これには、<code>lxc-start</code>に代え<code>lxc-copy</code>を<code>-e</code>フラグとともに使います。(聞きなれない
+&ldquo;ephemeral&quot;という表現は「儚い」「束の間であっけない」と言うことです。)</p>
+<p><code>lxc-copy</code>には<code>lxc-start</code>の<code>-s</code>オプションのような機能がないので、仮想環境とのデーター
+共有を実現するには、コピー元の仮想環境の設定ファイル<code>config</code>を上記のように編集し
+<code>lxc.mount.entry</code>を追加設定しておく必要があります。</p>
+<pre><code>$ sudo lxc-stop -n sid
+$ sudo lxc-info -n sid
+Name:           sid
+State:          STOPPED
+$ sudo lxc-copy -n sid -N sid-dev01 -e
+Created sid-dev01 as clone of sid
+$ sudo lxc-ls -f
+NAME      STATE   AUTOSTART GROUPS IPV4       IPV6 UNPRIVILEGED
+buster    STOPPED 0         -      -          -    false
+sid       STOPPED 0         -      -          -    false
+sid-dev01 RUNNING 0         -      10.0.3.220 -    false
+</code></pre><p><code>lxc-copy</code>で使い捨てのLXC仮想環境を起動をするには、実行前にコピー元の仮想環境の<code>STATE</code>を
+<code>STOPPED</code>(停止)に確実にする必要があります。</p>
+<p>こうして作った使い捨てのLXC仮想環境は、<code>lxc-attach</code>か<code>lxc-console</code>で入り利用できます。</p>
+<p>さらに、利用後の使い捨てのLXC仮想環境は、<code>lxc-stop</code>とするだけで<code>lxc-destroy</code>すること無く
+消滅するので、開発ホストシステム中のゴミファイルの蓄積を防げます。</p>
+<pre><code>$ sudo lxc-stop sid-dev01
+$ sudo lxc-ls -f
+NAME   STATE   AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED
+buster STOPPED 0         -      -    -    false
+sid    STOPPED 0         -      -    -    false
+</code></pre><h2 id="lxc仮想環境利用のtips">LXC仮想環境利用のTips</h2>
+<h3 id="debianパッケージ作成">Debianパッケージ作成</h3>
+<p>Debianパッケージ作成に必要なパッケージは正確にはDebian Policyで規定されています。ただ実務的には、
+LXCを以下の手順で使うと、ホストシステムをsid環境にして不安定にすることなく作業がはかどります。</p>
+<p>まず、ベースとなるsidで作成されたLXC仮想環境に以下のパッケージを導入します。 (前述の手順です)</p>
+<ul>
+<li><code>build-essential</code></li>
+<li><code>devscripts</code></li>
+<li><code>debhelper</code></li>
+</ul>
+<p>さらに、<code>lxc-copy</code>を使い、毎回使い捨てのLXC仮想環境を準備し、その中でホストシステムと
+共有されたディレクトリー内に置かれたDebianソースの<code>debian/control</code>に基づき、パッケージビルドに
+必要なパッケージを追加導入します。<code>devscripts</code>パッケージに含まれる<code>mk-build-deps</code>コマンドが、
+この追加導入操作に便利です。特に<code>-i</code>オプションを使うと便利です。この際、<code>mk-build-deps</code>
+実行前に、最新システム環境を確保する<code>apt update; apt full-upgrade</code>を実行する
+のが好ましいでしょう。</p>
+<p>これなら、<code>pbuilder</code>等の複雑なコマンドを覚えなくとも作業がはかどります。</p>
+<h3 id="debianパッケージのデバグ">Debianパッケージのデバグ</h3>
+<p>Debianパッケージのデバグの際には、毎回パッケージ依存関係確認のためにインストールするのは
+無駄なので、使い捨てではなく必要な全パッケージがインストールされたLXC仮想環境を準備し、
+それをベースに<code>lxc-copy</code>を使い、毎回使い捨てのLXC仮想環境を準備した方が効率的です。</p>
+<p>PDFファイル作成に<code>texlive-full</code>等の巨大パッケージが利用される際には、この配慮は重要です。</p>
+<h3 id="python2-プログラムの実行">Python2 プログラムの実行</h3>
+<p>Debian bullseye 11 以降はPython3のみのサポートとなるので、古いPython2 プログラムを
+実行しその動作を確認するには、buster環境で作成されたLXC仮想環境を準備すると便利です。</p>
+<h2 id="参考情報">参考情報</h2>
+<ul>
+<li><a href="https://linuxcontainers.org/">https://linuxcontainers.org/</a></li>
+<li><a href="https://wiki.debian.org/LXC">https://wiki.debian.org/LXC</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/01/27/git-master-main/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
