@@ -212,6 +212,9 @@ $ lxc-attach -n bullseye-user
 root@bullseye-user:/#
 </code></pre><p>GNOME terminal からの実行なので、<code>lxc-attach</code>は<code>systemd-run ...</code>
 をつけなくても動きました。</p>
+<p>また、非特権LXC仮想環境でも、仮想環境の設定ファイル<code>config</code>を前記の特権LXC
+仮想環境と同様に<code>lxc.mount.entry</code>の設定を追加設定することでデーター共有がで
+きました。</p>
 <h2 id="lxc仮想環境利用のtips">LXC仮想環境利用のTips</h2>
 <h3 id="debianパッケージ作成">Debianパッケージ作成</h3>
 <p>Debianパッケージ作成に必要なパッケージは正確にはDebian Policyで規定されています。ただ実務的には、
