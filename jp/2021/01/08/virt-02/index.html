@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/08 (initial publish),
-2021/01/29 (last update)
+2021/02/03 (last update)
 </h3>
 </div>
 
@@ -67,6 +67,10 @@
 LXC 4.0 のインフラを使います。</p>
 <p>WEB上のLXCの情報は古い1.0や2.0の情報とか、新規のUIを提供するLXDの情報が多い
 ので、bulleseyeベースの現行testing環境で基本操作を行って詳細の確認しています。</p>
+<p>Debianの最新のLXC環境を確認するには、まず<code>/usr/share/doc/lxc/README.Debian</code>を
+しっかり読む必要があります。ここに書かれたユーザー権限で実行されるコンテナ
+(unprivileged containers) 関連の手動設定は重要です。</p>
+<p>まずは、簡単なROOT権限で実行されるコンテナ中心に始めます。</p>
 <h2 id="lxc仮想環境作成">LXC仮想環境作成</h2>
 <p>LXCを使ってのパッケージ作成やデバグ用等に使うsid環境の仮想環境作成を試みます。</p>
 <pre><code> $ sudo lxc-create -n sid -t debian -- -r sid

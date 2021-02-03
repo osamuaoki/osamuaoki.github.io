@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/28 (initial publish),
-2021/02/01 (last update)
+2021/02/03 (last update)
 </h3>
 </div>
 
@@ -137,7 +137,82 @@ $ sudo lxc-ls -f
 NAME   STATE   AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED
 buster STOPPED 0         -      -    -    false
 sid    STOPPED 0         -      -    -    false
-</code></pre><h2 id="lxc仮想環境利用のtips">LXC仮想環境利用のTips</h2>
+</code></pre><h2 id="非特権lxc実行環境整備">非特権LXC実行環境整備</h2>
+<p>LXC (1:4.0.6-1) をBulleseye環境で<code>/usr/share/doc/lxc/README.Debian</code>の
+&ldquo;Unprivileged containers&quot;に従って設定していきます。(2021/02)</p>
+<p>まずKERNELがunprivileged user namespacesを有効にしていることを確認します。</p>
+<pre><code>$ sudo uname -a
+Linux **** 5.10.0-2-amd64 #1 SMP Debian 5.10.9-1 (2021-01-20) x86_64 GNU/Linux
+$ sudo sysctl kernel.unprivileged_userns_clone
+kernel.unprivileged_userns_clone = 1
+</code></pre><p>ユーザーアカウント設定の<code>/etc/subuid</code>と<code>/etc/subgid</code>はすでに設定されていました。</p>
+<p>ネットワーク設定は以下を実行：</p>
+<pre><code>$ NAME=$(id -un)
+$ sudo sh -c &quot;echo $NAME veth lxcbr0 10 &gt;&gt; /etc/lxc/lxc-usernet
+</code></pre><p>さらに、<code>~/.config/lxc/default.conf</code>のユーザー設定を<code>/etc/subuid</code>と
+<code>/etc/subgid</code>に合わせて以下でします。</p>
+<pre><code>$ mkdir -p ~/.config/lxc
+$ cat &gt;~/.config/lxc/default.conf &lt;&lt; EOF
+lxc.include = /etc/lxc/default.conf
+lxc.idmap = u 0 100000 65536
+lxc.idmap = g 0 100000 65536
+lxc.mount.auto = proc:mixed sys:ro cgroup:mixed
+lxc.apparmor.profile = unconfined
+EOF
+</code></pre><p><code>download</code> templateだけが使えるので実行します。</p>
+<pre><code>$ lxc-create -t download -n bullseye-user -- -d debian -r bullseye -a amd64
+Setting up the GPG keyring
+Downloading the image index
+Downloading the rootfs
+Downloading the metadata
+The image cache is now ready
+Unpacking the rootfs
+
+---
+You just created a Debian bullseye amd64 (20210203_05:24) container.
+
+To enable SSH, run: apt install openssh-server
+No default root or user password are set by LXC.
+$ cd ~/.local/share/lxc
+$ tree -L 2 .
+.
+└── bullseye-user
+    ├── config
+    └── rootfs
+$ cd bullseye-user
+$ ls -la rootfs
+otal 76
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 bin
+drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 boot
+drwxr-xr-x  3 100000 100000 4096 Feb  3 17:08 dev
+drwxr-xr-x 41 100000 100000 4096 Feb  3 17:08 etc
+drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 home
+drwxr-xr-x 10 100000 100000 4096 Feb  3 14:26 lib
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 lib64
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 media
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 mnt
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 opt
+drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 proc
+drwx------  2 100000 100000 4096 Feb  3 14:26 root
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 run
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 sbin
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 srv
+drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 sys
+drwxrwxrwt  2 100000 100000 4096 Feb  3 14:26 tmp
+drwxr-xr-x 11 100000 100000 4096 Feb  3 14:26 usr
+drwxr-xr-x 11 100000 100000 4096 Feb  3 14:26 var
+</code></pre><p>なるほどUIDやGIDがマップされています。</p>
+<p>ここで単純にlxc-startしてもこけますが、<code>README.Debian</code>の指示どおり以下を実行すれば
+うまく立ち上がりました。</p>
+<pre><code>$ systemd-run --scope --quiet --user --property=Delegate=yes lxc-start -n bullseye-user
+$ lxc-ls -f
+NAME          STATE   AUTOSTART GROUPS IPV4       IPV6 UNPRIVILEGED
+bullseye-user RUNNING 0         -      10.0.3.224 -    true
+$ lxc-attach -n bullseye-user
+root@bullseye-user:/#
+</code></pre><p>GNOME terminal からの実行なので、<code>lxc-attach</code>は<code>systemd-run ...</code>
+をつけなくても動きました。</p>
+<h2 id="lxc仮想環境利用のtips">LXC仮想環境利用のTips</h2>
 <h3 id="debianパッケージ作成">Debianパッケージ作成</h3>
 <p>Debianパッケージ作成に必要なパッケージは正確にはDebian Policyで規定されています。ただ実務的には、
 LXCを以下の手順で使うと、ホストシステムをsid環境にして不安定にすることなく作業がはかどります。</p>
@@ -173,8 +248,9 @@ LXCを以下の手順で使うと、ホストシステムをsid環境にして�
 <h2 id="参考情報">参考情報</h2>
 <ul>
 <li>Upstream: <a href="https://linuxcontainers.org/">https://linuxcontainers.org/</a></li>
-<li>Ubuntu: <a href="https://ubuntu.com/server/docs/containers-lxc">https://ubuntu.com/server/docs/containers-lxc</a> (semi-upstream, recent LXC 4.0)</li>
+<li>Debian: <code>/usr/share/doc/lxc/README.Debian</code> (最新、重要)</li>
 <li>Debian: <a href="https://wiki.debian.org/LXC">https://wiki.debian.org/LXC</a> (slightly outdated docs)</li>
+<li>Ubuntu: <a href="https://ubuntu.com/server/docs/containers-lxc">https://ubuntu.com/server/docs/containers-lxc</a> (semi-upstream, recent LXC 4.0)</li>
 <li>SUSE: <a href="https://documentation.suse.com/sles/15-SP1/html/SLES-all/part-virt-lxc.html">https://documentation.suse.com/sles/15-SP1/html/SLES-all/part-virt-lxc.html</a>
 (16 July 2018)</li>
 </ul>

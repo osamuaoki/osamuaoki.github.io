@@ -45,6 +45,8 @@ $ git fetch origin From github.com:&amp;lt;user_name&amp;gt;/&amp;lt;project_nam
 そこで、chrootの強化版のような環境設定インフラが整ったLXCを使ってのパッケージ 作成やデバグ用や古い環境下での動作確認等に使え、システムの立ち上げや動作が 軽快な仮想環境作成を試みます。(KVMは悪くは無いですが、重いことは否めません)
 ちなみに、DebianではLXDはまだパッケージされていないので、ここでは裸の LXC 4.0 のインフラを使います。
 WEB上のLXCの情報は古い1.0や2.0の情報とか、新規のUIを提供するLXDの情報が多い ので、bulleseyeベースの現行testing環境で基本操作を行って詳細の確認しています。
+Debianの最新のLXC環境を確認するには、まず/usr/share/doc/lxc/README.Debianを しっかり読む必要があります。ここに書かれたユーザー権限で実行されるコンテナ (unprivileged containers) 関連の手動設定は重要です。
+まずは、簡単なROOT権限で実行されるコンテナ中心に始めます。
 LXC仮想環境作成 LXCを使ってのパッケージ作成やデバグ用等に使うsid環境の仮想環境作成を試みます。
  $ sudo lxc-create -n sid -t debian -- -r sid もし、ミラーが不調なら、安定そうなUSミラーを使います。
  $ sudo lxc-create -n sid -t debian -- -r sid --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/sid/が作成されます。この中に、sidコンテナ 環境のファイルシステムがrootfsディレクトリー以下に、またそのコンテナ環境の設定 ファイルconfig が作成されています。
