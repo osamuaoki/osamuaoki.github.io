@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>サウンド環境 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">サウンド環境</span></h1>
+
+<h3 class="date">Date:
+2021/02/04 (initial publish),
+2021/02/05 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/01/28/virt-03/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>GNOME Desktop環境周辺の最近のサウンド環境関連の状況を確認してみました。</p>
+<h2 id="サウンド環境">サウンド環境</h2>
+<p>サウンド環境が色々あって住み分けが分かりにくいのでまとめてみました。</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Open_Sound_System">Open Sound System (OSS)</a>:
+UNIX用のサウンドカードドライバー　デバイス名<code>/dev/dsp</code>
+<ul>
+<li>(本来のOSSは古い。実際はALSA環境がOSSエミュレーションとして提供するデバイスを利用)</li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">Advanced Linux Sound Architecture (ALSA)</a>:
+現在のLinuxカーネル中のサウンドカードドライバーとユーティリティー、デバイス名<code>hw:0,0</code>, <code>hw1,0</code></li>
+<li><a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>:
+多機能の汎用のネットワーク機能付きの<a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">サウンドサーバー</a>
+<ul>
+<li>ALSAシステム上で稼働</li>
+<li>systemdとの相性良好 (同一アップストリーム)</li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/JACK_Audio_Connection_Kit">JACK Audio Connection Kit (JACK)</a>:
+低レイテンシーのプロ仕様ネットワーク機能付きのサウンドサーバー
+<ul>
+<li>(サウンドはJACK無しでも使用可)</li>
+</ul>
+</li>
+</ul>
+<p>PulseAudioとJACKの住み分けは、PulseAudio や systemd のアップストリームの Lennart Poettering による
+<a href="http://0pointer.net/blog/projects/when-pa-and-when-not.html">Pid Eins: PulseAudio and Jack</a>
+の比較記事を読むと状況がよく分かります。PulseAudio自体は、2008年ごろは色々問題があったのは
+<a href="https://lwn.net/Articles/299211/">LPC: Linux audio: it&rsquo;s a mess</a>から分かるし、また最近も
+<a href="https://moral.net.au/writing/2017/07/23/pulseaudio/">2017</a>,
+<a href="https://www.eigenmagic.com/2018/04/16/fixed-zoom-resets-pulseaudio-volume-to-max-with-flat-volumes/">2018</a>,
+<a href="https://200ok.ch/posts/2019-05-20_disable_flatvolume_for_pulseaudio.html">2019</a>
+には音量のデフォルト設定問題があった様ですが、
+<a href="https://wiki.debian.org/PulseAudio#Sound_level_is_low_or_suddenly_becomes_too_loud">ユーザー設定で回避</a>
+する様です。</p>
+<p>普通のGNOME Desktop環境では、ハードウエアー自体の設定はALSA、信号のつなぎ合わせ等
+はPulseAudio関係のツールを中心で使うのが基本のようです。</p>
+<p>以下で最低限<code>*</code>マークのパッケージの導入が良さそうです。</p>
+<ul>
+<li>ALSA 設定ソフト
+<ul>
+<li><code>alsa-utils</code>: ALSA 設定のコンソールコマンド集 (CLI) <code>*</code>
+<ul>
+<li><code>alsamixer</code>: ALSA 音量調整・MIXER コマンド(NCURSES)　細かな各部の音量調整が可能</li>
+</ul>
+</li>
+<li><code>alsa-tools-gui</code>: HW 設定コマンド (GTK) &ndash; <code>hdajackretask</code> etc.</li>
+</ul>
+</li>
+<li>PulseAudio 設定ソフト
+<ul>
+<li><code>pulseaudio-utils</code>: PulseAudio 設定コマンド (CLI) <code>*</code></li>
+<li><code>pavucontrol</code>: 音量調整・MIXER (GTK)  細かな各部の音量調整が可能</li>
+<li><code>pavumeter</code>: 音量表示 (GTK)</li>
+<li><code>paprefs</code>: PulseAudio ネットワーク接続環境の詳細設定 (GTK) <code>*</code>
+<ul>
+<li><code>Network Access</code> -&gt; &ldquo;Make discoverable PulseAudio sound devices available
+locally: ON&rdquo; とするとLXC他で便利になる。</li>
+<li><code>Network Server</code> -&gt; &hellip; これらを有効にするのも便利かも</li>
+</ul>
+</li>
+<li>GNOME <code>Settings</code> -&gt; <code>Sound</code>: 簡易設定・音量調整 (GNOME) <code>*</code> 日常の全体の音量調整用
+<ul>
+<li><code>gnome-tweaks</code>: &ldquo;<code>General</code> -&gt; Over-Amplification: ON&rdquo; とすると使いやすくなる (GNOME) <code>*</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="参考サイト">参考サイト</h2>
+<ul>
+<li><a href="https://www.freedesktop.org/wiki/Software/PulseAudio/Documentation/User/">PulseAudio: User document</a></li>
+<li><a href="https://www.freedesktop.org/wiki/Software/PulseAudio/FAQ/">PulseAudio: FAQ</a></li>
+<li><a href="https://wiki.debian.org/PulseAudio">Debian PulseAudio Wiki</a></li>
+<li><a href="https://wiki.debian.org/Sound">Debian Sound Wiki</a></li>
+<li>COOKBOOK info:
+<ul>
+<li><a href="https://wiki.archlinux.org/index.php/PulseAudio/Configuration">Archlinux: PulseAudio/Configuration</a></li>
+<li><a href="https://wiki.archlinux.org/index.php/PulseAudio/Examples">Archlinux: PulseAudio/Examples</a></li>
+<li><a href="https://askubuntu.com/questions/1123375/create-pulseaudio-socket-at-system-startup-in-ubuntu-16-04">Create pulseaudio socket at system startup in Ubuntu 16.04 (2019)</a></li>
+<li><a href="https://unix.stackexchange.com/questions/470961/how-to-set-up-pulseaudio-remote-properly-and-securely">How to set up PulseAudio remote properly and securely? (2018)</a></li>
+<li><a href="https://gist.github.com/Earnestly/4acc782087c0a9d9db58">Multiplexing Access to Audio Hardware via a Single PulseAudio Server (2017)</a></li>
+<li><a href="https://lists.freedesktop.org/archives/pulseaudio-discuss/2017-February/027580.html">Pulse audio&rsquo;s UNIX sockets and other questions about pulse and containers (2017)</a></li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/01/28/virt-03/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
