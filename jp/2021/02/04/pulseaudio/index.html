@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/04 (initial publish),
-2021/02/05 (last update)
+2021/02/06 (last update)
 </h3>
 </div>
 
@@ -62,13 +62,19 @@
 <p>サウンド環境が色々あって住み分けが分かりにくいのでまとめてみました。</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Open_Sound_System">Open Sound System (OSS)</a>:
-UNIX用のサウンドカードドライバー　デバイス名<code>/dev/dsp</code>
+UNIX用のサウンドカードドライバー
 <ul>
+<li>デバイス名<code>: /dev/dsp</code>, <code>/dev/mixer</code></li>
 <li>(本来のOSSは古い。実際はALSA環境がOSSエミュレーションとして提供するデバイスを利用)</li>
 </ul>
 </li>
 <li><a href="https://en.wikipedia.org/wiki/Advanced_Linux_Sound_Architecture">Advanced Linux Sound Architecture (ALSA)</a>:
-現在のLinuxカーネル中のサウンドカードドライバーとユーティリティー、デバイス名<code>hw:0,0</code>, <code>hw1,0</code></li>
+現在のLinuxカーネル中のサウンドカードドライバーとユーティリティー
+<ul>
+<li>デバイス名: <code>/dev/snd/*</code></li>
+<li><a href="https://www.alsa-project.org/main/index.php/Asoundrc">.asoundrc 中のデバイス名</a>: <code>hw:0,0</code>, <code>hw1,0</code></li>
+</ul>
+</li>
 <li><a href="https://en.wikipedia.org/wiki/PulseAudio">PulseAudio</a>:
 多機能の汎用のネットワーク機能付きの<a href="https://www.freedesktop.org/wiki/Software/PulseAudio/">サウンドサーバー</a>
 <ul>
