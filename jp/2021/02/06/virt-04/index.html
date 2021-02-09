@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>仮想環境(4) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">仮想環境(4)</span></h1>
+
+<h3 class="date">Date:
+2021/02/06 (initial publish),
+2021/02/09 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/02/04/pulseaudio/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>引き続きLXCの非特権仮想環境周辺を深堀りします。
+(2021-Feb Debian Bulleseye/testing pre-11 release)</p>
+<p>まあ、非特権LXC実行環境整備の際に出てきた<code>/etc/subuid</code>と<code>/etc/subgid</code>は、
+非特権仮想環境内の見かけのUIDやGIDから、親システムのUIDやGIDの
+への対応関係定義ということは直感的分かりました。</p>
+<p>ただ伝統的なUNIXの範疇を越えているので、Linuxのカーネルレベルで
+どこがどう拡張されているのかを確認しました。</p>
+<h2 id="linux-namespaces">Linux Namespaces</h2>
+<p>どうもLXCも含めた各種コンテナ環境は2002年以降拡充されてきた
+<a href="https://en.wikipedia.org/wiki/Linux_namespaces">LinuxのNamespaces</a>
+というカーネルの機能を使っていることがキーだと分かりました。</p>
+<p>とりあえず、以下の関連マンページに目を通しました。</p>
+<ul>
+<li><code>namespaces</code>(7): LinuxのNamespaces全体の説明</li>
+<li><code>cgroup_namespaces</code>(7): Cgroup root directory</li>
+<li><code>ipc_namespaces</code>(7): System V IPC, POSIX message queues</li>
+<li><code>network_namespaces</code>(7): Network devices, stacks, ports, etc.</li>
+<li><code>mount_namespaces</code>(7): Mount points</li>
+<li><code>pid_namespaces</code>(7): Process IDs</li>
+<li><code>time_namespaces</code>(7): Boot and monotonic clocks</li>
+<li><code>user_namespaces</code>(7): User and group IDs</li>
+<li><code>uts_namespaces</code>(7): Hostname and NIS domain name</li>
+</ul>
+<p>この中で<code>cgroup_namespaces</code>(7)がおもしろそうだったので自分なりに微調整と
+追加確認しながらtraceしてまたらちょっとマンページの通りに行きませんでした。</p>
+<p>「Linuxあるある」は、マンページの記載が嘘ではないけど古いスタイルの設定
+前提で、現状とずれている可能性を感じました。現在はBulleseyeがtestingにあり、
+リリース前です。その環境下でDebianの関連インフラ状況をまとめてみました。</p>
+<table>
+<thead>
+<tr>
+<th>Debian release</th>
+<th>Kernel version</th>
+<th>util-linux</th>
+<th>cgroup hierarchy</th>
+<th>Year</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Buster 10</td>
+<td>4.19系</td>
+<td>2.33系</td>
+<td>hybrid (v1+v2)</td>
+<td>2019</td>
+</tr>
+<tr>
+<td>Bulleseye 11</td>
+<td>5.10系</td>
+<td>2.36系</td>
+<td>unified (v2 only)</td>
+<td>2021 ?</td>
+</tr>
+</tbody>
+</table>
+<p>ここで、2015年に書かれたという、
+<a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html">Control Group v2</a>
+によると、hybridヒエラルキーでは“<code>/proc/$PID/cgroup</code>” 中に複数行でプロセスの
+cgroupメンバーシップをリストするのに対して、unifiedヒエラルキーでは
+“<code>/proc/$PID/cgroup</code>” 中の単一行で常に“<code>0::$PATH</code>”だけで複数行でプロセスの
+cgroupメンバーシップをリストしているとのことでした。</p>
+<p>現行の<code>cgroup_namespaces</code>(7)の例はhybridヒエラルキー前提なので、
+cgroup v2のunifiedヒエラルキー環境に合わせてでコマンド調整をしながら
+<code>cgroup_namespaces</code>(7)の例をtraceすることにします。</p>
+<p>その際に環境の確認に、各環境で以下の関数を定義して利用します。</p>
+<pre><code>... # declare -f cgck
+cgck ()
+{
+    for pid in 1 $(ps --no-headers -o pid);
+    do
+        if [ -e &quot;/proc/$pid/cgroup&quot; ]; then
+            ps --no-headers o pid,cmd --pid &quot;$pid&quot;;
+            cat &quot;/proc/$pid/cgroup&quot;;
+            grep cgroup2 &quot;/proc/$pid/mountinfo&quot;;
+            echo &quot; ---&quot;;
+        fi;
+    done
+}
+</code></pre><p>まずroot権限のBash shellを環境設定抜きで立ち上げ、バックグラウンドプロセスも立ち上げます。</p>
+<pre><code>$ PS1='sh1\$ ' sudo bash --norc
+sh1# sleep 1000000 &amp;
+[1] 397732
+</code></pre><p>さてこの状況を<code>cgck</code>関数を定義してそれを使って確認します。</p>
+<pre><code>sh1# cgck
+      1 /sbin/init
+0::/init.scope
+32 22 0:27 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392577 sudo bash --norc
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-445f3600-af41-459a-9ac3-1e1c5633a188.scope
+32 22 0:27 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392578 bash --norc
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-445f3600-af41-459a-9ac3-1e1c5633a188.scope
+32 22 0:27 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 397732 sleep 1000000
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-445f3600-af41-459a-9ac3-1e1c5633a188.scope
+32 22 0:27 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+</code></pre><p>気になるプロセスのcgroup PATHやcgroupの ファイルシステムのmount point
+を抜き出して表にします。Systemd＋GUI環境のconsoleからなので少々
+cgroup PATHが長めです。</p>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th><code>bash --norc</code></th>
+<th><code>sleep 1000000</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PID</td>
+<td><code>392578</code></td>
+<td><code>397732</code></td>
+</tr>
+<tr>
+<td>cgroup PATH</td>
+<td><code>/user.slice/...a188.scope</code></td>
+<td><code>/user.slice/...a188.scope</code></td>
+</tr>
+<tr>
+<td>cgroup2-fs mount point</td>
+<td><code>/</code></td>
+<td><code>/</code></td>
+</tr>
+</tbody>
+</table>
+<p>さてこれらの気になるプロセスのcgroup帰属を変更します。</p>
+<pre><code>sh1# echo $$
+392578
+sh1# mkdir -p /sys/fs/cgroup/freezer/sub
+sh1# echo $$ &gt;/sys/fs/cgroup/freezer/sub/cgroup.procs
+sh1# echo $!
+397732
+sh1# mkdir -p /sys/fs/cgroup/freezer/sub2
+sh1# echo $! &gt;/sys/fs/cgroup/freezer/sub2/cgroup.procs
+sh1# cgck
+      1 /sbin/init
+0::/init.scope
+32 22 0:27 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392577 sudo bash --norc
+0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-445f3600-af41-459a-9ac3-1e1c5633a188.scope
+32 22 0:27 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392578 bash --norc
+0::/freezer/sub
+32 22 0:27 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 397732 sleep 1000000
+0::/freezer/sub2
+32 22 0:27 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+</code></pre><p>ここでcgroupのPATHが新規作成した場所に変わっています。</p>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th><code>bash --norc</code></th>
+<th><code>sleep 1000000</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PID</td>
+<td><code>392578</code></td>
+<td><code>397732</code></td>
+</tr>
+<tr>
+<td>cgroup PATH</td>
+<td><code>/freezer/sub</code></td>
+<td><code>/freezer/sub2</code></td>
+</tr>
+<tr>
+<td>cgroup2-fs mount point</td>
+<td><code>/</code></td>
+<td><code>/</code></td>
+</tr>
+</tbody>
+</table>
+<p>さて、<code>unshare</code>を用いて新規のcgroupやmountのnamespaces内に新規のshellを
+立ち上げましょう。</p>
+<pre><code>sh1# PS1='sh2\$ ' unshare --cgroup --mount bash --norc
+</code></pre><p>さてこの状況を<code>cgck</code>関数を定義してそれを使って確認します。</p>
+<pre><code>sh2# cgck
+      1 /sbin/init
+0::/../../init.scope
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392577 sudo bash --norc
+0::/../../user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-445f3600-af41-459a-9ac3-1e1c5633a188.scope
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392578 bash --norc
+0::/
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 397732 sleep 1000000
+0::/../sub2
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 425474 bash --norc
+0::/
+503 501 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime - cgroup2 cgroup2 rw
+ ---
+sh2# echo $$
+425474
+</code></pre><p><code>unshare</code>で<code>bash --norc</code> として立ち上がった新規のshellから見たから見える各プロセスの
+cgroupのPATHは、<code>/sys/fs/cgroup/freeze/sub</code>からの相対になるので変わります。
+cgroup2のファイルシステムの mount pointも、<code>/sys/fs/cgroup/freeze/sub</code>からの
+相対になるので変わります。</p>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th><code>bash --norc</code></th>
+<th><code>sleep 1000000</code></th>
+<th><code>bash --norc</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PID</td>
+<td><code>392578</code></td>
+<td><code>397732</code></td>
+<td><code>425474</code></td>
+</tr>
+<tr>
+<td>cgroup PATH</td>
+<td><code>/</code></td>
+<td><code>/../sub2</code></td>
+<td><code>/</code></td>
+</tr>
+<tr>
+<td>cgroup2-fs mount point</td>
+<td><code>/../..</code></td>
+<td><code>/../..</code></td>
+<td><code>/../..</code></td>
+</tr>
+</tbody>
+</table>
+<p>ただこうして作成された新規のshell (PID=425474) のcgroup2-fs mount pointは<code>/</code>で
+あるべきでが、<code>/../..</code>となっています。これを直します。</p>
+<pre><code>sh2# mount --make-rslave /
+sh2# cgck
+      1 /sbin/init
+0::/../../init.scope
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392577 sudo bash --norc
+0::/../../user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-445f3600-af41-459a-9ac3-1e1c5633a188.scope
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392578 bash --norc
+0::/
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 397732 sleep 1000000
+0::/../sub2
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 425474 bash --norc
+0::/
+503 501 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime - cgroup2 cgroup2 rw
+ ---
+sh2# umount /sys/fs/cgroup
+sh2# cgck
+      1 /sbin/init
+0::/../../init.scope
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392577 sudo bash --norc
+0::/../../user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-445f3600-af41-459a-9ac3-1e1c5633a188.scope
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392578 bash --norc
+0::/
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 397732 sleep 1000000
+0::/../sub2
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 425474 bash --norc
+0::/
+ ---
+</code></pre><p>マウントイベントが他のnamespacesに漏れないようにした上で、一度マウントをはずしました。</p>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th><code>bash --norc</code></th>
+<th><code>sleep 1000000</code></th>
+<th><code>bash --norc</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PID</td>
+<td><code>392578</code></td>
+<td><code>397732</code></td>
+<td><code>425474</code></td>
+</tr>
+<tr>
+<td>cgroup PATH</td>
+<td><code>/</code></td>
+<td><code>/../sub2</code></td>
+<td><code>/</code></td>
+</tr>
+<tr>
+<td>cgroup2-fs mount point</td>
+<td><code>/../..</code></td>
+<td><code>/../..</code></td>
+<td>無し</td>
+</tr>
+</tbody>
+</table>
+<pre><code>sh2# mount -t cgroup2  cgroup2 /sys/fs/cgroup/
+sh2# cgck
+      1 /sbin/init
+0::/../../init.scope
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392577 sudo bash --norc
+0::/../../user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-445f3600-af41-459a-9ac3-1e1c5633a188.scope
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 392578 bash --norc
+0::/
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 397732 sleep 1000000
+0::/../sub2
+32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
+ ---
+ 425474 bash --norc
+0::/
+503 501 0:27 / /sys/fs/cgroup rw,relatime - cgroup2 cgroup2 rw
+ ---
+</code></pre><p>cgroup2-fsをマウントしました。</p>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th><code>bash --norc</code></th>
+<th><code>sleep 1000000</code></th>
+<th><code>bash --norc</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>PID</td>
+<td><code>392578</code></td>
+<td><code>397732</code></td>
+<td><code>425474</code></td>
+</tr>
+<tr>
+<td>cgroup PATH</td>
+<td><code>/</code></td>
+<td><code>/../sub2</code></td>
+<td><code>/</code></td>
+</tr>
+<tr>
+<td>cgroup2-fs mount point</td>
+<td><code>/../..</code></td>
+<td><code>/../..</code></td>
+<td><code>/</code></td>
+</tr>
+</tbody>
+</table>
+<p>これで新規のshell (PID=425474) のcgroup2-fs mount pointが<code>/</code>となりました。</p>
+<p>もう、このPID=425474のプロセスのシェルから、PID=392578やPID=397732の
+プロセスと同じcgroupのnamespacesに属させる操作はできません。なぜなら
+<code>/freezer/sub</code> や <code>/freezer/sub2</code> が <code>/sys/fs/cgroup</code> 以下に無くなっ
+ているからです。</p>
+<pre><code>sh2# tree -L 2 /sys/fs/cgroup
+/sys/fs/cgroup
+├── cgroup.controllers
+├── cgroup.events
+├── cgroup.freeze
+├── cgroup.max.depth
+├── cgroup.max.descendants
+├── cgroup.procs
+├── cgroup.stat
+├── cgroup.subtree_control
+├── cgroup.threads
+├── cgroup.type
+├── cpu.pressure
+├── cpu.stat
+├── io.pressure
+└── memory.pressure
+
+0 directories, 14 files
+</code></pre><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/02/04/pulseaudio/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

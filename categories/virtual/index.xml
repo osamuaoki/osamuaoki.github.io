@@ -6,7 +6,23 @@
     <description>Recent content in virtual on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 28 Jan 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/virtual/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 06 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/virtual/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>仮想環境(4)</title>
+      <link>/jp/2021/02/06/virt-04/</link>
+      <pubDate>Sat, 06 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/06/virt-04/</guid>
+      <description>引き続きLXCの非特権仮想環境周辺を深堀りします。 (2021-Feb Debian Bulleseye/testing pre-11 release)
+まあ、非特権LXC実行環境整備の際に出てきた/etc/subuidと/etc/subgidは、 非特権仮想環境内の見かけのUIDやGIDから、親システムのUIDやGIDの への対応関係定義ということは直感的分かりました。
+ただ伝統的なUNIXの範疇を越えているので、Linuxのカーネルレベルで どこがどう拡張されているのかを確認しました。
+Linux Namespaces どうもLXCも含めた各種コンテナ環境は2002年以降拡充されてきた LinuxのNamespaces というカーネルの機能を使っていることがキーだと分かりました。
+とりあえず、以下の関連マンページに目を通しました。
+ namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name  この中でcgroup_namespaces(7)がおもしろそうだったので自分なりに微調整と 追加確認しながらtraceしてまたらちょっとマンページの通りに行きませんでした。
+「Linuxあるある」は、マンページの記載が嘘ではないけど古いスタイルの設定 前提で、現状とずれている可能性を感じました。現在はBulleseyeがtestingにあり、 リリース前です。その環境下でDebianの関連インフラ状況をまとめてみました。
+   Debian release Kernel version util-linux cgroup hierarchy Year     Buster 10 4.</description>
+    </item>
+    
     <item>
       <title>仮想環境(3)</title>
       <link>/jp/2021/01/28/virt-03/</link>

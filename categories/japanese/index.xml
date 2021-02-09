@@ -6,7 +6,23 @@
     <description>Recent content in japanese on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 04 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/japanese/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 06 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/japanese/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>仮想環境(4)</title>
+      <link>/jp/2021/02/06/virt-04/</link>
+      <pubDate>Sat, 06 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/06/virt-04/</guid>
+      <description>引き続きLXCの非特権仮想環境周辺を深堀りします。 (2021-Feb Debian Bulleseye/testing pre-11 release)
+まあ、非特権LXC実行環境整備の際に出てきた/etc/subuidと/etc/subgidは、 非特権仮想環境内の見かけのUIDやGIDから、親システムのUIDやGIDの への対応関係定義ということは直感的分かりました。
+ただ伝統的なUNIXの範疇を越えているので、Linuxのカーネルレベルで どこがどう拡張されているのかを確認しました。
+Linux Namespaces どうもLXCも含めた各種コンテナ環境は2002年以降拡充されてきた LinuxのNamespaces というカーネルの機能を使っていることがキーだと分かりました。
+とりあえず、以下の関連マンページに目を通しました。
+ namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name  この中でcgroup_namespaces(7)がおもしろそうだったので自分なりに微調整と 追加確認しながらtraceしてまたらちょっとマンページの通りに行きませんでした。
+「Linuxあるある」は、マンページの記載が嘘ではないけど古いスタイルの設定 前提で、現状とずれている可能性を感じました。現在はBulleseyeがtestingにあり、 リリース前です。その環境下でDebianの関連インフラ状況をまとめてみました。
+   Debian release Kernel version util-linux cgroup hierarchy Year     Buster 10 4.</description>
+    </item>
+    
     <item>
       <title>サウンド環境</title>
       <link>/jp/2021/02/04/pulseaudio/</link>
@@ -15,7 +31,7 @@
       <guid>/jp/2021/02/04/pulseaudio/</guid>
       <description>GNOME Desktop環境周辺の最近のサウンド環境関連の状況を確認してみました。
 サウンド環境 サウンド環境が色々あって住み分けが分かりにくいのでまとめてみました。
- Open Sound System (OSS): UNIX用のサウンドカードドライバー  デバイス名: /dev/dsp, /dev/mixer (本来のOSSは古い。実際はALSA環境がOSSエミュレーションとして提供するデバイスを利用)   Advanced Linux Sound Architecture (ALSA): 現在のLinuxカーネル中のサウンドカードドライバーとユーティリティー  デバイス名: /dev/snd/* .asoundrc 中のデバイス名: hw:0,0, hw1,0   PulseAudio: 多機能の汎用のネットワーク機能付きのサウンドサーバー  ALSAシステム上で稼働 systemdとの相性良好 (同一アップストリーム)   JACK Audio Connection Kit (JACK): 低レイテンシーのプロ仕様ネットワーク機能付きのサウンドサーバー  (サウンドはJACK無しでも使用可)    PulseAudioとJACKの住み分けは、PulseAudio や systemd のアップストリームの Lennart Poettering による Pid Eins: PulseAudio and Jack の比較記事を読むと状況がよく分かります。PulseAudio自体は、2008年ごろは色々問題があったのは LPC: Linux audio: it&amp;rsquo;s a messから分かるし、また最近も 2017, 2018, 2019 には音量のデフォルト設定問題があった様ですが、 ユーザー設定で回避 する様です。</description>
+ Open Sound System (OSS): UNIX用のサウンドカードドライバー  デバイス名: /dev/dsp, /dev/mixer (本来のOSSは古い。実際はALSA環境がOSSエミュレーションとして提供するデバイスを利用)   Advanced Linux Sound Architecture (ALSA): 現在のLinuxカーネル中のサウンドカードドライバーとユーティリティー  デバイス名: /dev/snd/* asoundrc 中のデバイス名: hw:0,0, hw1,0   PulseAudio: 多機能の汎用のネットワーク機能付きのサウンドサーバー  ALSAシステム上で稼働 systemdとの相性良好 (同一アップストリーム)   JACK Audio Connection Kit (JACK): 低レイテンシーのプロ仕様ネットワーク機能付きのサウンドサーバー  (サウンドはJACK無しでも使用可)    PulseAudioとJACKの住み分けは、PulseAudio や systemd のアップストリームの Lennart Poettering による Pid Eins: PulseAudio and Jack の比較記事を読むと状況がよく分かります。PulseAudio自体は、2008年ごろは色々問題があったのは LPC: Linux audio: it&amp;rsquo;s a messから分かるし、また最近も 2017, 2018, 2019 には音量のデフォルト設定問題があった様ですが、 ユーザー設定で回避 する様です。</description>
     </item>
     
     <item>
