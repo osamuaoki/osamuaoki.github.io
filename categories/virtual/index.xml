@@ -6,7 +6,26 @@
     <description>Recent content in virtual on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 06 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/virtual/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 12 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/virtual/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>仮想環境(5)</title>
+      <link>/jp/2021/02/12/virt-05/</link>
+      <pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/12/virt-05/</guid>
+      <description>引き続きLXCの非特権仮想環境周辺を深堀りとして Linux Namespaces を読み解きます。
+User Namespaces Linux Namespacesの中でuser_namespaces(7)で説明されている User NamespacesはユーザーIDやグループID等のセキュリティー関連の識別子 と属性(credentials(7)参照。本来は、資格、信任状の意味の単語)を 分離します。属性とは具体的に言うとルートディレクトリーや、 キー(keyrings(7)参照。本来は、鍵の意味の単語)や、 ケーパビリティ(capabilities(7)参照。本来は能力・資質の意味の単語) 等です。
+このUser Namespacesにより、Namespacesの中ではあたかも特権ユーザーとして 振る舞いながら、Namespacesの外では通常の非特権ユーザー権限を保持するプロセスを 実現することができます。この際のユーザーIDの対応関係が/proc/[pid]/uid_map ファイルに記されています。(グループIDの場合は/proc/[pid]/gid_map)
+たとえばコンテナ環境外のシェルプロセスのuid_map以下です。
+$ cat /proc/$$/uid_map 0 0 4294967295 これは、最初の0 が現amespacesのユーザーID、次の0 が(実在しない)親Namespaces のユーザーID に対応し、(2^32)-1の4294967295が対応関係範囲長となります。 対応関係範囲長を2^32としないのは故意で2^32番目のユーザーID 4294967295 は「ユーザーID無し」の返り値となっているからだそうです。
+/proc/[pid]/uid_mapは、newuidmap(1)で設定できます。その際に 許容されるユーザーIDが/etc/subuidに羅列し規定されています。
+LXC 4.0の非特権ユーザーのコンテナ起動は、/usr/share/doc/lxc/README.Debianに 詳しく書かれています。この様な現在のシステムでは、各コンテナ環境では 16ビットユーザーIDの 0 - 65536＝(2^16)-2 を使っているようです。
+$ id -nu osamu $ cat /etc/subuid osamu:100000:65536 ここの100000は見通しが良いように大きい目になっていますが、65538以上の 適当なオフセット値ですね。このようなオフセット値を各コンテナ毎ずらせば 確かにコンテナを安全に隔離できますね。
+ちなみに、chroot(2)システムコールが設定するプロセスごとの ルートディレクトリーは/proc/[pid]/rootからのシムリンクとして 記録されています。これを使えば、コンテナ毎に違うルートファイルシステム 内容のシステムを作成できます。
+オーバーレイマウントやバインドマウント等のカーネル機能も効率的な仮想環境 構成に使えます。
+なんとなく、コンテナ環境の仮想化が収まっている全体感というか様子が、 ちょっと見えてきました。</description>
+    </item>
+    
     <item>
       <title>仮想環境(4)</title>
       <link>/jp/2021/02/06/virt-04/</link>
@@ -18,9 +37,7 @@
 ただ伝統的なUNIXの範疇を越えているので、Linuxのカーネルレベルで どこがどう拡張されているのかを確認しました。
 Linux Namespaces どうもLXCも含めた各種コンテナ環境は2002年以降拡充されてきた LinuxのNamespaces というカーネルの機能を使っていることがキーだと分かりました。
 とりあえず、以下の関連マンページに目を通しました。
- namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name  この中でcgroup_namespaces(7)がおもしろそうだったので自分なりに微調整と 追加確認しながらtraceしてまたらちょっとマンページの通りに行きませんでした。
-「Linuxあるある」は、マンページの記載が嘘ではないけど古いスタイルの設定 前提で、現状とずれている可能性を感じました。現在はBulleseyeがtestingにあり、 リリース前です。その環境下でDebianの関連インフラ状況をまとめてみました。
-   Debian release Kernel version util-linux cgroup hierarchy Year     Buster 10 4.</description>
+ namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name  Cgroup Namespaces Linux Namespacesの中でcgroup_namespaces(7)は、/proc/[pid]/cgroup と /proc/[pid]/mountinfo から見えるプロセスのcgroups (コントロールグループ) の見え方を仮想化します。各種コンテナ環境を可能にする仮想化技術の中心的な要素 としておもしろそうだったので、自分なりに追加の状況確認をしながらtraceしたの ですがマンページの通りには行きませんでした。</description>
     </item>
     
     <item>

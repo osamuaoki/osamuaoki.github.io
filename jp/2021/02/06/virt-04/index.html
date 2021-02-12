@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/06 (initial publish),
-2021/02/09 (last update)
+2021/02/13 (last update)
 </h3>
 </div>
 
@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2021/02/12/virt-05/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -80,11 +80,15 @@
 <li><code>user_namespaces</code>(7): User and group IDs</li>
 <li><code>uts_namespaces</code>(7): Hostname and NIS domain name</li>
 </ul>
-<p>この中で<code>cgroup_namespaces</code>(7)がおもしろそうだったので自分なりに微調整と
-追加確認しながらtraceしてまたらちょっとマンページの通りに行きませんでした。</p>
+<h2 id="cgroup-namespaces">Cgroup Namespaces</h2>
+<p>Linux Namespacesの中で<code>cgroup_namespaces</code>(7)は、<code>/proc/[pid]/cgroup</code> と
+<code>/proc/[pid]/mountinfo</code> から見えるプロセスのcgroups (コントロールグループ)
+の見え方を仮想化します。各種コンテナ環境を可能にする仮想化技術の中心的な要素
+としておもしろそうだったので、自分なりに追加の状況確認をしながらtraceしたの
+ですがマンページの通りには行きませんでした。</p>
 <p>「Linuxあるある」は、マンページの記載が嘘ではないけど古いスタイルの設定
 前提で、現状とずれている可能性を感じました。現在はBulleseyeがtestingにあり、
-リリース前です。その環境下でDebianの関連インフラ状況をまとめてみました。</p>
+リリース前です。まず現在のDebianの関連インフラ状況をまとめてみました。</p>
 <table>
 <thead>
 <tr>
@@ -118,10 +122,11 @@
 cgroupメンバーシップをリストするのに対して、unifiedヒエラルキーでは
 “<code>/proc/$PID/cgroup</code>” 中の単一行で常に“<code>0::$PATH</code>”だけで複数行でプロセスの
 cgroupメンバーシップをリストしているとのことでした。</p>
-<p>現行の<code>cgroup_namespaces</code>(7)の例はhybridヒエラルキー前提なので、
-cgroup v2のunifiedヒエラルキー環境に合わせてでコマンド調整をしながら
-<code>cgroup_namespaces</code>(7)の例をtraceすることにします。</p>
-<p>その際に環境の確認に、各環境で以下の関数を定義して利用します。</p>
+<p>こう見ると現行の<code>cgroup_namespaces</code>(7)の例はhybridヒエラルキー前提なので、
+ずれている分かりました。</p>
+<p>cgroup v2のunifiedヒエラルキー環境に合わせてでコマンドを調整をしながら
+<code>cgroup_namespaces</code>(7)の例を以下でtraceすることにします。この際に、
+各環境で以下の <code>cgck</code>関数を定義して状況の確認に利用します。</p>
 <pre><code>... # declare -f cgck
 cgck ()
 {
@@ -135,11 +140,14 @@ cgck ()
         fi;
     done
 }
-</code></pre><p>まずroot権限のBash shellを環境設定抜きで立ち上げ、バックグラウンドプロセスも立ち上げます。</p>
+</code></pre><p>ここでプロセスを取り巻く状況をモニターしている<code>/proc/$pid/*</code>ファイルの内容
+の意味は、<code>proc</code>(5)に説明されています。</p>
+<p>まずroot権限のBash shellを環境設定抜きで立ち上げ、バックグラウンド
+プロセスも立ち上げます。</p>
 <pre><code>$ PS1='sh1\$ ' sudo bash --norc
 sh1# sleep 1000000 &amp;
 [1] 397732
-</code></pre><p>さてこの状況を<code>cgck</code>関数を定義してそれを使って確認します。</p>
+</code></pre><p>この状況を上記の<code>cgck</code>関数を定義して確認します。</p>
 <pre><code>sh1# cgck
       1 /sbin/init
 0::/init.scope
@@ -453,8 +461,6 @@ sh2# cgck
 
 0 directories, 14 files
 </code></pre><!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -465,7 +471,7 @@ sh2# cgck
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2021/02/12/virt-05/">Next Post</a></td>
   
   </tr>
   </tbody>

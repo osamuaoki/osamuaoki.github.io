@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>仮想環境(5) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">仮想環境(5)</span></h1>
+
+<h3 class="date">Date:
+2021/02/12 (initial publish),
+2021/02/13 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/02/06/virt-04/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>引き続きLXCの非特権仮想環境周辺を深堀りとして Linux Namespaces
+を読み解きます。</p>
+<h3 id="user-namespaces">User Namespaces</h3>
+<p>Linux Namespacesの中で<code>user_namespaces</code>(7)で説明されている
+User NamespacesはユーザーIDやグループID等のセキュリティー関連の識別子
+と属性(<code>credentials</code>(7)参照。本来は、資格、信任状の意味の単語)を
+分離します。属性とは具体的に言うとルートディレクトリーや、
+キー(<code>keyrings</code>(7)参照。本来は、鍵の意味の単語)や、
+ケーパビリティ(<code>capabilities</code>(7)参照。本来は能力・資質の意味の単語)
+等です。</p>
+<p>このUser Namespacesにより、Namespacesの中ではあたかも特権ユーザーとして
+振る舞いながら、Namespacesの外では通常の非特権ユーザー権限を保持するプロセスを
+実現することができます。この際のユーザーIDの対応関係が<code>/proc/[pid]/uid_map</code>
+ファイルに記されています。(グループIDの場合は<code>/proc/[pid]/gid_map</code>)</p>
+<p>たとえばコンテナ環境外のシェルプロセスの<code>uid_map</code>以下です。</p>
+<pre><code>$ cat /proc/$$/uid_map
+         0          0 4294967295
+</code></pre><p>これは、最初の<code>0</code> が現amespacesのユーザーID、次の<code>0</code> が(実在しない)親Namespaces
+のユーザーID に対応し、(2^32)-1の4294967295が対応関係範囲長となります。
+対応関係範囲長を2^32としないのは故意で2^32番目のユーザーID <code>4294967295</code>
+は「ユーザーID無し」の返り値となっているからだそうです。</p>
+<p><code>/proc/[pid]/uid_map</code>は、<code>newuidmap</code>(1)で設定できます。その際に
+許容されるユーザーIDが<code>/etc/subuid</code>に羅列し規定されています。</p>
+<p>LXC 4.0の非特権ユーザーのコンテナ起動は、<code>/usr/share/doc/lxc/README.Debian</code>に
+詳しく書かれています。この様な現在のシステムでは、各コンテナ環境では
+16ビットユーザーIDの 0 - 65536＝(2^16)-2 を使っているようです。</p>
+<pre><code>$ id -nu
+osamu
+$ cat /etc/subuid
+osamu:100000:65536
+</code></pre><p>ここの100000は見通しが良いように大きい目になっていますが、65538以上の
+適当なオフセット値ですね。このようなオフセット値を各コンテナ毎ずらせば
+確かにコンテナを安全に隔離できますね。</p>
+<p>ちなみに、<code>chroot</code>(2)システムコールが設定するプロセスごとの
+ルートディレクトリーは<code>/proc/[pid]/root</code>からのシムリンクとして
+記録されています。これを使えば、コンテナ毎に違うルートファイルシステム
+内容のシステムを作成できます。</p>
+<p>オーバーレイマウントやバインドマウント等のカーネル機能も効率的な仮想環境
+構成に使えます。</p>
+<p>なんとなく、コンテナ環境の仮想化が収まっている全体感というか様子が、
+ちょっと見えてきました。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/02/06/virt-04/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
