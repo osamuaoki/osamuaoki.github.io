@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/13 (initial publish),
-2021/02/13 (last update)
+2021/02/14 (last update)
 </h3>
 </div>
 
@@ -105,11 +105,13 @@ $ tree -L 2 .
     └── rootfs
 $ cd bullseye-user
 $ ls -la rootfs
-otal 76
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 bin
+total 84
+drwxr-xr-x 21 100000 100000 4096 Feb  3 14:29 .
+drwxrwx---  3 100000 osamu  4096 Feb 13 18:20 ..
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:27 bin
 drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 boot
-drwxr-xr-x  3 100000 100000 4096 Feb  3 17:08 dev
-drwxr-xr-x 41 100000 100000 4096 Feb  3 17:08 etc
+drwxr-xr-x  3 100000 100000 4096 Feb 13 07:44 dev
+drwxr-xr-x 41 100000 100000 4096 Feb 13 23:55 etc
 drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 home
 drwxr-xr-x 10 100000 100000 4096 Feb  3 14:26 lib
 drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 lib64
@@ -118,32 +120,76 @@ drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 mnt
 drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 opt
 drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 proc
 drwx------  2 100000 100000 4096 Feb  3 14:26 root
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 run
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 sbin
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:27 run
+drwxr-xr-x  2 100000 100000 4096 Feb  3 14:27 sbin
 drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 srv
 drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 sys
-drwxrwxrwt  2 100000 100000 4096 Feb  3 14:26 tmp
+drwxrwxrwt  7 100000 100000 4096 Feb 13 23:59 tmp
 drwxr-xr-x 11 100000 100000 4096 Feb  3 14:26 usr
 drwxr-xr-x 11 100000 100000 4096 Feb  3 14:26 var
 </code></pre><p>なるほど0(root)であるUIDやGIDが、LXCの外から見ると100000にマップされています。</p>
-<p>ここで単純に<code>lxc-start</code>してもこけます。ここ要注意です！</p>
-<p><strong>systemd-run</strong> や <strong>&ndash;property=Delegate=yes</strong> が使われているのは重要です。</p>
-<p>でも以下の様に<code>README.Debian</code>の指示どおり実行すればうまく立ち上がりました。</p>
+<p>ここで単純にsudoを使った特権ユーザーのように<code>lxc-start</code>してコンテナ環境を
+立ち上げようとしてもこけます。ここ、要注意です！</p>
+<p>ここは以下の様にlxcパッケージの<code>README.Debian</code>の指示どおり<strong>systemd-run</strong> を
+<strong>&ndash;property=Delegate=yes</strong> 等とともに用いて実行すればうまく立ち上がります。</p>
 <pre><code>$ systemd-run --scope --quiet --user --property=Delegate=yes lxc-start -n bullseye-user
 $ lxc-ls -f
 NAME          STATE   AUTOSTART GROUPS IPV4       IPV6 UNPRIVILEGED
 bullseye-user RUNNING 0         -      10.0.3.224 -    true
 $ lxc-attach -n bullseye-user
 root@bullseye-user:/#
-</code></pre><p>GNOME terminal からの実行なので、<code>lxc-attach</code>は<code>systemd-run ...</code>をつけなくても動きました。</p>
-<p>また、非特権LXC仮想環境でも、仮想環境の設定ファイル<code>config</code>を前記の特権LXC
+</code></pre><p>私はGNOME terminal からの実行なので、<code>lxc-attach</code>等の他のコマンドは
+<code>systemd-run ...</code>をつけなくても特権ユーザーによるLXCを使っての仮想環境
+操作同様に動きました。</p>
+<p>ちなみにこれをキーボードで毎回叩くのは大変なので、Bashの初期化ファイルで
+以下を定義して使うことにしました。</p>
+<pre><code>alias cgdo=&quot;systemd-run --scope --quiet --user --property=Delegate=yes&quot;
+</code></pre><p>また、非特権LXC仮想環境でも、仮想環境の設定ファイル<code>config</code>を前記の特権LXC
 仮想環境と同様に<code>lxc.mount.entry</code>の設定を追加設定することでデーター共有がで
 きました。</p>
+<p>確かに、<code>lxc-attach</code>をしてファイルを操作すればコンテナ内のUIDやGIDと整合した
+ファイルが生成され問題ないのですが、コンテナ内でコマンド自身が提供されない
+場合は意外と面倒です。そんな時に便利なのは、ホスト側に居るままで
+User Namespacesだけを非特権LXCコンテナ内に切り替えられる<code>lxc-usernsexec</code>(1)
+コマンドです。</p>
+<p>例えば、上記のbullseye-userコンテナの例の続きで、
+<code>~/.local/share/lxc/bullseye-user</code>にいながらコンテナ内のUIDやGIDの
+特権ユーザー(UID=0, GID=0)となりファイルリスティングするには単純に
+以下とします。</p>
+<pre><code>$ lxc-usernsexec -- bash
+$ ls -la rootfs
+total 84
+drwxr-xr-x 21 root root    4096 Feb  3 14:29 .
+drwxrwx---  3 root nogroup 4096 Feb 13 18:20 ..
+drwxr-xr-x  2 root root    4096 Feb  3 14:27 bin
+drwxr-xr-x  2 root root    4096 Jul  9  2019 boot
+drwxr-xr-x  3 root root    4096 Feb 13 07:44 dev
+drwxr-xr-x 41 root root    4096 Feb 13 23:55 etc
+drwxr-xr-x  2 root root    4096 Jul  9  2019 home
+drwxr-xr-x 10 root root    4096 Feb  3 14:26 lib
+drwxr-xr-x  2 root root    4096 Feb  3 14:26 lib64
+drwxr-xr-x  2 root root    4096 Feb  3 14:26 media
+drwxr-xr-x  2 root root    4096 Feb  3 14:26 mnt
+drwxr-xr-x  2 root root    4096 Feb  3 14:26 opt
+drwxr-xr-x  2 root root    4096 Jul  9  2019 proc
+drwx------  2 root root    4096 Feb  3 14:26 root
+drwxr-xr-x  2 root root    4096 Feb  3 14:27 run
+drwxr-xr-x  2 root root    4096 Feb  3 14:27 sbin
+drwxr-xr-x  2 root root    4096 Feb  3 14:26 srv
+drwxr-xr-x  2 root root    4096 Jul  9  2019 sys
+drwxrwxrwt  7 root root    4096 Feb 13 23:59 tmp
+drwxr-xr-x 11 root root    4096 Feb  3 14:26 usr
+drwxr-xr-x 11 root root    4096 Feb  3 14:26 var
+</code></pre><p>コンテナ内の0(root)であるUIDやGIDが、LXCの外から見ると100000にマップ
+されていたのが、<code>lxc-usernsexec</code>を用いて立ち上げたコンテナ外のbash
+シェル環境からもコンテナ内のUIDやGIDになっています。</p>
 <p>ちなみに非特権LXCのファイルの場所は以下です。</p>
 <ul>
 <li><code>~/.config/lxc/default.conf</code> &ndash; 初期設定</li>
 <li><code>~/.cache/lxc/download/debian/...</code>, &hellip; &ndash; 最初にダウンロードしたデーター</li>
-<li><code>~/.local/share/lxc/*/</code> &ndash; 各コンテナのファイルシステム (<code>rootfs/</code>, <code>config</code> を含む)</li>
+<li><code>~/.local/share/lxc/[container_name]/rootfs/</code> &ndash; 各コンテナのファイルシステム</li>
+<li><code>~/.local/share/lxc/[container_name]/config</code> &ndash; 各コンテナの初期化設定</li>
+<li><code>~/.local/share/lxc/[container_name]/[ephemerical_conatiner_name]</code> &ndash; <code>lxc-copy</code>でephemericalコンテナーを作成すると作成される模様。ephemericalコンテナーが正常に終了消去されないとと、これが残ってしまう模様。</li>
 <li><code>/run/user/1000/lxc/lock/home/osamu/.local/share/lxc</code> &ndash; Lock files</li>
 </ul>
 <h2 id="lxc仮想環境利用のtips">LXC仮想環境利用のTips</h2>
