@@ -13,7 +13,7 @@
       <pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>/jp/2021/02/12/virt-05/</guid>
-      <description>引き続きLXCの非特権仮想環境周辺を深堀りとして Linux Namespaces を読み解きます。
+      <description>引き続き非特権ユーザー権限から立ち上げられたLXC仮想環境を実現するための 技術背景を学ぶために、Linux Namespaces 周辺に着目します。
 User Namespaces Linux Namespacesの中でuser_namespaces(7)で説明されている User NamespacesはユーザーIDやグループID等のセキュリティー関連の識別子 と属性(credentials(7)参照。本来は、資格、信任状の意味の単語)を 分離します。属性とは具体的に言うとルートディレクトリーや、 キー(keyrings(7)参照。本来は、鍵の意味の単語)や、 ケーパビリティ(capabilities(7)参照。本来は能力・資質の意味の単語) 等です。
 このUser Namespacesにより、Namespacesの中ではあたかも特権ユーザーとして 振る舞いながら、Namespacesの外では通常の非特権ユーザー権限を保持するプロセスを 実現することができます。この際のユーザーIDの対応関係が/proc/[pid]/uid_map ファイルに記されています。(グループIDの場合は/proc/[pid]/gid_map)
 たとえばコンテナ環境外のシェルプロセスのuid_map以下です。
@@ -32,9 +32,8 @@ $ id -nu osamu $ cat /etc/subuid osamu:100000:65536 ここの100000は見通し�
       <pubDate>Sat, 06 Feb 2021 00:00:00 +0000</pubDate>
       
       <guid>/jp/2021/02/06/virt-04/</guid>
-      <description>引き続きLXCの非特権仮想環境周辺を深堀りします。 (2021-Feb Debian Bulleseye/testing pre-11 release)
-まあ、非特権LXC実行環境整備の際に出てきた/etc/subuidと/etc/subgidは、 非特権仮想環境内の見かけのUIDやGIDから、親システムのUIDやGIDの への対応関係定義ということは直感的分かりました。
-ただ伝統的なUNIXの範疇を越えているので、Linuxのカーネルレベルで どこがどう拡張されているのかを確認しました。
+      <description>特権ユーザーでのシステムとしてのLXC仮想環境はほぼchrootと変わらないので それほど違和感はありませんでした。
+この次に非特権ユーザー権限から立ち上げられたLXC仮想環境を実現するための 技術背景を学ぶために、ここはひとまずLXCのコマンドを離れ Linux Namespaces 周辺に着目します。Linux Namespaces は伝統的なUNIXの範疇を越えているので、 Linuxがカーネルレベルでどこがどう拡張されているのかを2021年2月の時点の Debian Bulleseye/testing pre-11 release環境で確認していきます。
 Linux Namespaces どうもLXCも含めた各種コンテナ環境は2002年以降拡充されてきた LinuxのNamespaces というカーネルの機能を使っていることがキーだと分かりました。
 とりあえず、以下の関連マンページに目を通しました。
  namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name  Cgroup Namespaces Linux Namespacesの中でcgroup_namespaces(7)は、/proc/[pid]/cgroup と /proc/[pid]/mountinfo から見えるプロセスのcgroups (コントロールグループ) の見え方を仮想化します。各種コンテナ環境を可能にする仮想化技術の中心的な要素 としておもしろそうだったので、自分なりに追加の状況確認をしながらtraceしたの ですがマンページの通りには行きませんでした。</description>

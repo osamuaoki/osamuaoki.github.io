@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/28 (initial publish),
-2021/02/06 (last update)
+2021/02/13 (last update)
 </h3>
 </div>
 
@@ -57,7 +57,8 @@
   </tbody>
 </table>
 
-<p>引き続きchrootの強化版のようなLXCを使っての仮想環境作成を深堀りします。</p>
+<p>引き続きchrootの強化版のようなLXCを使っての仮想環境作成を特権ユーザーが
+作成する簡単なケースを深堀りします。</p>
 <h2 id="lxc仮想環境の停止">LXC仮想環境の停止</h2>
 <p>仮想環境のカスタマイズした起動をするためには、作成し起動した仮想環境の<code>STATE</code>を
 <code>STOPPED</code>(停止)に確実にします。</p>
@@ -137,129 +138,7 @@ $ sudo lxc-ls -f
 NAME   STATE   AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED
 buster STOPPED 0         -      -    -    false
 sid    STOPPED 0         -      -    -    false
-</code></pre><h2 id="非特権lxc実行環境整備">非特権LXC実行環境整備</h2>
-<p>LXC (1:4.0.6-1) をBulleseye環境で<code>/usr/share/doc/lxc/README.Debian</code>の
-&ldquo;Unprivileged containers&quot;に従って設定していきます。(2021/02)</p>
-<p>まずKERNELがunprivileged user namespacesを有効にしていることを確認します。</p>
-<pre><code>$ sudo uname -a
-Linux **** 5.10.0-2-amd64 #1 SMP Debian 5.10.9-1 (2021-01-20) x86_64 GNU/Linux
-$ sudo sysctl kernel.unprivileged_userns_clone
-kernel.unprivileged_userns_clone = 1
-</code></pre><p>ユーザーアカウント設定の<code>/etc/subuid</code>と<code>/etc/subgid</code>はすでに設定されていました。</p>
-<p>ネットワーク設定は以下を実行：</p>
-<pre><code>$ NAME=$(id -un)
-$ sudo sh -c &quot;echo $NAME veth lxcbr0 10 &gt;&gt; /etc/lxc/lxc-usernet
-</code></pre><p>さらに、<code>~/.config/lxc/default.conf</code>のユーザー設定を<code>/etc/subuid</code>と
-<code>/etc/subgid</code>に合わせて以下でします。</p>
-<pre><code>$ mkdir -p ~/.config/lxc
-$ cat &gt;~/.config/lxc/default.conf &lt;&lt; EOF
-lxc.include = /etc/lxc/default.conf
-lxc.idmap = u 0 100000 65536
-lxc.idmap = g 0 100000 65536
-lxc.mount.auto = proc:mixed sys:ro cgroup:mixed
-lxc.apparmor.profile = unconfined
-EOF
-</code></pre><p><code>download</code> templateだけが使えるので実行します。</p>
-<pre><code>$ lxc-create -t download -n bullseye-user -- -d debian -r bullseye -a amd64
-Setting up the GPG keyring
-Downloading the image index
-Downloading the rootfs
-Downloading the metadata
-The image cache is now ready
-Unpacking the rootfs
-
----
-You just created a Debian bullseye amd64 (20210203_05:24) container.
-
-To enable SSH, run: apt install openssh-server
-No default root or user password are set by LXC.
-$ cd ~/.local/share/lxc
-$ tree -L 2 .
-.
-└── bullseye-user
-    ├── config
-    └── rootfs
-$ cd bullseye-user
-$ ls -la rootfs
-otal 76
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 bin
-drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 boot
-drwxr-xr-x  3 100000 100000 4096 Feb  3 17:08 dev
-drwxr-xr-x 41 100000 100000 4096 Feb  3 17:08 etc
-drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 home
-drwxr-xr-x 10 100000 100000 4096 Feb  3 14:26 lib
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 lib64
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 media
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 mnt
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 opt
-drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 proc
-drwx------  2 100000 100000 4096 Feb  3 14:26 root
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 run
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 sbin
-drwxr-xr-x  2 100000 100000 4096 Feb  3 14:26 srv
-drwxr-xr-x  2 100000 100000 4096 Jul  9  2019 sys
-drwxrwxrwt  2 100000 100000 4096 Feb  3 14:26 tmp
-drwxr-xr-x 11 100000 100000 4096 Feb  3 14:26 usr
-drwxr-xr-x 11 100000 100000 4096 Feb  3 14:26 var
-</code></pre><p>なるほどUIDやGIDがマップされています。</p>
-<p>ここで単純にlxc-startしてもこけますが、<code>README.Debian</code>の指示どおり以下を実行すれば
-うまく立ち上がりました。</p>
-<pre><code>$ systemd-run --scope --quiet --user --property=Delegate=yes lxc-start -n bullseye-user
-$ lxc-ls -f
-NAME          STATE   AUTOSTART GROUPS IPV4       IPV6 UNPRIVILEGED
-bullseye-user RUNNING 0         -      10.0.3.224 -    true
-$ lxc-attach -n bullseye-user
-root@bullseye-user:/#
-</code></pre><p>GNOME terminal からの実行なので、<code>lxc-attach</code>は<code>systemd-run ...</code>
-をつけなくても動きました。</p>
-<p>また、非特権LXC仮想環境でも、仮想環境の設定ファイル<code>config</code>を前記の特権LXC
-仮想環境と同様に<code>lxc.mount.entry</code>の設定を追加設定することでデーター共有がで
-きました。</p>
-<h2 id="lxc仮想環境利用のtips">LXC仮想環境利用のTips</h2>
-<h3 id="debianパッケージ作成">Debianパッケージ作成</h3>
-<p>Debianパッケージ作成に必要なパッケージは正確にはDebian Policyで規定されています。ただ実務的には、
-LXCを以下の手順で使うと、ホストシステムをsid環境にして不安定にすることなく作業がはかどります。</p>
-<p>まず、ベースとなるsidで作成されたLXC仮想環境に以下のパッケージを導入します。 (前述の手順です)</p>
-<ul>
-<li><code>build-essential</code></li>
-<li><code>devscripts</code></li>
-<li><code>debhelper</code></li>
-</ul>
-<p>さらに、<code>lxc-copy</code>を使い、毎回使い捨てのLXC仮想環境を準備し、その中でホストシステムと
-共有されたディレクトリー内に置かれたDebianソースの<code>debian/control</code>に基づき、パッケージビルドに
-必要なパッケージを追加導入します。<code>devscripts</code>パッケージに含まれる<code>mk-build-deps</code>コマンドが、
-この追加導入操作に便利です。特に<code>-i</code>オプションを使うと便利です。この際、<code>mk-build-deps</code>
-実行前に、最新システム環境を確保する<code>apt update; apt full-upgrade</code>を実行する
-のが好ましいでしょう。</p>
-<p>これなら、<code>pbuilder</code>等の複雑なコマンドを覚えなくとも作業がはかどります。</p>
-<h3 id="debianパッケージのデバグ">Debianパッケージのデバグ</h3>
-<p>Debianパッケージのデバグの際には、毎回パッケージ依存関係確認のためにインストールするのは
-無駄なので、使い捨てではなく必要な全パッケージがインストールされたLXC仮想環境を準備し、
-それをベースに<code>lxc-copy</code>を使い、毎回使い捨てのLXC仮想環境を準備した方が効率的です。</p>
-<p>PDFファイル作成に<code>texlive-full</code>等の巨大パッケージが利用される際には、この配慮は重要です。</p>
-<h3 id="ssh接続">SSH接続</h3>
-<p>ホスト側から普通のリモートサーバー同様に操作するには、LXC仮想環境には以下のパッケージを
-最低限導入するのがいい。</p>
-<ul>
-<li>コンテナ上の<code>openssh-server</code>: 公開鍵認証でパスワード無しで接続用に導入・設定します。</li>
-<li>コンテナ上の<code>sudo</code>: rootにsshで入れない際にsudoerにユーザーをいれ対応するために導入・設定します。</li>
-<li>ホスト上の<code>/etc/hosts</code>: 各LXCのIPにホスト名を定義し、アクセス操作をしやすくする。</li>
-</ul>
-<h3 id="python2-プログラムの実行">Python2 プログラムの実行</h3>
-<p>Debian bullseye 11 以降はPython3のみのサポートとなるので、古いPython2 プログラムを
-実行しその動作を確認するには、buster環境で作成されたLXC仮想環境を準備すると便利です。</p>
-<h2 id="参考情報">参考情報</h2>
-<ul>
-<li>Upstream: <a href="https://linuxcontainers.org/">https://linuxcontainers.org/</a></li>
-<li>Debian: <code>/usr/share/doc/lxc/README.Debian</code> (最新、重要)</li>
-<li>Debian: <a href="https://wiki.debian.org/LXC">https://wiki.debian.org/LXC</a> (slightly outdated docs)</li>
-<li>Ubuntu: <a href="https://ubuntu.com/server/docs/containers-lxc">https://ubuntu.com/server/docs/containers-lxc</a> (semi-upstream, recent LXC 4.0)</li>
-<li>SUSE: <a href="https://documentation.suse.com/sles/15-SP1/html/SLES-all/part-virt-lxc.html">https://documentation.suse.com/sles/15-SP1/html/SLES-all/part-virt-lxc.html</a>
-(16 July 2018)</li>
-</ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+</code></pre><!-- raw HTML omitted -->
 
 
 <table width="100%">

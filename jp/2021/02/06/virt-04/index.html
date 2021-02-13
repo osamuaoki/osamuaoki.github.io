@@ -57,13 +57,13 @@
   </tbody>
 </table>
 
-<p>引き続きLXCの非特権仮想環境周辺を深堀りします。
-(2021-Feb Debian Bulleseye/testing pre-11 release)</p>
-<p>まあ、非特権LXC実行環境整備の際に出てきた<code>/etc/subuid</code>と<code>/etc/subgid</code>は、
-非特権仮想環境内の見かけのUIDやGIDから、親システムのUIDやGIDの
-への対応関係定義ということは直感的分かりました。</p>
-<p>ただ伝統的なUNIXの範疇を越えているので、Linuxのカーネルレベルで
-どこがどう拡張されているのかを確認しました。</p>
+<p>特権ユーザーでのシステムとしてのLXC仮想環境はほぼchrootと変わらないので
+それほど違和感はありませんでした。</p>
+<p>この次に非特権ユーザー権限から立ち上げられたLXC仮想環境を実現するための
+技術背景を学ぶために、ここはひとまずLXCのコマンドを離れ Linux Namespaces
+周辺に着目します。Linux Namespaces は伝統的なUNIXの範疇を越えているので、
+Linuxがカーネルレベルでどこがどう拡張されているのかを2021年2月の時点の
+Debian Bulleseye/testing pre-11 release環境で確認していきます。</p>
 <h2 id="linux-namespaces">Linux Namespaces</h2>
 <p>どうもLXCも含めた各種コンテナ環境は2002年以降拡充されてきた
 <a href="https://en.wikipedia.org/wiki/Linux_namespaces">LinuxのNamespaces</a>
