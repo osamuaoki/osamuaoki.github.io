@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/12 (initial publish),
-2021/02/13 (last update)
+2021/02/14 (last update)
 </h3>
 </div>
 
@@ -59,7 +59,7 @@
 
 <p>引き続き非特権ユーザー権限から立ち上げられたLXC仮想環境を実現するための
 技術背景を学ぶために、Linux Namespaces 周辺に着目します。</p>
-<h3 id="user-namespaces">User Namespaces</h3>
+<h2 id="user-namespaces">User Namespaces</h2>
 <p>Linux Namespacesの中で<code>user_namespaces</code>(7)で説明されている
 User NamespacesはユーザーIDやグループID等のセキュリティー関連の識別子
 と属性(<code>credentials</code>(7)参照。本来は、資格、信任状の意味の単語)を
@@ -98,6 +98,19 @@ osamu:100000:65536
 構成に使えます。</p>
 <p>なんとなく、コンテナ環境の仮想化が収まっている全体感というか様子が、
 ちょっと見えてきました。</p>
+<h2 id="shadow-utils">shadow-utils</h2>
+<p>Linux Namespaces関連の<code>newuidmap</code>(1)等のコマンドは、
+<a href="https://github.com/shadow-maint/shadow">Shadow</a>
+が提供するshadow-utilsのソース中にあり、Debianでは
+<code>uidmap</code>バイナリーパッケージの中で提供されています。</p>
+<p>shadow-utilsのソースは<code>passwd</code>(1)コマンド等も提供しています。</p>
+<h2 id="posix-access-control-lists">POSIX Access Control Lists</h2>
+<p>現在のLinuxにおける<code>capabilities</code>(7)には、Access Control Listsという
+旧来のUNIXには無い要素技術があります。これは旧来のUNIXの<code>chmod</code>(1)で
+設定する、<code>u</code>, <code>g</code>, <code>o</code>に対する<code>r</code>, <code>w</code>, <code>x</code>等の属性設定よりきめ細か
+い制御ができる機能です。</p>
+<p>詳しくは、<code>acl</code>(5)を参照しましょう。<code>acl</code>バイナリーパッケージに含まれる、
+<code>getfacl</code>(1) や <code>setfacl</code>(1) を使って管理操作します。</p>
 <!-- raw HTML omitted -->
 
 
