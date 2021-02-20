@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/13 (initial publish),
-2021/02/14 (last update)
+2021/02/20 (last update)
 </h3>
 </div>
 
@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2021/02/16/btrfs-02/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -192,8 +192,69 @@ drwxr-xr-x 11 root root    4096 Feb  3 14:26 var
 <li><code>~/.local/share/lxc/[container_name]/[ephemerical_conatiner_name]</code> &ndash; <code>lxc-copy</code>でephemericalコンテナーを作成すると作成される模様。ephemericalコンテナーが正常に終了消去されないとと、これが残ってしまう模様。</li>
 <li><code>/run/user/1000/lxc/lock/home/osamu/.local/share/lxc</code> &ndash; Lock files</li>
 </ul>
+<p>また、システムのCgroupの内容状況は、<code>systemd-cgls</code>コマンドでリストできます。</p>
 <h2 id="lxc仮想環境利用のtips">LXC仮想環境利用のTips</h2>
-<h3 id="debianパッケージ作成">Debianパッケージ作成</h3>
+<h3 id="カーネルのlxcサポートの確認">カーネルのLXCサポートの確認</h3>
+<p>現在のカーネルが lxc に必要な機能をサポートしているか確認は
+<code>lxc-checkconfig</code>(1)を実行します。</p>
+<pre><code>$ lxc-checkconfig
+LXC version 4.0.6
+Kernel configuration not found at /proc/config.gz; searching...
+Kernel configuration found at /boot/config-5.10.0-3-amd64
+--- Namespaces ---
+Namespaces: enabled
+Utsname namespace: enabled
+Ipc namespace: enabled
+Pid namespace: enabled
+User namespace: enabled
+Network namespace: enabled
+
+--- Control groups ---
+Cgroups: enabled
+
+Cgroup v1 mount points:
+
+
+Cgroup v2 mount points:
+/sys/fs/cgroup
+
+Cgroup v1 systemd controller: missing
+Cgroup v1 freezer controller: missing
+Cgroup namespace: required
+Cgroup device: enabled
+Cgroup sched: enabled
+Cgroup cpu account: enabled
+Cgroup memory controller: enabled
+Cgroup cpuset: enabled
+
+--- Misc ---
+Veth pair device: enabled, loaded
+Macvlan: enabled, not loaded
+Vlan: enabled, not loaded
+Bridges: enabled, loaded
+Advanced netfilter: enabled, loaded
+CONFIG_NF_NAT_IPV4: missing
+CONFIG_NF_NAT_IPV6: missing
+CONFIG_IP_NF_TARGET_MASQUERADE: enabled, not loaded
+CONFIG_IP6_NF_TARGET_MASQUERADE: enabled, not loaded
+CONFIG_NETFILTER_XT_TARGET_CHECKSUM: enabled, loaded
+CONFIG_NETFILTER_XT_MATCH_COMMENT: enabled, not loaded
+FUSE (for use with lxcfs): enabled, loaded
+
+--- Checkpoint/Restore ---
+checkpoint restore: enabled
+CONFIG_FHANDLE: enabled
+CONFIG_EVENTFD: enabled
+CONFIG_EPOLL: enabled
+CONFIG_UNIX_DIAG: enabled
+CONFIG_INET_DIAG: enabled
+CONFIG_PACKET_DIAG: enabled
+CONFIG_NETLINK_DIAG: enabled
+File capabilities:
+
+Note : Before booting a new kernel, you can check its configuration
+usage : CONFIG=/path/to/config /usr/bin/lxc-checkconfig
+</code></pre><h3 id="debianパッケージ作成">Debianパッケージ作成</h3>
 <p>Debianパッケージ作成に必要なパッケージは正確にはDebian Policyで規定されています。ただ実務的には、
 LXCを以下の手順で使うと、ホストシステムをsid環境にして不安定にすることなく作業がはかどります。</p>
 <p>まず、ベースとなるsidで作成されたLXC仮想環境に以下のパッケージを導入します。 (前述の手順です)</p>
@@ -214,6 +275,8 @@ LXCを以下の手順で使うと、ホストシステムをsid環境にして�
 無駄なので、使い捨てではなく必要な全パッケージがインストールされたLXC仮想環境を準備し、
 それをベースに<code>lxc-copy</code>を使い、毎回使い捨てのLXC仮想環境を準備した方が効率的です。</p>
 <p>PDFファイル作成に<code>texlive-full</code>等の巨大パッケージが利用される際には、この配慮は重要です。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h3 id="ssh接続">SSH接続</h3>
 <p>ホスト側から普通のリモートサーバー同様に操作するには、LXC仮想環境には以下のパッケージを
 最低限導入するのがいい。</p>
@@ -247,7 +310,7 @@ LXCを以下の手順で使うと、ホストシステムをsid環境にして�
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2021/02/16/btrfs-02/">Next Post</a></td>
   
   </tr>
   </tbody>

@@ -7,6 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/jp/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Btrfs入門(2)</title>
+      <link>/jp/2021/02/16/btrfs-02/</link>
+      <pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/16/btrfs-02/</guid>
+      <description>半年前に覗いたBtrfs をもう一度見直しました。以下は自分なりの備忘録メモです。
+subvolumeの使い方 使用法のガイド のリストのリンク先には興味深いコンテントがあります。 システム管理者ガイド 中の、subvolumeレイアウト の内容は、「使い方」を見詰め直す上で目から鱗でした。
+私は単純にFlatなsubvolumeレイアウトを乱用していましたが、 Nestedなsubvolumeレイアウトをうまく使い/etc/fstabを簡素化し、 よく考えて構成したMixedなsubvolumeレイアウトを使うと管理が楽そうです。
+この際、Ubuntu風の@home等の 慣習Subvolume命名法 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。
+Root-fsのbtrfs化 RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムもbtrfs化します。
+実際にはデュアルブートで別のルートファイルシステムを使いながら、 通常のルートファイルシステムをマウントせずbtrfs-convertでこれを処理します。
+ファイルシステムの変換自体はは、 Conversion from Ext3/4 and ReiserFS をトレースしました。
+ただこれだけでは、ブート可能なシステムにはなっていません。 ファイルシステムがext4からbtrfsに変更されると同時にデバイスのblkidも 変更されます。例えば、491a357c-822f-4f38-b56e-b998baea81a5 から 9be0d928-5892-4cdd-a647-1e8cce937b2e に変わったとします。
+当然ですがこの変更に合わせ当然/etc/fstabに以下のdiffに相当する変更をします。
+--- fstab.orig 2021-02-19 14:49:32.768895933 +0900 +++ fstab 2021-02-19 14:49:19.860921576 +0900 @@ -6,6 +6,6 @@ # # &amp;lt;file system&amp;gt; &amp;lt;mount point&amp;gt; &amp;lt;type&amp;gt; &amp;lt;options&amp;gt; &amp;lt;dump&amp;gt; &amp;lt;pass&amp;gt; # / was on /dev/nvme1n1p1 during installation -UUID=491a357c-822f-4f38-b56e-b998baea81a5 / ext4 errors=remount-ro 0 1 +UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e / btrfs subvol=/,defaults 0 1 # /boot/efi was on /dev/nvme0n1p1 during installation 他のパーティションのシステムが設定するgrub2を使っていても、自分のシステムの /boot/grub/grub.</description>
+    </item>
+    
+    <item>
       <title>仮想環境(6)</title>
       <link>/jp/2021/02/13/virt-06/</link>
       <pubDate>Sat, 13 Feb 2021 00:00:00 +0000</pubDate>
