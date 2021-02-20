@@ -201,7 +201,7 @@ ext4にしていたルートファイルシステムもbtrfs化します。</p>
  	}
 </code></pre><h2 id="ルートファイルシステムのsubvolumeへの移動">ルートファイルシステムのsubvolumeへの移動</h2>
 <p>timeshift等を使うには、ルートファイルシステムをsubvolume<code>@</code>へ移動する必要があります。
-こうすると、マルチブートの他のシステムからの起動が少々とリッキーです。</p>
+こうすると、マルチブートの他のシステムからの起動が少々トリッキーです。</p>
 <p>例えば&quot;<code>/dev/nvme1n1p1</code>&ldquo;がbtrfsで、&ldquo;subvol=@&ldquo;にシステムがある際に、他の
 パーティションにあるDebian Bulleseye 11 が作成する Grub 起動メニューに
 <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=983107">当システムがうまくリストされないバグ</a>
@@ -234,6 +234,7 @@ UUID=??? /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults    0    0
 <h2 id="参考サイト">参考サイト</h2>
 <ul>
 <li><a href="https://btrfs.wiki.kernel.org/index.php/SysadminGuide">Btrfs: SysadminGuide</a></li>
+<li><a href="https://btrfs.wiki.kernel.org/index.php/Manpage/btrfs(5)">Btrfs: Manpage/btrfs(5)</a></li>
 <li><a href="https://fedoramagazine.org/convert-your-filesystem-to-btrfs/">Convert your filesystem to Btrfs (2021-01)</a></li>
 <li><a href="https://forum.manjaro.org/t/default-btrfs-mount-options-and-subvolume-layout/43250">Default btrfs mount options and subvolume layout (2020-12)</a></li>
 <li><a href="https://opensource.com/article/20/11/btrfs-linux">Getting started with btrfs for Linux (2020-11)</a></li>
