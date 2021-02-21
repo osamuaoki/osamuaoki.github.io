@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/16 (initial publish),
-2021/02/20 (last update)
+2021/02/21 (last update)
 </h3>
 </div>
 
@@ -73,13 +73,36 @@ Nestedなsubvolumeレイアウトをうまく使い<code>/etc/fstab</code>を簡
 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。</p>
 <h2 id="root-fsのbtrfs化">Root-fsのbtrfs化</h2>
 <p>RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので
-ext4にしていたルートファイルシステムもbtrfs化します。</p>
-<p>実際にはデュアルブートで別のルートファイルシステムを使いながら、
-通常のルートファイルシステムをマウントせず<code>btrfs-convert</code>でこれを処理します。</p>
-<p>ファイルシステムの変換自体はは、
+ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。</p>
+<h3 id="btrfs化の全体手順">btrfs化の全体手順</h3>
+<p>btrfs化を確実にするために、練習を兼ねてサブ環境で移行を確認した上でメイン環境を移行します。</p>
+<ul>
+<li>EFIパーティションを共有した2つ以上別のパーティションを使う2つ以上のLinuxが立ち上げられるマルチブート環境を作成します。（EFIパーティションはWindowsとも共有）</li>
+<li>サブのLinux環境のbtrfs化
+<ul>
+<li>メインのLinux環境を立ち上げ、サブのLinux環境をbtrfs化します。（<code>btrfs-convert</code>で処理）</li>
+<li>サブのLinux環境の<code>/etc/fstab</code>や<code>/boot/grub/grub.cfg</code>内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。</li>
+<li>メインのLinux環境の<code>/boot/grub/grub.cfg</code>内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。(<code>sudo dpkg-reconfigure grub-efi-amd64</code>とするのでもいいはず)</li>
+<li>サブのLinux環境を立ち上げ、正常動作を確認します。</li>
+<li>サブのLinux環境を立ち上げ、メインのLinux環境をbtrfs化します。（この時点では、<code>subvol=/</code>にメインのシステムあり）</li>
+</ul>
+</li>
+<li>サブのLinux環境のsubvol=@への移動
+<ul>
+<li>サブのLinux環境のスナップショットを <code>subvol=@</code>に作成します。</li>
+<li>メインのLinux環境を立ち上げ、サブのLinux環境の<code>subvol=/</code>を<code>/mnt</code>にマウントし、後述のバグ回避策の処理を行います。</li>
+<li><code>subvol=@</code>に移動したサブのLinux環境を立ち上げ、動作を確認します。</li>
+<li>念のため<code>sudo dpkg-reconfigure grub-efi-amd64</code>とし、起動確認を確認します。</li>
+</ul>
+</li>
+<li>メインのLinux環境に関して、上記同様の、Linux環境のbtrfs化＋Linux環境のsubvol=@への移動を行います。</li>
+<li>メインのLinux環境に関して、<code>timeshift</code>を使えるようにsubvol=<code>@home</code>を追加します。</li>
+</ul>
+<h3 id="linux環境のbtrfs化">Linux環境のbtrfs化</h3>
+<p><code>btrfs-convert</code>によるファイルシステムの変換自体は、
 <a href="https://btrfs.wiki.kernel.org/index.php/Conversion_from_Ext3">Conversion from Ext3/4 and ReiserFS</a>
 をトレースしました。</p>
-<p>ただこれだけでは、ブート可能なシステムにはなっていません。
+<p>ファイルシステムの変換だけでは、ブート可能なシステムにはなっていません。
 ファイルシステムがext4からbtrfsに変更されると同時にデバイスのblkidも
 変更されます。例えば、<code>491a357c-822f-4f38-b56e-b998baea81a5</code> から
 <code>9be0d928-5892-4cdd-a647-1e8cce937b2e</code> に変わったとします。</p>
@@ -199,8 +222,8 @@ ext4にしていたルートファイルシステムもbtrfs化します。</p>
  		echo	'Loading initial ramdisk ...'
  		initrd	/boot/initrd.img-5.10.0-3-amd64
  	}
-</code></pre><h2 id="ルートファイルシステムのsubvolumeへの移動">ルートファイルシステムのsubvolumeへの移動</h2>
-<p>timeshift等を使うには、ルートファイルシステムをsubvolume<code>@</code>へ移動する必要があります。
+</code></pre><h3 id="linux環境のsubvolへの移動">Linux環境のsubvol=@への移動</h3>
+<p>timeshift等を使うには、ルートファイルシステムsubvol=<code>/</code>からsubvol=<code>@</code>へ移動する必要があります。
 こうすると、マルチブートの他のシステムからの起動が少々トリッキーです。</p>
 <p>例えば&quot;<code>/dev/nvme1n1p1</code>&ldquo;がbtrfsで、&ldquo;subvol=@&ldquo;にシステムがある際に、他の
 パーティションにあるDebian Bulleseye 11 が作成する Grub 起動メニューに
@@ -218,7 +241,12 @@ $ sudo ln -sf @/vmlinuz.old    vmlinuz.old
 $ sudo btrfs subvol set-default /mnt/@
 $ cd /
 $ sudo umount /mnt
-</code></pre><h2 id="ユーザー権限でのsubvolume削除">ユーザー権限でのsubvolume削除</h2>
+</code></pre><h3 id="subvolhomeの追加など">subvol=<code>@home</code>の追加など</h3>
+<p>メインのLinux環境で<code>timeshift</code>を使うには、ルートファイルシステム以外にsubvol=<code>@home</code>
+を追加する必要がありました。この件を含めて、メインのLinux環境の整備は、
+サブのLinux環境から行うとファイルシステムがマウントされ使われていないので
+変更がスムーズに進みます。</p>
+<h3 id="ユーザー権限でのsubvolume削除">ユーザー権限でのsubvolume削除</h3>
 <p>ユーザー権限でのsubvolume削除を可能にすると、Nestedなsubvolumeレイアウトが
 使いやすくなります。そのためには、btrfsを<code>user_subvol_rm_allowed</code>オプションで
 mountする必要があります。</p>
@@ -226,7 +254,10 @@ mountする必要があります。</p>
 <code>/etc/fstab</code>のエントリーを以下とします。</p>
 <pre><code>UUID=??? /      btrfs subvol=@,defaults    0    0
 UUID=??? /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults    0    0
-</code></pre><h2 id="no_cow-attribute">No_COW attribute</h2>
+</code></pre><p>また、最近(2019-06-13以降)の<code>useradd</code>コマンドにはマニュアルにはないけど
+<code>--btrfs-subvolume-home</code>があります。これを使うのも面白そうです。
+<code>adduser</code>はまだこのオプションをサポートしていません。</p>
+<h2 id="no_cow-attribute">No_COW attribute</h2>
 <p>No_COWアトリビュートをディレクトリー毎<code>chattr +C &lt;dirname&gt;</code>で設定できるようです。</p>
 <ul>
 <li><a href="https://btrfs.wiki.kernel.org/index.php/FAQ#Does_btrfs_support_swap_files.3F">swap ファイル</a></li>
