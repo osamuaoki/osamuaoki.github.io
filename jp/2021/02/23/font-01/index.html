@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>等幅フォント | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">等幅フォント</span></h1>
+
+<h3 class="date">Date:
+2021/02/23 (initial publish),
+2021/02/24 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/02/16/btrfs-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>ターミナル環境での等幅フォントをプログラミング入力と日本語入力の両面から
+見つめてみました。以下は自分なりの備忘録メモです。</p>
+<h2 id="文字の大きさのポイントとは">文字の大きさのポイントとは？</h2>
+<p>印刷・DTPで細かいことを言わなければ、1ポイントは(約)1/72インチ (0.354mm)の
+単位で、フォントセットの中の小文字の&quot;m&quot;の幅をポイントで計ることでフォントの
+高さ、つまりフォントのの大きさを示すのに使われます。</p>
+<h2 id="スクリーンや印字サイズ">スクリーンや印字サイズ</h2>
+<p>PC最初の表示装置のMDAは、白黒文字を文字幅x高さ9x14ピクセルのフォントで
+80文字x25行の表示を、720x350の解像度に表示します。文字自体は7x11ピクセル
+の大きさでした。アナログカラーテレビは、720x480の解像度に表示します。
+9x14ピクセルのフォントで最大80文字x34行の表示が出きると言えます。</p>
+<p>Macのディスプレーや初期のドットマトリクスプリンターのピクセル間隔は
+72 DPIで、初期のFAXは100 DPI、初期のレーザープリンターは300 DPIです。</p>
+<p>米国のレター紙(A4に近い)の幅は8.5&quot;なので、余白をとって8&quot;に印字すると
+すると、パイカサイズのタイプライター風の等幅で10 CPI で印字すると
+80文字/行はいります。また詰めた12 CPI で印字すると96文字/行はいります。
+そういえば当時の72 DPIのドットマトリクスプリンターでのソースコードの
+印刷は8x8 dotsのフォントデーターを、縦横同じすすめかたで10 CPI、
+横を詰めた印字で12 CPIとしていました。</p>
+<p>私のPCの14インチディスプレーはFHDで1920x1080ピクセルです。
+どうも160 DPIあります。昔の72 DPI比較で2.2倍の解像度があります</p>
+<h2 id="ターミナル環境と等幅フォント">ターミナル環境と等幅フォント</h2>
+<p>標準のターミナは、80文字24行です。</p>
+<p>Xtermだと72mmx48mmで、Gnome-terminalとDejaVu系英文14ポイントの
+等幅フォントの組み合わせだと 140mmx86mm位の大きさです。</p>
+<p>DejaVu系の英文14ポイントと同じ大きさのスクリーンサイズの
+ターミナルが、Terminus系の英文16ポイントで得られます。</p>
+<p>DejaVu系の等幅フォントに、DejaVuとHackとNotoとMonospaceがあります。
+これらに同じフォントサイズの日本語全角文字が入ると、日本語文字が
+英文と同じ大きさで行間が余裕ある感じになります。</p>
+<p>Terminus系の等幅フォントには、TerminusとUbuntuがあります。これらに
+同じフォントサイズの日本語全角文字が入ると、日本語文字が大きくなり
+行間が詰まった感じになります。</p>
+<p>これを見ると、英語のみならHackでもUbuntuでもフォントサイズ選定
+を調整すれば良いようです。ただ、日本語まじりだと、Hackが魅力的
+です。HackにはVim用の特殊フォントも入っています。</p>
+<table>
+<thead>
+<tr>
+<th>Font</th>
+<th>0O区別</th>
+<th>1lI区別</th>
+<th>Programing</th>
+<th>Japanese</th>
+<th>Overall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Monospace</td>
+<td>Good</td>
+<td>Good</td>
+<td>Good</td>
+<td>Good</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>DejaVu</td>
+<td>Good</td>
+<td>Good</td>
+<td>Good</td>
+<td>Good</td>
+<td>Good</td>
+</tr>
+<tr>
+<td>Hack</td>
+<td>Good</td>
+<td>Good</td>
+<td>Excellent</td>
+<td>Good</td>
+<td>Excellent</td>
+</tr>
+<tr>
+<td>Noto</td>
+<td>Poor</td>
+<td>Poor</td>
+<td>Poor</td>
+<td>Good</td>
+<td>Poor</td>
+</tr>
+<tr>
+<td>Terminus</td>
+<td>Good</td>
+<td>Poor</td>
+<td>Poor</td>
+<td>Poor</td>
+<td>Poor</td>
+</tr>
+<tr>
+<td>Ubuntu</td>
+<td>Good</td>
+<td>Good</td>
+<td>Excellent</td>
+<td>Poor</td>
+<td>fair</td>
+</tr>
+</tbody>
+</table>
+<h2 id="印字サイズ">印字サイズ</h2>
+<p>1パイカ(pica)で 12 ポイント　＝　1/6&quot;です。これは高さベースの
+文字サイズで、パイカはタイプライターでは水平方向の1インチに
+10文字を印字できます。つまり10 CPIです。</p>
+<p>米国のレターサイズ紙(8½in×11in = 215.9mm×279.4mm)は、余白をとると
+8x10インチ印刷でき10 CPIで80文字/行、12ポイントで1/6&quot; の行送りなら
+60行/ページ印字できます。</p>
+<p>日欧のA4紙(210×297 mm)はレターサイズ紙より少し長く幅狭ですが、
+ほぼ同じ大きさです。</p>
+<p>日本語印刷文書は5号なので、10.5ポイントが標準の文字サイズです。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/02/16/btrfs-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
