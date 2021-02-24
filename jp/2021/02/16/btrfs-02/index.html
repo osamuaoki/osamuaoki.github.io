@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/16 (initial publish),
-2021/02/21 (last update)
+2021/02/24 (last update)
 </h3>
 </div>
 
@@ -252,9 +252,12 @@ $ sudo umount /mnt
 mountする必要があります。</p>
 <p>例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、
 <code>/etc/fstab</code>のエントリーを以下とします。</p>
-<pre><code>UUID=??? /      btrfs subvol=@,defaults    0    0
-UUID=??? /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults    0    0
-</code></pre><p>また、最近(2019-06-13以降)の<code>useradd</code>コマンドにはマニュアルにはないけど
+<pre><code>UUID=???first  /      btrfs subvol=@,defaults    0    0
+UUID=???secind /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults    0    0
+</code></pre><p><code>btrfs</code>(5) mount option に以下の記載があるのに要注意です。&ldquo;most mount options
+apply to the whole filesystem and only options in the first mounted subvolume
+will take effect.&rdquo;</p>
+<p>また、最近(2019-06-13以降)の<code>useradd</code>コマンドにはマニュアルにはないけど
 <code>--btrfs-subvolume-home</code>があります。これを使うのも面白そうです。
 <code>adduser</code>はまだこのオプションをサポートしていません。</p>
 <h2 id="no_cow-attribute">No_COW attribute</h2>
