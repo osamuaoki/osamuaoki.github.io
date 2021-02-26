@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/04 (initial publish),
-2021/02/09 (last update)
+2021/02/26 (last update)
 </h3>
 </div>
 
@@ -132,6 +132,23 @@ locally: ON&rdquo; とするとLXC他で便利になる。</li>
 </li>
 </ul>
 </li>
+</ul>
+<h2 id="サウンド環境設定">サウンド環境設定</h2>
+<p>GUI ツールは、一般的な状況では、見栄えは良く使い安いのですが、
+詳細な設定状況が分かりにくいし設定変更自由度も低い問題があります。</p>
+<p>イヤフォンジャックの抜き差しに連動したスピーカーとマイクの切り替え
+がうまくいかなくなったり、音量設定範囲がやたら低い所に限定された際等への
+対処はGUI ツールではなく、コンソールから<code>alsamixer</code>を立ち上げるのが一番
+いい策です。</p>
+<h3 id="alsamixerでの音量の設定法"><code>alsamixer</code>での音量の設定法</h3>
+<p>コンソールから<code>alsamixer</code>を立ち上げ以下とし音量を設定します。</p>
+<ul>
+<li><code>F6</code> -&gt; <code>1  HD-Audio Generic</code> -&gt; 左右カーソール矢印で<code>Master</code>, <code>Headphone</code>, <code>Speaker</code>, &hellip; を選択 -&gt; 上カーソール矢印で<code>00</code> (100)</li>
+</ul>
+<h3 id="alsamixerでの消音非消音の設定法"><code>alsamixer</code>での消音・非消音の設定法</h3>
+<p>コンソールから<code>alsamixer</code>を立ち上げ以下とし消音・非消音を設定します。</p>
+<ul>
+<li><code>F6</code> -&gt; <code>1  HD-Audio Generic</code> -&gt; 左右カーソール矢印で<code>Master</code>, <code>Headphone</code>, <code>Speaker</code>, &hellip; を選択 -&gt; <code>m</code>を押して<code>M</code>をトグル</li>
 </ul>
 <h2 id="参考サイト">参考サイト</h2>
 <ul>

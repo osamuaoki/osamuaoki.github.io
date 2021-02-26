@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/07 (initial publish),
-2021/02/05 (last update)
+2021/02/26 (last update)
 </h3>
 </div>
 
@@ -126,11 +126,30 @@ iface enp2s0f0 inet dhcp
 # This is an autoconfigured IPv6 interface
 iface enp2s0f0 inet6 auto
 </code></pre><h2 id="audio-configuration">Audio configuration</h2>
+<p>GUI setting tools provide nice and easy control of the sound system under the
+normal situation.  But it doesn&rsquo;t provide access to detailed system system
+settings nor control on them.</p>
+<p>The console program <code>alsamixer</code> gives full control on internal sound devices on
+modern PC.</p>
+<h3 id="adjusting-sound-level-with-alsamixer">Adjusting sound level with <code>alsamixer</code></h3>
+<p>Use <code>alsamixer</code> from terminal console to set proper volume:</p>
+<ul>
+<li><code>F6</code> -&gt; <code>1  HD-Audio Generic</code> -&gt; <code>Master</code>, <code>Headphone</code>, <code>Speaker</code>, &hellip; with left/right-arrows -&gt; Up-arrows to set to <code>00</code> (100)</li>
+</ul>
+<h3 id="mute-and-unmute-sound-with-alsamixer">Mute and unmute sound with <code>alsamixer</code></h3>
+<p>Use <code>alsamixer</code> from terminal console to mute and unmute:</p>
+<ul>
+<li><code>F6</code> -&gt; <code>1  HD-Audio Generic</code> -&gt; Select <code>Master</code>, <code>Headphone</code>, <code>Speaker</code>, &hellip; with left/right-arrows -&gt; Press-<code>m</code> to toggle <code>M</code></li>
+</ul>
+<h2 id="sound-system-regression-late-2020">Sound system regression (late-2020)</h2>
+<p>We experienced a sound system regression of missing analog audio output
+incident in late-2020 for T14.  The root cause seemed to be the mismatch of the
+kernel version and the udev script.</p>
+<p>Here are my my workarounds for this issue.</p>
 <p>REFERENCE: <a href="https://yoshimemo.com/post-889/">https://yoshimemo.com/post-889/</a></p>
 <h3 id="workaround-rev-1-manual">Workaround (rev. 1: manual)</h3>
-<p>For the regression of missing analog audio output incident experienced from
-late-2020 (now 2021-Jan), my workaround is to run the following from console
-after installing <code>pulseaudio-utils</code> once for every booting manually:</p>
+<p>I run the following from console after installing <code>pulseaudio-utils</code> once for
+every booting manually:</p>
 <pre><code> $ pactl load-module module-detect
 </code></pre><h3 id="workaround-rev-2-automatic">Workaround (rev. 2: automatic)</h3>
 <p>Although modifying a distribution provided file as workaround is not my
@@ -159,12 +178,7 @@ $ diff -u default.pa.orig  default.pa
 
  ### Automatically connect sink and source if JACK server is present
  .ifexists module-jackdbus-detect.so
-</code></pre><h3 id="adjusting-sound-level">Adjusting sound level</h3>
-<p>Use <code>alsamixer</code> from terminal console to set proper volume:</p>
-<ul>
-<li><code>F6</code> -&gt; <code>1  HD-Audio Generic</code> -&gt; <code>Master</code> -&gt; Up-arrows to 100</li>
-</ul>
-<!-- raw HTML omitted -->
+</code></pre><!-- raw HTML omitted -->
 
 
 <table width="100%">
