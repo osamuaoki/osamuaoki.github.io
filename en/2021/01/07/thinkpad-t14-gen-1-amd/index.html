@@ -141,11 +141,14 @@ modern PC.</p>
 <ul>
 <li><code>F6</code> -&gt; <code>1  HD-Audio Generic</code> -&gt; Select <code>Master</code>, <code>Headphone</code>, <code>Speaker</code>, &hellip; with left/right-arrows -&gt; Press-<code>m</code> to toggle <code>M</code></li>
 </ul>
-<h2 id="sound-system-regression-late-2020">Sound system regression (late-2020)</h2>
+<h2 id="sound-system-regression-dec-2020">Sound system regression (Dec-2020)</h2>
 <p>We experienced a sound system regression of missing analog audio output
 incident in late-2020 for T14.  The root cause seemed to be the mismatch of the
 kernel version and the udev script.</p>
-<p>Here are my my workarounds for this issue.</p>
+<p>This problem seems already fixed in Feb-2021.  The below  are my my workarounds
+for this issue.</p>
+<p>FYI: I also suffered strange muting behavior which required me to use
+<code>alsamixer</code> to fix it. (See above)</p>
 <p>REFERENCE: <a href="https://yoshimemo.com/post-889/">https://yoshimemo.com/post-889/</a></p>
 <h3 id="workaround-rev-1-manual">Workaround (rev. 1: manual)</h3>
 <p>I run the following from console after installing <code>pulseaudio-utils</code> once for
