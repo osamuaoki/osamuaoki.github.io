@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/24 (initial publish),
-2021/01/25 (last update)
+2021/04/03 (last update)
 </h3>
 </div>
 
@@ -62,9 +62,20 @@
 <code>vimconf</code> command.  See
 <a href="https://github.com/osamuaoki/dot-vim">osamuaoki/dot-vim</a>.  I admit my scheme
 is not the main stream one.</p>
+<p>As of 2021-04-01, I enabled:</p>
+<ul>
+<li>00-vimrc</li>
+<li>ale</li>
+<li>vim-airline</li>
+<li>vim-airline-themes (automatic)</li>
+<li>vim-better-whitespace</li>
+<li>vim-indent-guides</li>
+<li>vim-spell-under</li>
+</ul>
 <p>Please note very basic configuration is at
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">~/.vim/vimrc</a>.</p>
 <p>All other initialization code is provided as plugin.</p>
+<p>Basic rule: Less customization is better.</p>
 <h2 id="osamuaoki00-vimrc"><code>osamuaoki/00-vimrc</code></h2>
 <p>My kitchen sink initialization
 <a href="https://github.com/osamuaoki/00-vimrc/blob/master/plugin/00-vimrc.vim">script</a>.</p>
@@ -116,11 +127,13 @@ function! CleverSTab()
   endif
 endfunction
 inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
-</code></pre><h3 id="indentation-changes-in-visual-mode">Indentation changes in VISUAL MODE</h3>
+</code></pre><h3 id="indentation-changes-in-visual-mode"><del>Indentation changes in VISUAL MODE</del></h3>
+<p><strong>This is not used any more</strong>  (Type &ldquo;.&rdquo; if you need.)</p>
 <p>Remap to keep VISUAL MODE selection for <code>&lt;</code> and <code>&gt;</code>.</p>
 <pre><code>xnoremap &gt; &gt;gv
 xnoremap &lt; &lt;gv
-</code></pre><h3 id="set-cursorline-in-normal-mode">Set cursorline in NORMAL MODE</h3>
+</code></pre><h3 id="set-cursorline-in-normal-mode"><del>Set cursorline in NORMAL MODE</del></h3>
+<p><strong>This is not used any more</strong></p>
 <p>Let&rsquo;s set cursorline in NORMAL MODE (and starting)</p>
 <pre><code>augroup MyCursor
   au!
