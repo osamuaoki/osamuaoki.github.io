@@ -84,7 +84,13 @@ is not the main stream one.</p>
 <p>Adjust PASTE MODE by <code>F2</code>-key.</p>
 <pre><code>set nopaste
 set pastetoggle=&lt;f2&gt;
-</code></pre><h3 id="map-kj-key-sequence-to-esc-in-insert-mode"><del>Map <code>kj</code>-key sequence to ESC in INSERT MODE</del></h3>
+</code></pre><h3 id="map-q-to-q-in-normal-mode">Map <code>Q</code> to <code>@q</code> in NORMAL MODE</h3>
+<p>Record and apply keyboard MACRO just with <code>q</code>-key. (&ldquo;qq&rdquo; to start recording
+MACRO, &ldquo;qq&rdquo; to quit recording MACRO, &ldquo;Q&rdquo; to apply MACRO)</p>
+<pre><code>nnoremap Q @q
+xnoremap Q :norm @q&lt;cr&gt;
+</code></pre><h3 id="disabled-now">Disabled now</h3>
+<h4 id="map-kj-key-sequence-to-esc-in-insert-mode"><del>Map <code>kj</code>-key sequence to ESC in INSERT MODE</del></h4>
 <p><strong>This is not used any more</strong> -&gt; map Caps to Esc by GNOME tweaks</p>
 <p>Pressing <code>ESC</code>-key to get back to NORMAL MODE from INSERT MODE is a bit
 stressful since it is far from the finger home position.  I map a quick key
@@ -95,17 +101,12 @@ inoremap kjk kj
 need to wait a second after entering <code>k</code> to enter <code>kj</code>.</p>
 <p><code>k</code> and <code>j</code> are easiest to type and unlikely under normal input situation.  I
 remember this as my <strong>Knee-Jerk-reaction</strong> to the distant <code>ESC</code>-key.</p>
-<h3 id="map-kj-key-sequence-to-wn-in-terminal-mode"><del>Map <code>kj</code>-key sequence to <code>^WN</code> in TERMINAL MODE</del></h3>
+<h4 id="map-kj-key-sequence-to-wn-in-terminal-mode"><del>Map <code>kj</code>-key sequence to <code>^WN</code> in TERMINAL MODE</del></h4>
 <p><strong>This is not used any more</strong></p>
 <p>Similar key sequence trick proposed for INSERT MODE can also be implemented</p>
 <pre><code>tnoremap kj  &lt;C-W&gt;N
 tnoremap kjk kj
-</code></pre><h3 id="map-q-to-q-in-normal-mode">Map <code>Q</code> to <code>@q</code> in NORMAL MODE</h3>
-<p>Record and apply keyboard MACRO just with <code>q</code>-key. (&ldquo;qq&rdquo; to start recording
-MACRO, &ldquo;qq&rdquo; to quit recording MACRO, &ldquo;Q&rdquo; to apply MACRO)</p>
-<pre><code>nnoremap Q @q
-xnoremap Q :norm @q&lt;cr&gt;
-</code></pre><h3 id="map-non-starter-tab-in-insert-mode"><del>Map non-starter TAB in INSERT MODE</del></h3>
+</code></pre><h4 id="map-non-starter-tab-in-insert-mode"><del>Map non-starter TAB in INSERT MODE</del></h4>
 <p><strong>This is not used any more</strong></p>
 <p>I follow the vim manual with some twist to map non-starter <code>TAB</code>. (<code>:h ins-completion</code>):</p>
 <pre><code>&quot; Auto complete &lt;C-N&gt; with &lt;TAB&gt; if tailing non-space character
@@ -127,12 +128,12 @@ function! CleverSTab()
   endif
 endfunction
 inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
-</code></pre><h3 id="indentation-changes-in-visual-mode"><del>Indentation changes in VISUAL MODE</del></h3>
+</code></pre><h4 id="indentation-changes-in-visual-mode"><del>Indentation changes in VISUAL MODE</del></h4>
 <p><strong>This is not used any more</strong>  (Type &ldquo;.&rdquo; if you need.)</p>
 <p>Remap to keep VISUAL MODE selection for <code>&lt;</code> and <code>&gt;</code>.</p>
 <pre><code>xnoremap &gt; &gt;gv
 xnoremap &lt; &lt;gv
-</code></pre><h3 id="set-cursorline-in-normal-mode"><del>Set cursorline in NORMAL MODE</del></h3>
+</code></pre><h4 id="set-cursorline-in-normal-mode"><del>Set cursorline in NORMAL MODE</del></h4>
 <p><strong>This is not used any more</strong></p>
 <p>Let&rsquo;s set cursorline in NORMAL MODE (and starting)</p>
 <pre><code>augroup MyCursor
@@ -200,7 +201,12 @@ such scripts are added, their claimed advantages may not be true any more.</p>
 <p>If I need really light statusline, I use bare monochrome static status line
 string with vim internally defined items (defined in <code>~/.vim/vimrc</code>).  If
 vim-airline is active, this setting is overridden.</p>
-<h2 id="tpopevim-fugitive"><code>tpope/vim-fugitive</code></h2>
+<h2 id="dense-analysisale"><code>dense-analysis/ale</code></h2>
+<p><strong>This is used a lot</strong></p>
+<p>Very nice syntax checker.</p>
+<h2 id="unused-plugins-etc">Unused plugins etc.</h2>
+<h3 id="tpopevim-fugitive"><del><code>tpope/vim-fugitive</code></del></h3>
+<p><strong>This is not used any more</strong></p>
 <p>This allows to issue <code>git</code> commands from Vim command line.  The following may
 be most useful.  If you have a command or alias &ldquo;<code>αβγ</code>&rdquo; for <code>git</code> command, it
 works as &ldquo;<code>:Git αβγ</code>&rdquo; and in its short form &ldquo;<code>:G αβγ</code>&rdquo; under Fugitive.</p>
@@ -214,11 +220,10 @@ works as &ldquo;<code>:Git αβγ</code>&rdquo; and in its short form &ldquo;<co
 <li><code>Gread</code>: Discard editor buffer contents and read from Git HEAD</li>
 <li><code>Gwrite</code>: Write the file and &ldquo;<code>git add</code>&rdquo; for it sensibly.</li>
 </ul>
-<h2 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h2>
+<h3 id="airbladevim-gitgutter"><del><code>airblade/vim-gitgutter</code></del></h3>
+<p><strong>This is not used any more</strong></p>
 <p>Checks diff from the repository contents asynchronously without blocking editor
 response and mark changed lines.</p>
-<h2 id="dense-analysisale"><code>dense-analysis/ale</code></h2>
-<p>Very nice syntax checker.</p>
 <!-- raw HTML omitted -->
 
 
