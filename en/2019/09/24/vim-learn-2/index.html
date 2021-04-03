@@ -72,10 +72,12 @@ is not the main stream one.</p>
 <li>vim-indent-guides</li>
 <li>vim-spell-under</li>
 </ul>
+<p>(vim-gitgutter is interesting but I don&rsquo;t work on repo with many contributors.)</p>
 <p>Please note very basic configuration is at
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">~/.vim/vimrc</a>.</p>
 <p>All other initialization code is provided as plugin.</p>
 <p>Basic rule: Less customization is better.</p>
+<p>For hard to reach Esc-key issue, use CapsLock for it via GNOME Tweak setting.</p>
 <h2 id="osamuaoki00-vimrc"><code>osamuaoki/00-vimrc</code></h2>
 <p>My kitchen sink initialization
 <a href="https://github.com/osamuaoki/00-vimrc/blob/master/plugin/00-vimrc.vim">script</a>.</p>
@@ -89,58 +91,6 @@ set pastetoggle=&lt;f2&gt;
 MACRO, &ldquo;qq&rdquo; to quit recording MACRO, &ldquo;Q&rdquo; to apply MACRO)</p>
 <pre><code>nnoremap Q @q
 xnoremap Q :norm @q&lt;cr&gt;
-</code></pre><h3 id="disabled-now">Disabled now</h3>
-<h4 id="map-kj-key-sequence-to-esc-in-insert-mode"><del>Map <code>kj</code>-key sequence to ESC in INSERT MODE</del></h4>
-<p><strong>This is not used any more</strong> -&gt; map Caps to Esc by GNOME tweaks</p>
-<p>Pressing <code>ESC</code>-key to get back to NORMAL MODE from INSERT MODE is a bit
-stressful since it is far from the finger home position.  I map a quick key
-sequence of &ldquo;<code>kj</code>&rdquo; to <code>ESC</code>-key.</p>
-<pre><code>inoremap kj  &lt;Esc&gt;
-inoremap kjk kj
-</code></pre><p>The second mapping is to allow quick input of <code>kj</code> by <code>kjk</code>.  Without this, you
-need to wait a second after entering <code>k</code> to enter <code>kj</code>.</p>
-<p><code>k</code> and <code>j</code> are easiest to type and unlikely under normal input situation.  I
-remember this as my <strong>Knee-Jerk-reaction</strong> to the distant <code>ESC</code>-key.</p>
-<h4 id="map-kj-key-sequence-to-wn-in-terminal-mode"><del>Map <code>kj</code>-key sequence to <code>^WN</code> in TERMINAL MODE</del></h4>
-<p><strong>This is not used any more</strong></p>
-<p>Similar key sequence trick proposed for INSERT MODE can also be implemented</p>
-<pre><code>tnoremap kj  &lt;C-W&gt;N
-tnoremap kjk kj
-</code></pre><h4 id="map-non-starter-tab-in-insert-mode"><del>Map non-starter TAB in INSERT MODE</del></h4>
-<p><strong>This is not used any more</strong></p>
-<p>I follow the vim manual with some twist to map non-starter <code>TAB</code>. (<code>:h ins-completion</code>):</p>
-<pre><code>&quot; Auto complete &lt;C-N&gt; with &lt;TAB&gt; if tailing non-space character
-function! CleverTab()
-  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
-    return &quot;\&lt;Tab&gt;&quot;
-  else
-    return &quot;\&lt;C-N&gt;&quot;
-  endif
-endfunction
-inoremap &lt;Tab&gt; &lt;C-R&gt;=CleverTab()&lt;CR&gt;
-
-&quot; Auto complete &lt;C-P&gt; with &lt;S-TAB&gt; if tailing non-space character
-function! CleverSTab()
-  if strpart( getline('.'), 0, col('.')-1 ) =~ '\(^\|\s\)$'
-    return &quot;\&lt;S-Tab&gt;&quot;
-  else
-    return &quot;\&lt;C-P&gt;&quot;
-  endif
-endfunction
-inoremap &lt;S-Tab&gt; &lt;C-R&gt;=CleverSTab()&lt;CR&gt;
-</code></pre><h4 id="indentation-changes-in-visual-mode"><del>Indentation changes in VISUAL MODE</del></h4>
-<p><strong>This is not used any more</strong>  (Type &ldquo;.&rdquo; if you need.)</p>
-<p>Remap to keep VISUAL MODE selection for <code>&lt;</code> and <code>&gt;</code>.</p>
-<pre><code>xnoremap &gt; &gt;gv
-xnoremap &lt; &lt;gv
-</code></pre><h4 id="set-cursorline-in-normal-mode"><del>Set cursorline in NORMAL MODE</del></h4>
-<p><strong>This is not used any more</strong></p>
-<p>Let&rsquo;s set cursorline in NORMAL MODE (and starting)</p>
-<pre><code>augroup MyCursor
-  au!
-  autocmd InsertLeave,WinEnter,VimEnter * set cursorline
-  autocmd InsertEnter,WinLeave * set nocursorline
-augroup END
 </code></pre><h2 id="ciaranmsecuremodelines"><code>ciaranm/securemodelines</code></h2>
 <p>Features like &ldquo;modeline&rdquo; is very convenient but it may become source of
 security concern.  This plugin disables Vim&rsquo;s native capability for &ldquo;modeline&rdquo;
@@ -204,24 +154,8 @@ vim-airline is active, this setting is overridden.</p>
 <h2 id="dense-analysisale"><code>dense-analysis/ale</code></h2>
 <p><strong>This is used a lot</strong></p>
 <p>Very nice syntax checker.</p>
-<h2 id="unused-plugins-etc">Unused plugins etc.</h2>
-<h3 id="tpopevim-fugitive"><del><code>tpope/vim-fugitive</code></del></h3>
-<p><strong>This is not used any more</strong></p>
-<p>This allows to issue <code>git</code> commands from Vim command line.  The following may
-be most useful.  If you have a command or alias &ldquo;<code>αβγ</code>&rdquo; for <code>git</code> command, it
-works as &ldquo;<code>:Git αβγ</code>&rdquo; and in its short form &ldquo;<code>:G αβγ</code>&rdquo; under Fugitive.</p>
-<ul>
-<li><code>G[status]</code>: 2nd top window with &ldquo;<code>git status</code>&rdquo; data.</li>
-<li><code>G[it] commit</code>: Wrapper for &ldquo;<code>git commit</code>&rdquo;.</li>
-<li><code>G[it] commit -–amend</code>: Wrapper for &ldquo;<code>git commit -–amend</code>&rdquo;.</li>
-<li><code>Gblame</code>: 2nd side window with &ldquo;<code>git blame</code>&rdquo; data.</li>
-<li><code>Gdiff</code>: Nice diff display with git HEAD data.</li>
-<li><code>Gmerge ...</code>: &ldquo;<code>git merge ...</code>&rdquo; with QuickFix list.</li>
-<li><code>Gread</code>: Discard editor buffer contents and read from Git HEAD</li>
-<li><code>Gwrite</code>: Write the file and &ldquo;<code>git add</code>&rdquo; for it sensibly.</li>
-</ul>
-<h3 id="airbladevim-gitgutter"><del><code>airblade/vim-gitgutter</code></del></h3>
-<p><strong>This is not used any more</strong></p>
+<h3 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h3>
+<p><strong>This is not used but interesting.  I disable this via vimconf</strong></p>
 <p>Checks diff from the repository contents asynchronously without blocking editor
 response and mark changed lines.</p>
 <!-- raw HTML omitted -->
