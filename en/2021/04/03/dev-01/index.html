@@ -175,8 +175,10 @@ each host name to access using good old SSH.  For example between VMs.</p>
 <pre><code>osamu@sid-dev:~$ ssh sid-GNOME.local
 </code></pre><p>SSH login directly to root account of a system are probably blocked.  In that
 case, you must SSH into user account first and sudo/su to root.</p>
-<p>Use of SSH key placed in user&rsquo;s home directory is a good idea.</p>
-<h3 id="setting-up-sudo">Setting up <code>sudo</code></h3>
+<p>Use of SSH key placed in user&rsquo;s home directory is a good idea.  Typical key
+generation goes:</p>
+<pre><code>osamu@sid-dev:~$ ssh-keygen -t rsa
+</code></pre><h3 id="setting-up-sudo">Setting up <code>sudo</code></h3>
 <p>Following will configure <code>sudo</code> to allow user &ldquo;osamu&rdquo; for root privilege.</p>
 <pre><code> $ su
 Password:
@@ -233,7 +235,7 @@ apt dist-upgrade
 apt autoremove
 apt install auto-apt-proxy sudo aptitude vim nano- gpm avahi-utils &quot;$@&quot;
 
-adduser &quot;$USERNAME&quot; sudo
+/usr/sbin/adduser &quot;$USERNAME&quot; sudo
 echo &quot;$HOST&quot; &gt; /etc/hostname
 echo &quot;%sudo ALL = (ALL) NOPASSWD: ALL&quot; &gt;/etc/sudoers.d/sudo-group
 cat &gt; /etc/hosts &lt;&lt; EOF
