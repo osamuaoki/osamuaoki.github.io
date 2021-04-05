@@ -159,8 +159,8 @@ repository and than try again.  (Don&rsquo;t use <code>--fix-missing</code>)</li
 <li>Clone from &ldquo;debian10&rdquo; to &ldquo;sid-dev&rdquo;</li>
 <li>Change <code>/etc/apt/sources.list</code></li>
 </ul>
-<pre><code>deb http://deb.debian.org/debian/ sid main contrib non-free
-deb-src http://deb.debian.org/debian/ sid main contrib non-free
+<pre><code>deb http://deb.debian.org/debian/ sid main
+deb-src http://deb.debian.org/debian/ sid main
 </code></pre><ul>
 <li><code>apt-get update &amp;&amp; apt-get dist-upgrade &amp;&amp; apt autoremove</code></li>
 <li><code>apt-get install devscripts</code></li>
@@ -206,7 +206,46 @@ VirtualBox.
 <p>After reading <a href="https://wiki.debian.org/DebianRepository/Setup">https://wiki.debian.org/DebianRepository/Setup</a> checking their
 <a href="https://qa.debian.org/popcon-graph.php?packages=reprepro+mini-dinstall+debarchiver+apt-ftparchive+aptly&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">popularity</a>,
 I decided to go with <code>reprepro</code> package by following a <a href="https://wiki.debian.org/DebianRepository/SetupWithReprepro">tutorial</a> later.</p>
-<!-- raw HTML omitted -->
+<h2 id="heading"></h2>
+<p>I created a short script as below.  I tar this and SSH keys into a tar and scp
+to host for now to ease initialization.</p>
+<pre><code>#!/bin/sh
+# vim:set sw=2 ts=2 sts=2 et ai:
+USERNAME=&quot;osamu&quot;
+if [ -z &quot;$1&quot; ]; then
+  echo &quot;Execute from root&quot; &gt;&amp;2
+  echo &quot;ARG1: hostname to be used (required)&quot; &gt;&amp;2
+  echo &quot;ARG2...: Additional packages such as 'task-gnome-desktop'.&quot; &gt;&amp;2
+  exit
+fi
+HOST=&quot;$1&quot;
+shift
+if [ &quot;$HOST&quot; = &quot;${HOST#sid-}&quot; ]; then
+  # $1 starts with sid-
+  cat &gt;/etc/apt/source.list &lt;&lt;EOF
+deb http://deb.debian.org/debian/ sid main
+deb-src http://deb.debian.org/debian/ sid main
+EOF
+  fi
+
+apt update
+apt dist-upgrade
+apt autoremove
+apt install auto-apt-proxy sudo aptitude vim nano- gpm avahi-utils &quot;$@&quot;
+
+adduser &quot;$USERNAME&quot; sudo
+echo &quot;$HOST&quot; &gt; /etc/hostname
+echo &quot;%sudo ALL = (ALL) NOPASSWD: ALL&quot; &gt;/etc/sudoers.d/sudo-group
+cat &gt; /etc/hosts &lt;&lt; EOF
+127.0.0.1       localhost
+127.0.1.1       $HOST.localdomain       $HOST
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+EOF
+</code></pre><!-- raw HTML omitted -->
 
 
 <table width="100%">
