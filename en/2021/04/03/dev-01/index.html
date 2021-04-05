@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Development system | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Development system</span></h1>
+
+<h3 class="date">Date:
+2021/04/03 (initial publish),
+2021/04/05 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/01/15/debian-buster-10-usability/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2 id="development-system-infrastructure">Development system infrastructure</h2>
+<p>In order to keep development setups to be simple and robust for both package
+build and package test, I decided to set up KVM.  (I was suffering sudden
+cowbuilder failure. That was another motivation.)</p>
+<p>Planned infrastructure includes:</p>
+<ul>
+<li>APT proxy on host WS.</li>
+<li>Avahi mDNS environment with domain nane &ldquo;local&rdquo;</li>
+<li>VM as KVM for package build. (non-GUI)</li>
+<li>VM as KVM for package testing. (GUI)</li>
+<li>SSH connection among systems.</li>
+<li>Mini private APT repo to satisfy dependency as needed.</li>
+</ul>
+<h2 id="apt-proxy-on-host-ws">APT proxy on host WS</h2>
+<p>In order to save network traffic, I decided to set up APT proxy on host WS.</p>
+<p>There are 4 good candidates.</p>
+<ul>
+<li><a href="https://salsa.debian.org/LeePen/apt-cacher">apt-cacher</a>: This needs to be installed with the web server.  Older code in perl (but it was newer than apt-.  Getting replaced by apt-cacher-ng.</li>
+<li><a href="https://salsa.debian.org/blade/apt-cacher-ng/-/tree/debian/sid">apt-cacher-ng</a>: Newer and well maintained code in C++.
+<ul>
+<li>This package is <a href="https://qa.debian.org/popcon-graph.php?packages=apt-cacher+apt-cacher-ng+approx+squid-deb-proxy&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">the most popular package</a>.</li>
+<li>This package had <a href="https://wiki.debian.org/Simple-CDD/Howto?action=diff&amp;rev1=51&amp;rev2=50">some problem in 2010</a>.</li>
+</ul>
+</li>
+<li><a href="https://salsa.debian.org/ocaml-team/approx">approx</a>: Less docs but its simplicity seems to make it more robust.</li>
+<li><a href="https://launchpad.net/squid-deb-proxy">squid-deb-proxy</a>: This needs generic proxy server (No way to read cached package data)</li>
+</ul>
+<p>It looks like <code>apt-cacher-ng</code> is the one for me to use.</p>
+<ul>
+<li>Execute: <code>apt install apt-cacher-ng</code></li>
+<li>&ldquo;Set up once&rdquo; -&gt; &ldquo;keep&rdquo;&hellip; -&gt; &ldquo;Allow HTTP tunnels&hellip;&quot;: Yes</li>
+</ul>
+<p>Currently, I experienced funny <a href="https://bugs.debian.org/986356">bug#986356</a>.
+You may need to run script I posted there.</p>
+<h3 id="set-up-proxy-for-the-local-apt">Set up proxy for the local APT</h3>
+<p>There are 2 interesting packages.</p>
+<ul>
+<li>auto-apt-proxy &ndash; no mDNS compatible &ndash;  <a href="https://salsa.debian.org/debian/auto-apt-proxy">https://salsa.debian.org/debian/auto-apt-proxy</a></li>
+<li>squid-deb-proxy-client &ndash; mDNS compatible &ndash; <a href="https://launchpad.net/squid-deb-proxy">https://launchpad.net/squid-deb-proxy</a></li>
+</ul>
+<p>WARN: Installing <code>auto-apt-proxy</code> package without functioning proxy may cause
+problem.</p>
+<p>For my purpose, proxy is always the local for host WS or the gateway WS(=host
+WS) for VMs.  Simply installing <code>auto-apt-proxy</code> is suffice to set up APT
+proxy.</p>
+<h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
+<ul>
+<li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
+</ul>
+<h3 id="create-minimal-stable-vm">Create minimal stable VM</h3>
+<ul>
+<li>Download the ISO for Debian stable. (netinst: 337MiB)</li>
+<li>Start virt-manager</li>
+<li>Create a new virtual machine from Debian stable ISO without Desktop (Use
+en_US).
+<ul>
+<li>Name as &ldquo;debian10&rdquo; (automtic)</li>
+<li>Format: qcow2</li>
+<li>Capacity: 20GiB</li>
+<li>Mostly go with defaults</li>
+<li>Activate virtual network</li>
+<li>Guided - use entire disk</li>
+<li>Write disk - Yes</li>
+<li>Unset &ldquo;Debian desktop environment&rdquo; and &ldquo;print server&rdquo;, and set &ldquo;SSH server&rdquo;</li>
+<li>GRUB install to MBR: Yes, <code>/dev/vda</code></li>
+<li>Installation complete and GRUB screen -&gt; VM started</li>
+<li>Shutdown VM</li>
+<li>Clone from &ldquo;debian10&rdquo; to &ldquo;buster-mini&rdquo;</li>
+<li>Start &ldquo;buster-mini&rdquo; and login to &ldquo;root&rdquo;
+<ul>
+<li><code>apt-get update&amp;&amp; apt-get install vim nano- aptitude screen gpm avahi-utils</code>
+<ul>
+<li>Installation of <code>gpm</code> package allows me to see mouse pointer on the
+Linux console.  This makes it easier to get out of fullscreen mode by
+moving mouse cursor to the top center. (Some times it moves strangely
+but OK for this purpose.)</li>
+<li>Installation of <code>avahi-utils</code> allows easy access to local hosts.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Shutdown &ldquo;buster-mini&rdquo; with <code>shutdown -h now</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="creating-gnome-vm">Creating GNOME VM</h3>
+<ul>
+<li>Clone from &ldquo;buster-mini&rdquo; to &ldquo;buster-GNOME&rdquo;</li>
+<li>Start &ldquo;buster-GNOME&rdquo; and login to &ldquo;root&rdquo;
+<ul>
+<li><code>apt-get update&amp;&amp; apt-get install task-gnome-desktop</code></li>
+</ul>
+</li>
+<li>If you get errors from aptitude, go to host and fix apt-cacher-ng
+repository and than try again.  (Don&rsquo;t use <code>--fix-missing</code>)</li>
+<li>Rebooting VM got me to nice GNOME system up.</li>
+</ul>
+<h3 id="creating-sid-vm-for-development">Creating sid VM for development</h3>
+<ul>
+<li>Clone from &ldquo;debian10&rdquo; to &ldquo;sid-dev&rdquo;</li>
+<li>Change <code>/etc/apt/sources.list</code></li>
+</ul>
+<pre><code>deb http://deb.debian.org/debian/ sid main contrib non-free
+deb-src http://deb.debian.org/debian/ sid main contrib non-free
+</code></pre><ul>
+<li><code>apt-get update &amp;&amp; apt-get dist-upgrade &amp;&amp; apt autoremove</code></li>
+<li><code>apt-get install devscripts</code></li>
+</ul>
+<h2 id="vm-house-keepings">VM house keepings</h2>
+<h3 id="changing-hostname">Changing hostname</h3>
+<p>You need to edit <code>/etc/hostname</code> and <code>/etc/hosts</code> and reboot to change
+the hostname of VMs.</p>
+<h3 id="setting-up-ssh">Setting up SSH</h3>
+<p>As long as host WS and guest VMs are installed with <code>avahi-utils</code>, we can use
+each host name to access using good old SSH.  For example between VMs.</p>
+<pre><code>osamu@sid-dev:~$ ssh sid-GNOME.local
+</code></pre><p>SSH login directly to root account of a system are probably blocked.  In that
+case, you must SSH into user account first and sudo/su to root.</p>
+<p>Use of SSH key placed in user&rsquo;s home directory is a good idea.</p>
+<h3 id="setting-up-sudo">Setting up <code>sudo</code></h3>
+<p>Following will configure <code>sudo</code> to allow user &ldquo;osamu&rdquo; for root privilege.</p>
+<pre><code> $ su
+Password:
+root@sid-dev:/home/osamu# /sbin/adduser osamu sudo
+...
+root@sid-dev:/home/osamu# echo &gt;/etc/sudoers.d/sudo-group &lt;&lt;EOF
+# NO password for the primary user
+%sudo ALL = (ALL) NOPASSWD: ALL
+EOF
+</code></pre><h3 id="vm-tools">VM tools</h3>
+<p>I am not familiar with VM oriented tools yet.  Following packages seem
+something to learn.</p>
+<ul>
+<li><a href="https://libvirt.org/">https://libvirt.org/</a> supporting EMU, KVM, XEN, OpenVZ, LXC, and
+VirtualBox.
+<ul>
+<li><code>libvirt-clients</code> (<code>virsh</code> command etc.)</li>
+<li><code>virt-manager</code>: desktop application</li>
+<li><code>virtinst</code>: CLI equiv of <code>virt-manage</code></li>
+<li><code>libvirt-login-shell</code>: isolate user sessions using LXC container</li>
+</ul>
+</li>
+<li><a href="http://libguestfs.org">http://libguestfs.org</a> <a href="https://libguestfs.org/guestfs-faq.1.html">FAQ</a></li>
+<li><code>libguestfs-tools</code>: guest disk image management system</li>
+</ul>
+<h2 id="local-repo">Local repo</h2>
+<p>After reading <a href="https://wiki.debian.org/DebianRepository/Setup">https://wiki.debian.org/DebianRepository/Setup</a> checking their
+<a href="https://qa.debian.org/popcon-graph.php?packages=reprepro+mini-dinstall+debarchiver+apt-ftparchive+aptly&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">popularity</a>,
+I decided to go with <code>reprepro</code> package by following a <a href="https://wiki.debian.org/DebianRepository/SetupWithReprepro">tutorial</a> later.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/01/15/debian-buster-10-usability/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
