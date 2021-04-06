@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/04/05 (last update)
+2021/04/06 (last update)
 </h3>
 </div>
 
@@ -105,8 +105,19 @@ proxy.</p>
 <h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
+<li>Read /usr/share/doc/libvirt-daemon/README.Debian.gz and follow it.</li>
 </ul>
-<h3 id="create-minimal-stable-vm">Create minimal stable VM</h3>
+<pre><code>$ sudo bash
+# virsh net-start default
+# virsh net-autostart default
+# mkdir /etc/dnsmasq.d
+# cat &lt;&lt;EOF &gt;/etc/dnsmasq.d/00_libvirtd.conf
+# only bind to loopback by default
+interface=lo
+bind-interfaces
+EOF
+# ^D
+</code></pre><h3 id="create-minimal-stable-vm">Create minimal stable VM</h3>
 <ul>
 <li>Download the ISO for Debian stable. (netinst: 337MiB)</li>
 <li>Start virt-manager</li>
