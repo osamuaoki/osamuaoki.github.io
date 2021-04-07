@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/16 (initial publish),
-2021/02/24 (last update)
+2021/04/08 (last update)
 </h3>
 </div>
 
@@ -253,7 +253,7 @@ mountする必要があります。</p>
 <p>例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、
 <code>/etc/fstab</code>のエントリーを以下とします。</p>
 <pre><code>UUID=???first  /      btrfs subvol=@,defaults    0    0
-UUID=???secind /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults    0    0
+UUID=???second /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults    0    0
 </code></pre><p><code>btrfs</code>(5) mount option に以下の記載があるのに要注意です。&ldquo;most mount options
 apply to the whole filesystem and only options in the first mounted subvolume
 will take effect.&rdquo;</p>
@@ -261,8 +261,12 @@ will take effect.&rdquo;</p>
 <code>--btrfs-subvolume-home</code>があります。これを使うのも面白そうです。
 <code>adduser</code>はまだこのオプションをサポートしていません。</p>
 <h2 id="no_cow-attribute">No_COW attribute</h2>
-<p>No_COWアトリビュートをディレクトリー毎<code>chattr +C &lt;dirname&gt;</code>で設定できるようです。</p>
+<p>No_COWアトリビュートをディレクトリ毎<code>chattr +C &lt;dirname&gt;</code>で設定できるようです。
+swapは別パーティションなので使いませんが、kvmが使うqcow2フォーマットのイメージファイルのある
+<code>/var/lib/libvirt/images</code>には適用してみました。No_COWアトリビュート設定の確認
+には<code>lsattr</code>(1)をつかいます。</p>
 <ul>
+<li><a href="https://btrfs.wiki.kernel.org/index.php/FAQ#Can_copy-on-write_be_turned_off_for_data_blocks.3F">No COW for VM image</a></li>
 <li><a href="https://btrfs.wiki.kernel.org/index.php/FAQ#Does_btrfs_support_swap_files.3F">swap ファイル</a></li>
 </ul>
 <h2 id="参考サイト">参考サイト</h2>
