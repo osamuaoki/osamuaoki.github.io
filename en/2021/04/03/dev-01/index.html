@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Development system | Goofing Osamu</title>
+    <title>Development system (1) | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,7 +32,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Development system</span></h1>
+<h1><span class="title">Development system (1)</span></h1>
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
@@ -57,17 +57,21 @@
   </tbody>
 </table>
 
-<h2 id="development-system-infrastructure">Development system infrastructure</h2>
-<p>In order to keep development setups to be simple and robust for both package
-build and package test, I decided to set up KVM.  (I was suffering sudden
-cowbuilder failure. That was another motivation.)</p>
+<h2 id="development-infrastructure">Development infrastructure</h2>
+<p>In order to keep development setups to be simple and robust, I changed development infrastructure.</p>
+<ul>
+<li>For package build, I decided to move to <code>sbuild</code>.</li>
+<li>For package test for each GUI setups, I decided to set up KVM.</li>
+</ul>
+<p>(I was suffering sudden cowbuilder failure. That was another motivation.)</p>
 <p>Planned infrastructure includes:</p>
 <ul>
 <li>APT proxy on host WS.</li>
 <li>Avahi mDNS environment with domain nane &ldquo;local&rdquo;</li>
-<li>VM as KVM for package build. (non-GUI)</li>
+<li>sbuild infrastructure for chroot package build.</li>
+<li>VM as KVM for package build. lternative(non-GUI)</li>
 <li>VM as KVM for package testing. (GUI)</li>
-<li>SSH connection among systems.</li>
+<li>SSH connection among VM systems.</li>
 <li>Mini private APT repo to satisfy dependency as needed.</li>
 </ul>
 <h2 id="apt-proxy-on-host-ws">APT proxy on host WS</h2>
@@ -102,7 +106,40 @@ problem.</p>
 <p>For my purpose, proxy is always the local for host WS or the gateway WS(=host
 WS) for VMs.  Simply installing <code>auto-apt-proxy</code> is suffice to set up APT
 proxy.</p>
-<h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
+<h2 id="sbuild-infrastructure">Sbuild infrastructure</h2>
+<h3 id="setup">Setup</h3>
+<p>Basically, followed <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> .</p>
+<pre><code>$ adduser osamu sbuild
+</code></pre><p>Logout and login.</p>
+<pre><code>$ id
+uid=1000(osamu) gid=1000(osamu) groups=1000(osamu),...,132(sbuild)
+</code></pre><p>Add few lines somewhere except last in <code>~/.sbuildrc</code>.</p>
+<pre><code>$build_arch_all = 1;
+$distribution = 'unstable';
+$run_lintian = 1;
+$lintian_opts = ['-i', '-I'];
+</code></pre><p>Then create the baseline chroot environment as:</p>
+<pre><code>$ sudo sbuild-createchroot --include=eatmydata,ccache,gnupg unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
+</code></pre><p>Prior to every use, you need to keep it up to date.</p>
+<pre><code>$ sudo sbuild-update -udcar unstable-amd64-sbuild
+</code></pre><p>I added following line into
+<code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to speed up.</p>
+<pre><code>command-prefix=eatmydata
+</code></pre><p>Please be aware, <code>/srv/chroot</code> and <code>/var/lib/sbuild</code> may eat up some disk
+spaces.</p>
+<h3 id="package-build">Package build</h3>
+<p>Package build from the source directory is simply as:</p>
+<pre><code>$ sbuild --source-only-changes
+</code></pre><p>or using source package as:</p>
+<pre><code>$ sbuild --source-only-changes &lt;packagename&gt;.dsc
+</code></pre><p>Here, the <code>--source-only-changes</code> flag enables to obtain a <code>.changes</code> file
+suitable for the source-only upload required by recent Debian.</p>
+<p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
+bind-mount kernel feature smartly to make build environment quickly.</p>
+<h3 id="build-environment-customization">Build environment customization</h3>
+<p>You can login to the baseline chroot environment as:</p>
+<pre><code>$ sudo sbuild-shell source:unstable-amd64-sbuild
+</code></pre><h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
 <li>Read /usr/share/doc/libvirt-daemon/README.Debian.gz and follow it.</li>
