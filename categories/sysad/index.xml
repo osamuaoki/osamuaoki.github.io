@@ -6,7 +6,20 @@
     <description>Recent content in sysad on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 03 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/sysad/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 09 Apr 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/sysad/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Development system (2)</title>
+      <link>/en/2021/04/09/dev-02/</link>
+      <pubDate>Fri, 09 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2021/04/09/dev-02/</guid>
+      <description>Local repo After reading https://wiki.debian.org/DebianRepository/Setup checking their popularity, I decided to go with reprepro package.
+Here, I follow https://wiki.debian.org/DebianRepository/SetupWithReprepro (It was slightly outdated. I update it.)
+Setting up an web server  $ sudo apt install apache2 Now you can see a nice &amp;ldquo;Default Page&amp;rdquo; at &amp;ldquo;[::1]&amp;rdquo; (or &amp;ldquo;127.0.0.1&amp;rdquo; for IPV4) using browser.
+Let&amp;rsquo;s create a simple directory tree for single distribution case.
+ $ sudo bash -i # mkdir -p /var/www/html/repo # cat &amp;gt; /etc/apache2/conf-available/repos.</description>
+    </item>
+    
     <item>
       <title>Development system (1)</title>
       <link>/en/2021/04/03/dev-01/</link>
@@ -14,9 +27,9 @@
       
       <guid>/en/2021/04/03/dev-01/</guid>
       <description>Development infrastructure In order to keep development setups to be simple and robust, I changed development infrastructure.
- For package build, I decided to move to sbuild. For package test for each GUI setups, I decided to set up KVM.  (I was suffering sudden cowbuilder failure. That was another motivation.)
+ For package build, I decided to move to sbuild. For package test for each GUI setups, I decided to set up KVM.  (I was suffering sudden cowbuilder failures. That was another motivation.)
 Planned infrastructure includes:
- APT proxy on host WS. Avahi mDNS environment with domain nane &amp;ldquo;local&amp;rdquo; sbuild infrastructure for chroot package build.</description>
+ APT proxy on the host WS. Avahi mDNS environment which allows to use domain name &amp;ldquo;local&amp;rdquo;.</description>
     </item>
     
     <item>

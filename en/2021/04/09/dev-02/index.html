@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Development system (2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Development system (2)</span></h1>
+
+<h3 class="date">Date:
+2021/04/09 (initial publish),
+2021/04/09 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/04/03/dev-01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2 id="local-repo">Local repo</h2>
+<p>After reading <a href="https://wiki.debian.org/DebianRepository/Setup">https://wiki.debian.org/DebianRepository/Setup</a> checking their
+<a href="https://qa.debian.org/popcon-graph.php?packages=reprepro+mini-dinstall+debarchiver+apt-ftparchive+aptly&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">popularity</a>,
+I decided to go with <code>reprepro</code> package.</p>
+<p>Here, I follow <a href="https://wiki.debian.org/DebianRepository/SetupWithReprepro">https://wiki.debian.org/DebianRepository/SetupWithReprepro</a>
+(It was slightly outdated.  I update it.)</p>
+<h2 id="setting-up-an-web-server">Setting up an web server</h2>
+<pre><code> $ sudo apt install apache2
+</code></pre><p>Now you can see a nice &ldquo;Default Page&rdquo; at &ldquo;[::1]&rdquo; (or &ldquo;127.0.0.1&rdquo; for IPV4)
+using browser.</p>
+<p>Let&rsquo;s create a simple directory tree for single distribution case.</p>
+<pre><code> $ sudo bash -i
+ # mkdir -p /var/www/html/repo
+ # cat &gt; /etc/apache2/conf-available/repos.conf &lt;&lt;'EOF'
+&lt;Directory /var/www/html/repo/ &gt;
+    # We want the user to be able to browse the directory manually
+    Options Indexes FollowSymLinks Multiviews
+    Require all granted
+&lt;/Directory&gt;
+
+# This syntax supports several repositories, e.g. one for Debian, one for Ubuntu.
+# Replace * with debian, if you intend to support one distribution only.
+&lt;Directory &quot;/var/www/html/repo/db/&quot;&gt;
+    Require all denied
+&lt;/Directory&gt;
+
+&lt;Directory &quot;/var/www/html/repo/conf/&quot;&gt;
+    Require all denied
+&lt;/Directory&gt;
+
+&lt;Directory &quot;/var/www/html/repo/incoming/&quot;&gt;
+    Require all denied
+&lt;/Directory&gt;
+EOF
+</code></pre><p>Let&rsquo;s enable configuration</p>
+<pre><code>$ sudo a2enconf repos
+Enabling conf repos.
+To activate the new configuration, you need to run:
+  systemctl reload apache2
+$ sudo systemctl reload apache2
+</code></pre><h2 id="gnu-pg">GNU PG</h2>
+<p>Since we need to use sub-key for this purpose, let me check:</p>
+<pre><code>$ gpg --list-secret-keys  --with-subkey-fingerprint
+pub   rsa4096 2010-09-23 [SC]
+      3133724D6207881579E95D621E1356881DD8D791
+uid           [ultimate] Osamu Aoki &lt;osamu@debian.org&gt;
+sub   rsa4096 2010-09-23 [E]
+      FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
+</code></pre><h2 id="setting-up-apt-repository">Setting up APT repository</h2>
+<pre><code>$ sudo mkdir -p /var/www/html/repo/conf
+$ cd /var/www/html/repo/conf
+</code></pre><p>In there, <code>distributions</code>:</p>
+<pre><code>Origin: Osamu
+Label: Osamu
+Codename: sid
+Architectures: amd64
+Components: main
+Description: APT repository for Osamu's local infrastructure
+SignWith: FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
+</code></pre><p>Also, in there <code>options</code>:</p>
+<pre><code>verbose
+basedir /var/www/html/repo/
+ask-passphrase
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/04/03/dev-01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

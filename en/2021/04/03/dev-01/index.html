@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/04/08 (last update)
+2021/04/09 (last update)
 </h3>
 </div>
 
@@ -51,31 +51,33 @@
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/04/09/dev-02/">Next Post</a></td>
   
   </tr>
   </tbody>
 </table>
 
 <h2 id="development-infrastructure">Development infrastructure</h2>
-<p>In order to keep development setups to be simple and robust, I changed development infrastructure.</p>
+<p>In order to keep development setups to be simple and robust, I changed
+development infrastructure.</p>
 <ul>
 <li>For package build, I decided to move to <code>sbuild</code>.</li>
 <li>For package test for each GUI setups, I decided to set up KVM.</li>
 </ul>
-<p>(I was suffering sudden cowbuilder failure. That was another motivation.)</p>
+<p>(I was suffering sudden cowbuilder failures. That was another motivation.)</p>
 <p>Planned infrastructure includes:</p>
 <ul>
-<li>APT proxy on host WS.</li>
-<li>Avahi mDNS environment with domain nane &ldquo;local&rdquo;</li>
-<li>sbuild infrastructure for chroot package build.</li>
-<li>VM as KVM for package build. lternative(non-GUI)</li>
-<li>VM as KVM for package testing. (GUI)</li>
-<li>SSH connection among VM systems.</li>
-<li>Mini private APT repo to satisfy dependency as needed.</li>
+<li>APT proxy on the host WS.</li>
+<li>Avahi mDNS environment which allows to use domain name &ldquo;local&rdquo;.</li>
+<li>sbuild infrastructure for the clean chroot package build.</li>
+<li>VM as KVM for alternative package build environment (non-GUI)</li>
+<li>VM as KVM for GUI package manual testing. (GUI)</li>
+<li>SSH connections among host WS and guest VM systems.</li>
+<li><a href="https://osamuaoki.github.io/en/2021/04/09/dev-02/">Mini private APT repo to satisfy dependency as needed.</a></li>
 </ul>
 <h2 id="apt-proxy-on-host-ws">APT proxy on host WS</h2>
-<p>In order to save network traffic, I decided to set up APT proxy on host WS.</p>
+<p>In order to save the network traffic, I decided to set up APT proxy on the host
+WS.</p>
 <p>There are 4 good candidates.</p>
 <ul>
 <li><a href="https://salsa.debian.org/LeePen/apt-cacher">apt-cacher</a>: This needs to be installed with the web server.  Older code in perl (but it was newer than apt-.  Getting replaced by apt-cacher-ng.</li>
@@ -94,7 +96,7 @@
 <li>&ldquo;Set up once&rdquo; -&gt; &ldquo;keep&rdquo;&hellip; -&gt; &ldquo;Allow HTTP tunnels&hellip;&quot;: Yes</li>
 </ul>
 <p>Currently, I experienced funny <a href="https://bugs.debian.org/986356">bug#986356</a>.
-You may need to run script I posted there.</p>
+You may need to run my script I posted there to work around problem.</p>
 <h3 id="set-up-proxy-for-the-local-apt">Set up proxy for the local APT</h3>
 <p>There are 2 interesting packages.</p>
 <ul>
@@ -103,30 +105,56 @@ You may need to run script I posted there.</p>
 </ul>
 <p>WARN: Installing <code>auto-apt-proxy</code> package without functioning proxy may cause
 problem.</p>
-<p>For my purpose, proxy is always the local for host WS or the gateway WS(=host
-WS) for VMs.  Simply installing <code>auto-apt-proxy</code> is suffice to set up APT
-proxy.</p>
+<p>For my purpose, proxy is always the local for the host WS which is the gateway
+WS for guest VMs(=kvm).  Simply installing <code>auto-apt-proxy</code> is suffice to set
+up APT proxy for them.</p>
 <h2 id="sbuild-infrastructure">Sbuild infrastructure</h2>
 <h3 id="setup">Setup</h3>
-<p>Basically, followed <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> .</p>
-<pre><code>$ adduser osamu sbuild
-</code></pre><p>Logout and login.</p>
+<p>Here, I follow <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> .</p>
+<pre><code>$ sudo apt install sbuild piuparts autopkgtest lintian
+$ adduser osamu sbuild
+</code></pre><p>Logout and login to check you are a member of <code>sbuild</code> group.</p>
 <pre><code>$ id
 uid=1000(osamu) gid=1000(osamu) groups=1000(osamu),...,132(sbuild)
-</code></pre><p>Add few lines somewhere except last in <code>~/.sbuildrc</code>.</p>
-<pre><code>$build_arch_all = 1;
+</code></pre><p>Let&rsquo;s create the configuration file <code>~/.sbuildrc</code> as:</p>
+<pre><code>cat &gt;~/.sbuildrc &lt;&lt; 'EOF'
+$build_arch_all = 1;
 $distribution = 'unstable';
 $run_lintian = 1;
 $lintian_opts = ['-i', '-I'];
-</code></pre><p>Then create the baseline chroot environment as:</p>
+$run_piuparts = 1;
+$piuparts_opts = ['--schroot', 'unstable-amd64-sbuild'];
+$run_autopkgtest = 1;
+$autopkgtest_root_args = '';
+$autopkgtest_opts = [ '--', 'schroot', '%r-%a-sbuild' ];
+
+EOF
+cat /usr/share/doc/sbuild/examples/example.sbuildrc &gt;&gt; ~/.sbuildrc
+</code></pre><p>You can disable and enable each functionality by assigning 0 or 1 to
+corresponding variables.  You can customize this further for your GPG key etc.</p>
+<p>Then create the baseline chroot environment as:</p>
 <pre><code>$ sudo sbuild-createchroot --include=eatmydata,ccache,gnupg unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
 </code></pre><p>Prior to every use, you need to keep it up to date.</p>
 <pre><code>$ sudo sbuild-update -udcar unstable-amd64-sbuild
 </code></pre><p>I added following line into
-<code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to speed up.</p>
+<code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to speed up the package
+installation process.</p>
 <pre><code>command-prefix=eatmydata
-</code></pre><p>Please be aware, <code>/srv/chroot</code> and <code>/var/lib/sbuild</code> may eat up some disk
-spaces.</p>
+</code></pre><p>Since I have enough DRAM and want to avoid were out of SSD, I added
+following to my <code>/etc/fstab</code>:</p>
+<pre><code>none /var/lib/schroot/union/overlay tmpfs uid=root,gid=root,mode=0750 0 0
+none /var/lib/sbuild/build tmpfs uid=sbuild,gid=sbuild,mode=0770 0 0
+</code></pre><p>(I am not sure if the use of <code>eatmydata</code> still has enough benefits under
+situation using tmpfs.)</p>
+<p>Here, I note a few notable directories:</p>
+<ul>
+<li><code>/srv/chroot</code>: directory containing whole initial chroot environment.</li>
+<li><code>/var/lib/schroot/union/overlay</code>: directory where additional packages are
+installed during the build process.</li>
+<li><code>/var/lib/sbuild/build</code>: directory where the source package is unpacked and
+build.</li>
+</ul>
+<p>Please be aware, these directory may eat up some disk spaces.</p>
 <h3 id="package-build">Package build</h3>
 <p>Package build from the source directory is simply as:</p>
 <pre><code>$ sbuild --source-only-changes
@@ -255,10 +283,6 @@ VirtualBox.
 <li><a href="http://libguestfs.org">http://libguestfs.org</a> <a href="https://libguestfs.org/guestfs-faq.1.html">FAQ</a></li>
 <li><code>libguestfs-tools</code>: guest disk image management system</li>
 </ul>
-<h2 id="local-repo">Local repo</h2>
-<p>After reading <a href="https://wiki.debian.org/DebianRepository/Setup">https://wiki.debian.org/DebianRepository/Setup</a> checking their
-<a href="https://qa.debian.org/popcon-graph.php?packages=reprepro+mini-dinstall+debarchiver+apt-ftparchive+aptly&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">popularity</a>,
-I decided to go with <code>reprepro</code> package by following a <a href="https://wiki.debian.org/DebianRepository/SetupWithReprepro">tutorial</a> later.</p>
 <h2 id="helper-script">Helper script</h2>
 <p>I created short scripts and use them to initialize Debian VMs.  This also takes
 care SSH keys: <a href="https://github.com/osamuaoki/vm-setup">https://github.com/osamuaoki/vm-setup</a></p>
@@ -273,7 +297,7 @@ care SSH keys: <a href="https://github.com/osamuaoki/vm-setup">https://github.co
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/04/09/dev-02/">Next Post</a></td>
   
   </tr>
   </tbody>
