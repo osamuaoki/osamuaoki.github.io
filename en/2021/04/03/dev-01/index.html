@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/04/09 (last update)
+2021/04/11 (last update)
 </h3>
 </div>
 
@@ -110,16 +110,33 @@ WS for guest VMs(=kvm).  Simply installing <code>auto-apt-proxy</code> is suffic
 up APT proxy for them.</p>
 <h2 id="sbuild-infrastructure">Sbuild infrastructure</h2>
 <h3 id="setup">Setup</h3>
-<p>Here, I follow <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> .</p>
+<p>Here, I follow <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> (I have made a few updates there,
+too.).</p>
 <pre><code>$ sudo apt install sbuild piuparts autopkgtest lintian
 $ adduser osamu sbuild
 </code></pre><p>Logout and login to check you are a member of <code>sbuild</code> group.</p>
 <pre><code>$ id
 uid=1000(osamu) gid=1000(osamu) groups=1000(osamu),...,132(sbuild)
-</code></pre><p>Let&rsquo;s create the configuration file <code>~/.sbuildrc</code> as:</p>
+</code></pre><p>Let&rsquo;s create the configuration file <code>~/.sbuildrc</code> in line with recent Debian
+practice <a href="https://wiki.debian.org/SourceOnlyUpload">https://wiki.debian.org/SourceOnlyUpload</a> as:</p>
 <pre><code>cat &gt;~/.sbuildrc &lt;&lt; 'EOF'
-$build_arch_all = 1;
+##############################################################################
+# PACKAGE BUILD RELATED (source-only-upload as default)
+##############################################################################
+# -d
 $distribution = 'unstable';
+# -A
+$build_arch_all = 1;
+# -s
+$build_source = 1;
+# --source-only-changes
+$source_only_changes = 1;
+# -v
+$verbose = 1;
+
+##############################################################################
+# POST-BUILD RELATED (turn off functionality by setting variables to 0)
+##############################################################################
 $run_lintian = 1;
 $lintian_opts = ['-i', '-I'];
 $run_piuparts = 1;
@@ -128,14 +145,18 @@ $run_autopkgtest = 1;
 $autopkgtest_root_args = '';
 $autopkgtest_opts = [ '--', 'schroot', '%r-%a-sbuild' ];
 
+##############################################################################
+# PERL MAGIC
+##############################################################################
+1;
 EOF
-cat /usr/share/doc/sbuild/examples/example.sbuildrc &gt;&gt; ~/.sbuildrc
 </code></pre><p>You can disable and enable each functionality by assigning 0 or 1 to
 corresponding variables.  You can customize this further for your GPG key etc.</p>
 <p>Then create the baseline chroot environment as:</p>
-<pre><code>$ sudo sbuild-createchroot --include=eatmydata,ccache,gnupg unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
-</code></pre><p>Prior to every use, you need to keep it up to date.</p>
-<pre><code>$ sudo sbuild-update -udcar unstable-amd64-sbuild
+<pre><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
+</code></pre><p>TODO: decide on technical merits: eatmydata or tmpfs for /build etc.</p>
+<p>Prior to every use, you need to keep it up to date.</p>
+<pre><code>$ sudo sbuild-update -udcar u
 </code></pre><p>I added following line into
 <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to speed up the package
 installation process.</p>
@@ -157,16 +178,14 @@ build.</li>
 <p>Please be aware, these directory may eat up some disk spaces.</p>
 <h3 id="package-build">Package build</h3>
 <p>Package build from the source directory is simply as:</p>
-<pre><code>$ sbuild --source-only-changes
+<pre><code>$ sbuild
 </code></pre><p>or using source package as:</p>
-<pre><code>$ sbuild --source-only-changes &lt;packagename&gt;.dsc
-</code></pre><p>Here, the <code>--source-only-changes</code> flag enables to obtain a <code>.changes</code> file
-suitable for the source-only upload required by recent Debian.</p>
-<p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
+<pre><code>$ sbuild &lt;packagename&gt;.dsc
+</code></pre><p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
 bind-mount kernel feature smartly to make build environment quickly.</p>
 <h3 id="build-environment-customization">Build environment customization</h3>
 <p>You can login to the baseline chroot environment as:</p>
-<pre><code>$ sudo sbuild-shell source:unstable-amd64-sbuild
+<pre><code>$ sudo sbuild-shell u
 </code></pre><h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
