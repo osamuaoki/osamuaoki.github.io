@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/04/12 (last update)
+2021/04/20 (last update)
 </h3>
 </div>
 
@@ -163,9 +163,14 @@ installation process.</p>
 <pre><code>command-prefix=eatmydata
 </code></pre><p>Since I have enough DRAM and want to avoid ware out of SSD, I added
 following to my <code>/etc/fstab</code>:</p>
-<pre><code>none /var/lib/schroot/union/overlay tmpfs uid=root,gid=root,mode=0755 0 0
+<pre><code># For speeding up sbuild/schroot and prevent SSD wear-out
+none /var/lib/schroot/session        tmpfs uid=root,gid=root,mode=0755 0 0
+none /var/lib/schroot/union/overlay  tmpfs uid=root,gid=root,mode=0755 0 0
 none /var/lib/schroot/union/underlay tmpfs uid=root,gid=root,mode=0755 0 0
-none /var/lib/sbuild/build tmpfs uid=sbuild,gid=sbuild,mode=0770 0 0
+none /var/lib/schroot/unpack         tmpfs uid=root,gid=root,mode=0755 0 0
+none /var/lib/sbuild/apt-keys        tmpfs uid=sbuild,gid=sbuild,mode=2770 0 0
+none /var/lib/sbuild/build           tmpfs uid=sbuild,gid=sbuild,mode=2770 0 0
+
 </code></pre><p>(I am not sure if the use of <code>eatmydata</code> still has enough benefits under
 situation using tmpfs.)</p>
 <p>Here, I note a few notable directories:</p>
