@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/04/20 (last update)
+2021/04/24 (last update)
 </h3>
 </div>
 
@@ -109,6 +109,8 @@ problem.</p>
 WS for guest VMs(=kvm).  Simply installing <code>auto-apt-proxy</code> is suffice to set
 up APT proxy for them.</p>
 <h2 id="sbuild-infrastructure">Sbuild infrastructure</h2>
+<p>Sbuild provides clean package building environment using schroot as its
+backend.</p>
 <h3 id="setup">Setup</h3>
 <p>Here, I follow <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> (I have made a few updates there,
 too.).</p>
@@ -134,6 +136,8 @@ $source_only_changes = 1;
 # -v
 $verbose = 1;
 
+# parallel build
+$ENV{'DEB_BUILD_OPTIONS'} = 'parallel=5';
 ##############################################################################
 # POST-BUILD RELATED (turn off functionality by setting variables to 0)
 ##############################################################################
@@ -153,8 +157,10 @@ EOF
 </code></pre><p>You can disable and enable each functionality by assigning 0 or 1 to
 corresponding variables.  You can customize this further for your GPG key etc.</p>
 <p>Then create the baseline chroot environment as:</p>
-<pre><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
-</code></pre><p>TODO: decide on technical merits: eatmydata or tmpfs for /build etc.</p>
+<pre><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/ftp.us.debian.org/debian
+</code></pre><p>Please note that the above create <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to be used by <code>schroot</code>.</p>
+<p>(This file needs to be removed together with the directory tree under <code>/srv/chroot/unstable-amd64-sbuild</code> to rerun above <code>sbuild-createchroot</code> if you messed up chroot contents.)</p>
+<p>TODO: decide on technical merits: eatmydata or tmpfs for /build etc.</p>
 <p>Prior to every use, you need to keep it up to date.</p>
 <pre><code>$ sudo sbuild-update -udcar u
 </code></pre><p>I added following line into
@@ -166,9 +172,8 @@ following to my <code>/etc/fstab</code>:</p>
 <pre><code># For speeding up sbuild/schroot and prevent SSD wear-out
 none /var/lib/schroot/session        tmpfs uid=root,gid=root,mode=0755 0 0
 none /var/lib/schroot/union/overlay  tmpfs uid=root,gid=root,mode=0755 0 0
-none /var/lib/schroot/union/underlay tmpfs uid=root,gid=root,mode=0755 0 0
 none /var/lib/schroot/unpack         tmpfs uid=root,gid=root,mode=0755 0 0
-none /var/lib/sbuild/apt-keys        tmpfs uid=sbuild,gid=sbuild,mode=2770 0 0
+#none /var/lib/sbuild/apt-keys        tmpfs uid=sbuild,gid=sbuild,mode=2770 0 0
 none /var/lib/sbuild/build           tmpfs uid=sbuild,gid=sbuild,mode=2770 0 0
 
 </code></pre><p>(I am not sure if the use of <code>eatmydata</code> still has enough benefits under
@@ -189,8 +194,33 @@ build.</li>
 <pre><code>$ sbuild &lt;packagename&gt;.dsc
 </code></pre><p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
 bind-mount kernel feature smartly to make build environment quickly.</p>
+<h2 id="schroot-infrastructure">Schroot infrastructure</h2>
+<p>For package development, creating the latest chroot environment for each test
+build as sbuild does is time consuming.  Let&rsquo;s create a package pre-loaded
+chroot environment using schroot directory.</p>
+<pre><code>$ sudo cp -a /srv/chroot/unstable-amd64-sbuild-* /srv/chroot/unstable-amd64-dev
+$ sudo cp -a /etc/schroot/default /etc/schroot/osamu
+$ sudo tee /etc/schroot/chroot.d/unstable-amd64-dev &lt;&lt; EOF
+[unstable-dev]
+description=Debian unstable/amd64 chroot development environment
+groups=root,sbuild
+root-groups=root,sbuild
+profile=osamu
+type=directory
+aliases=dev
+directory=/srv/chroot/unstable-amd64-dev
+EOF
+$ sudo vim /etc/schroot/osamu/fstab
+... add needed directories
+...
+$ echo &quot;alias dev=&quot;schroot -c unstable-dev&quot;&quot; &gt;&gt; ~/.bash_aliases
+$ . .bashrc
+$ dev
+(unstable-dev)$ apt-get update
+(unstable-dev)$ apt-get install aptitude sudo mc vim nano- devscripts fzf
+</code></pre><p>You may wish to copy setting from host PC for sudo, &hellip;</p>
 <h3 id="build-environment-customization">Build environment customization</h3>
-<p>You can login to the baseline chroot environment as:</p>
+<p>You can login to the baseline chroot environment to customize it as:</p>
 <pre><code>$ sudo sbuild-shell u
 </code></pre><h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
@@ -260,8 +290,8 @@ repository and than try again.  (Don&rsquo;t use <code>--fix-missing</code>)</li
 <li>Clone from &ldquo;debian10&rdquo; to &ldquo;sid-dev&rdquo;</li>
 <li>Change <code>/etc/apt/sources.list</code></li>
 </ul>
-<pre><code>deb http://deb.debian.org/debian/ sid main
-deb-src http://deb.debian.org/debian/ sid main
+<pre><code>deb http://ftp.us.debian.org/debian/ sid main
+deb-src http://ftp.us.debian.org/debian/ sid main
 </code></pre><ul>
 <li><code>apt-get update &amp;&amp; apt-get dist-upgrade &amp;&amp; apt autoremove</code></li>
 <li><code>apt-get install devscripts</code></li>
