@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/04/24 (last update)
+2021/04/25 (last update)
 </h3>
 </div>
 
@@ -61,7 +61,8 @@
 <p>In order to keep development setups to be simple and robust, I changed
 development infrastructure.</p>
 <ul>
-<li>For package build, I decided to move to <code>sbuild</code>.</li>
+<li>For package test build, I decided to move to <code>schroot</code>.</li>
+<li>For package build, I decided to move to <code>sbuild</code> (a <code>schroot</code> wrapper).</li>
 <li>For package test for each GUI setups, I decided to set up KVM.</li>
 </ul>
 <p>(I was suffering sudden cowbuilder failures. That was another motivation.)</p>
@@ -70,6 +71,7 @@ development infrastructure.</p>
 <li>APT proxy on the host WS.</li>
 <li>Avahi mDNS environment which allows to use domain name &ldquo;local&rdquo;.</li>
 <li>sbuild infrastructure for the clean chroot package build.</li>
+<li>schroot infrastructure for the fully popullated chroot package test build.</li>
 <li>VM as KVM for alternative package build environment (non-GUI)</li>
 <li>VM as KVM for GUI package manual testing. (GUI)</li>
 <li>SSH connections among host WS and guest VM systems.</li>
@@ -96,7 +98,8 @@ WS.</p>
 <li>&ldquo;Set up once&rdquo; -&gt; &ldquo;keep&rdquo;&hellip; -&gt; &ldquo;Allow HTTP tunnels&hellip;&quot;: Yes</li>
 </ul>
 <p>Currently, I experienced funny <a href="https://bugs.debian.org/986356">bug#986356</a>.
-You may need to run my script I posted there to work around problem.</p>
+For now, avoid using download URLs which require SRV support such as
+<code>deb.debian.org</code> should be avoided.</p>
 <h3 id="set-up-proxy-for-the-local-apt">Set up proxy for the local APT</h3>
 <p>There are 2 interesting packages.</p>
 <ul>
@@ -187,13 +190,21 @@ installed during the build process.</li>
 build.</li>
 </ul>
 <p>Please be aware, these directory may eat up some disk spaces.</p>
-<h3 id="package-build">Package build</h3>
+<h3 id="package-build-with-sbuild">Package build with sbuild</h3>
 <p>Package build from the source directory is simply as:</p>
 <pre><code>$ sbuild
 </code></pre><p>or using source package as:</p>
 <pre><code>$ sbuild &lt;packagename&gt;.dsc
 </code></pre><p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
 bind-mount kernel feature smartly to make build environment quickly.</p>
+<h3 id="gbp-buildpackage-configuration">gbp-buildpackage configuration</h3>
+<p>I changed gbp-buildpackage to use sbuild.</p>
+<pre><code>[DEFAULT]
+# the default build command:
+builder = sbuild -A -s --source-only-changes -v -d unstable
+...
+</code></pre><p>(Actually, with the above <code>~/.sbuidrc</code>, we should be able to skip options after
+<code>sbuild</code> here.)</p>
 <h2 id="schroot-infrastructure">Schroot infrastructure</h2>
 <p>For package development, creating the latest chroot environment for each test
 build as sbuild does is time consuming.  Let&rsquo;s create a package pre-loaded
@@ -213,16 +224,17 @@ EOF
 $ sudo vim /etc/schroot/osamu/fstab
 ... add needed directories
 ...
-$ echo &quot;alias dev=&quot;schroot -c unstable-dev&quot;&quot; &gt;&gt; ~/.bash_aliases
+</code></pre><h3 id="test-build-environment-customization">Test build environment customization</h3>
+<p>I set <code>dev</code> as alias to get into the test build environment.</p>
+<pre><code>$ echo &quot;alias dev=&quot;schroot -c unstable-dev&quot;&quot; &gt;&gt; ~/.bash_aliases
 $ . .bashrc
-$ dev
+</code></pre><p>Now I can login to the chroot environment and customize it as:</p>
+<pre><code>$ dev
 (unstable-dev)$ apt-get update
 (unstable-dev)$ apt-get install aptitude sudo mc vim nano- devscripts fzf
-</code></pre><p>You may wish to copy setting from host PC for sudo, &hellip;</p>
-<h3 id="build-environment-customization">Build environment customization</h3>
-<p>You can login to the baseline chroot environment to customize it as:</p>
-<pre><code>$ sudo sbuild-shell u
-</code></pre><h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
+</code></pre><p>I also coped setting from the host PC for sudo to avoid password prompt and add
+a few symlinks in <code>/root</code> as in the host PC.</p>
+<h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
 <li>Read /usr/share/doc/libvirt-daemon/README.Debian.gz and follow it.</li>
