@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/04/25 (last update)
+2021/04/26 (last update)
 </h3>
 </div>
 
@@ -112,7 +112,7 @@ problem.</p>
 WS for guest VMs(=kvm).  Simply installing <code>auto-apt-proxy</code> is suffice to set
 up APT proxy for them.</p>
 <h2 id="sbuild-infrastructure">Sbuild infrastructure</h2>
-<p>Sbuild provides clean package building environment using schroot as its
+<p>Sbuild provides clean <strong>binary</strong> package building environment using schroot as its
 backend.</p>
 <h3 id="setup">Setup</h3>
 <p>Here, I follow <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> (I have made a few updates there,
@@ -134,13 +134,13 @@ $distribution = 'unstable';
 $build_arch_all = 1;
 # -s
 $build_source = 1;
-# --source-only-changes
+# --source-only-changes or not
+# (1: for dput, 0: not for dgit source source-push)
 $source_only_changes = 1;
 # -v
 $verbose = 1;
-
 # parallel build
-$ENV{'DEB_BUILD_OPTIONS'} = 'parallel=5';
+$ENV{'DEB_BUILD_OPTIONS'} = 'parallel=12';
 ##############################################################################
 # POST-BUILD RELATED (turn off functionality by setting variables to 0)
 ##############################################################################
@@ -175,13 +175,9 @@ following to my <code>/etc/fstab</code>:</p>
 <pre><code># For speeding up sbuild/schroot and prevent SSD wear-out
 none /var/lib/schroot/session        tmpfs uid=root,gid=root,mode=0755 0 0
 none /var/lib/schroot/union/overlay  tmpfs uid=root,gid=root,mode=0755 0 0
-none /var/lib/schroot/unpack         tmpfs uid=root,gid=root,mode=0755 0 0
-#none /var/lib/sbuild/apt-keys        tmpfs uid=sbuild,gid=sbuild,mode=2770 0 0
 none /var/lib/sbuild/build           tmpfs uid=sbuild,gid=sbuild,mode=2770 0 0
 
-</code></pre><p>(I am not sure if the use of <code>eatmydata</code> still has enough benefits under
-situation using tmpfs.)</p>
-<p>Here, I note a few notable directories:</p>
+</code></pre><p>Here, I note a few notable directories:</p>
 <ul>
 <li><code>/srv/chroot</code>: directory containing whole initial chroot environment.</li>
 <li><code>/var/lib/schroot/union/overlay</code>: directory where additional packages are
@@ -190,6 +186,164 @@ installed during the build process.</li>
 build.</li>
 </ul>
 <p>Please be aware, these directory may eat up some disk spaces.</p>
+<h3 id="bench-mark">Bench mark</h3>
+<p>Very rough benchmarks were performed to see impact of eatmydata, tmpfs, and
+parallel build.</p>
+<p>System used:</p>
+<ul>
+<li>AMD Ryzen 5 PRO 4650U with Radeon Graphics (Units/Processor: 12)</li>
+<li>TS2TMTE220S (2TB NVMe SSD) &ndash; used</li>
+<li>WDC PC SN520 SDAPMUW-128G-1001 (128GB NVMe SSD)</li>
+<li>Wifi (802.11ac 5GHz) to Optical connection. (about 3 M Bytes/sec)</li>
+<li>Source:
+<ul>
+<li>DR: debian-reference source (original not to do parallel build)</li>
+<li>DR': debian-reference source (modified to do parallel build)</li>
+<li>GIT: git source</li>
+</ul>
+</li>
+</ul>
+<p>Result:</p>
+<table>
+<thead>
+<tr>
+<th>source</th>
+<th>eatmydata</th>
+<th>tmpfs</th>
+<th>para</th>
+<th>real</th>
+<th>user</th>
+<th>system</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>DR</td>
+<td>no</td>
+<td>yes</td>
+<td>1</td>
+<td>20m54s</td>
+<td>18m12s</td>
+<td>0m47s</td>
+<td>Cold APT</td>
+</tr>
+<tr>
+<td>DR</td>
+<td>yes</td>
+<td>yes</td>
+<td>1</td>
+<td>17m08s</td>
+<td>17m32s</td>
+<td>0m34s</td>
+<td></td>
+</tr>
+<tr>
+<td>DR</td>
+<td>no</td>
+<td>yes</td>
+<td>1</td>
+<td>17m56s</td>
+<td>18m09s</td>
+<td>0m45s</td>
+<td></td>
+</tr>
+<tr>
+<td>DR</td>
+<td>no</td>
+<td>no</td>
+<td>1</td>
+<td>19m24s</td>
+<td>18m12s</td>
+<td>1m21s</td>
+<td></td>
+</tr>
+<tr>
+<td>DR</td>
+<td>yes</td>
+<td>no</td>
+<td>1</td>
+<td>17m10s</td>
+<td>17m28s</td>
+<td>0m43s</td>
+<td></td>
+</tr>
+<tr>
+<td>DR'</td>
+<td>yes</td>
+<td>no</td>
+<td>24</td>
+<td>5m02s</td>
+<td>31m05s</td>
+<td>0m54s</td>
+<td></td>
+</tr>
+<tr>
+<td>DR'</td>
+<td>yes</td>
+<td>yes</td>
+<td>24</td>
+<td>5m02s</td>
+<td>31m05s</td>
+<td>0m54s</td>
+<td></td>
+</tr>
+<tr>
+<td>DR'</td>
+<td>yes</td>
+<td>no</td>
+<td>24</td>
+<td>6m34s</td>
+<td>35m37s</td>
+<td>0m56s</td>
+<td></td>
+</tr>
+<tr>
+<td>GIT</td>
+<td>yes</td>
+<td>yes</td>
+<td>24</td>
+<td>7m24s</td>
+<td>33m23s</td>
+<td>9m45s</td>
+<td>Cool CPU</td>
+</tr>
+<tr>
+<td>GIT</td>
+<td>yes</td>
+<td>no</td>
+<td>24</td>
+<td>7m51s</td>
+<td>38m18s</td>
+<td>12m00s</td>
+<td>Hot CPU</td>
+</tr>
+<tr>
+<td>GIT</td>
+<td>yes</td>
+<td>yes</td>
+<td>24</td>
+<td>7m21s</td>
+<td>35m08s</td>
+<td>12m434</td>
+<td>Hotter CPU</td>
+</tr>
+</tbody>
+</table>
+<p>Observation for real:</p>
+<ul>
+<li>Cold APT cache  &ndash; 10% slow down (not much)</li>
+<li>Hot CPU  &ndash; 7% slowdown (not much)</li>
+<li>Use of tmpfs  &ndash; no impact</li>
+<li>Use of eatmydata &ndash; 10% speed up (not much)</li>
+<li>Use of parallel &ndash; less than half (big gain but build log became cryptic)</li>
+</ul>
+<p>Conclusion:</p>
+<ul>
+<li>Use of APT cache is for reducing repository server load.</li>
+<li>Use of eatmydata is for skipping unnecessary waiting.</li>
+<li>Use of tmpfs is for longer SSD life.</li>
+</ul>
 <h3 id="package-build-with-sbuild">Package build with sbuild</h3>
 <p>Package build from the source directory is simply as:</p>
 <pre><code>$ sbuild
@@ -208,9 +362,9 @@ builder = sbuild -A -s --source-only-changes -v -d unstable
 <h2 id="schroot-infrastructure">Schroot infrastructure</h2>
 <p>For package development, creating the latest chroot environment for each test
 build as sbuild does is time consuming.  Let&rsquo;s create a package pre-loaded
-chroot environment using schroot directory.</p>
+chroot environment which can run x-apps using the schroot directory.</p>
 <pre><code>$ sudo cp -a /srv/chroot/unstable-amd64-sbuild-* /srv/chroot/unstable-amd64-dev
-$ sudo cp -a /etc/schroot/default /etc/schroot/osamu
+$ sudo cp -a /etc/schroot/desktop /etc/schroot/osamu
 $ sudo tee /etc/schroot/chroot.d/unstable-amd64-dev &lt;&lt; EOF
 [unstable-dev]
 description=Debian unstable/amd64 chroot development environment
@@ -218,6 +372,7 @@ groups=root,sbuild
 root-groups=root,sbuild
 profile=osamu
 type=directory
+preserve-environment=true
 aliases=dev
 directory=/srv/chroot/unstable-amd64-dev
 EOF
@@ -234,7 +389,10 @@ $ . .bashrc
 (unstable-dev)$ apt-get install aptitude sudo mc vim nano- devscripts fzf
 </code></pre><p>I also coped setting from the host PC for sudo to avoid password prompt and add
 a few symlinks in <code>/root</code> as in the host PC.</p>
-<h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
+<p>To run x-apps isuch as <code>gitk</code> inside chroot, please start schroot as:</p>
+<pre><code>xhost +
+schroot -c dev
+</code></pre><h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
 <li>Read /usr/share/doc/libvirt-daemon/README.Debian.gz and follow it.</li>
