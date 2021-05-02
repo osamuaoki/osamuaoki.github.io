@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/15 (initial publish),
-2021/04/03 (last update)
+2021/05/02 (last update)
 </h3>
 </div>
 
@@ -132,7 +132,7 @@ This enabled me to print nicely to Hagaki.</p>
 <p>For the GUI access to the remotely hosted IMAP4 mail services, use GNOME Online
 accounts and Evolution.  This approach works for Gmail etc. and compatible with
 using other devices such as smart phones.  Evolution can also be configured to
-read locally delivered mails to mbox too.  (send+recieve).</p>
+read locally delivered mails to mbox too.  (send+receive).</p>
 <p>For the command line such as <code>reportbug</code> and daemon programs such as <code>cron</code> to
 send mails to external hosts and local accounts, use of <code>exim4</code> as the locally
 installed MTA is good idea.  With &ldquo;sudo dpkg-reconfigure exim4-config&rdquo;, Select
@@ -146,7 +146,7 @@ be default.</p>
 <code>application_password</code> in advance.)</p>
 <p>Whenever I wish to send out mails with &ldquo;@debian.org&rdquo; address, I use
 ssh+sendmail (created shell script <code>~/bin/sendmail-p.d.o</code>) to access a Debian
-host. (This trick may be usable for iany hosts such as salsa.debian.org etc.)
+host. (This trick may be usable for any hosts such as salsa.debian.org etc.)
 I have sets up for:</p>
 <ul>
 <li>Evolution</li>
@@ -154,6 +154,15 @@ I have sets up for:</p>
 <li><code>reportbug</code> (add &ldquo;<code>mta /home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.reportbugrc</code>)</li>
 </ul>
 <p>I usually don&rsquo;t bother with fetchmail these days.</p>
+<h3 id="evolution-workaround">Evolution workaround</h3>
+<p>Evolution for Debian 11 Bullseye under wayland has ugly font problem as of May
+2, 2021.  (Some firefox, too).  It looks like some WebKit bug exposed by
+sandboxing. <a href="https://gitlab.gnome.org/GNOME/evolution/-/issues/1161">https://gitlab.gnome.org/GNOME/evolution/-/issues/1161</a></p>
+<p>Since my PATH lists <code>/usr/local/bin</code> before <code>/usr/bin</code>, I workaround this
+problem by creating a shell script <code>/usr/local/bin/evolution</code>.</p>
+<pre><code>#!/bin/sh
+WEBKIT_FORCE_SANDBOX=0 exec evolution &quot;$@&quot;
+</code></pre><p>See <a href="https://bugs.debian.org/975039">https://bugs.debian.org/975039</a></p>
 <h2 id="command-line">Command line</h2>
 <p>Setups:</p>
 <ul>
