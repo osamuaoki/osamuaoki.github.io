@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/04/27 (last update)
+2021/05/02 (last update)
 </h3>
 </div>
 
@@ -360,10 +360,11 @@ builder = sbuild -A -s --source-only-changes -v -d unstable
 </code></pre><p>(Actually, with the above <code>~/.sbuidrc</code>, we should be able to skip options after
 <code>sbuild</code> here.)</p>
 <h2 id="schroot-infrastructure">Schroot infrastructure</h2>
-<p>For package development, creating the latest chroot environment for each test
-build as sbuild does is time consuming.  Let&rsquo;s create a package pre-loaded
-chroot environment which can run x-apps using the schroot directory.</p>
-<pre><code>$ sudo cp -a /srv/chroot/unstable-amd64-sbuild-* /srv/chroot/unstable-amd64-dev
+<p>For package development, creating the latest minimal chroot environment for
+each test build as sbuild does is time consuming.  Let&rsquo;s create a package
+pre-loaded unstable chroot environment which can run x-apps using the schroot
+directly.</p>
+<pre><code>$ sudo cp -a /srv/chroot/unstable-amd64-sbuild-\* /srv/chroot/unstable-amd64-dev
 $ sudo cp -a /etc/schroot/desktop /etc/schroot/osamu
 $ sudo tee /etc/schroot/chroot.d/unstable-amd64-dev &lt;&lt; EOF
 [unstable-dev]
@@ -380,18 +381,23 @@ $ sudo vim /etc/schroot/osamu/fstab
 ... add needed directories
 ...
 </code></pre><h3 id="test-build-environment-customization">Test build environment customization</h3>
-<p>I set <code>dev</code> as alias to get into the test build environment.</p>
-<pre><code>$ echo &quot;alias dev=&quot;schroot -c unstable-dev&quot;&quot; &gt;&gt; ~/.bash_aliases
+<p>I set <code>dev</code> as the alias to get into the test build environment from anywhere
+in my home directory. (My user name is &ldquo;osamu&rdquo;)</p>
+<pre><code>$ echo 'alias dev=&quot;xhost +si:localuser:osamu &amp;&amp; schroot -c unstable-dev&quot; &amp;&amp; xhost -' &gt;&gt; ~/.bash_aliases
 $ . .bashrc
 </code></pre><p>Now I can login to the chroot environment and customize it as:</p>
 <pre><code>$ dev
-(unstable-dev)$ apt-get update
-(unstable-dev)$ apt-get install aptitude sudo mc vim nano- devscripts fzf
-</code></pre><p>I also coped setting from the host PC for sudo to avoid password prompt and add
-a few symlinks in <code>/root</code> as in the host PC.</p>
-<p>To run x-apps isuch as <code>gitk</code> inside chroot, please start schroot as:</p>
+localuser:osamu being added to access control list
+(unstable-dev)$ sudo apt update
+ ...
+(unstable-dev)$ exit
+exit
+access control enabled, only authorized clients can connect
+</code></pre><p>I also copied setting from the host PC for sudo to avoid password prompt and
+add a few symlinks in <code>/root</code> as in the host PC.</p>
+<p>To run x-apps such as <code>gitk</code> inside chroot, please start schroot as:</p>
 <pre><code>xhost +
-schroot -c dev
+dev
 </code></pre><h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
