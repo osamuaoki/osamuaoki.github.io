@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/05/02 (last update)
+2021/05/03 (last update)
 </h3>
 </div>
 
@@ -361,9 +361,11 @@ builder = sbuild -A -s --source-only-changes -v -d unstable
 <code>sbuild</code> here.)</p>
 <h2 id="schroot-infrastructure">Schroot infrastructure</h2>
 <p>For package development, creating the latest minimal chroot environment for
-each test build as sbuild does is time consuming.  Let&rsquo;s create a package
-pre-loaded unstable chroot environment which can run x-apps using the schroot
-directly.</p>
+each test build as sbuild does is time consuming.</p>
+<h3 id="creating-a-schroot-environment">Creating a schroot environment</h3>
+<p>Let&rsquo;s create a package pre-loaded unstable chroot environment which can run
+x-apps using the schroot directly. (My user name is &ldquo;osamu&rdquo; and my hostname is
+&ldquo;goofy&rdquo;.)</p>
 <pre><code>$ sudo cp -a /srv/chroot/unstable-amd64-sbuild-\* /srv/chroot/unstable-amd64-dev
 $ sudo cp -a /etc/schroot/desktop /etc/schroot/osamu
 $ sudo tee /etc/schroot/chroot.d/unstable-amd64-dev &lt;&lt; EOF
@@ -371,31 +373,35 @@ $ sudo tee /etc/schroot/chroot.d/unstable-amd64-dev &lt;&lt; EOF
 description=Debian unstable/amd64 chroot development environment
 groups=root,sbuild
 root-groups=root,sbuild
+source-groups=root,sbuild
+source-root-groups=root,sbuild
 profile=osamu
 type=directory
 preserve-environment=true
-aliases=dev
 directory=/srv/chroot/unstable-amd64-dev
+union-type=overlay
+#command-prefix=eatmydata
 EOF
-$ sudo vim /etc/schroot/osamu/fstab
-... add needed directories
-...
-</code></pre><h3 id="test-build-environment-customization">Test build environment customization</h3>
-<p>I set <code>dev</code> as the alias to get into the test build environment from anywhere
-in my home directory. (My user name is &ldquo;osamu&rdquo;)</p>
-<pre><code>$ echo 'alias dev=&quot;xhost +si:localuser:osamu &amp;&amp; schroot -c unstable-dev&quot; &amp;&amp; xhost -' &gt;&gt; ~/.bash_aliases
+</code></pre><p>Let&rsquo;s install basic build environment packages to the schroot.</p>
+<pre><code>$ cd /
+$ sudo schroot -c source:unstable-dev -u root
+(unstable-dev)root@goofy:/# apt update; apt full-upgrade
+(unstable-dev)root@goofy:/# apt install aptitude vim nano- mc devscripts sudo sbuild fzf
+(unstable-dev)root@goofy:/# exit
+</code></pre><p>I further customize mount points by editing <code>/etc/schroot/osamu/fstab</code>.</p>
+<p>I also copy setting from the host PC for sudo sbuild, fzf, &hellip; and
+add a few symlinks from <code>/home/osamu</code> to <code>/root</code> as in the host PC.</p>
+<h3 id="easy-access-to-the-schroot-environment">Easy access to the schroot environment</h3>
+<p>In order to access the pertinent schroot environment, I added 2 alias definitions.</p>
+<pre><code>$ echo 'alias devs=&quot;schroot -c source:unstable-dev&quot;' &gt;&gt;~/.bash_aliases
+$ echo 'alias devx=&quot;xhost +si:localuser:osamu ; schroot -c chroot:unstable-dev ; xhost -&quot;' &gt;&gt;~/.bash_aliases
 $ . .bashrc
-</code></pre><p>Now I can login to the chroot environment and customize it as:</p>
-<pre><code>$ dev
-localuser:osamu being added to access control list
-(unstable-dev)$ sudo apt update
- ...
-(unstable-dev)$ exit
-exit
-access control enabled, only authorized clients can connect
-</code></pre><p>I also copied setting from the host PC for sudo to avoid password prompt and
-add a few symlinks in <code>/root</code> as in the host PC.</p>
-<p>The above setup allows to run x-apps such as <code>gitk</code> inside chroot.</p>
+</code></pre><p>The <code>devs</code> command opens a shell prompt and allows us to modify the source
+chroot environment.  The changes made are persistent.  This is good for
+installing and upgrading packages in the chroot.</p>
+<p>The <code>devx</code> command opens a shell prompt and allows us to work in a chroot
+session to build a source tree with access to X applications such as <code>gitk</code> as
+usual.  The changes made aren&rsquo;t persistent.</p>
 <h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
