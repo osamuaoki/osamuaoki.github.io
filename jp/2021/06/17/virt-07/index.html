@@ -63,25 +63,25 @@
 トップアプリの安定版最新バージョンの導入や、Debianがまだ提供していない
 アップストリームの最新バージョンのアプリ導入に使うのはありがも知れません。</p>
 <ul>
-<li>[AppImage|https://appimage.org/]</li>
-<li>[Flatpack|https://flatpak.org/]</li>
-<li>[Snapcraft|https://snapcraft.io/]</li>
+<li><a href="https://appimage.org/">AppImage</a></li>
+<li><a href="https://flatpak.org/">Flatpack</a></li>
+<li><a href="https://snapcraft.io/">Snapcraft</a></li>
 </ul>
 <p>ただ、単にパッケージ開発やビルド環境のためだけならLXC仮想環境をLXCの
 CLIから用いるのは面倒です。</p>
-<p>最初の、[仮想環境(1)|https://osamuaoki.github.io/jp/2020/12/13/virt-01/]
+<p>最初の、<a href="https://osamuaoki.github.io/jp/2020/12/13/virt-01/">仮想環境(1)</a>
 の内容を見直してsbuild/schrootを経由した単純なchroot環境を使うようになり
 益々そう感じます。</p>
 <p>chrootにせよLXCにせよKernel以外のシステム全体のコピーを各環境毎に確保する
 ので重いことは否めません。</p>
-<p>Debianが提供しなくなった[grip|https://pypi.org/project/grip/]を、
-[PyPI|https://pypi.org/]からのPythonのモジュールとしてpipで導入すると、
+<p>Debianが提供しなくなった<a href="https://pypi.org/project/grip/">grip</a>を、
+<a href="https://pypi.org/">PyPI</a>からのPythonのモジュールとしてpipで導入すると、
 すでにシステムに導入済みのPythonのモジュールまで、sudoしなかったので
 <code>~/.local/</code>の中へとはいえ最新版を依存関係で導入したりするのが気になって
 いました。さすがにこれだけのためにchrootやコンテナ環境を作るのは重いので
 Python環境だけを仮想化しました。</p>
 <h2 id="python-venv">Python: venv</h2>
-<p>[grip|https://pypi.org/project/grip/]をPython環境だけを仮想化して導入した
+<p><a href="https://pypi.org/project/grip/">grip</a>をPython環境だけを仮想化して導入した
 ので、以下に例示します。</p>
 <pre><code>$ pip list --user
 $ cd ~/bin
