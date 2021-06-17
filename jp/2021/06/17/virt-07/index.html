@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>仮想環境(7) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">仮想環境(7)</span></h1>
+
+<h3 class="date">Date:
+2021/06/17 (initial publish),
+2021/06/17 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/02/23/font-01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>コンテナ技術を用いる仮想環境は、外部から導入するバイナリーを実行する
+際のリスク低減とメインのシステムの環境コンタミを防ぐのには悪くないので
+しょう。そういった意味でtesting環境では安定しないオフィス関係のデスク
+トップアプリの安定版最新バージョンの導入や、Debianがまだ提供していない
+アップストリームの最新バージョンのアプリ導入に使うのはありがも知れません。</p>
+<ul>
+<li>[AppImage|https://appimage.org/]</li>
+<li>[Flatpack|https://flatpak.org/]</li>
+<li>[Snapcraft|https://snapcraft.io/]</li>
+</ul>
+<p>ただ、単にパッケージ開発やビルド環境のためだけならLXC仮想環境をLXCの
+CLIから用いるのは面倒です。</p>
+<p>最初の、[仮想環境(1)|https://osamuaoki.github.io/jp/2020/12/13/virt-01/]
+の内容を見直してsbuild/schrootを経由した単純なchroot環境を使うようになり
+益々そう感じます。</p>
+<p>chrootにせよLXCにせよKernel以外のシステム全体のコピーを各環境毎に確保する
+ので重いことは否めません。</p>
+<p>Debianが提供しなくなった[grip|https://pypi.org/project/grip/]を、
+[PyPI|https://pypi.org/]からのPythonのモジュールとしてpipで導入すると、
+すでにシステムに導入済みのPythonのモジュールまで、sudoしなかったので
+<code>~/.local/</code>の中へとはいえ最新版を依存関係で導入したりするのが気になって
+いました。さすがにこれだけのためにchrootやコンテナ環境を作るのは重いので
+Python環境だけを仮想化しました。</p>
+<h2 id="python-venv">Python: venv</h2>
+<p>[grip|https://pypi.org/project/grip/]をPython環境だけを仮想化して導入した
+ので、以下に例示します。</p>
+<pre><code>$ pip list --user
+$ cd ~/bin
+$ python3 -m venv venv
+$ cd venv
+$ source venv/bin/activate
+(venv) $ pip install grip
+Collecting grip
+  Using cached grip-4.5.2-py3-none-any.whl
+Collecting requests&gt;=2.4.1
+  Using cached requests-2.25.1-py2.py3-none-any.whl (61 kB)
+Collecting path-and-address&gt;=2.0.1
+  Using cached path_and_address-2.0.1-py3-none-any.whl
+Collecting Markdown&gt;=2.5.1
+  Using cached Markdown-3.3.4-py3-none-any.whl (97 kB)
+Collecting Flask&gt;=0.10.1
+  Using cached Flask-2.0.1-py3-none-any.whl (94 kB)
+Collecting docopt&gt;=0.4.0
+  Using cached docopt-0.6.2-py2.py3-none-any.whl
+Collecting Pygments&gt;=1.6
+  Using cached Pygments-2.9.0-py3-none-any.whl (1.0 MB)
+Collecting itsdangerous&gt;=2.0
+  Using cached itsdangerous-2.0.1-py3-none-any.whl (18 kB)
+Collecting Werkzeug&gt;=2.0
+  Using cached Werkzeug-2.0.1-py3-none-any.whl (288 kB)
+Collecting Jinja2&gt;=3.0
+  Using cached Jinja2-3.0.1-py3-none-any.whl (133 kB)
+Collecting click&gt;=7.1.2
+  Using cached click-8.0.1-py3-none-any.whl (97 kB)
+Collecting MarkupSafe&gt;=2.0
+  Using cached MarkupSafe-2.0.1-cp39-cp39-manylinux2010_x86_64.whl (30 kB)
+Collecting idna&lt;3,&gt;=2.5
+  Using cached idna-2.10-py2.py3-none-any.whl (58 kB)
+Collecting certifi&gt;=2017.4.17
+  Using cached certifi-2021.5.30-py2.py3-none-any.whl (145 kB)
+Collecting chardet&lt;5,&gt;=3.0.2
+  Using cached chardet-4.0.0-py2.py3-none-any.whl (178 kB)
+Collecting urllib3&lt;1.27,&gt;=1.21.1
+  Using cached urllib3-1.26.5-py2.py3-none-any.whl (138 kB)
+Installing collected packages: MarkupSafe, Werkzeug, urllib3, Jinja2, itsdangerous, idna, click, chardet, certifi, requests, Pygments, path-and-address, Markdown, Flask, docopt, grip
+Successfully installed Flask-2.0.1 Jinja2-3.0.1 Markdown-3.3.4 MarkupSafe-2.0.1 Pygments-2.9.0 Werkzeug-2.0.1 certifi-2021.5.30 chardet-4.0.0 click-8.0.1 docopt-0.6.2 grip-4.5.2 idna-2.10 itsdangerous-2.0.1 path-and-address-2.0.1 requests-2.25.1 urllib3-1.26.5
+(venv) $ exec bash -l
+$ cd ~/bin
+$ ln -sf venv/bin/grip grip
+$ pip list --user
+</code></pre><p>これで、<code>~/bin</code>にPATHが通っていればメイン環境への影響なく<code>grip</code>コマンドが
+使えるようになりました。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/02/23/font-01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
