@@ -17,9 +17,10 @@
  AppImage Flatpack Snapcraft  ただ、単にパッケージ開発やビルド環境のためだけならLXC仮想環境をLXCの CLIから用いるのは面倒です。
 最初の、仮想環境(1) の内容を見直してsbuild/schrootを経由した単純なchroot環境を使うようになり 益々そう感じます。
 chrootにせよLXCにせよKernel以外のシステム全体のコピーを各環境毎に確保する ので重いことは否めません。
-Debianが提供しなくなったgripを、 PyPIからのPythonのモジュールとしてpipで導入すると、 すでにシステムに導入済みのPythonのモジュールまで、sudoしなかったので ~/.local/の中へとはいえ最新版を依存関係で導入したりするのが気になって いました。さすがにこれだけのためにchrootやコンテナ環境を作るのは重いので Python環境だけを仮想化しました。
+Debianが提供しなくなったgripを、 PyPIからのPythonのモジュールとしてpipで導入すると、 すでにシステムに導入済みのPythonのモジュールまで、sudoしなかったので システムレベルでの/usr/local/の中への変更は無く、ユーザー環境の ~/.local/の中への変更のみとはいえ、そこに最新版を依存関係で導入したり するのが気になっていました。さすがにこれだけのためにchrootやコンテナ環境 を作るのは重いのでPython環境だけを仮想化しました。
 Python: venv gripをPython環境だけを仮想化して導入した ので、以下に例示します。
-$ pip list --user $ cd ~/bin $ python3 -m venv venv $ cd venv $ source venv/bin/activate (venv) $ pip install grip Collecting grip Using cached grip-4.5.2-py3-none-any.whl Collecting requests&amp;gt;=2.4.1 Using cached requests-2.25.1-py2.py3-none-any.whl (61 kB) Collecting path-and-address&amp;gt;=2.0.1 Using cached path_and_address-2.0.1-py3-none-any.whl Collecting Markdown&amp;gt;=2.5.1 Using cached Markdown-3.</description>
+$ pip list --user いま、ユーザー環境へのpipによるパッケージ導入はありません。
+$ cd ~/bin $ python3 -m venv venv $ cd venv $ source venv/bin/activate (venv) $ pip install grip Collecting grip Using cached grip-4.5.2-py3-none-any.whl Collecting requests&amp;gt;=2.4.1 Using cached requests-2.25.1-py2.py3-none-any.whl (61 kB) Collecting path-and-address&amp;gt;=2.0.1 Using cached path_and_address-2.0.1-py3-none-any.whl Collecting Markdown&amp;gt;=2.</description>
     </item>
     
   </channel>
