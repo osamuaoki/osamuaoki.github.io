@@ -57,7 +57,8 @@
   </tbody>
 </table>
 
-<p>Pythonで書かれたプログラム管理は、Debian供給のdebパッケージを使う限り、単純にAPTで管理するだけなので簡単です。</p>
+<p>Pythonで書かれたプログラム管理は、Debian供給のdebパッケージを使う限り、
+普通にAPTで管理するだけなので簡単です。</p>
 <p>一方、ソースからの導入などを考え出すと、Pythonのモジュール管理の変遷もあり結構ややこしいので、ここで復習します。</p>
 <h2 id="python-のパッケージの導入">Python のパッケージの導入</h2>
 <p>Debian供給のdebパッケージ以外からの導入の基本ルールは、
@@ -72,7 +73,7 @@
 その後のシェル環境からはこちらが優先され実行されるようになり、
 干渉するかもしれないので要注意です。</p>
 <h2 id="python-のパッケージの作成">Python のパッケージの作成</h2>
-<p>また、モジュールパッケージを導入する際に、基本のはずの
+<p>また、モジュールパッケージを導入する際に、昔の基本の
 <a href="https://docs.python.org/3/library/distutils.html">distutils</a>
 を使おうとすると、最近はマニュアルにLegacy等と書いてあるので
 不安になります。当時は、<code>python3 setup.py install ...</code>等として
@@ -82,9 +83,18 @@
 <a href="https://pypi.org/">Python Package Index</a>にアップロード出きるようにするには、
 <a href="https://docs.python.org/3/library/distutils.html">distutils</a>ではなく
 殆ど変わらない使い勝手の<a href="https://pypi.org/project/setuptools/">setuptools</a>と
-<a href="https://pypi.org/project/wheel/">wheel</a>を用い、<code>setup.py</code>を作成すれば、
+合わせて<a href="https://pypi.org/project/wheel/">wheel</a>を用い、<code>setup.py</code>を作成すれば、
 <code>python3 setup.py bdist_wheel</code>等としてwheel形式でのモジュールパッケージ
 出力が難なくできます。</p>
+<p>wheel形式でのモジュールパッケージは<a href="https://pypi.org/project/pip/">pip</a>で
+扱えます。</p>
+<p><a href="https://pypi.org/project/distribute/">distribute</a>は、
+<a href="https://pypi.org/project/setuptools/">setuptools</a>にマージしたとか、
+<a href="https://pypi.org/project/setuptools/">setuptools</a>が以前使っていた
+<a href="https://setuptools.readthedocs.io/en/latest/deprecated/easy_install.html">easy_install</a>
+は、wheel形式でモジュールパッケージを作成し<a href="https://pypi.org/project/pip/">pip</a>
+でモジュールパッケージを導入するようになったという、過去の経緯を理解しないと
+わかりにくいです。</p>
 <p>さらに最近の<a href="https://www.python.org/dev/peps/pep">PEP517</a>に準拠させるには、
 別のパッケージ作成インフラを使おうとしないなら、単に
 <a href="https://www.python.org/dev/peps/pep-0518/">PEP518</a>準拠の、
@@ -105,17 +115,19 @@ ii  python3-toml                  0.10.1-1        all          library for Tom's
 ii  python3-venv                  3.9.2-3         amd64        venv module for python3 (default python3 version)
 ii  python3-wheel                 0.34.2-1        all          built-package format for Python
 ii  python3-xdg                   0.27-2          all          Python 3 library to access freedesktop.org standards
-</code></pre><p><a href="https://www.python.org/dev/peps/pep">PEP517</a>に準拠させることで、
+</code></pre><p>このように<a href="https://www.python.org/dev/peps/pep">PEP517</a>に準拠させることで、
 <a href="https://pypi.org/project/build/">build</a>を使ってwheelパッケージが作れるようになります。</p>
-<p>作成したパッケージテストする際には、全て<code>python3 -m venv ...</code>
+<p>作成したモジュールパッケージテストする際には、全て<code>python3 -m venv ...</code>
 を使って作成した仮想化された環境の中でのみ実行することを意識すれば
 大きな問題は起きないはずです。</p>
-<p>Debianパッケージ作成時に、<code>python3 setup.py install --prefix=...</code>
-としている辺りが、<code>setup.py</code>無しの<code>setup.cfg</code>だけの場合<code>python3 -m build</code>として
-どうなるか等の細かな点は、
+<p>Debianパッケージ作成時に、昔<code>python3 setup.py install --prefix=...</code>
+としている辺りが、最新の<a href="https://www.python.org/dev/peps/pep">PEP517</a>に準拠で
+<code>setup.py</code>無しの<code>setup.cfg</code>だけの場合などでは
+<code>python3 -m build --no-isolation</code>として行くのかと思います。</p>
+<p>具体的にどうなるか等の細かな点は、
 <a href="https://packaging.python.org/tutorials/packaging-projects/">Packaging Python Projects</a>
-を読みながら、後日imediffを<a href="https://pypi.org/project/twine/">twine</a>を用いて
-更新アップロードして加筆します。</p>
+を読みながら、後日テストパッケージを作ったりimediffを 今風の
+<a href="https://pypi.org/project/twine/">twine</a>を用いて更新アップロードして加筆します。</p>
 <!-- raw HTML omitted -->
 
 
