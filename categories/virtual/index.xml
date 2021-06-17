@@ -8,6 +8,22 @@
     <language>en-us</language>
     <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/virtual/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Pythonパッケージ</title>
+      <link>/jp/2021/06/17/python-package/</link>
+      <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/06/17/python-package/</guid>
+      <description>Pythonで書かれたプログラム管理は、Debian供給のdebパッケージを使う限り、単純にAPTで管理するだけなので簡単です。
+一方、ソースからの導入などを考え出すと、Pythonのモジュール管理の変遷もあり結構ややこしいので、ここで復習します。
+Python のパッケージの導入 Debian供給のdebパッケージ以外からの導入の基本ルールは、 ソースからバイナリパッケージのwheelを作成しての導入の場合や、 外部レポジトリーのPython Package Indexからの導入の場合ともに、 仮想環境(7) の様に、python3 -m venv ...を使って作成した環境の中へ pipを使って導入という流れです。
+Python のパッケージの作成 また、モジュールパッケージを導入する際に、基本のはずの distutils を使おうとすると、最近はマニュアルにLegacy等と書いてあるので 不安になります。当時は、python3 setup.py install ...等として いきなりターゲットディレクトリーに書き込みモジュールパッケージを導入 していました。
+現在はPython Packaging Authorityのルールに合致させ Python Package Indexにアップロード出きるようにするには、 distutilsではなく 殆ど変わらない使い勝手のsetuptoolsと wheelを用い、setup.pyを作成すれば、 python3 setup.py bdist_wheel等としてwheel形式でのモジュールパッケージ 出力が難なくできます。
+さらに最近のPEP517に準拠させるには、 別のパッケージ作成インフラを使おうとしないなら、単に PEP518準拠の、 以下のpyproject.tomlを加えれば充分です。
+[build-system] requires = [ &amp;quot;setuptools&amp;gt;=42&amp;quot;, &amp;quot;wheel&amp;quot; ] build-backend = &amp;quot;setuptools.build_meta&amp;quot; ちなみに、Bullseye環境は以下のバージョンですので余裕です。
+ii python3-build 0.1.0-3 all Simple, correct PEP517 package builder (Python 3) ii python3-distutils 3.9.2-1 all distutils package for Python 3.</description>
+    </item>
+    
+    <item>
       <title>仮想環境(7)</title>
       <link>/jp/2021/06/17/virt-07/</link>
       <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>

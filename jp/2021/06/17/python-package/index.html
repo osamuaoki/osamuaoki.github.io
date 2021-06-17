@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Pythonパッケージ | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Pythonパッケージ</span></h1>
+
+<h3 class="date">Date:
+2021/06/17 (initial publish),
+2021/06/17 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/06/17/virt-07/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<p>Pythonで書かれたプログラム管理は、Debian供給のdebパッケージを使う限り、単純にAPTで管理するだけなので簡単です。</p>
+<p>一方、ソースからの導入などを考え出すと、Pythonのモジュール管理の変遷もあり結構ややこしいので、ここで復習します。</p>
+<h2 id="python-のパッケージの導入">Python のパッケージの導入</h2>
+<p>Debian供給のdebパッケージ以外からの導入の基本ルールは、
+ソースからバイナリパッケージのwheelを作成しての導入の場合や、
+外部レポジトリーの<a href="https://pypi.org/">Python Package Index</a>からの導入の場合ともに、
+<a href="https://osamuaoki.github.io/jp/2021/06/17/virt-07/">仮想環境(7)</a>
+の様に、<code>python3 -m venv ...</code>を使って作成した環境の中へ
+<a href="https://pypi.org/project/pip/">pip</a>を使って導入という流れです。</p>
+<h2 id="python-のパッケージの作成">Python のパッケージの作成</h2>
+<p>また、モジュールパッケージを導入する際に、基本のはずの
+<a href="https://docs.python.org/3/library/distutils.html">distutils</a>
+を使おうとすると、最近はマニュアルにLegacy等と書いてあるので
+不安になります。当時は、<code>python3 setup.py install ...</code>等として
+いきなりターゲットディレクトリーに書き込みモジュールパッケージを導入
+していました。</p>
+<p>現在は<a href="https://www.pypa.io/">Python Packaging Authority</a>のルールに合致させ
+<a href="https://pypi.org/">Python Package Index</a>にアップロード出きるようにするには、
+<a href="https://docs.python.org/3/library/distutils.html">distutils</a>ではなく
+殆ど変わらない使い勝手の<a href="https://pypi.org/project/setuptools/">setuptools</a>と
+<a href="https://pypi.org/project/wheel/">wheel</a>を用い、<code>setup.py</code>を作成すれば、
+<code>python3 setup.py bdist_wheel</code>等としてwheel形式でのモジュールパッケージ
+出力が難なくできます。</p>
+<p>さらに最近の<a href="https://www.python.org/dev/peps/pep">PEP517</a>に準拠させるには、
+別のパッケージ作成インフラを使おうとしないなら、単に
+<a href="https://www.python.org/dev/peps/pep-0518/">PEP518</a>準拠の、
+以下の<code>pyproject.toml</code>を加えれば充分です。</p>
+<pre><code>[build-system]
+requires = [
+    &quot;setuptools&gt;=42&quot;,
+    &quot;wheel&quot;
+]
+build-backend = &quot;setuptools.build_meta&quot;
+</code></pre><p>ちなみに、Bullseye環境は以下のバージョンですので余裕です。</p>
+<pre><code>ii  python3-build                 0.1.0-3         all          Simple, correct PEP517 package builder (Python 3)
+ii  python3-distutils             3.9.2-1         all          distutils package for Python 3.x
+ii  python3-distutils-extra       2.45            all          enhancements to the Python3 build system
+ii  python3-pip                   20.3.4-2        all          Python package installer
+ii  python3-setuptools            52.0.0-3        all          Python3 Distutils Enhancements
+ii  python3-toml                  0.10.1-1        all          library for Tom's Obvious, Minimal Language - Python 3.x
+ii  python3-venv                  3.9.2-3         amd64        venv module for python3 (default python3 version)
+ii  python3-wheel                 0.34.2-1        all          built-package format for Python
+ii  python3-xdg                   0.27-2          all          Python 3 library to access freedesktop.org standards
+</code></pre><p><a href="https://www.python.org/dev/peps/pep">PEP517</a>に準拠させることで、
+<a href="https://pypi.org/project/build/">build</a>を使ってwheelパッケージが作れるようになります。</p>
+<p>とにかく、<a href="https://packaging.python.org/">Python Packaging User Guide</a>
+等の中のコマンド例は、全て<code>python3 -m venv ...</code>を使って作成した環境の中
+でのみ実行することを意識すれば大きな問題は起きないはずです。</p>
+<p>Debianパッケージ作成時に、<code>python3 setup.py install --prefix=...</code>
+としている辺りが、<code>setup.py</code>無しの<code>setup.cfg</code>だけの場合<code>python3 -m build</code>として
+どうなるか等の細かな点は、
+<a href="https://packaging.python.org/tutorials/packaging-projects/">Packaging Python Projects</a>
+を読みながら、後日imediffを<a href="https://pypi.org/project/twine/">twine</a>を用いて
+更新アップロードして加筆します。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/06/17/virt-07/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
