@@ -17,7 +17,7 @@
 一方、ソースからの導入などを考え出すと、Pythonのモジュール管理の変遷もあり結構ややこしいので、ここで復習します。
 Python のパッケージの導入 Debian供給のdebパッケージ以外からの導入の基本ルールは、 ソースからバイナリパッケージのwheelを作成しての導入の場合や、 外部レポジトリーのPython Package Indexからの導入の場合ともに、 仮想環境(7) の様に、python3 -m venv ...を使って作成した環境の中へ pipを使って導入という流れです。
 Python関連のPython Packaging User Guideからリンクされた サイトにある、python3 -m pip install --upgrade pip setuptools wheel 等のコマンドを安定版システムで漫然と通常のシェルから実行すると最新版が導入され、 その後のシェル環境からはこちらが優先され実行されるようになり、 干渉するかもしれないので要注意です。
-前期の様な手動での仮想環境を使った導入をするのが面倒な場合、 pipxを使うと自動化できるようです。 Debian Bullseyeからは2021/6/18現在落ちていますが、その環境で使えるパッケージ が最近アップロードされています。 https://packages.debian.org/sid/pipx
+前記の様な手動での仮想環境を使った導入をするのが面倒な場合、 pipxを使うと自動化できるようです。 Debian Bullseyeからは2021/6/18現在落ちていますが、その環境で使えるパッケージ が最近アップロードされています。 https://packages.debian.org/sid/pipx
 Python のパッケージの作成 また、モジュールパッケージを導入する際に、昔の基本の distutils を使おうとすると、最近はマニュアルにLegacy等と書いてあるので 不安になります。当時は、python3 setup.py install ...等として いきなりターゲットディレクトリーに書き込みモジュールパッケージを導入 していました。
 現在はPython Packaging Authorityのルールに合致させ Python Package Indexにアップロード出きるようにするには、 distutilsではなく 殆ど変わらない使い勝手のsetuptoolsと 合わせてwheelを用い、setup.pyを作成すれば、 python3 setup.py bdist_wheel等としてwheel形式でのモジュールパッケージ 出力が難なくできます。
 wheel形式でのモジュールパッケージはpipで 扱えます。
