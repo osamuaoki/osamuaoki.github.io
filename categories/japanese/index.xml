@@ -15,13 +15,17 @@
       <guid>/jp/2021/06/17/python-package/</guid>
       <description>Pythonで書かれたプログラム管理は、Debian供給のdebパッケージを使う限り、 普通にAPTで管理するだけなので簡単です。
 一方、ソースからの導入などを考え出すと、Pythonのモジュール管理の変遷もあり結構ややこしいので、ここで復習します。
-Python のパッケージの導入 Debian供給のdebパッケージ以外からの導入の基本ルールは、 ソースからバイナリパッケージのwheelを作成しての導入の場合や、 外部レポジトリーのPython Package Indexからの導入の場合ともに、 仮想環境(7) の様に、python3 -m venv ...を使って作成した環境の中へ pipを使って導入という流れです。
-Python関連のPython Packaging User Guideからリンクされた サイトにある、python3 -m pip install --upgrade pip setuptools wheel 等のコマンドを安定版システムで漫然と通常のシェルから実行すると最新版が導入され、 その後のシェル環境からはこちらが優先され実行されるようになり、 干渉するかもしれないので要注意です。
-前記の様な手動での仮想環境を使った導入をするのが面倒な場合、 pipxを使うと自動化できるようです。 Debian Bullseyeからは2021/6/18現在落ちていますが、その環境で使えるパッケージ が最近アップロードされています。 https://packages.debian.org/sid/pipx
+Python のパッケージの導入 Debian供給のdebパッケージ以外からの導入の基本ルールは、 OS環境をコンタミしないようにするのが賢明です。
+具体的には、ソースからバイナリパッケージのwheelを作成しての導入の場合や、 外部レポジトリーのPython Package Indexからの導入の場合のともに、 仮想環境(7) の手法を使って導入という流れです。
+Python関連のPython Packaging User Guideからリンクされた サイトの公式マニュアルにある、python3 -m pip install --upgrade pip setuptools wheel 等のコマンドを、安定版システムで漫然と通常のシェルから実行すると最新版が導入され、 その後のシェル環境からはこちらが優先され実行されるようになり、 干渉するかもしれないので要注意です。
+pipをpipxとすれば良いだけですが、気をつけたいところです．
 Python のパッケージの作成 また、モジュールパッケージを導入する際に、昔の基本の distutils を使おうとすると、最近はマニュアルにLegacy等と書いてあるので 不安になります。当時は、python3 setup.py install ...等として いきなりターゲットディレクトリーに書き込みモジュールパッケージを導入 していました。
 現在はPython Packaging Authorityのルールに合致させ Python Package Indexにアップロード出きるようにするには、 distutilsではなく 殆ど変わらない使い勝手のsetuptoolsと 合わせてwheelを用い、setup.pyを作成すれば、 python3 setup.py bdist_wheel等としてwheel形式でのモジュールパッケージ 出力が難なくできます。
 wheel形式でのモジュールパッケージはpipで 扱えます。
-ちなみに、distributeは、 setuptoolsにマージされたとか、 setuptoolsが以前使っていた easy_install は非推薦ツールとなり、wheel形式でモジュールパッケージを作成し pipでモジュールパッケージを導入するようになったという、 過去の経緯を理解しないといろんな手法の立ち位置がわかりにくいです。</description>
+ちなみに、distributeは、 setuptoolsにマージされたとか、 setuptoolsが以前使っていた easy_install は非推薦ツールとなり、wheel形式でモジュールパッケージを作成し pipでモジュールパッケージを導入するようになったという、 過去の経緯を理解しないといろんな手法の立ち位置がわかりにくいです。
+wheel形式とは、その実体はクロスプラットフォームで一番使われる アーカイブ形式のZIPファイルです。
+さらに最近のPEP517に準拠させるには、 別のパッケージ作成インフラを使おうとしないなら、単に PEP518準拠の、 以下のpyproject.tomlを加えれば充分です。
+[build-system] requires = [ &amp;quot;setuptools&amp;gt;=42&amp;quot;, &amp;quot;wheel&amp;quot; ] build-backend = &amp;quot;setuptools.</description>
     </item>
     
     <item>
@@ -35,9 +39,9 @@ wheel形式でのモジュールパッケージはpipで 扱えます。
 最初の、仮想環境(1) の内容を見直してsbuild/schrootを経由した単純なchroot環境を使うようになり 益々そう感じます。
 chrootにせよLXCにせよKernel以外のシステム全体のコピーを各環境毎に確保する ので重いことは否めません。
 Debianが提供しなくなったgripを、 PyPIからのPythonのモジュールとしてpipで導入すると、 すでにシステムに導入済みのPythonのモジュールまで、sudoしなかったので システムレベルでの/usr/local/の中への変更は無く、ユーザー環境の ~/.local/の中への変更のみとはいえ、そこに最新版を依存関係で導入したり するのが気になっていました。さすがにこれだけのためにchrootやコンテナ環境 を作るのは重いのでPython環境だけを仮想化しました。
-Python: venv gripをPython環境だけを仮想化して導入した ので、以下に例示します。
+Python: venv + pip (manual) gripをPython環境だけを仮想化して導入した ので、以下に例示します。
 $ pip list --user いま、ユーザー環境へのpipによるパッケージ導入はありません。
-$ cd ~/bin $ python3 -m venv venv $ cd venv $ source venv/bin/activate (venv) $ pip install grip Collecting grip Using cached grip-4.5.2-py3-none-any.whl Collecting requests&amp;gt;=2.4.1 Using cached requests-2.25.1-py2.py3-none-any.whl (61 kB) Collecting path-and-address&amp;gt;=2.0.1 Using cached path_and_address-2.0.1-py3-none-any.whl Collecting Markdown&amp;gt;=2.</description>
+$ cd ~/bin $ python3 -m venv venv $ cd venv $ source venv/bin/activate (venv) $ pip install grip Collecting grip Using cached grip-4.5.2-py3-none-any.whl Collecting requests&amp;gt;=2.4.1 Using cached requests-2.25.1-py2.py3-none-any.whl (61 kB) Collecting path-and-address&amp;gt;=2.0.1 Using cached path_and_address-2.</description>
     </item>
     
     <item>

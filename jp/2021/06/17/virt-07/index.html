@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/06/17 (initial publish),
-2021/06/17 (last update)
+2021/06/19 (last update)
 </h3>
 </div>
 
@@ -81,7 +81,7 @@ CLIから用いるのは面倒です。</p>
 <code>~/.local/</code>の中への変更のみとはいえ、そこに最新版を依存関係で導入したり
 するのが気になっていました。さすがにこれだけのためにchrootやコンテナ環境
 を作るのは重いのでPython環境だけを仮想化しました。</p>
-<h2 id="python-venv">Python: venv</h2>
+<h2 id="python-venv--pip-manual">Python: venv + pip (manual)</h2>
 <p><a href="https://pypi.org/project/grip/">grip</a>をPython環境だけを仮想化して導入した
 ので、以下に例示します。</p>
 <pre><code>$ pip list --user
@@ -133,6 +133,21 @@ $ ln -sf venv/bin/grip grip
 <pre><code>$ pip list --user
 </code></pre><p>ユーザー環境へのpipによるパッケージ導入なく、悪影響の心配が無い形で<code>grip</code>が
 導入できていることが確認できました。</p>
+<h2 id="python-pipx-automatic">Python: pipx (automatic)</h2>
+<p>前記の様な手動での仮想環境を使った導入をするのは、何がどうなっているのかを学には
+いいのですが、少々面倒です。</p>
+<p>単にDebianのOS環境をクリーンで安定に保ったまま、最新モジュールをDebian外のレポから
+持ってきてインストールし使用したい時には、<a href="https://pypa.github.io/pipx/">pipx</a>を
+使うと透過的に自動化できるので便利です。</p>
+<p>PyPIで見つかるリーモートからのインストールはパッケージ名だけの以下でOKです。</p>
+<pre><code>$ pipx install grip
+
+</code></pre><p>テストビルドしたローカルのwheelの場合には、必ず<code>./</code>を前につけたファイルパス名の以下でOKです。</p>
+<pre><code>$ pipx install ./test-code.wheel
+
+</code></pre><p><a href="https://pypa.github.io/pipx/">pipx</a>は、Debian Bullseye/testingからは、
+2021/6/18の現在落ちていますが、Bullseye環境で使えるパッケージが
+最近アップロードされています。 <a href="https://packages.debian.org/sid/pipx">https://packages.debian.org/sid/pipx</a></p>
 <!-- raw HTML omitted -->
 
 
