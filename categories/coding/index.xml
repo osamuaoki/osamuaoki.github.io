@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>coding on Goofing Osamu</title>
+    <link>/categories/coding/</link>
+    <description>Recent content in coding on Goofing Osamu</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Mon, 12 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/coding/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GTK GUI with PyGObject (1)</title>
+      <link>/en/2021/07/12/pygi-1/</link>
+      <pubDate>Mon, 12 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2021/07/12/pygi-1/</guid>
+      <description>GTK GUI situation GTK3 GUI has been changing. (Now 3.38.5)
+The Python GTK+ 3 Tutorial (as of 2021-07) goes as:
+ Gtk.UIManager, Gtk.Action, and Gtk.ActionGroup have been deprecated since GTK+ version 3.10 and should not be used in newly-written code. Use the Application framework instead.
+ I understand this is caused by App Menu Retirement. I see no Python based tutorial contents for creating modern Primary menu etc. How do I do it?</description>
+    </item>
+    
+    <item>
+      <title>GITデフォルトブランチの`main`への移行</title>
+      <link>/jp/2021/01/27/git-master-main/</link>
+      <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/01/27/git-master-main/</guid>
+      <description>２１世紀の世情の反映で、 PC の視点から、デフォールトのブランチ名は、masterに代わり、新規のプロジェクトでは mainが使われていきます。
+人を不愉快にすることを続けたく無いので、折に触れ過去のプロジェクトでも同様にするべく、 masterからmainへのデフォールトブランチ名を移行するための手順を、備忘録を兼ねたメモ としてここに作成します。
+GITHUBサーバーの変更 GithubのWeb interfaceで、Settings -&amp;gt; Branches -&amp;gt; Default branch から 「master」を「main」と変更します。
+ローカルのrepoの変更 ローカルブランチ名の変更 次に、GITHUBのWEBインターフェースの吹き出しにある指示手順で、ローカルの repoのブランチ名を状態を確認しながら変更します。
+$ git branch -a * master remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git branch -m master main $ git branch -a * main remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git status -sb ## main...origin/master トラッキングの移行 さらに、GITHUBのWEBインターフェースの吹き出しにある指示手順で リモートのトラッキングがうまくするための追加の関連設定を 状態を確認しながらします。
+$ git fetch origin From github.com:&amp;lt;user_name&amp;gt;/&amp;lt;project_name&amp;gt; * [new branch] main -&amp;gt; origin/main $ git branch -a * main remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/main remotes/origin/master $ git status -sb ## main.</description>
+    </item>
+    
+  </channel>
+</rss>

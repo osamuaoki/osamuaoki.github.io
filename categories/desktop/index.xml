@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>desktop on Goofing Osamu</title>
+    <link>/categories/desktop/</link>
+    <description>Recent content in desktop on Goofing Osamu</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/desktop/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Pythonパッケージ</title>
+      <link>/jp/2021/06/17/python-package/</link>
+      <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/06/17/python-package/</guid>
+      <description>Pythonで書かれたプログラム管理は、Debian供給のdebパッケージを使う限り、 普通にAPTで管理するだけなので簡単です。
+一方、ソースからの導入などを考え出すと、Pythonのモジュール管理の変遷もあり結構ややこしいので、ここで復習します。
+Python のパッケージの導入 Debian供給のdebパッケージ以外からの導入の基本ルールは、 OS環境をコンタミしないようにするのが賢明です。
+具体的には、ソースからバイナリパッケージのwheelを作成しての導入の場合や、 外部レポジトリーのPython Package Indexからの導入の場合のともに、 仮想環境(7) の手法を使って導入という流れです。
+Python関連のPython Packaging User Guideからリンクされた サイトの公式マニュアルにある、python3 -m pip install --upgrade pip setuptools wheel 等のコマンドを、安定版システムで漫然と通常のシェルから実行すると最新版が導入され、 その後のシェル環境からはこちらが優先され実行されるようになり、 干渉するかもしれないので要注意です。
+pipをpipxとすれば良いだけですが、気をつけたいところです．
+Python のパッケージの作成 また、モジュールパッケージを導入する際に、昔の基本の distutils を使おうとすると、最近はマニュアルにLegacy等と書いてあるので 不安になります。当時は、python3 setup.py install ...等として いきなりターゲットディレクトリーに書き込みモジュールパッケージを導入 していました。
+現在はPython Packaging Authorityのルールに合致させ Python Package Indexにアップロード出きるようにするには、 distutilsではなく 殆ど変わらない使い勝手のsetuptoolsと 合わせてwheelを用い、setup.pyを作成すれば、 python3 setup.py bdist_wheel等としてwheel形式でのモジュールパッケージ 出力が難なくできます。
+wheel形式でのモジュールパッケージはpipで 扱えます。
+ちなみに、distributeは、 setuptoolsにマージされたとか、 setuptoolsが以前使っていた easy_install は非推薦ツールとなり、wheel形式でモジュールパッケージを作成し pipでモジュールパッケージを導入するようになったという、 過去の経緯を理解しないといろんな手法の立ち位置がわかりにくいです。
+wheel形式とは、その実体はクロスプラットフォームで一番使われる アーカイブ形式のZIPファイルです。
+さらに最近のPEP517に準拠させるには、 別のパッケージ作成インフラを使おうとしないなら、単に PEP518準拠の、 以下のpyproject.tomlを加えれば充分です。
+[build-system] requires = [ &amp;quot;setuptools&amp;gt;=42&amp;quot;, &amp;quot;wheel&amp;quot; ] build-backend = &amp;quot;setuptools.</description>
+    </item>
+    
+    <item>
+      <title>仮想環境(7)</title>
+      <link>/jp/2021/06/17/virt-07/</link>
+      <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/06/17/virt-07/</guid>
+      <description>コンテナ技術を用いる仮想環境は、外部から導入するバイナリーを実行する 際のリスク低減とメインのシステムの環境コンタミを防ぐのには悪くないので しょう。そういった意味でtesting環境では安定しないオフィス関係のデスク トップアプリの安定版最新バージョンの導入や、Debianがまだ提供していない アップストリームの最新バージョンのアプリ導入に使うのはありがも知れません。
+ AppImage Flatpack Snapcraft  ただ、単にパッケージ開発やビルド環境のためだけならLXC仮想環境をLXCの CLIから用いるのは面倒です。
+最初の、仮想環境(1) の内容を見直してsbuild/schrootを経由した単純なchroot環境を使うようになり 益々そう感じます。
+chrootにせよLXCにせよKernel以外のシステム全体のコピーを各環境毎に確保する ので重いことは否めません。
+Debianが提供しなくなったgripを、 PyPIからのPythonのモジュールとしてpipで導入すると、 すでにシステムに導入済みのPythonのモジュールまで、sudoしなかったので システムレベルでの/usr/local/の中への変更は無く、ユーザー環境の ~/.local/の中への変更のみとはいえ、そこに最新版を依存関係で導入したり するのが気になっていました。さすがにこれだけのためにchrootやコンテナ環境 を作るのは重いのでPython環境だけを仮想化しました。
+Python: venv + pip (manual) gripをPython環境だけを仮想化して導入した ので、以下に例示します。
+$ pip list --user いま、ユーザー環境へのpipによるパッケージ導入はありません。
+$ cd ~/bin $ python3 -m venv venv $ cd venv $ source venv/bin/activate (venv) $ pip install grip Collecting grip Using cached grip-4.5.2-py3-none-any.whl Collecting requests&amp;gt;=2.4.1 Using cached requests-2.25.1-py2.py3-none-any.whl (61 kB) Collecting path-and-address&amp;gt;=2.0.1 Using cached path_and_address-2.</description>
+    </item>
+    
+    <item>
+      <title>Development system (2)</title>
+      <link>/en/2021/04/09/dev-02/</link>
+      <pubDate>Fri, 09 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2021/04/09/dev-02/</guid>
+      <description>Local repo After reading https://wiki.debian.org/DebianRepository/Setup checking their popularity, I decided to go with reprepro package.
+Here, I follow https://wiki.debian.org/DebianRepository/SetupWithReprepro (It was slightly outdated. I update it.)
+Setting up an web server  $ sudo apt install apache2 Now you can see a nice &amp;ldquo;Default Page&amp;rdquo; at &amp;ldquo;[::1]&amp;rdquo; (or &amp;ldquo;127.0.0.1&amp;rdquo; for IPV4) using browser.
+Let&amp;rsquo;s create a simple directory tree for single distribution case.
+ $ sudo bash -i # mkdir -p /var/www/html/repo # cat &amp;gt; /etc/apache2/conf-available/repos.</description>
+    </item>
+    
+    <item>
+      <title>Development system (1)</title>
+      <link>/en/2021/04/03/dev-01/</link>
+      <pubDate>Sat, 03 Apr 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2021/04/03/dev-01/</guid>
+      <description>Development infrastructure In order to keep development setups to be simple and robust, I changed development infrastructure.
+ For package test build, I decided to move to schroot. For package build, I decided to move to sbuild (a schroot wrapper). For package test for each GUI setups, I decided to set up KVM.  (I was suffering sudden cowbuilder failures. That was another motivation.)
+Planned infrastructure includes:
+ APT proxy on the host WS.</description>
+    </item>
+    
+    <item>
+      <title>等幅フォント</title>
+      <link>/jp/2021/02/23/font-01/</link>
+      <pubDate>Tue, 23 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/23/font-01/</guid>
+      <description>ターミナル環境での等幅フォントをプログラミング入力と日本語入力の両面から 見つめてみました。以下は自分なりの備忘録メモです。
+特定ソフトでフォントが汚い 最近のセキュリティーにうるさいソフトは、サンドボックス環境からうまくフォント が拾えなくなり、超低解像度のドットマトリクスフォントが拡大表示されてドン引き することがあります。 https://bugs.debian.org/987948
+こんな時には、xdg-desktop-portal-gtkの類のパッケージを導入すると 問題が解決します。
+文字の大きさのポイントとは？ 印刷・DTPで細かいことを言わなければ、1ポイントは(約)1/72インチ (0.354mm)の 単位で、フォントセットの中の小文字の&amp;quot;m&amp;quot;の幅をポイントで計ることでフォントの 高さ、つまりフォントのの大きさを示すのに使われます。
+スクリーンや印字サイズ PC最初の表示装置のMDAは、白黒文字を文字幅x高さ9x14ピクセルのフォントで 80文字x25行の表示を、720x350の解像度に表示します。文字自体は7x11ピクセル の大きさでした。アナログカラーテレビは、720x480の解像度に表示します。 9x14ピクセルのフォントで最大80文字x34行の表示が出きると言えます。
+初期のMacのディスプレーや初期のドットマトリクスプリンターのピクセル間隔は 72 DPIで、初期のFAXは100 DPI、初期のレーザープリンターは300 DPIです。
+米国のレター紙(A4に近い)の幅は8.5&amp;quot;なので、余白をとって8&amp;quot;に印字すると すると、パイカサイズのタイプライター風の等幅で10 CPI で印字すると 80文字/行はいります。また詰めた12 CPI で印字すると96文字/行はいります。 そういえば当時の72 DPIのドットマトリクスプリンターでのソースコードの 印刷は8x8 dotsのフォントデーターを、縦横同じすすめかたで10 CPI、 横を詰めた印字で12 CPIとしていました。
+私現在のPCの14インチディスプレーはFHDで1920x1080ピクセルです。 どうも160 DPIあります。昔の72 DPI比較で2.2倍の解像度があります
+ターミナル環境と等幅フォント 標準のターミナルのサイズは、80文字x24行です。
+Xtermだと72mmx48mmで、Gnome-terminalとDejaVu系英文14ポイントの 等幅フォントの組み合わせだと 140mmx86mm位の大きさです。
+DejaVu系の英文14ポイントと同じ大きさのスクリーンサイズの ターミナルが、Terminus系の英文16ポイントで得られます。
+DejaVu系の等幅フォントに、DejaVuとHackとNotoとMonospaceがあります。 これらに同じフォントサイズの日本語全角文字が入ると、日本語文字が 英文と同じ大きさで行間が余裕ある感じになります。
+Terminus系の等幅フォントには、TerminusとUbuntuがあります。これらに 同じフォントサイズの日本語全角文字が入ると、日本語文字が大きくなり 行間が詰まった感じになります。
+これを見ると、英語のみならHackでもUbuntuでもフォントサイズ選定 を調整すれば良いようです。ただ、日本語まじりだと、Hackが魅力的 です。HackにはVim用の特殊フォントも入っています。
+   Font Point 0O区別 1lI区別 Programing Japanese Overall     Monospace 14 Good Good Good Good Good   DejaVu 14 Good Good Good Good Good   Hack 14 Good Good Excellent Good Excellent   Noto 14 Poor Poor Poor Good Poor   Terminus 16 Good Poor Poor fair Poor   Ubuntu 16 Good Good Excellent fair fair    英文＋プログラムのためにFacebook由来のHackをインストールしターミナル環境で 指定し、UIやターミナル環境内の日本語環境文字はGoogle由来のNoto-CJK系導入で 補うのが良さそうです。</description>
+    </item>
+    
+    <item>
+      <title>Btrfs入門(2)</title>
+      <link>/jp/2021/02/16/btrfs-02/</link>
+      <pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/16/btrfs-02/</guid>
+      <description>半年前に覗いたBtrfs をもう一度見直しました。以下は自分なりの備忘録メモです。
+subvolumeの使い方 使用法のガイド のリストのリンク先には興味深いコンテントがあります。 システム管理者ガイド 中の、subvolumeレイアウト の内容は、「使い方」を見詰め直す上で目から鱗でした。
+私は単純にFlatなsubvolumeレイアウトを乱用していましたが、 Nestedなsubvolumeレイアウトをうまく使い/etc/fstabを簡素化し、 よく考えて構成したMixedなsubvolumeレイアウトを使うと管理が楽そうです。
+この際、Ubuntu風の@home等の 慣習Subvolume命名法 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。
+Root-fsのbtrfs化 RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。
+btrfs化の全体手順 btrfs化を確実にするために、練習を兼ねてサブ環境で移行を確認した上でメイン環境を移行します。
+ EFIパーティションを共有した2つ以上別のパーティションを使う2つ以上のLinuxが立ち上げられるマルチブート環境を作成します。（EFIパーティションはWindowsとも共有） サブのLinux環境のbtrfs化  メインのLinux環境を立ち上げ、サブのLinux環境をbtrfs化します。（btrfs-convertで処理） サブのLinux環境の/etc/fstabや/boot/grub/grub.cfg内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。 メインのLinux環境の/boot/grub/grub.cfg内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。(sudo dpkg-reconfigure grub-efi-amd64とするのでもいいはず) サブのLinux環境を立ち上げ、正常動作を確認します。 サブのLinux環境を立ち上げ、メインのLinux環境をbtrfs化します。（この時点では、subvol=/にメインのシステムあり）   サブのLinux環境のsubvol=@への移動  サブのLinux環境のスナップショットを subvol=@に作成します。 メインのLinux環境を立ち上げ、サブのLinux環境のsubvol=/を/mntにマウントし、後述のバグ回避策の処理を行います。 subvol=@に移動したサブのLinux環境を立ち上げ、動作を確認します。 念のためsudo dpkg-reconfigure grub-efi-amd64とし、起動確認を確認します。   メインのLinux環境に関して、上記同様の、Linux環境のbtrfs化＋Linux環境のsubvol=@への移動を行います。 メインのLinux環境に関して、timeshiftを使えるようにsubvol=@homeを追加します。  Linux環境のbtrfs化 btrfs-convertによるファイルシステムの変換自体は、 Conversion from Ext3/4 and ReiserFS をトレースしました。
+ファイルシステムの変換だけでは、ブート可能なシステムにはなっていません。 ファイルシステムがext4からbtrfsに変更されると同時にデバイスのblkidも 変更されます。例えば、491a357c-822f-4f38-b56e-b998baea81a5 から 9be0d928-5892-4cdd-a647-1e8cce937b2e に変わったとします。
+当然ですがこの変更に合わせ当然/etc/fstabに以下のdiffに相当する変更をします。
+--- fstab.orig 2021-02-19 14:49:32.768895933 +0900 +++ fstab 2021-02-19 14:49:19.</description>
+    </item>
+    
+    <item>
+      <title>仮想環境(6)</title>
+      <link>/jp/2021/02/13/virt-06/</link>
+      <pubDate>Sat, 13 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/13/virt-06/</guid>
+      <description>Linux Namespaces の雰囲気が分かったところで、非特権ユーザー権限から立ち 上げられたLXC仮想環境を作ってみます。
+非特権LXC実行環境整備 LXC (1:4.0.6-1) をBulleseye環境で/usr/share/doc/lxc/README.Debianの &amp;ldquo;Unprivileged containers&amp;quot;に従って設定していきます。(2021/02)
+まずKERNELがunprivileged user namespacesを有効にしていることを確認します。
+$ sudo uname -a Linux **** 5.10.0-3-amd64 #1 SMP Debian 5.10.13-1 (2021-02-06) x86_64 GNU/Linux $ sudo sysctl kernel.unprivileged_userns_clone kernel.unprivileged_userns_clone = 1 ユーザーアカウント設定の/etc/subuidと/etc/subgidはすでに設定されていました。 これらは親システムのUIDやGIDからLXCコンテナ内から見えるUIDやGIDへの対応関係定義 しています。
+ネットワーク設定は以下を実行：
+$ NAME=$(id -un) $ sudo sh -c &amp;quot;echo $NAME veth lxcbr0 10 &amp;gt;&amp;gt; /etc/lxc/lxc-usernet さらに、~/.config/lxc/default.confのユーザー設定を/etc/subuidと /etc/subgidに合わせて以下でします。
+$ mkdir -p ~/.config/lxc $ cat &amp;gt;~/.config/lxc/default.conf &amp;lt;&amp;lt; EOF lxc.include = /etc/lxc/default.conf lxc.idmap = u 0 100000 65536 lxc.</description>
+    </item>
+    
+    <item>
+      <title>仮想環境(5)</title>
+      <link>/jp/2021/02/12/virt-05/</link>
+      <pubDate>Fri, 12 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/12/virt-05/</guid>
+      <description>引き続き非特権ユーザー権限から立ち上げられたLXC仮想環境を実現するための 技術背景を学ぶために、Linux Namespaces 周辺に着目します。
+User Namespaces Linux Namespacesの中でuser_namespaces(7)で説明されている User NamespacesはユーザーIDやグループID等のセキュリティー関連の識別子 と属性(credentials(7)参照。本来は、資格、信任状の意味の単語)を 分離します。属性とは具体的に言うとルートディレクトリーや、 キー(keyrings(7)参照。本来は、鍵の意味の単語)や、 ケーパビリティ(capabilities(7)参照。本来は能力・資質の意味の単語) 等です。
+このUser Namespacesにより、Namespacesの中ではあたかも特権ユーザーとして 振る舞いながら、Namespacesの外では通常の非特権ユーザー権限を保持するプロセスを 実現することができます。この際のユーザーIDの対応関係が/proc/[pid]/uid_map ファイルに記されています。(グループIDの場合は/proc/[pid]/gid_map)
+たとえばコンテナ環境外のシェルプロセスのuid_map以下です。
+$ cat /proc/$$/uid_map 0 0 4294967295 これは、最初の0 が現amespacesのユーザーID、次の0 が(実在しない)親Namespaces のユーザーID に対応し、(2^32)-1の4294967295が対応関係範囲長となります。 対応関係範囲長を2^32としないのは故意で2^32番目のユーザーID 4294967295 は「ユーザーID無し」の返り値となっているからだそうです。
+/proc/[pid]/uid_mapは、newuidmap(1)で設定できます。その際に 許容されるユーザーIDが/etc/subuidに羅列し規定されています。
+LXC 4.0の非特権ユーザーのコンテナ起動は、/usr/share/doc/lxc/README.Debianに 詳しく書かれています。この様な現在のシステムでは、各コンテナ環境では 16ビットユーザーIDの 0 - 65536＝(2^16)-2 を使っているようです。
+$ id -nu osamu $ cat /etc/subuid osamu:100000:65536 ここの100000は見通しが良いように大きい目になっていますが、65538以上の 適当なオフセット値ですね。このようなオフセット値を各コンテナ毎ずらせば 確かにコンテナを安全に隔離できますね。
+ちなみに、chroot(2)システムコールが設定するプロセスごとの ルートディレクトリーは/proc/[pid]/rootからのシムリンクとして 記録されています。これを使えば、コンテナ毎に違うルートファイルシステム 内容のシステムを作成できます。
+オーバーレイマウントやバインドマウント等のカーネル機能も効率的な仮想環境 構成に使えます。
+なんとなく、コンテナ環境の仮想化が収まっている全体感というか様子が、 ちょっと見えてきました。
+shadow-utils Linux Namespaces関連のnewuidmap(1)等のコマンドは、 Shadow が提供するshadow-utilsのソース中にあり、Debianでは uidmapバイナリーパッケージの中で提供されています。</description>
+    </item>
+    
+    <item>
+      <title>仮想環境(4)</title>
+      <link>/jp/2021/02/06/virt-04/</link>
+      <pubDate>Sat, 06 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/06/virt-04/</guid>
+      <description>特権ユーザーでのシステムとしてのLXC仮想環境はほぼchrootと変わらないので それほど違和感はありませんでした。
+この次に非特権ユーザー権限から立ち上げられたLXC仮想環境を実現するための 技術背景を学ぶために、ここはひとまずLXCのコマンドを離れ Linux Namespaces 周辺に着目します。Linux Namespaces は伝統的なUNIXの範疇を越えているので、 Linuxがカーネルレベルでどこがどう拡張されているのかを2021年2月の時点の Debian Bulleseye/testing pre-11 release環境で確認していきます。
+Linux Namespaces どうもLXCも含めた各種コンテナ環境は2002年以降拡充されてきた LinuxのNamespaces というカーネルの機能を使っていることがキーだと分かりました。
+とりあえず、以下の関連マンページに目を通しました。
+ namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name  Cgroup Namespaces Linux Namespacesの中でcgroup_namespaces(7)は、/proc/[pid]/cgroup と /proc/[pid]/mountinfo から見えるプロセスのcgroups (コントロールグループ) の見え方を仮想化します。各種コンテナ環境を可能にする仮想化技術の中心的な要素 としておもしろそうだったので、自分なりに追加の状況確認をしながらtraceしたの ですがマンページの通りには行きませんでした。</description>
+    </item>
+    
+    <item>
+      <title>サウンド環境</title>
+      <link>/jp/2021/02/04/pulseaudio/</link>
+      <pubDate>Thu, 04 Feb 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/02/04/pulseaudio/</guid>
+      <description>GNOME Desktop環境周辺の最近のサウンド環境関連の状況を確認してみました。
+サウンド環境 サウンド環境が色々あって住み分けが分かりにくいのでまとめてみました。
+ Open Sound System (OSS): UNIX用のサウンドカードドライバー  デバイス名: /dev/dsp, /dev/mixer (本来のOSSは古い。実際はALSA環境がOSSエミュレーションとして提供するデバイスを利用)   Advanced Linux Sound Architecture (ALSA): 現在のLinuxカーネル中のサウンドカードドライバーとユーティリティー  デバイス名: /dev/snd/* asoundrc 中のデバイス名: hw:0,0, hw1,0   PulseAudio: 多機能の汎用のネットワーク機能付きのサウンドサーバー  ALSAシステム上で稼働 systemdとの相性良好 (同一アップストリーム)   JACK Audio Connection Kit (JACK): 低レイテンシーのプロ仕様ネットワーク機能付きのサウンドサーバー  (サウンドはJACK無しでも使用可)   PipeWire is a server and user space API to deal with multimedia pipeline  (今後注目)    PulseAudioとJACKの住み分けは、PulseAudio や systemd のアップストリームの Lennart Poettering による Pid Eins: PulseAudio and Jack の比較記事を読むと状況がよく分かります。PulseAudio自体は、2008年ごろは色々問題があったのは LPC: Linux audio: it&amp;rsquo;s a messから分かるし、また最近も 2017, 2018, 2019 には音量のデフォルト設定問題があった様ですが、 ユーザー設定で回避 する様です。</description>
+    </item>
+    
+    <item>
+      <title>仮想環境(3)</title>
+      <link>/jp/2021/01/28/virt-03/</link>
+      <pubDate>Thu, 28 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/01/28/virt-03/</guid>
+      <description>引き続きchrootの強化版のようなLXCを使っての仮想環境作成を特権ユーザーが 作成する簡単なケースを深堀りします。
+LXC仮想環境の停止 仮想環境のカスタマイズした起動をするためには、作成し起動した仮想環境のSTATEを STOPPED(停止)に確実にします。
+$ sudo lxc-stop -n sid $ sudo lxc-ls -f NAME STATE AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED buster STOPPED 0 - - - false sid STOPPED 0 - - - false LXC仮想環境とのデーター共有起動 仮想環境のカスタマイズした起動時に、設定変数を指定することで、ホスト側の /home/fish/srcを仮想環境内の/home/fishとしてアクセスできるように共有化 された仮想環境として起動できます。この仮想環境環境にユーザーアカウントに ログインするまでの手順は以下です。
+$ sudo lxc-start -n sid \ -s &amp;quot;lxc.mount.entry=/home/fish/src home/fish none bind 0 0&amp;quot; $ sudo lxc-attach -n sid root@sid:/# login sid login: fish Password: ... fish@sid:~$ ここで仮想環境内のホームディレクトリーで見えるのは/home/fish/srcと同一デバイス上の ファイルだけです。(再帰的マウントはされません。)
+このLXC仮想環境内でパッケージビルドなどをすれば綺麗な環境ででき、さらにその結果に ホスト側から直接アクセスできます。</description>
+    </item>
+    
+    <item>
+      <title>Usability tips: Debian GNOME Workstation</title>
+      <link>/en/2021/01/15/debian-buster-10-usability/</link>
+      <pubDate>Fri, 15 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2021/01/15/debian-buster-10-usability/</guid>
+      <description>Workstation usability Let me keep up note on configuring and administrating my workstation under Debian Buster (10) GNU/Linux. This is non-hardware specific tips.
+EFI-based firmware updates Install gnome-firmware package and invoke GUI to update firmware on devices supported by fwupd using Linux Vendor Firmware Service.
+Thinkpad EFI firmware and SSD firmware were updated.
+GUI Desktop customization Install gnome-tweak package to the system and tweaked to add &amp;ldquo;Applications&amp;rdquo; to top bar etc.</description>
+    </item>
+    
+    <item>
+      <title>仮想環境(2)</title>
+      <link>/jp/2021/01/08/virt-02/</link>
+      <pubDate>Fri, 08 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/01/08/virt-02/</guid>
+      <description>chrootを使ってのデバグ用のsid仮想環境作成をpbuilder/cowbuilderでと言うのは 少々強引です。とはいえ直接chrootやmountコマンドで仮想環境作成というのも 面倒です。
+そこで、chrootの強化版のような環境設定インフラが整ったLXCを使ってのパッケージ 作成やデバグ用や古い環境下での動作確認等に使え、システムの立ち上げや動作が 軽快な仮想環境作成を試みます。(KVMは悪くは無いですが、重いことは否めません)
+ちなみに、DebianではLXDはまだパッケージされていないので、ここでは裸の LXC 4.0 のインフラを使います。
+WEB上のLXCの情報は古い1.0や2.0の情報とか、新規のUIを提供するLXDの情報が多い ので、bulleseyeベースの現行testing環境で基本操作を行って詳細の確認しています。
+Debianの最新のLXC環境を確認するには、まず/usr/share/doc/lxc/README.Debianを しっかり読む必要があります。ここに書かれたユーザー権限で実行されるコンテナ (unprivileged containers) 関連の手動設定は重要です。
+まずは、簡単なROOT権限で実行されるコンテナ中心に始めます。
+LXC仮想環境作成 LXCを使ってのパッケージ作成やデバグ用等に使うsid環境の仮想環境作成を試みます。
+ $ sudo lxc-create -n sid -t debian -- -r sid もし、ミラーが不調なら、安定そうなUSミラーを使います。
+ $ sudo lxc-create -n sid -t debian -- -r sid --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/sid/が作成されます。この中に、sidコンテナ 環境のファイルシステムがrootfsディレクトリー以下に、またそのコンテナ環境の設定 ファイルconfig が作成されています。
+コンテナ環境のファイルシステム:
+ # root@goofy:/var/lib/lxc/sid# tree -L 2 -F . ├── config └── rootfs/ ├── bin -&amp;gt; usr/bin/ ├── boot/ ├── dev/ ├── etc/ ├── home/ ├── lib -&amp;gt; usr/lib/ ├── lib32 -&amp;gt; usr/lib32/ ├── lib64 -&amp;gt; usr/lib64/ ├── libx32 -&amp;gt; usr/libx32/ ├── media/ ├── mnt/ ├── opt/ ├── proc/ ├── root/ ├── run/ ├── sbin -&amp;gt; usr/sbin/ ├── selinux/ ├── srv/ ├── sys/ ├── tmp/ ├── usr/ └── var/ コンテナ環境の設定ファイルconfig:</description>
+    </item>
+    
+    <item>
+      <title>Hardware tips: ThinkPad T14 Gen 1 (AMD)</title>
+      <link>/en/2021/01/07/thinkpad-t14-gen-1-amd/</link>
+      <pubDate>Thu, 07 Jan 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2021/01/07/thinkpad-t14-gen-1-amd/</guid>
+      <description>Let me keep up note on configuring and administrating my ThinkPad T14 Gen 1 (AMD) under Debian GNU/Linux. This is hardware specific tips.
+My system has 2 NVMe SSDs:
+ AMD Ryzen™ 5 PRO 4650U &amp;ndash; 6 cores, 12 threads 32GB (PC4-25600 DDR4 SDRAM) &amp;ndash; after adding aftermarket 16GB SDRAM WDC PC SN520 SDAPMUW-128G-1001 (20370001) &amp;ndash; Original Western Digital 128GB SSD TS2TMTE220S (42B8T4EA) &amp;ndash; Aftermarket Transcend 2TB SSD  Official Information Sources  T14 Gen 1 (type 20UD, 20UE) Laptop (ThinkPad) Product Home Removal and Replacement Videos - ThinkPad T14 Gen 1 Forum  Adding 2TB SSD (2280 both side) The original Western Digital 128GB PCIe SSD (2242, IC on top side only) is removed and moved with thermal pad to the unused PCIe slot intended for WAN card.</description>
+    </item>
+    
+    <item>
+      <title>仮想環境(1)</title>
+      <link>/jp/2020/12/13/virt-01/</link>
+      <pubDate>Sun, 13 Dec 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/12/13/virt-01/</guid>
+      <description>2021-06-17:　sbuild使用に更新
+開発環境の基本 開発環境は、できるだけ安定しているほうがストレスが少ないです。editorを 使いメールやウエッブページを読むだけならstable環境が使えればそれでも いいのですが、新しいハードウエアー (Thinkpad T14, AMD Ryzen 5 PRO 4650U with Radeon Graphics)だとグラフィクスドライバーの問題があるので testing ぐらいは必要です。でも歳々アップデートすると不安定になったりして面倒です。
+パッケージ作成環境 以前は、pbuilder/cowbuilder を使って仮想化されたchroot環境を使っていましたが、 最近はschroot/sbuildででも確実に sid/unstable 環境を確保でき、色々便利なので 乗り換えました。
+開発環境をsidにしなくても確実にパッケージが正しいsid環境で作成できます。
+ 英語：Sbuildインフラ参照.  これで、sbuild コマンド実行で、 sid/unstable 環境で確実にパッケージが作成できます。
+デバグ用の仮想環境作成 (chroot) デバグ操作用のsid/unstable 環境の作業用のシェル環境が、現在のHOME環境のままで快適に使えるので便利です。
+ 英語：Schrootインフラ参照.  devsコマンドで、作業用の chroot 環境のベースとなるソースchroot 環境 にパッケージの 追加や削除や更新ができるシェルプロンプトへ、現在のHOME環境のままで移動できます。
+devxコマンドで、gitkが使えるX環境へのアクセスできる作業用の使い捨てできる作業用の chroot 環境に、現在のHOME環境のままで移動できます。</description>
+    </item>
+    
+    <item>
+      <title>Rescue media(1)</title>
+      <link>/jp/2020/05/30/rescue-01/</link>
+      <pubDate>Sat, 30 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/05/30/rescue-01/</guid>
+      <description>UEFIとかMBRとかある昨今のシステムに対応する、Rescue mediaを探しました。
+Grubのレスキューイメージもありますが、これを直接操るのは結構大変 と思っていたら、 Super Grub2 と言う便利なものがあることに気づきました。
+Super Grub2はUEFIとかMBRの設定が壊れたシステムを自動調査してくれ 起動してくれるのみならず、DebianやUbuntuのLIVE ISOイメージを DOSのFATファイルシステムのメディアに複数書き込むだけで、これらを 選択起動できるようにしてくれる優れものです。
+よく分かっていませんが、ディスクの入れ替えやインストーをして、その後 元のディスクに戻した際にUEFIでブートしなくなったことを経験しました。 そんな際にSuper Grub2だと素直に起動しました。この際に、ただ起動後 update-grubとしただけでは、起動設定更新がうまく行かなかったことが ありました。こんな時にはまず以下を実行しました。
+$ sudo dpkg-reconfigure grub-efi-amd64 これだとNVRAM variablesの更新他いろいろするようです。さらにBIOSの ブートの優先順位をさわることも有効でした。(古いMBなのでBIOSが賢くない 気がしました。)
+実際にSuper Grub2に用意した8GBのUSBキーでは、レスキュー用のLinuxの Live imageとして以下のISOイメージを入れました。
+ Rescatux boot-repair Debian live install image  こららがあると思うだけで、UEFIとMBRの両方のシステム対応なので 安心感があります。
+ここで使うISOイメージですが、Debianの標準のインストール用の ISOイメージは、上記が用いるGrub2のループマウントでは 使えないようです。
+Debianの標準のインストール用のISOイメージは、全イメージを 生のUSBキーに直接cpかddで書いたものを準備する必要があります。 １つ古い小さなUSBキーに書いて手元に置いています。
+このDebianの標準のインストール用のISOイメージですが、 わたしは視力があり音声サポートがいらないので、D-Iが作っている mini.iso を使っています。46MBと極端に小さいので便利です。
+実際のインストールの際には、キーファイル(GNUPG/SSHデーター)に加え チェックアウトされた
+ VIMの設定集 ローカルのshell script集  他のファイルの入った小型バックアップのUSBキーを準備すると効率的に 進められます。</description>
+    </item>
+    
+    <item>
+      <title>Btrfs入門(1)</title>
+      <link>/jp/2020/05/05/btrfs-01/</link>
+      <pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/05/05/btrfs-01/</guid>
+      <description>先日トライしたGit Annexは不完全燃焼でしたが、これをきっかけに 世代管理・dedup・ファイル圧縮に対応できるというファイルシステムの Btrfs をもう一度見直しました。以下は自分なりの備忘録メモです。
+Btrfsをどう使うのか まずBtrfsがどこまで使えて、どういう注意が要るのかを Debianのwiki で確認しました。
+2020年5月のLinux goofy 5.4.0-0.bpo.4-amd64でも初心者が 安心して気楽に使うにはまだ制約が多いですね。
+ LVMに重ねるのは不安 RAID関連も使うのは不安 quotas/qgroupsは使わないこと Subvolume毎にbtrfs特有オプションでマウントできない制約がある 多くのbtrfs特有オプションは使わないのが無難: nodatacow, 圧縮関連, autodefrag, discard, space_cache=v2 &amp;ldquo;btrfs filesystem defrag&amp;ldquo;はソースSubvolumeにのみ実施。snapshotには実施禁止 スナップショットは12個まで(これでもLVMより状況は良い) ディスクは使用9割を越えないようにする  ここまで調べて、システムファイル/usrやログ記録/var のbtrfs移行は面倒なので、当面は無理せず以下を移行対象に 考えます。
+ データーのアーカイブ・バックアップ用の専用ドライブ /homeの専用パーティション  世代管理にはスナップショット機能を濫用しないように程々で 使い、バックアップソフトがバックアップする際にバックアップ メディア上の記録をdedupする配慮をし、ファイル圧縮は当面使 わないのはいい気がしました。
+推奨バックアップソフトはborgbackupがDebianのwikiには書か かれています。 確かに人気がある ようです。この他timeshiftやbtrbkやsnapperや btrfsmaintenanceパッケージも使えそうです。
+Btrfsを意識したdedupeという視点では jdupesがよく使われている ようです。単純なcp -r ...やrsync ...を、dedupをする jdupes --dedupe ...と組み合わせて使うのに対する、上記 専用ソフトのメリットは気になります&amp;hellip;ただ、jdupesはあまりファイル数が 多くとファイルのオープン数のせいかうまく動かないことがありました。 このへんは後日の課題かな。
+Subvolume命名法 Btrfs自体は 特定のSubvolume命名法の慣習を定めていません。
+Debianでは特にどうするって言う慣習が無いようです。
+ただ、Btrfsを積極的に使うディストリビューションが Subvolume命名法に関して特定の慣習をとっているため そこで開発されているGUIツールがそれに依存してる印象 があります。
+ Ubuntu  慣習Subvolume命名法  @ @home   スナップショット: timeshift   OpenSuse  慣習Subvolume命名法 慣習Subvolume命名法(tutorial)  @/ @/home   スナップショット: snapper    最近のDebianでは、borgbackup以外だと timeshiftの人気が出ています。 でもシステムのロールバックにフォーカスしていてユーザーデーターの スナップショットをしたいだけだと意外と使いにくくて止めました。</description>
+    </item>
+    
+    <item>
+      <title>dmesg for SATA</title>
+      <link>/en/2020/04/29/dmesg-sata/</link>
+      <pubDate>Wed, 29 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2020/04/29/dmesg-sata/</guid>
+      <description>After having a loose SATA cable problem and fixed it, I happen to see dmesg as:
+$ sudo dmesg ... [ 2.373152] sd 0:0:0:0: [sda] 937703088 512-byte logical blocks: (480 GB/447 GiB) [ 2.373156] sd 0:0:0:0: [sda] Write Protect is off [ 2.373158] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00 [ 2.373165] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn&#39;t support DPO or FUA [ 2.373173] sd 2:0:0:0: [sdb] 468862128 512-byte logical blocks: (240 GB/224 GiB) [ 2.</description>
+    </item>
+    
+    <item>
+      <title>Git Annex入門(1)</title>
+      <link>/jp/2020/04/22/git-annex-01/</link>
+      <pubDate>Wed, 22 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/04/22/git-annex-01/</guid>
+      <description>正直なところ、今は Git Annexを 使っていません。rsync と btrfs の 組み合わせでバックアップしています。(2021/07/07)
+ Git関連ツールで、写真等の大きなデーターの分散保存・世代管理をする Git Annexというツールを walkthrough を読みながら学びました。間違っているかもしれませんが、 自分なりに簡単に以下にまとめて見ます。
+Git Annexの基本コンセプト Gitはデーターの分散管理では非常に便利ですが、 大きなデーターを直接扱うのが不得意 です。そこで、このGitが不得意な部分のデーターの分散管理を協調的に補完す るのがGit Annexです。
+写真等の大きなファイルを含むデーターは、ソースコードなどのテキスト ファイルを含むデーターと違い、ファイル自体がすでに圧縮されていて 保存の際のさらなるデーター圧縮のメリットが少ないことや、世代間の 詳細なデーター差分の検出には大きな労力が必要な割に、詳細な差分は サイズも大きくなりがちでメリットが少ないという特徴があります。
+そこで大きなファイルは、Gitの本体で直接扱かわずに、労力とのバランス を考えGitの上に構築したGit Annexで扱うのが望ましいです。Git Annexでは データー保存の効率化対象を単純なファイルの重複保存や世代間のファイル の位置移動に絞ります。この制約の下では、ファイル実体によって決まる 「ユニークな特定パスに保存する」ことで、ファイル実体の効率的な保存 が実現できます。「ユニーク」ということはファイル内容のハッシュ値 等を用いた文字列(Key)で実現します。Git Annexではファイル実体データー (Value)をGit本来のデーター保存インフラとは別の.git/annex/objects/ 以下に書き込み禁止のファイルパーミッションで保存します。
+一方、作業ディレクトリーツリー中のファイルがあった場所には Git Annex管理下に保存されたファイルへのシムリンクを置きます。 このシムリンクのデーターサイズは小さいので、本来のGitで問題なく 場所の保存や世代管理ができます。
+このままでは他のプログラムによるデーターの編集・更新ができな いので、Git Annexはシムリンクをファイルで置き換え編集可能化する unlock機能と、Git Annexに編集結果を戻すlock機能を提供します。
+さらにGit Annexは、「特定パスに保存する」という部分に関して、 「分散保存を管理するインフラを提供する」とすることで、すべての 分散管理レポジトリー内に全ファイルを保持しなくても良い とします。ここは全ファイルを保持する本来のGitレポジトリーと 大きく異なるところです。Git Annexは、分散管理レポジトリー間で それぞれが保存するファイルに関するメタ情報を交換するインフラも 提供します。
+Git Annexがチェックアウトした作業ディレクトリーツリー中で、 ローカルに保持していないファイルは、ダングリングシムリンク (宙ぶらりシムリンク)となってしまいます。その際に、保有するメタ 情報に基づき指定範囲のファイル実体をリモートサイトから簡単に オンディマンドでコピーしてくる部分チェックアウト機能や、 作業ディレクトリーツリー中ダングリングシムリンクを簡単に消す 機能もサポートします。
+Git Annexによるリモートサイトへのアクセスは抽象化されていて、 単純なファイルシステム経由のアクセスはもちろん、SSH経由のアクセス、 Amazon S3等の各種クラウドへのアクセスが、既成のバックエンドを 利用し、ほぼ同じ手順で簡単に実現出来るようになっています。</description>
+    </item>
+    
+    <item>
+      <title>GITを使うフォークの管理</title>
+      <link>/jp/2020/04/02/git-fork/</link>
+      <pubDate>Thu, 02 Apr 2020 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2020/04/02/git-fork/</guid>
+      <description>Gitを使う際に、アップストリームのレポの更新に合わせて、 自分がフォークしたレポを如何にスムーズに更新していくかは、 フォークしたレポの開始方法やブランチ名の設定や実行するコマンド 手順に複数のアプローチや複数の対応方法があるだけに、いつも 混乱して悩まされます。
+備忘録を兼ねて、アップストリームがGITHUBを使っている 場合を軸にメモを作成します。
+GITを使うフォークの管理手順(基本) 簡単のために以下の前提を置きます。（追跡＝tracking）
+ 他人が管理する、アップストリームのリモートのレポ名を、「upstream」(任意名ですが慣習名)とします。 他人が管理する、アップストリームのリモートのレポ上の「master」ブランチを追跡します。（コピー元） 自分が管理する、フォークしたリモートのレポ名を、「origin」とします。 自分が管理する、フォークしたリモートのレポ上の「master」ブランチに追跡コピーを保管します。（コピー先） アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を、フォークしたレポに勝手に作らないようにします。  この際の、GITを使うフォークの管理手順は以下です。
+  アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、 自分のアカウントにフォークされたリモートのレポを作成
+  フォークされたレポをローカルに「git clone」して、ローカルのレポを作成
+ $ git clone git@github.com:my_name/project_name.git ; cd project_name    自分が書き換える開発ブランチ(ここでは「devel」)を作成
+ $ git checkout -b devel    ファイルを編集し、開発ブランチにコミット
+  アップストリームのリモートのレポをローカルにリモート「upstream」として追加。
+ $ git remote add upstream https://github.com/upstream_name/project_name.git    フォークされたレポの「master」ブランチをアップストリームのレポの「master」ブランチに同期
+  $ git checkout master ; git fetch -p upstream ; git pull upstream master ; git push origin master  -pは--pruneのショートハンドで、不要なリモート追跡ブランチを削除してくれます。</description>
+    </item>
+    
+    <item>
+      <title>Fish shell</title>
+      <link>/en/2019/10/21/fish-shell-1/</link>
+      <pubDate>Mon, 21 Oct 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2019/10/21/fish-shell-1/</guid>
+      <description>NOTE (2021-01-07):
+I gave up using fish early in 2000. I now stick to:
+ Bash for interactive shell activity. Dash for simple scripting. Python3 for non-trivial scripting.  Original note:
+Fish shell looks interesting to me since it makes handling of space in the filename a lot simpler and have simple but powerful string manipulation with PCRE2.
+ Fish shell  Fish Documentation Fish Tutorial Fish Command reference   Fisher  Awesome fish   Other resources  differences from bash fish shellを使う fish shellで文字列操作 Debimate &amp;hellip; fishへ移行 fish shellのconfig.</description>
+    </item>
+    
+    <item>
+      <title>Re-learning Vim (2)</title>
+      <link>/en/2019/09/24/vim-learn-2/</link>
+      <pubDate>Tue, 24 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2019/09/24/vim-learn-2/</guid>
+      <description>Let&amp;rsquo;s review a few interesting plugins.
+Please note that I manage plugins via GUI reconfiguration framework using the vimconf command. See osamuaoki/dot-vim. I admit my scheme is not the main stream one.
+As of 2021-04-01, I enabled:
+ 00-vimrc ale vim-airline vim-airline-themes (automatic) vim-better-whitespace vim-indent-guides vim-spell-under  (vim-gitgutter is interesting but I don&amp;rsquo;t work on repo with many contributors.)
+Please note very basic configuration is at ~/.vim/vimrc.
+All other initialization code is provided as plugin.</description>
+    </item>
+    
+    <item>
+      <title>Wayland</title>
+      <link>/en/2019/09/21/wayland/</link>
+      <pubDate>Sat, 21 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2019/09/21/wayland/</guid>
+      <description>Standard GNOME desktop under Debian Buster 10 has moved to use Wayland.
+Although the migration from X to Wayland is mostly transparent to the end-user like me, there are some exceptions.
+How to check if an application uses Wayland or X  Execute &amp;ldquo;xeyes &amp;amp;&amp;rdquo; from a terminal console . Move mouse pointer over to an application in question. If eyes are responsive, it&amp;rsquo;s an X application. If eyes aren&amp;rsquo;t responsive, it&amp;rsquo;s a Wayland application.</description>
+    </item>
+    
+    <item>
+      <title>Re-learning Vim (1)</title>
+      <link>/en/2019/09/17/vim-learn-1/</link>
+      <pubDate>Tue, 17 Sep 2019 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2019/09/17/vim-learn-1/</guid>
+      <description>I could use Vim as a basic editor with TKL-keyboard while tapping some keys multiple times. This was functional but not so elegant!
+I decided to re-learn Vim to use it properly. Here is my learning memo.
+For simplicity, I use ^F to mean CTRL-F.
+Concept  Use default vim (minimum configuration, if possible).  Use as much native functionalities. Don&amp;rsquo;t force Vim to behave like another program.   50%/60%-keyboard ready.</description>
+    </item>
+    
+    <item>
+      <title>キーボード入力モード選択</title>
+      <link>/jp/2019/03/23/gnome-uskb-im-select/</link>
+      <pubDate>Sat, 23 Mar 2019 18:59:13 +0900</pubDate>
+      
+      <guid>/jp/2019/03/23/gnome-uskb-im-select/</guid>
+      <description>キーボード入力モード選択 Gnome等のLinuxの日本語環境でキーボード入力モード選択がトグル（ローテート） 動作（日本語/英語の交互切り替え)だと今どっちか分からなくなって結構不便です。
+SUPER-SPACEとSHIFT-SUPER-SPACEがGnomeの側でのキーボード入力ソースの デフォルトの切り替えキーです。
+input method内での切り替えは、昔のWindowsと同じ&amp;quot;zenkaku-hankaku&amp;quot;とか、 Unix系では良く使う&amp;quot;Shift-space&amp;quot;が良くバインドされています。
+切り替えが、状態が分からなくとも一発でできるのが望ましいので、 その設定方法を以下に記します。
+日本語キーボードのIM側の設定方法 日本語キーボードだと、変換と無変換キーを、Anthyの入力モード HiraganaとLatinへの切り替えにAnthyの中のキーバインディングで 設定して常にibus-anthyで使うことで何とかなります。これは特に 問題ありません。
+ 変換キー: 全角かな入力 (hiragana mode) 無変換キー: 英数半角入力 (latin mode)  ALT-漢字、漢字、ALT-`等でのトグル動作が嫌いで、Macの真似でこんな キーバインディングしています。
+Windows10でもトグル動作が嫌いで、OS側から プロパティ → 詳細設定 → キー設定　変更 として以下の設定で同様の操作感にそろえています。
+ 変換キー: IME-ON (IMEは全角かな入力モードにしておく) 無変換キー: IME-OFF  英語キーボードでのIM側の設定方法 (ibus+Anthy) ただ、英語キーボードの場合は変換と無変換キーはありません。
+ SHIFTと普通の文字との組み合わせは論外。 CTRLと普通の文字との組み合わせも、VIM使うので全部先約有り。 ALTと普通の文字との組み合わせも、メニューへのショートカットで全部先約有り。  こういったことも有り、私はAnthyの中のキーバインディングで CTRL-SPACE, SHIFT-SPACEを一時使っていました。
+ところが、SHIFT-SPACEやCTRL-SPACEのどちらかをLokalizeなどのアプリ が使っていました。（ALT-SPACEは既にGNOMEが使っている）こうなると、 お手上げです。
+結局今は、Anthyの中のキーバインディングは以下にしています。
+ SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キーも CTRL-SPACE: 英数半角入力 (latin mode) 無変換キーも  Windows10でも英語キーボードの場合にはOS側から プロパティ → 詳細設定 → キー設定　変更 として以下の設定で同様の操作感にそろえています。</description>
+    </item>
+    
+  </channel>
+</rss>

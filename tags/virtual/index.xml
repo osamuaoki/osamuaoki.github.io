@@ -2,32 +2,11 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>virtual on Goofing Osamu</title>
-    <link>/categories/virtual/</link>
+    <link>/tags/virtual/</link>
     <description>Recent content in virtual on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/virtual/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Pythonパッケージ</title>
-      <link>/jp/2021/06/17/python-package/</link>
-      <pubDate>Thu, 17 Jun 2021 00:00:00 +0000</pubDate>
-      
-      <guid>/jp/2021/06/17/python-package/</guid>
-      <description>Pythonで書かれたプログラム管理は、Debian供給のdebパッケージを使う限り、 普通にAPTで管理するだけなので簡単です。
-一方、ソースからの導入などを考え出すと、Pythonのモジュール管理の変遷もあり結構ややこしいので、ここで復習します。
-Python のパッケージの導入 Debian供給のdebパッケージ以外からの導入の基本ルールは、 OS環境をコンタミしないようにするのが賢明です。
-具体的には、ソースからバイナリパッケージのwheelを作成しての導入の場合や、 外部レポジトリーのPython Package Indexからの導入の場合のともに、 仮想環境(7) の手法を使って導入という流れです。
-Python関連のPython Packaging User Guideからリンクされた サイトの公式マニュアルにある、python3 -m pip install --upgrade pip setuptools wheel 等のコマンドを、安定版システムで漫然と通常のシェルから実行すると最新版が導入され、 その後のシェル環境からはこちらが優先され実行されるようになり、 干渉するかもしれないので要注意です。
-pipをpipxとすれば良いだけですが、気をつけたいところです．
-Python のパッケージの作成 また、モジュールパッケージを導入する際に、昔の基本の distutils を使おうとすると、最近はマニュアルにLegacy等と書いてあるので 不安になります。当時は、python3 setup.py install ...等として いきなりターゲットディレクトリーに書き込みモジュールパッケージを導入 していました。
-現在はPython Packaging Authorityのルールに合致させ Python Package Indexにアップロード出きるようにするには、 distutilsではなく 殆ど変わらない使い勝手のsetuptoolsと 合わせてwheelを用い、setup.pyを作成すれば、 python3 setup.py bdist_wheel等としてwheel形式でのモジュールパッケージ 出力が難なくできます。
-wheel形式でのモジュールパッケージはpipで 扱えます。
-ちなみに、distributeは、 setuptoolsにマージされたとか、 setuptoolsが以前使っていた easy_install は非推薦ツールとなり、wheel形式でモジュールパッケージを作成し pipでモジュールパッケージを導入するようになったという、 過去の経緯を理解しないといろんな手法の立ち位置がわかりにくいです。
-wheel形式とは、その実体はクロスプラットフォームで一番使われる アーカイブ形式のZIPファイルです。
-さらに最近のPEP517に準拠させるには、 別のパッケージ作成インフラを使おうとしないなら、単に PEP518準拠の、 以下のpyproject.tomlを加えれば充分です。
-[build-system] requires = [ &amp;quot;setuptools&amp;gt;=42&amp;quot;, &amp;quot;wheel&amp;quot; ] build-backend = &amp;quot;setuptools.</description>
-    </item>
-    
+    <lastBuildDate>Thu, 17 Jun 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/virtual/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>仮想環境(7)</title>
       <link>/jp/2021/06/17/virt-07/</link>
