@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/07/12 (initial publish),
-2021/07/13 (last update)
+2021/07/16 (last update)
 </h3>
 </div>
 
@@ -51,14 +51,14 @@
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/16/pygi-2/">Next Post</a></td>
   
   </tr>
   </tbody>
 </table>
 
 <h2 id="gtk-gui-situation">GTK GUI situation</h2>
-<p>GTK3 GUI has been changing.  (Now 3.38.5)</p>
+<p>GTK3 GUI has been changing.  (version 3.38.5, 2021-07, Debian Bullseye)</p>
 <p><a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/menus.html">The Python GTK+ 3 Tutorial</a>
 (as of 2021-07) goes as:</p>
 <blockquote>
@@ -70,126 +70,244 @@ Application framework instead.</p>
 <a href="https://gitlab.gnome.org/GNOME/Initiatives/-/wikis/App-Menu-Retirement">App Menu Retirement</a>.
 I see no Python based tutorial contents for creating modern
 <a href="https://developer.gnome.org/hig/stable/primary-menus.html.en">Primary menu</a>
-etc.  How do I do it?
-Unfortunately, many code examples
-in the upstream source tree and the tutorial tend to contain old deprecated
-practices.</p>
-<p>I would like to use Glade with the Gtk.Builder class to program GUI with
-minimum efforts instead of calling widget classes.</p>
+etc.  How do I do it?  Unfortunately, many code examples in the upstream source
+tree and the tutorial tend to contain old deprecated practices.  So I decided
+to record my learning experiences.</p>
 <h2 id="glade">Glade</h2>
-<p>Let me go step-by-step to use Glade to create GTK GUI.</p>
-<p>In order to understand what each Glade component does, linked pages from the
+<p>I would like to use Glade with the Gtk.Builder class to program GUI with
+minimum efforts instead of calling widget classes.  So I am not going through
+the order
+<a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/">The Python GTK+ 3 Tutorial</a>
+was written.</p>
+<p>Let me go step-by-step to use Glade to create GTK GUI in my way.</p>
+<p>In order to understand what each Glade widget does, linked pages from the
 corresponding listed classes in the Gtk 3.0&rsquo;s
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/class.html">Class</a> page was
-valuable and gave me the most current insights.</p>
-<p>Each Glade component is spelled without &ldquo;.&rdquo; while corresponding Gtk class name
-has &ldquo;.&rdquo; after &ldquo;<strong>Gtk</strong>&rdquo;.</p>
-<h3 id="where-to-start-gui">Where to start GUI</h3>
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes.html">Classes</a> page were
+valuable and gave me the most current insights.  This is a part of
+<a href="https://lazka.github.io/pgi-docs/">PyGObject API Reference</a>.</p>
+<p><a href="https://developer.gnome.org/gtk3/stable/">GTK+ 3 Reference Manual</a> is the same
+content as the system installed &ldquo;GTK+3 Reference Manual&rdquo; normally read using
+the <strong>devhelp</strong> package and is the C API Reference.</p>
+<p>From Python API point-of-view, each <strong>Glade widget</strong> name is spelled
+<strong>without</strong> &ldquo;<strong>.</strong>&rdquo; in Glade widget dialogue, while the corresponding <strong>Gtk
+class</strong> name is spelled <strong>with</strong> &ldquo;<strong>.</strong>&rdquo; after &ldquo;<strong>Gtk</strong>&rdquo; in PyGObject API
+Reference.  This is because the help content by Glade uses the C API name.
+Since many things tend to use this C API name, we need to get used to
+correspondence to the Python API name.</p>
+<h2 id="where-to-start-gui-design">Where to start GUI design</h2>
 <p>Looking at the way Glade is designed, it looked like I should start creating
-window design by clicking and moving item from selection in the top buttons to
-the canvas.</p>
+window design by clicking and moving item from selection in the top 4 big
+buttons to the center canvas.</p>
 <p>Since I want a simple GUI,
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a>
 found under the &ldquo;Toplevels&rdquo; button seems to be a good one as the starting
 object.  (For other items under the &ldquo;Toplevels&rdquo; button, they seem to offer
-mostly pop-up window dialogue etc.  One exeption is
+mostly pop-up window dialogue etc.  One exception is
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ApplicationWindow.html">GtkApplicationWindow</a>
 which accommodates capability to start program via DBus connection.)</p>
-<p>How to create top bar embedded primary menu was tricky.  It looks like
+<p>How to create the top bar embedded primary menu is tricky.  It looks like
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/HeaderBar.html">GtkHeaderBar</a>
-under the &ldquo;Containers&rdquo; button is the one.   To me, this should have been placed
-under the &ldquo;Toplevels&rdquo; button. (I am using Glade 3.38.2)</p>
+under the &ldquo;Containers&rdquo; button is the one to be used. We will get back to this
+later.</p>
 <p>Please note
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/MenuBar.html">GtkMenuBar</a>
-is not the one to use (marked as deprecated).</p>
-<h3 id="how-to-fill-widgets-into-gui">How to fill widgets into GUI</h3>
+is not the one to be used for creating the menu (marked as deprecated for Glade
+3.38.2).</p>
+<h2 id="how-to-write-a-clean-python-code">How to write a clean python code</h2>
+<p>Being a lazy person, I want to write a clean and easy python code using
+<a href="https://www.python.org/dev/peps/pep-0318/">decorator</a> technique as described
+in
+<a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/builder.html#gtk-template">The Python GTK+ 3 Tutorial: 22.5.  Gtk.Template</a>.
+This is extremely terse.  The upstream document is found at
+<a href="https://pygobject.readthedocs.io/en/latest/guide/gtk_template.html">PyGObject: Docs » User Guide » Gtk.Template</a>
+gives a bit more details.
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes.html">PyGObject API Reference under Gtk 3.0 » Classes</a>
+has no mention of this <strong>Gtk.Template</strong>.</p>
+<p>It&rsquo;s best to check how this <strong>Gtk.Template</strong> is implemented to be confident.
+This is found in the <strong>python3-gi</strong> package as
+<code>/usr/lib/python3/dist-packages/gi/_gtktemplate.py</code> imported from
+<code>/usr/lib/python3/dist-packages/gi/overrides/Gtk.py</code>.  Reading these gives us
+what exactly does this decorator does.</p>
+<p>In order to use this decorator technique, the top level widget needs to be
+declared as <code>&lt;template&gt;</code> instead of <code>&lt;object&gt;</code> in XML.  For Glade, this
+requires us to click the &ldquo;composite&rdquo; checkbox next to ID entry box on the right
+side panel to change &ldquo;ID&rdquo; to &ldquo;Class Name&rdquo; while focusing at the top level
+widget
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a> on
+the left side panel for my simple example case here.</p>
+<p>Let&rsquo;s put &ldquo;Simple1&rdquo; to &ldquo;ID&rdquo;/&ldquo;Class Name&rdquo; entry and see the difference in
+XML.</p>
+<pre><code>$ diff -u0 composite-off-ID.ui composite-on-class.ui
+--- composite-off-ID.ui 2021-07-12 22:56:06.250484181 +0900
++++ composite-on-class.ui       2021-07-12 22:54:35.185207274 +0900
+@@ -11 +11 @@
+-  &lt;object class=&quot;GtkWindow&quot; id=&quot;Simple1&quot;&gt;
++  &lt;template class=&quot;Simple1&quot; parent=&quot;GtkWindow&quot;&gt;
+@@ -123 +123 @@
+-  &lt;/object&gt;
++  &lt;/template&gt;
+</code></pre><h2 id="how-to-fill-static-simple-widgets-into-gui">How to fill static simple widgets into GUI</h2>
 <p>Dividing area into smaller subdivided areas are mostly done by
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Box.html">GtkBox</a>
 or
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Grid.html">GtkGrid</a>
 under the &ldquo;Containers&rdquo; button.</p>
 <p>As a starter, I put
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Box.html">GtkBox</a>
-and changed &ldquo;Number of items&rdquo; on the left panel to 7.</p>
-<p>Then I placed
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Button.html">GtkButton</a>,
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Entry.html">GtkEntry</a>,
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/SearchEntry.html">GtkSearchEntry</a>,
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/SpinButton.html">GtkSpinButton</a>,
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Label.html">GtkLabel</a>,
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/TextView.html">GtkTextView</a>, and
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/FileChooserButton.html">GtkFileChooserButton</a>
-as an easy starter.</p>
-<p>For
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a>,
-clicking composite box next to ID entry box will change &ldquo;ID&rdquo; to &ldquo;Class Name&rdquo;.
-Let&rsquo;s put &ldquo;SimpleGui&rdquo; to &ldquo;ID&rdquo; or &ldquo;Class Name&rdquo; entry and see the difference in
-XML.  Let&rsquo;s see the diff.</p>
-<pre><code>--- composite-off-ID.ui 2021-07-12 22:56:06.250484181 +0900
-+++ composite-on-class.ui       2021-07-12 22:54:35.185207274 +0900
-@@ -2,7 +2,7 @@
- &lt;!-- Generated with glade 3.38.2 --&gt;
- &lt;interface&gt;
-   &lt;requires lib=&quot;gtk+&quot; version=&quot;3.24&quot;/&gt;
--  &lt;object class=&quot;GtkWindow&quot; id=&quot;SimpleGui&quot;&gt;
-+  &lt;template class=&quot;SimpleGui&quot; parent=&quot;GtkWindow&quot;&gt;
-     &lt;property name=&quot;can-focus&quot;&gt;False&lt;/property&gt;
-     &lt;child&gt;
-       &lt;object class=&quot;GtkBox&quot;&gt;
-@@ -95,5 +95,5 @@
-         &lt;/child&gt;
-       &lt;/object&gt;
-     &lt;/child&gt;
--  &lt;/object&gt;
-+  &lt;/template&gt;
- &lt;/interface&gt;
-</code></pre><p>I set IDs for other widgets.</p>
-<p>Hmm&hellip; I see.  Now, I can use decorator technique described in
-<a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/builder.html#gtk-template">The Python GTK+ 3 Tutorial: 22.5.  Gtk.Template</a>.
-This <strong>Gtk.Template</strong> can&rsquo;t be found in
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes.html">PyGObject API Reference under Gtk 3.0 » Classes</a>.
-I found the definition of this decorator in the <strong>python3-gi</strong> package as
-<code>/usr/lib/python3/dist-packages/gi/_gtktemplate.py</code> imported from
-<code>/usr/lib/python3/dist-packages/gi/overrides/Gtk.py</code>.</p>
-<p>Let&rsquo;s set the signal for the top level &ldquo;SimpleGui&rdquo; panel.  On right side panel
-under &ldquo;signal&rdquo;, go down to &ldquo;GtkWidget&rdquo; and then we enter &ldquo;onDestroy&rdquo; asthe
-&ldquo;destroy&rdquo; signal handler.  For &ldquo;button_example&rdquo; widget, we enter
-&ldquo;onButtonPressed&rdquo; as the &ldquo;pressed&rdquo; signal handler.  For &ldquo;folder_example&rdquo;
-created by &ldquo;GtkFileChooserButton&rdquo;, we enter
-&ldquo;onFolderSelected&rdquo; as the &ldquo;selection-changed&rdquo; signal handler.</p>
-<p><img src="/img/simple-gui-glade.png" alt="The Glade screen"></p>
-<h3 id="how-to-create-gui-program">How to create GUI program</h3>
-<p>Now we should be ready to use this from <code>simple.py</code>:</p>
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Box.html">GtkBox</a>.</p>
+<p>Then I placed 2 simple &ldquo;Control&rdquo; widgets and a simple <strong>GtkLabel</strong>
+&ldquo;Display&rdquo; widget as an easy starter:</p>
+<ul>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Button.html">GtkButton</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Entry.html">GtkEntry</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Label.html">GtkLabel</a> under the &ldquo;Display&rdquo; button</li>
+</ul>
+<p>I set IDs for these widgets basically by dropping &ldquo;Gtk&rdquo; from the GTk class
+names.  Then set up signal handlers in the right panel.</p>
+<table>
+<thead>
+<tr>
+<th>ID/Class name</th>
+<th>Widget</th>
+<th>Signal</th>
+<th>Signal handler</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simple1</td>
+<td>GtkWindow</td>
+<td>destroy</td>
+<td>onDestroy</td>
+</tr>
+<tr>
+<td>Button</td>
+<td>GtkButton</td>
+<td>pressed</td>
+<td>onButtonPressed</td>
+</tr>
+<tr>
+<td>Entry</td>
+<td>GtkEntry</td>
+<td>changed</td>
+<td>onEntryChanged</td>
+</tr>
+<tr>
+<td>Label</td>
+<td>GtkLabel</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+</tr>
+</tbody>
+</table>
+<p>Then Glade screen looks like:</p>
+<p><img src="/img/simple1-glade.png" alt="The Glade screen"></p>
+<h2 id="how-to-create-a-simple-gui-program">How to create a simple GUI program</h2>
+<p>Now we are ready to use this from <code>simple1.py</code>:</p>
+
 <pre><code>import gi
 
-gi.require_version(&quot;Gtk&quot;, &quot;3.0&quot;)
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
 from gi.repository import Gtk
 
 
-@Gtk.Template(filename=&quot;composite-on-class.ui&quot;)
-class Window1(Gtk.Window):
-    __gtype_name__ = &quot;SimpleGui&quot;
+@Gtk.Template(filename=&#34;simple1.ui&#34;)
+class SimpleWindow(Gtk.Window):
+    # corresponding class in XML
+    __gtype_name__ = &#34;Simple1&#34;
+    # class variable and corresponding widget in XML
+    label = Gtk.Template.Child(&#34;Label&#34;)
+    entry_text = &#34;&#34;
 
     @Gtk.Template.Callback()
     def onDestroy(self, *args):
         Gtk.main_quit()
 
     @Gtk.Template.Callback()
-    def onButtonPressed(self, button):
-        print(&quot;Hello World! &quot; + button.get_label())
+    def onButtonPressed(self, widget):
+        print(&#34;=&#34; * 80)
+        print(&#34;Button label:    &#34; &#43; widget.get_label())
+        print(&#34;Entered text:    &#34; &#43; self.entry_text)
+        # This is right, I think.
+        self.label.set_label(self.entry_text)
 
     @Gtk.Template.Callback()
-    def onFolderSelected(self, widget):
-        print(&quot;Folder: &quot; + widget.get_filename())
+    def onEntryChanged(self, widget):
+        self.entry_text = widget.get_text()
 
-window = Window1()
+
+window = SimpleWindow()
 window.show()
 
 Gtk.main()
-</code></pre><p>Running this with <code>python3 simple.py</code> will start the GUI as:</p>
-<p><img src="/img/simple-gui-run.png" alt="Run simple-gui"></p>
-<p>Not bad.  I am using signal handler which uses the call back function.</p>
-<p>For fixed GUI component widgets, this is going to be similar.</p>
+</code></pre>
+
+<p>The meaning of &ldquo;@&hellip;&rdquo; is described in <a href="https://www.python.org/dev/peps/pep-0318/">Decorator in PEP 318</a>.</p>
+<p>Running this with <code>python3 simple1.py</code> will start the GUI as:</p>
+<p><img src="/img/simple1-py.png" alt="Run simple1"></p>
+<p>I am using the signal handler which uses the call back functions which set
+class variables in this example code.  Now the rationale to use the class which
+generates functions and associated data is clear to me.  It is a good start but
+this is not sufficient experience to make useful GUI since we still lack
+examples to use &ldquo;Control&rdquo; and &ldquo;Display&rdquo; widgets.</p>
+<h2 id="how-glade-generated-xml-looks">How Glade generated XML looks</h2>
+<p>Just in case I forget which items were selected via Glade session, here is the
+Glade generated XML <code>simple1.ui</code>:</p>
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;template class=&#34;Simple1&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;onDestroy&#34; swapped=&#34;no&#34;/&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;Button&#34;&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Press this to update&lt;/property&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;pressed&#34; handler=&#34;onButtonPressed&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkEntry&#34; id=&#34;Entry&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;changed&#34; handler=&#34;onEntryChanged&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;Label&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre>
+
 <!-- raw HTML omitted -->
 
 
@@ -201,7 +319,7 @@ Gtk.main()
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/16/pygi-2/">Next Post</a></td>
   
   </tr>
   </tbody>

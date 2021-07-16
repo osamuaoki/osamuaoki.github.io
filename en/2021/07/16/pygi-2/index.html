@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GTK GUI with PyGObject (2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GTK GUI with PyGObject (2)</span></h1>
+
+<h3 class="date">Date:
+2021/07/16 (initial publish),
+2021/07/16 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/12/pygi-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2 id="how-to-fill-more-control-widgets-into-gui">How to fill more control widgets into GUI</h2>
+<p>To put more widgets,&ldquo;Number of items&rdquo; on the left panel of
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Box.html">GtkBox</a>
+was incremented.  Some box are further subdivided again with
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Box.html">GtkBox</a>
+with their &ldquo;Orientation&rdquo; settings set to &ldquo;Horizontal&rdquo; instead.</p>
+<p>Then I placed several additional simple &ldquo;Control&rdquo; widgets:</p>
+<ul>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/SpinButton.html">GtkSpinButton</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ToggleButton.html">GtkToggleButton</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/CheckButton.html">GtkCheckButton</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/RadioButton.html">GtkRadioButton</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/FileChooserButton.html">GtkFileChooserButton</a> under the &ldquo;Control&rdquo; button</li>
+</ul>
+<p>Please note I created multiple widgets to learn how they work together with
+the object.</p>
+<p>I set IDs for these widgets basically by dropping &ldquo;Gtk&rdquo; from the GTk class
+names with optional number as suffix to distinguish them.  Then set up signal
+handlers in the right panel.</p>
+<table>
+<thead>
+<tr>
+<th>ID/Class name</th>
+<th>Widget</th>
+<th>Signal</th>
+<th>Signal handler</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Simple</td>
+<td>GtkWindow</td>
+<td>destroy</td>
+<td>onDestroy</td>
+</tr>
+<tr>
+<td>Button</td>
+<td>GtkButton</td>
+<td>pressed</td>
+<td>onButtonPressed</td>
+</tr>
+<tr>
+<td>Entry</td>
+<td>GtkEntry</td>
+<td>changed</td>
+<td>onEntryChanged</td>
+</tr>
+<tr>
+<td>SpinButton?</td>
+<td>GtkSpinButton</td>
+<td>changed</td>
+<td>onSpinButtonChanged?</td>
+</tr>
+<tr>
+<td>ToggleButton?</td>
+<td>GtkToggleButton</td>
+<td>toggled</td>
+<td>onToggleButtonToggled?</td>
+</tr>
+<tr>
+<td>CheckButton?</td>
+<td>GtkCheckButton</td>
+<td>toggled</td>
+<td>onCheckButtonToggled?</td>
+</tr>
+<tr>
+<td>RadioButton?</td>
+<td>GtkRadioButton</td>
+<td>toggled</td>
+<td>onRadioButtonToggled</td>
+</tr>
+<tr>
+<td>FileChooserButton</td>
+<td>GtkFileChooserButton</td>
+<td>selection-changed</td>
+<td>onFileChooserButtonChanged</td>
+</tr>
+<tr>
+<td>Label</td>
+<td>GtkLabel</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+</tr>
+</tbody>
+</table>
+<p>There are some non-obvious extra works other with Glade usage.</p>
+<p><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/SpinButton.html">GtkSpinButton</a>
+widget needs to click on the pen-icon in the &ldquo;Adjustment&rdquo; entry box to open
+dialog and create a new <strong>Adjustment</strong> object &ldquo;adjustment1&rdquo; for <strong>SpinButton1</strong>.
+Although normally each <strong>SpinButton?</strong> has its own adjustment?&quot;, just for
+learning, let me set the same <strong>Adjustment</strong> object &ldquo;adjustment1&rdquo; for
+<strong>SpinButton2</strong>.  These 2 spin buttons now function in parallel since they
+share the same <strong>Adjustment</strong> object &ldquo;adjustment1&rdquo;.</p>
+<p><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ToggleButton.html">GtkToggleButton</a>
+widget can display icon instead of just a text label by clicking &ldquo;Always show
+image&rdquo; checkbox and clicking on the pen-icon in the &ldquo;Image&rdquo; entry box to open
+dialog and create a new <strong>GtkImage</strong> object &ldquo;image1&rdquo; for <strong>ToggleButton1</strong>.
+When setting &ldquo;Image&rdquo;, somehow my Glade focus on deprecated &ldquo;Stock ID&rdquo;.  Just
+click radio button for &ldquo;Icon name&rdquo; and select one you like.  Do the same for
+another to create a new <strong>GtkImage</strong> object &ldquo;image2&rdquo;.  If you put null string
+to the text label, this becomes a clean small icon button.</p>
+<p><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/CheckButton.html">GtkCheckButton</a>
+widget is very much like
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ToggleButton.html">GtkToggleButton</a>
+except for presentation of its state and area to click.</p>
+<p><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/RadioButton.html">GtkRadioButton</a>
+widget with round icon is visually very much like
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/CheckButton.html">GtkCheckButton</a>
+with square icon but has quite unique feature of exclusivity.  This is realized
+by grouping these controls.  Click on the pen-icon in the &ldquo;Group&rdquo; entry box for
+RadioButton2 and RadioButton3 widgets and select RadioButton1 as their Group
+choice.</p>
+<p><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/FileChooserButton.html">GtkFileChooserButton</a>
+widget has 2 modes of operations determined by &ldquo;FileChooserAttribute&rdquo; to be
+either &ldquo;Open&rdquo; or &ldquo;Select Folder&rdquo;.  Let&rsquo;s set this to &ldquo;Select Folder&rdquo;.  (Somehow
+my Glade version 3.38.2 tends to skip updating menu.  So I end up setting it
+multiple times and checking the resulting XML file for <code>&lt;property name=&quot;action&quot;&gt;select-folder&lt;/property&gt;</code> with a text editor.)</p>
+<p><img src="/img/simple2-glade.png" alt="The Glade screen"></p>
+<h3 id="how-to-create-gui-program">How to create GUI program</h3>
+<p>Now we are ready to use this from <code>simple2.py</code>:</p>
+
+<pre><code>import gi
+
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+from gi.repository import Gtk
+
+
+@Gtk.Template(filename=&#34;simple2.ui&#34;)
+class SimpleWindow(Gtk.Window):
+    # corresponding class in XML
+    __gtype_name__ = &#34;Simple2&#34;
+    # class variable and corresponding widget in XML
+    label = Gtk.Template.Child(&#34;Label&#34;)
+    entry_text = &#34;(null as init)&#34;
+    spin1_text = &#34;0 (init)&#34;
+    spin2_text = &#34;0 (init)&#34;
+    toggle1_text = &#34;___ off ___ (init)&#34;
+    toggle2_text = &#34;___ off ___ (init)&#34;
+    check1_text = &#34;___ off ___ (init)&#34;
+    check2_text = &#34;___ off ___ (init)&#34;
+    radio_text = &#34;radiobutton1 (init)&#34;
+    folder = &#34;(null as init)&#34;
+
+    @Gtk.Template.Callback()
+    def onDestroy(self, *args):
+        Gtk.main_quit()
+
+    @Gtk.Template.Callback()
+    def onButtonPressed(self, widget):
+        print(&#34;=&#34; * 80)
+        print(&#34;Button label:    &#34; &#43; widget.get_label())
+        print(&#34;Entered text:    &#34; &#43; self.entry_text)
+        print(&#34;Spin1 value :    &#34; &#43; self.spin1_text)
+        print(&#34;Spin2 value :    &#34; &#43; self.spin2_text)
+        print(&#34;Toggle1 text:    &#34; &#43; self.toggle1_text)
+        print(&#34;Toggle2 text:    &#34; &#43; self.toggle2_text)
+        print(&#34;Check1 text :    &#34; &#43; self.check1_text)
+        print(&#34;Check2 text :    &#34; &#43; self.check2_text)
+        print(&#34;Radio text  :    &#34; &#43; self.radio_text)
+        print(&#34;Folder      :    &#34; &#43; self.folder)
+        # This is right, I think.
+        self.label.set_label(self.entry_text)
+
+    @Gtk.Template.Callback()
+    def onEntryChanged(self, widget):
+        self.entry_text = widget.get_text()
+
+    @Gtk.Template.Callback()
+    def onSpinButton1Changed(self, widget):
+        self.spin1_text = str(widget.get_value_as_int())
+
+    @Gtk.Template.Callback()
+    def onSpinButton2Changed(self, widget):
+        self.spin2_text = str(widget.get_value_as_int())
+
+    @Gtk.Template.Callback()
+    def onToggleButton1Toggled(self, widget):
+        if widget.get_active():
+            self.toggle1_text = &#34;@@@ ON  @@@&#34;
+        else:
+            self.toggle1_text = &#34;___ off ___&#34;
+
+    @Gtk.Template.Callback()
+    def onToggleButton2Toggled(self, widget):
+        if widget.get_active():
+            self.toggle2_text = &#34;@@@ ON  @@@&#34;
+        else:
+            self.toggle2_text = &#34;___ off ___&#34;
+
+    @Gtk.Template.Callback()
+    def onCheckButton1Toggled(self, widget):
+        if widget.get_active():
+            self.check1_text = &#34;@@@ ON  @@@&#34;
+        else:
+            self.check1_text = &#34;___ off ___&#34;
+
+    @Gtk.Template.Callback()
+    def onCheckButton2Toggled(self, widget):
+        if widget.get_active():
+            self.check2_text = &#34;@@@ ON  @@@&#34;
+        else:
+            self.check2_text = &#34;___ off ___&#34;
+
+    @Gtk.Template.Callback()
+    def onRadioButtonToggled(self, widget):
+        if widget.get_active():
+            self.radio_text = widget.get_label()
+
+    @Gtk.Template.Callback()
+    def onFileChooserButtonSet(self, widget):
+        self.folder = widget.get_filename()
+
+window = SimpleWindow()
+window.show()
+
+Gtk.main()
+</code></pre>
+
+<p>Running this with <code>python3 simple2.py</code> will start the GUI as:</p>
+<p><img src="/img/simple2-py.png" alt="Run simple2"></p>
+<h2 id="how-glade-generated-xml-looks">How Glade generated XML looks</h2>
+<p>Just in case I forget which items were selected via Glade session, here is the
+Glade generated XML <code>simple2.ui</code>:</p>
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;object class=&#34;GtkAdjustment&#34; id=&#34;adjustment1&#34;&gt;
+    &lt;property name=&#34;upper&#34;&gt;100&lt;/property&gt;
+    &lt;property name=&#34;step-increment&#34;&gt;1&lt;/property&gt;
+    &lt;property name=&#34;page-increment&#34;&gt;10&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image1&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;format-justify-left&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image2&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;format-justify-fill&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;template class=&#34;Simple2&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;onDestroy&#34; swapped=&#34;no&#34;/&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;Button&#34;&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Press this to update&lt;/property&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;pressed&#34; handler=&#34;onButtonPressed&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkEntry&#34; id=&#34;Entry&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;changed&#34; handler=&#34;onEntryChanged&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;Label&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkBox&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkSpinButton&#34; id=&#34;SpinButton1&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;adjustment&#34;&gt;adjustment1&lt;/property&gt;
+                &lt;signal name=&#34;changed&#34; handler=&#34;onSpinButton1Changed&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkSpinButton&#34; id=&#34;SpinButton2&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;adjustment&#34;&gt;adjustment1&lt;/property&gt;
+                &lt;signal name=&#34;changed&#34; handler=&#34;onSpinButton2Changed&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;3&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkBox&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkToggleButton&#34; id=&#34;ToggleButton1&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;togglebutton1&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image1&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;onToggleButton1Toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkToggleButton&#34; id=&#34;ToggleButton2&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;togglebutton2&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image2&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;onToggleButton2Toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;4&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkBox&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkCheckButton&#34; id=&#34;CheckButton1&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;checkbutton1&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;onCheckButton1Toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkCheckButton&#34; id=&#34;CheckButton2&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;checkbutton2&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;onCheckButton2Toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;5&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkBox&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;RadioButton1&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;radiobutton1&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;onRadioButtonToggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;RadioButton2&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;radiobutton2&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;group&#34;&gt;RadioButton1&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;onRadioButtonToggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;RadioButton3&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;radiobutton3&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;group&#34;&gt;RadioButton1&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;onRadioButtonToggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;6&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkFileChooserButton&#34; id=&#34;FileChooserButton&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;action&#34;&gt;select-folder&lt;/property&gt;
+            &lt;property name=&#34;title&#34; translatable=&#34;yes&#34;/&gt;
+            &lt;signal name=&#34;file-set&#34; handler=&#34;onFileChooserButtonSet&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;7&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre>
+
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/12/pygi-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
