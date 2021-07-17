@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GTK GUI with PyGObject (3) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GTK GUI with PyGObject (3)</span></h1>
+
+<h3 class="date">Date:
+2021/07/17 (initial publish),
+2021/07/17 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/16/pygi-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2 id="how-to-fill-widgets-into-header-of-gui">How to fill widgets into header of GUI</h2>
+<p>Let&rsquo;s get back to the <code>simple1.py</code>/<code>simple1.ui</code> example and change it to make a
+<code>simple3.py</code>/<code>simple3.ui</code> example by adding following widgets to the header bar.</p>
+<ul>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Label.html">GtkLabel</a> under the &ldquo;Display&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/FileChooserButton.html">GtkFileChooserButton</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Button.html">GtkButton</a> under the &ldquo;Control&rdquo; button</li>
+</ul>
+<p>For this <code>simple3.py</code>/<code>simple3.ui</code> example, let&rsquo;s rename IDs in the XML file to
+the lowercase and rename class name as <code>s/1/3/g</code>.  This is much more efficient
+if you use the text editor instead of clicking through Glade.  This is trivial.</p>
+<p>For the header bar,
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/HeaderBar.html">GtkHeaderBar</a>
+under the &ldquo;Containers&rdquo; button seems to be the one to use.  Tricky part is how
+to use it.  You don&rsquo;t put the HeaderBar widget into the Gtk.Windows class as
+usual.  You put it aside.</p>
+<p><img src="/img/simple3-glade.png" alt="The Glade screen"></p>
+<p>The rest of operations are pretty much routines.</p>
+<h3 id="how-to-create-gui-program">How to create GUI program</h3>
+<p>Now we are ready to use this Glade origin header bar widget from <code>simple3.py</code>
+by <code>header = Gtk.Template.Child()</code>:</p>
+
+<pre><code>import gi
+
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+from gi.repository import Gtk
+
+
+@Gtk.Template(filename=&#34;simple3.ui&#34;)
+class SimpleWindow(Gtk.Window):
+    # corresponding class in XML
+    __gtype_name__ = &#34;Simple3&#34;
+    # class variable and corresponding widget in XML
+    label = Gtk.Template.Child()
+    header = Gtk.Template.Child()
+    header_label = Gtk.Template.Child()
+    entry_text = &#34;&#34;
+    folder = &#34;&#34;
+
+    @Gtk.Template.Callback()
+    def onDestroy(self, *args):
+        Gtk.main_quit()
+
+    @Gtk.Template.Callback()
+    def onFileChooserButtonChanged(self, widget):
+        self.folder = widget.get_filename()
+
+    @Gtk.Template.Callback()
+    def onButtonPressed(self, widget):
+        print(&#34;=&#34; * 80)
+        print(&#34;Button label:    &#34; &#43; widget.get_label())
+        print(&#34;Entered text:    &#34; &#43; self.entry_text)
+        print(&#34;Folder      :    &#34; &#43; self.folder)
+        # This is right, I think.
+        self.label.set_label(self.entry_text.upper())
+        self.header_label.set_label(self.entry_text.lower())
+
+    @Gtk.Template.Callback()
+    def onEntryChanged(self, widget):
+        self.entry_text = widget.get_text()
+
+
+window = SimpleWindow()
+
+#window.header.props.title = &#34;Convert2Html&#34;
+window.set_titlebar(window.header)
+window.show()
+
+Gtk.main()
+</code></pre>
+
+<p>Since we use the same name for the assigned variable and the ID in XML,
+<code>Gtk.Template.Child()</code> takes no argument now.</p>
+<p>Running this with <code>python3 simple3.py</code> will start the GUI as:</p>
+<p><img src="/img/simple3-py.png" alt="Run simple3"></p>
+<p>Please play with this GUI while looking at your terminal outputs.</p>
+<h2 id="how-glade-generated-xml-looks">How Glade generated XML looks</h2>
+<p>Just in case I forget which items were selected via Glade session, here is the
+Glade generated XML <code>simple3.ui</code>:</p>
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;template class=&#34;Simple3&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;default-width&#34;&gt;600&lt;/property&gt;
+    &lt;property name=&#34;default-height&#34;&gt;400&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;access&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;onDestroy&#34; swapped=&#34;no&#34;/&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34; id=&#34;main&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;button&#34;&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Press this to update&lt;/property&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;pressed&#34; handler=&#34;onButtonPressed&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkEntry&#34; id=&#34;entry&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;changed&#34; handler=&#34;onEntryChanged&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;label&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image1&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;open-menu-symbolic&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkHeaderBar&#34; id=&#34;header&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;show-close-button&#34;&gt;True&lt;/property&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkLabel&#34; id=&#34;header_label&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;HEADER (init)&lt;/property&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkFileChooserButton&#34; id=&#34;folder&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;action&#34;&gt;select-folder&lt;/property&gt;
+        &lt;property name=&#34;title&#34; translatable=&#34;yes&#34;/&gt;
+        &lt;signal name=&#34;selection-changed&#34; handler=&#34;onFileChooserButtonChanged&#34; swapped=&#34;no&#34;/&gt;
+      &lt;/object&gt;
+      &lt;packing&gt;
+        &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+      &lt;/packing&gt;
+    &lt;/child&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkButton&#34; id=&#34;primary&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;image&#34;&gt;image1&lt;/property&gt;
+        &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+      &lt;/object&gt;
+      &lt;packing&gt;
+        &lt;property name=&#34;position&#34;&gt;3&lt;/property&gt;
+      &lt;/packing&gt;
+    &lt;/child&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkPopoverMenu&#34; id=&#34;primary_pop&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;relative-to&#34;&gt;primary&lt;/property&gt;
+    &lt;child&gt;
+      &lt;placeholder/&gt;
+    &lt;/child&gt;
+  &lt;/object&gt;
+&lt;/interface&gt;
+</code></pre>
+
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/16/pygi-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

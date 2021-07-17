@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/07/12 (initial publish),
-2021/07/16 (last update)
+2021/07/17 (last update)
 </h3>
 </div>
 
@@ -136,17 +136,20 @@ widget
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a> on
 the left side panel for my simple example case here.</p>
 <p>Let&rsquo;s put &ldquo;Simple1&rdquo; to &ldquo;ID&rdquo;/&ldquo;Class Name&rdquo; entry and see the difference in
-XML.</p>
-<pre><code>$ diff -u0 composite-off-ID.ui composite-on-class.ui
---- composite-off-ID.ui 2021-07-12 22:56:06.250484181 +0900
-+++ composite-on-class.ui       2021-07-12 22:54:35.185207274 +0900
-@@ -11 +11 @@
--  &lt;object class=&quot;GtkWindow&quot; id=&quot;Simple1&quot;&gt;
-+  &lt;template class=&quot;Simple1&quot; parent=&quot;GtkWindow&quot;&gt;
-@@ -123 +123 @@
+XML.
+
+<pre><code>$  diff -u0 simple1.ui-ID simple1.ui
+--- simple1.ui-ID	2021-07-17 21:55:12.056677932 &#43;0900
+&#43;&#43;&#43; simple1.ui	2021-07-16 22:40:20.989739414 &#43;0900
+@@ -5 &#43;5 @@
+-  &lt;object class=&#34;GtkWindow&#34; id=&#34;Simple1&#34;&gt;
+&#43;  &lt;template class=&#34;Simple1&#34; parent=&#34;GtkWindow&#34;&gt;
+@@ -52 &#43;52 @@
 -  &lt;/object&gt;
-+  &lt;/template&gt;
-</code></pre><h2 id="how-to-fill-static-simple-widgets-into-gui">How to fill static simple widgets into GUI</h2>
+&#43;  &lt;/template&gt;
+</code></pre>
+</p>
+<h2 id="how-to-fill-static-simple-widgets-into-gui">How to fill static simple widgets into GUI</h2>
 <p>Dividing area into smaller subdivided areas are mostly done by
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Box.html">GtkBox</a>
 or
