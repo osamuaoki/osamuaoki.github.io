@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/07/12 (initial publish),
-2021/07/18 (last update)
+2021/07/19 (last update)
 </h3>
 </div>
 
@@ -57,6 +57,11 @@
   </tbody>
 </table>
 
+<p>My objective here is to establish efficient GUI programming example with Glade
+and Python using Gtk.Builder class instead of calling widget classes directly.</p>
+<p>I only touch on essential concepts in the order of practical importance and
+skip trivial points and points already addressed in
+<a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/">The Python GTK+ 3 Tutorial</a>.</p>
 <h2 id="gtk-gui-situation">GTK GUI situation</h2>
 <p>GTK3 GUI has been changing.  (version 3.38.5, 2021-07, Debian Bullseye)</p>
 <p><a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/menus.html">The Python GTK+ 3 Tutorial</a>
@@ -71,14 +76,9 @@ Application framework instead.</p>
 I see no Python based tutorial contents for creating modern
 <a href="https://developer.gnome.org/hig/stable/primary-menus.html.en">Primary menu</a>
 etc.  How do I do it?  Unfortunately, many code examples in the upstream source
-tree and the tutorial tend to contain old deprecated practices.  So I decided
-to record my learning experiences.</p>
+tree and the tutorial tend to contain old deprecated practices.  This is why I
+recorded my learning experiences here.</p>
 <h2 id="glade">Glade</h2>
-<p>I would like to use Glade with the Gtk.Builder class to program GUI with
-minimum efforts instead of calling widget classes.  So I am not going through
-the order
-<a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/">The Python GTK+ 3 Tutorial</a>
-was written.</p>
 <p>Let me go step-by-step to use Glade to create GTK GUI in my way.</p>
 <p>In order to understand what each Glade widget does, linked pages from the
 corresponding listed classes in the Gtk 3.0&rsquo;s
@@ -96,6 +96,12 @@ program uses PyGObject API.  From Python user point-of-view, this is a bit
 confusing.  But we need to get used to correspondence between C API names and
 Python API ones, since there are more information described with this C API
 name,</p>
+<p>(If you see Python GTK document with their first part of GTK class name
+spelled in all lower case such as &ldquo;<strong>gtk.Window</strong>&rdquo; instead, you are reading old
+API based documents such as
+<a href="https://developer.gnome.org/pygtk/stable/">PyGTK 2.0 Reference Manual</a>.
+Though they look similar, it is based on pre-GObject Introspection API and
+they are old.  Keep away from them :-))</p>
 <h2 id="where-to-start-gui-design">Where to start GUI design</h2>
 <p>Looking at the way Glade is designed, it looked like I should start creating
 window design by clicking and moving item from selection in the top 4 big
