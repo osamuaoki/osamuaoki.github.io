@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GTK GUI with PyGObject (4) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GTK GUI with PyGObject (4)</span></h1>
+
+<h3 class="date">Date:
+2021/07/18 (initial publish),
+2021/07/18 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/17/pygi-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2 id="gui-workflow">GUI workflow</h2>
+<p>Let&rsquo;s recap how GUI program are written here.</p>
+<ul>
+<li>Design static GUI components with Glade
+<ul>
+<li>Set the &ldquo;composite&rdquo; checkbox for the ID of the top GUI widget to make it
+&ldquo;Class name&rdquo;</li>
+</ul>
+</li>
+<li>Using Python with GObject Introspection to access GTK and associated
+libraries to program dynamic GUI components
+<ul>
+<li>Use <code>Gtk.Template.Child()</code> to create variables matching IDs to access widgets.</li>
+</ul>
+</li>
+</ul>
+<h2 id="gtknotebook-and-gtkstack">GtkNotebook and GtkStack</h2>
+<p>Let&rsquo;s go through more notable widgets again.</p>
+<ul>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Notebook.html">GtkNotebook</a> under the &ldquo;Containers&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Stack.html">GtkStack</a> under the &ldquo;Containers&rdquo; button</li>
+</ul>
+<p>These are very similar displaying a selected page out of stacked pages.  The
+latter needs an extra &ldquo;Control&rdquo; button to change stacked page.</p>
+<ul>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/StackSwitcher.html">GtkStackSwitcher</a>
+under the &ldquo;Control&rdquo; button (horizontal/vertical list)</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/StackSidebar.html">GtkStackSidebar</a>
+under the &ldquo;Control&rdquo; button (vertical list)</li>
+</ul>
+<p>For the content of the displayed button label for GtkStackSwicher, it is set as
+property of the GtkStack widget.</p>
+<h2 id="gtklistbox-and-gtkflowbox">GtkListBox and GtkFlowBox</h2>
+<ul>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ListBox.html">GtkListBox</a> under the &ldquo;Containers&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/FlowBox.html">GtkFlowBox</a> under the &ldquo;Containers&rdquo; button</li>
+</ul>
+<p>These are like <strong>Gtk.Box</strong> and <strong>Gtk.Grid</strong> but its contents can by dynamically
+sorted and filtered.</p>
+<p>The children of these are <strong>Gtk.ListBoxRow</strong> and <strong>Gtk.FlowBoxChild</strong>
+respectively and these can be fairly complex. If the content of these are
+simple enough, Use of <strong>Gtk.TreeView</strong> and <strong>Gtk.IconView</strong> may save your
+efforts.</p>
+<h2 id="gtktreeview">GtkTreeView</h2>
+<p>Now that <strong>Gtk.TreeView</strong> was mentioned in <strong>Gtk.ListBox</strong> as a simpler tool to
+use, let&rsquo;s use it with <strong>Gtk.Template</strong>.</p>
+<p><strong>Gtk.TreeView</strong> is used with <strong>Gtk.TreeModel</strong> such as <strong>Gtk.ListStore</strong> or <strong>Gtk.TreeStore</strong>.</p>
+<p>For this let&rsquo;s create a <code>phone-book.py</code>/<code>phone-book.ui</code> example.  It took me a
+while to make this working since existing examples usually don&rsquo;t use Glade nor
+<strong>Gtk.Template</strong>.</p>
+<p>You place
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/TreeView.html">GtkTreeView</a>
+under the &ldquo;Display&rdquo; button to the desired window box.  Then click on pen-icon
+in the &ldquo;TreeView Model:&rdquo; entry on the right side panel, and select &ldquo;New&rdquo; in the pop-up window.  This
+will fill &ldquo;TreeView Model:&rdquo; entry box with &ldquo;liststore1&rdquo;.</p>
+<p><img src="/img/phone-book-glade-tree.png" alt="The Glade screen"></p>
+<p>Then you select newly created &ldquo;liststore1&rdquo; object on the left side panel.
+You can set types of data for each column and initial data to be filled-in.
+Since column header is represented as comment in XML, these seems to be just
+placeholders.</p>
+<p><img src="/img/phone-book-glade-list.png" alt="The Glade screen"></p>
+<p>The rest of operations are pretty much routines.</p>
+<h3 id="how-to-create-gui-program">How to create GUI program</h3>
+<p>Now we are ready to use this Glade origin header bar widget from <code>simple3.py</code>
+by <code>header = Gtk.Template.Child()</code>:</p>
+
+<pre><code>import gi
+
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+from gi.repository import Gtk
+from gi.repository import Pango
+import sys
+
+# columns are not in XML so only these are used
+columns = [&#34;First Name&#34;,
+           &#34;Last Name&#34;,
+           &#34;Phone Number&#34;]
+
+# data are in XML so this goes after existing ones
+phonebook = [[&#34;Jurg&#34;, &#34;Billeter&#34;, &#34;555-0123&#34;],
+             [&#34;Johannes&#34;, &#34;Schmid&#34;, &#34;555-1234&#34;],
+             [&#34;Julita&#34;, &#34;Inca&#34;, &#34;555-2345&#34;],
+             [&#34;Javier&#34;, &#34;Jardon&#34;, &#34;555-3456&#34;],
+             [&#34;Jason&#34;, &#34;Clinton&#34;, &#34;555-4567&#34;],
+             [&#34;Random J.&#34;, &#34;Hacker&#34;, &#34;555-5678&#34;]]
+
+@Gtk.Template(filename=&#34;phone-book.ui&#34;)
+class SimpleWindow(Gtk.Window):
+
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;phone_book&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
+    liststore1 = Gtk.Template.Child()
+    treeview = Gtk.Template.Child()
+    label = Gtk.Template.Child()
+
+    def __init__(self):
+        super().__init__()
+        # initialize phonedata by row (append)
+        for phonedata in phonebook:
+            self.liststore1.append(phonedata)
+
+        # treeview is linked to listmodel
+        # initialize treeview by column
+        for i, column in enumerate(columns):
+            # cellrenderer to render the text
+            cell = Gtk.CellRendererText()
+            # the text in the 0-th column should be in boldface
+            if i == 0:
+                cell.props.weight_set = True
+                cell.props.weight = Pango.Weight.BOLD
+            # column view is created from
+            # i-th columns (= column) as header text and
+            # i-th liststore1 data generating Gtk.CellRendererText()
+            col = Gtk.TreeViewColumn(column, cell, text=i)
+            # appended to the treeview by column
+            self.treeview.append_column(col)
+
+    @Gtk.Template.Callback()
+    def onDestroy(self, *args):
+        Gtk.main_quit()
+
+    @Gtk.Template.Callback()
+    def onChanged(self, selection):
+        # get the model and the iterator that points at the data in the model
+        (model, iter) = selection.get_selected()
+        # set the label to a new value depending on the selection
+        self.label.set_text(&#34;{} {} --&gt; Phone: {}&#34;.format(model[iter][0],  model[iter][1], model[iter][2]))
+        return True
+
+window = SimpleWindow()
+window.show()
+Gtk.main()
+</code></pre>
+
+<p>Running this with <code>python3 phone-book.py</code> will start the GUI as:</p>
+<p><img src="/img/phone-book-py.png" alt="Run simple3"></p>
+<p>Please play with this GUI to see label get updated as you select listed item..</p>
+<h2 id="how-glade-generated-xml-looks">How Glade generated XML looks</h2>
+<p>Just in case I forget which items were selected via Glade session, here is the
+Glade generated XML <code>simple3.ui</code>:</p>
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;object class=&#34;GtkListStore&#34; id=&#34;liststore1&#34;&gt;
+    &lt;columns&gt;
+      &lt;!-- column-name name --&gt;
+      &lt;column type=&#34;gchararray&#34;/&gt;
+      &lt;!-- column-name surname --&gt;
+      &lt;column type=&#34;gchararray&#34;/&gt;
+      &lt;!-- column-name phonenumber --&gt;
+      &lt;column type=&#34;gchararray&#34;/&gt;
+    &lt;/columns&gt;
+    &lt;data&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;John&lt;/col&gt;
+        &lt;col id=&#34;1&#34; translatable=&#34;yes&#34;&gt;Doe&lt;/col&gt;
+        &lt;col id=&#34;2&#34; translatable=&#34;yes&#34;&gt;911&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;Call&lt;/col&gt;
+        &lt;col id=&#34;1&#34; translatable=&#34;yes&#34;&gt;Me&lt;/col&gt;
+        &lt;col id=&#34;2&#34; translatable=&#34;yes&#34;&gt;411&lt;/col&gt;
+      &lt;/row&gt;
+    &lt;/data&gt;
+  &lt;/object&gt;
+  &lt;template class=&#34;phone_book&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;onDestroy&#34; swapped=&#34;no&#34;/&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;property name=&#34;baseline-position&#34;&gt;top&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkTreeView&#34; id=&#34;treeview&#34;&gt;
+            &lt;property name=&#34;name&#34;&gt;view&lt;/property&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;model&#34;&gt;liststore1&lt;/property&gt;
+            &lt;child internal-child=&#34;selection&#34;&gt;
+              &lt;object class=&#34;GtkTreeSelection&#34; id=&#34;treeselect&#34;&gt;
+                &lt;signal name=&#34;changed&#34; handler=&#34;onChanged&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;label&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre>
+
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/17/pygi-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

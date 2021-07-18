@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/07/16 (initial publish),
-2021/07/16 (last update)
+2021/07/18 (last update)
 </h3>
 </div>
 
@@ -87,55 +87,55 @@ handlers in the right panel.</p>
 </thead>
 <tbody>
 <tr>
-<td>Simple</td>
+<td>simple</td>
 <td>GtkWindow</td>
 <td>destroy</td>
 <td>onDestroy</td>
 </tr>
 <tr>
-<td>Button</td>
+<td>button</td>
 <td>GtkButton</td>
 <td>pressed</td>
 <td>onButtonPressed</td>
 </tr>
 <tr>
-<td>Entry</td>
+<td>entry</td>
 <td>GtkEntry</td>
 <td>changed</td>
 <td>onEntryChanged</td>
 </tr>
 <tr>
-<td>SpinButton?</td>
+<td>spinbutton?</td>
 <td>GtkSpinButton</td>
 <td>changed</td>
 <td>onSpinButtonChanged?</td>
 </tr>
 <tr>
-<td>ToggleButton?</td>
+<td>togglebutton?</td>
 <td>GtkToggleButton</td>
 <td>toggled</td>
 <td>onToggleButtonToggled?</td>
 </tr>
 <tr>
-<td>CheckButton?</td>
+<td>checkbutton?</td>
 <td>GtkCheckButton</td>
 <td>toggled</td>
 <td>onCheckButtonToggled?</td>
 </tr>
 <tr>
-<td>RadioButton?</td>
+<td>radiobutton?</td>
 <td>GtkRadioButton</td>
 <td>toggled</td>
 <td>onRadioButtonToggled</td>
 </tr>
 <tr>
-<td>FileChooserButton</td>
+<td>filechooserbutton</td>
 <td>GtkFileChooserButton</td>
 <td>selection-changed</td>
 <td>onFileChooserButtonChanged</td>
 </tr>
 <tr>
-<td>Label</td>
+<td>label</td>
 <td>GtkLabel</td>
 <td>&mdash;</td>
 <td>&mdash;</td>
@@ -145,15 +145,15 @@ handlers in the right panel.</p>
 <p>There are some non-obvious extra works other with Glade usage.</p>
 <p><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/SpinButton.html">GtkSpinButton</a>
 widget needs to click on the pen-icon in the &ldquo;Adjustment&rdquo; entry box to open
-dialog and create a new <strong>Adjustment</strong> object &ldquo;adjustment1&rdquo; for <strong>SpinButton1</strong>.
-Although normally each <strong>SpinButton?</strong> has its own adjustment?&quot;, just for
+dialog and create a new <strong>Adjustment</strong> object &ldquo;adjustment1&rdquo; for <strong>spinbutton1</strong>.
+Although normally each <strong>spinbutton?</strong> has its own adjustment?&quot;, just for
 learning, let me set the same <strong>Adjustment</strong> object &ldquo;adjustment1&rdquo; for
-<strong>SpinButton2</strong>.  These 2 spin buttons now function in parallel since they
+<strong>spinbutton2</strong>.  These 2 spin buttons now function in parallel since they
 share the same <strong>Adjustment</strong> object &ldquo;adjustment1&rdquo;.</p>
 <p><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ToggleButton.html">GtkToggleButton</a>
 widget can display icon instead of just a text label by clicking &ldquo;Always show
 image&rdquo; checkbox and clicking on the pen-icon in the &ldquo;Image&rdquo; entry box to open
-dialog and create a new <strong>GtkImage</strong> object &ldquo;image1&rdquo; for <strong>ToggleButton1</strong>.
+dialog and create a new <strong>GtkImage</strong> object &ldquo;image1&rdquo; for <strong>togglebutton1</strong>.
 When setting &ldquo;Image&rdquo;, somehow my Glade focus on deprecated &ldquo;Stock ID&rdquo;.  Just
 click radio button for &ldquo;Icon name&rdquo; and select one you like.  Do the same for
 another to create a new <strong>GtkImage</strong> object &ldquo;image2&rdquo;.  If you put null string
@@ -173,7 +173,7 @@ choice.</p>
 widget has 2 modes of operations determined by &ldquo;FileChooserAttribute&rdquo; to be
 either &ldquo;Open&rdquo; or &ldquo;Select Folder&rdquo;.  Let&rsquo;s set this to &ldquo;Select Folder&rdquo;.  (Somehow
 my Glade version 3.38.2 tends to skip updating menu.  So I end up setting it
-multiple times and checking the resulting XML file for <code>&lt;property name=&quot;action&quot;&gt;select-folder&lt;/property&gt;</code> with a text editor.)</p>
+multiple times and checking the resulting XML file for <code>&lt;property name=&quot;action&quot;&gt;select-folder&lt;/property&gt;</code> by a text editor.)</p>
 <p><img src="/img/simple2-glade.png" alt="The Glade screen"></p>
 <h3 id="how-to-create-gui-program">How to create GUI program</h3>
 <p>Now we are ready to use this from <code>simple2.py</code>:</p>
@@ -186,10 +186,11 @@ from gi.repository import Gtk
 
 @Gtk.Template(filename=&#34;simple2.ui&#34;)
 class SimpleWindow(Gtk.Window):
-    # corresponding class in XML
-    __gtype_name__ = &#34;Simple2&#34;
-    # class variable and corresponding widget in XML
-    label = Gtk.Template.Child(&#34;Label&#34;)
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;simple2&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
+    label = Gtk.Template.Child()
+    # class member variables
     entry_text = &#34;(null as init)&#34;
     spin1_text = &#34;0 (init)&#34;
     spin2_text = &#34;0 (init)&#34;
@@ -301,7 +302,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
     &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
     &lt;property name=&#34;icon-name&#34;&gt;format-justify-fill&lt;/property&gt;
   &lt;/object&gt;
-  &lt;template class=&#34;Simple2&#34; parent=&#34;GtkWindow&#34;&gt;
+  &lt;template class=&#34;simple2&#34; parent=&#34;GtkWindow&#34;&gt;
     &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
     &lt;signal name=&#34;destroy&#34; handler=&#34;onDestroy&#34; swapped=&#34;no&#34;/&gt;
     &lt;child&gt;
@@ -311,7 +312,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
         &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
         &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
         &lt;child&gt;
-          &lt;object class=&#34;GtkButton&#34; id=&#34;Button&#34;&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;button&#34;&gt;
             &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Press this to update&lt;/property&gt;
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
@@ -325,7 +326,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
           &lt;/packing&gt;
         &lt;/child&gt;
         &lt;child&gt;
-          &lt;object class=&#34;GtkEntry&#34; id=&#34;Entry&#34;&gt;
+          &lt;object class=&#34;GtkEntry&#34; id=&#34;entry&#34;&gt;
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;signal name=&#34;changed&#34; handler=&#34;onEntryChanged&#34; swapped=&#34;no&#34;/&gt;
@@ -337,7 +338,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
           &lt;/packing&gt;
         &lt;/child&gt;
         &lt;child&gt;
-          &lt;object class=&#34;GtkLabel&#34; id=&#34;Label&#34;&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;label&#34;&gt;
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
           &lt;/object&gt;
@@ -353,7 +354,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
             &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
             &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
             &lt;child&gt;
-              &lt;object class=&#34;GtkSpinButton&#34; id=&#34;SpinButton1&#34;&gt;
+              &lt;object class=&#34;GtkSpinButton&#34; id=&#34;spinbutton1&#34;&gt;
                 &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;adjustment&#34;&gt;adjustment1&lt;/property&gt;
@@ -366,7 +367,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
               &lt;/packing&gt;
             &lt;/child&gt;
             &lt;child&gt;
-              &lt;object class=&#34;GtkSpinButton&#34; id=&#34;SpinButton2&#34;&gt;
+              &lt;object class=&#34;GtkSpinButton&#34; id=&#34;spinbutton2&#34;&gt;
                 &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;adjustment&#34;&gt;adjustment1&lt;/property&gt;
@@ -391,7 +392,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
             &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
             &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
             &lt;child&gt;
-              &lt;object class=&#34;GtkToggleButton&#34; id=&#34;ToggleButton1&#34;&gt;
+              &lt;object class=&#34;GtkToggleButton&#34; id=&#34;togglebutton1&#34;&gt;
                 &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;togglebutton1&lt;/property&gt;
                 &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
@@ -407,7 +408,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
               &lt;/packing&gt;
             &lt;/child&gt;
             &lt;child&gt;
-              &lt;object class=&#34;GtkToggleButton&#34; id=&#34;ToggleButton2&#34;&gt;
+              &lt;object class=&#34;GtkToggleButton&#34; id=&#34;togglebutton2&#34;&gt;
                 &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;togglebutton2&lt;/property&gt;
                 &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
@@ -435,7 +436,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
             &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
             &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
             &lt;child&gt;
-              &lt;object class=&#34;GtkCheckButton&#34; id=&#34;CheckButton1&#34;&gt;
+              &lt;object class=&#34;GtkCheckButton&#34; id=&#34;checkbutton1&#34;&gt;
                 &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;checkbutton1&lt;/property&gt;
                 &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
@@ -450,7 +451,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
               &lt;/packing&gt;
             &lt;/child&gt;
             &lt;child&gt;
-              &lt;object class=&#34;GtkCheckButton&#34; id=&#34;CheckButton2&#34;&gt;
+              &lt;object class=&#34;GtkCheckButton&#34; id=&#34;checkbutton2&#34;&gt;
                 &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;checkbutton2&lt;/property&gt;
                 &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
@@ -477,7 +478,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
             &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
             &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
             &lt;child&gt;
-              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;RadioButton1&#34;&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;radiobutton1&#34;&gt;
                 &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;radiobutton1&lt;/property&gt;
                 &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
@@ -493,14 +494,14 @@ Glade generated XML <code>simple2.ui</code>:</p>
               &lt;/packing&gt;
             &lt;/child&gt;
             &lt;child&gt;
-              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;RadioButton2&#34;&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;radiobutton2&#34;&gt;
                 &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;radiobutton2&lt;/property&gt;
                 &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
                 &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
-                &lt;property name=&#34;group&#34;&gt;RadioButton1&lt;/property&gt;
+                &lt;property name=&#34;group&#34;&gt;radiobutton1&lt;/property&gt;
                 &lt;signal name=&#34;toggled&#34; handler=&#34;onRadioButtonToggled&#34; swapped=&#34;no&#34;/&gt;
               &lt;/object&gt;
               &lt;packing&gt;
@@ -510,14 +511,14 @@ Glade generated XML <code>simple2.ui</code>:</p>
               &lt;/packing&gt;
             &lt;/child&gt;
             &lt;child&gt;
-              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;RadioButton3&#34;&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;radiobutton3&#34;&gt;
                 &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;radiobutton3&lt;/property&gt;
                 &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
                 &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
                 &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
-                &lt;property name=&#34;group&#34;&gt;RadioButton1&lt;/property&gt;
+                &lt;property name=&#34;group&#34;&gt;radiobutton1&lt;/property&gt;
                 &lt;signal name=&#34;toggled&#34; handler=&#34;onRadioButtonToggled&#34; swapped=&#34;no&#34;/&gt;
               &lt;/object&gt;
               &lt;packing&gt;
@@ -534,7 +535,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
           &lt;/packing&gt;
         &lt;/child&gt;
         &lt;child&gt;
-          &lt;object class=&#34;GtkFileChooserButton&#34; id=&#34;FileChooserButton&#34;&gt;
+          &lt;object class=&#34;GtkFileChooserButton&#34; id=&#34;filechooserbutton&#34;&gt;
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
             &lt;property name=&#34;action&#34;&gt;select-folder&lt;/property&gt;
@@ -576,7 +577,7 @@ Glade generated XML <code>simple2.ui</code>:</p>
   
   
   <hr/>
-  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

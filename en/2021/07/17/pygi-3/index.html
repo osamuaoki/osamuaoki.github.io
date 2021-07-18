@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/18/pygi-4/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -87,12 +87,13 @@ from gi.repository import Gtk
 
 @Gtk.Template(filename=&#34;simple3.ui&#34;)
 class SimpleWindow(Gtk.Window):
-    # corresponding class in XML
-    __gtype_name__ = &#34;Simple3&#34;
-    # class variable and corresponding widget in XML
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;simple3&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
     label = Gtk.Template.Child()
     header = Gtk.Template.Child()
     header_label = Gtk.Template.Child()
+    # class member variables
     entry_text = &#34;&#34;
     folder = &#34;&#34;
 
@@ -141,7 +142,7 @@ Glade generated XML <code>simple3.ui</code>:</p>
 &lt;!-- Generated with glade 3.38.2 --&gt;
 &lt;interface&gt;
   &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
-  &lt;template class=&#34;Simple3&#34; parent=&#34;GtkWindow&#34;&gt;
+  &lt;template class=&#34;simple3&#34; parent=&#34;GtkWindow&#34;&gt;
     &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
     &lt;property name=&#34;default-width&#34;&gt;600&lt;/property&gt;
     &lt;property name=&#34;default-height&#34;&gt;400&lt;/property&gt;
@@ -254,7 +255,7 @@ Glade generated XML <code>simple3.ui</code>:</p>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/18/pygi-4/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -266,7 +267,7 @@ Glade generated XML <code>simple3.ui</code>:</p>
   
   
   <hr/>
-  © 2019-2020 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>
