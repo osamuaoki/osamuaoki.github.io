@@ -170,8 +170,8 @@ class SimpleWindow(Gtk.Window):
                 cell.props.weight = Pango.Weight.BOLD
             # column view is created from
             # i-th columns (= column) as header text and
-            # i-th liststore1 data generating Gtk.CellRendererText()
-            col = Gtk.TreeViewColumn(column, cell, text=i)
+            # i-th liststore1 data rendered by Gtk.CellRendererText() instance
+            col = Gtk.TreeViewColumn(title=column, cell_renderer=cell, text=i)
             # appended to the treeview by column
             self.treeview.append_column(col)
 
