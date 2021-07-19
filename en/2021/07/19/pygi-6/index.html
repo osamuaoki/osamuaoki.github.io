@@ -61,7 +61,7 @@
 <p>Let&rsquo;s create <code>icon-view.py</code>/<code>icon-view.ui</code> example.  It took me
 a while to make these working since existing examples usually don&rsquo;t use Glade
 nor <strong>Gtk.Template</strong>.</p>
-<p>This is very much like  <strong>GtkTreeView</strong> or <strong>GtkComboBoxText</strong> example.</p>
+<p>This is very much like  <strong>GtkTreeView</strong> example.</p>
 <p><code>icon-view.py</code>:
 
 <pre><code>import gi
@@ -78,7 +78,6 @@ class SimpleWindow(Gtk.Window):
     # corresponding name in XML &#39;id&#39; attribute sets this class member variable
     liststore1 = Gtk.Template.Child() # MODEL
     iconview = Gtk.Template.Child()   # VIEW
-    icon = &#34;&#34;
     button = Gtk.Template.Child()
 
     def __init__(self):
@@ -90,10 +89,6 @@ class SimpleWindow(Gtk.Window):
         self.iconview.pack_start(renderer_text, True)
         self.iconview.add_attribute(renderer_text, &#34;text&#34;, 1)
 
-        #tree_iter = self.iconview.get_active_iter()
-        #self.icon = self.liststore1[tree_iter][1]
-
-
     @Gtk.Template.Callback()
     def onDestroy(self, *args):
         Gtk.main_quit()
@@ -101,8 +96,6 @@ class SimpleWindow(Gtk.Window):
     @Gtk.Template.Callback()
     def onButtonPressed(self, widget):
         print(&#34;=&#34; * 80)
-        #print(&#34;country = &#39;{}&#39;&#34;.format(self.country, self.lang1))
-        #print(&#34;~&#34; * 80)
 
 window = SimpleWindow()
 window.show_all()
