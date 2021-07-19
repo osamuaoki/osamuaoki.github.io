@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/19/pygi-5/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -98,12 +98,24 @@ property of the GtkStack widget.</p>
 sorted and filtered.</p>
 <p>The children of these are <strong>Gtk.ListBoxRow</strong> and <strong>Gtk.FlowBoxChild</strong>
 respectively and these can be fairly complex. If the content of these are
-simple enough, Use of <strong>Gtk.TreeView</strong> and <strong>Gtk.IconView</strong> may save your
+simple enough, use of <strong>Gtk.TreeView</strong> and <strong>Gtk.IconView</strong> may save your
 efforts.</p>
 <h2 id="gtktreeview">GtkTreeView</h2>
-<p>Now that <strong>Gtk.TreeView</strong> was mentioned in <strong>Gtk.ListBox</strong> as a simpler tool to
-use, let&rsquo;s use it with <strong>Gtk.Template</strong>.</p>
-<p><strong>Gtk.TreeView</strong> is used with <strong>Gtk.TreeModel</strong> such as <strong>Gtk.ListStore</strong> or <strong>Gtk.TreeStore</strong>.</p>
+<p>Although <strong>Gtk.TreeView</strong> was mentioned as a simpler tool to use than
+<strong>Gtk.ListBox</strong>, it is still quite complex since this involves Model-View type
+GUI conventions.  Let&rsquo;s use this with <strong>Gtk.Template</strong> and Glade to learn how
+it works.</p>
+<p>NOTE: Please don&rsquo;t consider things described here and subsequent pages are the
+best known methods.  I am merely recording how I got it work (sort of &hellip;).</p>
+<p><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/TreeView.html">GtkTreeView</a>
+is used with <strong>Gtk.TreeModel</strong> such as
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ListStore.html">GtkListStore</a>
+or
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/TreeStore.html">GtkTreeStore</a>.</p>
+<p>I wasn&rsquo;t clear what is the difference between these <strong>GtkListStore</strong> and
+<strong>GtkTreeStore</strong> and; what is &ldquo;view&rdquo;.
+<a href="https://stackoverflow.com/questions/28448852/python-gtk-can-someone-explain-the-difference-between-treestore-listmodel-a">Python (GTK) : Can someone explain the difference between TreeStore, Listmodel and all the rest?</a>
+was a good one.</p>
 <p>For this let&rsquo;s create a <code>phone-book.py</code>/<code>phone-book.ui</code> example.  It took me a
 while to make this working since existing examples usually don&rsquo;t use Glade nor
 <strong>Gtk.Template</strong>.</p>
@@ -282,7 +294,7 @@ Glade generated XML <code>simple3.ui</code>:</p>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/19/pygi-5/">Next Post</a></td>
   
   </tr>
   </tbody>

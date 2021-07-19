@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/02/09 (initial publish),
-2021/01/24 (last update)
+2021/07/19 (last update)
 </h3>
 </div>
 
@@ -146,10 +146,36 @@ to a certain branch of a certain github repository to enable github pages.</p>
  $ git commit -m &quot;updated webpages&quot;
  $ cd ..
  $ git commit -a -m &quot;updated submodule for webpages&quot;
-</code></pre><h2 id="draft">Draft</h2>
-<p>Add following to source.</p>
-<pre><code>draft: true
-</code></pre><p>Check the resulting page with <code>hugo -D server</code> .</p>
+</code></pre><h2 id="date">Date</h2>
+<p>Normally, hugo doesn&rsquo;t publish future date unless <code>-F</code> is specified.</p>
+<p>So please consider to include <code>date:</code> to include full <code>date --iso=sec</code> output
+as follows.</p>
+<ul>
+<li>Header of this page:</li>
+</ul>
+<pre><code>title: Initial setup for hugo (2)
+date: 2019-02-09T11:15:56+09:00
+categories:
+  - web
+  - english
+tags:
+  - hugo
+slug: initial-setup02
+</code></pre><ul>
+<li>Header to publish anytime after the start of the day of JST.</li>
+</ul>
+<pre><code>date: 2019-02-09T00:00:00+09:00
+</code></pre><ul>
+<li>Header to publish anytime after the end of the day of JST.</li>
+</ul>
+<pre><code>date: 2019-02-09T23:59:59+09:00
+</code></pre><p>If time zone is omitted, it seems to use UT.</p>
+<h2 id="draft">Draft</h2>
+<p>Add following to the header of the source.</p>
+<pre><code>date: 2999-12-31
+draft: true
+</code></pre><p>Check the resulting page with <code>hugo -F -D server</code> to include darft and future
+dated page.</p>
 <h2 id="salsa-debian-page">salsa (debian) page</h2>
 <p><strong>TODO</strong></p>
 <p>For more, follow

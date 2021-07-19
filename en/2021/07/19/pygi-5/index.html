@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GTK GUI with PyGObject (5) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GTK GUI with PyGObject (5)</span></h1>
+
+<h3 class="date">Date:
+2021/07/19 (initial publish),
+2021/07/19 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/18/pygi-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2 id="gtkcombobox-and-gtkcomboboxtext">GtkComboBox and GtkComboBoxText</h2>
+<ul>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ComboBox.html">GtkComboBox</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ComboBoxText.html">GtkComboBoxText</a> under the &ldquo;Cotrol&rdquo; button</li>
+</ul>
+<p>A <strong>GtkComboBox</strong> is a widget that allows the user to choose from a list of
+valid choices offered in <strong>Gtk.TreeModel</strong>.</p>
+<p><strong>GtkComboBoxText</strong> is for the simpler text-only case of <strong>GtkComboBox</strong>.</p>
+<p>For these let&rsquo;s create <code>combo-box.py</code>/<code>combo-box.ui</code> and
+<code>combo-box-text.py</code>/<code>combo-box-text.ui</code> examples and compare them.  It took me
+a while to make these working since existing examples usually don&rsquo;t use Glade
+nor <strong>Gtk.Template</strong>.</p>
+<h2 id="gtkcombobox-example">GtkComboBox example</h2>
+<p>Since GUI combobox doesn&rsquo;t know how to render the model-provided data to GUI,
+it needs to be explicitly specified and becomes complex.</p>
+<p><code>combo-box.py</code>:
+
+<pre><code>import gi
+
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+from gi.repository import Gtk
+
+@Gtk.Template(filename=&#34;combo-box.ui&#34;)
+class SimpleWindow(Gtk.Window):
+
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;combo_boxes&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
+    liststore_country = Gtk.Template.Child()
+    liststore_lang1 = Gtk.Template.Child()
+    combo_country = Gtk.Template.Child()
+    combo_lang1 = Gtk.Template.Child()
+    button = Gtk.Template.Child()
+
+    def __init__(self):
+        super().__init__()
+
+        renderer_text = Gtk.CellRendererText()
+        self.combo_country.pack_start(renderer_text, True)
+        self.combo_country.add_attribute(renderer_text, &#34;text&#34;, 0)
+
+        tree_iter = self.combo_country.get_active_iter()
+        self.country = self.liststore_country[tree_iter][0]
+
+        self.combo_lang1.pack_start(renderer_text, True)
+        self.combo_lang1.add_attribute(renderer_text, &#34;text&#34;, 0)
+
+        tree_iter = self.combo_lang1.get_active_iter()
+        self.lang1 = self.liststore_lang1[tree_iter][0]
+
+    @Gtk.Template.Callback()
+    def onDestroy(self, *args):
+        Gtk.main_quit()
+
+    @Gtk.Template.Callback()
+    def onCountryChanged(self, widget):
+        tree_iter = widget.get_active_iter()
+        model = widget.get_model()
+        country = model[tree_iter][0]
+        print(&#34;Selected: country = &#39;{}&#39;&#34;.format(country))
+        self.country = country
+
+    @Gtk.Template.Callback()
+    def onLang1Changed(self, widget):
+        tree_iter = widget.get_active_iter()
+        model = widget.get_model()
+        lang1 = model[tree_iter][0]
+        print(&#34;Selected:                    lang1 = &#39;{}&#39;&#34;.format(lang1))
+        self.lang1 = lang1
+
+    @Gtk.Template.Callback()
+    def onButtonPressed(self, widget):
+        print(&#34;=&#34; * 80)
+        print(&#34;country = &#39;{}&#39;, lang1 = &#39;{}&#39;&#34;.format(self.country, self.lang1))
+        print(&#34;~&#34; * 80)
+
+window = SimpleWindow()
+window.show()
+Gtk.main()
+</code></pre>
+</p>
+<p><code>combo-box.ui</code>:
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;object class=&#34;GtkListStore&#34; id=&#34;liststore_country&#34;&gt;
+    &lt;columns&gt;
+      &lt;!-- column-name country --&gt;
+      &lt;column type=&#34;gchararray&#34;/&gt;
+    &lt;/columns&gt;
+    &lt;data&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;U.S.A&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;Japan&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;Mexico&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;Taiwan (R.O.C)&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;France&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;U.K.&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;Canada&lt;/col&gt;
+      &lt;/row&gt;
+    &lt;/data&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkListStore&#34; id=&#34;liststore_lang1&#34;&gt;
+    &lt;columns&gt;
+      &lt;!-- column-name Language --&gt;
+      &lt;column type=&#34;gchararray&#34;/&gt;
+    &lt;/columns&gt;
+    &lt;data&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;Japanese&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;English&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;Mandarin Chinese&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;French&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34; translatable=&#34;yes&#34;&gt;Spanish&lt;/col&gt;
+      &lt;/row&gt;
+    &lt;/data&gt;
+  &lt;/object&gt;
+  &lt;template class=&#34;combo_boxes&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;title&#34; translatable=&#34;yes&#34;&gt;COMBOBOX EXAMPLES&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;onDestroy&#34; swapped=&#34;no&#34;/&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;baseline-position&#34;&gt;top&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;label_county&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Country&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkComboBox&#34; id=&#34;combo_country&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;model&#34;&gt;liststore_country&lt;/property&gt;
+            &lt;property name=&#34;active&#34;&gt;0&lt;/property&gt;
+            &lt;property name=&#34;id-column&#34;&gt;0&lt;/property&gt;
+            &lt;signal name=&#34;changed&#34; handler=&#34;onCountryChanged&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;label_lang1&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Language (primary)&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkComboBox&#34; id=&#34;combo_lang1&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;model&#34;&gt;liststore_lang1&lt;/property&gt;
+            &lt;property name=&#34;active&#34;&gt;0&lt;/property&gt;
+            &lt;property name=&#34;id-column&#34;&gt;0&lt;/property&gt;
+            &lt;signal name=&#34;changed&#34; handler=&#34;onLang1Changed&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;3&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;button&#34;&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Print&lt;/property&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;pressed&#34; handler=&#34;onButtonPressed&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;4&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre>
+</p>
+<h2 id="gtkcomboboxtext-example">GtkComboBoxText example</h2>
+<p>Since GUI combobox created by <strong>GtkComboBoxText</strong> knows the model-provided data
+is text and how to render to GUI, program is simpler and XML needs minimal
+changes.</p>
+<p><code>combo-boxi-text.py</code>:
+
+<pre><code>import gi
+
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+from gi.repository import Gtk
+
+@Gtk.Template(filename=&#34;combo-box-text.ui&#34;)
+class SimpleWindow(Gtk.Window):
+
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;combo_boxes&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
+    liststore_country = Gtk.Template.Child()
+    liststore_lang1 = Gtk.Template.Child()
+    combo_country = Gtk.Template.Child()
+    combo_lang1 = Gtk.Template.Child()
+    button = Gtk.Template.Child()
+
+    def __init__(self):
+        super().__init__()
+        self.country = self.combo_country.get_active_text()
+        self.lang1 = self.combo_lang1.get_active_text()
+
+    @Gtk.Template.Callback()
+    def onDestroy(self, *args):
+        Gtk.main_quit()
+
+    @Gtk.Template.Callback()
+    def onCountryChanged(self, widget):
+        tree_iter = widget.get_active_iter()
+        model = widget.get_model()
+        country = model[tree_iter][0]
+        print(&#34;Selected: country = &#39;{}&#39;&#34;.format(country))
+        self.country = country
+
+    @Gtk.Template.Callback()
+    def onLang1Changed(self, widget):
+        tree_iter = widget.get_active_iter()
+        model = widget.get_model()
+        lang1 = model[tree_iter][0]
+        print(&#34;Selected:                    lang1 = &#39;{}&#39;&#34;.format(lang1))
+        self.lang1 = lang1
+
+    @Gtk.Template.Callback()
+    def onButtonPressed(self, widget):
+        print(&#34;=&#34; * 80)
+        print(&#34;country = &#39;{}&#39;, lang1 = &#39;{}&#39;&#34;.format(self.country, self.lang1))
+        print(&#34;~&#34; * 80)
+
+window = SimpleWindow()
+window.show()
+Gtk.main()
+</code></pre>
+</p>
+<p><code>combo-box-text.ui</code> as diff:
+
+<pre><code>⟫🥷⟫ diff -u0 combo-box.ui combo-box-text.ui 
+--- combo-box.ui	2021-07-18 22:15:11.636047337 &#43;0900
+&#43;&#43;&#43; combo-box-text.ui	2021-07-19 00:27:27.848236975 &#43;0900
+@@ -81 &#43;81 @@
+-          &lt;object class=&#34;GtkComboBox&#34; id=&#34;combo_country&#34;&gt;
+&#43;          &lt;object class=&#34;GtkComboBoxText&#34; id=&#34;combo_country&#34;&gt;
+@@ -108 &#43;108 @@
+-          &lt;object class=&#34;GtkComboBox&#34; id=&#34;combo_lang1&#34;&gt;
+&#43;          &lt;object class=&#34;GtkComboBoxText&#34; id=&#34;combo_lang1&#34;&gt;
+
+</code></pre>
+</p>
+<h2 id="show-and-show_all"><code>show()</code> and <code>show_all()</code></h2>
+<p>As I see my examples up to here, I casually mix <code>window.show()</code> and
+<code>window.show_all()</code>. Reading
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html">Gtk.Widget</a>
+class, I realize that
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget.show">show() method</a>
+good enough for situation in my previous examples and the recursive
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget.show_all">show_all() method</a>
+is the robust approach which works even for more complex situation.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/18/pygi-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
