@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GTK GUI with PyGObject (6) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GTK GUI with PyGObject (6)</span></h1>
+
+<h3 class="date">Date:
+2021/07/19 (initial publish),
+2021/07/19 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/19/pygi-5/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2 id="gtkiconview-example">GtkIconView example</h2>
+<p>Let&rsquo;s create <code>icon-view.py</code>/<code>icon-view.ui</code> example.  It took me
+a while to make these working since existing examples usually don&rsquo;t use Glade
+nor <strong>Gtk.Template</strong>.</p>
+<p>This is very much like  <strong>GtkTreeView</strong> or <strong>GtkComboBoxText</strong> example.</p>
+<p><code>icon-view.py</code>:
+
+<pre><code>import gi
+
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+from gi.repository import Gtk
+from gi.repository.GdkPixbuf import Pixbuf
+
+@Gtk.Template(filename=&#34;icon-view.ui&#34;)
+class SimpleWindow(Gtk.Window):
+
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;icon-views&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
+    liststore1 = Gtk.Template.Child() # MODEL
+    iconview = Gtk.Template.Child()   # VIEW
+    icon = &#34;&#34;
+    button = Gtk.Template.Child()
+
+    def __init__(self):
+        super().__init__()
+        renderer_pixbuf = Gtk.CellRendererPixbuf()
+        self.iconview.pack_start(renderer_pixbuf, True)
+        self.iconview.add_attribute(renderer_pixbuf, &#34;pixbuf&#34;, 0)
+        renderer_text = Gtk.CellRendererText()
+        self.iconview.pack_start(renderer_text, True)
+        self.iconview.add_attribute(renderer_text, &#34;text&#34;, 1)
+
+        #tree_iter = self.iconview.get_active_iter()
+        #self.icon = self.liststore1[tree_iter][1]
+
+
+    @Gtk.Template.Callback()
+    def onDestroy(self, *args):
+        Gtk.main_quit()
+
+    @Gtk.Template.Callback()
+    def onButtonPressed(self, widget):
+        print(&#34;=&#34; * 80)
+        #print(&#34;country = &#39;{}&#39;&#34;.format(self.country, self.lang1))
+        #print(&#34;~&#34; * 80)
+
+window = SimpleWindow()
+window.show_all()
+Gtk.main()
+</code></pre>
+</p>
+<p><code>icon-view.ui</code>:
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;object class=&#34;GtkListStore&#34; id=&#34;liststore1&#34;&gt;
+    &lt;columns&gt;
+      &lt;!-- column-name GdkPixbuf1 --&gt;
+      &lt;column type=&#34;GdkPixbuf&#34;/&gt;
+      &lt;!-- column-name gchararray1 --&gt;
+      &lt;column type=&#34;gchararray&#34;/&gt;
+    &lt;/columns&gt;
+    &lt;data&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34;&gt;edit-cut.png&lt;/col&gt;
+        &lt;col id=&#34;1&#34;&gt;cut&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34;&gt;edit-paste.png&lt;/col&gt;
+        &lt;col id=&#34;1&#34;&gt;paste&lt;/col&gt;
+      &lt;/row&gt;
+      &lt;row&gt;
+        &lt;col id=&#34;0&#34;&gt;edit-copy.png&lt;/col&gt;
+        &lt;col id=&#34;1&#34;&gt;copy&lt;/col&gt;
+      &lt;/row&gt;
+    &lt;/data&gt;
+  &lt;/object&gt;
+  &lt;template class=&#34;icon-views&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;title&#34; translatable=&#34;yes&#34;&gt;ICONVIEW EXAMPLES&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;onDestroy&#34; swapped=&#34;no&#34;/&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;property name=&#34;baseline-position&#34;&gt;top&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;label_county&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Icons&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkIconView&#34; id=&#34;iconview&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;margin&#34;&gt;6&lt;/property&gt;
+            &lt;property name=&#34;model&#34;&gt;liststore1&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;button&#34;&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Print&lt;/property&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;pressed&#34; handler=&#34;onButtonPressed&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre>
+</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/19/pygi-5/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

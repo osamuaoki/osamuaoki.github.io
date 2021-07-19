@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/19/pygi-6/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -85,17 +85,19 @@ class SimpleWindow(Gtk.Window):
     # corresponding name in XML &#39;class&#39; attribute for this class
     __gtype_name__ = &#34;combo_boxes&#34;
     # corresponding name in XML &#39;id&#39; attribute sets this class member variable
-    liststore_country = Gtk.Template.Child()
-    liststore_lang1 = Gtk.Template.Child()
-    combo_country = Gtk.Template.Child()
-    combo_lang1 = Gtk.Template.Child()
+    liststore_country = Gtk.Template.Child() # MODEL
+    liststore_lang1 = Gtk.Template.Child()   # MODEL
+    combo_country = Gtk.Template.Child()     # VIEW
+    combo_lang1 = Gtk.Template.Child()       # VIEW
     button = Gtk.Template.Child()
 
     def __init__(self):
         super().__init__()
 
         renderer_text = Gtk.CellRendererText()
+        # pack_start(cell, expand), Here, cell (Gtk.CellRenderer) 
         self.combo_country.pack_start(renderer_text, True)
+        # add_attribute (cell, attribute, column)
         self.combo_country.add_attribute(renderer_text, &#34;text&#34;, 0)
 
         tree_iter = self.combo_country.get_active_iter()
@@ -298,10 +300,10 @@ class SimpleWindow(Gtk.Window):
     # corresponding name in XML &#39;class&#39; attribute for this class
     __gtype_name__ = &#34;combo_boxes&#34;
     # corresponding name in XML &#39;id&#39; attribute sets this class member variable
-    liststore_country = Gtk.Template.Child()
-    liststore_lang1 = Gtk.Template.Child()
-    combo_country = Gtk.Template.Child()
-    combo_lang1 = Gtk.Template.Child()
+    liststore_country = Gtk.Template.Child() # MODEL
+    liststore_lang1 = Gtk.Template.Child()   # MODEL
+    combo_country = Gtk.Template.Child()     # VIEW
+    combo_lang1 = Gtk.Template.Child()       # VIEW
     button = Gtk.Template.Child()
 
     def __init__(self):
@@ -360,9 +362,9 @@ Gtk.main()
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html">Gtk.Widget</a>
 class, I realize that
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget.show">show() method</a>
-good enough for situation in my previous examples and the recursive
+is good enough for situation in my previous examples and the recursive
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Widget.html#Gtk.Widget.show_all">show_all() method</a>
-is the robust approach which works even for more complex situation.</p>
+is the more robust approach which works even for more complex situation.</p>
 <!-- raw HTML omitted -->
 
 
@@ -374,7 +376,7 @@ is the robust approach which works even for more complex situation.</p>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/19/pygi-6/">Next Post</a></td>
   
   </tr>
   </tbody>
