@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/07/18 (initial publish),
-2021/07/19 (last update)
+2021/07/22 (last update)
 </h3>
 </div>
 
@@ -58,21 +58,60 @@
 </table>
 
 <h2 id="gui-workflow">GUI workflow</h2>
-<p>Let&rsquo;s recap how GUI program are written here.</p>
+<p>Let&rsquo;s recap my GUI programming workflow here.</p>
 <ul>
+<li>Read basic references first &mdash; many programming approaches
+<ul>
+<li><a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/">The Python GTK+ 3 Tutorial</a>.
+<ul>
+<li>Not much examples for Glade nor Gtk.Template.</li>
+</ul>
+</li>
+<li><a href="https://developer.gnome.org/gnome-devel-demos/stable/beginner.py.html.en">GTK+ widgets sample code</a>
+<ul>
+<li>Learn basic <a href="https://developer.gnome.org/gnome-devel-demos/stable/beginner.py.html.en#theory">theory of GUI programming</a>
+such as
+<a href="https://developer.gnome.org/gnome-devel-demos/stable/model-view-controller.py.html.en">The Model/View/Controller design</a>.</li>
+</ul>
+</li>
+<li><a href="https://lazka.github.io/pgi-docs/">PyGObject API Reference</a>.
+<ul>
+<li>Most authorative and in details &mdash; don&rsquo;t get lost :-)</li>
+</ul>
+</li>
+</ul>
+</li>
 <li>Design static GUI components with Glade
 <ul>
 <li>Set the &ldquo;composite&rdquo; checkbox for the ID of the top GUI widget to make it
-&ldquo;Class name&rdquo;</li>
+&ldquo;Class name&rdquo;.</li>
 </ul>
 </li>
-<li>Using Python with GObject Introspection to access GTK and associated
-libraries to program dynamic GUI components
+<li>Program dynamic GUI components with Python
 <ul>
-<li>Use <code>Gtk.Template.Child()</code> to create variables matching IDs to access widgets.</li>
+<li>Use GObject Introspection to access GTK and associated libraries from
+simple Python code.</li>
+<li>Use <code>Gtk.Template.Child()</code> to create variables matching IDs in Glade XML to access widgets.</li>
 </ul>
 </li>
 </ul>
+<p>Know some limitations for Glade:</p>
+<ul>
+<li>Glade can set only one top level widget as &ldquo;composit&rdquo;=ON per one Glade XML
+file.
+<ul>
+<li>Decorator <code>Gtk.Template</code> approach requires one Glade XML file for each top level widget.</li>
+<li>&ldquo;Transient for:&rdquo; in Glade is non-compatible with decorator <code>Gtk.Template</code> approach.</li>
+</ul>
+</li>
+<li>When using Glade to create GUI, you are using
+<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html#Gtk.Buildable">Gtk.Buildable</a>
+to create GUI widgets.  So you can only set widgets defined in the Glade XML
+as the &ldquo;User data&rdquo; parameter.  No external constant number nor string.</li>
+<li>Changing widget types or renaming IDs or shuffling position of widgets in Glade XML file are easier with the text editor than Glade.</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h2 id="gtknotebook-and-gtkstack">GtkNotebook and GtkStack</h2>
 <p>Let&rsquo;s go through more notable widgets again.</p>
 <ul>
@@ -115,7 +154,9 @@ or
 <p>I wasn&rsquo;t clear what is the difference between these <strong>GtkListStore</strong> and
 <strong>GtkTreeStore</strong> and; what is &ldquo;view&rdquo;.
 <a href="https://stackoverflow.com/questions/28448852/python-gtk-can-someone-explain-the-difference-between-treestore-listmodel-a">Python (GTK) : Can someone explain the difference between TreeStore, Listmodel and all the rest?</a>
-was a good one.</p>
+was a good one.  Then I found
+<a href="https://developer.gnome.org/gnome-devel-demos/stable/model-view-controller.py.html.en">The Model/View/Controller design</a>
+which gave me some general idea.</p>
 <p>For this let&rsquo;s create a <code>phone-book.py</code>/<code>phone-book.ui</code> example.  It took me a
 while to make this working since existing examples usually don&rsquo;t use Glade nor
 <strong>Gtk.Template</strong>.</p>

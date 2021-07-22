@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GTK GUI with PyGObject (7) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GTK GUI with PyGObject (7)</span></h1>
+
+<h3 class="date">Date:
+2021/07/21 (initial publish),
+2021/07/22 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/19/pygi-6/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2 id="multiline-text-editor-example-with-gtksourceview">Multiline Text Editor example with GtkSource.View</h2>
+<p>Next exercise is to create a modal dialog window with Glade similar to <a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/textview.html">Multiline Text Editor</a></p>
+<p>Doing this with the
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/TextView.html">Gtk.TextView</a>
+widget is not so challenging, I decided to use
+<a href="https://lazka.github.io/pgi-docs/GtkSource-3.0/classes/View.html">GtkSource.View</a>
+instead to gain access to capability of regex and case sensitivity.</p>
+<p>I don&rsquo;t see <strong>GtkSource.View</strong> related widgets in the Glade&rsquo;s available choice list, I first created Multiline Text Editor with <strong>Gtk.TextView</strong> just get the general design done.
+Since we have 2 toplevel widgets, 2 XML files were created by Glade to allow us to use
+<a href="htt__GtkSource.View__ps://pygobject.readthedocs.io/en/latest/guide/gtk_template.html">Gtk.Template</a>.</p>
+<p>Then I removed <strong>Gtk.TextView</strong> and  <strong>Gtk.TextBuffer</strong> from Glade and left
+empty container and wrote code in Python which uses <strong>GtkSource.View</strong> and
+attach it to empty container with <code>self.scrollwin.add(self.textview)</code>.</p>
+<p>In order to <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Dialog.html#Gtk.Dialog.run">get proper response</a>
+upon exit from <code>dialog.run()</code>, when creation buttons used in the modal window dialog using Glade, I enabled Response IDs of buttons.  (It was not so obvious for me.)</p>
+<p>The resulting code is long as below but it is relatively easy to reconfigure its graphic components.</p>
+<p><code>editor.py</code>:
+
+<pre><code>import gi
+
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+gi.require_version(&#39;GtkSource&#39;, &#39;3.0&#39;)
+from gi.repository import Gtk, Pango, GtkSource
+
+
+@Gtk.Template(filename=&#34;editor-main.ui&#34;)
+class TextViewWindow(Gtk.Window):
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;main&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
+    editable = Gtk.Template.Child()
+    invisible = Gtk.Template.Child()
+    mono = Gtk.Template.Child()
+    one = Gtk.Template.Child()
+    char = Gtk.Template.Child()
+    word = Gtk.Template.Child()
+    left = Gtk.Template.Child()
+    center = Gtk.Template.Child()
+    right = Gtk.Template.Child()
+    fill = Gtk.Template.Child()
+    scrollwin = Gtk.Template.Child()
+
+    def __init__(self):
+        super().__init__()
+        #################################################################################
+        # Let&#39;s add widgets and buffer not supported by Glade
+        # (replacing GtkTextView and GtkTextBuffer)
+        #    s/text/source/ later
+        #################################################################################
+        self.textview = GtkSource.View()
+        self.textbuffer = self.textview.get_buffer()
+        self.textbuffer.set_text(
+            &#34;This is some text inside of a Gtk.SourceView. &#34;
+            &#43; &#34;Select text and click one of the buttons &#39;bold&#39;, &#39;italic&#39;, &#34;
+            &#43; &#34;or &#39;underline&#39; to modify the text accordingly.\n\n&#34;
+            &#43; &#34;	• This search can be one with case insensitive match.\n&#34;
+            &#43; &#34;	• This search can be one with regular expression match.\n\n&#34;
+            &#43; &#34;日本国民は、正当に選挙された国会における代表者を通じて行動し、&#34;
+            &#43; &#34;われらとわれらの子孫のために、諸国民との協和による成果と、&#34;
+            &#43; &#34;わが国全土にわたつて自由のもたらす恵沢を確保し、&#34;
+            &#43; &#34;政府の行為によつて再び戦争の惨禍が起ることのないやうにすることを決意し、&#34;
+            &#43; &#34;ここに主権が国民に存することを宣言し、この憲法を確定する。&#34;
+            &#43; &#34;そもそも国政は、国民の厳粛な信託によるものであつて、その権威は国民に由来し、&#34;
+            &#43; &#34;その権力は国民の代表者がこれを行使し、その福利は国民がこれを享受する。&#34;
+            &#43; &#34;これは人類普遍の原理であり、この憲法は、かかる原理に基くものである。&#34;
+            &#43; &#34;われらは、これに反する一切の憲法、法令及び詔勅を排除する。\n\n&#34;
+            &#43; &#34;日本国民は、恒久の平和を念願し、人間相互の関係を支配する崇高な理想を深く自覚するのであつて、&#34;
+            &#43; &#34;平和を愛する諸国民の公正と信義に信頼して、われらの安全と生存を保持しようと決意した。&#34;
+            &#43; &#34;われらは、平和を維持し、専制と隷従、圧迫と偏狭を地上から永遠に除去しようと努めてゐる国際社会において、&#34;
+            &#43; &#34;名誉ある地位を占めたいと思ふ。われらは、全世界の国民が、&#34;
+            &#43; &#34;ひとしく恐怖と欠乏から免かれ、平和のうちに生存する権利を有することを確認する。\n\n&#34;
+            &#43; &#34;われらは、いづれの国家も、自国のことのみに専念して他国を無視してはならないのであつて、&#34;
+            &#43; &#34;政治道徳の法則は、普遍的なものであり、この法則に従ふことは、自国の主権を維持し、&#34;
+            &#43; &#34;他国と対等関係に立たうとする各国の責務であると信ずる。\n\n&#34;
+            &#43; &#34;日本国民は、国家の名誉にかけ、全力をあげてこの崇高な理想と目的を達成することを誓ふ。\n\n&#34;
+            &#43; &#34;« L&#39;Assemblée nationale décrète qu&#39;elle borne quant à présent la Déclaration des droits &#34;
+            &#43; &#34;de l&#39;homme et du citoyen aux dix-sept articles qu&#39;elle a arrêtés, et qu&#39;elle va procéder &#34;
+            &#43; &#34;sans délai à fixer la Constitution de la France pour assurer la prospérité publique, sauf &#34;
+            &#43; &#34;à ajouter après le travail de la Constitution les articles qu&#39;elle croirait nécessaires &#34;
+            &#43; &#34;pour compléter la Déclaration des droits. »&#34;
+        )
+        self.scrollwin.add(self.textview)
+        #################################################################################
+        self.tag_bold = self.textbuffer.create_tag(&#34;bold&#34;, weight=Pango.Weight.BOLD)
+        self.tag_italic = self.textbuffer.create_tag(&#34;italic&#34;, style=Pango.Style.ITALIC)
+        self.tag_under = self.textbuffer.create_tag(
+            &#34;underline&#34;, underline=Pango.Underline.SINGLE
+        )
+        self.tag_found = self.textbuffer.create_tag(&#34;found&#34;, background=&#34;yellow&#34;)
+        # check Glade XML initial settings and set them so
+        if self.editable.get_active():
+            self.editable = self.editable.get_active()
+            self.textview.set_editable(self.editable)
+        if self.invisible.get_active():
+            self.invisible = self.invisible.get_active()
+            self.textview.set_visible(not self.invisible)
+        if self.mono.get_active():
+            self.mono = self.mono.get_active()
+            self.textview.set_monospace(self.mono)
+        if self.one.get_active():
+            self.textview.set_wrap_mode(Gtk.WrapMode.NONE)
+        if self.char.get_active():
+            self.textview.set_wrap_mode(Gtk.WrapMode.CHAR)
+        if self.word.get_active():
+            self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
+        if self.left.get_active():
+            self.textview.set_justification(Gtk.Justification.LEFT)
+        if self.center.get_active():
+            self.textview.set_justification(Gtk.Justification.CENTER)
+        if self.right.get_active():
+            self.textview.set_justification(Gtk.Justification.RIGHT)
+        if self.fill.get_active():
+            self.textview.set_justification(Gtk.Justification.FILL)
+
+    # common function for callbacks
+    def button_apply_tag(self, tag):
+        bounds = self.textbuffer.get_selection_bounds()
+        if len(bounds) != 0 and self.editable:
+            start, end = bounds
+            self.textbuffer.apply_tag(tag, start, end)
+
+    @Gtk.Template.Callback()
+    def on_bold_clicked(self, widget):
+        self.button_apply_tag(self.tag_bold)
+
+    @Gtk.Template.Callback()
+    def on_italic_clicked(self, widget):
+        self.button_apply_tag(self.tag_italic)
+
+    @Gtk.Template.Callback()
+    def on_under_clicked(self, widget):
+        self.button_apply_tag(self.tag_under)
+
+    @Gtk.Template.Callback()
+    def on_clear_clicked(self, widget):
+        start = self.textbuffer.get_start_iter()
+        end = self.textbuffer.get_end_iter()
+        self.textbuffer.remove_all_tags(start, end)
+
+    @Gtk.Template.Callback()
+    def on_editable_toggled(self, widget):
+        self.editable = widget.get_active()
+        self.textview.set_editable(self.editable)
+
+    @Gtk.Template.Callback()
+    def on_invisible_toggled(self, widget):
+        self.invisible = widget.get_active()
+        self.textview.set_cursor_visible(not self.invisible)
+
+    @Gtk.Template.Callback()
+    def on_mono_toggled(self, widget):
+        self.mono = widget.get_active()
+        self.textview.set_monospace(self.mono)
+
+    @Gtk.Template.Callback()
+    def on_one_toggled(self, widget):
+        if widget.get_active():
+            self.textview.set_wrap_mode(Gtk.WrapMode.NONE)
+
+    @Gtk.Template.Callback()
+    def on_char_toggled(self, widget):
+        if widget.get_active():
+            self.textview.set_wrap_mode(Gtk.WrapMode.CHAR)
+
+    @Gtk.Template.Callback()
+    def on_word_toggled(self, widget):
+        if widget.get_active():
+            self.textview.set_wrap_mode(Gtk.WrapMode.WORD)
+
+    @Gtk.Template.Callback()
+    def on_left_toggled(self, widget):
+        if widget.get_active():
+            self.textview.set_justification(Gtk.Justification.LEFT)
+
+    @Gtk.Template.Callback()
+    def on_center_toggled(self, widget):
+        if widget.get_active():
+            self.textview.set_justification(Gtk.Justification.CENTER)
+
+    @Gtk.Template.Callback()
+    def on_right_toggled(self, widget):
+        if widget.get_active():
+            self.textview.set_justification(Gtk.Justification.RIGHT)
+
+    @Gtk.Template.Callback()
+    def on_fill_toggled(self, widget):
+        if widget.get_active():
+            self.textview.set_justification(Gtk.Justification.FILL)
+
+    @Gtk.Template.Callback()
+    def on_search_clicked(self, widget):
+        dialog = SearchDialog(self)
+        dialog.set_transient_for(self)
+        dialog.set_modal(True)
+        dialog.show_all()
+        # ==== This is important part for *dialog =====
+        # Clicking button placed in the particular *dialog makes dialog to
+        # exit the event loop while emitting a response signal if the
+        # Response ID entry in Glade is activated.
+        response = dialog.run()
+        search_settings = GtkSource.SearchSettings()
+        search_settings.set_case_sensitive(dialog.case_sensitive)
+        search_settings.set_regex_enabled(dialog.regex_enabled)
+        search_settings.set_search_text(dialog.searchbox.get_text())
+        # buffer (GtkSource.Buffer) – a GtkSource.Buffer.
+        # settings (GtkSource.SearchSettings or None) – a GtkSource.SearchSettings, or None.
+        self.search_context = GtkSource.SearchContext(buffer=self.textbuffer, settings=search_settings)
+        if response == Gtk.ResponseType.OK:
+            cursor_mark = self.textbuffer.get_insert()
+            start = self.textbuffer.get_iter_at_mark(cursor_mark)
+            if start.get_offset() == self.textbuffer.get_char_count():
+                start = self.textbuffer.get_start_iter()
+            self.search_and_mark(start)
+        dialog.destroy()
+
+    def search_and_mark(self, start):
+        end = self.textbuffer.get_end_iter()
+        flag, match_start, match_end, has_wrapped_around = self.search_context.forward2(start)
+        if flag:
+            self.textbuffer.apply_tag(self.tag_found, match_start, match_end)
+            self.search_and_mark(match_end)
+
+
+@Gtk.Template(filename=&#34;editor-search.ui&#34;)
+class SearchDialog(Gtk.Dialog):
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;search_win&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
+    find = Gtk.Template.Child()
+    cancel = Gtk.Template.Child()
+    label = Gtk.Template.Child()
+    searchbox = Gtk.Template.Child()
+    nocase = Gtk.Template.Child()
+    regex = Gtk.Template.Child()
+
+    def __init__(self, parent):
+        super().__init__()
+        # initialize from Glade XML settings
+        if self.nocase.get_active():
+            self.case_sensitive = False
+        else:
+            self.case_sensitive = True
+        if self.regex.get_active():
+            self.regex_enabled = False
+        else:
+            self.regex_enabled = True
+
+    @Gtk.Template.Callback()
+    def on_cancel_clicked(self, widget):
+        print(&#34;I: cancel clicked&#34;)
+
+    @Gtk.Template.Callback()
+    def on_searchbox_search_changed(self, widget):
+        pass
+
+    @Gtk.Template.Callback()
+    def on_regex_toggled(self, widget):
+        if widget.get_active():
+            self.regex_enabled = True
+        else:
+            self.regex_enabled = False
+
+    @Gtk.Template.Callback()
+    def on_nocase_toggled(self, widget):
+        if widget.get_active():
+            self.case_sensitive = False
+        else:
+            self.case_sensitive = True
+
+
+win = TextViewWindow()
+win.connect(&#34;destroy&#34;, Gtk.main_quit)
+win.show_all()
+Gtk.main()
+</code></pre>
+</p>
+<p><code>editor-main.ui</code>:
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;object class=&#34;GtkTextTagTable&#34;/&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image1&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;format-text-bold&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image2&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;format-text-italic&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image3&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;format-text-underline&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image4&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;format-justify-left&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image5&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;format-justify-center&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image6&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;format-justify-right&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image7&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;format-justify-fill&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image8&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;edit-clear-symbolic&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image9&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;edit-find&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;template class=&#34;main&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;title&#34; translatable=&#34;yes&#34;&gt;Editor&lt;/property&gt;
+    &lt;property name=&#34;default-width&#34;&gt;640&lt;/property&gt;
+    &lt;property name=&#34;default-height&#34;&gt;400&lt;/property&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkBox&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkButton&#34; id=&#34;bold&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image1&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;clicked&#34; handler=&#34;on_bold_clicked&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkButton&#34; id=&#34;italic&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image2&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;clicked&#34; handler=&#34;on_italic_clicked&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkButton&#34; id=&#34;under&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image3&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;clicked&#34; handler=&#34;on_under_clicked&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkSeparator&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;3&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;left&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image4&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;False&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_left_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;4&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;center&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image5&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;group&#34;&gt;left&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_center_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;5&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;right&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image6&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;group&#34;&gt;left&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_right_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;6&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;fill&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image7&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;group&#34;&gt;left&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_fill_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;7&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkSeparator&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;8&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkButton&#34; id=&#34;clear&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image8&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;clicked&#34; handler=&#34;on_clear_clicked&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;9&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkSeparator&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;10&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkButton&#34; id=&#34;search&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;image&#34;&gt;image9&lt;/property&gt;
+                &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;clicked&#34; handler=&#34;on_search_clicked&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;11&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkScrolledWindow&#34; id=&#34;scrollwin&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;shadow-type&#34;&gt;in&lt;/property&gt;
+            &lt;child&gt;
+              &lt;placeholder/&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;!-- n-columns=3 n-rows=2 --&gt;
+          &lt;object class=&#34;GtkGrid&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;row-homogeneous&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;column-homogeneous&#34;&gt;True&lt;/property&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkCheckButton&#34; id=&#34;editable&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Editable&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_editable_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;left-attach&#34;&gt;0&lt;/property&gt;
+                &lt;property name=&#34;top-attach&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkCheckButton&#34; id=&#34;invisible&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Invisible&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_invisible_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;left-attach&#34;&gt;1&lt;/property&gt;
+                &lt;property name=&#34;top-attach&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;one&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;No wrap&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;group&#34;&gt;word&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_one_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;left-attach&#34;&gt;0&lt;/property&gt;
+                &lt;property name=&#34;top-attach&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;char&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Char. wrap&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;group&#34;&gt;word&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_char_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;left-attach&#34;&gt;1&lt;/property&gt;
+                &lt;property name=&#34;top-attach&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkRadioButton&#34; id=&#34;word&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Word wrap&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;active&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_word_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;left-attach&#34;&gt;2&lt;/property&gt;
+                &lt;property name=&#34;top-attach&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkCheckButton&#34; id=&#34;mono&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Mono&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;toggled&#34; handler=&#34;on_mono_toggled&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;left-attach&#34;&gt;2&lt;/property&gt;
+                &lt;property name=&#34;top-attach&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre>
+</p>
+<p><code>editor-search.ui</code>:
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;template class=&#34;search_win&#34; parent=&#34;GtkDialog&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;title&#34; translatable=&#34;yes&#34;&gt;Search&lt;/property&gt;
+    &lt;property name=&#34;type-hint&#34;&gt;dialog&lt;/property&gt;
+    &lt;child internal-child=&#34;vbox&#34;&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;property name=&#34;spacing&#34;&gt;2&lt;/property&gt;
+        &lt;child internal-child=&#34;action_area&#34;&gt;
+          &lt;object class=&#34;GtkButtonBox&#34;&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;layout-style&#34;&gt;end&lt;/property&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkButton&#34; id=&#34;find&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Find All Matches&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkButton&#34; id=&#34;cancel&#34;&gt;
+                &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Cancel Search&lt;/property&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+                &lt;signal name=&#34;clicked&#34; handler=&#34;on_cancel_clicked&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;label&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Input search word.&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkBox&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkSearchEntry&#34; id=&#34;searchbox&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;primary-icon-name&#34;&gt;edit-find-symbolic&lt;/property&gt;
+                &lt;property name=&#34;primary-icon-activatable&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;primary-icon-sensitive&#34;&gt;False&lt;/property&gt;
+                &lt;signal name=&#34;search-changed&#34; handler=&#34;on_searchbox_search_changed&#34; swapped=&#34;no&#34;/&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkBox&#34; id=&#34;search_opt&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;homogeneous&#34;&gt;True&lt;/property&gt;
+                &lt;child&gt;
+                  &lt;object class=&#34;GtkCheckButton&#34; id=&#34;nocase&#34;&gt;
+                    &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Ignore case&lt;/property&gt;
+                    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                    &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                    &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                    &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                    &lt;signal name=&#34;toggled&#34; handler=&#34;on_nocase_toggled&#34; swapped=&#34;no&#34;/&gt;
+                  &lt;/object&gt;
+                  &lt;packing&gt;
+                    &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                    &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                    &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+                  &lt;/packing&gt;
+                &lt;/child&gt;
+                &lt;child&gt;
+                  &lt;object class=&#34;GtkCheckButton&#34; id=&#34;regex&#34;&gt;
+                    &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Regular expr.&lt;/property&gt;
+                    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                    &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+                    &lt;property name=&#34;receives-default&#34;&gt;False&lt;/property&gt;
+                    &lt;property name=&#34;draw-indicator&#34;&gt;True&lt;/property&gt;
+                    &lt;signal name=&#34;toggled&#34; handler=&#34;on_regex_toggled&#34; swapped=&#34;no&#34;/&gt;
+                  &lt;/object&gt;
+                  &lt;packing&gt;
+                    &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                    &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                    &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+                  &lt;/packing&gt;
+                &lt;/child&gt;
+              &lt;/object&gt;
+              &lt;packing&gt;
+                &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+              &lt;/packing&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+    &lt;action-widgets&gt;
+      &lt;action-widget response=&#34;-5&#34;&gt;find&lt;/action-widget&gt;
+      &lt;action-widget response=&#34;-6&#34;&gt;cancel&lt;/action-widget&gt;
+    &lt;/action-widgets&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre>
+</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/19/pygi-6/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

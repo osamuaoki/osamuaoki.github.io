@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/07/12 (initial publish),
-2021/07/19 (last update)
+2021/07/22 (last update)
 </h3>
 </div>
 
@@ -106,16 +106,36 @@ they are old.  Keep away from them :-))</p>
 <p>Looking at the way Glade is designed, it looked like I should start creating
 window design by clicking and moving item from selection in the top 4 big
 buttons to the center canvas.</p>
+<p>Out of these 4 big buttons, the &ldquo;Toplevels&rdquo; button seems to be a good to start.
+Let&rsquo;s check what are these GUI objects in &ldquo;Toplevels&rdquo;.</p>
+<ul>
+<li>A <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">Gtk.Window</a> is a toplevel window which can contain other widgets.</li>
+<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/OffscreenWindow.html#class-details">Gtk.OffscreenWindow</a> is strictly intended to be used for obtaining snapshots of widgets that are not part of a normal widget hierarchy.</li>
+<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/ApplicationWindow.html#class-details">Gtk.ApplicationWindow</a> is a Gtk.Window subclass that offers some extra functionality for better integration with Gtk.Application features. Notably, it can handle both the application menu as well as the menubar.</li>
+<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Dialog.html#class-details">Gtk.Dialog</a> boxes are a convenient way to prompt the user for a small amount of input, e.g. to display a message, ask a question, or anything else that does not require extensive effort on the user’s part.
+<ul>
+<li>The <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/AboutDialog.html">Gtk.AboutDialog</a> offers a simple way to display information about a program like its logo, name, copyright, website and license.</li>
+<li>There are many <strong>Gtk&hellip;.Dialog</strong>  dialog widgets which work by putting some widget inside a Gtk.Dialog.</li>
+</ul>
+</li>
+<li>A <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Assistant.html#class-details">Gtk.Assistant</a> is a widget used to represent a generally complex operation split in several steps, guiding the user through its pages and controlling the page flow to collect the necessary data.</li>
+</ul>
 <p>Since I want a simple GUI,
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a>
-found under the &ldquo;Toplevels&rdquo; button seems to be a good one as the starting
-object.  (For other items under the &ldquo;Toplevels&rdquo; button, they seem to offer
-mostly pop-up window dialogue etc.  One exception is
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ApplicationWindow.html">GtkApplicationWindow</a>
-which accommodates additional capability to start program via DBus connection
-over the simple
-<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a>.</p>
-<p>How to create the top bar embedded primary menu is tricky.  It looks like
+seems to be a good starting point for the GUI programming learning experience for me now, though
+<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/ApplicationWindow.html#class-details">Gtk.ApplicationWindow</a>
+seems to be a good starting point for serious applications in future</p>
+<p><a href="https://en.wikipedia.org/wiki/Glade_Interface_Designer">Glade</a>
+generates
+<a href="https://developer.gnome.org/gtk3/stable/GtkBuilder.html#BUILDER-UI">GtkBuilder UI descriptions</a>
+in a XML file and
+<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html#gtk-buildable-vfuncs">Gtk.Buildable</a>
+consumes this XML file to create complicated widgets.
+Please pay attention to some of these linked pages talking how widgets are implemented in the
+<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html#gtk-buildable-vfuncs">Gtk.Buildable</a>.</p>
+<p>How to create the top bar embedded primary menu is tricky with
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a>.
+It looks like
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/HeaderBar.html">GtkHeaderBar</a>
 under the &ldquo;Containers&rdquo; button is the one to be used. We will get back to this
 <a href="/en/2021/07/17/pygi-3/">header bar topic later</a>.</p>
