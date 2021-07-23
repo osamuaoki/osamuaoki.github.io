@@ -6,70 +6,96 @@
     <description>Recent content in coding on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 21 Jul 2021 00:00:00 +0900</lastBuildDate><atom:link href="/categories/coding/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 23 Jul 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/coding/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>GTK GUI with PyGObject (7)</title>
-      <link>/en/2021/07/21/pygi-7/</link>
-      <pubDate>Wed, 21 Jul 2021 00:00:00 +0900</pubDate>
+      <title>GTK GUI with PyGObject (9)</title>
+      <link>/en/2021/07/23/pygi-9/</link>
+      <pubDate>Fri, 23 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>/en/2021/07/21/pygi-7/</guid>
-      <description>Multiline Text Editor example with GtkSource.View Next exercise is to create a modal dialog window with Glade similar to Multiline Text Editor
-Doing this with the Gtk.TextView widget is not so challenging, I decided to use GtkSource.View instead to gain access to capability of regex and case sensitivity.
-I don&amp;rsquo;t see GtkSource.View related widgets in the Glade&amp;rsquo;s available choice list, I first created Multiline Text Editor with Gtk.TextView just get the general design done.</description>
+      <guid>/en/2021/07/23/pygi-9/</guid>
+      <description>TODO : This page is WIP.
+How to fill widgets into header of GUI Let&amp;rsquo;s get back to the simple1.py/simple1.ui example and change it to make a simple3.py/simple3.ui example by adding following widgets to the header bar.
+ GtkLabel under the &amp;ldquo;Display&amp;rdquo; button GtkFileChooserButton under the &amp;ldquo;Control&amp;rdquo; button GtkButton under the &amp;ldquo;Control&amp;rdquo; button  For this simple3.py/simple3.ui example, let&amp;rsquo;s rename IDs in the XML file to the lowercase and rename class name as s/1/3/g.</description>
     </item>
     
     <item>
-      <title>GTK GUI with PyGObject (6)</title>
-      <link>/en/2021/07/19/pygi-6/</link>
+      <title>GTK GUI with PyGObject (8)</title>
+      <link>/en/2021/07/21/pygi-8/</link>
+      <pubDate>Wed, 21 Jul 2021 00:00:00 +0900</pubDate>
+      
+      <guid>/en/2021/07/21/pygi-8/</guid>
+      <description>Example: Multiline Text Editor with GtkSource.View Next exercise is to create a modal dialog window with Glade similar to Multiline Text Editor
+Doing this with the Gtk.TextView widget is not so challenging. I decided to use GtkSource.View instead to gain access to capability of regex and case sensitivity.
+I didn&amp;rsquo;t see GtkSource.View related widgets in the Glade&amp;rsquo;s available choice list, I first created Multiline Text Editor with Gtk.TextView just to get the general design done.</description>
+    </item>
+    
+    <item>
+      <title>GTK GUI with PyGObject (7)</title>
+      <link>/en/2021/07/19/pygi-7/</link>
       <pubDate>Mon, 19 Jul 2021 00:00:05 +0900</pubDate>
       
-      <guid>/en/2021/07/19/pygi-6/</guid>
-      <description>GtkIconView example Let&amp;rsquo;s go through another notable widget GtkIconView.
+      <guid>/en/2021/07/19/pygi-7/</guid>
+      <description>Example: GtkIconView Let&amp;rsquo;s go through another notable widget GtkIconView.
 Let&amp;rsquo;s create icon-view.py/icon-view.ui example. It took me a while to make these working since existing examples usually don&amp;rsquo;t use Glade nor Gtk.Template.
 This is very much like GtkTreeView example.
 icon-view.py: import gi gi.require_version(&amp;#34;Gtk&amp;#34;, &amp;#34;3.0&amp;#34;) from gi.repository import Gtk from gi.repository.GdkPixbuf import Pixbuf @Gtk.Template(filename=&amp;#34;icon-view.ui&amp;#34;) class SimpleWindow(Gtk.Window): # corresponding name in XML &amp;#39;class&amp;#39; attribute for this class __gtype_name__ = &amp;#34;icon-views&amp;#34; # corresponding name in XML &amp;#39;id&amp;#39; attribute sets this class member variable liststore1 = Gtk.</description>
     </item>
     
     <item>
-      <title>GTK GUI with PyGObject (5)</title>
-      <link>/en/2021/07/19/pygi-5/</link>
+      <title>GTK GUI with PyGObject (6)</title>
+      <link>/en/2021/07/19/pygi-6/</link>
       <pubDate>Mon, 19 Jul 2021 00:00:00 +0900</pubDate>
       
-      <guid>/en/2021/07/19/pygi-5/</guid>
+      <guid>/en/2021/07/19/pygi-6/</guid>
       <description>GtkComboBox and GtkComboBoxText  GtkComboBox under the &amp;ldquo;Control&amp;rdquo; button GtkComboBoxText under the &amp;ldquo;Cotrol&amp;rdquo; button  A GtkComboBox is a widget that allows the user to choose from a list of valid choices offered in Gtk.TreeModel.
 GtkComboBoxText is for the simpler text-only case of GtkComboBox.
 For these let&amp;rsquo;s create combo-box.py/combo-box.ui and combo-box-text.py/combo-box-text.ui examples and compare them. It took me a while to make these working since existing examples usually don&amp;rsquo;t use Glade nor Gtk.</description>
     </item>
     
     <item>
-      <title>GTK GUI with PyGObject (4)</title>
-      <link>/en/2021/07/18/pygi-4/</link>
+      <title>GTK GUI with PyGObject (5)</title>
+      <link>/en/2021/07/18/pygi-5/</link>
       <pubDate>Sun, 18 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>/en/2021/07/18/pygi-4/</guid>
-      <description>GUI workflow Let&amp;rsquo;s recap my GUI programming workflow here.
- Read basic references first &amp;mdash; many programming approaches  The Python GTK+ 3 Tutorial.  Not much examples for Glade nor Gtk.Template.   GTK+ widgets sample code  Learn basic theory of GUI programming such as The Model/View/Controller design.   PyGObject API Reference.  Most authorative and in details &amp;mdash; don&amp;rsquo;t get lost :-)     Design static GUI components with Glade  Set the &amp;ldquo;composite&amp;rdquo; checkbox for the ID of the top GUI widget to make it &amp;ldquo;Class name&amp;rdquo;.</description>
+      <guid>/en/2021/07/18/pygi-5/</guid>
+      <description>GtkListBox and GtkFlowBox  GtkListBox under the &amp;ldquo;Containers&amp;rdquo; button GtkFlowBox under the &amp;ldquo;Containers&amp;rdquo; button  These are like Gtk.Box and Gtk.Grid but its contents can by dynamically sorted and filtered.
+The children of these are Gtk.ListBoxRow and Gtk.FlowBoxChild respectively and these can be fairly complex. If the content of these are simple enough, use of Gtk.TreeView and Gtk.IconView may save your efforts.
+GtkTreeView Although Gtk.TreeView was mentioned as a simpler tool to use than Gtk.</description>
+    </item>
+    
+    <item>
+      <title>GTK GUI with PyGObject (4)</title>
+      <link>/en/2021/07/17/pygi-4/</link>
+      <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2021/07/17/pygi-4/</guid>
+      <description>GtkNotebook and GtkStack  GtkNotebook under the &amp;ldquo;Containers&amp;rdquo; button GtkStack under the &amp;ldquo;Containers&amp;rdquo; button  These are very similar displaying a selected page out of stacked pages.
+For GtkNotebook, functionality to select page is automatically provided.
+For GtkStack, functionality to select page needs external &amp;ldquo;control&amp;rdquo; widget and it needs to be specified in the property of the GtkStack widget. Such external &amp;ldquo;control&amp;rdquo; widget can be:
+ GtkStackSwitcher under the &amp;ldquo;Control&amp;rdquo; button (horizontal/vertical list) GtkStackSidebar under the &amp;ldquo;Control&amp;rdquo; button (vertical list)  </description>
     </item>
     
     <item>
       <title>GTK GUI with PyGObject (3)</title>
-      <link>/en/2021/07/17/pygi-3/</link>
-      <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
+      <link>/en/2021/07/16/pygi-3/</link>
+      <pubDate>Fri, 16 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>/en/2021/07/17/pygi-3/</guid>
-      <description>How to fill widgets into header of GUI Let&amp;rsquo;s get back to the simple1.py/simple1.ui example and change it to make a simple3.py/simple3.ui example by adding following widgets to the header bar.
- GtkLabel under the &amp;ldquo;Display&amp;rdquo; button GtkFileChooserButton under the &amp;ldquo;Control&amp;rdquo; button GtkButton under the &amp;ldquo;Control&amp;rdquo; button  For this simple3.py/simple3.ui example, let&amp;rsquo;s rename IDs in the XML file to the lowercase and rename class name as s/1/3/g. This is much more efficient if you use the text editor instead of clicking through Glade.</description>
+      <guid>/en/2021/07/16/pygi-3/</guid>
+      <description>Example: Special button widgets into GUI To put more widgets,&amp;ldquo;Number of items&amp;rdquo; on the left panel of GtkBox was incremented. Some box are further subdivided again with GtkBox with their &amp;ldquo;Orientation&amp;rdquo; settings set to &amp;ldquo;Horizontal&amp;rdquo; instead.
+Then I placed several additional simple &amp;ldquo;Control&amp;rdquo; widgets:
+ GtkSpinButton under the &amp;ldquo;Control&amp;rdquo; button GtkToggleButton under the &amp;ldquo;Control&amp;rdquo; button GtkCheckButton under the &amp;ldquo;Control&amp;rdquo; button GtkRadioButton under the &amp;ldquo;Control&amp;rdquo; button GtkFileChooserButton under the &amp;ldquo;Control&amp;rdquo; button  Please note I created multiple widgets to learn how they work together with the object.</description>
     </item>
     
     <item>
       <title>GTK GUI with PyGObject (2)</title>
-      <link>/en/2021/07/16/pygi-2/</link>
-      <pubDate>Fri, 16 Jul 2021 00:00:00 +0000</pubDate>
+      <link>/en/2021/07/13/pygi-2/</link>
+      <pubDate>Tue, 13 Jul 2021 00:00:00 +0000</pubDate>
       
-      <guid>/en/2021/07/16/pygi-2/</guid>
-      <description>How to fill more control widgets into GUI To put more widgets,&amp;ldquo;Number of items&amp;rdquo; on the left panel of GtkBox was incremented. Some box are further subdivided again with GtkBox with their &amp;ldquo;Orientation&amp;rdquo; settings set to &amp;ldquo;Horizontal&amp;rdquo; instead.
-Then I placed several additional simple &amp;ldquo;Control&amp;rdquo; widgets:
- GtkSpinButton under the &amp;ldquo;Control&amp;rdquo; button GtkToggleButton under the &amp;ldquo;Control&amp;rdquo; button GtkCheckButton under the &amp;ldquo;Control&amp;rdquo; button GtkRadioButton under the &amp;ldquo;Control&amp;rdquo; button GtkFileChooserButton under the &amp;ldquo;Control&amp;rdquo; button  Please note I created multiple widgets to learn how they work together with the object.</description>
+      <guid>/en/2021/07/13/pygi-2/</guid>
+      <description>Example: Static simple widgets into GUI Dividing area into smaller subdivided areas are mostly done by GtkBox or GtkGrid under the &amp;ldquo;Containers&amp;rdquo; button.
+As a starter, I put GtkBox.
+Then I placed 2 simple &amp;ldquo;Control&amp;rdquo; widgets and a simple GtkLabel &amp;ldquo;Display&amp;rdquo; widget as an easy starter:
+ GtkButton under the &amp;ldquo;Control&amp;rdquo; button GtkEntry under the &amp;ldquo;Control&amp;rdquo; button GtkLabel under the &amp;ldquo;Display&amp;rdquo; button  I set IDs for these widgets basically by dropping &amp;ldquo;Gtk&amp;rdquo; from the GTk class names.</description>
     </item>
     
     <item>
@@ -78,7 +104,7 @@ Then I placed several additional simple &amp;ldquo;Control&amp;rdquo; widgets:
       <pubDate>Mon, 12 Jul 2021 00:00:00 +0000</pubDate>
       
       <guid>/en/2021/07/12/pygi-1/</guid>
-      <description>My objective here is to establish efficient GUI programming example with Glade and Python using Gtk.Builder class instead of calling widget classes directly.
+      <description>My objective here is to learn efficient GUI programming with Glade and Python using Gtk.Builder class instead of calling widget classes directly and using decorators offered by Gtk.Templates.
 I only touch on essential concepts in the order of practical importance and skip trivial points and points already addressed in The Python GTK+ 3 Tutorial.
 GTK GUI situation GTK3 GUI has been changing. (version 3.38.5, 2021-07, Debian Bullseye)
 The Python GTK+ 3 Tutorial (as of 2021-07) goes as:</description>

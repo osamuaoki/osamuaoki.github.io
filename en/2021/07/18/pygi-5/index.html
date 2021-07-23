@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GTK GUI with PyGObject (4) | Goofing Osamu</title>
+    <title>GTK GUI with PyGObject (5) | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,11 +32,11 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">GTK GUI with PyGObject (4)</span></h1>
+<h1><span class="title">GTK GUI with PyGObject (5)</span></h1>
 
 <h3 class="date">Date:
 2021/07/18 (initial publish),
-2021/07/22 (last update)
+2021/07/24 (last update)
 </h3>
 </div>
 
@@ -47,87 +47,16 @@
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2021/07/17/pygi-3/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2021/07/17/pygi-4/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/en/2021/07/19/pygi-5/">Next Post</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/19/pygi-6/">Next Post</a></td>
   
   </tr>
   </tbody>
 </table>
 
-<h2 id="gui-workflow">GUI workflow</h2>
-<p>Let&rsquo;s recap my GUI programming workflow here.</p>
-<ul>
-<li>Read basic references first &mdash; many programming approaches
-<ul>
-<li><a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/">The Python GTK+ 3 Tutorial</a>.
-<ul>
-<li>Not much examples for Glade nor Gtk.Template.</li>
-</ul>
-</li>
-<li><a href="https://developer.gnome.org/gnome-devel-demos/stable/beginner.py.html.en">GTK+ widgets sample code</a>
-<ul>
-<li>Learn basic <a href="https://developer.gnome.org/gnome-devel-demos/stable/beginner.py.html.en#theory">theory of GUI programming</a>
-such as
-<a href="https://developer.gnome.org/gnome-devel-demos/stable/model-view-controller.py.html.en">The Model/View/Controller design</a>.</li>
-</ul>
-</li>
-<li><a href="https://lazka.github.io/pgi-docs/">PyGObject API Reference</a>.
-<ul>
-<li>Most authorative and in details &mdash; don&rsquo;t get lost :-)</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Design static GUI components with Glade
-<ul>
-<li>Set the &ldquo;composite&rdquo; checkbox for the ID of the top GUI widget to make it
-&ldquo;Class name&rdquo;.</li>
-</ul>
-</li>
-<li>Program dynamic GUI components with Python
-<ul>
-<li>Use GObject Introspection to access GTK and associated libraries from
-simple Python code.</li>
-<li>Use <code>Gtk.Template.Child()</code> to create variables matching IDs in Glade XML to access widgets.</li>
-</ul>
-</li>
-</ul>
-<p>Know some limitations for Glade:</p>
-<ul>
-<li>Glade can set only one top level widget as &ldquo;composit&rdquo;=ON per one Glade XML
-file.
-<ul>
-<li>Decorator <code>Gtk.Template</code> approach requires one Glade XML file for each top level widget.</li>
-<li>&ldquo;Transient for:&rdquo; in Glade is non-compatible with decorator <code>Gtk.Template</code> approach.</li>
-</ul>
-</li>
-<li>When using Glade to create GUI, you are using
-<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html#Gtk.Buildable">Gtk.Buildable</a>
-to create GUI widgets.  So you can only set widgets defined in the Glade XML
-as the &ldquo;User data&rdquo; parameter.  No external constant number nor string.</li>
-<li>Changing widget types or renaming IDs or shuffling position of widgets in Glade XML file are easier with the text editor than Glade.</li>
-</ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<h2 id="gtknotebook-and-gtkstack">GtkNotebook and GtkStack</h2>
-<p>Let&rsquo;s go through more notable widgets again.</p>
-<ul>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Notebook.html">GtkNotebook</a> under the &ldquo;Containers&rdquo; button</li>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Stack.html">GtkStack</a> under the &ldquo;Containers&rdquo; button</li>
-</ul>
-<p>These are very similar displaying a selected page out of stacked pages.  The
-latter needs an extra &ldquo;Control&rdquo; button to change stacked page.</p>
-<ul>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/StackSwitcher.html">GtkStackSwitcher</a>
-under the &ldquo;Control&rdquo; button (horizontal/vertical list)</li>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/StackSidebar.html">GtkStackSidebar</a>
-under the &ldquo;Control&rdquo; button (vertical list)</li>
-</ul>
-<p>For the content of the displayed button label for GtkStackSwicher, it is set as
-property of the GtkStack widget.</p>
 <h2 id="gtklistbox-and-gtkflowbox">GtkListBox and GtkFlowBox</h2>
 <ul>
 <li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ListBox.html">GtkListBox</a> under the &ldquo;Containers&rdquo; button</li>
@@ -172,7 +101,7 @@ Since column header is represented as comment in XML, these seems to be just
 placeholders.</p>
 <p><img src="/img/phone-book-glade-list.png" alt="The Glade screen"></p>
 <p>The rest of operations are pretty much routines.</p>
-<h3 id="how-to-create-gui-program">How to create GUI program</h3>
+<h2 id="example-gtktreeview-phone-book">Example: GtkTreeView (Phone book)</h2>
 <p>Now we are ready to use this Glade origin header bar widget from <code>simple3.py</code>
 by <code>header = Gtk.Template.Child()</code>:</p>
 
@@ -328,11 +257,11 @@ Glade generated XML <code>simple3.ui</code>:</p>
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2021/07/17/pygi-3/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2021/07/17/pygi-4/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/en/2021/07/19/pygi-5/">Next Post</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/19/pygi-6/">Next Post</a></td>
   
   </tr>
   </tbody>

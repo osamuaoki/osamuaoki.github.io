@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GTK GUI with PyGObject (2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GTK GUI with PyGObject (2)</span></h1>
+
+<h3 class="date">Date:
+2021/07/13 (initial publish),
+2021/07/24 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/12/pygi-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2021/07/16/pygi-3/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2 id="example-static-simple-widgets-into-gui">Example: Static simple widgets into GUI</h2>
+<p>Dividing area into smaller subdivided areas are mostly done by
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Box.html">GtkBox</a>
+or
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Grid.html">GtkGrid</a>
+under the &ldquo;Containers&rdquo; button.</p>
+<p>As a starter, I put
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Box.html">GtkBox</a>.</p>
+<p>Then I placed 2 simple &ldquo;Control&rdquo; widgets and a simple <strong>GtkLabel</strong>
+&ldquo;Display&rdquo; widget as an easy starter:</p>
+<ul>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Button.html">GtkButton</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Entry.html">GtkEntry</a> under the &ldquo;Control&rdquo; button</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Label.html">GtkLabel</a> under the &ldquo;Display&rdquo; button</li>
+</ul>
+<p>I set IDs for these widgets basically by dropping &ldquo;Gtk&rdquo; from the GTk class
+names.  Then set up signal handlers in the right panel.</p>
+<table>
+<thead>
+<tr>
+<th>ID/Class name</th>
+<th>Widget</th>
+<th>Signal</th>
+<th>Signal handler</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>simple1</td>
+<td>GtkWindow</td>
+<td>destroy</td>
+<td>onDestroy</td>
+</tr>
+<tr>
+<td>button</td>
+<td>GtkButton</td>
+<td>pressed</td>
+<td>onButtonPressed</td>
+</tr>
+<tr>
+<td>entry</td>
+<td>GtkEntry</td>
+<td>changed</td>
+<td>onEntryChanged</td>
+</tr>
+<tr>
+<td>label</td>
+<td>GtkLabel</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+</tr>
+</tbody>
+</table>
+<p>Then Glade screen looks like:</p>
+<p><img src="/img/simple1-glade.png" alt="The Glade screen"></p>
+<h2 id="how-to-create-a-simple-gui-program">How to create a simple GUI program</h2>
+<p>Now we are ready to use this from <code>simple1.py</code>:</p>
+
+<pre><code>import gi
+
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+from gi.repository import Gtk
+
+
+@Gtk.Template(filename=&#34;simple1.ui&#34;)
+class SimpleWindow(Gtk.Window):
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;simple1&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
+    label = Gtk.Template.Child()
+    # class member variable
+    entry_text = &#34;&#34;
+
+    @Gtk.Template.Callback()
+    def onDestroy(self, *args):
+        Gtk.main_quit()
+
+    @Gtk.Template.Callback()
+    def onButtonPressed(self, widget):
+        print(&#34;=&#34; * 80)
+        print(&#34;Button label:    &#34; &#43; widget.get_label())
+        print(&#34;Entered text:    &#34; &#43; self.entry_text)
+        # This is right, I think.
+        self.label.set_label(self.entry_text)
+
+    @Gtk.Template.Callback()
+    def onEntryChanged(self, widget):
+        self.entry_text = widget.get_text()
+
+
+window = SimpleWindow()
+window.show()
+
+Gtk.main()
+</code></pre>
+
+<p>The meaning of &ldquo;@&hellip;&rdquo; is described in <a href="https://www.python.org/dev/peps/pep-0318/">Decorator in PEP 318</a>.</p>
+<p>Running this with <code>python3 simple1.py</code> will start the GUI as:</p>
+<p><img src="/img/simple1-py.png" alt="Run simple1"></p>
+<p>Please play with this GUI while looking at your terminal outputs.</p>
+<p>Here, I am using the signal handler which uses the call back functions which set
+class variables in this example code.  Now the rationale to use the class which
+generates functions and associated data is clear to me.  It is a good start but
+this is not sufficient experience to make useful GUI since we still lack
+examples to use &ldquo;Control&rdquo; and &ldquo;Display&rdquo; widgets.</p>
+<h2 id="how-glade-generated-xml-looks">How Glade generated XML looks</h2>
+<p>Just in case I forget which items were selected via Glade session, here is the
+Glade generated XML <code>simple1.ui</code>:</p>
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;template class=&#34;simple1&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;onDestroy&#34; swapped=&#34;no&#34;/&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;button&#34;&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Press this to update&lt;/property&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;pressed&#34; handler=&#34;onButtonPressed&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkEntry&#34; id=&#34;entry&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;changed&#34; handler=&#34;onEntryChanged&#34; swapped=&#34;no&#34;/&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;label&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre>
+
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/12/pygi-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2021/07/16/pygi-3/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

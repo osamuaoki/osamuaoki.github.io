@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GTK GUI with PyGObject (7) | Goofing Osamu</title>
+    <title>GTK GUI with PyGObject (8) | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,11 +32,11 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">GTK GUI with PyGObject (7)</span></h1>
+<h1><span class="title">GTK GUI with PyGObject (8)</span></h1>
 
 <h3 class="date">Date:
 2021/07/21 (initial publish),
-2021/07/22 (last update)
+2021/07/24 (last update)
 </h3>
 </div>
 
@@ -47,32 +47,32 @@
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2021/07/19/pygi-6/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2021/07/19/pygi-7/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/23/pygi-9/">Next Post</a></td>
   
   </tr>
   </tbody>
 </table>
 
-<h2 id="multiline-text-editor-example-with-gtksourceview">Multiline Text Editor example with GtkSource.View</h2>
+<h2 id="example-multiline-text-editor-with-gtksourceview">Example: Multiline Text Editor with GtkSource.View</h2>
 <p>Next exercise is to create a modal dialog window with Glade similar to <a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/textview.html">Multiline Text Editor</a></p>
 <p>Doing this with the
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/TextView.html">Gtk.TextView</a>
-widget is not so challenging, I decided to use
+widget is not so challenging. I decided to use
 <a href="https://lazka.github.io/pgi-docs/GtkSource-3.0/classes/View.html">GtkSource.View</a>
 instead to gain access to capability of regex and case sensitivity.</p>
-<p>I don&rsquo;t see <strong>GtkSource.View</strong> related widgets in the Glade&rsquo;s available choice list, I first created Multiline Text Editor with <strong>Gtk.TextView</strong> just get the general design done.
+<p>I didn&rsquo;t see <strong>GtkSource.View</strong> related widgets in the Glade&rsquo;s available choice list, I first created Multiline Text Editor with <strong>Gtk.TextView</strong> just to get the general design done.
 Since we have 2 toplevel widgets, 2 XML files were created by Glade to allow us to use
 <a href="htt__GtkSource.View__ps://pygobject.readthedocs.io/en/latest/guide/gtk_template.html">Gtk.Template</a>.</p>
 <p>Then I removed <strong>Gtk.TextView</strong> and  <strong>Gtk.TextBuffer</strong> from Glade and left
 empty container and wrote code in Python which uses <strong>GtkSource.View</strong> and
 attach it to empty container with <code>self.scrollwin.add(self.textview)</code>.</p>
 <p>In order to <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Dialog.html#Gtk.Dialog.run">get proper response</a>
-upon exit from <code>dialog.run()</code>, when creation buttons used in the modal window dialog using Glade, I enabled Response IDs of buttons.  (It was not so obvious for me.)</p>
-<p>The resulting code is long as below but it is relatively easy to reconfigure its graphic components.</p>
+upon exiting from <code>dialog.run()</code>, I enabled <strong>Response ID</strong> for buttons in modal window using Glade.  (It was not so obvious for me.)</p>
+<p>The resulting code is long as below but it is relatively easy to reconfigure its graphic components using Glade.</p>
 <p><code>editor.py</code>:
 
 <pre><code>import gi
@@ -861,11 +861,11 @@ Gtk.main()
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2021/07/19/pygi-6/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2021/07/19/pygi-7/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/07/23/pygi-9/">Next Post</a></td>
   
   </tr>
   </tbody>
