@@ -67,15 +67,13 @@ and to put primary menu with
 <li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=991468">Can&rsquo;t add GtkHeaderBar to &ldquo;Client side window decoration&rdquo; area</a></li>
 <li><a href="https://gitlab.gnome.org/GNOME/glade/-/issues/499">Can&rsquo;t add GtkHeaderBar to window with existing widgets / containers</a></li>
 </ul>
-<p>Let&rsquo;s use Glade to design GUI.  The GtkHeadBar can be anywhere but placing at the end
-makes editing with the text editor easy later.</p>
+<p>Let&rsquo;s use Glade to design GUI.  The GtkHeadBar can be anywhere but placing it at the end makes editing with the text editor easy for me later.</p>
+<p>(Although it looked easier to reorder widgets via the text editor cut-and-paste initially, it is actually easier to play with &ldquo;Pack type&rdquo; and Position&quot; in Packing tab of involved widgets.)</p>
 <p><img src="/img/head-start.png" alt="Glade initial GUI design"></p>
-<p>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates odd
-non-editable area inside the window.  Trying to put a widget there causes the
-error message as follows:</p>
+<p>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates odd <strong>non-editable</strong> blank area inside the window.  Trying to put a widget there causes the error message as follows:</p>
 <p><img src="/img/head-csd.png" alt="Glade not woring as expected"></p>
-<p>This is odd but seems intentional design of Glade.</p>
-<p>Please look into the UI XML file.  There is a odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is explained in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as &ldquo;The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.&rdquo;.</p>
+<p>This seems to be intentional design of Glade to deal newly introduced XML structure support with minimal efforts on time.  Things are quickly changing since GTK4 has been released.</p>
+<p>Please look into the UI XML file after above change.  There is a odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is found in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as &ldquo;The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.&rdquo;.</p>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;!-- Generated with glade 3.38.2 --&gt;
 &lt;interface&gt;
@@ -102,7 +100,7 @@ error message as follows:</p>
   &lt;/template&gt;
 &lt;/interface&gt;
 </code></pre><p>This <code>&lt;placeholder/&gt;</code> is sloppy but practical Glade support of &ldquo;Client-side window decorations&rdquo;.</p>
-<p>Since Glade expects us to manually touch-up this XML file, let&rsquo;s do it.</p>
+<p>Since Glade seems to expect us to manually touch-up this XML file, let&rsquo;s do it.</p>
 <p>First move <code>&lt;child&gt;&lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;...&lt;/child&gt;</code>
 to just after <code>&lt;placeholder/&gt;</code> and
 remove <code>&lt;placeholder/&gt;</code>.</p>
@@ -131,7 +129,7 @@ printing tool.</p>
 &lt;/interface&gt;
 </code></pre><p>Let&rsquo;s open Glade to see what happened.</p>
 <p><img src="/img/head-titlebar.png" alt="Glade with CSD titlebar"></p>
-<p>Look at widget for GtkHeaderBar.  It now has <strong>(titlebar child)</strong> added and placed at the top of the window screen.</p>
+<p><strong>GtkHeaderBar</strong> listed in the left side widget list panel has <strong>(titlebar child)</strong> added.  The <strong>GtkHeaderBar</strong> widget placed at the top of the <strong>GtkWindow</strong> widget in the center panel now.</p>
 <h3 id="how-to-create-gui-program">How to create GUI program</h3>
 <p>Now we are ready to use this touched-up Glade origin GUI design XML file from <code>head_win.py</code>.</p>
 <p>XXX FIXME XXX</p>
