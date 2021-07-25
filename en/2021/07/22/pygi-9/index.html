@@ -73,7 +73,10 @@ and to put primary menu with
 <p>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates odd <strong>non-editable</strong> blank area inside the window.  Trying to put a widget there causes the error message as follows:</p>
 <p><img src="/img/head-csd.png" alt="Glade not woring as expected"></p>
 <p>This seems to be intentional design of Glade to deal newly introduced XML structure support with minimal efforts on time.  Things are quickly changing since GTK4 has been released.</p>
-<p>Please look into the UI XML file after above change.  There is a odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is found in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as &ldquo;The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.&rdquo;.</p>
+<p>Please look into the UI XML file after above change.  There is a odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is found in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as:</p>
+<blockquote>
+<p>The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.</p>
+</blockquote>
 <pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;!-- Generated with glade 3.38.2 --&gt;
 &lt;interface&gt;
