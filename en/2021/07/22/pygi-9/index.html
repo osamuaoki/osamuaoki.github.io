@@ -68,7 +68,7 @@ and to put primary menu with
 <li><a href="https://gitlab.gnome.org/GNOME/glade/-/issues/499">Can&rsquo;t add GtkHeaderBar to window with existing widgets / containers</a></li>
 </ul>
 <p>Let&rsquo;s use Glade to design GUI.  The GtkHeadBar can be anywhere but placing at the end
-makes editing with the test editor easy later.</p>
+makes editing with the text editor easy later.</p>
 <p><img src="/img/head-start.png" alt="Glade initial GUI design"></p>
 <p>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates odd
 non-editable area inside the window.  Trying to put a widget there causes the
@@ -259,7 +259,7 @@ Gtk.main()
           &lt;/packing&gt;
         &lt;/child&gt;
         &lt;child&gt;
-          &lt;object class=&#34;GtkModelButton&#34;&gt;
+          &lt;object class=&#34;GtkModelButton&#34; id=&#34;menu3&#34;&gt;
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
@@ -272,7 +272,7 @@ Gtk.main()
           &lt;/packing&gt;
         &lt;/child&gt;
         &lt;child&gt;
-          &lt;object class=&#34;GtkModelButton&#34;&gt;
+          &lt;object class=&#34;GtkModelButton&#34; id=&#34;menu4&#34;&gt;
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
@@ -285,7 +285,7 @@ Gtk.main()
           &lt;/packing&gt;
         &lt;/child&gt;
         &lt;child&gt;
-          &lt;object class=&#34;GtkModelButton&#34;&gt;
+          &lt;object class=&#34;GtkModelButton&#34; id=&#34;menu5&#34;&gt;
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
@@ -308,7 +308,7 @@ Gtk.main()
         &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
         &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
         &lt;child&gt;
-          &lt;object class=&#34;GtkLabel&#34;&gt;
+          &lt;object class=&#34;GtkLabel&#34; id=&#34;label&#34;&gt;
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
             &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;&amp;lt;EMPTY INITIAL&amp;gt;&lt;/property&gt;
@@ -379,7 +379,6 @@ Gtk.main()
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;focus-on-click&#34;&gt;False&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
-            &lt;property name=&#34;use-popover&#34;&gt;False&lt;/property&gt;
             &lt;property name=&#34;popover&#34;&gt;popover1&lt;/property&gt;
             &lt;child&gt;
               &lt;object class=&#34;GtkImage&#34;&gt;
