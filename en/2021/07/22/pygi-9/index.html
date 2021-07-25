@@ -57,205 +57,362 @@
   </tbody>
 </table>
 
-<h2 id="buttons-and-toggles">Buttons and Toggles</h2>
-<p>Let&rsquo;s see widgets offering buttons and toggles.</p>
-<p>We have covered the followings buttons and toggles with examples:</p>
+<h2 id="client-side-decoration-with-gtkheaderbar-using-glade">Client-side decoration with GtkHeaderbar using Glade</h2>
+<p>Let&rsquo;s consider to add client-side decorated
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/HeaderBar.html">GtkHeaderBar</a>
+and to put primary menu with
+<a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Popover.html">GtkPopover</a>.</p>
+<p>This isn&rsquo;t intuitive but I think I figured out.  So I made some postings.</p>
 <ul>
-<li>GtkButton — A widget that emits a signal when clicked on</li>
-<li>GtkCheckButton — Create widgets with a discrete toggle button</li>
-<li>GtkRadioButton — A choice from multiple check buttons</li>
-<li>GtkToggleButton — Create buttons which retain their state</li>
-<li>GtkSpinButton — Retrieve an integer or floating-point number from the user</li>
-<li>GtkFileChooserButton — A button to launch a file selection dialog</li>
+<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=991468">Can&rsquo;t add GtkHeaderBar to &ldquo;Client side window decoration&rdquo; area</a></li>
+<li><a href="https://gitlab.gnome.org/GNOME/glade/-/issues/499">Can&rsquo;t add GtkHeaderBar to window with existing widgets / containers</a></li>
 </ul>
-<p>These buttons and toggles are trivial ones to understand their use case and use method:</p>
-<ul>
-<li>GtkLinkButton — Create buttons bound to a URL</li>
-<li>GtkSwitch — A “light switch” style toggle</li>
-<li>GtkScaleButton — A button which pops up a scale</li>
-<li>GtkVolumeButton — A button which pops up a volume control</li>
-<li>GtkLockButton — A widget to unlock or lock privileged operations</li>
-<li>GtkColorButton — A button to launch a color selection dialog</li>
-<li>GtkFontButton — A button to launch a font chooser dialog</li>
-<li>GtkAppChooserButton — A button to launch an application chooser dialog</li>
-</ul>
-<p>These buttons and toggles related to Toolbar are obvious, too</p>
-<ul>
-<li>GtkToolbar — Create bars of buttons and other widgets</li>
-<li>GtkToolButton — A GtkToolItem subclass that displays buttons</li>
-<li>GtkMenuToolButton — A GtkToolItem containing a button with an additional dropdown menu</li>
-<li>GtkToggleToolButton — A GtkToolItem containing a toggle button</li>
-<li>GtkRadioToolButton — A toolbar item that contains a radio button</li>
-</ul>
-<p>So we are left with 2 intriguing buttons which seem to be related to the skipped <strong>GtkApplicationWindow</strong> as I started this series with <strong>GtkWindow</strong>:</p>
-<ul>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/MenuButton.html#class-details">GtkMenuButton</a> — A widget that shows a popup when clicked on</li>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ModelButton.html#class-details">GtkModelButton</a> — A button that uses a <a href="https://developer.gnome.org/GAction/">GAction</a> as model</li>
-</ul>
-<h2 id="menu-on-gtk3-and-client-side-decoration">Menu on GTK3 and Client-side decoration</h2>
-<p>Topics related to &ldquo;Client-side decoration&rdquo; and menu of GNOME/Gtk in historical context. (events and some blogs from older ones to newer ones in the order):</p>
-<ul>
-<li>
-<p>Gtk.menu has been used from early GNOME 2</p>
-</li>
-<li>
-<p>GNOME 2.32 release (2010-09) &ndash; Gio.Menu introduced</p>
-</li>
-<li>
-<p><a href="http://blog.martin-graesslin.com/blog/2010/05/open-letter-the-issues-with-client-side-window-decorations/">Open Letter: The issues with client-side-window-decorations (2010)</a></p>
-</li>
-<li>
-<p>GNOME 3.0 release (2011-04)</p>
-</li>
-<li>
-<p><a href="https://blog.martin-graesslin.com/blog/2013/02/client-side-window-decorations-and-wayland/">Client Side Window Decorations and Wayland (2013)</a></p>
-</li>
-<li>
-<p>GNOME 3.10 release (2013-09) &ndash; Wayland support and introduction of header bar widget</p>
-<ul>
-<li>Some Gtk.Action, Gtk.menu functions deprecated &ndash;&gt; Gio.menu, Gio.Action
-<ul>
-<li><a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/menus.html">The Python GTK+ 3 Tutorial</a> (as of 2021-07) goes as:
-Gtk.UIManager, Gtk.Action, and Gtk.ActionGroup have been deprecated since GTK+ version 3.10.</li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p><a href="https://blogs.gnome.org/mclasen/2013/12/05/client-side-decorations-in-themes/">CLIENT-SIDE DECORATIONS IN THEMES (2013, mclarsen)</a></p>
-</li>
-<li>
-<p><a href="https://blogs.gnome.org/mclasen/2014/01/13/client-side-decorations-continued/">CLIENT-SIDE DECORATIONS, CONTINUED (2014, mclarsen)</a></p>
-</li>
-<li>
-<p><a href="https://blogs.gnome.org/fmuellner/2015/01/30/a-small-note-on-window-decorations/">A small note on window decorations (2015, Florian Müllner)</a></p>
-</li>
-<li>
-<p><a href="https://blogs.gnome.org/tbernard/2018/01/26/csd-initiative/">Introducing the CSD Initiative (2018)</a></p>
-</li>
-<li>
-<p><a href="https://blogs.gnome.org/aday/2018/10/09/farewell-application-menus/">Farewell, application menus! (2018)</a></p>
-</li>
-<li>
-<p>GNOME 3.38 (2020-09) &ndash; Final GTK3-series based major release</p>
-</li>
-<li>
-<p><a href="https://en.wikipedia.org/wiki/Client-side_decoration">Wikipedia: Client-side decoration</a> (meaningful last update 2020-11)</p>
-</li>
-<li>
-<p><a href="https://developer.gnome.org/hig/stable/header-bars.html.en">Gnome: Header bars</a> (valid for 2021)</p>
-<ul>
-<li><a href="https://developer.gnome.org/hig/stable/primary-menus.html.en">Primary menus</a> &ndash; humburger menu for both the current window or view, as well as the application as a whole (usually on the left side of application top bar)
-<ul>
-<li>Use: GtkMenuButton, GtkPopoverMenu</li>
-</ul>
-</li>
-<li><a href="https://developer.gnome.org/hig/stable/secondary-menus.html.en">Secondary menus</a> &ndash;  3-dots menu for the current view or content item (usually on the left side of application top bar)
-<ul>
-<li>Use: GtkMenuButton, GtkPopoverMenu</li>
-</ul>
-</li>
-<li>Header bars are incompatible with menu bars.</li>
-</ul>
-</li>
-<li>
-<p><a href="https://wiki.gnome.org/HowDoI/ApplicationMenu">Application menu</a> &ndash; Deprecated (as of 2021) (shown at the screen top menubar)</p>
-<ul>
-<li>Use <a href="https://wiki.gnome.org/HowDoI/GtkApplication">GtkApplication</a>
-<ul>
-<li>Each item in your application menu must already be exposed as a GAction</li>
-<li>See <a href="https://developer.gnome.org/GAction/">GAction</a> <a href="https://wiki.gnome.org/HowDoI/GAction">HowDoI/GAction</a>.</li>
-</ul>
-</li>
-<li><a href="https://developer.gnome.org/gnome-devel-demos/stable/gmenu.py.html.en">GtkApplication with a simple GMenu and SimpleActions</a></li>
-<li>Use GTK2-style &ldquo;menu bar menus&rdquo; instead as workaround if Gnome: Header bar doesn&rsquo;t work.
-<ul>
-<li><a href="https://developer.gnome.org/hig-book/3.12/menus-standard.html.en">GNOME Human Interface Guidelines 2.2.3</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>
-<p><a href="https://github.com/sebp/PyGObject-Tutorial/issues/127">PyGObject-Tutorial: issue/127: Menus, Actions</a></p>
-</li>
-<li>
-<p><a href="https://stackoverflow.com/questions/49964906/how-to-create-pygobject-application-with-a-menubar-using-gtk-builder">How to create PyGObject application with a menubar using Gtk.Builder?</a></p>
-</li>
-</ul>
-<p>I will come back later on these.</p>
-<h2 id="gtk3-to-gtk4-migration">GTK3 to GTK4 migration.</h2>
-<p>Before going any further, let&rsquo;s look at the GTK3 to GTK4 migration.</p>
-<p>GTK4 has matured now (2021-07).  So when writing any more code for GTK3, we
-should avoid deprecated features and widgets to minimize future efforts.</p>
-<p>(My stable Desktop system environment is Debian/Bullseye which is still GTK3.)</p>
-<p>API reference of GTK4 is at <a href="https://docs.gtk.org/">https://docs.gtk.org/</a> now(2021-07).</p>
-<p>I found the followings to be good references to understand differences between GTK3 and GTK4, and where GTK4 is heading to.</p>
-<ul>
-<li><a href="https://developer.gnome.org/gtk4/stable/gtk-migrating-3-to-4.html#id-1.7.4.3">Migrating from GTK 3.x to GTK 4 &ndash; Preparation in GTK 3.x</a></li>
-<li><a href="https://blog.gtk.org/2021/05/10/adventures-in-graphics-apis/">Adventures in graphics APIs (2021-05)</a></li>
-<li><a href="https://blog.gtk.org/2021/02/18/gtk-happenings/">GTK happenings - A new GL Renderer, Popover Shadows, Better Input (2021-02</a></li>
-<li><a href="https://blog.gtk.org/2020/04/23/custom-widgets-in-gtk-4-introduction/">Custom widgets in GTK 4 – Introduction (2020-04)</a>
-<ul>
-<li>Another big loser is GtkWindow.
-<ul>
-<li>In GTK 3, all the “popups”  (entry completion, menus, tooltips, etc) were using a GtkWindow underneath.</li>
-<li>In GTK 4, most of them have been converted to popovers, and the GtkPopover implementation has been untangled from GtkWindow.</li>
-</ul>
-</li>
-<li>In addition, many pieces of toplevel-specific functionality have been broken out in separate interfaces called GtkRoot and GtkNative.</li>
-</ul>
-</li>
-<li><a href="https://blog.gtk.org/2020/04/24/custom-widgets-in-gtk-4-drawing/">Custom widgets in GTK 4 – Drawing (2020-04)</a></li>
-<li><a href="https://blog.gtk.org/2020/04/27/custom-widgets-in-gtk-4-layout/">Custom widgets in GTK 4 – Layout (2020-04)</a></li>
-<li><a href="https://blog.gtk.org/2020/05/01/custom-widgets-in-gtk-4-actions/">Custom widgets in GTK 4 – Actions (2020-05)</a></li>
-<li><a href="https://mclasen.fedorapeople.org/gtk4-devconf2018.pdf">GTK+ 4 Status Update (2018)</a></li>
-</ul>
-<p>Also, since Nim is similar to Python, <a href="http://ssalewski.de/gtkprogramming.html">GTK4 for Graphical User Interfaces with the Nim Programming Language</a> was interesting to read.</p>
-<h2 id="gtkmenubutton-and-gtkpopover-and-gaction-">GtkMenuButton and GtkPopover and GAction &hellip;</h2>
-<p>The following may be partially wrong.  Just my learning note.</p>
-<ul>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/MenuButton.html#class-details">GtkMenuButton</a> — A widget that shows a popup when clicked on
-<ul>
-<li>This is used to start popover.
-<ul>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Popover.html">GtkPopover</a> — Context dependent bubbles</li>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/PopoverMenu.html">GtkPopoverMenu</a> — Popovers to use as menus
-<ul>
-<li><a href="https://csorianognome.wordpress.com/2014/11/07/gtkpopovermenu-new-widget-for-complex-popovers/">GtkPopoverMenu – New widget for complex popovers</a></li>
-<li><a href="https://stackoverflow.com/questions/38907362/how-i-create-a-headermenu-with-a-popover-menu-in-gtk">How I create a “HeaderMenu” with a Popover menu in GTK?</a></li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/ModelButton.html#class-details">GtkModelButton</a> — A button that uses a <a href="https://developer.gnome.org/GAction/">GAction</a> as model
-<ul>
-<li>This is basically used with GtkApplication and GtkApplicationWindow and not for GtkWindow</li>
-<li>Modelbuttons are used in Gtk.Popover and Gtk.PopoverMenu.</li>
-</ul>
-</li>
-<li><a href="https://lazka.github.io/pgi-docs/index.html#Gio-2.0/classes/Action.html#Gio.Action">Gio.GAction</a> is <a href="https://developer.gnome.org/GAction/">GAction</a>
-<ul>
-<li>See GTK4&rsquo;s <a href="https://docs.gtk.org/gtk4/actions.html">Overview of actions in GTK</a> also.</li>
-</ul>
-</li>
-<li>GtkApplication and GtkApplicationWindow
-<ul>
-<li>Introduced in GTK3 cycle</li>
-<li>Key part of GTK4 (unseating GtkWindow)</li>
-<li>Gtk.ApplicationWindow can handle both the application menu as well as the menubar.</li>
-</ul>
-</li>
-<li>Here are a few pages related to this.
-<ul>
-<li><a href="https://python-gtk-3-tutorial.readthedocs.io/en/latest/application.html">The Python GTK+ 3 Tutorial &ndash; 24. Application</a></li>
-<li><a href="https://developer.gnome.org/gnome-devel-demos/stable/gmenu.py.html.en">A GtkApplication with a simple GMenu and SimpleActions</a></li>
-<li><a href="https://www.programcreek.com/python/example/84574/gi.repository.Gio.Menu">Python gi.repository.Gio.Menu() Examples</a></li>
-</ul>
-</li>
-</ul>
-<p>Too much info and confusing for me.</p>
+<p>Let&rsquo;s use Glade to design GUI.  The GtkHeadBar can be anywhere but placing at the end
+makes editing with the test editor easy later.</p>
+<p><img src="/img/head-start.png" alt="Glade initial GUI design"></p>
+<p>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates odd
+non-editable area inside the window.  Trying to put a widget there causes the
+error message as follows:</p>
+<p><img src="/img/head-csd.png" alt="Glade not woring as expected"></p>
+<p>This is odd but seems intentional design of Glade.</p>
+<p>Please look into the UI XML file.  There is a odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is explained in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as &ldquo;The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.&rdquo;.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  ...
+  &lt;template class=&quot;window&quot; parent=&quot;GtkWindow&quot;&gt;
+    &lt;property name=&quot;can-focus&quot;&gt;False&lt;/property&gt;
+    &lt;child&gt;
+      ...
+        &lt;child&gt;
+          &lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;
+            ... (snipped)
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+            &lt;property name=&quot;fill&quot;&gt;True&lt;/property&gt;
+            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+    &lt;child type=&quot;titlebar&quot;&gt;
+      &lt;placeholder/&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre><p>This <code>&lt;placeholder/&gt;</code> is sloppy but practical Glade support of &ldquo;Client-side window decorations&rdquo;.</p>
+<p>Since Glade expects us to manually touch-up this XML file, let&rsquo;s do it.</p>
+<p>First move <code>&lt;child&gt;&lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;...&lt;/child&gt;</code>
+to just after <code>&lt;placeholder/&gt;</code> and
+remove <code>&lt;placeholder/&gt;</code>.</p>
+<p>Then remove now redundant <code>&lt;child&gt;</code> and <code>&lt;/child&gt;</code> tags from newly moved
+section.  Indentation is non-significant.  Glade also functions as a pretty
+printing tool.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  ...
+  &lt;template class=&quot;window&quot; parent=&quot;GtkWindow&quot;&gt;
+    &lt;property name=&quot;can-focus&quot;&gt;False&lt;/property&gt;
+    &lt;child&gt;
+      ...
+    &lt;child type=&quot;titlebar&quot;&gt;
+      &lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;
+        ... (snipped)
+      &lt;/object&gt;
+      &lt;packing&gt;
+        &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+        &lt;property name=&quot;fill&quot;&gt;True&lt;/property&gt;
+        &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+      &lt;/packing&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre><p>Let&rsquo;s open Glade to see what happened.</p>
+<p><img src="/img/head-titlebar.png" alt="Glade with CSD titlebar"></p>
+<p>Look at widget for GtkHeaderBar.  It now has <strong>(titlebar child)</strong> added and placed at the top of the window screen.</p>
+<h3 id="how-to-create-gui-program">How to create GUI program</h3>
+<p>Now we are ready to use this touched-up Glade origin GUI design XML file from <code>head_win.py</code>.</p>
+<p>XXX FIXME XXX</p>
+<p>The following needs to be finished.</p>
+
+<pre><code>import gi
+
+gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
+from gi.repository import Gtk
+
+
+@Gtk.Template(filename=&#34;simple3.ui&#34;)
+class SimpleWindow(Gtk.Window):
+    # corresponding name in XML &#39;class&#39; attribute for this class
+    __gtype_name__ = &#34;simple3&#34;
+    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
+    label = Gtk.Template.Child()
+    header = Gtk.Template.Child()
+    header_label = Gtk.Template.Child()
+    # class member variables
+    entry_text = &#34;&#34;
+    folder = &#34;&#34;
+
+    @Gtk.Template.Callback()
+    def onDestroy(self, *args):
+        Gtk.main_quit()
+
+    @Gtk.Template.Callback()
+    def onFileChooserButtonChanged(self, widget):
+        self.folder = widget.get_filename()
+
+    @Gtk.Template.Callback()
+    def onButtonPressed(self, widget):
+        print(&#34;=&#34; * 80)
+        print(&#34;Button label:    &#34; &#43; widget.get_label())
+        print(&#34;Entered text:    &#34; &#43; self.entry_text)
+        print(&#34;Folder      :    &#34; &#43; self.folder)
+        # This is right, I think.
+        self.label.set_label(self.entry_text.upper())
+        self.header_label.set_label(self.entry_text.lower())
+
+    @Gtk.Template.Callback()
+    def onEntryChanged(self, widget):
+        self.entry_text = widget.get_text()
+
+
+window = SimpleWindow()
+
+#window.header.props.title = &#34;Convert2Html&#34;
+window.set_titlebar(window.header)
+window.show()
+
+Gtk.main()
+</code></pre>
+
+<p>Since we use the same name for the assigned variable and the ID in XML,
+<code>Gtk.Template.Child()</code> takes no argument now.</p>
+<p>Running this with <code>python3 simple3.py</code> will start the GUI as:</p>
+<p><img src="/img/simple3-py.png" alt="Run simple3"></p>
+<p>Please play with this GUI while looking at your terminal outputs.</p>
+<h2 id="how-touch-upped-glade-generated-xml-looks">How touch-upped Glade generated XML looks</h2>
+<p>For the record, the full XML file <code>head_win.ui</code> is here.</p>
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  &lt;requires lib=&#34;gtk&#43;&#34; version=&#34;3.24&#34;/&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image1&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;edit-undo&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image2&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;edit-redo&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkImage&#34; id=&#34;image3&#34;&gt;
+    &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;icon-name&#34;&gt;gtk-execute&lt;/property&gt;
+  &lt;/object&gt;
+  &lt;object class=&#34;GtkPopover&#34; id=&#34;popover1&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkModelButton&#34; id=&#34;menu1&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;File&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkModelButton&#34; id=&#34;menu2&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;Edit&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkSeparator&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkModelButton&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;Preferences&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;3&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkModelButton&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;Help&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;4&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkModelButton&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;About Application&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;5&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/object&gt;
+  &lt;template class=&#34;window&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkBox&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;orientation&#34;&gt;vertical&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkLabel&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;&amp;lt;EMPTY INITIAL&amp;gt;&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;0&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkEntry&#34; id=&#34;entry&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;button&#34;&gt;
+            &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Push this to print entered data&lt;/property&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+    &lt;child type=&#34;titlebar&#34;&gt;
+      &lt;object class=&#34;GtkHeaderBar&#34; id=&#34;header&#34;&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;title&#34; translatable=&#34;yes&#34;&gt;win&lt;/property&gt;
+        &lt;property name=&#34;has-subtitle&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;show-close-button&#34;&gt;True&lt;/property&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;go_prev&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;image&#34;&gt;image1&lt;/property&gt;
+            &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+          &lt;/object&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;go_next&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;image&#34;&gt;image2&lt;/property&gt;
+            &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkMenuButton&#34; id=&#34;menu&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;focus-on-click&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;use-popover&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;popover&#34;&gt;popover1&lt;/property&gt;
+            &lt;child&gt;
+              &lt;object class=&#34;GtkImage&#34;&gt;
+                &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+                &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+                &lt;property name=&#34;icon-name&#34;&gt;open-menu-symbolic&lt;/property&gt;
+              &lt;/object&gt;
+            &lt;/child&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;pack-type&#34;&gt;end&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;2&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+        &lt;child&gt;
+          &lt;object class=&#34;GtkButton&#34; id=&#34;configure&#34;&gt;
+            &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;image&#34;&gt;image3&lt;/property&gt;
+            &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&#34;pack-type&#34;&gt;end&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;4&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre>
+
 <!-- raw HTML omitted -->
 
 
