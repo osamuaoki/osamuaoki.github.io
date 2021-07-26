@@ -72,8 +72,8 @@ and to put primary menu with
 <p><img src="/img/head-start.png" alt="Glade initial GUI design"></p>
 <p>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates odd <strong>non-editable</strong> blank area inside the window.  Trying to put a widget there causes the error message as follows:</p>
 <p><img src="/img/head-csd.png" alt="Glade not woring as expected"></p>
-<p>This seems to be intentional design of Glade to deal newly introduced XML structure support with minimal efforts on time.  Things are quickly changing since GTK4 has been released.</p>
-<p>Please look into the UI XML file after above change.  There is a odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is found in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as:</p>
+<p>This seems to be intentional design of Glade to deal newly introduced XML structure support with minimal efforts on time.</p>
+<p>Please look into the UI XML file after above change.  There is an odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is found in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as:</p>
 <blockquote>
 <p>The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.</p>
 </blockquote>
@@ -133,10 +133,10 @@ printing tool.</p>
 </code></pre><p>Let&rsquo;s open Glade to see what happened.</p>
 <p><img src="/img/head-titlebar.png" alt="Glade with CSD titlebar"></p>
 <p><strong>GtkHeaderBar</strong> listed in the left side widget list panel has <strong>(titlebar child)</strong> added.  The <strong>GtkHeaderBar</strong> widget placed at the top of the <strong>GtkWindow</strong> widget in the center panel now.</p>
+<p>Then I made some more routines such as setting up callback functions for
+signals.</p>
 <h3 id="how-to-create-gui-program">How to create GUI program</h3>
 <p>Now we are ready to use this touched-up Glade origin GUI design XML file from <code>head_win.py</code>.</p>
-<p>XXX FIXME XXX</p>
-<p>The following needs to be finished.</p>
 
 <pre><code>import gi
 
@@ -144,54 +144,78 @@ gi.require_version(&#34;Gtk&#34;, &#34;3.0&#34;)
 from gi.repository import Gtk
 
 
-@Gtk.Template(filename=&#34;simple3.ui&#34;)
-class SimpleWindow(Gtk.Window):
-    # corresponding name in XML &#39;class&#39; attribute for this class
-    __gtype_name__ = &#34;simple3&#34;
-    # corresponding name in XML &#39;id&#39; attribute sets this class member variable
-    label = Gtk.Template.Child()
-    header = Gtk.Template.Child()
-    header_label = Gtk.Template.Child()
-    # class member variables
-    entry_text = &#34;&#34;
-    folder = &#34;&#34;
+@Gtk.Template(filename=&#34;head_win.ui&#34;)
+class Window(Gtk.Window):
+    __gtype_name__ = &#34;window&#34;
 
-    @Gtk.Template.Callback()
-    def onDestroy(self, *args):
+    entry = Gtk.Template.Child()
+    label = Gtk.Template.Child()
+
+    def __init__(self):
+        super().__init__()
+        self.entry_text = &#34;&#34;
+
+    @Gtk.Template.Callback(&#34;on_window_destroy&#34;)
+    def onDestroy(self, widget):
         Gtk.main_quit()
 
-    @Gtk.Template.Callback()
-    def onFileChooserButtonChanged(self, widget):
-        self.folder = widget.get_filename()
+    @Gtk.Template.Callback(&#34;on_button_clicked&#34;)
+    def onButton(self, widget):
+        self.label.set_label(&#34;*** &#34; &#43; self.entry_text &#43; &#34; ***&#34;)
 
-    @Gtk.Template.Callback()
-    def onButtonPressed(self, widget):
-        print(&#34;=&#34; * 80)
-        print(&#34;Button label:    &#34; &#43; widget.get_label())
-        print(&#34;Entered text:    &#34; &#43; self.entry_text)
-        print(&#34;Folder      :    &#34; &#43; self.folder)
-        # This is right, I think.
-        self.label.set_label(self.entry_text.upper())
-        self.header_label.set_label(self.entry_text.lower())
+    @Gtk.Template.Callback(&#34;on_entry_activate&#34;)
+    def onEntry(self, widget):
+        self.entry_text = self.entry.get_text()
+        self.label.set_label(self.entry.get_text())
+        widget.set_text(&#34;&#34;)
 
-    @Gtk.Template.Callback()
-    def onEntryChanged(self, widget):
-        self.entry_text = widget.get_text()
+    @Gtk.Template.Callback(&#34;on_go_prev_clicked&#34;)
+    def onGoPrev(self, widget):
+        print(&#34;Dummy: onGoPrev&#34;)
+
+    @Gtk.Template.Callback(&#34;on_go_next_clicked&#34;)
+    def onGoNext(self, widget):
+        print(&#34;Dummy: onGoNext&#34;)
+
+    @Gtk.Template.Callback(&#34;on_configure_clicked&#34;)
+    def onConfigure(self, widget):
+        print(&#34;Dummy: onConfigure&#34;)
+
+    @Gtk.Template.Callback(&#34;on_menu1_clicked&#34;)
+    def onFile(self, widget):
+        print(&#34;Dummy: onFile&#34;)
+
+    @Gtk.Template.Callback(&#34;on_menu2_clicked&#34;)
+    def onEdit(self, widget):
+        print(&#34;Dummy: onEdit&#34;)
+
+    @Gtk.Template.Callback(&#34;on_menu3_clicked&#34;)
+    def onPreference(self, widget):
+        print(&#34;Dummy: onPreference&#34;)
+
+    @Gtk.Template.Callback(&#34;on_menu4_clicked&#34;)
+    def onHelp(self, widget):
+        print(&#34;Dummy: onHelp&#34;)
+
+    @Gtk.Template.Callback(&#34;on_menu5_clicked&#34;)
+    def onAbout(self, widget):
+        self.set_title(self.entry_text)
 
 
-window = SimpleWindow()
-
-#window.header.props.title = &#34;Convert2Html&#34;
-window.set_titlebar(window.header)
-window.show()
-
+window = Window()
+window.set_title(&#34;Demo HeaderBar&#34;)
+window.show_all()
 Gtk.main()
 </code></pre>
 
 <p>Since we use the same name for the assigned variable and the ID in XML,
 <code>Gtk.Template.Child()</code> takes no argument now.</p>
-<p>Running this with <code>python3 simple3.py</code> will start the GUI as:</p>
-<p><img src="/img/simple3-py.png" alt="Run simple3"></p>
+<p>Since we use different names for callback functions between Python code and UI
+XML, <code>@Gtk.Template.Callback</code> takes argument such as <code>@Gtk.Template.Callback(&quot;on_button_clicked&quot;)</code>.</p>
+<p>Running this with <code>python3 head_win.py</code> will start the GUI as:</p>
+<p><img src="/img/head_win_start.png" alt="Run head_win start"></p>
+<p>Click on hamburger icon to open primary menu.</p>
+<p><img src="/img/head_win_popover.png" alt="Run head_win_click"></p>
 <p>Please play with this GUI while looking at your terminal outputs.</p>
 <h2 id="how-touch-upped-glade-generated-xml-looks">How touch-upped Glade generated XML looks</h2>
 <p>For the record, the full XML file <code>head_win.ui</code> is here.</p>
@@ -228,6 +252,7 @@ Gtk.main()
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;File&lt;/property&gt;
+            &lt;signal name=&#34;clicked&#34; handler=&#34;on_menu1_clicked&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
@@ -241,6 +266,7 @@ Gtk.main()
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;Edit&lt;/property&gt;
+            &lt;signal name=&#34;clicked&#34; handler=&#34;on_menu2_clicked&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
@@ -265,6 +291,7 @@ Gtk.main()
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;Preferences&lt;/property&gt;
+            &lt;signal name=&#34;clicked&#34; handler=&#34;on_menu3_clicked&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
@@ -278,6 +305,7 @@ Gtk.main()
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;Help&lt;/property&gt;
+            &lt;signal name=&#34;clicked&#34; handler=&#34;on_menu4_clicked&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
@@ -291,6 +319,7 @@ Gtk.main()
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;text&#34; translatable=&#34;yes&#34;&gt;About Application&lt;/property&gt;
+            &lt;signal name=&#34;clicked&#34; handler=&#34;on_menu5_clicked&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
@@ -303,6 +332,7 @@ Gtk.main()
   &lt;/object&gt;
   &lt;template class=&#34;window&#34; parent=&#34;GtkWindow&#34;&gt;
     &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;on_window_destroy&#34; swapped=&#34;no&#34;/&gt;
     &lt;child&gt;
       &lt;object class=&#34;GtkBox&#34;&gt;
         &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
@@ -324,6 +354,7 @@ Gtk.main()
           &lt;object class=&#34;GtkEntry&#34; id=&#34;entry&#34;&gt;
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;activate&#34; handler=&#34;on_entry_activate&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
@@ -337,6 +368,7 @@ Gtk.main()
             &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;can-focus&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;clicked&#34; handler=&#34;on_button_clicked&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
@@ -360,6 +392,7 @@ Gtk.main()
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;image&#34;&gt;image1&lt;/property&gt;
             &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;clicked&#34; handler=&#34;on_go_prev_clicked&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
         &lt;/child&gt;
         &lt;child&gt;
@@ -369,6 +402,7 @@ Gtk.main()
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;image&#34;&gt;image2&lt;/property&gt;
             &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;clicked&#34; handler=&#34;on_go_next_clicked&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&#34;position&#34;&gt;1&lt;/property&gt;
@@ -401,6 +435,7 @@ Gtk.main()
             &lt;property name=&#34;receives-default&#34;&gt;True&lt;/property&gt;
             &lt;property name=&#34;image&#34;&gt;image3&lt;/property&gt;
             &lt;property name=&#34;always-show-image&#34;&gt;True&lt;/property&gt;
+            &lt;signal name=&#34;clicked&#34; handler=&#34;on_configure_clicked&#34; swapped=&#34;no&#34;/&gt;
           &lt;/object&gt;
           &lt;packing&gt;
             &lt;property name=&#34;pack-type&#34;&gt;end&lt;/property&gt;
