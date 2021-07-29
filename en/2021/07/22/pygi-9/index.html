@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/07/22 (initial publish),
-2021/07/28 (last update)
+2021/07/29 (last update)
 </h3>
 </div>
 
@@ -63,75 +63,14 @@
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/HeaderBar.html">GtkHeaderBar</a>
 and to put primary menu with
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Popover.html">GtkPopover</a>.</p>
-<p>This <del>isn&rsquo;t intuitive</del> is buggy but I think I figured out.  So I made some postings.</p>
+<p>This may not be easy with Glade 3.38.2 on upcoming Debian Bullseye 11 since it is buggy.  I created a note on my workaround at the end of <a href="#workaround-of-glade-bug">this page</a></p>
+<p>Let&rsquo;s assume Glade is fixed by <a href="https://gitlab.gnome.org/GNOME/glade/-/merge_requests/116">my patch</a> or any other means and let&rsquo;s use Glade to design GUI.</p>
 <ul>
-<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=991468">Can&rsquo;t add GtkHeaderBar to &ldquo;Client side window decoration&rdquo; area</a></li>
-<li><a href="https://gitlab.gnome.org/GNOME/glade/-/issues/499">Can&rsquo;t add GtkHeaderBar to window with existing widgets / containers</a></li>
+<li>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates to add top special area inside the window.</li>
+<li>Add <strong>GtkHeaderBar</strong> there.  (If you have not touched Glade data except for adding the <strong>GtkWindow</strong>, this may work even with 3.38.2).</li>
+<li>You may increase &ldquo;number of items&rdquo; for <strong>GtkHeaderBar</strong> as you need.</li>
 </ul>
-<p>Let&rsquo;s use Glade to design GUI.  The GtkHeadBar can be placed anywhere on Glade drawing area but placing it at the end of normal window widgets makes touching up its UI XML file with the text editor easy for me later.</p>
-<p>(Although it looked easier to reorder widgets via the text editor cut-and-paste initially, it is actually easier to play with &ldquo;Pack type&rdquo; and Position&quot; in Packing tab of involved widgets.)</p>
-<p><img src="/img/head-start.png" alt="Glade initial GUI design"></p>
-<p>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates odd <strong>non-editable</strong> blank area inside the window.  Trying to put a widget there causes the error message as follows:</p>
-<p><img src="/img/head-csd.png" alt="Glade not woring as expected"></p>
-<p>This seems to be intentional design of Glade to deal newly introduced XML structure support with minimal efforts on time.</p>
-<p>Please look into the UI XML file after above change.  There is an odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is found in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as:</p>
-<blockquote>
-<p>The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.</p>
-</blockquote>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!-- Generated with glade 3.38.2 --&gt;
-&lt;interface&gt;
-  ...
-  &lt;template class=&quot;window&quot; parent=&quot;GtkWindow&quot;&gt;
-    &lt;property name=&quot;can-focus&quot;&gt;False&lt;/property&gt;
-    &lt;child&gt;
-      ...
-        &lt;child&gt;
-          &lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;
-            ... (snipped)
-          &lt;/object&gt;
-          &lt;packing&gt;
-            &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-            &lt;property name=&quot;fill&quot;&gt;True&lt;/property&gt;
-            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
-          &lt;/packing&gt;
-        &lt;/child&gt;
-      &lt;/object&gt;
-    &lt;/child&gt;
-    &lt;child type=&quot;titlebar&quot;&gt;
-      &lt;placeholder/&gt;
-    &lt;/child&gt;
-  &lt;/template&gt;
-&lt;/interface&gt;
-</code></pre><p>This <code>&lt;placeholder/&gt;</code> is sloppy but practical Glade support of &ldquo;Client-side window decorations&rdquo;.</p>
-<p>Since Glade seems to expect us to manually touch-up this XML file, let&rsquo;s do it.</p>
-<p>First move <code>&lt;child&gt;&lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;...&lt;/child&gt;</code>
-to just after <code>&lt;placeholder/&gt;</code> and
-remove <code>&lt;placeholder/&gt;</code>.</p>
-<p>Then remove now redundant <code>&lt;child&gt;</code> and <code>&lt;/child&gt;</code> tags from newly moved
-section.  Indentation is non-significant.  Glade also functions as a pretty
-printing tool.</p>
-<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
-&lt;!-- Generated with glade 3.38.2 --&gt;
-&lt;interface&gt;
-  ...
-  &lt;template class=&quot;window&quot; parent=&quot;GtkWindow&quot;&gt;
-    &lt;property name=&quot;can-focus&quot;&gt;False&lt;/property&gt;
-    &lt;child&gt;
-      ...
-    &lt;child type=&quot;titlebar&quot;&gt;
-      &lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;
-        ... (snipped)
-      &lt;/object&gt;
-      &lt;packing&gt;
-        &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-        &lt;property name=&quot;fill&quot;&gt;True&lt;/property&gt;
-        &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
-      &lt;/packing&gt;
-    &lt;/child&gt;
-  &lt;/template&gt;
-&lt;/interface&gt;
-</code></pre><p>Let&rsquo;s open Glade to see what happened.</p>
+<p>Now you have:</p>
 <p><img src="/img/head-titlebar.png" alt="Glade with CSD titlebar"></p>
 <p><strong>GtkHeaderBar</strong> listed in the left side widget list panel has <strong>(titlebar child)</strong> added.  The <strong>GtkHeaderBar</strong> widget placed at the top of the <strong>GtkWindow</strong> widget in the center panel now.</p>
 <p>Then I made some more routines such as setting up callback functions for signals.</p>
@@ -453,6 +392,89 @@ XML, <code>@Gtk.Template.Callback</code> takes argument such as <code>@Gtk.Templ
 &lt;/interface&gt;
 </code></pre>
 
+<h2 id="workaround-of-glade-bug">Workaround of Glade bug</h2>
+<p>This is a note of workaround for Glade 3.38.2 which may be useful for other situation too.</p>
+<p>If you already put something into <strong>GtkWindow</strong>, the above fails.  Very similar bug exists for <strong>GtkPOpoverMenu</strong>.</p>
+<ul>
+<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=991468">Can&rsquo;t add GtkHeaderBar to &ldquo;Client side window decoration&rdquo; area</a></li>
+<li><a href="https://gitlab.gnome.org/GNOME/glade/-/issues/499">Can&rsquo;t add GtkHeaderBar to window with existing widgets / containers</a></li>
+</ul>
+<p>To work around this bug, the GtkHeadBar can be placed anywhere on Glade drawing area but placing it at the end of normal window widgets makes touching up its UI XML file with the text editor easy for me later.</p>
+<p>(Although it looked easier to reorder widgets via the text editor cut-and-paste initially, it is actually easier to play with &ldquo;Pack type&rdquo; and Position&quot; in Packing tab of involved widgets.)</p>
+<p><img src="/img/head-start.png" alt="Glade initial GUI design"></p>
+<p>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates odd <strong>non-editable</strong> blank area inside the window.  Trying to put a widget there causes the error message as follows:</p>
+<p><img src="/img/head-csd.png" alt="Glade not woring as expected"></p>
+<p>This seems to be intentional design of Glade to deal newly introduced XML structure support with minimal efforts on time.</p>
+<p>Please look into the UI XML file after above change.  There is an odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is found in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as:</p>
+<blockquote>
+<p>The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.</p>
+</blockquote>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  ...
+  &lt;template class=&quot;window&quot; parent=&quot;GtkWindow&quot;&gt;
+    &lt;property name=&quot;can-focus&quot;&gt;False&lt;/property&gt;
+    &lt;child&gt;
+      ...
+        &lt;child&gt;
+          &lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;
+            ... (snipped)
+          &lt;/object&gt;
+          &lt;packing&gt;
+            &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+            &lt;property name=&quot;fill&quot;&gt;True&lt;/property&gt;
+            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+          &lt;/packing&gt;
+        &lt;/child&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+    &lt;child type=&quot;titlebar&quot;&gt;
+      &lt;placeholder/&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre><p>This <code>&lt;placeholder/&gt;</code> is sloppy but practical Glade support of &ldquo;Client-side window decorations&rdquo;.</p>
+<p>Since Glade seems to expect us to manually touch-up this XML file, let&rsquo;s do it.</p>
+<p>First move <code>&lt;child&gt;&lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;...&lt;/child&gt;</code>
+to just after <code>&lt;placeholder/&gt;</code> and
+remove <code>&lt;placeholder/&gt;</code>.</p>
+<p>Then remove now redundant <code>&lt;child&gt;</code> and <code>&lt;/child&gt;</code> tags from newly moved
+section.  Indentation is non-significant.  Glade also functions as a pretty
+printing tool.</p>
+<pre><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;!-- Generated with glade 3.38.2 --&gt;
+&lt;interface&gt;
+  ...
+  &lt;template class=&quot;window&quot; parent=&quot;GtkWindow&quot;&gt;
+    &lt;property name=&quot;can-focus&quot;&gt;False&lt;/property&gt;
+    &lt;child&gt;
+      ...
+    &lt;child type=&quot;titlebar&quot;&gt;
+      &lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;
+        ... (snipped)
+      &lt;/object&gt;
+      &lt;packing&gt;
+        &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
+        &lt;property name=&quot;fill&quot;&gt;True&lt;/property&gt;
+        &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+      &lt;/packing&gt;
+    &lt;/child&gt;
+  &lt;/template&gt;
+&lt;/interface&gt;
+</code></pre><p>If you open this manually modified XML file, you should get the desired result.</p>
+<p>I verified the same trick works for the GtkPopoverMenu bug, too.</p>
+<p>You may read followings:</p>
+<ul>
+<li><a href="https://www.reddit.com/r/gnome/comments/og12z2/where_am_i_supposed_to_learn_things_that_glade/">Where am I supposed to learn things that Glade &ldquo;does not know&rdquo;? (2021-07)</a> -reddit
+<ul>
+<li><a href="https://blogs.gnome.org/christopherdavis/2020/11/19/glade-not-recommended/">Glade Not Recommended (2020-11)</a> &ndash; non-valid negative points</li>
+<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a>&rsquo;s documentation says, &ldquo;The GtkWindow implementation of the GtkBuildable interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a element.&rdquo; This means that if you have a <code>&lt;child type=&quot;titlebar&quot;&gt;</code>, the widget will be set as the titlebar, instead of being packed inside the window.</li>
+</ul>
+</li>
+<li><a href="https://stackoverflow.com/questions/48581081/gtk-headerbar-actionbar-pack-start-pack-end-within-ui-xml-file0">Gtk HeaderBar ActionBar pack_start pack_end within UI xml file</a> &ndash; method to position widget in headerbar</li>
+<li><a href="https://wiki.gnome.org/Projects/GTK/Inspector">GtkInspector</a> &ndash; GtkInspector is the built-in interactive debugging support in GTK+</li>
+</ul>
 <!-- raw HTML omitted -->
 
 

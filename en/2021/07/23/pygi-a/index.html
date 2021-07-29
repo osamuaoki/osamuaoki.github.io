@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/07/23 (initial publish),
-2021/07/27 (last update)
+2021/07/29 (last update)
 </h3>
 </div>
 
@@ -57,6 +57,16 @@
   </tbody>
 </table>
 
+<h2 id="note-on-recent-change-of-environment-for-gui-design">Note on recent change of environment for GUI design</h2>
+<p>Since the computer monitor screen has changed fro VGA (4:3) to HDTV (16:9),
+screen got wider.  In other word, we have relatively less vertical space for
+the computer monitor screen.</p>
+<p>Now cellphones and tablets are powerful enough to use previously Desktop only
+general purpose programs.  Go the GUI need to handle touch events.</p>
+<p>Lastly, X11 is not the only GUI target.  Wayland and browser needs to be
+addressed.</p>
+<p>These things are driving changes in design of the low level GUI support tools such as GTK.</p>
+<h2 id="recent-gtk-changes">Recent GTK changes</h2>
 <p>Quite frankly, it was very confusing for me since GTK was a moving target.  We
 are moving even to GTK4 now after August/2021 for Debian.  (I mean
 post-Bulleseye release.)  Here is my memo.</p>
@@ -67,7 +77,20 @@ questions.  I also posted comments based on my understanding.</p>
 <li><a href="https://gitlab.gnome.org/GNOME/glade/-/issues/499">Can&rsquo;t add GtkHeaderBar to window with existing widgets / containers</a></li>
 <li><a href="https://github.com/sebp/PyGObject-Tutorial/issues/127">PyGObject-Tutorial: issue/127: Menus, Actions</a></li>
 </ul>
-<h2 id="menu-on-gtk3-and-client-side-decoration-csd">Menu on GTK3 and Client-side decoration (CSD)</h2>
+<p>It looks to me there have been an effort to save vertical space.  I can
+summarize the originally intended design practice of each platform as:</p>
+<ul>
+<li>GNOME2/GTK2 &ndash; Classic character based pull down menu at the top of the application&rsquo;s window</li>
+<li>GNOME3/GTK3 &ndash; Display application&rsquo;s menu as a popover from the system menu at the top of the monitor screen</li>
+<li>GNOME4/GTK4&ndash; Display application&rsquo;s menu as a popover from the top titlebar of the application&rsquo;s window</li>
+</ul>
+<p>As usual of these platform transition, the last release of each generation of
+platform supports platform of the next generation while deprecating the
+practice it used to support.  Debian Bullseye as of 2021 is based on the last
+release of GNOME3/GTK3 in late 2020 and its design principle has moved almost
+to GNOME4/GTK4 ones.  Namely, it recommend to use primary menu started from the
+titlebar created with Client-side decoration (CSD).</p>
+<h3 id="menu-on-recent-gtk3-and-client-side-decoration-csd">Menu on recent GTK3 and Client-side decoration (CSD)</h3>
 <p>Topics related to &ldquo;Client-side decoration&rdquo; and menu of GNOME/Gtk in historical context. (events and some blogs from older ones to newer ones in the order):</p>
 <ul>
 <li>Gtk.menu has been used from early GNOME 2</li>
@@ -126,7 +149,7 @@ Gtk.UIManager, Gtk.Action, and Gtk.ActionGroup have been deprecated since GTK+ v
 </ul>
 </li>
 </ul>
-<h2 id="gtk3-to-gtk4-migration">GTK3 to GTK4 migration.</h2>
+<h3 id="gtk3-to-gtk4-migration">GTK3 to GTK4 migration.</h3>
 <p>Before going any further, let&rsquo;s look at the GTK3 to GTK4 migration.</p>
 <p>GTK4 has matured now (2021-07).  So when writing any more code for GTK3, we
 should avoid deprecated features and widgets to minimize future efforts.</p>
@@ -152,20 +175,9 @@ should avoid deprecated features and widgets to minimize future efforts.</p>
 <li><a href="https://blog.gtk.org/2020/04/27/custom-widgets-in-gtk-4-layout/">Custom widgets in GTK 4 – Layout (2020-04)</a></li>
 <li><a href="https://blog.gtk.org/2020/05/01/custom-widgets-in-gtk-4-actions/">Custom widgets in GTK 4 – Actions (2020-05)</a></li>
 <li><a href="https://mclasen.fedorapeople.org/gtk4-devconf2018.pdf">GTK+ 4 Status Update (2018)</a></li>
+<li><a href="https://docs.gtk.org/gtk4/class.Builder.html#gtkbuilder-ui-definitions">Gtk.Builder on GTK4</a></li>
 </ul>
 <p>Also, since Nim is similar to Python, <a href="http://ssalewski.de/gtkprogramming.html">GTK4 for Graphical User Interfaces with the Nim Programming Language</a> was interesting to read.</p>
-<h2 id="glade-gtkbuilder-placeholder-tag-gtkinspector">Glade, GtkBuilder, &ldquo;placeholder&rdquo;-tag, GtkInspector</h2>
-<ul>
-<li><a href="https://docs.gtk.org/gtk4/class.Builder.html#gtkbuilder-ui-definitions">Gtk.Builder on GTK4</a></li>
-<li><a href="https://www.reddit.com/r/gnome/comments/og12z2/where_am_i_supposed_to_learn_things_that_glade/">Where am I supposed to learn things that Glade &ldquo;does not know&rdquo;? (2021-07)</a> -reddit
-<ul>
-<li><a href="https://blogs.gnome.org/christopherdavis/2020/11/19/glade-not-recommended/">Glade Not Recommended (2020-11)</a> &ndash; non-valid negative points</li>
-<li><a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a>&rsquo;s documentation says, &ldquo;The GtkWindow implementation of the GtkBuildable interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a element.&rdquo; This means that if you have a <code>&lt;child type=&quot;titlebar&quot;&gt;</code>, the widget will be set as the titlebar, instead of being packed inside the window.</li>
-</ul>
-</li>
-<li><a href="https://wiki.gnome.org/Projects/GTK/Inspector">GtkInspector</a> &ndash; GtkInspector is the built-in interactive debugging support in GTK+</li>
-<li><a href="https://stackoverflow.com/questions/48581081/gtk-headerbar-actionbar-pack-start-pack-end-within-ui-xml-file0">Gtk HeaderBar ActionBar pack_start pack_end within UI xml file</a> &ndash; method to position widget in headerbar</li>
-</ul>
 <h2 id="gtkmenubutton-and-gtkpopover-and-gaction-">GtkMenuButton and GtkPopover and GAction &hellip;</h2>
 <p>The following may be partially wrong.  Just my learning note.</p>
 <ul>
