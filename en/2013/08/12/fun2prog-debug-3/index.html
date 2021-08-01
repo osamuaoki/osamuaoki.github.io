@@ -1,0 +1,1753 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Debug: level 3 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Debug: level 3</span></h1>
+
+<h3 class="date">Date:
+2013/08/12 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/11/fun2prog-debug-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/13/fun2prog-debug-4/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="debug-level-3">Debug: level 3</h2>
+<!-- raw HTML omitted -->
+<p>The GNU debugger (GDB) make you look into binary programs.</p>
+<p>If you do not mind reading the code in the assembler, no source code is required.</p>
+<p>The GDB works even better if the program is compiled with the <code>-g</code> option and
+the source code is kept in place on the same machine after the compilation with
+the <code>-g</code> option.  See <a href="/en/2013/08/17/fun2prog-elf/#compile-hello-gdb">ELF: Compile hello-gdb</a>.</p>
+<h3 id="gdb-commands">GDB commands</h3>
+<p>Please have <a href="http://users.ece.utexas.edu/~adnan/gdb-refcard.pdf">GDB QUICK REFERENCE</a> with you.</p>
+<p>Here are some basic GDB commands.</p>
+<table>
+<thead>
+<tr>
+<th>command</th>
+<th>alias</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>help COMMAND</code></td>
+<td><code>h</code></td>
+<td>Print help for <code>COMMAND</code>.</td>
+</tr>
+<tr>
+<td><code>file FILE</code></td>
+<td><code>fil</code></td>
+<td>Use <code>FILE</code> as the program to be debugged.</td>
+</tr>
+<tr>
+<td><code>set VAR = EXP</code></td>
+<td></td>
+<td>Evaluate <code>EXP</code> and assign its result to <code>VAR</code>.</td>
+</tr>
+<tr>
+<td><code>show VAR</code></td>
+<td><code>sho</code></td>
+<td>Show <code>VAR</code> contents.</td>
+</tr>
+<tr>
+<td><code>set trace-commands on|off</code></td>
+<td></td>
+<td>Set/reset tracing of GDB CLI commands</td>
+</tr>
+<tr>
+<td><code>set substitute-path FROM TO</code></td>
+<td></td>
+<td>Set a substitution rule replacing <code>FROM</code> into <code>TO</code> in source file paths. (<code>unset ...</code>)</td>
+</tr>
+<tr>
+<td><code>set args ARGS</code></td>
+<td></td>
+<td>Set command arguments <code>ARGS</code> to be used when GDB runs a program to be debugged.</td>
+</tr>
+<tr>
+<td><code>set env VAR VALUE</code></td>
+<td></td>
+<td>Set environment variable <code>VAR</code> to <code>VALUE</code>. (<code>unset ...</code>)</td>
+</tr>
+<tr>
+<td><code>directory DIR ...</code></td>
+<td><code>dir</code></td>
+<td>Add <code>DIR</code> to the search path for source files (<code>:</code> separated). Reset the search path to the default, if invoked without <code>DIR</code>.</td>
+</tr>
+<tr>
+<td><code>run</code></td>
+<td><code>r</code></td>
+<td>Start debugged program.</td>
+</tr>
+<tr>
+<td><code>run ARGS</code></td>
+<td><code>r</code></td>
+<td>Start debugged program with its command arguments <code>ARGS</code>.</td>
+</tr>
+<tr>
+<td><code>start</code></td>
+<td><code>star</code></td>
+<td>Run the debugged program like <code>run</code> but stop at the beginning of <code>main</code>.</td>
+</tr>
+<tr>
+<td><code>cont</code></td>
+<td><code>c</code></td>
+<td>Resume execution, after signal or breakpoint.</td>
+</tr>
+<tr>
+<td><code>next</code></td>
+<td><code>n</code></td>
+<td>Step to the next source code line (proceed through soubroutine call)</td>
+</tr>
+<tr>
+<td><code>nexti</code></td>
+<td><code>ni</code></td>
+<td>Step to the next instruction line (proceed through soubroutine call)</td>
+</tr>
+<tr>
+<td><code>step</code></td>
+<td><code>s</code></td>
+<td>Step one source code line, step into subroutine call as needed.</td>
+</tr>
+<tr>
+<td><code>stepi</code></td>
+<td><code>si</code></td>
+<td>Step one instruction line, step into subroutine call as needed.</td>
+</tr>
+<tr>
+<td><code>finish</code></td>
+<td><code>fin</code></td>
+<td>Execute until selected stack frame returns.</td>
+</tr>
+<tr>
+<td><code>until</code></td>
+<td><code>u</code></td>
+<td>Execute until the program reaches a source line greater than the current or a specified location within the current frame.</td>
+</tr>
+<tr>
+<td><code>kill</code></td>
+<td><code>k</code></td>
+<td>Kill execution of program being debugged.</td>
+</tr>
+<tr>
+<td><code>quit</code></td>
+<td><code>q</code></td>
+<td>Exit &ldquo;<code>gdb</code>&rdquo;.</td>
+</tr>
+<tr>
+<td><code>break [FILE:]LINE</code></td>
+<td><code>b</code></td>
+<td>Set breakpoint at <code>LINE</code> [of <code>FUNCTION</code>].</td>
+</tr>
+<tr>
+<td><code>break [FILE:]LINE if COND</code></td>
+<td><code>b</code></td>
+<td>Set breakpoint at <code>LINE</code> [of <code>FUNCTION</code>] which breaks only if <code>COND</code> is true.</td>
+</tr>
+<tr>
+<td><code>break * ADDRESS</code></td>
+<td><code>b</code></td>
+<td>Set breakpoint at <code>ADDRESS</code></td>
+</tr>
+<tr>
+<td><code>info break</code></td>
+<td><code>i</code></td>
+<td>Status of specified breakpoints (all user-settable breakpoints if no argument).</td>
+</tr>
+<tr>
+<td><code>condition N COND</code></td>
+<td><code>cond</code></td>
+<td>Specify breakpoint number <code>N</code> to break only if <code>COND</code> is true.</td>
+</tr>
+<tr>
+<td><code>tbreak [FILE:]LINE</code></td>
+<td><code>tb</code></td>
+<td>Set a temporary breakpoint at <code>LINE</code> [of <code>FUNCTION</code>].</td>
+</tr>
+<tr>
+<td><code>rbreak REGEXP</code></td>
+<td><code>rb</code></td>
+<td>Set a breakpoint for all functions matching <code>REGEXP</code>.</td>
+</tr>
+<tr>
+<td><code>clear</code></td>
+<td><code>cl</code></td>
+<td>Clear breakpoint at specified line or function.</td>
+</tr>
+<tr>
+<td><code>delete</code></td>
+<td><code>d</code></td>
+<td>Delete some breakpoints or auto-display expressions.</td>
+</tr>
+<tr>
+<td><code>enable</code></td>
+<td><code>en</code></td>
+<td>Enable some breakpoints.</td>
+</tr>
+<tr>
+<td><code>disable</code></td>
+<td><code>dis</code></td>
+<td>Disable some breakpoints.</td>
+</tr>
+<tr>
+<td><code>define NAME</code></td>
+<td><code>def</code></td>
+<td>Define a new command NAME. End with a <code>end</code> line.</td>
+</tr>
+<tr>
+<td><code>command N</code></td>
+<td><code>comm</code></td>
+<td>Set commands to be executed when a breakpoint N is hit. End with a <code>end</code> line.</td>
+</tr>
+<tr>
+<td><code>ignore N COUNT</code></td>
+<td><code>ig</code></td>
+<td>Set ignore-count of breakpoint number <code>N</code> to <code>COUNT</code>.</td>
+</tr>
+<tr>
+<td><code>signal NUM</code></td>
+<td><code>sig</code></td>
+<td>Resume execution with signal <code>NUM</code>. (without signal if &ldquo;0&rdquo;)</td>
+</tr>
+<tr>
+<td><code>catch EVENT</code></td>
+<td><code>cat</code></td>
+<td>Set catchpoints to catch <code>EVENT</code>(assert catch exception exec fork syscall throw vfork).</td>
+</tr>
+<tr>
+<td><code>info catch</code></td>
+<td><code>i</code></td>
+<td>Exceptions that can be caught in the current stack frame</td>
+</tr>
+<tr>
+<td><code>trace [FILE:]LINE</code></td>
+<td><code>tr</code></td>
+<td>Set a tracepoint at <code>LINE</code> [of <code>FUNCTION</code>].</td>
+</tr>
+<tr>
+<td><code>info trace</code></td>
+<td><code>i</code></td>
+<td>Specified watchpoints (all watchpoints if no argument).</td>
+</tr>
+<tr>
+<td><code>watch EXP</code></td>
+<td><code>wa</code></td>
+<td>Stop execution whenever the value of an <code>EXP</code> changes. If <code>-l</code> is given, the value of a <code>*(EXP)</code> changes.</td>
+</tr>
+<tr>
+<td><code>info watch</code></td>
+<td><code>i</code></td>
+<td>Specified watchpoints (all watchpoints if no argument).</td>
+</tr>
+<tr>
+<td><code>list</code></td>
+<td><code>l</code></td>
+<td>List ten more lines after or around previous listing.</td>
+</tr>
+<tr>
+<td><code>list -</code></td>
+<td><code>l</code></td>
+<td>List the ten lines before a previous ten-line listing.</td>
+</tr>
+<tr>
+<td><code>list FROM[,TO]</code></td>
+<td><code>l</code></td>
+<td>List specified function or line.</td>
+</tr>
+<tr>
+<td><code>disassemble</code></td>
+<td><code>disas</code></td>
+<td>Disassemble a specified section of memory.</td>
+</tr>
+<tr>
+<td><code>disassemble/m</code></td>
+<td><code>disas</code></td>
+<td>Disassemble a specified section of memory with source lines (if available). (m: more code)</td>
+</tr>
+<tr>
+<td><code>disassemble/r</code></td>
+<td><code>disas</code></td>
+<td>Disassemble a specified section of memory with raw instructions in hex. (r: raw code)</td>
+</tr>
+<tr>
+<td><code>info</code></td>
+<td><code>i</code></td>
+<td>Generic command for showing things about the program being debugged.</td>
+</tr>
+<tr>
+<td><code>info all-reg</code></td>
+<td><code>i</code></td>
+<td>List of all registers and their contents, for selected stack frame.</td>
+</tr>
+<tr>
+<td><code>info locales</code></td>
+<td><code>i</code></td>
+<td>List of local variables of current stack frame.</td>
+</tr>
+<tr>
+<td><code>info reg</code></td>
+<td><code>i</code></td>
+<td>List of integer registers and their contents, for selected stack frame.</td>
+</tr>
+<tr>
+<td><code>print EXP</code></td>
+<td><code>p</code></td>
+<td>Print value of expression <code>EXP</code>.</td>
+</tr>
+<tr>
+<td><code>print/F EXP</code></td>
+<td><code>p</code></td>
+<td>Print value of expression <code>EXP</code> with <code>F</code> format.</td>
+</tr>
+<tr>
+<td><code>printf &quot;FMT&quot;, EXP, ...</code></td>
+<td></td>
+<td>Print value of expression <code>EXP, ...</code> with C-style FMT.</td>
+</tr>
+<tr>
+<td><code>print-object</code></td>
+<td><code>po</code></td>
+<td>Ask an Objective-C object to print itself.</td>
+</tr>
+<tr>
+<td><code>call FUNC</code></td>
+<td><code>cal</code></td>
+<td>Call a function <code>FUNC</code> in the program and print its result.</td>
+</tr>
+<tr>
+<td><code>call/F FUNC</code></td>
+<td><code>cal</code></td>
+<td>Call a function <code>FUNC</code> in the program and print its result with <code>F</code> format.</td>
+</tr>
+<tr>
+<td><code>ptype TYPE</code></td>
+<td><code>pt</code></td>
+<td>Print definition of type <code>TYPE</code>. (unrolls any typedefs)</td>
+</tr>
+<tr>
+<td><code>whatis EXP</code></td>
+<td><code>wha</code></td>
+<td>Print data type of expression <code>EXP</code>. (Only one level of typedefs is unrolled.)</td>
+</tr>
+<tr>
+<td><code>x/NFU</code></td>
+<td><code>x</code></td>
+<td>Examine memory, <code>N</code> data with <code>F</code> format in <code>U</code> unit</td>
+</tr>
+<tr>
+<td><code>backtrace</code></td>
+<td><code>bt</code></td>
+<td>Print backtrace of all stack frames, or innermost <code>COUNT</code> frames. (<code>where</code> == <code>bt</code>)</td>
+</tr>
+<tr>
+<td><code>backtrace full</code></td>
+<td><code>bt f</code></td>
+<td>Print backtrace of all stack frames and the values of the local variables.</td>
+</tr>
+<tr>
+<td><code>frame</code></td>
+<td><code>f</code></td>
+<td>Select and print a stack frame.</td>
+</tr>
+<tr>
+<td><code>down</code></td>
+<td><code>do</code></td>
+<td>Select and print stack frame called by this one.</td>
+</tr>
+<tr>
+<td><code>up</code></td>
+<td></td>
+<td>Select and print stack frame that called this one.</td>
+</tr>
+<tr>
+<td><code>attach PID</code></td>
+<td><code>at</code></td>
+<td>Attach to a <code>PID</code> process outside of GDB.</td>
+</tr>
+<tr>
+<td><code>detach</code></td>
+<td><code>det</code></td>
+<td>Detach a process or file previously attached to GDB.</td>
+</tr>
+<tr>
+<td><code>target</code></td>
+<td><code>tar</code></td>
+<td>Connect to a target machine or process.</td>
+</tr>
+<tr>
+<td><code>overlay</code></td>
+<td><code>ov</code></td>
+<td>Commands for debugging overlays.</td>
+</tr>
+<tr>
+<td><code>thread N</code></td>
+<td><code>t</code></td>
+<td>Switch to the thread number <code>N</code>.</td>
+</tr>
+<tr>
+<td><code>thread apply N COMMAND</code></td>
+<td><code>t a</code></td>
+<td>Apply a <code>COMMAND</code> to the thread number <code>N</code>.</td>
+</tr>
+<tr>
+<td><code>thread apply all COMMAND</code></td>
+<td><code>t a a</code></td>
+<td>Apply a <code>COMMAND</code> to all threads.</td>
+</tr>
+<tr>
+<td><code>thread apply all bt full</code></td>
+<td><code>t a a bt f</code></td>
+<td>Apply <code>bt full</code> to all threads.</td>
+</tr>
+<tr>
+<td><code>info thread</code></td>
+<td><code>i</code></td>
+<td>List of information on all currently known threads.</td>
+</tr>
+<tr>
+<td><code>advance</code></td>
+<td><code>adv</code></td>
+<td>Continue the program up to the specified line or function.</td>
+</tr>
+<tr>
+<td><code>go</code></td>
+<td><code>g</code></td>
+<td>Go to an earlier-bookmarked point in the program&rsquo;s execution history.</td>
+</tr>
+<tr>
+<td><code>jump</code></td>
+<td><code>ju</code></td>
+<td>Continue program being debugged at specified line or address.</td>
+</tr>
+<tr>
+<td><code>generate-core-file</code></td>
+<td><code>gcore</code></td>
+<td>Save a core file with the current state of the debugged process.</td>
+</tr>
+<tr>
+<td><code>shell</code></td>
+<td><code>!</code></td>
+<td>Execute the rest of the line as a shell command.</td>
+</tr>
+<tr>
+<td><code>cd DIR</code></td>
+<td></td>
+<td>Set working directory to <code>DIR</code> for debugger and program being debugged.</td>
+</tr>
+<tr>
+<td><code>make</code></td>
+<td><code>mak</code></td>
+<td>Run the &ldquo;<code>make</code>&rdquo; program using the rest of the line as arguments.</td>
+</tr>
+<tr>
+<td><code>pwd</code></td>
+<td><code>pw</code></td>
+<td>Print working directory.  This is used for your program as well.</td>
+</tr>
+<tr>
+<td><code>focus</code></td>
+<td><code>fs</code></td>
+<td>Set focus to the next/prev/src/asm/regs/cmd window. (TUI)</td>
+</tr>
+<tr>
+<td><code>layout</code></td>
+<td><code>lo</code></td>
+<td>Change the layout of windows to next/prev/src/asm/split/regs. (TUI)</td>
+</tr>
+<tr>
+<td><code>info win</code></td>
+<td><code>i</code></td>
+<td>List of all displayed windows. (TUI)</td>
+</tr>
+<tr>
+<td><code>winheight W [+|-] VAL</code></td>
+<td><code>wh</code></td>
+<td>Set the height of a window, W=src/cmd/asm/regs. (TUI)</td>
+</tr>
+</tbody>
+</table>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Formating option <code>F</code> is used with <code>call/F</code>, <code>print/F</code> and <code>x/NFU</code> sequences:</p>
+<ul>
+<li><code>a</code> address</li>
+<li><code>c</code> char</li>
+<li><code>d</code> decimal</li>
+<li><code>f</code> floating point</li>
+<li><code>i</code> machine instruction (<code>x</code> command only)</li>
+<li><code>o</code> octal</li>
+<li><code>r</code> raw</li>
+<li><code>s</code> string (<code>x</code> command only)</li>
+<li><code>t</code> binary(radix two)</li>
+<li><code>u</code> unsigned decimal</li>
+<li><code>x</code> hexadecimal</li>
+</ul>
+<p>Unit is used with <code>x/NFU</code> sequence:</p>
+<ul>
+<li><code>b</code> byte</li>
+<li><code>h</code> half word (2 bytes)</li>
+<li><code>w</code> word (4 bytes)</li>
+<li><code>g</code> giant word (8 bytes)</li>
+</ul>
+<p>Initialization files:</p>
+<ul>
+<li>System-wide init file: <code>/etc/gdb/gdbinit</code></li>
+<li>User provided init files: <code>~/.gdbinit</code> -&gt; <code>./.gdbinit</code></li>
+<li><code>-x</code> and <code>-nx</code> options disable default init files.</li>
+</ul>
+<p>TIP: Use the &ldquo;Return&rdquo;-key to repeat the last command.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="detached-debugging-symbols">Detached debugging symbols</h3>
+<p>The Debian system provided library packages have no debugging symbols in them.</p>
+<p>The <code>dh_strip</code>(1) is normally used to strip executables, shared libraries, and
+some static libraries in those packages.</p>
+<p>The <code>dh_strip</code>(1) is also used to generate a separate *-dbg package with
+&ldquo;<code>dh_strip --dbg-package=foo-dbg</code>&rdquo;.</p>
+<p>The low level operation to enable detached debugging symbols is described in
+the <code>objcopy</code>(1) manpage under &ldquo;<code>--only-keep-debug</code>&rdquo; and
+&ldquo;<code>--add-gnu-debuglink</code>&rdquo;.  (You can strip binary with the <code>strip</code>(1) command,
+too.)</p>
+<p>Examples for the path to the key file of library and its debugging symbols</p>
+<table>
+<thead>
+<tr>
+<th>package type</th>
+<th>package name</th>
+<th>path to the key file</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>library</td>
+<td><code>libfoo</code></td>
+<td><code>/usr/lib/x86_64-linux-gnu/libfoo.so</code></td>
+</tr>
+<tr>
+<td>debug symbols</td>
+<td><code>libfoo-dbg</code></td>
+<td><code>/usr/lib/debug/lib/x86_64-linux-gnu/libfoo.so</code></td>
+</tr>
+</tbody>
+</table>
+<p>When ever GDB executes a function in the stripped library
+<code>/usr/lib/x86_64-linux-gnu/libfoo.so</code> file, GDB shipped with Debian obtains its
+debugging symbols from the <code>/usr/lib/debug/lib/x86_64-linux-gnu/libfoo.so</code>
+file.</p>
+<p>TIP: Debian wanted to strip debug symbols from the shipped binary packages
+while FSF wished to keep them.  This was one of the reason for Debian to become
+independent of FSF.  Now we have detached debugging symbol packages which
+solves this difference. See <a href="http://debconf6.debconf.org/comas/general/proposals/64.html">Debian&rsquo;s Debugging Debacle: the Debrief</a>.</p>
+<h3 id="source-file-path">Source file path</h3>
+<p>GDB also use the corresponding C source file path and C source line information
+stored in the ELF file as described in <a href="/en/2013/08/17/fun2prog-elf/#readelf-wl">ELF: readelf -wL</a> to
+display them at the proper address.</p>
+<p>GDB searches file, e.g., <code>foo.c</code> as follows without recursion:</p>
+<ul>
+<li>Exactly <code>foo.c</code> in the current working directory.</li>
+<li>Some file location based on the file location recorded in the ELF file and the <strong>substitution rule</strong>.
+<ul>
+<li>Exactly <code>/usr/src/foo-1.0/lib/foo.c</code> as recorded in the ELF file. (default)</li>
+<li>Exactly <code>/home/bar/foo-1.0/lib/foo.c</code> with &ldquo;<code>set substitute-path /usr/src /home/bar</code>&rdquo;.</li>
+</ul>
+</li>
+<li>Exactly <code>/mnt/cross/foo.c</code> if the source path is set to <code>/mnt/cross</code>.
+<ul>
+<li>GDB command prompt: &ldquo;<code>directory /mnt/cross</code>&rdquo; (<code>:</code> separated list possible)</li>
+<li>GDB command argument: &ldquo;<code>gdb -d /mnt/cross</code>&rdquo; (multiple <code>-d</code> options possible)</li>
+</ul>
+</li>
+</ul>
+<p>If you are debugging a locally compiled binary, the C source file path stored in
+the ELF and the actual C source file path should match.  So GDB should have no difficulty
+finding them.</p>
+<p>If you are debugging a packaged binary, you should obtain its corresponding
+source package and expand it into a source tree, first.  For this case, the C
+source file path stored in the compiled ELF and the actual C source file path
+on your system should be different but most likely should share taling portion
+of the path.</p>
+<p>Use of the <strong>substitution rule</strong> is usually the wise choice and the most
+elegant one.  But sometimes, it may be required to use a brute force approach:</p>
+<pre><code>$ gdb $(find src_path -type d -printf '-d %p ') prog
+</code></pre><h3 id="gdb-hello-gdb">gdb hello-gdb</h3>
+<p>Here we practice to walk through a program <code>hello-gdb</code> with GDB.</p>
+<p>Let&rsquo;s start loading <code>hello-gdb</code> ELF binary generated by GCC with the <code>-g</code>
+option in <a href="/en/2013/08/17/fun2prog-elf/#compile-hello-gdb">ELF: Compile hello-gdb</a> to GDB.</p>
+
+<pre><code>$ gdb hello-gdb
+GNU gdb (GDB) 7.6 (Debian 7.6-5)
+Copyright (C) 2013 Free Software Foundation, Inc.
+License GPLv3&#43;: GNU GPL version 3 or later &lt;http://gnu.org/licenses/gpl.html&gt;
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.  Type &#34;show copying&#34;
+and &#34;show warranty&#34; for details.
+This GDB was configured as &#34;x86_64-linux-gnu&#34;.
+For bug reporting instructions, please see:
+&lt;http://www.gnu.org/software/gdb/bugs/&gt;...
+Reading symbols from /path/to/c/hello-gdb...done.
+</code></pre>
+
+<p>Now you are at a interactive GDB prompt with <code>(gdb)</code>.</p>
+<p>Let&rsquo;s set up several breakpoints.</p>
+
+<pre><code>(gdb) list
+1    #include &lt;stdio.h&gt;
+2    #include &lt;stdlib.h&gt;
+3    /* my first C program */
+4    int main()
+5    {
+6        printf(&#34;Hello, world!\n&#34;);
+7        return EXIT_SUCCESS;
+8    }
+(gdb) break 3
+Breakpoint 1 at 0x400501: file hello.c, line 3.
+(gdb) break 5
+Breakpoint 2 at 0x400501: file hello.c, line 5.
+(gdb) break 6
+Breakpoint 3 at 0x400501: file hello.c, line 6.
+(gdb) info break
+Num     Type           Disp Enb Address            What
+1       breakpoint     keep y   0x0000000000400501 in main at hello.c:3
+2       breakpoint     keep y   0x0000000000400501 in main at hello.c:5
+3       breakpoint     keep y   0x0000000000400501 in main at hello.c:6
+</code></pre>
+
+<p>As you see, not all C source lines translate to independent lines.  Breakpoint 3 and 5 stops at the same address.</p>
+<p>Let&rsquo;s run program while stopping at line 3, 5 , and 6.</p>
+
+<pre><code>(gdb) run
+warning: no loadable sections found in added symbol-file system-supplied DSO at 
+0x2aaaaaacc000
+warning: Could not load shared library symbols for linux-vdso.so.1.
+Do you need &#34;set solib-search-path&#34; or &#34;set sysroot&#34;?
+
+Breakpoint 1, main () at hello.c:6
+6        printf(&#34;Hello, world!\n&#34;);
+(gdb) cont
+Hello, world!
+[Inferior 1 (process 30593) exited normally]
+(gdb) quit
+$
+</code></pre>
+
+<p>Here &ldquo;inferior&rdquo; is an object generated by GDB to represent the state of each
+program and typically corresponds to a process but more general.</p>
+<p>Let&rsquo;s start again.</p>
+<ul>
+<li>make sure to install the <code>libc6-dbg:amd64</code> package containing &ldquo;Embedded GNU C Library: detached debugging symbols&rdquo;.</li>
+<li>start GDB less noisily with the <code>-q</code> option.</li>
+<li>list source in the assembly code in various ways.</li>
+</ul>
+
+<pre><code>$ COLUMNS=80 dpkg -l libc6-dbg:amd64
+Desired=Unknown/Install/Remove/Purge/Hold
+| Status=Not/Inst/Conf-files/Unpacked/halF-conf/Half-inst/trig-aWait/Trig-pend
+|/ Err?=(none)/Reinst-required (Status,Err: uppercase=bad)
+||/ Name           Version      Architecture Description
+&#43;&#43;&#43;-==============-============-============-=================================
+ii  libc6-dbg:amd6 2.17-92      amd64        Embedded GNU C Library: detached
+$ gdb -q hello-gdb
+(gdb) list
+1    #include &lt;stdio.h&gt;
+2    #include &lt;stdlib.h&gt;
+3    /* my first C program */
+4    int main()
+5    {
+6        printf(&#34;Hello, world!\n&#34;);
+7        return EXIT_SUCCESS;
+8    }
+(gdb) disas main
+Dump of assembler code for function main:
+   0x00000000004004fd &lt;&#43;0&gt;:    push   %rbp
+   0x00000000004004fe &lt;&#43;1&gt;:    mov    %rsp,%rbp
+   0x0000000000400501 &lt;&#43;4&gt;:    mov    $0x4005c4,%edi
+   0x0000000000400506 &lt;&#43;9&gt;:    callq  0x4003e0 &lt;puts@plt&gt;
+   0x000000000040050b &lt;&#43;14&gt;:    mov    $0x0,%eax
+   0x0000000000400510 &lt;&#43;19&gt;:    pop    %rbp
+   0x0000000000400511 &lt;&#43;20&gt;:    retq
+End of assembler dump.
+(gdb) disas/m main
+Dump of assembler code for function main:
+5    {
+   0x00000000004004fd &lt;&#43;0&gt;:    push   %rbp
+   0x00000000004004fe &lt;&#43;1&gt;:    mov    %rsp,%rbp
+
+6        printf(&#34;Hello, world!\n&#34;);
+   0x0000000000400501 &lt;&#43;4&gt;:    mov    $0x4005c4,%edi
+   0x0000000000400506 &lt;&#43;9&gt;:    callq  0x4003e0 &lt;puts@plt&gt;
+
+7        return EXIT_SUCCESS;
+   0x000000000040050b &lt;&#43;14&gt;:    mov    $0x0,%eax
+
+8    }
+   0x0000000000400510 &lt;&#43;19&gt;:    pop    %rbp
+   0x0000000000400511 &lt;&#43;20&gt;:    retq
+
+End of assembler dump.
+(gdb) disas/r main
+Dump of assembler code for function main:
+   0x00000000004004fd &lt;&#43;0&gt;:    55    push   %rbp
+   0x00000000004004fe &lt;&#43;1&gt;:    48 89 e5    mov    %rsp,%rbp
+   0x0000000000400501 &lt;&#43;4&gt;:    bf c4 05 40 00    mov    $0x4005c4,%edi
+   0x0000000000400506 &lt;&#43;9&gt;:    e8 d5 fe ff ff    callq  0x4003e0 &lt;puts@plt&gt;
+   0x000000000040050b &lt;&#43;14&gt;:    b8 00 00 00 00    mov    $0x0,%eax
+   0x0000000000400510 &lt;&#43;19&gt;:    5d    pop    %rbp
+   0x0000000000400511 &lt;&#43;20&gt;:    c3    retq
+End of assembler dump.
+</code></pre>
+
+<p>For GDB, just typing <code>disas</code> is as good as typing <code>disassemble</code>.</p>
+<p>GDB also supports TAB completion to expand <code>disas</code>+TAB into <code>disassemble</code>.</p>
+<p>It is quite ammusing to see some hex codes such as <code>c3</code> (ASCII character &ldquo;]&quot;)
+in <code>amd64</code> which are the same ones as <code>i386</code> with the same meaning &ldquo;return from
+a function&rdquo;.</p>
+<p>Let&rsquo;s read the assembler code here.  The <code>%rdi</code> register holds the 1st function
+argument passed to the <code>puts</code> function according to the ABI described in
+<a href="/en/2013/08/17/fun2prog-gcc/#assembler-code"> GCC: Assembler code</a>.  Its value is set to 0x40067c.</p>
+<p>Let&rsquo;s see what is there using the examine memory command for string.</p>
+
+<pre><code>(gdb) x/s 0x40067c
+0x40067c:    &#34;D&#34;
+(gdb) x/14x 0x40067c
+0x40067c:    0x44    0x00    0x00    0x00    0x7d    0xfe    0xff    0xff
+0x400684:    0x15    0x00    0x00    0x00    0x00    0x41
+</code></pre>
+
+<p>OK. This memory data matches the original C function definition.</p>
+<p>Let&rsquo;s trace program execution a bit slowly this time.</p>
+
+<pre><code>(gdb) start
+Temporary breakpoint 1 at 0x400501: file hello.c, line 6.
+warning: Could not load shared library symbols for linux-vdso.so.1.
+Do you need &#34;set solib-search-path&#34; or &#34;set sysroot&#34;?
+
+Temporary breakpoint 1, main () at hello.c:6
+6        printf(&#34;Hello, world!\n&#34;);
+(gdb) disas/m
+Dump of assembler code for function main:
+5    {
+   0x00000000004004fd &lt;&#43;0&gt;:    push   %rbp
+   0x00000000004004fe &lt;&#43;1&gt;:    mov    %rsp,%rbp
+
+6        printf(&#34;Hello, world!\n&#34;);
+=&gt; 0x0000000000400501 &lt;&#43;4&gt;:    mov    $0x4005c4,%edi
+   0x0000000000400506 &lt;&#43;9&gt;:    callq  0x4003e0 &lt;puts@plt&gt;
+
+7        return EXIT_SUCCESS;
+   0x000000000040050b &lt;&#43;14&gt;:    mov    $0x0,%eax
+
+8    }
+   0x0000000000400510 &lt;&#43;19&gt;:    pop    %rbp
+   0x0000000000400511 &lt;&#43;20&gt;:    retq
+
+End of assembler dump.
+</code></pre>
+
+<p>You are at the start of the <code>main</code> function.</p>
+<p>There are few basic stepping commands to walk through program with GDB.</p>
+<ul>
+<li>The <code>next</code> command goes to the next line in the C source without stepping into
+the child function.</li>
+<li>The <code>step</code> command goes to the next line in the C source possibly stepping into
+the child function.</li>
+<li>The <code>nexti</code> and <code>stepi</code> commands moves slowly by the line based on the
+assembler code instead of the C source.</li>
+</ul>
+<p>Let&rsquo;s trace slowly to play with calling of <code>printf</code>.</p>
+<ul>
+<li>Verify initial value of the <code>%edi</code> register with the <code>info reg ...</code> command.</li>
+<li>Move to the next assembler code line with <code>nexti</code>.</li>
+<li>Verify the first function argument value in the <code>%edi</code> register with the <code>info reg ...</code> command.</li>
+<li>Tweak the <code>%edi</code> register value to point 1 byte forward to show the <strong>power of GDB.</strong></li>
+<li>Verify the updated first function argument value.</li>
+</ul>
+
+<pre><code>(gdb) info reg edi
+edi            0x1    1
+(gdb) nexti
+0x0000000000400506    6        printf(&#34;Hello, world!\n&#34;);
+(gdb) disas/m
+Dump of assembler code for function main:
+5    {
+   0x00000000004004fd &lt;&#43;0&gt;:    push   %rbp
+   0x00000000004004fe &lt;&#43;1&gt;:    mov    %rsp,%rbp
+
+6        printf(&#34;Hello, world!\n&#34;);
+   0x0000000000400501 &lt;&#43;4&gt;:    mov    $0x4005c4,%edi
+=&gt; 0x0000000000400506 &lt;&#43;9&gt;:    callq  0x4003e0 &lt;puts@plt&gt;
+
+7        return EXIT_SUCCESS;
+   0x000000000040050b &lt;&#43;14&gt;:    mov    $0x0,%eax
+
+8    }
+   0x0000000000400510 &lt;&#43;19&gt;:    pop    %rbp
+   0x0000000000400511 &lt;&#43;20&gt;:    retq
+
+End of assembler dump.
+(gdb) info reg edi
+edi            0x4005c4    4195780
+(gdb) print /x $edi
+$1 = 0x4005c4
+(gdb) x/s $edi
+0x4005c4:    &#34;Hello, world!&#34;
+(gdb) set $edi=$edi&#43;1
+(gdb) x/s $edi
+0x4005c5:    &#34;ello, world!&#34;
+</code></pre>
+
+<p>Let&rsquo;s step into the <code>printf</code> function with <code>step</code>.</p>
+
+<pre><code>(gdb) step
+_IO_puts (str=0x4005c5 &#34;ello, world!&#34;) at ioputs.c:34
+34         const char *str;
+(gdb) disas/m
+Dump of assembler code for function _IO_puts:
+34         const char *str;
+=&gt; 0x00002aaaaad3c2e0 &lt;&#43;0&gt;:    push   %r12
+   0x00002aaaaad3c2e2 &lt;&#43;2&gt;:    mov    %rdi,%r12
+   0x00002aaaaad3c2e5 &lt;&#43;5&gt;:    push   %rbp
+   0x00002aaaaad3c2e6 &lt;&#43;6&gt;:    push   %rbx
+
+35    {
+   0x00002aaaaad3c409 &lt;&#43;297&gt;:    mov    $0xffffffff,%ebp
+   0x00002aaaaad3c40e &lt;&#43;302&gt;:    jmp    0x2aaaaad3c3bd &lt;_IO_puts&#43;221&gt;
+
+36      int result = EOF;
+   0x00002aaaaad3c2e7 &lt;&#43;7&gt;:    callq  0x2aaaaad53080 &lt;__strlen_sse2&gt;
+   0x00002aaaaad3c2f3 &lt;&#43;19&gt;:    mov    %rax,%rbp
+
+37      _IO_size_t len = strlen (str);
+   0x00002aaaaad3c2ec &lt;&#43;12&gt;:    mov    0x33a43d(%rip),%rbx        # 0x2aaaab0767
+30 &lt;stdout&gt;
+   0x00002aaaaad3c2f6 &lt;&#43;22&gt;:    mov    (%rbx),%eax
+   0x00002aaaaad3c2f8 &lt;&#43;24&gt;:    mov    %rbx,%rdi
+   0x00002aaaaad3c2fb &lt;&#43;27&gt;:    and    $0x8000,%eax
+   0x00002aaaaad3c300 &lt;&#43;32&gt;:    jne    0x2aaaaad3c358 &lt;_IO_puts&#43;120&gt;
+   0x00002aaaaad3c302 &lt;&#43;34&gt;:    mov    0x88(%rbx),%r8
+   0x00002aaaaad3c309 &lt;&#43;41&gt;:    mov    %fs:0x10,%rdx
+   0x00002aaaaad3c312 &lt;&#43;50&gt;:    cmp    0x8(%r8),%rdx
+   0x00002aaaaad3c316 &lt;&#43;54&gt;:    je     0x2aaaaad3c410 &lt;_IO_puts&#43;304&gt;
+   0x00002aaaaad3c31c &lt;&#43;60&gt;:    mov    $0x1,%esi
+   0x00002aaaaad3c321 &lt;&#43;65&gt;:    cmpl   $0x0,0x33e6cc(%rip)        # 0x2aaaab07a9
+f4 &lt;__libc_multiple_threads&gt;
+   0x00002aaaaad3c328 &lt;&#43;72&gt;:    je     0x2aaaaad3c337 &lt;_IO_puts&#43;87&gt;
+   0x00002aaaaad3c32a &lt;&#43;74&gt;:    lock cmpxchg %esi,(%r8)
+   0x00002aaaaad3c32f &lt;&#43;79&gt;:    jne    0x2aaaaad3c468 &lt;_L_lock_50&gt;
+   0x00002aaaaad3c335 &lt;&#43;85&gt;:    jmp    0x2aaaaad3c341 &lt;_IO_puts&#43;97&gt;
+   0x00002aaaaad3c337 &lt;&#43;87&gt;:    cmpxchg %esi,(%r8)
+   0x00002aaaaad3c33b &lt;&#43;91&gt;:    jne    0x2aaaaad3c468 &lt;_L_lock_50&gt;
+   0x00002aaaaad3c341 &lt;&#43;97&gt;:    mov    0x88(%rbx),%r8
+   0x00002aaaaad3c348 &lt;&#43;104&gt;:    mov    0x33a3e1(%rip),%rdi        # 0x2aaaab076
+730 &lt;stdout&gt;
+   0x00002aaaaad3c34f &lt;&#43;111&gt;:    mov    %rdx,0x8(%r8)
+   0x00002aaaaad3c353 &lt;&#43;115&gt;:    addl   $0x1,0x4(%r8)
+   0x00002aaaaad3c410 &lt;&#43;304&gt;:    mov    %rbx,%rdi
+   0x00002aaaaad3c413 &lt;&#43;307&gt;:    jmpq   0x2aaaaad3c353 &lt;_IO_puts&#43;115&gt;
+
+38      _IO_acquire_lock (_IO_stdout);
+39
+   0x00002aaaaad3c400 &lt;&#43;288&gt;:    cmp    $0xffffffff,%eax
+   0x00002aaaaad3c403 &lt;&#43;291&gt;:    je     0x2aaaaad3c370 &lt;_IO_puts&#43;144&gt;
+
+40      if ((_IO_vtable_offset (_IO_stdout) != 0
+   0x00002aaaaad3c358 &lt;&#43;120&gt;:    mov    0xc0(%rdi),%eax
+   0x00002aaaaad3c35e &lt;&#43;126&gt;:    test   %eax,%eax
+   0x00002aaaaad3c360 &lt;&#43;128&gt;:    jne    0x2aaaaad3c400 &lt;_IO_puts&#43;288&gt;
+   0x00002aaaaad3c366 &lt;&#43;134&gt;:    movl   $0xffffffff,0xc0(%rdi)
+
+41           || _IO_fwide (_IO_stdout, -1) == -1)
+   0x00002aaaaad3c370 &lt;&#43;144&gt;:    mov    0xd8(%rdi),%rax
+   0x00002aaaaad3c377 &lt;&#43;151&gt;:    mov    %rbp,%rdx
+   0x00002aaaaad3c37a &lt;&#43;154&gt;:    mov    %r12,%rsi
+   0x00002aaaaad3c37d &lt;&#43;157&gt;:    callq  *0x38(%rax)
+   0x00002aaaaad3c380 &lt;&#43;160&gt;:    cmp    %rax,%rbp
+   0x00002aaaaad3c383 &lt;&#43;163&gt;:    jne    0x2aaaaad3c409 &lt;_IO_puts&#43;297&gt;
+
+42          &amp;&amp; _IO_sputn (_IO_stdout, str, len) == len
+   0x00002aaaaad3c389 &lt;&#43;169&gt;:    mov    0x33a3a0(%rip),%rdi        # 0x2aaaab076
+730 &lt;stdout&gt;
+   0x00002aaaaad3c390 &lt;&#43;176&gt;:    mov    0x28(%rdi),%rax
+   0x00002aaaaad3c394 &lt;&#43;180&gt;:    cmp    0x30(%rdi),%rax
+   0x00002aaaaad3c398 &lt;&#43;184&gt;:    jae    0x2aaaaad3c418 &lt;_IO_puts&#43;312&gt;
+   0x00002aaaaad3c39e &lt;&#43;190&gt;:    movb   $0xa,(%rax)
+   0x00002aaaaad3c3a1 &lt;&#43;193&gt;:    add    $0x1,%rax
+   0x00002aaaaad3c3a5 &lt;&#43;197&gt;:    mov    %rax,0x28(%rdi)
+   0x00002aaaaad3c418 &lt;&#43;312&gt;:    mov    $0xa,%esi
+   0x00002aaaaad3c41d &lt;&#43;317&gt;:    callq  0x2aaaaad46ea0 &lt;__GI___overflow&gt;
+   0x00002aaaaad3c422 &lt;&#43;322&gt;:    add    $0x1,%eax
+   0x00002aaaaad3c425 &lt;&#43;325&gt;:    je     0x2aaaaad3c409 &lt;_IO_puts&#43;297&gt;
+   0x00002aaaaad3c427 &lt;&#43;327&gt;:    jmpq   0x2aaaaad3c3a9 &lt;_IO_puts&#43;201&gt;
+
+43          &amp;&amp; _IO_putc_unlocked (&#39;\n&#39;, _IO_stdout) != EOF)
+   0x00002aaaaad3c3a9 &lt;&#43;201&gt;:    add    $0x1,%rbp
+   0x00002aaaaad3c3ad &lt;&#43;205&gt;:    mov    $0x7fffffff,%eax
+   0x00002aaaaad3c3b2 &lt;&#43;210&gt;:    cmp    $0x7fffffff,%rbp
+   0x00002aaaaad3c3b9 &lt;&#43;217&gt;:    cmova  %rax,%rbp
+
+44        result = MIN (INT_MAX, len &#43; 1);
+45
+46      _IO_release_lock (_IO_stdout);
+47      return result;
+   0x00002aaaaad3c3f6 &lt;&#43;278&gt;:    pop    %rbx
+   0x00002aaaaad3c3f7 &lt;&#43;279&gt;:    mov    %ebp,%eax
+   0x00002aaaaad3c3f9 &lt;&#43;281&gt;:    pop    %rbp
+   0x00002aaaaad3c3fa &lt;&#43;282&gt;:    pop    %r12
+   0x00002aaaaad3c3fc &lt;&#43;284&gt;:    retq
+   0x00002aaaaad3c3fd &lt;&#43;285&gt;:    nopl   (%rax)
+   0x00002aaaaad3c42c &lt;&#43;332&gt;:    testl  $0x8000,(%rbx)
+   0x00002aaaaad3c432 &lt;&#43;338&gt;:    mov    %rax,%rsi
+   0x00002aaaaad3c435 &lt;&#43;341&gt;:    jne    0x2aaaaad3c460 &lt;_IO_puts&#43;384&gt;
+
+End of assembler dump.
+</code></pre>
+
+<p>Since required detached debugging symbols are properly installed by the
+<code>libc6-dbg:amd64</code> package into its proper path
+<code>/usr/lib/debug/lib/x86_64-linux-gnu</code>, you see the symbol <code>_IO_puts</code> is
+resolved.</p>
+<p>I used &ldquo;<code>apt-get source eglibc</code>&rdquo; to get the source files for the libc library
+used on the Debian system and copied the <code>ioputs.c</code> file from the
+<code>eglibc-*.**/libio/ioputs.c</code> file into the current directory in advance to
+enable the C source code display.  You can blame me going easy but &hellip;</p>
+<p>Let&rsquo;s get out of the <code>_IO_puts</code> function using the <code>finish</code> command which
+finishes child function and returns to the parent function.</p>
+
+<pre><code>(gdb) finish
+main () at hello.c:7
+7        return EXIT_SUCCESS;
+Value returned is $2 = 13
+(gdb) disas/m
+Dump of assembler code for function main:
+5    {
+   0x00000000004004fd &lt;&#43;0&gt;:    push   %rbp
+   0x00000000004004fe &lt;&#43;1&gt;:    mov    %rsp,%rbp
+
+6        printf(&#34;Hello, world!\n&#34;);
+   0x0000000000400501 &lt;&#43;4&gt;:    mov    $0x4005c4,%edi
+   0x0000000000400506 &lt;&#43;9&gt;:    callq  0x4003e0 &lt;puts@plt&gt;
+
+7        return EXIT_SUCCESS;
+=&gt; 0x000000000040050b &lt;&#43;14&gt;:    mov    $0x0,%eax
+
+8    }
+   0x0000000000400510 &lt;&#43;19&gt;:    pop    %rbp
+   0x0000000000400511 &lt;&#43;20&gt;:    retq
+
+End of assembler dump.
+</code></pre>
+
+<p>Now you are back to the <code>main</code> function.</p>
+<p>Let&rsquo;s finish by continuing.</p>
+
+<pre><code>(gdb) cont
+ello, world!
+[Inferior 1 (process 30633) exited normally]
+(gdb) quit
+$
+</code></pre>
+
+<p>Please note that <strong>the program output lacks &ldquo;H&rdquo; in &ldquo;Hello&rdquo;</strong> since I tweaked the program execution via GDB.</p>
+<p>This is just a simple walk through but you get roughly what GDB can do.</p>
+<h3 id="gdb-prime8-gdb">gdb prime8-gdb</h3>
+<p>The <a href="/en/2013/08/17/fun2prog-library/#libpthread">Library: libpthread</a> had a buggy <code>prime8.c</code> code.  Let&rsquo;s check what was wrong under GDB.</p>
+<!-- raw HTML omitted -->
+<p>Let&rsquo;s compile  <code>prime8.c</code> with <code>-g</code> as <code>prime8-gdb</code> and run it to create the <code>core</code> file as <a href="/en/2013/08/17/fun2prog-elf/#core-dump">ELF: Core dump</a>, then analyze it with GDB.</p>
+<p>Compiling <code>prime8.c</code> with <code>-g</code> as <code>prime8-gdb</code> and check core under GDB.</p>
+
+<pre><code>$ gcc -g -Wall -lpthread -o prime8-gdb prime8.c
+$ ulimit -c unlimited
+$ ./prime8-gdb 1090
+Segmentation fault (core dumped)
+$ ls -l core
+-rw------- 1 osamu osamu 40873984 Aug 17 23:42 core
+$ gdb -q prime8-gdb core
+[New LWP 29809]
+
+warning: Could not load shared library symbols for linux-vdso.so.1.
+Do you need &#34;set solib-search-path&#34; or &#34;set sysroot&#34;?
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library &#34;/lib/x86_64-linux-gnu/libthread_db.so.1&#34;.
+Core was generated by `./prime8-gdb 1090&#39;.
+Program terminated with signal 11, Segmentation fault.
+#0  0x0000000000400b09 in main (argc=2, argv=0x7fff204861b8) at prime8.c:108
+108            tail-&gt;next = thd[i].head;
+(gdb) print i
+$1 = 63
+(gdb) print tail
+$2 = (primelist *) 0x0
+(gdb) print thd[i].head
+$3 = (primelist *) 0x0
+(gdb) print thd[i-1].head
+$4 = (primelist *) 0x0
+(gdb) print thd[i-2].head
+$5 = (primelist *) 0x2aaab8001d40
+(gdb) list
+103        for (i=0; i &lt; TMAX; i&#43;&#43;) {
+104            /* TMAX thread of checkprime loop */
+105            if (pthread_join(thd[i].th, (void *) NULL) ) {
+106                printf (&#34;E: error joining thread at %li\n&#34;, i);
+107            }
+108            tail-&gt;next = thd[i].head;
+109            tail = thd[i].tail;
+110        }
+111
+112        p=head;
+(gdb) quit
+</code></pre>
+
+<p>Alternatively, let&rsquo;s run <code>prime8-gdb</code> under GDB.</p>
+<p>Compiling <code>prime8.c</code> with <code>-g</code> as <code>prime8-gdb</code> and running it under GDB.</p>
+
+<pre><code>$ gdb -q
+(gdb) file prime8-gdb
+(gdb) run 1090
+warning: Could not load shared library symbols for linux-vdso.so.1.
+Do you need &#34;set solib-search-path&#34; or &#34;set sysroot&#34;?
+Using host libthread_db library &#34;/lib/x86_64-linux-gnu/libthread_db.so.1&#34;.
+... (snip thread dialog)
+
+Program received signal SIGSEGV, Segmentation fault.
+0x0000000000400b09 in main (argc=2, argv=0x7fffffffdf88) at prime8.c:108
+108            tail-&gt;next = thd[i].head;
+(gdb) print i
+$1 = 63
+(gdb) print tail
+$2 = (primelist *) 0x0
+(gdb) print thd[i].head
+$3 = (primelist *) 0x0
+(gdb) print thd[i-1].head
+$4 = (primelist *) 0x0
+(gdb) print thd[i-2].head
+$5 = (primelist *) 0x2aaaac001f40
+(gdb) list
+103        for (i=0; i &lt; TMAX; i&#43;&#43;) {
+104            /* TMAX thread of checkprime loop */
+105            if (pthread_join(thd[i].th, (void *) NULL) ) {
+106                printf (&#34;E: error joining thread at %li\n&#34;, i);
+107            }
+108            tail-&gt;next = thd[i].head;
+109            tail = thd[i].tail;
+110        }
+111
+112        p=head;
+(gdb) kill
+Kill the program being debugged? (y or n) [answered Y; input not from terminal]
+(gdb) quit
+</code></pre>
+
+<p>I see the cause of the bug clearly in the result of both methods.  Assignment
+at <code>prime8.c:108</code> should not be done if no prime numbers were found (returning
+<code>NULL</code>) from the calculation in the thread.  So I created <code>prime9.patch</code> to
+append only when the thread finds some prime numbers.</p>
+<p>Creating and compiling <code>prime9.c</code> with <code>-g</code> as <code>prime9-gdb</code> and running it.</p>
+
+<pre><code>$ cat prime9.patch
+--- prime8.c    2013-02-23 23:14:45.943466837 &#43;0900
+&#43;&#43;&#43; prime9.c    2013-02-23 23:16:41.144054858 &#43;0900
+@@ -105,8 &#43;105,10 @@
+         if (pthread_join(thd[i].th, (void *) NULL) ) {
+             printf (&#34;E: error joining thread at %li\n&#34;, i);
+         }
+-        tail-&gt;next = thd[i].head;
+-        tail = thd[i].tail;
+&#43;        if (thd[i].head != NULL) { /* prime found */
+&#43;            tail-&gt;next = thd[i].head;
+&#43;            tail = thd[i].tail;
+&#43;        }
+     }
+
+     p=head;
+$ cp prime8.c prime9.c
+$ patch -p0 prime9.c &lt;prime9.patch
+patching file prime9.c
+$ gcc -g -Wall -lpthread -o prime9-gdb prime9.c
+$ ./prime9-gdb &#34;1090&#34;&gt;/dev/null; echo $?
+0
+$ ./prime9-gdb &#34;4&#34;
+2
+3
+$ ./prime9-gdb &#34;3&#34;
+2
+3
+3
+3
+3
+3
+3
+3
+3
+ ... (snip)
+</code></pre>
+
+<p>Oops, still something is wrong here.  (I see I was careless with iteration boundaries.)</p>
+<p>Let&rsquo;s continue debugging &hellip;</p>
+<h3 id="gdb-prime-gdb">gdb prime-gdb</h3>
+<p>Let&rsquo;s fix the <code>ptime9.c</code> code by:</p>
+<ul>
+<li>split this into <code>prime.c</code>, <code>prime.h</code>, <code>checkprime.c</code> and <code>subthread.c</code> files.</li>
+<li>keep each <code>*.c</code> file to contain only one function in it.</li>
+<li>make <code>TMAX</code> as variable <code>tmax</code>.</li>
+<li>fix bugs by carefully going over iteration boundaries.</li>
+<li>use &ldquo;<code>set trace-commands on</code>&rdquo; under the batch command execution.</li>
+</ul>
+<p><code>prime.c</code></p>
+
+<pre><code>#include &#34;prime.h&#34;
+
+primelist *head=NULL, *tail=NULL;
+thdata       thd[TMAX];
+
+int main(int argc, char **argv) {
+    primelist *p = NULL, *q = NULL;
+    long n, n_max, i, nd, tmax = TMAX;
+    n_max = atol(argv[1]); /* &gt;=3 */
+    head = calloc(1, sizeof(primelist));
+    tail = head;
+    tail-&gt;prime = 2;
+    n = 2;
+    while((n - 1) * (n - 1) &lt; n_max) {
+        n&#43;&#43;;
+        if (checkprime(n)) {
+            q= calloc(1, sizeof(primelist));
+            tail-&gt;next = q;
+            tail = q;
+            tail-&gt;prime = n;
+        }
+    }
+    nd = (n_max - n &#43; tmax - 1) / (long) tmax;
+    for (i=0; i &lt; tmax; i&#43;&#43;) {
+        /* tmax thread of checkprime loop */
+        thd[i].n0 = n &#43; 1; /* next unchecked */
+        thd[i].n1 = n &#43; nd;
+        if (thd[i].n1 &gt;= n_max) {
+            thd[i].n1 = n_max;
+        }
+	n = thd[i].n1;
+        if (pthread_create(&amp;thd[i].th,
+                NULL, 
+                (void *) subthread, 
+                (void *) &amp;(thd[i]) ) ) {
+            printf (&#34;E: error creating thread at %li\n&#34;, i);
+        }
+    }
+    for (i=0; i &lt; tmax; i&#43;&#43;) {
+        /* tmax thread of checkprime loop */
+        if (pthread_join(thd[i].th, (void *) NULL) ) {
+            printf (&#34;E: error joining thread at %li\n&#34;, i);
+        }
+        if (thd[i].head != NULL) { /* prime found */
+            tail-&gt;next = thd[i].head;
+            tail = thd[i].tail;
+        }
+    }
+
+    p=head;
+    while(p) {
+        printf (&#34;%ld\n&#34;, p-&gt;prime);
+        p = p-&gt;next;
+    }
+    p=head;
+    while(p) {
+        q = p-&gt;next;
+	    free(p);
+	    p = q;
+    }
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Here, 3 lines in <code>prime.c</code> have been corrected (bugs!).</p>
+<ul>
+<li>line 14: &ldquo;<code>&lt;=</code>&rdquo; -&gt; &ldquo;<code>&lt;</code>&rdquo;</li>
+<li>line 23: adjust the loop stepping.</li>
+<li>line 26: start from the next integer.</li>
+</ul>
+<p><code>prime.h</code></p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;semaphore.h&gt;
+#include &lt;pthread.h&gt;
+#define TRUE 1
+#define FALSE 0
+#define TMAX 64L
+
+struct _primelist {
+    long prime; 
+    struct _primelist *next;
+    };
+typedef struct _primelist primelist;
+
+extern primelist *head, *tail;
+
+struct _thdata {
+    pthread_t           th;
+    long                n0;
+    long                n1;
+    primelist           *head;
+    primelist           *tail;
+};
+typedef struct _thdata thdata;
+
+extern thdata       thd[TMAX];
+
+int checkprime(long n);
+void subthread(thdata *thd);
+int main(int argc, char **argv);
+</code></pre>
+
+<p>Please note the use of <code>extern</code> in the <code>prime.h</code>.</p>
+<p>Then here are supporting sources.</p>
+<p><code>checkprime.c</code></p>
+
+<pre><code>#include &#34;prime.h&#34;
+
+int checkprime(long n) {
+    primelist *p;
+    long i, n_div_i, n_mod_i;
+    int flag;
+    flag = TRUE;
+    p = head;
+    while(p) {
+        i = p-&gt;prime;
+        n_div_i = n / i;
+        n_mod_i = n % i;
+        if (n_mod_i == 0) {
+            flag = FALSE;
+            break; /* found not to be prime */
+        }
+        if (n_div_i &lt; i) {
+            break; /* no use doing more i-loop if n &lt; i*i */
+        }
+        p = p-&gt;next;
+    }
+    return flag;
+}
+</code></pre>
+
+<p><code>subthread.c</code></p>
+
+<pre><code>#include &#34;prime.h&#34;
+
+void subthread(thdata *thd) {
+    long i;
+    primelist *p=NULL, *q=NULL;
+    thd-&gt;head = NULL;
+    for (i = thd-&gt;n0; i &lt;= thd-&gt;n1; i&#43;&#43;) {
+        if (checkprime(i)) {
+            q = calloc(1, sizeof(primelist));
+            q-&gt;prime = i;
+            if (!thd-&gt;head) {
+                thd-&gt;head = q;
+                p = q;
+            } else {
+                p-&gt;next = q;
+                p = q;
+            }
+            thd-&gt;tail = q;
+        }
+    }
+}
+</code></pre>
+
+<p>Now we should have good program.</p>
+<p>Compiling <code>prime.c</code> and related files with <code>-g</code> as <code>prime-gdb</code> and running it without hitting bugs.</p>
+
+<pre><code>$ gcc -g -Wall -lpthread -c prime.c
+$ gcc -g -Wall -lpthread -c checkprime.c
+$ gcc -g -Wall -lpthread -c subthread.c
+$ gcc -g -Wall -lpthread checkprime.o subthread.o prime.o -o prime-gdb
+$ ./prime-gdb &#34;1090&#34;&gt;/dev/null; echo $?
+0
+$ ./prime-gdb &#34;3&#34;
+2
+3
+$ ./prime-gdb &#34;4&#34;
+2
+3
+$ ./prime-gdb &#34;5&#34;
+2
+3
+5
+$ ./prime-gdb &#34;6&#34;
+2
+3
+5
+</code></pre>
+
+<p>This is running nicely without hitting bugs for all input range.</p>
+<p>Let&rsquo;s run this program under the batch mode of GDB to verify its internal
+situation where it used to segfaults.</p>
+<p>TIP: Use of &ldquo;<code>set trace-commands on</code>&rdquo; enables tracing of commands under the
+batch mode.</p>
+<p>Running <code>prime-gdb</code> under GDB. (session #1)</p>
+
+<pre><code>$ cat prime.1.gdb
+set trace-commands on
+file prime-gdb
+set arg 1090
+break prime.c:44 if i &gt;= 61
+# define macro pre-definition
+define xprint
+print i
+print tail
+printf &#34;thd[i].head=%08X\n&#34;, thd[i].head
+printf &#34;thd[i-1].head=%08X\n&#34;, thd[i-1].head
+printf &#34;thd[i-2].head=%08X\n&#34;, thd[i-2].head
+end
+# autorun xprint
+command 1
+xprint
+end
+# debug run start
+run
+cont
+cont
+cont
+quit
+$ gdb -batch -x prime.1.gdb
+&#43;file prime-gdb
+&#43;set arg 1090
+&#43;break prime.c:44 if i &gt;= 61
+Breakpoint 1 at 0x400aef: file prime.c, line 44.
+&#43;define xprint
+&#43;command 1
+&#43;run
+warning: no loadable sections found in added symbol-file system-supplied DSO at 
+0x2aaaaaacc000
+warning: Could not load shared library symbols for linux-vdso.so.1.
+Do you need &#34;set solib-search-path&#34; or &#34;set sysroot&#34;?
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library &#34;/lib/x86_64-linux-gnu/libthread_db.so.1&#34;.
+[New Thread 0x2aaaab497700 (LWP 30671)]
+[Thread 0x2aaaab497700 (LWP 30671) exited]
+[New Thread 0x2aaaab698700 (LWP 30672)]
+[Thread 0x2aaaab698700 (LWP 30672) exited]
+[New Thread 0x2aaaab899700 (LWP 30674)]
+[Thread 0x2aaaab899700 (LWP 30674) exited]
+[New Thread 0x2aaaaba9a700 (LWP 30675)]
+[Thread 0x2aaaaba9a700 (LWP 30675) exited]
+[New Thread 0x2aaaabc9b700 (LWP 30676)]
+ ... (snip)
+
+Breakpoint 1, main (argc=2, argv=0x7fffffffdf88) at prime.c:44
+44            if (thd[i].head != NULL) { /* prime found */
+&#43;xprint
+&#43;&#43;print i
+$1 = 61
+&#43;&#43;print tail
+$2 = (primelist *) 0x2aaaac001dc0
+&#43;&#43;printf &#34;thd[i].head=%08X\n&#34;, thd[i].head
+thd[i].head=AC001DE0
+&#43;&#43;printf &#34;thd[i-1].head=%08X\n&#34;, thd[i-1].head
+thd[i-1].head=AC001D80
+&#43;&#43;printf &#34;thd[i-2].head=%08X\n&#34;, thd[i-2].head
+thd[i-2].head=AC001D20
+&#43;cont
+
+Breakpoint 1, main (argc=2, argv=0x7fffffffdf88) at prime.c:44
+44            if (thd[i].head != NULL) { /* prime found */
+&#43;xprint
+&#43;&#43;print i
+$3 = 62
+&#43;&#43;print tail
+$4 = (primelist *) 0x2aaaac001de0
+&#43;&#43;printf &#34;thd[i].head=%08X\n&#34;, thd[i].head
+thd[i].head=00000000
+&#43;&#43;printf &#34;thd[i-1].head=%08X\n&#34;, thd[i-1].head
+thd[i-1].head=AC001DE0
+&#43;&#43;printf &#34;thd[i-2].head=%08X\n&#34;, thd[i-2].head
+thd[i-2].head=AC001D80
+&#43;cont
+
+Breakpoint 1, main (argc=2, argv=0x7fffffffdf88) at prime.c:44
+44            if (thd[i].head != NULL) { /* prime found */
+&#43;xprint
+&#43;&#43;print i
+$5 = 63
+&#43;&#43;print tail
+$6 = (primelist *) 0x2aaaac001de0
+&#43;&#43;printf &#34;thd[i].head=%08X\n&#34;, thd[i].head
+thd[i].head=00000000
+&#43;&#43;printf &#34;thd[i-1].head=%08X\n&#34;, thd[i-1].head
+thd[i-1].head=00000000
+&#43;&#43;printf &#34;thd[i-2].head=%08X\n&#34;, thd[i-2].head
+thd[i-2].head=AC001DE0
+&#43;cont
+2
+3
+5
+7
+11
+13
+... (snip)
+1063
+1069
+1087
+[Inferior 1 (process 30667) exited normally]
+&#43;quit
+</code></pre>
+
+<p><a href="http://en.wikipedia.org/wiki/Native_POSIX_Thread_Library%5BNative">http://en.wikipedia.org/wiki/Native_POSIX_Thread_Library[Native</a> POSIX Thread
+Library (NTPL)] uses
+<a href="http://en.wikipedia.org/wiki/Light-weight_process">light-weight process (LWP)</a>
+to enable the <a href="http://en.wikipedia.org/wiki/POSIX_Threads%5BPOSIX">http://en.wikipedia.org/wiki/POSIX_Threads[POSIX</a> thread
+(pthread)] on the modern Linux system.</p>
+<p>Please note that the breakpoint defined with condition stops just before
+the previous segfault location (<code>i = 61, 62, 63</code>).</p>
+<p>Let&rsquo;s run this program again creating a breakpoint at the
+start of <code>subthread.c</code>.   Also, let&rsquo;s change <code>tmax</code> value from <code>64</code> to <code>4</code>.</p>
+<p>Running <code>prime-gdb</code> under GDB. (session #2)</p>
+
+<pre><code>$ cat prime.2.gdb
+set trace-commands on
+# start program with argument 1090 and stop at the first line
+start 1090
+# break at the start of  subthread.c
+break subthread.c:1
+# define macro pre-definition
+define xprint
+printf &#34;thd-&gt;n0=%08X\n&#34;, thd-&gt;n0
+printf &#34;thd-&gt;n1=%08X\n&#34;, thd-&gt;n1
+bt
+end
+# autorun xprint at breakpoint 2
+command 2
+xprint
+end
+# conditional breakpoint
+break prime.c:44 if i &gt;= 3
+# one time break point
+tbreak 16
+c
+print tmax
+set tmax = 4
+print tmax
+bt full
+s
+bt f
+finish
+where f
+c
+c
+c
+c
+info thread
+thread apply all bt
+c
+print i
+c
+quit
+$ gdb -batch -x prime.2.gdb prime-gdb
+&#43;start 1090
+Temporary breakpoint 1 at 0x400883: file prime.c, line 7.
+warning: no loadable sections found in added symbol-file system-supplied DSO at 
+0x2aaaaaacc000
+warning: Could not load shared library symbols for linux-vdso.so.1.
+Do you need &#34;set solib-search-path&#34; or &#34;set sysroot&#34;?
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library &#34;/lib/x86_64-linux-gnu/libthread_db.so.1&#34;.
+
+Temporary breakpoint 1, main (argc=2, argv=0x7fffffffdf88) at prime.c:7
+7        primelist *p = NULL, *q = NULL;
+&#43;break subthread.c:1
+Breakpoint 2 at 0x4007c0: file subthread.c, line 1.
+&#43;define xprint
+&#43;command 2
+&#43;break prime.c:44 if i &gt;= 3
+Breakpoint 3 at 0x400aef: file prime.c, line 44.
+&#43;tbreak 16
+Temporary breakpoint 4 at 0x4008f3: file prime.c, line 16.
+&#43;c
+
+Temporary breakpoint 4, main (argc=2, argv=0x7fffffffdf88) at prime.c:16
+16            if (checkprime(n)) {
+&#43;print tmax
+$1 = 64
+&#43;set tmax = 4
+&#43;print tmax
+$2 = 4
+&#43;bt full
+#0  main (argc=2, argv=0x7fffffffdf88) at prime.c:16
+        p = 0x0
+        q = 0x0
+        n = 3
+        n_max = 1090
+        i = 4195920
+        nd = 4197437
+        tmax = 4
+&#43;s
+checkprime (n=3) at checkprime.c:7
+7        flag = TRUE;
+&#43;bt f
+#0  checkprime (n=3) at checkprime.c:7
+        p = 0x7fffffffdf80
+        i = 140737488346784
+        n_div_i = 0
+        n_mod_i = 46912501095478
+        flag = 0
+#1  0x00000000004008ff in main (argc=2, argv=0x7fffffffdf88) at prime.c:16
+        p = 0x0
+        q = 0x0
+        n = 3
+        n_max = 1090
+        i = 4195920
+        nd = 4197437
+        tmax = 4
+&#43;finish
+0x00000000004008ff in main (argc=2, argv=0x7fffffffdf88) at prime.c:16
+16            if (checkprime(n)) {
+Value returned is $3 = 1
+&#43;where f
+#0  0x00000000004008ff in main (argc=2, argv=0x7fffffffdf88) at prime.c:16
+        p = 0x0
+        q = 0x0
+        n = 3
+        n_max = 1090
+        i = 4195920
+        nd = 4197437
+        tmax = 4
+&#43;c
+[New Thread 0x2aaaab497700 (LWP 30769)]
+[Switching to Thread 0x2aaaab497700 (LWP 30769)]
+
+Breakpoint 2, subthread (thd=0x6012a0 &lt;thd&gt;) at subthread.c:5
+5        primelist *p=NULL, *q=NULL;
+&#43;xprint
+&#43;&#43;printf &#34;thd-&gt;n0=%08X\n&#34;, thd-&gt;n0
+thd-&gt;n0=00000024
+&#43;&#43;printf &#34;thd-&gt;n1=%08X\n&#34;, thd-&gt;n1
+thd-&gt;n1=0000012B
+&#43;&#43;bt
+#0  subthread (thd=0x6012a0 &lt;thd&gt;) at subthread.c:5
+#1  0x00002aaaaacd6e0e in start_thread (arg=0x2aaaab497700) at pthread_create.c:
+311
+#2  0x00002aaaaafd393d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:
+113
+&#43;c
+[New Thread 0x2aaaab698700 (LWP 30770)]
+[Thread 0x2aaaab497700 (LWP 30769) exited]
+[Switching to Thread 0x2aaaab698700 (LWP 30770)]
+
+Breakpoint 2, subthread (thd=0x6012c8 &lt;thd&#43;40&gt;) at subthread.c:5
+5        primelist *p=NULL, *q=NULL;
+&#43;xprint
+&#43;&#43;printf &#34;thd-&gt;n0=%08X\n&#34;, thd-&gt;n0
+thd-&gt;n0=0000012C
+&#43;&#43;printf &#34;thd-&gt;n1=%08X\n&#34;, thd-&gt;n1
+thd-&gt;n1=00000233
+&#43;&#43;bt
+#0  subthread (thd=0x6012c8 &lt;thd&#43;40&gt;) at subthread.c:5
+#1  0x00002aaaaacd6e0e in start_thread (arg=0x2aaaab698700) at pthread_create.c:
+311
+#2  0x00002aaaaafd393d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:
+113
+&#43;c
+[New Thread 0x2aaaab899700 (LWP 30772)]
+[Thread 0x2aaaab698700 (LWP 30770) exited]
+[Switching to Thread 0x2aaaab899700 (LWP 30772)]
+
+Breakpoint 2, subthread (thd=0x6012f0 &lt;thd&#43;80&gt;) at subthread.c:5
+5        primelist *p=NULL, *q=NULL;
+&#43;xprint
+&#43;&#43;printf &#34;thd-&gt;n0=%08X\n&#34;, thd-&gt;n0
+thd-&gt;n0=00000234
+&#43;&#43;printf &#34;thd-&gt;n1=%08X\n&#34;, thd-&gt;n1
+thd-&gt;n1=0000033B
+&#43;&#43;bt
+#0  subthread (thd=0x6012f0 &lt;thd&#43;80&gt;) at subthread.c:5
+#1  0x00002aaaaacd6e0e in start_thread (arg=0x2aaaab899700) at pthread_create.c:
+311
+#2  0x00002aaaaafd393d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:
+113
+&#43;c
+[Thread 0x2aaaab899700 (LWP 30772) exited]
+[New Thread 0x2aaaaba9a700 (LWP 30773)]
+[Switching to Thread 0x2aaaaba9a700 (LWP 30773)]
+
+Breakpoint 2, subthread (thd=0x601318 &lt;thd&#43;120&gt;) at subthread.c:5
+5        primelist *p=NULL, *q=NULL;
+&#43;xprint
+&#43;&#43;printf &#34;thd-&gt;n0=%08X\n&#34;, thd-&gt;n0
+thd-&gt;n0=0000033C
+&#43;&#43;printf &#34;thd-&gt;n1=%08X\n&#34;, thd-&gt;n1
+thd-&gt;n1=00000442
+&#43;&#43;bt
+#0  subthread (thd=0x601318 &lt;thd&#43;120&gt;) at subthread.c:5
+#1  0x00002aaaaacd6e0e in start_thread (arg=0x2aaaaba9a700) at pthread_create.c:
+311
+#2  0x00002aaaaafd393d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:
+113
+&#43;info thread
+  Id   Target Id         Frame
+* 5    Thread 0x2aaaaba9a700 (LWP 30773) &#34;prime-gdb&#34; subthread (thd=0x601318 &lt;th
+d&#43;120&gt;) at subthread.c:5
+  1    Thread 0x2aaaaaafcfc0 (LWP 30765) &#34;prime-gdb&#34; main (argc=2, argv=0x7fffff
+ffdf88) at prime.c:44
+&#43;thread apply all bt
+
+Thread 5 (Thread 0x2aaaaba9a700 (LWP 30773)):
+&#43;bt
+#0  subthread (thd=0x601318 &lt;thd&#43;120&gt;) at subthread.c:5
+#1  0x00002aaaaacd6e0e in start_thread (arg=0x2aaaaba9a700) at pthread_create.c:
+311
+#2  0x00002aaaaafd393d in clone () at ../sysdeps/unix/sysv/linux/x86_64/clone.S:
+113
+
+Thread 1 (Thread 0x2aaaaaafcfc0 (LWP 30765)):
+&#43;bt
+#0  main (argc=2, argv=0x7fffffffdf88) at prime.c:44
+&#43;c
+[Thread 0x2aaaaba9a700 (LWP 30773) exited]
+[Switching to Thread 0x2aaaaaafcfc0 (LWP 30765)]
+
+Breakpoint 3, main (argc=2, argv=0x7fffffffdf88) at prime.c:44
+44            if (thd[i].head != NULL) { /* prime found */
+&#43;print i
+$4 = 3
+&#43;c
+2
+3
+5
+7
+11
+13
+... (snip)
+1063
+1069
+1087
+[Inferior 1 (process 30765) exited normally]
+&#43;quit
+</code></pre>
+
+<p>Please note the backtrace generated by <code>bt</code>:</p>
+<ul>
+<li><code>bt</code> lists all stack frames of the thread on which the breakpoint stopped.
+<ul>
+<li>On the main thread, it reaches <code>main</code>.</li>
+<li>On the sub thread, it does not reach <code>main</code> but reaches NULL pointer function via <code>start_thread()</code> and <code>clone()</code>.</li>
+</ul>
+</li>
+<li><code>bt full</code>  lists all stack frames and local variables of the thread.
+<ul>
+<li>Uninitialized variables show bogus valus.</li>
+</ul>
+</li>
+<li><code>thead apply all bt</code> lists all stack frames of all running threads.</li>
+</ul>
+<p>See how a user defined command <code>xprint</code> is defined and a sequence of commands
+at breakpoint is auto-executed via <code>command</code>.</p>
+<h3 id="gdb-tui">GDB TUI</h3>
+<p>Although normal command mode GDB is powerful, it is cumbersome to keep typing
+&ldquo;<code>list</code>&rdquo;, &ldquo;<code>print ...</code>&rdquo;, &ldquo;<code>info break</code>&rdquo;, and &ldquo;<code>info reg</code>&rdquo;, &hellip; just to see what
+is going on.</p>
+<p>That is where GDB Text User Interface (TUI) comes in.  Wile you are using GDB:</p>
+<ul>
+<li>Type &ldquo;Ctrl-X&rdquo; and &ldquo;Ctrl-A&rdquo; (or &ldquo;Ctrl-X&rdquo; and &ldquo;a&rdquo;) to get into the TUI mode.</li>
+<li>Type &ldquo;Ctrl-X&rdquo; and &ldquo;Ctrl-A&rdquo; (or &ldquo;Ctrl-X&rdquo; and &ldquo;a&rdquo;) again to get out of the TUI mode and back to the normal command prompt.</li>
+<li>Change the screen layout by &ldquo;<code>la src</code>&rdquo;, &ldquo;<code>la asm</code>&rdquo;, &ldquo;<code>la split</code>&rdquo;, &ldquo;<code>la regs</code>&rdquo;, &ldquo;<code>la next</code>&rdquo;, or &ldquo;<code>la prev</code>&rdquo;. (<code>la</code> is short for <code>layout</code>)</li>
+<li>Change the screen focus by &ldquo;<code>fs cmd</code>&rdquo;, &ldquo;<code>fs src</code>&rdquo;, &ldquo;<code>fs asm</code>&rdquo;, &ldquo;<code>fs split</code>&rdquo;, &ldquo;<code>fs regs</code>&rdquo;, &ldquo;<code>fs next</code>&rdquo;, or &ldquo;<code>fs prev</code>&rdquo;. (<code>fs</code> is short for <code>focus</code>)</li>
+<li>Change the register window by &ldquo;<code>tui reg general</code>&rdquo;, &ldquo;<code>tui reg float</code>&rdquo;, &ldquo;<code>tui reg next</code>&rdquo;, or &ldquo;<code>tui reg all</code>&rdquo;.</li>
+<li>Refresh the screen by &ldquo;<code>refresh</code>&rdquo; or &ldquo;Ctrl-L&rdquo;.</li>
+<li>Change active window by &ldquo;Ctrl-X&rdquo; and &ldquo;o&rdquo;.</li>
+<li>Check window status by &ldquo;<code>info win</code>&rdquo;.</li>
+</ul>
+<p>For more, read &ldquo;<code>info gdb TUI</code>&rdquo; from the shell prompt.</p>
+<p>TIP: Use &ldquo;<code>gdb -tui</code>&rdquo; or &ldquo;<code>gdbtui</code>&rdquo; in place of &ldquo;<code>gdb</code>&rdquo; to start GDB in the TUI mode.</p>
+<h3 id="gdb-resources">GDB resources</h3>
+<p>Here are some GDB resources:</p>
+<ul>
+<li>GDB QUICK REFERENCE (gdb-doc package, /usr/share/doc/gdb-doc/pdf/refcard.pdf.gz)</li>
+<li><a href="http://wiki.debian.org/HowToGetABacktrace">HowToGetABacktrace</a> (Debian wiki)</li>
+<li><a href="http://wiki.debian.org/DebugPackage">DebugPackage</a> (Debian wiki)</li>
+<li><a href="http://www.dirac.org/linux/gdb/">Using GNU&rsquo;s GDB Debugger</a> (Debian GDB package recommended)</li>
+<li><a href="http://sourceware.org/gdb/">GDB: The GNU Project Debugger</a> (upstream)</li>
+<li><a href="http://sourceware.org/gdb/wiki/">GDB Wiki</a> (upstream FAQ wiki)</li>
+<li><a href="http://www.ibm.com/developerworks/aix/library/au-gdb.html">GNU Project Debugger: More fun with GDB</a> by William B. Zimmerly (IBM DW,Date: 03 Oct 2006)</li>
+<li><a href="http://www.ibm.com/developerworks/aix/library/au-unix-strace.html">Fun with strace and the GDB Debugger</a> by William B. Zimmerly (IBM DW, Date: 11 May 2006)</li>
+<li><a href="http://www.ibm.com/developerworks/systems/library/es-debug/">Debugging tools and techniques for Linux on Power</a> by Calvin Sze (IBM DW, Date: 04 Aug 2005)</li>
+<li><a href="http://www.ibm.com/developerworks/linux/library/l-debug/">Mastering Linux debugging techniques</a> by Steve Best (IBM DW, Date: 01 Aug 2002)</li>
+<li><a href="http://www.ibm.com/developerworks/library/l-gdb/">Linux software debugging with GDB</a> by David Seager (IBM DW, Date: 01 Feb 2001)</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/11/fun2prog-debug-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/13/fun2prog-debug-4/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

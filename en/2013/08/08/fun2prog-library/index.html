@@ -1,0 +1,2020 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Library | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Library</span></h1>
+
+<h3 class="date">Date:
+2013/08/08 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/07/fun2prog-gcc/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/09/fun2prog-elf/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="library">Library</h2>
+<h3 id="static-and-dynamic-libraries">Static and dynamic libraries</h3>
+<p>Compiling source while stopping at object file can be done with the <code>-c</code> option.
+You can bunch such object files into a single archive/object.  This is called library.</p>
+<ul>
+<li>static library: <code>libfoo.a</code>
+<ul>
+<li>simple archive of object files (<code>*.o</code>) as &ldquo;<code>ar rcs libfoo.a *.o</code>&rdquo;</li>
+<li>*.a may be used just like bunch of <code>*.o</code> files while linking.</li>
+</ul>
+</li>
+<li>dynamic library: <code>libfoo.so</code>
+<ul>
+<li>all object files (<code>*.o</code>) compiled with <code>gcc</code> option <code>-fPIC</code>.</li>
+<li>shared object file created by &ldquo;<code>gcc -shared -Wl,-soname,libfoo.so.1 -o libfoo.so.1.0 *.o</code>&rdquo;.</li>
+<li>associated symbolic links created by &ldquo;<code>ldconfig</code>&rdquo;.</li>
+</ul>
+</li>
+</ul>
+<p>TIP: In order to load a library file with the GCC <code>-l</code> option, its name must
+start with <code>lib</code>.</p>
+<p>I do not go in details here but the <code>gccintro</code> package provides a good tutorial
+&ldquo;Introduction to GCC by Brian J. Gough&rdquo; with examples.</p>
+<p>See also:</p>
+<ul>
+<li><a href="http://people.redhat.com/drepper/dsohowto.pdf">How To Write Shared Libraries</a> by Ulrich Drepper (2011-12-10)</li>
+<li><a href="http://people.redhat.com/drepper/goodpractice.pdf">Good Practices in Library Design, Implementation, and Maintenance</a> by Ulrich Drepper (2002-03-07)</li>
+<li><a href="http://people.redhat.com/drepper/symbol-versioning">ELF Symbol Versioning</a> by Ulrich Drepper</li>
+<li><a href="http://www.eyrie.org/~eagle/notes/rpath.html">Shared Library Search Paths</a> by Russ Allbery (2011-11-11)</li>
+<li><a href="http://wiki.debian.org/RpathIssue">RPATH issue</a> (wiki.debian.org)</li>
+<li>Dynamic Linking in Linux and Windows <a href="http://www.symantec.com/connect/articles/dynamic-linking-linux-and-windows-part-one">part one</a> and <a href="http://www.symantec.com/connect/articles/dynamic-linking-linux-and-windows-part-two">part two</a> by Reji Thomas and Bhasker Reddy (2010-11-02)</li>
+<li><a href="http://static.usenix.org/publications/library/proceedings/als00/2000papers/papers/full_papers/browndavid/browndavid_html/">Library Interface Versioning in Solaris and Linux</a> by David J. Brown and Karl Runge (October 2010-10-10)</li>
+<li><a href="http://www.ibm.com/developerworks/linux/library/l-lpic1-v3-102-3/">Learn Linux, 101: Manage shared libraries</a> by Ian Shields (IBM DW, Date: 31 Aug 2011)</li>
+<li><a href="http://www.ibm.com/developerworks/linux/library/l-setup-sharedlibs-pr/">Practice: Manage shared libraries</a> by Tracy Bost (IBM DW, Date: 21 Jun 2011)</li>
+<li><a href="http://www.ibm.com/developerworks/linux/library/l-dynamic-libraries/">Anatomy of Linux dynamic libraries</a> by M. Tim Jones (IBM DW, Date:  20 Aug 2008)</li>
+<li><a href="http://www.ibm.com/developerworks/linux/library/l-shared/">Use shared objects on Linux</a> by Sachin Agrawal (IBM DW, Date:  11 May 2004)</li>
+<li><a href="http://tldp.org/HOWTO/Program-Library-HOWTO/">Program Library HOWTO</a> by David A. Wheeler (TLDP, 11 April 2003)</li>
+<li><a href="http://www.ibm.com/developerworks/library/l-shobj/">Shared objects for the object disoriented!</a> by Ashish Bansal (IBM DW, Date:  01 Apr 2001)</li>
+</ul>
+<h3 id="gnu-c-library">GNU C Library</h3>
+<p>The Debian <code>libc6:amd64</code> package offeres
+<a href="http://en.wikipedia.org/wiki/Embedded_GLIBC">embedded GNU C library</a> which
+contains the standard libraries that are used by nearly all programs on the
+system.</p>
+<p>Shared libraries offered by the <code>libc6:amd64</code> package.</p>
+
+<pre><code>$ dpkg -L libc6:amd64|grep ^/lib/x86_64-linux-gnu/.*\.so$
+/lib/x86_64-linux-gnu/libpthread-2.17.so
+/lib/x86_64-linux-gnu/ld-2.17.so
+/lib/x86_64-linux-gnu/libanl-2.17.so
+/lib/x86_64-linux-gnu/libBrokenLocale-2.17.so
+/lib/x86_64-linux-gnu/libc-2.17.so
+/lib/x86_64-linux-gnu/libcidn-2.17.so
+/lib/x86_64-linux-gnu/libcrypt-2.17.so
+/lib/x86_64-linux-gnu/libdl-2.17.so
+/lib/x86_64-linux-gnu/libm-2.17.so
+/lib/x86_64-linux-gnu/libmemusage.so
+/lib/x86_64-linux-gnu/libnsl-2.17.so
+/lib/x86_64-linux-gnu/libnss_compat-2.17.so
+/lib/x86_64-linux-gnu/libnss_dns-2.17.so
+/lib/x86_64-linux-gnu/libnss_files-2.17.so
+/lib/x86_64-linux-gnu/libnss_hesiod-2.17.so
+/lib/x86_64-linux-gnu/libnss_nis-2.17.so
+/lib/x86_64-linux-gnu/libnss_nisplus-2.17.so
+/lib/x86_64-linux-gnu/libpcprofile.so
+/lib/x86_64-linux-gnu/libresolv-2.17.so
+/lib/x86_64-linux-gnu/librt-2.17.so
+/lib/x86_64-linux-gnu/libSegFault.so
+/lib/x86_64-linux-gnu/libthread_db-1.0.so
+/lib/x86_64-linux-gnu/libutil-2.17.so
+</code></pre>
+
+<h3 id="libc">libc</h3>
+<p>Most of the standard C library functions are included in the <code>libc</code> library.</p>
+<p>You do not mention linking to the <code>libc</code> library explicitly using the <code>-l</code> option to GCC.  It is always linked.</p>
+<p>Most of the basic functions of the <code>libc</code> library are explained in many C
+programing tutorials such as &ldquo;The C programming Language, by B. W. Kerninghan
+and Dennis M. Ritchie&rdquo;.  I will skip most of those mentioned in such tutorials.</p>
+<p><a href="http://www.gnu.org/software/libc/manual/">The GNU C Library</a> manual is also good source of information.</p>
+<h3 id="libc-macro">libc: macro</h3>
+<p>There are some macros defined in the <code>libc</code> library.  They tend to make
+programs easier to read.</p>
+<p>Macro for exit status.</p>
+
+<pre><code>$ grep &#34;#define.*EXIT_&#34; /usr/include/stdlib.h
+#define    EXIT_FAILURE    1    /* Failing exit status.  */
+#define    EXIT_SUCCESS    0    /* Successful exit status.  */
+</code></pre>
+
+<p>TIP: The exit status value matches with the shell convention.  But some
+programs return <code>-1</code> as the non-zero value instead of <code>1</code> when errors are
+encountered.</p>
+<p>TIP: Defining <code>TRUE</code> and <code>FALSE</code> macros as the Boolean context values for <code>1</code>
+and <code>0</code> are popular in the C program.  They are not defined in the <code>libc</code>
+library.  So normally, user has to define them.</p>
+<h3 id="libc-errorh">libc: error.h</h3>
+<p>Here are some notable items for the error handling of the <code>libc</code> library.</p>
+<ul>
+<li>The <code>errno</code> integer variable is set to non-zero value when library functions encounter the error.</li>
+<li>The <code>strerror(errno)</code> function returns a pointer to a string that describes the meaning of the error for <code>errno</code>.</li>
+<li>The <code>perror(&quot;foo&quot;)</code> produces a message on the standard error output for <code>errno</code> with <code>&quot;foo: &lt;error message&gt;&quot;</code></li>
+</ul>
+<p>The macros for the error are explained in the manpage <code>errno</code>(3).</p>
+<p>The values of the macros for the error are defined in <code>&lt;errno.h&gt;</code> header file which is a bit convoluted.  Arch dependent symlinks are marked as (*).:</p>
+<table>
+<thead>
+<tr>
+<th>header file</th>
+<th>action</th>
+<th>target</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>&lt;errno.h&gt;</code></td>
+<td>defines</td>
+<td>&ldquo;<code>extern int errno;</code>&rdquo;.</td>
+</tr>
+<tr>
+<td><code>&lt;errno.h&gt;</code></td>
+<td>includes</td>
+<td><code>&lt;bits/errno.h&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;bits/errno.h&gt;</code> (*)</td>
+<td>includes</td>
+<td><code>&lt;linux/errno.h&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;linux/errno.h&gt;</code></td>
+<td>includes</td>
+<td><code>&lt;asm/errno.h&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;asm/errno.h&gt;</code> (*)</td>
+<td>includes</td>
+<td><code>&lt;asm-generic/errno.h&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;asm-generic/errno.h&gt;</code></td>
+<td>defines</td>
+<td>many error values.</td>
+</tr>
+<tr>
+<td><code>&lt;asm-generic/errno.h&gt;</code></td>
+<td>includes</td>
+<td><code>&lt;asm-generic/errno-base.h&gt;</code>.</td>
+</tr>
+<tr>
+<td><code>&lt;asm-generic/errno-base.h&gt;</code></td>
+<td>defines</td>
+<td>important error values from 1 to 34.</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>TIP: Make sure to include <code>&lt;error.h&gt;</code> in the header if a program needs to
+deal with the <code>libc</code> library generated errors.</p>
+<h3 id="libc-string-operations">libc: string operations</h3>
+<p>Unfortunately, some C string functions are known to be troublemakers.</p>
+<p>Safe coding recommendations by busybox coders</p>
+<table>
+<thead>
+<tr>
+<th>troublemaker functions</th>
+<th>overrun concerns</th>
+<th>recommendation</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>strcpy</code>(3)</td>
+<td><code>dest</code> string</td>
+<td><code>safe_strncpy</code></td>
+</tr>
+<tr>
+<td><code>strncpy</code>(3)</td>
+<td>may fail to 0-terminate <code>dst</code></td>
+<td><code>safe_strncpy</code></td>
+</tr>
+<tr>
+<td><code>strcat</code>(3)</td>
+<td><code>dest</code> string</td>
+<td><code>strncat</code>(3)</td>
+</tr>
+<tr>
+<td><code>gets</code>(3)</td>
+<td>string it gets</td>
+<td><code>fgets</code>(3)</td>
+</tr>
+<tr>
+<td><code>getwd</code>(3)</td>
+<td><code>buf</code> string</td>
+<td><code>getcwd</code>(3)</td>
+</tr>
+<tr>
+<td><code>[v]sprintf</code>(3)</td>
+<td><code>str</code> buffer</td>
+<td><code>[v]snprintf</code>(3)</td>
+</tr>
+<tr>
+<td><code>realpath</code>(3)</td>
+<td><code>path</code> buffer</td>
+<td>use with <code>pathconf</code>(3)</td>
+</tr>
+<tr>
+<td><code>[vf]scanf</code>(3)</td>
+<td>its arguments</td>
+<td>just avoid it</td>
+</tr>
+</tbody>
+</table>
+<p>Although <code>[vf]scanf</code>(3) are marked as &ldquo;just avoid it&rdquo;, it is not the end of the
+world for the coding of the <code>scanf</code>-like logic.</p>
+<p>The combination of <code>getline</code>(3) and <code>sscanf</code>(3) is the most portable solution
+for the safe <code>scanf</code> alternative.  If the incoming data is not delimited by the
+newline &ldquo;<code>\n</code>&rdquo; code, <code>getdelim</code>(3) may alternatively be used in place of
+<code>getline</code>(3).</p>
+<p>The use the &ldquo;<code>m</code>&rdquo; flag in the format string, as described in <code>scanf</code>(3) is the
+other solution for the safe <code>scanf</code> alternative. (You need newer POSIX.1-2008
+complient <code>libc</code>.)  It uses &ldquo;<code>[vf]scanf(&quot;%ms&quot;, &amp;char)</code>&rdquo; with <code>free</code> instead of
+&ldquo;<code>[vf]scanf(&quot;%s&quot;, char)</code>&rdquo; alone.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="libc-safe_strncpy">libc: safe_strncpy</h3>
+<p>The <code>safe_strncpy</code> recommended by busybox coders is essentially the 0-terminate
+guranteed <code>strncpy</code> with the safe data length.  Since it is missing in the
+<code>libc</code> library, it should be emulated by adding a custom function definition
+as:</p>
+<p>Alternative safe string copy function <code>safe_strncpy</code>: <code>safe_strncpy.c</code>.</p>
+
+<pre><code>#include &lt;string.h&gt;
+char* safe_strncpy(char *dst, const char *src, size_t size)
+{
+    if (size == 0) {
+        return dst;
+    } else {
+        size--;
+        dst[size] = &#39;\0&#39;;
+        return strncpy(dst, src, size);
+    }
+}
+</code></pre>
+
+<p>Alternative safe string copy function <code>safe_strncpy</code>: <code>safe_strncpy.h</code>.</p>
+
+<pre><code>char* safe_strncpy(char *dst, const char *src, size_t size);
+</code></pre>
+
+<p>Let&rsquo;s test string copy functions: <code>strcpy</code>, <code>strncpy</code>, and <code>safe_strncpy</code>.</p>
+<p>Test code for string copy functions: <code>test_strcpy.c</code>.</p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;string.h&gt;
+#include &#34;safe_strncpy.h&#34;
+
+char s1[10], s2[10];
+int main(int argc, char ** argv)
+{
+    char *sc1 = &#34;0123456789&#34;; /* 11 bytes */
+    char *sc2 = &#34;I gotcha!&#34;;  /* 10 bytes */
+
+    printf(&#34;%s\n&#34;, &#34;Constant strings&#34;);
+    printf(&#34;\tsc1 = %s\n&#34;, sc1);
+    printf(&#34;\tsc2 = %s\n&#34;, sc2);
+    safe_strncpy(s1, sc1, 10);
+    safe_strncpy(s2, sc2, 10);
+    printf(&#34;%s\n&#34;, &#34;Copied strings: safe_strncpy\n&#34;
+        &#34;\t\tIt should drop 9 at the end to be safe.&#34;);
+    printf(&#34;\ts1  = %s\n&#34;, s1);
+    printf(&#34;\ts2  = %s\n&#34;, s2);
+    strncpy(s1, sc1, 10);
+    printf(&#34;%s\n&#34;, &#34;Copied strings: strncpy(s1, sc1, 10)\n&#34;
+        &#34;\t\tprintf(..., s1) can not stop at the end.&#34;);
+    printf(&#34;\ts1  = %s\n&#34;, s1);
+    printf(&#34;\ts2  = %s\n&#34;, s2);
+    strcpy(s1, sc1);
+    printf(&#34;%s\n&#34;, &#34;Copied strings: strcpy(s1, sc1)\n&#34;
+        &#34;\t\tstrcpy overwrites onto s2.&#34;);
+    printf(&#34;\ts1  = %s\n&#34;, s1);
+    printf(&#34;\ts2  = %s\n&#34;, s2);
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Test result of string copy functions by <code>test_strcpy.c</code>.</p>
+
+<pre><code>$ gcc -Wall -o test_strcpy safe_strncpy.c test_strcpy.c
+$ ./test_strcpy
+Constant strings
+    sc1 = 0123456789
+    sc2 = I gotcha!
+Copied strings: safe_strncpy
+        It should drop 9 at the end to be safe.
+    s1  = 012345678
+    s2  = I gotcha!
+Copied strings: strncpy(s1, sc1, 10)
+        printf(..., s1) can not stop at the end.
+    s1  = 0123456789
+    s2  = I gotcha!
+Copied strings: strcpy(s1, sc1)
+        strcpy overwrites onto s2.
+    s1  = 0123456789
+    s2  = I gotcha!
+</code></pre>
+
+<p>Only <code>safe_strncpy</code> works safely as seen above.</p>
+<h3 id="libc-file-operations">libc: file operations</h3>
+<p>File operation in C can be done with different levels.</p>
+<ul>
+<li>low level file descriptor based operations:
+<ul>
+<li><code>open</code>(2): open and possibly create the file and return a new file descriptor</li>
+<li><code>close</code>(2): close the file descriptor</li>
+<li><code>lseak</code>(2): reposition read/write file offset associated with the file descriptor</li>
+<li><code>read</code>(2): read from the file descriptor</li>
+<li><code>write</code>(2): write to the file descriptor</li>
+<li><code>mmap</code>(2): map file associated with the file descriptor into memory</li>
+<li><code>fcntl</code>(2): manipulate file descriptor</li>
+</ul>
+</li>
+</ul>
+<p>Predefined file descriptor macros</p>
+
+<pre><code>$ grep FILENO /usr/include/unistd.h
+#define    STDIN_FILENO    0    /* Standard input.  */
+#define    STDOUT_FILENO    1    /* Standard output.  */
+#define    STDERR_FILENO    2    /* Standard error output.  */
+</code></pre>
+
+<ul>
+<li>high level stream IO based operations:
+<ul>
+<li><code>fopen</code>(3): open and possibly create the file and associate the stream with the file</li>
+<li><code>fclose</code>(3): close the stream</li>
+<li><code>feof</code>(3):  test the end-of-file indicator for the stream</li>
+<li><code>ferror</code>(3): test the error indicator for the stream</li>
+<li><code>getc</code>(3): read a character from the binary stream</li>
+<li><code>putc</code>(3): write a character to the binary stream</li>
+<li><code>fread</code>(3): read blocks of data from the binary stream</li>
+<li><code>fwrite</code>(3): write blocks of data to the binary stream</li>
+<li><code>fprintf</code>(3): formatted text stream output conversion</li>
+<li><code>fscanf</code>(3): formatted text stream input conversion</li>
+</ul>
+</li>
+</ul>
+<p>Predefined file stream macros</p>
+
+<pre><code>$ grep &#34;# *define *std&#34; /usr/include/stdio.h
+#define stdin stdin
+#define stdout stdout
+#define stderr stderr
+</code></pre>
+
+<p>Let&rsquo;s learn fundamentals of file operation by creating simple codes such as
+<a href="#libc-size-of-a-file">size of a file</a> or <a href="#libc-copy-a-file">copy a file</a>.
+These example codes are not meant to be the fastest nor the shortest code.</p>
+<h3 id="libc-size-of-a-file">libc: size of a file</h3>
+<p>We can think of 4 different methods to obtain the size of a file.</p>
+<ul>
+<li><em>char</em> : read and count characters</li>
+<li><em>block</em> : read blocks and count characters</li>
+<li><em>lseek</em> : move file offset and count characters</li>
+<li><em>stat</em> : obtain file size from the directory it belongs</li>
+</ul>
+<p>Since <em>stat</em> method works only for real files but not for symlinks, <em>lseek</em>
+method seems to be the most popular one used.</p>
+<p>Here are benchmark results of these methods using <code>perf</code> (See <a href="/en/2013/08/17/fun2prog-debug-4/#perf">Debug: level 4: perf</a>).</p>
+<p>Speed benchmark of various methods to obtain the file size.</p>
+<!-- raw HTML omitted -->
+<table>
+<thead>
+<tr>
+<th>Performance counter stats</th>
+<th>char</th>
+<th>block</th>
+<th>lseek</th>
+<th>stat</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>seconds time elapsed</td>
+<td>0.060168937</td>
+<td>0.004092420</td>
+<td>0.002638296</td>
+<td>0.002588425</td>
+</tr>
+<tr>
+<td>task-clock</td>
+<td>59.126037</td>
+<td>3.051782</td>
+<td>1.616662</td>
+<td>1.634113</td>
+</tr>
+<tr>
+<td>context-switches</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>cpu-migrations</td>
+<td>1</td>
+<td>1</td>
+<td>0</td>
+<td>1</td>
+</tr>
+<tr>
+<td>page-faults</td>
+<td>193</td>
+<td>193</td>
+<td>191</td>
+<td>191</td>
+</tr>
+<tr>
+<td>cycles</td>
+<td>154,305,859</td>
+<td>2,428,799</td>
+<td><!-- raw HTML omitted --></td>
+<td>1,297,107</td>
+</tr>
+<tr>
+<td>stalled-cycles-frontend</td>
+<td>32,413,607</td>
+<td>1,237,525</td>
+<td>787,158</td>
+<td>805,663</td>
+</tr>
+<tr>
+<td>stalled-cycles-backend</td>
+<td>3,089,296</td>
+<td>828,200</td>
+<td>612,162</td>
+<td>627,711</td>
+</tr>
+<tr>
+<td>branches</td>
+<td>87,138,178</td>
+<td>382,322</td>
+<td>209,395</td>
+<td>208,836</td>
+</tr>
+<tr>
+<td>branch-misses</td>
+<td>14,795</td>
+<td><!-- raw HTML omitted --></td>
+<td>9,023</td>
+<td><!-- raw HTML omitted --></td>
+</tr>
+</tbody>
+</table>
+<p>If you wish to do more than just counting characters, other methods may give
+good starting point for such programs.  I will list all the source of <code>size.c</code> as below.</p>
+<p>Read size of a file (char)</p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdio.h&gt;      /* printf, perror */
+#include &lt;errno.h&gt;      /* perror */
+#include &lt;stdlib.h&gt;     /* exit */
+#include &lt;fcntl.h&gt;      /* open */
+#include &lt;sys/stat.h&gt;   /* open */
+#include &lt;sys/types.h&gt;  /* open lseek */
+#include &lt;unistd.h&gt;     /* lseek */
+#include &lt;locale.h&gt;     /* setlocale */
+
+int
+main(int argc, char* argv[])
+{
+    FILE *f;
+    off_t size = 0;
+    if (argc != 2) {
+        printf(&#34;E: Need a filename as an argument.\n&#34;);
+        return EXIT_FAILURE;
+    }
+    f = fopen(argv[1], &#34;r&#34;);
+    if (f == NULL) {
+        perror(&#34;E: Can not open input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+
+    for (;;) {
+        fgetc(f);
+        if (ferror(f)) {
+            perror(&#34;E: Error reading input file&#34;);
+            exit(EXIT_FAILURE);
+        }
+        if (feof(f)) {
+            break;
+        } else {
+            size &#43;= 1;
+        }
+    }
+    if (fclose(f)) {
+        perror(&#34;E: Can not close input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+
+    setlocale(LC_ALL,&#34;&#34;);
+    return (printf(&#34;\nFile size: %&#39;zi\n&#34;, size));
+}
+
+</code></pre>
+
+<p>Read size of a file (block)</p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt; /* exit, malloc */
+#include &lt;stdio.h&gt;  /* printf, perror, freed */
+#include &lt;errno.h&gt;  /* perror */
+#include &lt;locale.h&gt; /* setlocale */
+#define BUFFSIZE (1024*4)
+int
+main(int argc, char* argv[])
+{
+    FILE *f;
+    char *buf;
+    size_t n = BUFFSIZE, i, size = 0;
+    if (argc != 2) {
+        printf(&#34;E: Need a filename as an argument.\n&#34;);
+        return EXIT_FAILURE;
+    }
+    if ((buf = (char *) malloc(n)) == NULL) {
+        perror(&#34;E: Can not make a buffer&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if ((f = fopen(argv[1], &#34;r&#34;)) == NULL) {
+        perror(&#34;E: Can not open input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    for (;;) {
+        i = fread(buf, 1, n, f);
+        if (ferror(f)) {
+            perror(&#34;E: Error reading input file&#34;);
+            exit(EXIT_FAILURE);
+        } else if (i == 0) {
+            break;
+        } else {
+            size &#43;= i;
+        }
+    }
+    if (fclose(f)) {
+        perror(&#34;E: Can not close input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    setlocale(LC_ALL,&#34;&#34;);
+    return (printf(&#34;\nFile size: %&#39;zi\n&#34;, size));
+}
+
+</code></pre>
+
+<p>Read size of a file (lseek)</p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdio.h&gt;      /* printf, perror */
+#include &lt;errno.h&gt;      /* perror */
+#include &lt;stdlib.h&gt;     /* exit */
+#include &lt;fcntl.h&gt;      /* open */
+#include &lt;sys/stat.h&gt;   /* open */
+#include &lt;sys/types.h&gt;  /* open, lseek */
+#include &lt;unistd.h&gt;     /* lseek */
+#include &lt;locale.h&gt;     /* setlocale */
+
+int
+main(int argc, char* argv[])
+{
+    int fd;
+    off_t size;
+    if (argc != 2) {
+        printf(&#34;E: Need a filename as an argument.\n&#34;);
+        return EXIT_FAILURE;
+    }
+    if ((fd = open(argv[1], O_RDONLY)) == -1) {
+        perror(&#34;E: Can not open input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    size = lseek(fd, 0, SEEK_END);
+    setlocale(LC_ALL,&#34;&#34;);
+    printf(&#34;\nFile size: %&#39;zi\n&#34;, size);
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Read size of a file (stat)</p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdio.h&gt;      /* printf, perror */
+#include &lt;errno.h&gt;      /* perror */
+#include &lt;stdlib.h&gt;     /* exit */
+#include &lt;sys/types.h&gt;  /* stat */
+#include &lt;sys/stat.h&gt;   /* stat */
+#include &lt;unistd.h&gt;     /* stat */
+#include &lt;locale.h&gt;     /* setlocale */
+
+int
+main(int argc, char* argv[])
+{
+    struct stat st;
+    off_t size;
+    if (argc != 2) {
+        printf(&#34;E: Need a filename as an argument.\n&#34;);
+        return EXIT_FAILURE;
+    }
+    if (stat(argv[1], &amp;st) == -1) {
+        perror(&#34;E: Can not stat input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    size = st.st_size;
+    setlocale(LC_ALL,&#34;&#34;);
+    printf(&#34;\nFile size: %&#39;zi\n&#34;, size);
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>All the above example can be compiled as follows.</p>
+<p>Example of compiling <code>size.c</code>.</p>
+
+<pre><code>$ gcc -Wall -o size size.c
+</code></pre>
+
+<h3 id="libc-copy-a-file">libc: copy a file</h3>
+<p>We can think of 5 different methods to copy a file.</p>
+<ul>
+<li><em>char</em> : copy a character at a time</li>
+<li><em>block</em> : copy a block (4 KiB) at a time</li>
+<li><em>block big</em> : copy a block (4 MiB) at a time</li>
+<li><em>mmap memcpy</em> : use <code>mmap</code>(2) to map input and output files while copying data with <code>memcpy</code>(3).</li>
+<li><em>mmap write</em> : use <code>mmap</code>(2) to map input file while writing data with <code>write</code>(2) from the memory.</li>
+</ul>
+<p>Here are benchmark results of these methods using <code>perf</code> (See <a href="/en/2013/08/17/fun2prog-debug-4/#perf">Debug: level 4: perf</a>).</p>
+<p>Speed benchmark of various methods to copy a large file about 2.4 MiB.</p>
+<!-- raw HTML omitted -->
+<table>
+<thead>
+<tr>
+<th>Performance counter stats</th>
+<th>char</th>
+<th>block</th>
+<th>block big</th>
+<th>mmap memcpy</th>
+<th>mmap write</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>seconds time elapsed</td>
+<td>0.089096423</td>
+<td>0.015654253</td>
+<td>0.016963338</td>
+<td>0.018813373</td>
+<td>0.018040972</td>
+</tr>
+<tr>
+<td>task-clock</td>
+<td>78.600617</td>
+<td>5.916846</td>
+<td>7.286212</td>
+<td>8.114573</td>
+<td>6.747344</td>
+</tr>
+<tr>
+<td>context-switches</td>
+<td>12</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+<td>5</td>
+</tr>
+<tr>
+<td>cpu-migrations</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>page-faults</td>
+<td>132</td>
+<td>132</td>
+<td>715</td>
+<td>1,283</td>
+<td>694</td>
+</tr>
+<tr>
+<td>cycles</td>
+<td>213,622,432</td>
+<td>8,787,602</td>
+<td>9,975,035</td>
+<td>9,506,449</td>
+<td>8,258,812</td>
+</tr>
+<tr>
+<td>stalled-cycles-frontend</td>
+<td>46,249,968</td>
+<td>5,289,960</td>
+<td>4,939,101</td>
+<td>4,771,343</td>
+<td>4,421,422</td>
+</tr>
+<tr>
+<td>stalled-cycles-backend</td>
+<td>8,069,075</td>
+<td>3,617,957</td>
+<td>3,660,122</td>
+<td>3,965,894</td>
+<td>3,223,960</td>
+</tr>
+<tr>
+<td>branches</td>
+<td>118,042,429</td>
+<td>1,614,855</td>
+<td>1,639,492</td>
+<td>1,555,953</td>
+<td>1,442,130</td>
+</tr>
+<tr>
+<td>branch-misses</td>
+<td>20,800</td>
+<td>12,048</td>
+<td>10,295</td>
+<td>8,539</td>
+<td><!-- raw HTML omitted --></td>
+</tr>
+</tbody>
+</table>
+<p>Speed benchmark of various methods to copy a small file about 2 KiB.</p>
+<!-- raw HTML omitted -->
+<table>
+<thead>
+<tr>
+<th>Performance counter stats</th>
+<th>char</th>
+<th>block</th>
+<th>block big</th>
+<th>mmap memcpy</th>
+<th>mmap write</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>seconds time elapsed</td>
+<td>0.002350776</td>
+<td>0.001894332</td>
+<td>0.001848917</td>
+<td>0.002023421</td>
+<td>0.002016262</td>
+</tr>
+<tr>
+<td>task-clock</td>
+<td>1.335467</td>
+<td>1.008275</td>
+<td>0.954096</td>
+<td>1.053580</td>
+<td>1.013171</td>
+</tr>
+<tr>
+<td>context-switches</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>cpu-migrations</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>page-faults</td>
+<td>132</td>
+<td>132</td>
+<td>132</td>
+<td>117</td>
+<td>111</td>
+</tr>
+<tr>
+<td>cycles</td>
+<td><!-- raw HTML omitted --></td>
+<td>731,955</td>
+<td>769,188</td>
+<td>606,346</td>
+<td>616,053</td>
+</tr>
+<tr>
+<td>stalled-cycles-frontend</td>
+<td>696,792</td>
+<td>625,996</td>
+<td>648,758</td>
+<td>579,552</td>
+<td>552,678</td>
+</tr>
+<tr>
+<td>stalled-cycles-backend</td>
+<td>536,087</td>
+<td>495,138</td>
+<td>513,756</td>
+<td>455,248</td>
+<td>434,162</td>
+</tr>
+<tr>
+<td>branches</td>
+<td>153,252</td>
+<td>125,526</td>
+<td>127,090</td>
+<td>102,813</td>
+<td>99,467</td>
+</tr>
+<tr>
+<td>branch-misses</td>
+<td>3,292</td>
+<td><!-- raw HTML omitted --></td>
+<td>2,232</td>
+<td>2,474</td>
+<td><!-- raw HTML omitted --></td>
+</tr>
+</tbody>
+</table>
+<p>The <em>char</em> method works the slowest as expected.</p>
+<p>The <em>block</em> method works slightly faster than all other methods excluding the
+<em>char</em> method which is significantly slower.</p>
+<p>If you wish to do more than just copying a file, other methods may give good
+starting point for such programs.  For example, if many programs access the
+same file simultaneously, use of <code>mmap</code>(2) should have major advantage over
+simple block method.  I will list all the source of <code>cp.c</code> as below.</p>
+<p>Read copy a file (char)</p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt;     /* exit */
+#include &lt;stdio.h&gt;      /* printf, perror */
+#include &lt;errno.h&gt;      /* perror */
+#include &lt;locale.h&gt;     /* setlocale */
+
+int
+main(int argc, char* argv[])
+{
+    FILE *fi, *fo;
+    int i;
+    if (argc != 3) {
+        printf(&#34;E: Need 2 filenames as arguments.\n&#34;);
+        return EXIT_FAILURE;
+    }
+    if ((fi = fopen(argv[1], &#34;r&#34;)) == NULL) {
+        perror(&#34;E: Can not open input file&#34;);
+        return EXIT_FAILURE;
+    }
+    if ((fo = fopen(argv[2], &#34;w&#34;)) == NULL) {
+        perror(&#34;E: Can not open output file&#34;);
+        return EXIT_FAILURE;
+    }
+    for (;;) {
+        i = getc(fi);
+        if (ferror(fi)) {
+            perror(&#34;E: Error reading input file&#34;);
+            exit(EXIT_FAILURE);
+        } else if (feof(fi)) {
+            break;
+        } else {
+            putc(i, fo);
+        }
+    }
+    if (fclose(fi)) {
+        perror(&#34;E: Can not close input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (fclose(fo)) {
+        perror(&#34;E: Can not close output file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Copy a file (block)</p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt; /* exit, malloc */
+#include &lt;stdio.h&gt;  /* printf, perror, freed */
+#include &lt;errno.h&gt;  /* perror */
+#include &lt;locale.h&gt; /* setlocale */
+#define BUFFSIZE (1024*4)
+
+int
+main(int argc, char* argv[])
+{
+    FILE *fi, *fo;
+    char *buf;
+    size_t n = BUFFSIZE, i;
+    if (argc != 3) {
+        printf(&#34;E: Need 2 filenames as arguments.\n&#34;);
+        return EXIT_FAILURE;
+    }
+    if ((fi = fopen(argv[1], &#34;r&#34;)) == NULL) {
+        perror(&#34;E: Can not open input file&#34;);
+        return EXIT_FAILURE;
+    }
+    if ((fo = fopen(argv[2], &#34;w&#34;)) == NULL) {
+        perror(&#34;E: Can not open output file&#34;);
+        return EXIT_FAILURE;
+    }
+    if ((buf = (char *) malloc(n)) == NULL) {
+        perror(&#34;E: Can not make a buffer&#34;);
+        exit(EXIT_FAILURE);
+    }
+    for (;;) {
+        i = fread(buf, 1, n, fi);
+        if (ferror(fi)) {
+            perror(&#34;E: Error reading input file&#34;);
+            exit(EXIT_FAILURE);
+        } else if (i == 0) {
+            break;
+        } else {
+            if (fwrite(buf, 1, i, fo) != i) {
+                perror(&#34;E: Error writing output file&#34;);
+                exit(EXIT_FAILURE);
+            }
+        }
+    }
+    if (fclose(fi)) {
+        perror(&#34;E: Can not close input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (fclose(fo)) {
+        perror(&#34;E: Can not close output file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Copy a file (big block) replaces <code>#define BUFFSIZE (1024*4)</code> in the above with
+<code>#define BUFFSIZE (1024*1024*4)</code>.</p>
+<p>Copy a file (mmap+memcpy)</p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt; /* exit, malloc */
+#include &lt;stdio.h&gt;  /* printf, perror */
+#include &lt;errno.h&gt;  /* perror */
+#include &lt;fcntl.h&gt;      /* open */
+#include &lt;unistd.h&gt;     /* lseek, write */
+#include &lt;sys/stat.h&gt;   /* open */
+#include &lt;sys/types.h&gt;  /* open, lseek */
+#include &lt;sys/mman.h&gt;   /* mmap */
+#include &lt;locale.h&gt; /* setlocale */
+#include &lt;string.h&gt;     /* memcpy */
+int
+main(int argc, char* argv[])
+{
+    int fdi, fdo;
+    void *src, *dst;
+    size_t size;
+    ssize_t offset;
+    if (argc != 3) {
+        printf(&#34;E: Need 2 filenames as arguments.\n&#34;);
+        return EXIT_FAILURE;
+    }
+    if ((fdi = open(argv[1], O_RDONLY)) &lt; 0) {
+        perror(&#34;E: Can not open input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    size = lseek(fdi, 0, SEEK_END);
+    src = mmap(NULL, size, PROT_READ, MAP_SHARED, fdi, 0);
+    if (src == (void *) -1) {
+        perror(&#34;E: Can not map input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if ((fdo = open(argv[2], O_CREAT | O_RDWR | O_TRUNC, 00666)) &lt; 0) {
+        perror(&#34;E: Can not open output file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    offset = lseek(fdo, size -1, SEEK_SET);
+    if (offset == (ssize_t) -1) {
+        perror(&#34;E: lseek() error&#34;);
+        exit(EXIT_FAILURE);
+    }
+    offset = write(fdo, &#34;&#34;, 1); /* dummy write at the end */
+    if (offset == (ssize_t) -1) {
+        perror(&#34;E: write() error&#34;);
+        exit(EXIT_FAILURE);
+    }
+    dst = mmap(NULL, size, PROT_WRITE, MAP_SHARED, fdo, 0);
+    if (dst == MAP_FAILED) {
+        perror(&#34;E: Can not map output file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    memcpy(dst, src, size);
+    if (munmap(src, size)) {
+        perror(&#34;E: Can not unmap input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (munmap(dst, size)) {
+        perror(&#34;E: Can not unmap output file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (close(fdi)) {
+        perror(&#34;E: Can not close input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (close(fdo)) {
+        perror(&#34;E: Can not close output file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>TIP: The dummy <code>write</code> of 1 byte of 0 to the output file after <code>lseek</code> is the
+idiom to set the size of the output file with <code>mmap</code>(2).  It will be
+overwritten by the subsequent <code>memcpy</code>(3).</p>
+<p>Copy a file (mmap+write)</p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt;     /* exit, malloc */
+#include &lt;stdio.h&gt;      /* printf, perror */
+#include &lt;errno.h&gt;      /* perror */
+#include &lt;fcntl.h&gt;      /* open */
+#include &lt;unistd.h&gt;     /* stat */
+#include &lt;sys/types.h&gt;  /* open, lseek */
+#include &lt;sys/stat.h&gt;   /* open stat */
+#include &lt;sys/mman.h&gt;   /* mmap */
+#include &lt;locale.h&gt;     /* setlocale */
+#include &lt;string.h&gt;     /* memcpy */
+int
+main(int argc, char* argv[])
+{
+    int fdi, fdo;
+    struct stat st;
+    void *src;
+    size_t size;
+    ssize_t offset;
+    if (argc != 3) {
+        printf(&#34;E: Need 2 filenames as arguments.\n&#34;);
+        return EXIT_FAILURE;
+    }
+    if ((fdi = open(argv[1], O_RDONLY)) &lt; 0) {
+        perror(&#34;E: Can not open input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (stat(argv[1], &amp;st) == -1) {
+        perror(&#34;E: Can not stat input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    size = st.st_size;
+    src = mmap(NULL, size, PROT_READ, MAP_SHARED, fdi, 0);
+    if (src == (void *) -1) {
+        perror(&#34;E: Can not map input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if ((fdo = open(argv[2], O_CREAT | O_RDWR | O_TRUNC, 00666)) &lt; 0) {
+        perror(&#34;E: Can not open output file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    offset = write(fdo, src, size);
+    if (offset == (ssize_t) -1) {
+        perror(&#34;E: write() error&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (munmap(src, size)) {
+        perror(&#34;E: Can not unmap input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (close(fdi)) {
+        perror(&#34;E: Can not close input file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (close(fdo)) {
+        perror(&#34;E: Can not close output file&#34;);
+        exit(EXIT_FAILURE);
+    }
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Example of compiling <code>cp.c</code>.</p>
+
+<pre><code>$ gcc -Wall -o cp cp.c
+</code></pre>
+
+<h3 id="libc-setlocale">libc: setlocale</h3>
+<p>For decimal conversion functions provided by the <code>libc</code> library such as
+<code>printf</code>(3), the 3-digit-grouping behavior depends on the locale.  Use
+<code>setlocale</code>(3) to set the locale.</p>
+<p>Localization example of <code>printf</code> as <code>lprintf.c</code></p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;locale.h&gt;
+
+int
+main(int argc, char* argv[])
+{
+    int n = 12345678;
+    printf(&#34;init        %%i  -&gt; %i\n&#34;, n);
+    printf(&#34;init        %%&#39;i -&gt; %&#39;i\n&#34;, n);
+    setlocale(LC_ALL,&#34;&#34;);
+    printf(&#34;env         %%i  -&gt; %i\n&#34;, n);
+    printf(&#34;env         %%&#39;i -&gt; %&#39;i\n&#34;, n);
+    setlocale(LC_ALL,&#34;C&#34;);
+    printf(&#34;C           %%i  -&gt; %i\n&#34;, n);
+    printf(&#34;C           %%&#39;i -&gt; %&#39;i\n&#34;, n);
+    setlocale(LC_ALL,&#34;en_US.UTF-8&#34;);
+    printf(&#34;en_US.UTF-8 %%i  -&gt; %i\n&#34;, n);
+    printf(&#34;en_US.UTF-8 %%&#39;i -&gt; %&#39;i\n&#34;, n);
+    setlocale(LC_ALL,&#34;fr_FR.UTF-8&#34;);
+    printf(&#34;fr_FR.UTF-8 %%i  -&gt; %i\n&#34;, n);
+    printf(&#34;fr_FR.UTF-8 %%&#39;i -&gt; %&#39;i\n&#34;, n);
+    setlocale(LC_ALL,&#34;de_DE.UTF-8&#34;);
+    printf(&#34;de_DE.UTF-8 %%i  -&gt; %i\n&#34;, n);
+    printf(&#34;de_DE.UTF-8 %%&#39;i -&gt; %&#39;i\n&#34;, n);
+    setlocale(LC_ALL,&#34;ja_JP.UTF-8&#34;);
+    printf(&#34;ja_JP.UTF-8 %%i  -&gt; %i\n&#34;, n);
+    printf(&#34;ja_JP.UTF-8 %%&#39;i -&gt; %&#39;i\n&#34;, n);
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Run <code>lprintf</code></p>
+
+<pre><code>$ gcc -Wall -o lprintf lprintf.c
+$ ./lprintf
+init        %i  -&gt; 12345678
+init        %&#39;i -&gt; 12345678
+env         %i  -&gt; 12345678
+env         %&#39;i -&gt; 12,345,678
+C           %i  -&gt; 12345678
+C           %&#39;i -&gt; 12345678
+en_US.UTF-8 %i  -&gt; 12345678
+en_US.UTF-8 %&#39;i -&gt; 12,345,678
+fr_FR.UTF-8 %i  -&gt; 12345678
+fr_FR.UTF-8 %&#39;i -&gt; 12 345 678
+de_DE.UTF-8 %i  -&gt; 12345678
+de_DE.UTF-8 %&#39;i -&gt; 12.345.678
+ja_JP.UTF-8 %i  -&gt; 12345678
+ja_JP.UTF-8 %&#39;i -&gt; 12,345,678
+</code></pre>
+
+<p>TIP: The text translation mechanism also uses the locale.  See <code>gettext</code>(3) and &ldquo;<code>info gettext</code>&rdquo;.</p>
+<h3 id="libm">libm</h3>
+<p>Although most of standard C library functions are included in the <code>libc</code> library,
+some math related library functions are in the separate <code>libm</code> library.</p>
+<p>So such program requires to be linked not just to <code>libc</code> but also to <code>libm</code>.</p>
+<p>Let&rsquo;s consider <code>math.c</code> to calculate <code>sin(60 degree)</code>.</p>
+<p>Source code: math.c</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;math.h&gt;
+double
+sindeg(double x)
+{
+    return sin(x * 3.141592 / 180.0);
+}
+
+int
+main()
+{
+    double x, y;
+    x = 60.0;
+    y = sindeg(x);
+    printf(&#34;angle = %f degree, sin(angle) = %f\n&#34;, x, y);
+    exit(0);
+}
+</code></pre>
+
+<p>Let&rsquo;s compile <code>math.c</code> while linking to the <code>libm</code> library to create an ELF executable object <code>math</code> and run it.</p>
+
+<pre><code>$ gcc -Wall -omath math.c -lm
+$ ./math
+angle = 60.000000 degree, sin(angle) = 0.866025
+</code></pre>
+
+<p>TIP: The linked library is specified after the <code>-l</code> option to GCC while removing the leading <code>lib</code> from the library name.</p>
+<p>Let&rsquo;s list linked libraries to the ELF executable object <code>hello</code>.</p>
+
+<pre><code>$ ldd math
+ldd: ./math: No such file or directory
+</code></pre>
+
+<ul>
+<li><code>linux-vdso.so.1</code> : Linux Virtual Dynamic Shared Object</li>
+<li><code>libm.so.6</code> : The GNU C Library (glibc, support math functions)</li>
+<li><code>libc.so.6</code> : The GNU C Library (glibc)</li>
+<li><code>/lib64/ld-linux-x86-64.so.2</code> :  dynamic linker/loader</li>
+</ul>
+<p>We can split <code>math.c</code> into 3 files and compile each code piece.</p>
+<p>Source code: math-main.c containing the main() function only</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &#34;sindeg.h&#34;
+int main()
+{
+    double x, y;
+    x = 60.0;
+    y = sindeg(x);
+    printf(&#34;angle = %f degree, sin(angle) = %f\n&#34;, x, y);
+    exit(0);
+}
+</code></pre>
+
+<p>Source code: sindeg.c containing the sindeg() function only</p>
+
+<pre><code>#include &lt;math.h&gt;
+double sindeg(double x)
+{
+    return sin(x * 3.141592 / 180.0);
+}
+</code></pre>
+
+<p>Source code: sindeg.h containing the header information of sindeg()</p>
+
+<pre><code>double sindeg(double x);
+</code></pre>
+
+<p>Let&rsquo;s compile these into separate object files (<code>*.o</code> files) with the <code>-c</code> option
+and link them into a executable <code>math-main</code> specified with the <code>-o</code> option.</p>
+<p>Building math-main via separate object files and running it.</p>
+
+<pre><code>$ gcc -Wall -c math-main.c
+$ gcc -Wall -c sindeg.c
+$ gcc -Wall -o math-main math-main.o sindeg.o -lm
+$ ./math-main
+angle = 60.000000 degree, sin(angle) = 0.866025
+</code></pre>
+
+<h3 id="libdl">libdl</h3>
+<p><code>libdl</code> provides the following generic functions for the dynamic loader.</p>
+<ul>
+<li><code>dlopen</code>(3): POSIX</li>
+<li><code>dlerror</code>(3): POSIX</li>
+<li><code>dlsym</code>(3): POSIX</li>
+<li><code>dlclose</code>(3): POSIX</li>
+<li><code>dladdr</code>(3): Glibc extensions</li>
+<li><code>dlvsym</code>(3): Glibc extensions</li>
+</ul>
+<p>Let&rsquo;s convert <code>math.c</code> to <code>math-dl.c</code> which uses <code>libm</code> via dynamic linking
+loader provided by <code>libdl</code>.  Here, function names prefixed with <code>v</code> are defined
+as wrappers for the <code>dlopen</code>, <code>dlsym</code>, and <code>dlclose</code> functions providing
+verbose error reporting.  So the core is just <code>main()</code>.</p>
+<p>Source code: math-dl.c</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;dlfcn.h&gt;
+
+void *
+vdlopen(const char *filename, int flag) {
+    void *dl_handle;
+    dl_handle = dlopen(filename, RTLD_LAZY);
+    if (!dl_handle) {
+        printf(&#34;Load %s library, error: %s\n&#34;, filename, dlerror());
+        exit(EXIT_FAILURE);
+    } else {
+        printf(&#34;Load %s library, success!\n&#34;, filename);
+    }
+    return dl_handle;
+}
+
+void *
+vdlsym(void *handle, const char *symbol) {
+    double (*func)(double); /* Yep ... this is only for double */
+    func = dlsym(handle, symbol);
+    if (!func) {
+        printf(&#34;Load %s symbol, error: %s\n&#34;, symbol, dlerror());
+        exit(EXIT_FAILURE);
+    } else {
+        printf(&#34;Load %s symbol, success!\n&#34;, symbol);
+    }
+    return func;
+}
+
+int
+vdlclose(void *handle) {
+    int i;
+    i = dlclose(handle);
+    if (i) {
+        printf(&#34;Unload error %i: %s\n&#34;, i, dlerror());
+        exit(EXIT_FAILURE);
+    } else {
+        printf(&#34;Unload, success!\n&#34;);
+    }
+    return i;
+}
+
+int
+main()
+{
+    double x, y;
+    x = 60.0;
+    char *lib = &#34;libm.so&#34;;
+    char *method = &#34;sin&#34;;
+    void *dl_handle;
+    double (*func)(double);
+    dl_handle = vdlopen(lib, RTLD_LAZY);
+    func = vdlsym(dl_handle, method);
+    y = (*func)(x * 3.141592 / 180.0);
+    printf(&#34;angle = %f degree, sin(angle) = %f\n&#34;, x, y);
+    vdlclose(dl_handle);
+    exit(0);
+}
+
+</code></pre>
+
+<p>Let&rsquo;s compile this <code>math-dl.c</code> by not directly linking to <code>libm</code> but to <code>libdl</code>.</p>
+<p>Building math-dl and running it.</p>
+
+<pre><code>$ gcc -Wall -rdynamic -omath-dl math-dl.c -ldl
+$ ./math-dl
+Load libm.so library, success!
+Load sin symbol, success!
+angle = 60.000000 degree, sin(angle) = 0.866025
+Unload, success!
+</code></pre>
+
+<p>The <code>-rdynamic</code> option is used to add all symbols to the dynamic symbol table
+to permit backtraces with the use of dlopen.  The <code>-ldl</code> option is for the
+<code>libdl.so</code> library.  You do not need the <code>-lm</code> option here but need <code>libm.so</code>
+library installed in the system.</p>
+<h3 id="libpthread">libpthread</h3>
+<p>The <a href="http://en.wikipedia.org/wiki/Thread_(computing)">thread</a> can efficiently implement parallelism for shared memory multiprocessor architectures, such as SMPs.  The thread creation does not copy ever resources like the <a href="http://en.wikipedia.org/wiki/Fork-exec">fork-exec</a> multiprocessing mechanism of the UNIX-like system.  <a href="http://en.wikipedia.org/wiki/POSIX_Threads">POSIX thread</a> is supported by the modern GNU/Linux (with [Linux kernel 2.6 or newer]) with the <code>libpthread</code> library.  Here are some references and tutorials.</p>
+<ul>
+<li><a href="https://computing.llnl.gov/tutorials/parallel_comp/">Introduction to Parallel Computing</a></li>
+<li><a href="https://computing.llnl.gov/tutorials/pthreads/">POSIX Threads Programming</a></li>
+<li><a href="http://www.gentoo.org/doc/en/articles/l-posix1.xml">POSIX threads explained</a> (updated, based on <a href="http://www.ibm.com/developerworks/library/l-posix1/">IBM developerWorks: POSIX threads explained</a>.)</li>
+</ul>
+<!-- raw HTML omitted -->
+<p>TIP: We should focus on reading tutorials which are written after the <a href="http://en.wikipedia.org/wiki/Native_POSIX_Thread_Library">native POSIX thread library (NPTL)</a> support.  This means tutorial should be newer than 2006.</p>
+<p>The actual execution speed of a program on the modern CPU can be affected by many issues other than the utilization of CPU cores:</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Out-of-order_execution">Out-of-order execution</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Instruction-level_parallelism">Instruction-level parallelism</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Instruction_pipeline">Instruction pipeline</a></li>
+<li><a href="http://en.wikipedia.org/wiki/CPU_cache">CPU cache</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Cache_coherence">Cache coherence</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Amdahl">http://en.wikipedia.org/wiki/Amdahl</a>'s_law[Amdahl&rsquo;s law]</li>
+</ul>
+<p>I am no expert to tell how all these fit together.  But seeing is believing. Let&rsquo;s use a touched-up C programs to list prime numbers based on <code>while</code>-loop style in <a href="/en/2013/08/17/fun2prog-prime/#c-with-the-list-variants">C with the list (variants)</a> to to experiment with the POSIX thread programing.  This algorithm has some sequential nature.  So the task of partitioning the program into parallel and mostly independent code is non-trivial.  The observed execution time figures are significantly different.</p>
+<ul>
+<li><code>prime5.c</code>: fast
+<ul>
+<li>single-threaded program, a uninterrupted tight code.</li>
+</ul>
+</li>
+<li><code>prime6.c</code>: slow
+<ul>
+<li>multi-threaded program, a thread started for each integer.</li>
+</ul>
+</li>
+<li><code>prime7.c</code>: very slow
+<ul>
+<li>multi-threaded program, fixed number of threads are started and controlled via <a href="http://en.wikipedia.org/wiki/Semaphore_(programming)">semaphore</a>.</li>
+</ul>
+</li>
+<li><code>prime8.c</code>: very fast
+<ul>
+<li>multi-threaded program, fixed number of threads are started only for the time consuming large number portion while each thread is written as a uninterrupted tight code.</li>
+</ul>
+</li>
+</ul>
+<p>Here is a benchmark results of execution times for these programs listed below.</p>
+<p>Speed benchmark of various program languages</p>
+<!-- raw HTML omitted -->
+<table>
+<thead>
+<tr>
+<th>Program</th>
+<th style="text-align:right">real(2^20)</th>
+<th style="text-align:right">user(2^20)</th>
+<th style="text-align:right">sys(2^20)</th>
+<th style="text-align:right">real(2^24)</th>
+<th style="text-align:right">user(2^24)</th>
+<th style="text-align:right">sys(2^24)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>prime5.c</code></td>
+<td style="text-align:right">0.15</td>
+<td style="text-align:right">0.15</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">5.62</td>
+<td style="text-align:right">5.60</td>
+<td style="text-align:right">0.02</td>
+</tr>
+<tr>
+<td><code>prime6.c</code></td>
+<td style="text-align:right">0.48</td>
+<td style="text-align:right">0.09</td>
+<td style="text-align:right">1.15</td>
+<td style="text-align:right">7.38</td>
+<td style="text-align:right">1.52</td>
+<td style="text-align:right">18.30</td>
+</tr>
+<tr>
+<td><code>prime7.c</code></td>
+<td style="text-align:right">0.77</td>
+<td style="text-align:right">0.26</td>
+<td style="text-align:right">1.80</td>
+<td style="text-align:right">12.01</td>
+<td style="text-align:right">5.18</td>
+<td style="text-align:right">27.82</td>
+</tr>
+<tr>
+<td><code>prime8.c</code></td>
+<td style="text-align:right">0.05</td>
+<td style="text-align:right">0.28</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">1.61</td>
+<td style="text-align:right">10.27</td>
+<td style="text-align:right">0.08</td>
+</tr>
+</tbody>
+</table>
+<p>Here, the time reported by the <code>/usr/bin/time -p</code> command is in POSIX standard 1003.2 style:</p>
+<ul>
+<li><code>real</code>: Elapsed real (wall clock) time used by the process, in seconds.</li>
+<li><code>user</code>: Total number of CPU-seconds that the process used directly (in user mode), in seconds.</li>
+<li><code>sys</code>: Total number of CPU-seconds used by the system on behalf of the process (in kernel mode), in seconds.</li>
+</ul>
+<p>It seems that the <code>user</code> time and the <code>sys</code> time add up all multi-threaded time figures so they may end up in larger figure than the <code>real</code> time figure for multi-threaded programs.  There are a similar <code>sar</code> command offered by the <code>sysstat</code> and <code>atsar</code> packages which has more functionalities.  But if you are looking for more insight for the time, you should consider using the <code>perf</code> command. See <a href="/en/2013/08/17/fun2prog-debug-2/#perf">Debug: level 2; perf</a>.</p>
+<p>TIP: Unless properly used, the use of the thread mechanism does not guarantee the faster code.</p>
+<h4 id="prime5c-single-threaded-program-a-uninterrupted-tight-code"><code>prime5.c</code>: single-threaded program, a uninterrupted tight code.</h4>
+<p>Source code for the C program: prime5.c</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#define TRUE 1
+#define FALSE 0
+
+struct _primelist {
+    long prime; 
+    struct _primelist *next;
+    };
+typedef struct _primelist primelist;
+
+primelist *head=NULL, *tail=NULL;
+
+int checkprime(long n) {
+    primelist *p;
+    long i, n_div_i, n_mod_i;
+    int flag;
+    flag = TRUE;
+    p = head;
+    while(p) {
+        i = p-&gt;prime;
+        n_div_i = n / i;
+        n_mod_i = n % i;
+        if (n_mod_i == 0) {
+            flag = FALSE;
+            break; /* found not to be prime */
+        }
+        if (n_div_i &lt; i) {
+            break; /* no use doing more i-loop if n &lt; i*i */
+        }
+        p = p-&gt;next;
+    }
+    return flag;
+}
+
+int main(int argc, char **argv) {
+    primelist *p=NULL, *q=NULL;
+    long n, n_max;
+    n_max = atol(argv[1]);
+    head = calloc(1, sizeof(primelist));
+    tail = head;
+    tail-&gt;prime = 2;
+    n = 2;
+    while(n &lt;= n_max) {
+        n&#43;&#43;;
+        if (checkprime(n)) {
+            q= calloc(1, sizeof(primelist));
+            tail-&gt;next = q;
+            tail = q;
+            tail-&gt;prime = n;
+        }
+    }
+    p=head;
+    while(p) {
+        printf (&#34;%ld\n&#34;, p-&gt;prime);
+        p = p-&gt;next;
+    }
+    p=head;
+    while(p) {
+        q = p-&gt;next;
+	    free(p);
+	    p = q;
+    }
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Behavior of the C program: <code>prime5.c</code></p>
+
+<pre><code>$ /usr/bin/time -p ./prime5 &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 0.15
+user 0.15
+sys 0.00
+$ /usr/bin/time -p ./prime5 &#34;$(echo 2^24 | bc)&#34;&gt;/dev/null
+real 5.62
+user 5.60
+sys 0.02
+</code></pre>
+
+<h4 id="prime6c-multi-threaded-program-a-thread-started-for-each-integer"><code>prime6.c</code>: multi-threaded program, a thread started for each integer.</h4>
+<p>Source code for the Vala program: prime6.c</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;semaphore.h&gt;
+#include &lt;pthread.h&gt;
+#define TRUE 1
+#define FALSE 0
+#define TMAX 64L
+
+struct _primelist {
+    long prime; 
+    struct _primelist *next;
+    };
+typedef struct _primelist primelist;
+
+struct _thdata {
+    pthread_t           th;
+    int                 flag;
+};
+typedef struct _thdata thdata;
+
+primelist *head=NULL, *tail=NULL;
+
+thdata       thd[TMAX];
+
+int checkprime(long n) {
+    primelist *p;
+    long i, n_div_i, n_mod_i;
+    int flag;
+    flag = TRUE;
+    p = head;
+    while(p) {
+        i = p-&gt;prime;
+        n_div_i = n / i;
+        n_mod_i = n % i;
+        if (n_mod_i == 0) {
+            flag = FALSE;
+            break; /* found not to be prime */
+        }
+        if (n_div_i &lt; i) {
+            break; /* no use doing more i-loop if n &lt; i*i */
+        }
+        p = p-&gt;next;
+    }
+    return flag;
+}
+
+int main(int argc, char **argv) {
+    primelist *p=NULL, *q=NULL;
+    long n, n_max, m;
+    n_max = atol(argv[1]);
+    /* thdata = calloc(TMAX, sizeof(thdata)); */
+    head = calloc(1, sizeof(primelist));
+    tail = head;
+    tail-&gt;prime = 2;
+    n = 2; /* last number checking for prime */
+    m = 2; /* last number checked  for prime */
+    while(m &lt; n_max) {
+        if ((n &#43; 1 - m &lt; TMAX) &amp;&amp; (n &#43; 1 &lt;= m * m) &amp;&amp; (n &#43; 1 &lt;= n_max)) {
+            n = n &#43; 1;
+            /* start checkprime(n) */
+            if (pthread_create(&amp;thd[n%TMAX].th,
+                        NULL,
+                        (void *) checkprime,
+                        (void *) n) ) {
+                printf (&#34;E: error creating thread at %li\n&#34;, n);
+            }
+        }
+        if ((n &#43; 1 - m &gt;= TMAX) || (n &#43; 1 &gt; m * m) || (n &#43; 1 &gt; n_max) ) {
+            m&#43;&#43;;
+            /* close checkprime(m) */
+            pthread_join(thd[m%TMAX].th, (void *) &amp;thd[m%TMAX].flag);
+            if (thd[m%TMAX].flag) {
+                /* if prime, update list with m */
+                q = calloc(1, sizeof(primelist));
+        	    tail-&gt;next = q;
+        	    tail = q;
+            	tail-&gt;prime = m;
+            }
+        }
+    }
+    p=head;
+    while(p) {
+        printf (&#34;%ld\n&#34;, p-&gt;prime);
+        p = p-&gt;next;
+    }
+    p=head;
+    while(p) {
+        q = p-&gt;next;
+	    /* free(p); */
+	    p = q;
+    }
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Behavior of the C program: <code>prime6.c</code></p>
+
+<pre><code>$ /usr/bin/time -p ./prime6 &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 0.48
+user 0.09
+sys 1.15
+$ /usr/bin/time -p ./prime6 &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 7.38
+user 1.52
+sys 18.30
+</code></pre>
+
+<h4 id="prime7c-multi-threaded-program-fixed-number-of-threads-are-started-and-controlled-via-semaphorehttpenwikipediaorgwikisemaphore_programming"><code>prime7.c</code>: multi-threaded program, fixed number of threads are started and controlled via <a href="http://en.wikipedia.org/wiki/Semaphore_(programming)">semaphore</a>.</h4>
+<p>Source code for the Vala program: prime7.c</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;semaphore.h&gt;
+#include &lt;pthread.h&gt;
+#define TRUE 1
+#define FALSE 0
+#define TMAX 64L
+
+struct _primelist {
+    long prime; 
+    struct _primelist *next;
+    };
+typedef struct _primelist primelist;
+
+struct _thdata {
+    pthread_t           th;
+    long                n;
+    int                 flag;
+    sem_t               read_ready;
+    sem_t               read_done;
+    sem_t               write_ready;
+    sem_t               write_done;
+};
+typedef struct _thdata thdata;
+
+primelist *head=NULL, *tail=NULL;
+
+thdata       thd[TMAX];
+
+int checkprime(long n) {
+    primelist *p;
+    long i, n_div_i, n_mod_i;
+    int flag;
+    flag = TRUE;
+    p = head;
+    while(p) {
+        i = p-&gt;prime;
+        n_div_i = n / i;
+        n_mod_i = n % i;
+        if (n_mod_i == 0) {
+            flag = FALSE;
+            break; /* found not to be prime */
+        }
+        if (n_div_i &lt; i) {
+            break; /* no use doing more i-loop if n &lt; i*i */
+        }
+        p = p-&gt;next;
+    }
+    return flag;
+}
+
+void subthread(thdata *thd) {
+    while(TRUE) {
+        sem_post(&amp;(thd-&gt;read_ready));
+        sem_wait(&amp;(thd-&gt;read_done));
+        thd-&gt;flag = checkprime(thd-&gt;n);
+        sem_post(&amp;(thd-&gt;write_ready));
+        sem_wait(&amp;(thd-&gt;write_done));
+    }
+}
+
+int main(int argc, char **argv) {
+    primelist *p=NULL, *q=NULL;
+    long n, n_max, m;
+    int i;
+    n_max = atol(argv[1]);
+    head = calloc(1, sizeof(primelist));
+    tail = head;
+    tail-&gt;prime = 2;
+    for (i=0;i&lt;TMAX;i&#43;&#43;){
+        sem_init(&amp;thd[i].read_ready, 0, 0);
+        sem_init(&amp;thd[i].read_done, 0, 0);
+        sem_init(&amp;thd[i].write_ready, 0, 0);
+        sem_init(&amp;thd[i].write_done, 0, 0);
+        if (pthread_create(&amp;thd[i].th,
+                NULL, 
+                (void *) subthread, 
+                (void *) &amp;(thd[i]) ) ) {
+            printf (&#34;E: error creating thread at %i\n&#34;, i);
+        }
+    }
+    n = 2; /* last number started   checking of prime*/
+    m = 2; /* last number completed checking of prime */
+    while(m &lt; n_max) {
+        if ((n &#43; 1 - m &lt; TMAX) &amp;&amp; (n &#43; 1 &lt;= m * m) &amp;&amp; (n &#43; 1 &lt;= n_max)) {
+            n = n &#43; 1;
+            /* start checkprime(n) */
+            sem_wait(&amp;(thd[n%TMAX].read_ready));
+            thd[n%TMAX].n = n;
+            sem_post(&amp;(thd[n%TMAX].read_done));
+        }
+        if ((n &#43; 1 - m &gt;= TMAX) || (n &gt;= m * m) || (n &gt;= n_max) ) {
+            m&#43;&#43;;
+            /* close checkprime(m) */
+            sem_wait(&amp;(thd[m%TMAX].write_ready));
+            if (thd[m%TMAX].flag) {
+                /* if prime, update list with m */
+                q = calloc(1, sizeof(primelist));
+        	    tail-&gt;next = q;
+        	    tail = q;
+            	tail-&gt;prime = m;
+            }
+            sem_post(&amp;(thd[m%TMAX].write_done));
+        }
+    }
+    for (i=0;i&lt;TMAX;i&#43;&#43;){
+        if (pthread_cancel(thd[i].th)) {
+            printf (&#34;E: error canseling thread at %i\n&#34;, i);
+        }
+        
+    }
+    p=head;
+    while(p) {
+        printf (&#34;%ld\n&#34;, p-&gt;prime);
+        p = p-&gt;next;
+    }
+    p=head;
+    while(p) {
+        q = p-&gt;next;
+	    /* free(p); */
+	    p = q;
+    }
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Behavior of the C program: <code>prime7.c</code></p>
+
+<pre><code>$ /usr/bin/time -p ./prime7 &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 0.77
+user 0.26
+sys 1.80
+$ /usr/bin/time -p ./prime7 &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 12.01
+user 5.18
+sys 27.82
+</code></pre>
+
+<h4 id="prime8c-multi-threaded-program-fixed-number-of-threads-are-started-only-for-the-time-consuming-large-number-portion-while-each-thread-is-written-as-a-uninterrupted-tight-code"><code>prime8.c</code>: multi-threaded program, fixed number of threads are started only for the time consuming large number portion while each thread is written as a uninterrupted tight code.</h4>
+<p>Source code for the Vala program: prime8.c</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;semaphore.h&gt;
+#include &lt;pthread.h&gt;
+#define TRUE 1
+#define FALSE 0
+#define TMAX 64L
+
+struct _primelist {
+    long prime; 
+    struct _primelist *next;
+    };
+typedef struct _primelist primelist;
+
+primelist *head=NULL, *tail=NULL;
+
+struct _thdata {
+    pthread_t           th;
+    long                n0;
+    long                n1;
+    primelist           *head;
+    primelist           *tail;
+};
+typedef struct _thdata thdata;
+
+thdata       thd[TMAX];
+
+int checkprime(long n) {
+    primelist *p;
+    long i, n_div_i, n_mod_i;
+    int flag;
+    flag = TRUE;
+    p = head;
+    while(p) {
+        i = p-&gt;prime;
+        n_div_i = n / i;
+        n_mod_i = n % i;
+        if (n_mod_i == 0) {
+            flag = FALSE;
+            break; /* found not to be prime */
+        }
+        if (n_div_i &lt; i) {
+            break; /* no use doing more i-loop if n &lt; i*i */
+        }
+        p = p-&gt;next;
+    }
+    return flag;
+}
+
+void subthread(thdata *thd) {
+    long i;
+    primelist *p=NULL, *q=NULL;
+    thd-&gt;head = NULL;
+    for (i = thd-&gt;n0; i &lt;= thd-&gt;n1; i&#43;&#43;) {
+        if (checkprime(i)) {
+            q = calloc(1, sizeof(primelist));
+            q-&gt;prime = i;
+            if (!thd-&gt;head) {
+                thd-&gt;head = q;
+                p = q;
+            } else {
+                p-&gt;next = q;
+                p = q;
+            }
+            thd-&gt;tail = q;
+        }
+    }
+}
+
+int main(int argc, char **argv) {
+    primelist *p=NULL, *q=NULL;
+    long n, n_max, i, nd;
+    n_max = atol(argv[1]);
+    head = calloc(1, sizeof(primelist));
+    tail = head;
+    tail-&gt;prime = 2;
+    n = 2;
+    while((n - 1) * (n - 1) &lt;= n_max) {
+        n&#43;&#43;;
+        if (checkprime(n)) {
+            q= calloc(1, sizeof(primelist));
+            tail-&gt;next = q;
+            tail = q;
+            tail-&gt;prime = n;
+        }
+    }
+    nd = (n_max - n ) / (long) TMAX &#43; 1L;
+    for (i=0; i &lt; TMAX; i&#43;&#43;) {
+        /* TMAX thread of checkprime loop */
+        thd[i].n0 = n;
+        thd[i].n1 = n &#43; nd;
+        if (thd[i].n1 &gt;= n_max) {
+            thd[i].n1 = n_max;
+        }
+	n = thd[i].n1;
+        if (pthread_create(&amp;thd[i].th,
+                NULL, 
+                (void *) subthread, 
+                (void *) &amp;(thd[i]) ) ) {
+            printf (&#34;E: error creating thread at %li\n&#34;, i);
+        }
+    }
+    for (i=0; i &lt; TMAX; i&#43;&#43;) {
+        /* TMAX thread of checkprime loop */
+        if (pthread_join(thd[i].th, (void *) NULL) ) {
+            printf (&#34;E: error joining thread at %li\n&#34;, i);
+        }
+        tail-&gt;next = thd[i].head;
+        tail = thd[i].tail;
+    }
+
+    p=head;
+    while(p) {
+        printf (&#34;%ld\n&#34;, p-&gt;prime);
+        p = p-&gt;next;
+    }
+    p=head;
+    while(p) {
+        q = p-&gt;next;
+	    free(p);
+	    p = q;
+    }
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Behavior of the C program: <code>prime8.c</code></p>
+
+<pre><code>$ /usr/bin/time -p ./prime8 &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 0.05
+user 0.28
+sys 0.00
+$ /usr/bin/time -p ./prime8 &#34;$(echo 2^24 | bc)&#34;&gt;/dev/null
+real 1.61
+user 10.27
+sys 0.08
+</code></pre>
+
+<p>Actually, this program is buggy for smaller than 1090.  We will debug this later.</p>
+<p>Buggy behavior of the C program for 1090: <code>prime8.c</code></p>
+
+<pre><code>$ ./prime8 &#34;1090&#34;&gt;/dev/null; echo $?
+Segmentation fault
+139
+$ ./prime8 &#34;1091&#34;&gt;/dev/null; echo $?
+0
+</code></pre>
+
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/07/fun2prog-gcc/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/09/fun2prog-elf/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

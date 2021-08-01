@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Opening | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Opening</span></h1>
+
+<h3 class="date">Date:
+2013/08/01 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="#">***</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/02/fun2prog-hello/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<p>This &ldquo;Fun to Program&rdquo; was originally created around 2013 when I was learning
+programming on Debian system and was published to
+<a href="http://people.debian.org/~osamu/fun2prog.html">http://people.debian.org/~osamu/fun2prog.html</a> .</p>
+<p>Since this has been neglected and I thought it is good idea to go through this
+content again. I moved this content to the currently maintained site
+<a href="https://osamuaoki.github.io/">https://osamuaoki.github.io/</a> in 2021.</p>
+<p>Script examples were created in 2013.  So they may not be applicable for
+current system.</p>
+<p>In order to make it easy to trace, I am tagging all related pages under
+<a href="/tags/fun2prog/">fun2prog</a>.</p>
+<p>Initial publish dates of <a href="/tags/fun2prog/">fun2prog</a> are approximate ones in correct order.</p>
+<p>All contents are licensed as</p>
+<ul>
+<li><a href="http://www.gnu.org/licenses/gpl2.html">GPL2</a> or later and</li>
+<li><a href="http://creativecommons.org/licenses/by-sa/3.0/">CC BY-SA 3.0</a> or later, and</li>
+<li><a href="http://www.debian.org/misc/bsd.license">modified BSD</a>.</li>
+</ul>
+<p>(Pick any one of the licenses as you need if you take any parts of this.  This
+is intended to be used for any purposes with least conflicts.)</p>
+<p>Please note that the quoted part from the <code>ioputs.c</code> source remains in just LGPL (GNU Lesser General Public License).</p>
+<h2 id="what-this-is">What this is</h2>
+<p>Please consider this as a <em>note of a self-study student</em>.</p>
+<p>This is not mean to be a tutorial document to explain how to program
+nor authoritative document by an expert.</p>
+<p>I recorded how I tried to learn programing basics of the modern large software
+packages written in mixed languages using various complicated libraries. I
+provide the followings:</p>
+<ul>
+<li>Learning records of my programing and building binaries.</li>
+<li>URL links to the essential technical information for learning.</li>
+<li>Minimal explanation and many simple examples.</li>
+<li>Some summary list of things to remember.</li>
+<li>Priority on POSIX shell, Python, and C. (on Debian system)</li>
+</ul>
+<p>I hope this information is useful to others.</p>
+<p>If the tailing parts of terminal example lines are dropped to fit within 80
+character/line, they are indicated by <code>...</code> at the end of the line. (Or, I
+forced them to fit using <code>fold</code> command.)</p>
+<p>My local user name on this machine is <code>osamu</code>.  You may need to replace it with
+your user name.</p>
+<p>Please be careful about the publication date of reference documents since the
+software infrastructure is a moving target and such documentations may be
+obsoleted when you read this document.</p>
+<p>TIP: If you find any questionable contents in this document, doubt them.  If
+you find errors, let me know.</p>
+<h3 id="background">Background</h3>
+<p>To be a Debian developer, I encounter situations to deal with large software
+packages written in a combination of languages such as C, C++, Vala, Python,
+Perl, Shell, LaTex, DocBook, &hellip; with specialty cross platform build script
+generators such as autotools and cmake.  Their build tools invoke commands such
+as <code>./configure</code>, <code>make</code>, <code>gcc</code>, and <code>g++</code>.  These software packages tend to be
+linked to many libraries which make them even more complex.</p>
+<p>For example:</p>
+<ul>
+<li>GNOME: <code>gcc</code> + Glib + GTK+ + D-bus + Autoconf + Automake + Autopoint + &hellip;</li>
+<li>KDE: MOC (Metaobject compiler) + <code>g++</code> + Qt (QtCore, QtGui, &hellip;) + D-bus + Cmake + &hellip;</li>
+</ul>
+<p>Even with all these complexities, using these software package just for
+backporting is not usually out-of-reach for me as a novice programmer with the
+help of well designed packaging tools such as debhelper.  The package build
+script can be deceptively simple as the following.</p>
+<pre><code>%:
+	dh $@
+</code></pre><p>But when I need to tweak something, I get overwhelmed with the complexity.  I
+felt I have to practice program building and packaging with simpler case to
+understand its fundamentals and to become a better Debian developer.</p>
+<p>Also, being a maintainer, it is essential to know how debugger works to use it effectively.</p>
+<p>There are new major technical challenges such as multitarch and fortify of
+binary packages which I did not deal in &ldquo;Debian New Maintainers' Guide&rdquo;.  These
+needed to be addressed for newer packages, too.</p>
+<h2 id="prerequisites">Prerequisites</h2>
+<p>I expect readers of this to read the followings first.</p>
+<ul>
+<li>Debian system: <a href="http://www.debian.org/doc/manuals/debian-reference/">Debian Reference</a></li>
+<li>Debian packaging: <a href="http://www.debian.org/doc/manuals/maint-guide/">Debian New Maintainers' Guide</a></li>
+</ul>
+<p>I have browsed through tutorial contents of these documents &hellip; so I expect you to do the same.</p>
+<ul>
+<li>Unix system: <a href="http://cm.bell-labs.com/cm/cs/upe/">The Unix Programming Environment</a> (Brian W. Kernighan and Rob Pike. Prentice Hall, Inc., 1984. )</li>
+<li>POSIX shell: <a href="http://tldp.org/LDP/abs/html/">Advanced Bash-Scripting Guide</a></li>
+<li>C Language:
+** <a href="http://cm.bell-labs.com/cm/cs/cbook/">The C Programming Language</a> (2nd ed., Brian W. Kernighan, Dennis M. Ritchie Prentice Hall.)
+** Gccintro package containing &ldquo;Introduction to GCC by Brian J. Gough&rdquo;: <code>apt-get install gccintro</code> (non-free GFDL package)</li>
+<li>Python:
+** [The Python Tutorial](<a href="http://www.python.org/">http://www.python.org/</a> and <a href="http://docs.python.org/tutorial/">http://docs.python.org/tutorial/</a>)</li>
+<li>Vala: <a href="https://live.gnome.org/Vala">Vala</a> and <a href="https://live.gnome.org/Vala/Tutorial">Vala Tutorial</a></li>
+<li>Lua: [Programming in Lua](<a href="http://www.lua.org/">http://www.lua.org/</a> and  <a href="http://www.lua.org/pil/">http://www.lua.org/pil/</a>)</li>
+<li>Perl: [Perl Tutorials](<a href="http://www.perl.org/">http://www.perl.org/</a> and <a href="http://perldoc.perl.org/index-tutorials.html">http://perldoc.perl.org/index-tutorials.html</a>)</li>
+<li>Devhelp package: <code>apt-get install devhelp</code> with recommended packages.
+** libglib2.0-doc: Documentation files for the GLib library
+** libgtk2.0-doc: Documentation for the GTK+2 graphical user interface library (tutorial included)
+** libgtk-3-doc: Documentation for the GTK+3 graphical user interface library
+** libpango1.0-doc: Documentation files for the Pango
+** &hellip;</li>
+</ul>
+<p>Also, I recently found on-line textbooks from <a href="http://www.greenteapress.com/">Green Tea Press</a>.  They are very informative.</p>
+<ul>
+<li><a href="http://www.greenteapress.com/thinkpython/thinkpython.html">Think Python: How to Think Like a Computer Scientist</a> by Allen B. Downey</li>
+<li><a href="http://www.greenteapress.com/thinkapjava/index.html">Think Java: How to Think Like a Computer Scientist</a> by Allen B. Downey</li>
+<li><a href="http://www.greenteapress.com/thinkcpp/index.html">How to Think Like a Computer Scientist - &lsquo;C++-Version&rsquo; (PDF)</a> by Allen B. Downey</li>
+<li><a href="http://prof.beuth-hochschule.de/scheffler/lehre/programmieren-in-c/">How to Think Like a Computer Scientist - &lsquo;C-Version&rsquo; (PDF)</a> by Allen B. Downey (C-Version by Thomas Scheffler)</li>
+</ul>
+<p>Here are extra sources of information &hellip;</p>
+<ul>
+<li>Wikipedia: <a href="http://en.wikipedia.org/wiki/C_(programming_language)">C (programming language)</a></li>
+<li>Wikibook: <a href="http://en.wikibooks.org/wiki/C_Programming">C Programming</a></li>
+<li>Slightly outdated: <a href="http://www.iu.hio.no/~mark/CTutorial/">C Programming Tutorial (K&amp;R version 4)</a></li>
+<li>Wikipedia: <a href="http://en.wikipedia.org/wiki/Bourne_shell">Bourne shell</a></li>
+<li>Wikipedia: <a href="http://en.wikipedia.org/wiki/Python_(programming_language)">Python</a></li>
+<li>Wikipedia: <a href="http://en.wikipedia.org/wiki/Vala_(programming_language)">Vala</a></li>
+<li>Wikipedia: <a href="http://en.wikipedia.org/wiki/Lua_(programming_language)">Lua</a></li>
+<li>Wikipedia: <a href="http://en.wikipedia.org/wiki/Perl">Perl</a></li>
+</ul>
+<p>TIP: Install all dependency packages of devscripts, vim, lua, python, python3, perl, vala, swig, git, manpages-dev, devhelp, &hellip;</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="#">***</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/02/fun2prog-hello/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

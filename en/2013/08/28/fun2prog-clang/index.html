@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- C Language | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; C Language</span></h1>
+
+<h3 class="date">Date:
+2013/08/28 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/27/fun2prog-languages/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2019/02/09/initial-setup01/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="c-language">C Language</h2>
+<p>Except for some functional languages such as
+<a href="http://en.wikipedia.org/wiki/Scheme_(programming_language)">Scheme</a>, many
+procedual languages share quite a bit of similarities.
+<a href="http://en.wikipedia.org/wiki/C_(programming_language)">C language</a> is a good
+start in terms of its gramatical simplicity.</p>
+<p>Program control sequence keywords</p>
+<table>
+<thead>
+<tr>
+<th>C syntax</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>expression;</code></td>
+<td>simple expression statement</td>
+</tr>
+<tr>
+<td><code>{statement...}</code></td>
+<td>block statement</td>
+</tr>
+<tr>
+<td><code>if (expression) statement</code></td>
+<td>conditional execution</td>
+</tr>
+<tr>
+<td><code>if (expression) statement else statement</code></td>
+<td>conditional executions</td>
+</tr>
+<tr>
+<td><code>switch (expression) {case const-express: {statement... break;}... default: statement}</code></td>
+<td>conditional branch execution</td>
+</tr>
+<tr>
+<td><code>while (expression) statement</code></td>
+<td>conditional loop execution</td>
+</tr>
+<tr>
+<td><code>do statement while (expression);</code></td>
+<td>conditional loop execution</td>
+</tr>
+<tr>
+<td><code>for (i = 0; i++; i &lt; n) statement</code></td>
+<td>conditional loop execution i = 0, 1, 2, &hellip;, n-1</td>
+</tr>
+<tr>
+<td><code>return expression;</code></td>
+<td>return by exiting function</td>
+</tr>
+<tr>
+<td><code>continue;</code></td>
+<td>continue to the next loop execution</td>
+</tr>
+<tr>
+<td><code>break;</code></td>
+<td>break out of the loop/switch execution</td>
+</tr>
+<tr>
+<td><code>goto identifier</code></td>
+<td>goto identifier label in the current function</td>
+</tr>
+</tbody>
+</table>
+<p>Type, structure, union, storage class declarations</p>
+<table>
+<thead>
+<tr>
+<th>C declaration</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>void</code></td>
+<td>pointer type</td>
+</tr>
+<tr>
+<td><code>char</code></td>
+<td>byte type</td>
+</tr>
+<tr>
+<td><code>int</code></td>
+<td>integer type</td>
+</tr>
+<tr>
+<td><code>float</code></td>
+<td>single-precision floating point type</td>
+</tr>
+<tr>
+<td><code>double</code></td>
+<td>double-precision floating point type</td>
+</tr>
+<tr>
+<td><code>enum</code></td>
+<td>enumeration constant type</td>
+</tr>
+<tr>
+<td><code>short</code></td>
+<td>type qualifier</td>
+</tr>
+<tr>
+<td><code>long</code></td>
+<td>type qualifier</td>
+</tr>
+<tr>
+<td><code>signed</code></td>
+<td>type qualifier</td>
+</tr>
+<tr>
+<td><code>unsigned</code></td>
+<td>type qualifier</td>
+</tr>
+<tr>
+<td><code>const</code></td>
+<td>type qualifier</td>
+</tr>
+<tr>
+<td><code>volatile</code></td>
+<td>type qualifier</td>
+</tr>
+<tr>
+<td><code>union</code></td>
+<td>union declaration</td>
+</tr>
+<tr>
+<td><code>struct</code></td>
+<td>structure declaration</td>
+</tr>
+<tr>
+<td><code>auto</code></td>
+<td>storage class</td>
+</tr>
+<tr>
+<td><code>register</code></td>
+<td>storage class</td>
+</tr>
+<tr>
+<td><code>static</code></td>
+<td>storage class</td>
+</tr>
+<tr>
+<td><code>extern</code></td>
+<td>storage class</td>
+</tr>
+<tr>
+<td><code>typedef</code></td>
+<td>storage class</td>
+</tr>
+</tbody>
+</table>
+<h3 id="unary-operators">Unary operators</h3>
+<table>
+<thead>
+<tr>
+<th>C operator</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-</code></td>
+<td>arith.	minus</td>
+</tr>
+<tr>
+<td><code>~</code></td>
+<td>bitwise not</td>
+</tr>
+<tr>
+<td><code>++</code></td>
+<td>increment.</td>
+</tr>
+<tr>
+<td><code>--</code></td>
+<td>decrement.</td>
+</tr>
+<tr>
+<td><code>sizeof</code></td>
+<td>object size</td>
+</tr>
+<tr>
+<td><code>(typename)</code></td>
+<td>type conversion</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>reference (pointer, indirection)</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>dereference (pointer, address of)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="binary-operators">Binary operators</h3>
+<table>
+<thead>
+<tr>
+<th>C operator</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>+</code></td>
+<td>arith. addition</td>
+</tr>
+<tr>
+<td><code>-</code></td>
+<td>arith.	substraction</td>
+</tr>
+<tr>
+<td><code>*</code></td>
+<td>arith.	multiplication</td>
+</tr>
+<tr>
+<td><code>/</code></td>
+<td>arith.	division</td>
+</tr>
+<tr>
+<td><code>%</code></td>
+<td>arith.	modulo</td>
+</tr>
+<tr>
+<td><code>&amp;</code></td>
+<td>bitwise and</td>
+</tr>
+<tr>
+<td><code>|</code></td>
+<td>bitwise or</td>
+</tr>
+<tr>
+<td><code>^</code></td>
+<td>bitwise xor</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;</code></td>
+<td>bitwise shiftL</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;</code></td>
+<td>bitwise shiftR</td>
+</tr>
+<tr>
+<td><code>==</code></td>
+<td>equal. test.</td>
+</tr>
+<tr>
+<td><code>!=</code></td>
+<td>non-equal. test.</td>
+</tr>
+<tr>
+<td><code>&lt;</code></td>
+<td>less than</td>
+</tr>
+<tr>
+<td><code>&lt;=</code></td>
+<td>less or equal.</td>
+</tr>
+<tr>
+<td><code>&gt;</code></td>
+<td>more than</td>
+</tr>
+<tr>
+<td><code>&gt;=</code></td>
+<td>more or equal.</td>
+</tr>
+<tr>
+<td><code>!</code></td>
+<td>bool. not</td>
+</tr>
+<tr>
+<td><code>&amp;&amp;</code></td>
+<td>bool. and</td>
+</tr>
+<tr>
+<td><code>||||</code></td>
+<td>bool. or</td>
+</tr>
+<tr>
+<td><code>=</code></td>
+<td>assign.</td>
+</tr>
+<tr>
+<td><code>+=</code></td>
+<td>aug. assign. with arith. addition</td>
+</tr>
+<tr>
+<td><code>-=</code></td>
+<td>aug. assign. with arith. substraction</td>
+</tr>
+<tr>
+<td><code>*=</code></td>
+<td>aug. assign. with arith. multiplication</td>
+</tr>
+<tr>
+<td><code>/=</code></td>
+<td>aug. assign. with arith. division</td>
+</tr>
+<tr>
+<td><code>%=</code></td>
+<td>aug. assign. with arith. modulo</td>
+</tr>
+<tr>
+<td><code>&amp;=</code></td>
+<td>aug. assign. with bitwise and</td>
+</tr>
+<tr>
+<td><code>|=</code></td>
+<td>aug. assign. with bitwise or</td>
+</tr>
+<tr>
+<td><code>^=</code></td>
+<td>aug. assign. with bitwise xor</td>
+</tr>
+<tr>
+<td><code>&lt;&lt;=</code></td>
+<td>aug. assign. with bitwise shiftL</td>
+</tr>
+<tr>
+<td><code>&gt;&gt;=</code></td>
+<td>aug. assign. with bitwise shiftR</td>
+</tr>
+<tr>
+<td><code>.</code></td>
+<td>member select. (structure)</td>
+</tr>
+<tr>
+<td><code>-&gt;</code></td>
+<td>member select. (structure, pointed by parent)</td>
+</tr>
+<tr>
+<td><code>,</code></td>
+<td>sequencing</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ternary-and-other-operators">Ternary and other operators</h3>
+<table>
+<thead>
+<tr>
+<th>C operator</th>
+<th>meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>? :</code></td>
+<td>cond. eval.</td>
+</tr>
+<tr>
+<td><code>()</code></td>
+<td>subexpression grouping</td>
+</tr>
+<tr>
+<td><code>()</code></td>
+<td>calling function argument</td>
+</tr>
+<tr>
+<td><code>[]</code></td>
+<td>array subscript</td>
+</tr>
+</tbody>
+</table>
+<p>Despite its simplicity, writing good code under C is not easy. If you write C
+code carelessly with fixed width character array buffers, you are sure to hit a
+buffer overflow bug which is serious bug. Memory management to cope with
+variable length character array buffers under C is non-trivial task.</p>
+<h3 id="operator-precedence">Operator Precedence</h3>
+<table>
+<thead>
+<tr>
+<th>operator type</th>
+<th>operator expression</th>
+<th>precidence</th>
+<th>space</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>func. operator, array operator, structure member operator</td>
+<td><code>func(...)</code> <code>array[...]</code> <code>parentptr-&gt;id</code> <code>parent.id</code></td>
+<td>L &lt;- R</td>
+<td>no</td>
+</tr>
+<tr>
+<td>prefix unary operator (address-of, pointer-to, plus, minus, bitwise not, logical not)</td>
+<td><code>&amp;</code> <code>*</code> <code>+</code> <code>-</code> <code>~</code> <code>!</code></td>
+<td>L &lt;- R</td>
+<td>no (yes before)</td>
+</tr>
+<tr>
+<td>binary operator (mul., div., mod.)</td>
+<td><code>*</code> <code>/</code> <code>%</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>binary operator (add, sub)</td>
+<td><code>+</code> <code>-</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>bitwise shift operator (shr, shl)</td>
+<td><code>&gt;&gt;</code> <code>&lt;&lt;</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>logical relational operator (gt,lt,ge,le)</td>
+<td><code>&gt;</code> <code>&lt;</code> <code>&gt;=</code> <code>&lt;=</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>logical equity operator (eq,ne)</td>
+<td><code>==</code> <code>!=</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>bitwise and operator (and)</td>
+<td><code>&amp;</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>bitwise xor operator (xor)</td>
+<td><code>^</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>bitwise or operator (or)</td>
+<td><code>|</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>logical and operator (and)</td>
+<td><code>&amp;&amp;</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>logical or operator (or)</td>
+<td><code>||||</code></td>
+<td>L -&gt; R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>conditional operator</td>
+<td><code>? :</code></td>
+<td>L &lt;- R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>assignment operator</td>
+<td><code>=</code> <code>*=</code> <code>/=</code> <code>%=</code> <code>+=</code> <code>-=</code> <code>&lt;&lt;=</code> <code>&gt;&gt;=</code> <code>&amp;=</code> <code>^=</code> <code>|=</code></td>
+<td>L &lt;- R</td>
+<td>yes</td>
+</tr>
+<tr>
+<td>comma operator</td>
+<td><code>,</code></td>
+<td>L -&gt; R</td>
+<td>no (yes for after)</td>
+</tr>
+</tbody>
+</table>
+<p>Please note:</p>
+<ul>
+<li>logical xor operator can be &ldquo;<code>!a != !b</code>&rdquo;</li>
+<li>&ldquo;<code>foo = *p++</code>&rdquo; is &ldquo;<code>foo = *(p++)</code>&rdquo; or &ldquo;<code>foo = *p, p++</code>&rdquo;. (FIXME TEST!)</li>
+<li>&ldquo;<code>int *foo()</code>&rdquo; is a function &ldquo;<code>foo</code>&rdquo;. The function returns a pointer to an integer value.  Equivalent of &ldquo;<code>int *(foo())</code>&rdquo;.</li>
+<li>&ldquo;<code>int (*foo)()</code>&rdquo; is a function &ldquo;(*foo)&rdquo; pointed by &ldquo;<code>foo</code>&rdquo;.  The function returns an integer value.</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/27/fun2prog-languages/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2019/02/09/initial-setup01/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

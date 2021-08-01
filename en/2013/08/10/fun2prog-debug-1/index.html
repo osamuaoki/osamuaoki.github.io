@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Debug: level 1 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Debug: level 1</span></h1>
+
+<h3 class="date">Date:
+2013/08/10 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/09/fun2prog-elf/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/11/fun2prog-debug-2/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="debug-level-1">Debug: level 1</h2>
+<p>Debugging is the major part of programing.</p>
+<p>If your code fails by an unknown cause, it is primitive but is often used
+technique to embed <strong>logging</strong> codes for key internal parameters.  This logging
+must be disabled for the normal program execution.</p>
+<p>TIP: Use the <code>script</code>(1) command to obtain a file copy of the console output.
+Piping the <code>COMMAND</code> output as &ldquo;<code>COMMAND 2&gt;&amp;1 |tee typescript</code>&rdquo; is an
+alternative.</p>
+<p>If your code assumes something, it is good idea to protect this assumption with
+an <strong>assertion</strong> code, i.e., a conditional reporting and aborting code.  If the
+assertion code fails, you know you hit a bug.  This is a very effective and
+preventive debug method.</p>
+<p>Let&rsquo;s review some cliches used to embed such codes.</p>
+<h3 id="shell-logging">Shell logging</h3>
+<p>Embedding many &ldquo;<code>echo &quot;...&quot;</code>&rdquo; lines works fine to debug short shell programs.</p>
+<p>But it can get tangled with normal output codes.  So disabling them for
+production use and removing them later may not be trivial for larger shell
+programs.</p>
+<p>You can solve this complication by defining a purpose specific <code>debug</code>
+function.</p>
+<p>The <code>cli-log</code> program logs an error message if the variable <code>DEBUG</code> is set.</p>
+<p>Example of a shell code <code>cli-log</code> with logging capability.</p>
+
+<pre><code>#!/bin/sh
+# Un-comment the following to activate debug messages
+#DEBUG=&#34;TRUE&#34;
+debug ()
+{
+    if [ -n &#34;$DEBUG&#34; ]; then
+        echo &#34;$@&#34; &gt;&amp;2
+    fi
+}
+FOO=$1
+BAR=$2
+debug &#34;I: debug log message: FOO=$FOO, BAR=$BAR&#34;
+echo &#34;$FOO $BAR!&#34;
+</code></pre>
+
+<p>Execution example of logging for a shell code <code>cli-log</code>.</p>
+
+<pre><code>$ ./cli-log Hello World
+Hello World!
+$ DEBUG=TRUE ./cli-log Hello World
+I: debug log message: FOO=Hello, BAR=World
+Hello World!
+</code></pre>
+
+<p>TIP: Unlike Bash, Dash which offers <code>/bin/sh</code> on the recent Debian system does
+not support <code>$LINENO</code> for wheezy.</p>
+<h3 id="python-logging">Python logging</h3>
+<p>Embedding many &ldquo;<code>print(&quot;...&quot;)</code>&rdquo; lines works fine to debug short Python programs.</p>
+<p>Let&rsquo;s try to log in a better way as done for the above shell code.</p>
+<p>The <code>cli-log</code> program logs an error message if the variable <code>DEBUG</code> is set.</p>
+<p>Example of a Python 3 code <code>cli-log</code> with logging capability.</p>
+
+<pre><code>#!/usr/bin/python3
+import sys,os,inspect
+try:
+    DEBUG = os.environ[&#34;DEBUG&#34;]
+except KeyError:
+    DEBUG = 0
+
+def debug (msg):
+    &#34;&#34;&#34;Outputs to sys.stderr if DEBUG is non-zero.&#34;&#34;&#34;
+    if (DEBUG):
+        print(msg, file=sys.stderr)
+
+def lineno():
+    &#34;&#34;&#34;Returns the current line number.&#34;&#34;&#34;
+    return inspect.currentframe().f_back.f_lineno
+
+def main():
+    foo = sys.argv[1]
+    bar = sys.argv[2]
+    if (foo != bar):
+        debug(&#34;L: line=%i, foo=%s, bar=%s&#34; % (lineno(), foo, bar))
+    print(foo &#43; &#34; &#34; &#43; bar &#43;&#39;!&#39;)
+
+if __name__ == &#39;__main__&#39;: 
+    main()
+</code></pre>
+
+<p>TIP: On Python 2, you should replace &ldquo;<code>#!/usr/bin/python3</code>&rdquo; with
+&ldquo;<code>#!/usr/bin/python</code>&quot;; and &ldquo;<code>print(msg, file=sys.stderr)</code>&rdquo; with
+&ldquo;<code>print &gt;&gt; sys.stderr, msg</code>&rdquo;.</p>
+<p>Execution example of logging for a Python code <code>cli-log</code>.</p>
+
+<pre><code>$ ./cli-log Hello World
+Hello World!
+$ DEBUG=TRUE ./cli-log Hello World
+L: line=21, foo=Hello, bar=World
+Hello World!
+</code></pre>
+
+<p>See:</p>
+<ul>
+<li><a href="http://docs.python.org/3/tutorial/stdlib2.html#logging">&ldquo;Logging&rdquo; in &ldquo;The Python Tutorial&rdquo;</a></li>
+<li><a href="http://docs.python.org/3/howto/logging.html">&ldquo;Logging HOWTO&rdquo; in &ldquo;Python HOWTOs&rdquo;</a></li>
+<li><a href="http://docs.python.org/3/howto/logging-cookbook.html">&ldquo;Logging Cookbook&rdquo; in &ldquo;Python HOWTOs&rdquo;</a></li>
+</ul>
+<h3 id="c-logging">C logging</h3>
+<p>Embedding many &ldquo;<code>printf(fmt, ...)</code>&rdquo; or &ldquo;<code>fprintf(stderr, fmt, ...)</code>&rdquo; lines
+works fine to debug short C programs.</p>
+<p>TIP: The <code>unifdef</code> command may be handy for removing these useless debug lines
+after finishing the debug, if they are enclosed between a pair of macros such
+as <code>#ifdef DEBUG</code> and <code>#endif</code>.</p>
+<p>Let&rsquo;s try to log in a better way as done for the above shell and Python codes.</p>
+<p>I made a generic C header file <code>logerr.h</code> for this purpose.</p>
+<p>A C header code <code>logerr.h</code> with logging capability.</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+#ifdef NLOGERR
+#define logerr(level,fmt,...)
+#else
+#define logerr(level,fmt, ...) \
+if(level &lt;= logerr_level) { \
+    fprintf(stderr, &#34;%s: %s:%d: &#34;, \
+        level &gt;= 3 ? &#34;D&#34; : level == 2 ? &#34;I&#34; : level == 1 ? &#34;N&#34; : &#34;W&#34; , \
+        __FILE__, __LINE__); \
+    fprintf(stderr, fmt, ##__VA_ARGS__); \
+    fflush(stderr); \
+    } \
+else /* the single statement cliche to avoid breaking if(...)-construct */
+#endif
+
+#define LOGERR_WARN        0       /* W: warning       always */
+#define LOGERR_NOTICE      1       /* N: notice        -v */
+#define LOGERR_INFO        2       /* I: informational -vv */
+#define LOGERR_DEBUG       3       /* D: debug         -vvv */
+
+int logerr_level = LOGERR_WARN;
+
+</code></pre>
+
+<p>Here,</p>
+<ul>
+<li>This <code>logerr</code> macro is safe to use even after <code>if(...)</code>-construct.</li>
+<li>The global variable <code>logerr_level</code> is used to control the logging threadshold of the <code>logerr</code> macro.</li>
+<li>The <code>NLOGERR</code> macro controls deactivation of the <code>logerr</code> macro.</li>
+</ul>
+<p>TIP: <code>do { ... ; } while(0)</code> is another construct frequently used in the macro definition to avoid breaking <code>if(...)</code>-construct.</p>
+<p>TIP: GNU extention form of the variadic macro &ldquo;<code>, ##__VA_ARGS__</code>&rdquo; is used in place of &ldquo;<code>, __VA_ARGS__</code>&rdquo; to deal with the case of zero extra argument.  See <a href="http://gcc.gnu.org/onlinedocs/cpp/Variadic-Macros.html">Variadic Macros</a>.</p>
+<p>The <code>cli-log.c</code> program logs an error message if the variable <code>DEBUG</code> is set or the <code>-v</code> option is used.</p>
+<p>Example of a C code <code>cli-log.c</code> with logging capability.</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;unistd.h&gt; /* getopt */
+#include &#34;logerr.h&#34;
+
+int main(int argc, char **argv)
+{
+    int c;
+    int logerr_level = 0;
+    char* env_debug = NULL;
+    env_debug = getenv(&#34;DEBUG&#34;);
+    if (env_debug) {
+        logerr_level = atoi(env_debug);
+    }
+    while ((c = getopt(argc, argv, &#34;v&#34;)) != -1) {
+        switch (c) {
+        case &#39;v&#39;:
+            logerr_level &#43;= 1;
+            break;
+        default:
+            printf(&#34;unknown option = %c = ascii(0%x)\n&#34;,
+                    optopt, optopt);
+            printf(&#34;return value of getopt() = %c\n&#34;, c);
+        }
+    }
+    printf(&#34;logerr_level = %i\n&#34;, logerr_level);
+    logerr(LOGERR_NOTICE,&#34;optind = %i\n&#34;, optind);
+    logerr(LOGERR_INFO,&#34;argc = %i\n&#34;, argc);
+    logerr(LOGERR_DEBUG,&#34;argv[0] = %s\n&#34;, argv[0]);
+    if (optind &#43; 2 == argc) {
+        printf(&#34;%s %s!\n&#34;, argv[optind], argv[optind&#43;1]);
+    } else {
+        logerr(LOGERR_WARN,&#34;%i arg(s) / 2 args needed\n&#34;, argc - optind);
+        printf(&#34;Oops!\n&#34;);
+    }
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Compile and execution example with logging for a C code <code>cli-log.c</code>.</p>
+
+<pre><code>$ gcc -Wall -o cli-log cli-log.c
+$ ./cli-log Hello
+W: cli-log.c:33: 1 arg(s) / 2 args needed
+logerr_level = 0
+Oops!
+$ ./cli-log Hello World
+logerr_level = 0
+Hello World!
+$ ./cli-log -v Hello World
+N: cli-log.c:27: optind = 2
+logerr_level = 1
+Hello World!
+$ ./cli-log -vv Hello World
+N: cli-log.c:27: optind = 2
+I: cli-log.c:28: argc = 4
+logerr_level = 2
+Hello World!
+$ ./cli-log -vvv Hello World
+N: cli-log.c:27: optind = 2
+I: cli-log.c:28: argc = 4
+D: cli-log.c:29: argv[0] = ./cli-log
+logerr_level = 3
+Hello World!
+$ ./cli-log -vvv Hello World EXT
+N: cli-log.c:27: optind = 2
+I: cli-log.c:28: argc = 5
+D: cli-log.c:29: argv[0] = ./cli-log
+W: cli-log.c:33: 3 arg(s) / 2 args needed
+logerr_level = 3
+Oops!
+$ DEBUG=2 ./cli-log -v Hello World
+N: cli-log.c:27: optind = 2
+I: cli-log.c:28: argc = 4
+D: cli-log.c:29: argv[0] = ./cli-log
+logerr_level = 3
+Hello World!
+</code></pre>
+
+<p>You can completely remove logging capability in compile time by defining the <code>NLOGERR</code> macro.</p>
+<p>Compile and execution example without logging for a C code <code>cli-log.c</code>.</p>
+
+<pre><code>$ gcc -Wall -DNLOGERR -o cli-log-no cli-log.c
+$ DEBUG=3 ./cli-log-no -vvv Hello World
+logerr_level = 6
+Hello World!
+$ DEBUG=3 ./cli-log-no -vvv Hello
+logerr_level = 6
+Oops!
+</code></pre>
+
+<p>If you have some logging lines which are only needed for testing phase, please
+enclose them between a pair of macros such as <code>#ifdef TESTERRLOG</code> and <code>#endif</code>
+and remove them with the <code>unifdef</code> command.</p>
+<p>TIP: For the serious logging, consider using <code>syslog</code>(3).</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="shell-assertion">Shell assertion</h3>
+<p>If you know something should not happen, test it to ensure it.</p>
+<p>The <code>cli-assert</code> program aborts with an error message if the first and the
+second arguments do not match.</p>
+<p>Example of a shell code <code>cli-assert</code> with assertion.</p>
+
+<pre><code>#!/bin/sh
+error ()
+{
+    echo &#34;$@&#34; &gt;&amp;2
+    exit 1
+}
+FOO=$1
+BAR=$2
+if [ ! &#34;$FOO&#34; = &#34;$BAR&#34; ]; then
+    error &#34;E: FOO and BAR do not match.&#34;
+fi
+echo &#34;Input matches: $FOO = $BAR&#34;
+</code></pre>
+
+<p>Execution example with assertion for a shell code <code>cli-assert</code>.</p>
+
+<pre><code>$ ./cli-assert apple apple
+Input matches: apple = apple
+$ ./cli-assert apple orange
+E: FOO and BAR do not match.
+</code></pre>
+
+<h3 id="python-assertion">Python assertion</h3>
+<p>If you know something should not happen, test it to ensure it.</p>
+<p>The <code>cli-assert</code> program aborts with an error message if the first argument is
+not a non-negative value.</p>
+<p>Example of a Python code <code>cli-assert</code> with assertion.</p>
+
+<pre><code>#!/usr/bin/python3
+def main():
+    import sys
+    arg = sys.argv[1]
+    assert int(arg) &gt;= 0, &#34;argument should be positive but &#34; &#43; arg
+    print(&#34;argument is &#34; &#43; arg)
+
+if __name__ == &#39;__main__&#39;: 
+    main()
+</code></pre>
+
+<p>Execution example with assertion for a Python code <code>cli-assert</code>.</p>
+
+<pre><code>$ ./cli-assert 1
+argument is 1
+$ ./cli-assert -1
+Traceback (most recent call last):
+  File &#34;./cli-assert&#34;, line 9, in &lt;module&gt;
+    main()
+  File &#34;./cli-assert&#34;, line 5, in main
+    assert int(arg) &gt;= 0, &#34;argument should be positive but &#34; &#43; arg
+AssertionError: argument should be positive but -1
+</code></pre>
+
+<h3 id="c-assertion">C assertion</h3>
+<p>If assertion fails, the C <code>assert</code>(3) macro prints an error message to standard
+error and terminates the program by calling abort(3).</p>
+<p>The <code>cli-assert.c</code> program aborts with an error message if the first and only argument is
+not a non-negative value.</p>
+<p>Example of a C code <code>cli-assert.c</code> with assertion.</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;assert.h&gt;
+
+int main(int argc, char **argv)
+{
+    int i;
+    assert(argv[1] != NULL);
+    assert(argv[2] == NULL);
+    i = atoi(argv[1]);
+    assert(i &gt;= 0);
+    if (i &gt;= 0) {
+        printf(&#34;Argument is a single non-negative value: %i\n&#34;, i);
+    }
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Compile and execution example with assertion for a C code <code>cli-assert.c</code>.</p>
+
+<pre><code>$ gcc -Wall -o cli-assert cli-assert.c
+$ ./cli-assert 1
+Argument is a single non-negative value: 1
+$ ./cli-assert -1
+cli-assert: cli-assert.c:11: main: Assertion `i &gt;= 0&#39; failed.
+Aborted
+$ ./cli-assert
+cli-assert: cli-assert.c:8: main: Assertion `argv[1] != ((void *)0)&#39; failed.
+Aborted
+$ ./cli-assert 1 2
+cli-assert: cli-assert.c:9: main: Assertion `argv[2] == ((void *)0)&#39; failed.
+Aborted
+</code></pre>
+
+<p>As for &ldquo;core dumped&rdquo;, please see <a href="/en/2013/08/17/fun2prog-elf/#core-dump">ELF: Core dump</a>.</p>
+<p>TIP: Never call an expression with side effects as the argument of the C
+<code>assert</code>(3) macro if those side effects are essential.  This is because the C
+<code>assert</code>(3) macro may be disabled by defining the macro <code>NDEBUG</code> for the
+production code and the argument may never be executed when it is needed.</p>
+<p>TIP: <a href="http://lists.debian.org/20771.43161.813488.58458@chiark.greenend.org.uk">Ian Jackson</a>
+said &ldquo;<code>-DNDEBUG</code> is (normally) Evil, Bad and Wrong. &hellip; you shouldn&rsquo;t set it.
+Even if upstream specify it it can be right to remove it.&rdquo;</p>
+<p>You can completely remove assertion capability in compile time by defining the <code>NDEBUG</code> macro.</p>
+<p>Compile and execution example without asserion for a C code <code>cli-assert.c</code>.</p>
+
+<pre><code>$ gcc -Wall -DNDEBUG -o cli-assert-no cli-assert.c
+$ ./cli-assert-no 1
+Argument is a single non-negative value: 1
+$ ./cli-assert-no -1
+</code></pre>
+
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/09/fun2prog-elf/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/11/fun2prog-debug-2/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

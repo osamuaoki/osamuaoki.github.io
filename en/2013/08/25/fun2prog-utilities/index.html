@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Utilities | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Utilities</span></h1>
+
+<h3 class="date">Date:
+2013/08/25 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/24/fun2prog-coding-style/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/26/fun2prog-vim/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="utilities">Utilities</h2>
+<p>Here is a list of basic utilities used for the programming.</p>
+<p>You can find usage examples for the commands in this document if their lines are ending with *.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ul>
+<li>POSIX shell (<code>dash</code> package) See <a href="http://www.debian.org/doc/manuals/debian-reference/ch12.en.html#_the_shell_script">Debain Reference</a></li>
+<li>GNU make (<code>make</code> package) See <a href="http://www.debian.org/doc/manuals/debian-reference/ch12.en.html#_make">Debain Reference</a></li>
+<li>GNU C compiler (<code>gcc</code> package) *
+<ul>
+<li>See the <code>gccintro</code> package containing &ldquo;Introduction to GCC by Brian J. Gough&rdquo;: <code>apt-get install gccintro</code> (non-free GFDL package)</li>
+</ul>
+</li>
+<li>GNU C++ compiler (<code>g++</code> package) *</li>
+<li>GNU Debugger (<code>gdb</code> package) *
+<ul>
+<li><code>gdb -tui</code>: Run GDB with TUI (full screen mode)</li>
+<li><code>ddd</code> package: The Data Display Debugger, a graphical debugger frontend</li>
+</ul>
+</li>
+<li>GNU assembler, linker and binary utilities (<code>binutils</code> package) *
+<ul>
+<li><code>readelf</code> - Displays information about ELF files.</li>
+<li><code>objdump</code> - Display information from object files.
+<ul>
+<li>Use this with <code>--demangle</code> for C++.</li>
+<li>Use this with <code>--disassemble</code> to disassemble code.</li>
+</ul>
+</li>
+<li><code>nm</code> - List symbols from object files.
+<ul>
+<li>Use this with <code>--demangle</code> for C++.</li>
+</ul>
+</li>
+<li><code>c++filt</code> - Demangle C++ and Java symbols. *
+<ul>
+<li>This is useful for studying compilation results in assembly codes or ELF binaries.</li>
+<li>Use <code>abi::__cxa_demangle()</code> in C++ source as <a href="http://gcc.gnu.org/onlinedocs/libstdc">http://gcc.gnu.org/onlinedocs/libstdc</a>++/manual/ext_demangling.html[The GNU C++ Library Manual, Chapter 29. Demangling].</li>
+</ul>
+</li>
+<li><code>addr2line</code> - Convert addresses into file names and line numbers.</li>
+<li><code>ar</code> - Create, modify, and extract from archives.</li>
+<li><code>ranlib</code> - Generate index to archive.</li>
+<li><code>gprof</code> - Display call graph <a href="http://en.wikipedia.org/wiki/Profiling_(computer_programming)">profile</a> data.
+<ul>
+<li><a href="http://www.ibm.com/developerworks/library/l-gnuprof.html">Speed your code with the GNU profiler</a> IBM DeveloperWorks (2006)</li>
+<li><a href="http://sam.zoy.org/writings/programming/gprof.html">HOWTO: using gprof with multithreaded applications</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Embedded GNU C Library: Binaries (<code>libc-bin</code> package)
+<ul>
+<li><code>ldd</code> - Print shared library dependencies *</li>
+<li><code>iconv</code> - Convert encoding of given files from one encoding to another See <a href="http://www.debian.org/doc/manuals/debian-reference/ch11.en.html#_text_data_conversion_tools">Debain Reference</a></li>
+</ul>
+</li>
+<li><code>perf</code> - performance analysis tools for Linux (<code>linux-base</code> package) *
+<ul>
+<li>See <a href="http://www.eece.maine.edu/~vweaver/projects/perf_events/">The Unofficial Linux Perf Events Web-Page</a></li>
+</ul>
+</li>
+<li>Remove cpp <code>#ifdef</code> lines from files (<code>unifdef</code> package) *
+<ul>
+<li><code>unifdef</code>, <code>unifdefall</code> — Remove preprocessor conditionals from code
+<ul>
+<li>This is useful for avoiding distractions when studying code.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Utility to list open files (<code>lsof</code> package)
+<ul>
+<li><code>lsof</code>   - List open files</li>
+</ul>
+</li>
+<li>Utility for <a href="http://en.wikipedia.org/wiki/Memory_debugger">memory debugger</a>
+<ul>
+<li><code>gcc</code> with <code>-fstack-protector</code> - Stack smashing protector (SSP) *</li>
+<li><code>valgrind</code> package - A suite of tools for debugging and profiling programs</li>
+<li><code>alleyoop</code> package - Valgrind memory checker front-end for GNOME</li>
+<li><code>electric-fence</code> package - Library to detect buffer overruns and under-runs
+<ul>
+<li>a memory-usage debugger for C programs</li>
+<li><code>LD_PRELOAD=/path/to/libefence.so.0.0  your-buggy-program</code></li>
+</ul>
+</li>
+<li><code>duma</code> pckage - A fork of <code>electric-fence</code> with more features
+<ul>
+<li>a memory-usage debugger for C/C++ programs</li>
+<li><code>LD_PRELOAD=/path/to/libefence.so.0.0  your-buggy-program</code></li>
+</ul>
+</li>
+<li><code>leaktracer</code> package - Simple and efficient memory-leak tracer for C++ programs
+<ul>
+<li><code>LeakCheck</code> <code>leak-analyze</code> - A memory-usage debugger for C++ programs</li>
+<li><code>LD_PRELOAD=/path/to/LeakTracer.so your-buggy-program</code></li>
+</ul>
+</li>
+<li><code>libdmalloc-dev</code> package - Debug memory allocation library (development files and doc)
+<ul>
+<li>Drop in replacement for the system&rsquo;s <code>malloc</code>, <code>realloc</code>, <code>calloc</code>, <code>free</code> and other memory management routines.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Utility to trace calls etc. like <a href="http://en.wikipedia.org/wiki/Strace">strace</a>
+<ul>
+<li><code>strace</code> - Trace system calls and signals *</li>
+<li><code>ltrace</code> - A library call tracer *</li>
+<li><code>xtrace</code> - Trace communication between X11 client and server</li>
+</ul>
+</li>
+<li>Utility to <a href="http://en.wikipedia.org/wiki/Static_code_analysis">analyze code statically</a>
+<ul>
+<li><code>pylint</code> - Python code static checker</li>
+<li><code>splint</code> - A tool for statically checking C programs</li>
+<li><code>cppcheck</code> - Tool for static C/C++ code analysis</li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/24/fun2prog-coding-style/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/26/fun2prog-vim/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

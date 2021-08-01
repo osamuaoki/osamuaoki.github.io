@@ -1,0 +1,2517 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Python program | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Python program</span></h1>
+
+<h3 class="date">Date:
+2013/08/14 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/13/fun2prog-debug-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/15/fun2prog-build/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="python-program">Python program</h2>
+<p><a href="http://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> is a vary
+<a href="http://en.wikipedia.org/wiki/High-level_programming_language%5Bhigh-level">http://en.wikipedia.org/wiki/High-level_programming_language[high-level</a>
+programming language] which offers features to support
+<a href="http://en.wikipedia.org/wiki/Object-oriented_programming">OOP</a>.  It is very well
+documented in the <a href="http://docs.python.org/">Python documentation web site</a>.</p>
+<p>Python frees us from chores of the memory management required by C and allows
+us to focus on the problem solving.  Python module system allows us to organize
+codes in multiple files nicely and let us divide and conqueror bugs
+efficiently.</p>
+<p>If you are completely new to Python, I found a wiki page at
+<a href="http://wiki.debian.org/DebianWomen/PythonTutorial">DebianWomen/PythonTutorial</a>
+to be a very good starting point.  (I knew Python basics explained here.)</p>
+<p>Let me try to learn slightly advanced Python such as modules and class by going
+through the following available documentation as the self-teaching session.</p>
+<ul>
+<li><a href="http://docs.python.org/3/tutorial/">The Python Tutorial</a> (Complete tutorial)</li>
+<li><a href="http://www.greenteapress.com/thinkpython/thinkpython.html">Think Python: How to Think Like a Computer Scientist</a> by Allen B. Downey</li>
+<li><a href="https://python-guide.readthedocs.org/en/latest/">The Hitchhiker’s Guide to Python!</a></li>
+<li>Wikipedia articles</li>
+</ul>
+<p>Consider the following as my note of the self-teaching session.</p>
+<p>TIP: If you are using Python 2.7, replace <code>python3</code> in the above examples with <code>python</code>.</p>
+<h3 id="what-is-oop">What is OOP?</h3>
+<p>An <a href="http://en.wikipedia.org/wiki/Object_(computer_science)">object</a> is a
+<em>location in memory</em> having a
+<a href="http://en.wikipedia.org/wiki/Value_(computer_science)">value</a> and referenced by
+an <a href="http://en.wikipedia.org/wiki/Identifier">identifier</a>. An object can be a
+<a href="http://en.wikipedia.org/wiki/Variable_(computer_science)">variable</a>,
+<a href="http://en.wikipedia.org/wiki/Subroutine">function</a>, or
+<a href="http://en.wikipedia.org/wiki/Data_structure">data structure</a>.</p>
+<p><a href="http://en.wikipedia.org/wiki/Object-oriented_programming%5BObject-oriented">http://en.wikipedia.org/wiki/Object-oriented_programming[Object-oriented</a>
+programming (OOP)] is a
+<a href="http://en.wikipedia.org/wiki/Programming_paradigm">programming paradigm</a>.  The
+&ldquo;object&rdquo; for OOP refers to a particular
+<a href="http://en.wikipedia.org/wiki/Instance_(computer_science)">instance</a> of a
+<a href="http://en.wikipedia.org/wiki/Class_(computer_science)">class</a>. Objects are used
+to interact with one another to design applications and computer programs.
+&ldquo;<a href="http://en.wikipedia.org/wiki/Object_(computer_science)">objects</a>&rdquo; have</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Field_(computer_science)">data fields</a> (attributes that describe the object) and</li>
+<li>associated procedures known as <a href="http://en.wikipedia.org/wiki/Method_(computer_science)">methods</a>.</li>
+</ul>
+<h3 id="python2-and-python3">Python2 and Python3</h3>
+<p>See <a href="http://wiki.python.org/moin/Python2orPython3">&ldquo;Should I use Python 2 or Python 3 for my development activity?&quot;</a></p>
+<p>Currently, Python is available in 2 major versions.</p>
+<p>Python2</p>
+<ul>
+<li>Very stable (2.7 being the last version)</li>
+<li>Very robust</li>
+<li>Latin-1 (ISO-8859-1) encoding centric</li>
+</ul>
+<p>Python3</p>
+<ul>
+<li>Future of Python</li>
+<li>Moving target</li>
+<li>Cleaner grammer
+<ul>
+<li><code>print</code> as a function.</li>
+<li>extensive use of iterator</li>
+</ul>
+</li>
+<li>UTF-8 encoding centric</li>
+</ul>
+<p>The conversion of source files between Python2 and Python3 is done by:</p>
+<ul>
+<li><a href="http://docs.python.org/2/library/2to3.html">2to3</a></li>
+<li><a href="https://pypi.python.org/pypi/3to2">3to2</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<p>Example to convert Python2 to Python3 using <code>fridge.py</code> in <a href="#python-inheritance">Python inheritance</a></p>
+
+<pre><code>$ 2to3 -w fridge/fridge.py 2&gt;/dev/null
+--- fridge/fridge.py    (original)
+&#43;&#43;&#43; fridge/fridge.py    (refactored)
+@@ -3,19 &#43;3,19 @@
+ class Fridge:
+     def __init__(self, name):
+         self.beer = 0
+-        print name, &#34;bought a new fridge.&#34;
+&#43;        print(name, &#34;bought a new fridge.&#34;)
+         self.name = name
+     def report_beer(self):
+-        print self.name, &#34;has&#34;, self.beer, &#34;can(s) of beer in stock.&#34;
+&#43;        print(self.name, &#34;has&#34;, self.beer, &#34;can(s) of beer in stock.&#34;)
+         return
+     def stock_beer(self, cans):
+-        print self.name, &#34;stocks&#34;, cans, &#34;can(s) of beer.&#34;
+&#43;        print(self.name, &#34;stocks&#34;, cans, &#34;can(s) of beer.&#34;)
+         self.beer &#43;= cans
+         return
+     def consume_beer(self, cans):
+-        print self.name, &#34;tries to consume&#34;, cans, &#34;can(s) of beer&#34;
+&#43;        print(self.name, &#34;tries to consume&#34;, cans, &#34;can(s) of beer&#34;)
+         if self.beer &lt;= cans:
+-            print (&#34;No more beer after drinking %i can(s) of beer!&#34; % self.beer)...
+&#43;            print((&#34;No more beer after drinking %i can(s) of beer!&#34; % self.beer)...
+             self.beer = 0
+         else:
+             self.beer -= cans
+@@ -25,12 &#43;25,12 @@
+ class NormalFridge(Fridge):
+     def __init__(self, name, min_beer):
+         Fridge.__init__(self, name)
+-        print name, &#34;wishes to have&#34;, min_beer, &#34;cans of beer&#34;
+&#43;        print(name, &#34;wishes to have&#34;, min_beer, &#34;cans of beer&#34;)
+         self.min_beer = min_beer
+     def check_beer(self):
+         if self.beer &lt; self.min_beer:
+-            print (&#34;%i extra can(s) of beer needed for good stocking.&#34; %
+-                    (self.min_beer - self.beer))
+&#43;            print((&#34;%i extra can(s) of beer needed for good stocking.&#34; %
+&#43;                    (self.min_beer - self.beer)))
+         return
+     def consume_beer(self, cans):
+         Fridge.consume_beer(self, cans)
+</code></pre>
+
+<p>References:</p>
+<ul>
+<li><a href="http://docs.python.org/3/howto/pyporting.html">&ldquo;Porting Python 2 Code to Python 3&rdquo; in &ldquo;Python HOWTOs.&quot;</a></li>
+<li><a href="http://docs.python.org/release/3.0/whatsnew/3.0.html">&ldquo;What’s New In Python 3.0&rdquo;</a></li>
+</ul>
+<h3 id="python-modules">Python modules</h3>
+<p>See <a href="http://docs.python.org/3/tutorial/modules.html">&ldquo;The Python Tutorial: Modules&rdquo;</a>.</p>
+<p>The Python <em>module</em> is a block of reusable code which can be <em>imported</em> to some
+Python code.</p>
+<p>Types of modules:</p>
+<ul>
+<li>pure Python module
+<ul>
+<li>a module written in Python and contained in a <code>.py</code> file.</li>
+</ul>
+</li>
+<li>extension module
+<ul>
+<li>a module written in the low-level language of the Python implementation: C/C++ for Python in a <code>.so</code> file.</li>
+<li>extension module written in C is a shared library following <a href="http://docs.python.org/3/c-api/">Python/C API</a>.</li>
+</ul>
+</li>
+<li>module package
+<ul>
+<li>a module package contains many modules under a tree of directories all containing <code>__init__.py</code> files.</li>
+</ul>
+</li>
+</ul>
+<p>Names defined by the Python module:</p>
+<ul>
+<li>Names defined by the current module is listed by the Python built-in function <a href="http://docs.python.org/3/tutorial/modules.html#the-dir-function"><code>dir()</code></a>.</li>
+<li>Names defined by the <code>foo</code> module is listed by the Python built-in function <a href="http://docs.python.org/3/tutorial/modules.html#the-dir-function"><code>dir(foo)</code></a>.</li>
+</ul>
+<p>Python module search path:</p>
+<ul>
+<li>Python module search path is used to search Python modules by the <code>import</code> statement.
+<ul>
+<li>&ldquo;<code>import foo</code>&rdquo; imports the Python code <code>foo.py</code> found in the Python module search path.</li>
+<li>&ldquo;<code>import foo</code>&rdquo; imports the compiled C code <code>foo.so</code> found in the Python module search path.</li>
+</ul>
+</li>
+<li>Python module search path is defined in the Python variable <code>sys.path</code>.</li>
+<li>Python module search path is usually customized by the <code>PYTHONPATH</code> environment variable by the user.</li>
+</ul>
+<p>Let&rsquo;s check it with the <code>printpath2</code> script for Python 2.*.</p>
+<p>Program to check <code>sys.path</code> for Python 2.*</p>
+
+<pre><code>#!/usr/bin/python
+import sys
+print &#34;dir() =&#34;, dir()
+print &#34;dir(sys) =&#34;, dir(sys)
+print &#34;sys.path =&#34;, sys.path
+</code></pre>
+
+<p>The console output is:</p>
+<p><code>sys.path</code> for Python 2.*</p>
+
+<pre><code>$ ./printpath2
+dir() = [&#39;__builtins__&#39;, &#39;__doc__&#39;, &#39;__file__&#39;, &#39;__name__&#39;, &#39;__package__&#39;, &#39;sys&#39;
+]
+dir(sys) = [&#39;__displayhook__&#39;, &#39;__doc__&#39;, &#39;__excepthook__&#39;, &#39;__name__&#39;, &#39;__packa
+ge__&#39;, &#39;__stderr__&#39;, &#39;__stdin__&#39;, &#39;__stdout__&#39;, &#39;_clear_type_cache&#39;, &#39;_current_f
+rames&#39;, &#39;_getframe&#39;, &#39;_mercurial&#39;, &#39;_multiarch&#39;, &#39;api_version&#39;, &#39;argv&#39;, &#39;builtin
+_module_names&#39;, &#39;byteorder&#39;, &#39;call_tracing&#39;, &#39;callstats&#39;, &#39;copyright&#39;, &#39;displayh
+ook&#39;, &#39;dont_write_bytecode&#39;, &#39;exc_clear&#39;, &#39;exc_info&#39;, &#39;exc_type&#39;, &#39;excepthook&#39;, 
+&#39;exec_prefix&#39;, &#39;executable&#39;, &#39;exit&#39;, &#39;flags&#39;, &#39;float_info&#39;, &#39;float_repr_style&#39;, 
+&#39;getcheckinterval&#39;, &#39;getdefaultencoding&#39;, &#39;getdlopenflags&#39;, &#39;getfilesystemencodi
+ng&#39;, &#39;getprofile&#39;, &#39;getrecursionlimit&#39;, &#39;getrefcount&#39;, &#39;getsizeof&#39;, &#39;gettrace&#39;, 
+&#39;hexversion&#39;, &#39;long_info&#39;, &#39;maxint&#39;, &#39;maxsize&#39;, &#39;maxunicode&#39;, &#39;meta_path&#39;, &#39;modu
+les&#39;, &#39;path&#39;, &#39;path_hooks&#39;, &#39;path_importer_cache&#39;, &#39;platform&#39;, &#39;prefix&#39;, &#39;py3kwa
+rning&#39;, &#39;pydebug&#39;, &#39;setcheckinterval&#39;, &#39;setdlopenflags&#39;, &#39;setprofile&#39;, &#39;setrecur
+sionlimit&#39;, &#39;settrace&#39;, &#39;stderr&#39;, &#39;stdin&#39;, &#39;stdout&#39;, &#39;subversion&#39;, &#39;version&#39;, &#39;v
+ersion_info&#39;, &#39;warnoptions&#39;]
+sys.path = [&#39;/path/to/path&#39;, &#39;/usr/lib/python2.7&#39;, &#39;/usr/lib/python2.7/plat-x86_
+64-linux-gnu&#39;, &#39;/usr/lib/python2.7/lib-tk&#39;, &#39;/usr/lib/python2.7/lib-old&#39;, &#39;/usr/
+lib/python2.7/lib-dynload&#39;, &#39;/home/osamu/.local/lib/python2.7/site-packages&#39;, &#39;/
+usr/local/lib/python2.7/dist-packages&#39;, &#39;/usr/lib/python2.7/dist-packages&#39;, &#39;/us
+r/lib/python2.7/dist-packages/PIL&#39;, &#39;/usr/lib/python2.7/dist-packages/gst-0.10&#39;,
+ &#39;/usr/lib/python2.7/dist-packages/gtk-2.0&#39;, &#39;/usr/lib/pymodules/python2.7&#39;, &#39;/u
+sr/lib/python2.7/dist-packages/wx-2.8-gtk2-unicode&#39;]
+</code></pre>
+
+<p>Let&rsquo;s check it with the <code>printpath3</code> script for Python 3.*.</p>
+<p>Program to check <code>sys.path</code> for Python 3.*</p>
+
+<pre><code>#!/usr/bin/python3
+import sys
+print(&#34;dir() =&#34;, dir())
+print(&#34;dir(sys) =&#34;, dir(sys))
+print(&#34;sys.path =&#34;, sys.path)
+</code></pre>
+
+<p>The console output is:</p>
+<p><code>sys.path</code> for Python 3.*</p>
+
+<pre><code>$ ./printpath3
+dir() = [&#39;__builtins__&#39;, &#39;__cached__&#39;, &#39;__doc__&#39;, &#39;__file__&#39;, &#39;__loader__&#39;, &#39;__n
+ame__&#39;, &#39;__package__&#39;, &#39;sys&#39;]
+dir(sys) = [&#39;__displayhook__&#39;, &#39;__doc__&#39;, &#39;__excepthook__&#39;, &#39;__loader__&#39;, &#39;__nam
+e__&#39;, &#39;__package__&#39;, &#39;__stderr__&#39;, &#39;__stdin__&#39;, &#39;__stdout__&#39;, &#39;_clear_type_cache
+&#39;, &#39;_current_frames&#39;, &#39;_debugmallocstats&#39;, &#39;_getframe&#39;, &#39;_home&#39;, &#39;_mercurial&#39;, &#39;
+_xoptions&#39;, &#39;abiflags&#39;, &#39;api_version&#39;, &#39;argv&#39;, &#39;base_exec_prefix&#39;, &#39;base_prefix&#39;
+, &#39;builtin_module_names&#39;, &#39;byteorder&#39;, &#39;call_tracing&#39;, &#39;callstats&#39;, &#39;copyright&#39;,
+ &#39;displayhook&#39;, &#39;dont_write_bytecode&#39;, &#39;exc_info&#39;, &#39;excepthook&#39;, &#39;exec_prefix&#39;, 
+&#39;executable&#39;, &#39;exit&#39;, &#39;flags&#39;, &#39;float_info&#39;, &#39;float_repr_style&#39;, &#39;getcheckinterv
+al&#39;, &#39;getdefaultencoding&#39;, &#39;getdlopenflags&#39;, &#39;getfilesystemencoding&#39;, &#39;getprofil
+e&#39;, &#39;getrecursionlimit&#39;, &#39;getrefcount&#39;, &#39;getsizeof&#39;, &#39;getswitchinterval&#39;, &#39;gettr
+ace&#39;, &#39;hash_info&#39;, &#39;hexversion&#39;, &#39;implementation&#39;, &#39;int_info&#39;, &#39;intern&#39;, &#39;maxsiz
+e&#39;, &#39;maxunicode&#39;, &#39;meta_path&#39;, &#39;modules&#39;, &#39;path&#39;, &#39;path_hooks&#39;, &#39;path_importer_c
+ache&#39;, &#39;platform&#39;, &#39;prefix&#39;, &#39;setcheckinterval&#39;, &#39;setdlopenflags&#39;, &#39;setprofile&#39;,
+ &#39;setrecursionlimit&#39;, &#39;setswitchinterval&#39;, &#39;settrace&#39;, &#39;stderr&#39;, &#39;stdin&#39;, &#39;stdou
+t&#39;, &#39;thread_info&#39;, &#39;version&#39;, &#39;version_info&#39;, &#39;warnoptions&#39;]
+sys.path = [&#39;/path/to/path&#39;, &#39;/usr/lib/python3.3&#39;, &#39;/usr/lib/python3.3/plat-x86_
+64-linux-gnu&#39;, &#39;/usr/lib/python3.3/lib-dynload&#39;, &#39;/home/osamu/.local/lib/python3
+.3/site-packages&#39;, &#39;/usr/local/lib/python3.3/dist-packages&#39;, &#39;/usr/lib/python3/d
+ist-packages&#39;]
+</code></pre>
+
+<p>The Python module search path is set as follows:</p>
+<ul>
+<li>The directory containing the input script.
+<ul>
+<li>The current working directory for interactive <code>python</code>.</li>
+</ul>
+</li>
+<li><code>PYTHONPATH</code> environment variable.
+<ul>
+<li>colon (&quot;:&quot;) separated on Unix-like systems (defined in <code>.bashrc</code> etc.)</li>
+<li>semicolon (&quot;;&quot;) separated on the Windows system</li>
+</ul>
+</li>
+<li>The installation-dependent default.
+<ul>
+<li><code>/usr/lib/python*.*</code></li>
+<li><code>/usr/lib/python*.*/plat-linux*</code></li>
+<li><code>/usr/lib/python*.*/lib-dynload</code></li>
+<li><code>/home/&lt;user_name&gt;/.local/lib/python*.*/site-packages</code> (installed by the local user.)</li>
+<li><code>/usr/local/lib/python*.*/dist-packages</code> (installed by the local admin.)</li>
+<li><code>/usr/lib/python*/dist-packages</code> (installed by the Debian system.)</li>
+</ul>
+</li>
+<li>The content of any <code>*.pth</code> files (if present)
+<ul>
+<li><code>/usr/lib/python2.7/dist-packages/PIL.pth</code> containing <code>PIL</code> to include <code>/usr/lib/python2.7/dist-packages/PIL</code>. (Python 2)</li>
+<li>&hellip;</li>
+</ul>
+</li>
+</ul>
+<p>TIP: The additional Python module search path including <code>dist-packages</code> are for modules provided by the Debian system.</p>
+<p>The <code>sys.path</code> value consists of only existing directory path on the system.  (I.e., <code>/home/&lt;user_name&gt;/.local/lib/python3.2/site-packages</code> should exist to see it in the above example.)</p>
+<p>References:</p>
+<ul>
+<li><a href="http://www.debian.org/doc/packaging-manuals/python-policy/ch-python.html#s-paths">&ldquo;Debian Python Policy&rdquo;: &ldquo;Module Path&rdquo;</a>.</li>
+<li><a href="http://www.debian.org/doc/packaging-manuals/python-policy/ch-module_packages.html">&ldquo;Debian Python Policy&rdquo;: &ldquo;Debian packaged modules&rdquo;</a>.</li>
+<li><a href="http://wiki.debian.org/Python#Deviations_from_upstream">&ldquo;Debian wiki&rdquo;: &ldquo;Python: Deviations from upstream&rdquo;</a></li>
+</ul>
+<h3 id="python-module-package">Python module package</h3>
+<p>See <a href="http://docs.python.org/3/tutorial/modules.html#packages">&ldquo;The Python Tutorial: Python module package.&quot;</a></p>
+<p>Python module files may be organized in multi-level directories.
+For example on Unix-like environments, a Python module package <code>foo</code> may
+contain directories and files as follows:</p>
+<pre><code>foo/
+    __init__.py
+    bar.py
+    baz/
+        __init__.py
+        qux.py
+</code></pre><ul>
+<li><code>foo/</code> should reside in the Python module search path <code>sys.path</code>.</li>
+<li>All directories in the Python module package should contain <code>__init__.py</code>.</li>
+<li>The module name uses the platform independent &ldquo;dotted module name&rdquo; convention.
+<ul>
+<li>The module name <code>foo</code> accesses the module file <code>foo/__init__.py</code>.</li>
+<li>The module name <code>foo.bar</code> accesses the module file <code>foo/bar.py</code>.</li>
+<li>The module name <code>foo.baz</code> accesses the module file <code>foo/baz/__init__.py</code>.</li>
+<li>The module name <code>foo.baz.qux</code> accesses the module file <code>foo/baz/qux.py</code>.</li>
+</ul>
+</li>
+<li>&ldquo;<code>import foo</code>&rdquo; imports the entire Python module package <code>foo</code> including all submodules.</li>
+<li>The Python module <code>*.py</code> in the above may alternatively be the shared libraries <code>*.so</code> following <a href="http://docs.python.org/3/c-api/">Python/C API</a></li>
+</ul>
+<h3 id="python-scope">Python scope</h3>
+<p>See <a href="http://docs.python.org/3/tutorial/classes.html#python-scopes-and-namespaces">&ldquo;The Python Tutorial: Python Scopes and Namespaces.&quot;</a></p>
+<p>A <em>scope</em> is a textual region of a Python program where a namespace is <em>directly accessible</em> by the unqualified reference to a name.  It is determined textually no matter from where or by what alias the function is called.</p>
+<p>The <em>name searching order</em> is the following:</p>
+<ul>
+<li>the <em>local</em> names in the innermost scope</li>
+<li>the <em>non-local</em> names in the nearest enclosing scope (excluding the last 2 scopes)</li>
+<li>the <em>global</em> names in the next-to-last scope</li>
+<li>the <em>built-in</em> names in the outermost scope.</li>
+</ul>
+<p>The <em>name binding scope</em> can be manipulated.</p>
+<ul>
+<li>The nonlocal statement rebinds variables as the non-local names.</li>
+<li>The global statement rebinds variables as the global names.</li>
+<li>The del statement removes the binding of the local variables.</li>
+</ul>
+<p>Here is an example of code to show scopes and namespaces: <code>test_scope</code>.</p>
+
+<pre><code>#!/usr/bin/python3
+# vi:se ts=4 sts=4 et:
+import sys
+#######################################################################
+def test_spam(context):
+    try:
+        print(context, &#34;EXT Valid:&#34;, spam)
+    except:
+        print(context, &#34;EXT Error:&#34;, sys.exc_info()[1])
+#######################################################################
+def scope_test():
+    def do_local():
+        spam = &#34;local spam&#34;
+    def do_nonlocal():
+        nonlocal spam
+        spam = &#34;nonlocal spam&#34;
+    def do_del_nonlocal():
+        nonlocal spam
+        del spam
+    def do_global():
+        global spam
+        spam = &#34;global spam&#34;
+    def test_spam_in(context):
+        try:
+            print(context, &#34;IN Valid:&#34;, spam)
+        except:
+            print(context, &#34;IN Error&#34;, sys.exc_info()[1])
+#----------------------------------------------------------------------
+### Check spam status before scope_test() INSIDE ###
+    try:
+        print(&#34;Scope&#34;, &#34;Valid:&#34;, spam)
+    except:
+        print(&#34;Scope&#34;, &#34;Error:&#34;, sys.exc_info()[1])
+### Make assignment INSIDE ###
+    spam = &#34;scope_test spam&#34;
+### Check spam status after assignment INSIDE ###
+    try:
+        print(&#34;Assign&#34;, &#34;Valid:&#34;, spam)
+    except:
+        print(&#34;Assign&#34;, &#34;Error:&#34;, sys.exc_info()[1])
+### Make local assignment INSIDE ###
+    do_local()
+### Check spam status after do_local INSIDE ###
+    try:
+        print(&#34;local&#34;, &#34;Valid:&#34;, spam)
+    except:
+        print(&#34;local&#34;, &#34;Error:&#34;, sys.exc_info()[1])
+### Check spam status after do_local INT ###
+    test_spam_in(&#34;local&#34;)
+### Check spam status after do_local EXT ###
+    test_spam(&#34;local&#34;)
+### Make nonlocal assignment INSIDE ###
+    do_nonlocal()
+### Check spam status after do_nonlocal INSIDE ###
+    try:
+        print(&#34;nonlocal&#34;, &#34;Valid:&#34;, spam)
+    except:
+        print(&#34;nonlocal&#34;, &#34;Error:&#34;, sys.exc_info()[1])
+### Check spam status after do_nonlocal INT ###
+    test_spam_in(&#34;nonlocal&#34;)
+### Check spam status after do_nonlocal EXT ###
+    test_spam(&#34;nonlocal&#34;)
+### Make nonlocal del INSIDE ###
+    do_del_nonlocal()
+### Check spam status after do_nonlocal INSIDE ###
+    try:
+        print(&#34;nonlocal after del&#34;, &#34;Valid:&#34;, spam)
+    except:
+        print(&#34;nonlocal after del&#34;, &#34;Error:&#34;, sys.exc_info()[1])
+### Check spam status after do_local INT ###
+    test_spam_in(&#34;nonlocal after del&#34;)
+### Make global assignment INSIDE ###
+    do_global()
+### Check spam status after do_global INSIDE ###
+    try:
+        print(&#34;Global &#34;, &#34;Valid:&#34;, spam)
+    except:
+        print(&#34;Global &#34;, &#34;Error:&#34;, sys.exc_info()[1])
+#######################################################################
+### Check spam status before scope_test() OUTSIDE ###
+try:
+    print(&#34;Start &#34;, &#34;Valid:&#34;, spam)
+except:
+    print(&#34;Start &#34;, &#34;Error:&#34;, sys.exc_info()[1])
+### Call scope_test() ###
+scope_test()
+### Check spam status after scope_test() OUTSIDE ###
+try:
+    print(&#34;End   &#34;, &#34;Valid:&#34;, spam)
+except:
+    print(&#34;End   &#34;, &#34;Error:&#34;, sys.exc_info()[1])
+
+</code></pre>
+
+<p>This is a bit more complicated than the <a href="http://docs.python.org/3/tutorial/classes.html#scopes-and-namespaces-example">example found on Python Tutorial</a> since this <a href="http://docs.python.org/3/tutorial/errors.html#handling-exceptions">handles exceptions</a> caused by the errors.</p>
+<p>Let&rsquo;s execute this.</p>
+
+<pre><code>$ ./test_scope|fold
+Start  Error: global name &#39;spam&#39; is not defined
+Scope Error: local variable &#39;spam&#39; referenced before assignment
+Assign Valid: scope_test spam
+local Valid: scope_test spam
+local IN Valid: scope_test spam
+local EXT Error: global name &#39;spam&#39; is not defined
+nonlocal Valid: nonlocal spam
+nonlocal IN Valid: nonlocal spam
+nonlocal EXT Error: global name &#39;spam&#39; is not defined
+nonlocal after del Error: local variable &#39;spam&#39; referenced before assignment
+nonlocal after del IN Error free variable &#39;spam&#39; referenced before assignment in
+ enclosing scope
+Global  Error: local variable &#39;spam&#39; referenced before assignment
+End    Valid: global spam
+</code></pre>
+
+<h3 id="python-class">Python class</h3>
+<p>See <a href="http://docs.python.org/3/tutorial/classes.html#a-first-look-at-classes">&ldquo;The Python Tutorial: A First Look at Classes.&quot;</a></p>
+<p>When a <em>class definition</em> is left normally (via the end), a <em>class object</em> is created.  Class object for <code>MyClass</code> has attributes such as <code>foo</code> and <code>bar</code> globally referenced as <code>MyClass.foo</code> and <code>MyClass.bar</code>.</p>
+<p>By the assignment of a class object, a new <em>instance object</em> such as <code>x</code> is created.  <em>Instance objects</em> can have 2 types of valid attributes:  <em>data attribute</em> and <em>method attribute</em>.  They may be referenced as <code>x.foo</code> and <code>x.bar</code>.</p>
+<p>The <em>data attribute</em> in Python is equivalent of <em>instance variables</em> in <a href="http://en.wikipedia.org/wiki/Smalltalk">Smalltalk</a> and <em>data members</em> in <a href="http://en.wikipedia.org/wiki/C">http://en.wikipedia.org/wiki/C</a>++[C++].</p>
+<p><em>Data attributes</em> override <em>method attributes</em> and may cause confusion.  There are some naming conventions to prevent this confusion.</p>
+<ul>
+<li><em>data attribute</em> names
+<ul>
+<li>prefix with a underscore</li>
+<li>using nouns</li>
+</ul>
+</li>
+<li><em>method attribute</em> names
+<ul>
+<li>capitalize</li>
+<li>using verbs</li>
+</ul>
+</li>
+</ul>
+<p>The first argument of a method is called <code>self</code> by convention.</p>
+<p>An object has class (also called its type) which is stored as <code>object.__class__</code>.</p>
+<p>The instantiation method is defined by <code>def __init__(self):</code> etc.</p>
+<h3 id="python-inheritance">Python inheritance</h3>
+<p>See <a href="http://docs.python.org/3/tutorial/classes.html#inheritance">&ldquo;The Python Tutorial: Inheritance.&quot;</a></p>
+<p>The syntax for the derived class definition starts with:</p>
+<ul>
+<li><code>class DerivedClassName(BaseClassName):</code></li>
+<li><code>class DerivedClassName(modname.BaseClassName):</code></li>
+</ul>
+<p>Derived classes may override methods of their base classes. (I.e., All methods in Python are effectively <a href="http://en.wikipedia.org/wiki/Virtual_function">virtual methods</a> in <a href="http://en.wikipedia.org/wiki/C">http://en.wikipedia.org/wiki/C</a>++[C++] sense.)</p>
+<p>A base class accessible as <code>BaseClassName</code> may be extended by calling its method directly as <code>BaseClassName.methodname(self, arguments)</code>.</p>
+<p>Python has two built-in functions that work with inheritance:</p>
+<ul>
+<li><code>isinstance()</code>
+<ul>
+<li><code>isinstance(obj, int)</code> is True only if <code>obj.__class__</code> for the <code>obj</code> instance is <code>int</code> or some class derived from <code>int</code>.</li>
+</ul>
+</li>
+<li><code>issubclass()</code>
+<ul>
+<li>issubclass(bool, int) is True since <code>bool</code> is a subclass of <code>int</code>.</li>
+<li>issubclass(float, int) is False since <code>float</code> is not a subclass of <code>int</code>.</li>
+</ul>
+</li>
+</ul>
+<p>Python supports a form of multiple inheritance as well. A class definition with multiple base classes looks like this:</p>
+<p>The syntax for the multiple inheritance starts with:</p>
+<ul>
+<li><code>class DerivedClassName(Base1, Base2, Base3):</code></li>
+</ul>
+<p>The attributes inherited from a parent class is searched basically as:</p>
+<ul>
+<li>depth-first</li>
+<li>left-to-right</li>
+<li>not searching twice in the same class where there is an overlap in the hierarchy.</li>
+</ul>
+<p>Thus, the search order is:</p>
+<ul>
+<li>attributes found in <code>DerivedClassName</code></li>
+<li>attributes found in <code>Base1</code> class</li>
+<li>attributes found in recursively in the base classes of <code>Base1</code></li>
+<li>attributes found in <code>Base2</code> class</li>
+<li>&hellip;</li>
+</ul>
+<p>In practice, slightly more complex method resolution order like the call-next-method of <a href="http://en.wikipedia.org/wiki/Common_Lisp_Object_System">CLOS</a> is supported via cooperative calls to the <a href="http://docs.python.org/3.1/library/functions.html#super">super</a> built-in function. (This is out-of-scope for me now.)</p>
+<p>Here is an example of code <code>fridge/fridge.py</code> in Python2 to show how class and inheritance can be used.</p>
+
+<pre><code>#!/usr/bin/python
+# vi:se ts=4 sts=4 et:
+class Fridge:
+    def __init__(self, name):
+        self.beer = 0
+        print name, &#34;bought a new fridge.&#34;
+        self.name = name
+    def report_beer(self):
+        print self.name, &#34;has&#34;, self.beer, &#34;can(s) of beer in stock.&#34;
+        return
+    def stock_beer(self, cans):
+        print self.name, &#34;stocks&#34;, cans, &#34;can(s) of beer.&#34;
+        self.beer &#43;= cans
+        return
+    def consume_beer(self, cans):
+        print self.name, &#34;tries to consume&#34;, cans, &#34;can(s) of beer&#34;
+        if self.beer &lt;= cans:
+            print (&#34;No more beer after drinking %i can(s) of beer!&#34; % self.beer)
+            self.beer = 0
+        else:
+            self.beer -= cans
+        self.report_beer()
+        return
+
+class NormalFridge(Fridge):
+    def __init__(self, name, min_beer):
+        Fridge.__init__(self, name)
+        print name, &#34;wishes to have&#34;, min_beer, &#34;cans of beer&#34;
+        self.min_beer = min_beer
+    def check_beer(self):
+        if self.beer &lt; self.min_beer:
+            print (&#34;%i extra can(s) of beer needed for good stocking.&#34; % 
+                    (self.min_beer - self.beer))
+        return
+    def consume_beer(self, cans):
+        Fridge.consume_beer(self, cans)
+        self.check_beer()
+        return
+
+def test(name = &#34;Tom&#34;, minimum = 6):
+    tom_fridge = NormalFridge(name, minimum)
+    tom_fridge.stock_beer(12)
+    tom_fridge.consume_beer(5)
+    tom_fridge.consume_beer(5)
+    tom_fridge.consume_beer(5)
+    tom_fridge.stock_beer(8)
+    tom_fridge.consume_beer(3)
+    exit(0)
+
+if __name__ == &#39;__main__&#39;:
+    test()
+</code></pre>
+
+<p>Let&rsquo;s execute this.</p>
+
+<pre><code>$ python fridge/fridge.py
+Tom bought a new fridge.
+Tom wishes to have 6 cans of beer
+Tom stocks 12 can(s) of beer.
+Tom tries to consume 5 can(s) of beer
+Tom has 7 can(s) of beer in stock.
+Tom tries to consume 5 can(s) of beer
+Tom has 2 can(s) of beer in stock.
+4 extra can(s) of beer needed for good stocking.
+Tom tries to consume 5 can(s) of beer
+No more beer after drinking 2 can(s) of beer!
+Tom has 0 can(s) of beer in stock.
+6 extra can(s) of beer needed for good stocking.
+Tom stocks 8 can(s) of beer.
+Tom tries to consume 3 can(s) of beer
+Tom has 5 can(s) of beer in stock.
+1 extra can(s) of beer needed for good stocking.
+</code></pre>
+
+<p>Here is an example of code <code>fridge/fridge.py</code> in Python3 converted from the above example by <code>2to3</code> as described in <a href="#python2_and_python3">Python2 and Python3</a>.</p>
+
+<pre><code>#!/usr/bin/python
+# vi:se ts=4 sts=4 et:
+class Fridge:
+    def __init__(self, name):
+        self.beer = 0
+        print(name, &#34;bought a new fridge.&#34;)
+        self.name = name
+    def report_beer(self):
+        print(self.name, &#34;has&#34;, self.beer, &#34;can(s) of beer in stock.&#34;)
+        return
+    def stock_beer(self, cans):
+        print(self.name, &#34;stocks&#34;, cans, &#34;can(s) of beer.&#34;)
+        self.beer &#43;= cans
+        return
+    def consume_beer(self, cans):
+        print(self.name, &#34;tries to consume&#34;, cans, &#34;can(s) of beer&#34;)
+        if self.beer &lt;= cans:
+            print((&#34;No more beer after drinking %i can(s) of beer!&#34; % self.beer))
+            self.beer = 0
+        else:
+            self.beer -= cans
+        self.report_beer()
+        return
+
+class NormalFridge(Fridge):
+    def __init__(self, name, min_beer):
+        Fridge.__init__(self, name)
+        print(name, &#34;wishes to have&#34;, min_beer, &#34;cans of beer&#34;)
+        self.min_beer = min_beer
+    def check_beer(self):
+        if self.beer &lt; self.min_beer:
+            print((&#34;%i extra can(s) of beer needed for good stocking.&#34; % 
+                    (self.min_beer - self.beer)))
+        return
+    def consume_beer(self, cans):
+        Fridge.consume_beer(self, cans)
+        self.check_beer()
+        return
+
+def test(name = &#34;Tom&#34;, minimum = 6):
+    tom_fridge = NormalFridge(name, minimum)
+    tom_fridge.stock_beer(12)
+    tom_fridge.consume_beer(5)
+    tom_fridge.consume_beer(5)
+    tom_fridge.consume_beer(5)
+    tom_fridge.stock_beer(8)
+    tom_fridge.consume_beer(3)
+    exit(0)
+
+if __name__ == &#39;__main__&#39;:
+    test()
+</code></pre>
+
+<p>Let&rsquo;s execute this.</p>
+
+<pre><code>$ python3 fridge/fridge.py
+Tom bought a new fridge.
+Tom wishes to have 6 cans of beer
+Tom stocks 12 can(s) of beer.
+Tom tries to consume 5 can(s) of beer
+Tom has 7 can(s) of beer in stock.
+Tom tries to consume 5 can(s) of beer
+Tom has 2 can(s) of beer in stock.
+4 extra can(s) of beer needed for good stocking.
+Tom tries to consume 5 can(s) of beer
+No more beer after drinking 2 can(s) of beer!
+Tom has 0 can(s) of beer in stock.
+6 extra can(s) of beer needed for good stocking.
+Tom stocks 8 can(s) of beer.
+Tom tries to consume 3 can(s) of beer
+Tom has 5 can(s) of beer in stock.
+1 extra can(s) of beer needed for good stocking.
+</code></pre>
+
+<h3 id="python-private-variables">Python private variables</h3>
+<p>See <a href="http://docs.python.org/3/tutorial/classes.html#private-variables">&ldquo;The Python Tutorial: Private Variables.&quot;</a></p>
+<p><em>Private</em> instance variables that should be treated as a non-public part of the API normally use names prefixed with an underscore (e.g. <code>_spam</code>) by convention.</p>
+<p>The name mangling mechanism to support class-private members:</p>
+<ul>
+<li>For current class name of <code>classname</code> or <code>_classname</code>:
+<ul>
+<li>Replace <code>__spam</code> with <code>_classname__spam</code>.</li>
+<li>Replace <code>__spam_</code> with <code>_classname__spam_</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="install-python-source-distribution">Install Python source distribution</h3>
+<p>See <a href="http://docs.python.org/3/install/%5B%22The">http://docs.python.org/3/install/[&quot;The</a> Python Tutorial: Installing Python
+Modules&rdquo;] to learn <code>distutils</code> from user&rsquo;s perspective.</p>
+<p>Python programs are normally distributed as a tar ball containing Python module
+package and script files.  These are managed by the cross-platform distribution
+utility, <code>distutils</code>.  The Python source distribution tar ball can be untared
+as:</p>
+<pre><code>setup.py
+foo/
+    __init__.py
+    bar.py
+    baz/
+        __init__.py
+        qux.py
+scripts/
+    command_line_command
+</code></pre><p>The <code>setup.py</code> script of <code>distutils</code> installs Python module package <code>foo</code> in this Python source distribution to the <code>lib/pythonX.Y/site-packages</code> subdirectory with:</p>
+<p>Basic install (system wide to <code>/usr/local</code>)</p>
+<pre><code>$ sudo python3 setup.py install
+</code></pre><p>Alternate install (per user to <code>~/.local</code>)</p>
+<pre><code>$ pythone setup.py install --user
+</code></pre><p>Alternate install (per user to <code>~/</code>)</p>
+<pre><code>$ python3 setup.py install --home
+</code></pre><p>Alternate install (custom to <code>/path/to</code>)</p>
+<pre><code>$ python3 setup.py install --prefix=/path/to
+</code></pre><p>Each execution of <code>setup.py</code> script in the above examples also installs files in the <code>scripts</code> to the corresponding <code>bin</code> subdirectory.</p>
+<h3 id="generate-python-source-distribution">Generate Python source distribution</h3>
+<p>See
+<a href="http://docs.python.org/3/istutils/">The Python Tutorial: Distributing Python Modules</a>
+to learn <code>distutils</code> from developer&rsquo;s perspective.</p>
+<p>The <code>setup.py</code> script of <code>distutils</code> can generate Python source distribution from the source tree containing Python modules and script files.</p>
+<p>Generate Python source distribution</p>
+<pre><code>$ python3 setup.py sdist
+</code></pre><p>This creates a <code>dist/foo-1.0.tar.gz</code> tar ball file for the Python source distribution.</p>
+<h3 id="example-1-of-python-source-distribution">Example #1 of Python source distribution</h3>
+<p>Let&rsquo;s populate the <code>fridge</code> directory with a few files to make Python source distribution.</p>
+<ul>
+<li><code>fridge.py</code> : Python module <code>fridge</code> to be packaged (see <a href="#python_inheritance"> Python inheritance</a>).</li>
+<li><code>README</code> : Package description</li>
+<li><code>setup.py</code> : Package configuration for the Python source distribution.</li>
+<li><code>scripts/jane</code>, &hellip; : Python script using Python module <code>fridge</code>.</li>
+</ul>
+<p>Let&rsquo;s make a source tree for Python module <code>fridge</code>.</p>
+
+<pre><code>$ ls -lR fridge
+fridge:
+total 20
+-rw-r--r-- 1 osamu osamu 1586 Aug 17 23:43 fridge.py
+-rw-r--r-- 1 osamu osamu 1579 Aug 17 23:43 fridge.py.bak
+-rw-rw-r-- 1 osamu osamu   31 Mar 28 22:17 README
+drwxrwxr-x 2 osamu osamu 4096 Apr  6 18:14 scripts
+-rwxr-xr-x 1 osamu osamu  362 Apr  5 23:58 setup.py
+
+fridge/scripts:
+total 12
+-rw-r--r-- 1 osamu osamu 124 Apr  6 18:14 jane
+-rw-r--r-- 1 osamu osamu  93 Mar 28 20:18 joe
+-rw-r--r-- 1 osamu osamu  81 Mar 28 20:19 tom
+$
+$ cat fridge/setup.py
+#!/usr/bin/python3
+# vi:se ts=4 sts=4 et si:
+from distutils.core import setup
+setup(name=&#39;fridge&#39;,
+    version=&#39;1.0&#39;,
+    description=&#39;Python Distutils practice&#39;,
+    author=&#39;Osamu Aoki&#39;,
+    author_email=&#39;osamu@debian.org&#39;,
+    url=&#39;http://people.debian.org/~osamu/&#39;,
+    py_modules=[&#39;fridge&#39;],
+    scripts=[&#39;scripts/jane&#39;, &#39;scripts/joe&#39;, &#39;scripts/tom&#39;],
+    )
+$
+$ cat fridge/README
+python source package practice
+$
+$ cat fridge/scripts/jane
+#!/usr/bin/python3
+import fridge
+import sys
+
+if __name__ == &#39;__main__&#39;:
+    print(sys.path)
+    fridge.test(name = &#34;Jane&#34;)
+$
+$ cat fridge/scripts/joe
+#!/usr/bin/python3
+import fridge
+
+if __name__ == &#39;__main__&#39;:
+    fridge.test(name = &#34;Joe&#34;)
+$
+$ cat fridge/scripts/tom
+#!/usr/bin/python3
+import fridge
+
+if __name__ == &#39;__main__&#39;:
+    fridge.test()
+</code></pre>
+
+<p>Please note &ldquo;<code>py_modules=['fridge'],</code>&rdquo; in <code>setup.py</code> which tells to
+use the <code>fridge.py</code> file as the <code>fridge</code> module.</p>
+<p>Let&rsquo;s execute <code>setup.py</code> and generate Python source distribution</p>
+
+<pre><code>$ cd fridge; python3 setup.py sdist; cd -
+/path/to/package2/fridge
+running sdist
+running check
+warning: sdist: manifest template &#39;MANIFEST.in&#39; does not exist (using default fil...
+
+writing manifest file &#39;MANIFEST&#39;
+creating fridge-1.0
+creating fridge-1.0/scripts
+making hard links in fridge-1.0...
+hard linking README -&gt; fridge-1.0
+hard linking fridge.py -&gt; fridge-1.0
+hard linking setup.py -&gt; fridge-1.0
+hard linking scripts/jane -&gt; fridge-1.0/scripts
+hard linking scripts/joe -&gt; fridge-1.0/scripts
+hard linking scripts/tom -&gt; fridge-1.0/scripts
+creating dist
+Creating tar archive
+removing &#39;fridge-1.0&#39; (and everything under it)
+/path/to/package2
+</code></pre>
+
+<p>Let&rsquo;s see the updated source tree for fridge</p>
+
+<pre><code>$ ls -lR fridge
+fridge:
+total 28
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 dist
+-rw-r--r-- 1 osamu osamu 1586 Aug 17 23:43 fridge.py
+-rw-r--r-- 1 osamu osamu 1579 Aug 17 23:43 fridge.py.bak
+-rw-rw-r-- 1 osamu osamu  106 Aug 17 23:43 MANIFEST
+-rw-rw-r-- 1 osamu osamu   31 Mar 28 22:17 README
+drwxrwxr-x 2 osamu osamu 4096 Apr  6 18:14 scripts
+-rwxr-xr-x 1 osamu osamu  362 Apr  5 23:58 setup.py
+
+fridge/dist:
+total 4
+-rw-rw-r-- 1 osamu osamu 1230 Aug 17 23:43 fridge-1.0.tar.gz
+
+fridge/scripts:
+total 12
+-rw-r--r-- 1 osamu osamu 124 Apr  6 18:14 jane
+-rw-r--r-- 1 osamu osamu  93 Mar 28 20:18 joe
+-rw-r--r-- 1 osamu osamu  81 Mar 28 20:19 tom
+$
+$ tar -tvzf fridge/dist/fridge-1.0.tar.gz
+drwxrwxr-x osamu/osamu       0 2013-08-17 23:43 fridge-1.0/
+drwxrwxr-x osamu/osamu       0 2013-08-17 23:43 fridge-1.0/scripts/
+-rw-r--r-- osamu/osamu     124 2013-04-06 18:14 fridge-1.0/scripts/jane
+-rw-r--r-- osamu/osamu      93 2013-03-28 20:18 fridge-1.0/scripts/joe
+-rw-r--r-- osamu/osamu      81 2013-03-28 20:19 fridge-1.0/scripts/tom
+-rw-r--r-- osamu/osamu    1586 2013-08-17 23:43 fridge-1.0/fridge.py
+-rw-rw-r-- osamu/osamu     233 2013-08-17 23:43 fridge-1.0/PKG-INFO
+-rwxr-xr-x osamu/osamu     362 2013-04-05 23:58 fridge-1.0/setup.py
+-rw-rw-r-- osamu/osamu      31 2013-03-28 22:17 fridge-1.0/README
+$
+$ tar -xvzOf fridge/dist/fridge-1.0.tar.gz fridge-1.0/PKG-INFO
+fridge-1.0/PKG-INFO
+Metadata-Version: 1.0
+Name: fridge
+Version: 1.0
+Summary: Python Distutils practice
+Home-page: http://people.debian.org/~osamu/
+Author: Osamu Aoki
+Author-email: osamu@debian.org
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
+</code></pre>
+
+<p>You see few files generated.</p>
+<ul>
+<li><code>MANIFEST</code> : auto generated by distutils.</li>
+<li><code>dist</code> : directory for generated Python source distribution packages.</li>
+<li><code>dist/fridge-1.0.tar.gz</code> :  Python source distribution package.</li>
+<li><code>PKG-INFO</code> in <code>dist/fridge-1.0.tar.gz</code> : Metadata for Python source distribution package generated from the <code>setup.py</code> file.</li>
+</ul>
+<p>Let&rsquo;s untar Python source distribution package and install as user.</p>
+
+<pre><code>$ tar -xvzf fridge/dist/fridge-1.0.tar.gz -C dist
+fridge-1.0/
+fridge-1.0/scripts/
+fridge-1.0/scripts/jane
+fridge-1.0/scripts/joe
+fridge-1.0/scripts/tom
+fridge-1.0/fridge.py
+fridge-1.0/PKG-INFO
+fridge-1.0/setup.py
+fridge-1.0/README
+$ cd dist/fridge-1.0; python3 setup.py install --user;cd -
+/path/to/package2/dist/fridge-1.0
+running install
+running build
+running build_py
+creating build
+creating build/lib
+copying fridge.py -&gt; build/lib
+running build_scripts
+creating build/scripts-3.3
+copying and adjusting scripts/jane -&gt; build/scripts-3.3
+copying and adjusting scripts/joe -&gt; build/scripts-3.3
+copying and adjusting scripts/tom -&gt; build/scripts-3.3
+changing mode of build/scripts-3.3/jane from 664 to 775
+changing mode of build/scripts-3.3/joe from 664 to 775
+changing mode of build/scripts-3.3/tom from 664 to 775
+running install_lib
+copying build/lib/fridge.py -&gt; /home/osamu/.local/lib/python3.3/site-packages
+byte-compiling /home/osamu/.local/lib/python3.3/site-packages/fridge.py to fridge...
+running install_scripts
+copying build/scripts-3.3/jane -&gt; /home/osamu/.local/bin
+copying build/scripts-3.3/joe -&gt; /home/osamu/.local/bin
+copying build/scripts-3.3/tom -&gt; /home/osamu/.local/bin
+changing mode of /home/osamu/.local/bin/jane to 775
+changing mode of /home/osamu/.local/bin/joe to 775
+changing mode of /home/osamu/.local/bin/tom to 775
+running install_egg_info
+Removing /home/osamu/.local/lib/python3.3/site-packages/fridge-1.0.egg-info
+Writing /home/osamu/.local/lib/python3.3/site-packages/fridge-1.0.egg-info
+/path/to/package2
+$ jane|fold
+[&#39;/home/osamu/.local/bin&#39;, &#39;/usr/lib/python3.3&#39;, &#39;/usr/lib/python3.3/plat-x86_64
+-linux-gnu&#39;, &#39;/usr/lib/python3.3/lib-dynload&#39;, &#39;/home/osamu/.local/lib/python3.3
+/site-packages&#39;, &#39;/usr/local/lib/python3.3/dist-packages&#39;, &#39;/usr/lib/python3/dis
+t-packages&#39;]
+Jane bought a new fridge.
+Jane wishes to have 6 cans of beer
+Jane stocks 12 can(s) of beer.
+Jane tries to consume 5 can(s) of beer
+Jane has 7 can(s) of beer in stock.
+Jane tries to consume 5 can(s) of beer
+Jane has 2 can(s) of beer in stock.
+4 extra can(s) of beer needed for good stocking.
+Jane tries to consume 5 can(s) of beer
+No more beer after drinking 2 can(s) of beer!
+Jane has 0 can(s) of beer in stock.
+6 extra can(s) of beer needed for good stocking.
+Jane stocks 8 can(s) of beer.
+Jane tries to consume 3 can(s) of beer
+Jane has 5 can(s) of beer in stock.
+1 extra can(s) of beer needed for good stocking.
+</code></pre>
+
+<p>Unfortunately, <code>distutils</code> as of now does not offer uninstall.  We need to remove files manually to uninstall them.</p>
+<p>Let&rsquo;s uninstall Python source distribution manually.</p>
+
+<pre><code>$ rm -rf dist
+$ rm -r ~/.local/bin/jane ~/.local/bin/joe ~/.local/bin/tom
+$ rm -r ~/.local/lib/python3.2/site-packages/fridge.py
+rm: cannot remove ‘/home/osamu/.local/lib/python3.2/site-packages/fridge.py’: No ...
+$ rm -r ~/.local/lib/python3.2/site-packages/fridge-1.0.egg-info
+rm: cannot remove ‘/home/osamu/.local/lib/python3.2/site-packages/fridge-1.0.egg-...
+$ rm -rf ~/.local/lib/python3.2/site-packages/__pycache__
+</code></pre>
+
+<h3 id="example-2-of-python-source-distribution">Example #2 of Python source distribution</h3>
+<p>Let&rsquo;s try an alternative Python source distribution with <a href="#python-module-package">Python module package</a>.</p>
+<p>Basically, move <code>fridge/fridge.py</code> in Example #1 to <code>fridge/src/fridge/__init__.py</code>.</p>
+<p>Let&rsquo;s execute this.</p>
+
+<pre><code>$ python3 fridge/src/fridge/__init__.py
+Tom bought a new fridge.
+Tom wishes to have 6 cans of beer
+Tom stocks 12 can(s) of beer.
+Tom tries to consume 5 can(s) of beer
+Tom has 7 can(s) of beer in stock.
+Tom tries to consume 5 can(s) of beer
+Tom has 2 can(s) of beer in stock.
+4 extra can(s) of beer needed for good stocking.
+Tom tries to consume 5 can(s) of beer
+No more beer after drinking 2 can(s) of beer!
+Tom has 0 can(s) of beer in stock.
+6 extra can(s) of beer needed for good stocking.
+Tom stocks 8 can(s) of beer.
+Tom tries to consume 3 can(s) of beer
+Tom has 5 can(s) of beer in stock.
+1 extra can(s) of beer needed for good stocking.
+</code></pre>
+
+<p>Let&rsquo;s populate the <code>fridge</code> directory with mostly the same files except:</p>
+<ul>
+<li><code>src/fridge/__init__.py</code> : Python module <code>fridge</code> to be packaged insted of <code>fridge.py</code> (see <a href="#python-module-package">Python module package</a>).</li>
+<li><code>setup.py</code> : Package configuration for the Python source distribution (Contents of the file updated).</li>
+</ul>
+<p>Let&rsquo;s make a source tree for Python module <code>fridge</code>.</p>
+
+<pre><code>$ ls -lR fridge
+fridge:
+total 16
+-rw-rw-r-- 1 osamu osamu   31 Mar 28 22:17 README
+drwxrwxr-x 2 osamu osamu 4096 Apr  6 18:14 scripts
+-rwxr-xr-x 1 osamu osamu  402 Apr  5 23:59 setup.py
+drwxrwxr-x 3 osamu osamu 4096 Mar 29 00:01 src
+
+fridge/scripts:
+total 12
+-rw-r--r-- 1 osamu osamu 124 Apr  6 18:14 jane
+-rw-r--r-- 1 osamu osamu  93 Mar 28 20:18 joe
+-rw-r--r-- 1 osamu osamu  81 Mar 28 20:19 tom
+
+fridge/src:
+total 4
+drwxrwxr-x 2 osamu osamu 4096 Apr  6 18:35 fridge
+
+fridge/src/fridge:
+total 4
+-rw-r--r-- 1 osamu osamu 1583 Mar 28 20:10 __init__.py
+$
+$ cat fridge/setup.py
+#!/usr/bin/python3
+# vi:se ts=4 sts=4 et si:
+from distutils.core import setup
+setup(name=&#39;fridge&#39;,
+    version=&#39;1.0&#39;,
+    description=&#39;Python Distutils practice&#39;,
+    author=&#39;Osamu Aoki&#39;,
+    author_email=&#39;osamu@debian.org&#39;,
+    url=&#39;http://people.debian.org/~osamu/&#39;,
+    packages=[&#39;fridge&#39;],
+    package_dir={&#39;fridge&#39;: &#39;src/fridge&#39;},
+    scripts=[&#39;scripts/jane&#39;, &#39;scripts/joe&#39;, &#39;scripts/tom&#39;],
+    )
+</code></pre>
+
+<p>Please note &ldquo;<code>package_dir={'fridge': 'src/fridge'},</code>&rdquo; in <code>setup.py</code> which tells
+to use files in the <code>src/fridge</code> directory as the <code>fridge</code> module package.</p>
+<p>Let&rsquo;s execute <code>setup.py</code> and generate Python source distribution</p>
+
+<pre><code>$ cd fridge; python3 setup.py sdist; cd -
+/path/to/package3/fridge
+running sdist
+running check
+warning: sdist: manifest template &#39;MANIFEST.in&#39; does not exist (using default fil...
+
+writing manifest file &#39;MANIFEST&#39;
+creating fridge-1.0
+creating fridge-1.0/scripts
+creating fridge-1.0/src
+creating fridge-1.0/src/fridge
+making hard links in fridge-1.0...
+hard linking README -&gt; fridge-1.0
+hard linking setup.py -&gt; fridge-1.0
+hard linking scripts/jane -&gt; fridge-1.0/scripts
+hard linking scripts/joe -&gt; fridge-1.0/scripts
+hard linking scripts/tom -&gt; fridge-1.0/scripts
+hard linking src/fridge/__init__.py -&gt; fridge-1.0/src/fridge
+creating dist
+Creating tar archive
+removing &#39;fridge-1.0&#39; (and everything under it)
+/path/to/package3
+</code></pre>
+
+<p>Let&rsquo;s see the updated source tree for fridge</p>
+
+<pre><code>$ ls -lR fridge
+fridge:
+total 24
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 dist
+-rw-rw-r-- 1 osamu osamu  119 Aug 17 23:43 MANIFEST
+-rw-rw-r-- 1 osamu osamu   31 Mar 28 22:17 README
+drwxrwxr-x 2 osamu osamu 4096 Apr  6 18:14 scripts
+-rwxr-xr-x 1 osamu osamu  402 Apr  5 23:59 setup.py
+drwxrwxr-x 3 osamu osamu 4096 Mar 29 00:01 src
+
+fridge/dist:
+total 4
+-rw-rw-r-- 1 osamu osamu 1268 Aug 17 23:43 fridge-1.0.tar.gz
+
+fridge/scripts:
+total 12
+-rw-r--r-- 1 osamu osamu 124 Apr  6 18:14 jane
+-rw-r--r-- 1 osamu osamu  93 Mar 28 20:18 joe
+-rw-r--r-- 1 osamu osamu  81 Mar 28 20:19 tom
+
+fridge/src:
+total 4
+drwxrwxr-x 2 osamu osamu 4096 Apr  6 18:35 fridge
+
+fridge/src/fridge:
+total 4
+-rw-r--r-- 1 osamu osamu 1583 Mar 28 20:10 __init__.py
+$
+$ tar -tvzf fridge/dist/fridge-1.0.tar.gz
+drwxrwxr-x osamu/osamu       0 2013-08-17 23:43 fridge-1.0/
+drwxrwxr-x osamu/osamu       0 2013-08-17 23:43 fridge-1.0/scripts/
+-rw-r--r-- osamu/osamu     124 2013-04-06 18:14 fridge-1.0/scripts/jane
+-rw-r--r-- osamu/osamu      93 2013-03-28 20:18 fridge-1.0/scripts/joe
+-rw-r--r-- osamu/osamu      81 2013-03-28 20:19 fridge-1.0/scripts/tom
+drwxrwxr-x osamu/osamu       0 2013-08-17 23:43 fridge-1.0/src/
+drwxrwxr-x osamu/osamu       0 2013-08-17 23:43 fridge-1.0/src/fridge/
+-rw-r--r-- osamu/osamu    1583 2013-03-28 20:10 fridge-1.0/src/fridge/__init__.py...
+-rw-rw-r-- osamu/osamu     233 2013-08-17 23:43 fridge-1.0/PKG-INFO
+-rwxr-xr-x osamu/osamu     402 2013-04-05 23:59 fridge-1.0/setup.py
+-rw-rw-r-- osamu/osamu      31 2013-03-28 22:17 fridge-1.0/README
+</code></pre>
+
+<p>You see few files generated.</p>
+<ul>
+<li><code>MANIFEST</code> : auto generated by distutils.</li>
+<li><code>dist</code> : directory for generated Python source distribution packages.</li>
+<li><code>dist/fridge-1.0.tar.gz</code> :  Python source distribution package.</li>
+<li><code>PKG-INFO</code> in <code>dist/fridge-1.0.tar.gz</code> : Metadata for Python source distribution package generated from the <code>setup.py</code> file.</li>
+</ul>
+<p>Let&rsquo;s untar Python source distribution package and install as user.</p>
+
+<pre><code>$ tar -xvzf fridge/dist/fridge-1.0.tar.gz -C dist
+fridge-1.0/
+fridge-1.0/scripts/
+fridge-1.0/scripts/jane
+fridge-1.0/scripts/joe
+fridge-1.0/scripts/tom
+fridge-1.0/fridge.py
+fridge-1.0/PKG-INFO
+fridge-1.0/setup.py
+fridge-1.0/README
+$ cd dist/fridge-1.0; python3 setup.py install --user;cd -
+/path/to/package2/dist/fridge-1.0
+running install
+running build
+running build_py
+creating build
+creating build/lib
+copying fridge.py -&gt; build/lib
+running build_scripts
+creating build/scripts-3.3
+copying and adjusting scripts/jane -&gt; build/scripts-3.3
+copying and adjusting scripts/joe -&gt; build/scripts-3.3
+copying and adjusting scripts/tom -&gt; build/scripts-3.3
+changing mode of build/scripts-3.3/jane from 664 to 775
+changing mode of build/scripts-3.3/joe from 664 to 775
+changing mode of build/scripts-3.3/tom from 664 to 775
+running install_lib
+copying build/lib/fridge.py -&gt; /home/osamu/.local/lib/python3.3/site-packages
+byte-compiling /home/osamu/.local/lib/python3.3/site-packages/fridge.py to fridge...
+running install_scripts
+copying build/scripts-3.3/jane -&gt; /home/osamu/.local/bin
+copying build/scripts-3.3/joe -&gt; /home/osamu/.local/bin
+copying build/scripts-3.3/tom -&gt; /home/osamu/.local/bin
+changing mode of /home/osamu/.local/bin/jane to 775
+changing mode of /home/osamu/.local/bin/joe to 775
+changing mode of /home/osamu/.local/bin/tom to 775
+running install_egg_info
+Removing /home/osamu/.local/lib/python3.3/site-packages/fridge-1.0.egg-info
+Writing /home/osamu/.local/lib/python3.3/site-packages/fridge-1.0.egg-info
+/path/to/package2
+$ jane|fold
+[&#39;/home/osamu/.local/bin&#39;, &#39;/usr/lib/python3.3&#39;, &#39;/usr/lib/python3.3/plat-x86_64
+-linux-gnu&#39;, &#39;/usr/lib/python3.3/lib-dynload&#39;, &#39;/home/osamu/.local/lib/python3.3
+/site-packages&#39;, &#39;/usr/local/lib/python3.3/dist-packages&#39;, &#39;/usr/lib/python3/dis
+t-packages&#39;]
+Jane bought a new fridge.
+Jane wishes to have 6 cans of beer
+Jane stocks 12 can(s) of beer.
+Jane tries to consume 5 can(s) of beer
+Jane has 7 can(s) of beer in stock.
+Jane tries to consume 5 can(s) of beer
+Jane has 2 can(s) of beer in stock.
+4 extra can(s) of beer needed for good stocking.
+Jane tries to consume 5 can(s) of beer
+No more beer after drinking 2 can(s) of beer!
+Jane has 0 can(s) of beer in stock.
+6 extra can(s) of beer needed for good stocking.
+Jane stocks 8 can(s) of beer.
+Jane tries to consume 3 can(s) of beer
+Jane has 5 can(s) of beer in stock.
+1 extra can(s) of beer needed for good stocking.
+</code></pre>
+
+<p>Unfortunately, <code>distutils</code> as of now does not offer uninstall.  We need to remove files manually to uninstall them.</p>
+<p>Let&rsquo;s uninstall Python source distribution manually.</p>
+
+<pre><code>$ rm -rf dist
+$ rm -r ~/.local/bin/jane ~/.local/bin/joe ~/.local/bin/tom
+$ rm -r ~/.local/lib/python3.2/site-packages/fridge.py
+rm: cannot remove ‘/home/osamu/.local/lib/python3.2/site-packages/fridge.py’: No ...
+$ rm -r ~/.local/lib/python3.2/site-packages/fridge-1.0.egg-info
+rm: cannot remove ‘/home/osamu/.local/lib/python3.2/site-packages/fridge-1.0.egg-...
+$ rm -rf ~/.local/lib/python3.2/site-packages/__pycache__
+</code></pre>
+
+<h3 id="debian-package-from-python2-source-distribution-dh_make">Debian package from Python2 source distribution (dh_make)</h3>
+<p>The <code>dh_make</code> is handy for making a Debian package.  I will be very sloppy for now.  (More work is needed to make package suitable for Debian.)</p>
+<p>Let&rsquo;s make Debian source package.</p>
+
+<pre><code>$ tar -xvzf fridge/dist/fridge-1.0.tar.gz -C deb
+fridge-1.0/
+fridge-1.0/scripts/
+fridge-1.0/scripts/jane
+fridge-1.0/scripts/joe
+fridge-1.0/scripts/tom
+fridge-1.0/fridge.py
+fridge-1.0/PKG-INFO
+fridge-1.0/setup.py
+fridge-1.0/README
+$ cd deb/fridge-1.0; dh_make -s --createorig --yes; cd -
+/path/to/package1/deb/fridge-1.0
+Maintainer name  : Osamu Aoki
+Email-Address    : osamu@debian.org
+Date             : Sat, 17 Aug 2013 23:43:26 &#43;0900
+Package Name     : fridge
+Version          : 1.0
+License          : blank
+Type of Package  : Single
+Currently there is no top level Makefile. This may require additional tuning.
+Done. Please edit the files in the debian/ subdirectory now. You should also
+check that the fridge Makefiles install into $DESTDIR and not in / .
+/path/to/package1
+$ ls -lR deb
+deb:
+total 8
+drwxrwxr-x 4 osamu osamu 4096 Aug 17 23:43 fridge-1.0
+-rw-rw-r-- 1 osamu osamu 1212 Aug 17 23:43 fridge_1.0.orig.tar.xz
+
+deb/fridge-1.0:
+total 24
+drwxr-xr-x 3 osamu osamu 4096 Aug 17 23:43 debian
+-rw-r--r-- 1 osamu osamu 1579 Apr  8 21:16 fridge.py
+-rw-rw-r-- 1 osamu osamu  233 Aug 17 23:43 PKG-INFO
+-rw-rw-r-- 1 osamu osamu   31 Mar 28 22:17 README
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 scripts
+-rwxr-xr-x 1 osamu osamu  361 Apr  8 21:13 setup.py
+
+deb/fridge-1.0/debian:
+total 104
+-rw-rw-r-- 1 osamu osamu   180 Aug 17 23:43 changelog
+-rw-rw-r-- 1 osamu osamu     2 Aug 17 23:43 compat
+-rw-rw-r-- 1 osamu osamu   505 Aug 17 23:43 control
+-rw-rw-r-- 1 osamu osamu  1668 Aug 17 23:43 copyright
+-rw-rw-r-- 1 osamu osamu     7 Aug 17 23:43 docs
+-rw-rw-r-- 1 osamu osamu   128 Aug 17 23:43 fridge.cron.d.ex
+-rw-rw-r-- 1 osamu osamu   232 Aug 17 23:43 fridge.default.ex
+-rw-rw-r-- 1 osamu osamu   504 Aug 17 23:43 fridge.doc-base.EX
+-rw-rw-r-- 1 osamu osamu  4675 Aug 17 23:43 init.d.ex
+-rw-rw-r-- 1 osamu osamu  1625 Aug 17 23:43 manpage.1.ex
+-rw-rw-r-- 1 osamu osamu  4648 Aug 17 23:43 manpage.sgml.ex
+-rw-rw-r-- 1 osamu osamu 11003 Aug 17 23:43 manpage.xml.ex
+-rw-rw-r-- 1 osamu osamu   123 Aug 17 23:43 menu.ex
+-rw-rw-r-- 1 osamu osamu   956 Aug 17 23:43 postinst.ex
+-rw-rw-r-- 1 osamu osamu   929 Aug 17 23:43 postrm.ex
+-rw-rw-r-- 1 osamu osamu   689 Aug 17 23:43 preinst.ex
+-rw-rw-r-- 1 osamu osamu   876 Aug 17 23:43 prerm.ex
+-rw-rw-r-- 1 osamu osamu   173 Aug 17 23:43 README.Debian
+-rw-rw-r-- 1 osamu osamu   191 Aug 17 23:43 README.source
+-rwxr-xr-x 1 osamu osamu   442 Aug 17 23:43 rules
+drwxr-xr-x 2 osamu osamu  4096 Aug 17 23:43 source
+-rw-rw-r-- 1 osamu osamu   775 Aug 17 23:43 watch.ex
+
+deb/fridge-1.0/debian/source:
+total 4
+-rw-rw-r-- 1 osamu osamu 12 Aug 17 23:43 format
+
+deb/fridge-1.0/scripts:
+total 12
+-rw-r--r-- 1 osamu osamu 124 Apr  6 18:14 jane
+-rw-r--r-- 1 osamu osamu  93 Mar 28 20:18 joe
+-rw-r--r-- 1 osamu osamu  81 Mar 28 20:19 tom
+$
+
+  ... update debian/control
+  ... update debian/rules
+  ... touch up template files
+  ... remove unused template files
+
+$ ls -l deb/fridge-1.0/debian
+total 32
+-rw-rw-r-- 1 osamu osamu  180 Apr  6 22:36 changelog
+-rw-rw-r-- 1 osamu osamu    2 Apr  6 22:36 compat
+-rw-rw-r-- 1 osamu osamu  554 Apr  8 21:18 control
+-rw-rw-r-- 1 osamu osamu 1668 Apr  6 22:36 copyright
+-rw-rw-r-- 1 osamu osamu  440 Apr  6 23:03 manpage.1
+-rw-rw-r-- 1 osamu osamu  120 Apr  6 23:03 README.Debian
+-rwxr-xr-x 1 osamu osamu   67 Apr  9 20:33 rules
+drwxr-xr-x 2 osamu osamu 4096 Apr  6 22:36 source
+$ cat deb/fridge-1.0/debian/control
+Source: fridge
+Section: unknown
+Priority: extra
+Maintainer: Osamu Aoki &lt;osamu@debian.org&gt;
+Build-Depends: debhelper (&gt;= 8.0.0), python-minimal, python
+Standards-Version: 3.9.3
+X-Python-Version: &gt;= 2.6
+Homepage: &lt;insert the upstream URL, if relevant&gt;
+#Vcs-Git: git://git.debian.org/collab-maint/fridge.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/fridge.git;a=summary
+
+Package: fridge
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: &lt;insert up to 60 chars description&gt;
+ &lt;insert long description, indented with spaces&gt;
+$ cat deb/fridge-1.0/debian/rules
+#!/usr/bin/make -f
+#export DH_VERBOSE=1
+
+%:
+    dh $@ --with python2
+
+</code></pre>
+
+<p>Here, I add the package dependency etc. to <code>debian/control</code>.</p>
+<p>Let&rsquo;s make Debian binary package.</p>
+
+<pre><code>$ cd deb/fridge-1.0; debuild -us -uc; cd -
+/path/to/package1/deb/fridge-1.0
+ dpkg-buildpackage -rfakeroot -D -us -uc -I -i
+dpkg-buildpackage: source package fridge
+dpkg-buildpackage: source version 1.0-1
+dpkg-buildpackage: source distribution unstable
+dpkg-buildpackage: source changed by Osamu Aoki &lt;osamu@debian.org&gt;
+ dpkg-source -I -i --before-build fridge-1.0
+dpkg-buildpackage: host architecture amd64
+ fakeroot debian/rules clean
+dh clean --with python2
+   dh_testdir
+   dh_auto_clean
+running clean
+&#39;build/lib.linux-x86_64-2.7&#39; does not exist -- can&#39;t clean it
+&#39;build/bdist.linux-x86_64&#39; does not exist -- can&#39;t clean it
+&#39;build/scripts-2.7&#39; does not exist -- can&#39;t clean it
+   dh_clean
+ dpkg-source -I -i -b fridge-1.0
+dpkg-source: info: using source format `3.0 (quilt)&#39;
+dpkg-source: info: building fridge using existing ./fridge_1.0.orig.tar.xz
+dpkg-source: info: building fridge in fridge_1.0-1.debian.tar.gz
+dpkg-source: info: building fridge in fridge_1.0-1.dsc
+ debian/rules build
+dh build --with python2
+   dh_testdir
+   dh_auto_configure
+   dh_auto_build
+running build
+running build_py
+creating build
+creating build/lib.linux-x86_64-2.7
+copying fridge.py -&gt; build/lib.linux-x86_64-2.7
+running build_scripts
+creating build/scripts-2.7
+copying and adjusting scripts/jane -&gt; build/scripts-2.7
+copying and adjusting scripts/joe -&gt; build/scripts-2.7
+copying and adjusting scripts/tom -&gt; build/scripts-2.7
+changing mode of build/scripts-2.7/jane from 644 to 755
+changing mode of build/scripts-2.7/joe from 644 to 755
+changing mode of build/scripts-2.7/tom from 644 to 755
+   dh_auto_test
+ fakeroot debian/rules binary
+dh binary --with python2
+   dh_testroot
+   dh_prep
+   dh_auto_install
+running install
+running build
+running build_py
+running build_scripts
+running install_lib
+creating /path/to/package1/deb/fridge-1.0/debian/fridge/usr
+creating /path/to/package1/deb/fridge-1.0/debian/fridge/usr/lib
+creating /path/to/package1/deb/fridge-1.0/debian/fridge/usr/lib/python2.7
+creating /path/to/package1/deb/fridge-1.0/debian/fridge/usr/lib/python2.7/dist-pa...
+copying build/lib.linux-x86_64-2.7/fridge.py -&gt; /path/to/package1/deb/fridge-1.0/...
+running install_scripts
+creating /path/to/package1/deb/fridge-1.0/debian/fridge/usr/bin
+copying build/scripts-2.7/jane -&gt; /path/to/package1/deb/fridge-1.0/debian/fridge/...
+copying build/scripts-2.7/joe -&gt; /path/to/package1/deb/fridge-1.0/debian/fridge/u...
+copying build/scripts-2.7/tom -&gt; /path/to/package1/deb/fridge-1.0/debian/fridge/u...
+changing mode of /path/to/package1/deb/fridge-1.0/debian/fridge/usr/bin/jane to 7...
+changing mode of /path/to/package1/deb/fridge-1.0/debian/fridge/usr/bin/joe to 75...
+changing mode of /path/to/package1/deb/fridge-1.0/debian/fridge/usr/bin/tom to 75...
+running install_egg_info
+Writing /path/to/package1/deb/fridge-1.0/debian/fridge/usr/lib/python2.7/dist-pac...
+   dh_installdocs
+   dh_installchangelogs
+   dh_python2
+   dh_perl
+   dh_link
+   dh_compress
+   dh_fixperms
+   dh_installdeb
+   dh_gencontrol
+dpkg-gencontrol: warning: Depends field of package fridge: unknown substitution v...
+dpkg-gencontrol: warning: package fridge: unused substitution variable ${python:V...
+dpkg-gencontrol: warning: package fridge: unused substitution variable ${python:D...
+   dh_md5sums
+   dh_builddeb
+dpkg-deb: building package `fridge&#39; in `../fridge_1.0-1_all.deb&#39;.
+ dpkg-genchanges  &gt;../fridge_1.0-1_amd64.changes
+dpkg-genchanges: including full source code in upload
+ dpkg-source -I -i --after-build fridge-1.0
+dpkg-buildpackage: full upload (original source is included)
+Now running lintian...
+W: fridge source: superfluous-clutter-in-homepage &lt;insert the upstream URL, if re...
+N:
+N:    The &#34;Homepage:&#34; field in this package&#39;s control file contains
+N:    superfluous markup around the URL, like enclosing &lt; and &gt;. This is
+N:    unnecessary and needlessly complicates using this information.
+N:
+N:    Refer to Debian Policy Manual section 5.6.23 (Homepage) for details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: fields, Type: binary, udeb, source
+N:
+W: fridge source: bad-homepage &lt;insert the upstream URL, if relevant&gt;
+N:
+N:    The &#34;Homepage:&#34; field in this package&#39;s control file does not contain a
+N:    valid absolute URL. Most probably you forgot to specify the scheme (e.g.
+N:    http).
+N:
+N:    This tag is also triggered if the scheme is not known by Lintian.
+N:
+N:    Please file a bug against Lintian, if this tag is triggered for a valid
+N:    homepage URL.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: fields, Type: binary, udeb, source
+N:
+W: fridge source: out-of-date-standards-version 3.9.3 (current is 3.9.4)
+N:
+N:    The source package refers to a Standards-Version older than the one that
+N:    was current at the time the package was created (according to the
+N:    timestamp of the latest debian/changelog entry). Please consider
+N:    updating the package to current Policy and setting this control field
+N:    appropriately.
+N:
+N:    If the package is already compliant with the current standards, you
+N:    don&#39;t have to re-upload the package just to adjust the Standards-Version
+N:    control field. However, please remember to update this field next time
+N:    you upload the package.
+N:
+N:    See /usr/share/doc/debian-policy/upgrading-checklist.txt.gz in the
+N:    debian-policy package for a summary of changes in newer versions of
+N:    Policy.
+N:
+N:    Refer to http://www.debian.org/doc/debian-policy/upgrading-checklist for
+N:    details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: standards-version, Type: source
+N:
+W: fridge: wrong-bug-number-in-closes l3:#nnnn
+N:
+N:    Bug numbers can only contain digits.
+N:
+N:    Refer to Debian Policy Manual section 4.4 (Debian changelog:
+N:    debian/changelog) for details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: changelog-file, Type: binary
+N:
+W: fridge: new-package-should-close-itp-bug
+N:
+N:    This package appears to be the first packaging of a new upstream
+N:    software package (there is only one changelog entry and the Debian
+N:    revision is 1), but it does not close any bugs. The initial upload of a
+N:    new package should close the corresponding ITP bug for that package.
+N:
+N:    This warning can be ignored if the package is not intended for Debian or
+N:    if it is a split of an existing Debian package.
+N:
+N:    Refer to Debian Developer&#39;s Reference section 5.1 (New packages) for
+N:    details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: changelog-file, Type: binary
+N:
+E: fridge: helper-templates-in-copyright
+N:
+N:    The /usr/share/doc/&lt;pkg&gt;/copyright file still contains template markers
+N:    from a packaging helper. Please fill in the actual license, upstream
+N:    copyright holders, and download information about the package and remove
+N:    any remaining templates generated by the packaging helper.
+N:
+N:    Severity: important, Certainty: certain
+N:
+N:    Check: copyright-file, Type: binary
+N:
+W: fridge: copyright-has-url-from-dh_make-boilerplate
+N:
+N:    There is &#34;url://example.com&#34; in your copyright file. This was most
+N:    likely a remnant from the dh_make template.
+N:
+N:    Make sure you include the real location where you obtained the upstream
+N:    sources (if any).
+N:
+N:    Refer to Debian Policy Manual section 12.5 (Copyright information) for
+N:    details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: copyright-file, Type: binary
+N:
+E: fridge: copyright-contains-dh_make-todo-boilerplate
+N:
+N:    The string &#34;Please also look if...&#34; appears in the copyright file, which
+N:    indicates that you either didn&#39;t check the whole source to find
+N:    additional copyright/license, or that you didn&#39;t remove that paragraph
+N:    after having done so.
+N:
+N:    Refer to Debian Policy Manual section 12.5 (Copyright information) for
+N:    details.
+N:
+N:    Severity: serious, Certainty: possible
+N:
+N:    Check: copyright-file, Type: binary
+N:
+E: fridge: description-is-dh_make-template
+N:
+N:    The synopsis or the extended description has not been changed from the
+N:    template provided by dh_make.
+N:
+N:    Severity: serious, Certainty: certain
+N:
+N:    Check: description, Type: binary, udeb
+N:
+E: fridge: section-is-dh_make-template
+N:
+N:    The &#34;Section:&#34; field in this package&#39;s control file is set to unknown.
+N:    This is not a valid section, and usually means a dh_make template
+N:    control file was used and never modified to set the correct section.
+N:
+N:    Refer to Debian Policy Manual section 2.4 (Sections) for details.
+N:
+N:    Severity: serious, Certainty: certain
+N:
+N:    Check: fields, Type: binary, udeb, source
+N:
+W: fridge: superfluous-clutter-in-homepage &lt;insert the upstream URL, if relevant&gt;...
+W: fridge: bad-homepage &lt;insert the upstream URL, if relevant&gt;
+W: fridge: binary-without-manpage usr/bin/jane
+N:
+N:    Each binary in /usr/bin, /usr/sbin, /bin, /sbin or /usr/games should
+N:    have a manual page
+N:
+N:    Note that though the man program has the capability to check for several
+N:    program names in the NAMES section, each of these programs should have
+N:    its own manual page (a symbolic link to the appropriate manual page is
+N:    sufficient) because other manual page viewers such as xman or tkman
+N:    don&#39;t support this.
+N:
+N:    If the name of the man page differs from the binary by case, man may be
+N:    able to find it anyway; however, it is still best practice to make the
+N:    case of the man page match the case of the binary.
+N:
+N:    If the man pages are provided by another package on which this package
+N:    depends, lintian may not be able to determine that man pages are
+N:    available. In this case, after confirming that all binaries do have man
+N:    pages after this package and its dependencies are installed, please add
+N:    a lintian override.
+N:
+N:    Refer to Debian Policy Manual section 12.1 (Manual pages) for details.
+N:
+N:    Severity: normal, Certainty: possible
+N:
+N:    Check: manpages, Type: binary
+N:
+W: fridge: binary-without-manpage usr/bin/joe
+W: fridge: binary-without-manpage usr/bin/tom
+E: fridge: python-script-but-no-python-dep usr/bin/jane
+N:
+N:    Packages with Python scripts should depend on the package python. Those
+N:    with scripts that specify a specific version of Python must depend on
+N:    that version of Python (exactly).
+N:
+N:    For example, if a script in the package uses #!/usr/bin/python, the
+N:    package needs a dependency on python. If a script uses
+N:    #!/usr/bin/python2.6, the package needs a dependency on python2.6. A
+N:    dependency on python (&gt;= 2.6) is not correct, since later versions of
+N:    Python may not provide the /usr/bin/python2.6 binary.
+N:
+N:    If you are using debhelper, adding ${python:Depends} to the Depends
+N:    field and ensuring dh_pysupport or dh_pycentral are run during the build
+N:    should take care of adding the correct dependency.
+N:
+N:    In some cases a weaker relationship, such as Suggests or Recommends,
+N:    will be more appropriate.
+N:
+N:    Severity: important, Certainty: certain
+N:
+N:    Check: scripts, Type: binary
+N:
+E: fridge: python-script-but-no-python-dep usr/bin/joe
+E: fridge: python-script-but-no-python-dep usr/bin/tom
+Finished running lintian.
+/path/to/package1
+$ ls -l deb
+total 36
+drwxrwxr-x 5 osamu osamu  4096 Aug 17 23:43 fridge-1.0
+-rw-r--r-- 1 osamu osamu  3364 Aug 17 23:43 fridge_1.0-1_all.deb
+-rw-r--r-- 1 osamu osamu 11908 Aug 17 23:43 fridge_1.0-1_amd64.build
+-rw-r--r-- 1 osamu osamu  1419 Aug 17 23:43 fridge_1.0-1_amd64.changes
+-rw-r--r-- 1 osamu osamu  1993 Aug 17 23:43 fridge_1.0-1.debian.tar.gz
+-rw-r--r-- 1 osamu osamu   808 Aug 17 23:43 fridge_1.0-1.dsc
+-rw-rw-r-- 1 osamu osamu  1212 Aug 17 23:43 fridge_1.0.orig.tar.xz
+$ dpkg -c deb/fridge_1.0-1_all.deb
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/lib/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/lib/python2.7/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/lib/python2.7/dist-packages...
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/bin/
+-rwxr-xr-x root/root       124 2013-08-17 23:43 ./usr/bin/jane
+-rwxr-xr-x root/root        93 2013-08-17 23:43 ./usr/bin/joe
+-rwxr-xr-x root/root        81 2013-08-17 23:43 ./usr/bin/tom
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/share/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/share/doc/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/share/doc/fridge/
+-rw-r--r-- root/root      1668 2013-04-06 22:36 ./usr/share/doc/fridge/copyright
+-rw-r--r-- root/root       120 2013-04-06 23:03 ./usr/share/doc/fridge/README.Deb...
+-rw-r--r-- root/root       172 2013-04-06 22:36 ./usr/share/doc/fridge/changelog....
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/share/pyshared/
+-rw-r--r-- root/root       233 2013-08-17 23:43 ./usr/share/pyshared/fridge-1.0.e...
+-rw-r--r-- root/root      1579 2013-04-08 21:16 ./usr/share/pyshared/fridge.py
+lrwxrwxrwx root/root         0 2013-08-17 23:43 ./usr/lib/python2.7/dist-packages...
+lrwxrwxrwx root/root         0 2013-08-17 23:43 ./usr/lib/python2.7/dist-packages...
+</code></pre>
+
+<p>Now we have Debian package <code>fridge_1.0-1_all.deb</code> which can be installed and removed easily.</p>
+<h3 id="debian-package-from-python3-source-distribution-dh_make">Debian package from Python3 source distribution (dh_make)</h3>
+<p>Let&rsquo;s do the same for Python3.</p>
+<p>Let&rsquo;s make Debian source package.</p>
+
+<pre><code>$ tar -xvzf fridge/dist/fridge-1.0.tar.gz -C deb
+fridge-1.0/
+fridge-1.0/scripts/
+fridge-1.0/scripts/jane
+fridge-1.0/scripts/joe
+fridge-1.0/scripts/tom
+fridge-1.0/fridge.py
+fridge-1.0/PKG-INFO
+fridge-1.0/setup.py
+fridge-1.0/README
+$ cd deb/fridge-1.0; dh_make -s --createorig --yes; cd -
+/path/to/package2/deb/fridge-1.0
+Maintainer name  : Osamu Aoki
+Email-Address    : osamu@debian.org
+Date             : Sat, 17 Aug 2013 23:43:32 &#43;0900
+Package Name     : fridge
+Version          : 1.0
+License          : blank
+Type of Package  : Single
+Currently there is no top level Makefile. This may require additional tuning.
+Done. Please edit the files in the debian/ subdirectory now. You should also
+check that the fridge Makefiles install into $DESTDIR and not in / .
+/path/to/package2
+$ ls -lR deb
+deb:
+total 8
+drwxrwxr-x 4 osamu osamu 4096 Aug 17 23:43 fridge-1.0
+-rw-rw-r-- 1 osamu osamu 1212 Aug 17 23:43 fridge_1.0.orig.tar.xz
+
+deb/fridge-1.0:
+total 24
+drwxr-xr-x 3 osamu osamu 4096 Aug 17 23:43 debian
+-rw-r--r-- 1 osamu osamu 1586 Aug 17 23:43 fridge.py
+-rw-rw-r-- 1 osamu osamu  233 Aug 17 23:43 PKG-INFO
+-rw-rw-r-- 1 osamu osamu   31 Mar 28 22:17 README
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 scripts
+-rwxr-xr-x 1 osamu osamu  362 Apr  5 23:58 setup.py
+
+deb/fridge-1.0/debian:
+total 104
+-rw-rw-r-- 1 osamu osamu   180 Aug 17 23:43 changelog
+-rw-rw-r-- 1 osamu osamu     2 Aug 17 23:43 compat
+-rw-rw-r-- 1 osamu osamu   505 Aug 17 23:43 control
+-rw-rw-r-- 1 osamu osamu  1668 Aug 17 23:43 copyright
+-rw-rw-r-- 1 osamu osamu     7 Aug 17 23:43 docs
+-rw-rw-r-- 1 osamu osamu   128 Aug 17 23:43 fridge.cron.d.ex
+-rw-rw-r-- 1 osamu osamu   232 Aug 17 23:43 fridge.default.ex
+-rw-rw-r-- 1 osamu osamu   504 Aug 17 23:43 fridge.doc-base.EX
+-rw-rw-r-- 1 osamu osamu  4675 Aug 17 23:43 init.d.ex
+-rw-rw-r-- 1 osamu osamu  1625 Aug 17 23:43 manpage.1.ex
+-rw-rw-r-- 1 osamu osamu  4648 Aug 17 23:43 manpage.sgml.ex
+-rw-rw-r-- 1 osamu osamu 11003 Aug 17 23:43 manpage.xml.ex
+-rw-rw-r-- 1 osamu osamu   123 Aug 17 23:43 menu.ex
+-rw-rw-r-- 1 osamu osamu   956 Aug 17 23:43 postinst.ex
+-rw-rw-r-- 1 osamu osamu   929 Aug 17 23:43 postrm.ex
+-rw-rw-r-- 1 osamu osamu   689 Aug 17 23:43 preinst.ex
+-rw-rw-r-- 1 osamu osamu   876 Aug 17 23:43 prerm.ex
+-rw-rw-r-- 1 osamu osamu   173 Aug 17 23:43 README.Debian
+-rw-rw-r-- 1 osamu osamu   191 Aug 17 23:43 README.source
+-rwxr-xr-x 1 osamu osamu   442 Aug 17 23:43 rules
+drwxr-xr-x 2 osamu osamu  4096 Aug 17 23:43 source
+-rw-rw-r-- 1 osamu osamu   775 Aug 17 23:43 watch.ex
+
+deb/fridge-1.0/debian/source:
+total 4
+-rw-rw-r-- 1 osamu osamu 12 Aug 17 23:43 format
+
+deb/fridge-1.0/scripts:
+total 12
+-rw-r--r-- 1 osamu osamu 124 Apr  6 18:14 jane
+-rw-r--r-- 1 osamu osamu  93 Mar 28 20:18 joe
+-rw-r--r-- 1 osamu osamu  81 Mar 28 20:19 tom
+$
+
+  ... update debian/control
+  ... update debian/rules
+  ... touch up template files
+  ... remove unused template files
+
+$ ls -l deb/fridge-1.0/debian
+total 32
+-rw-rw-r-- 1 osamu osamu  180 Apr  6 22:36 changelog
+-rw-rw-r-- 1 osamu osamu    2 Apr  6 22:36 compat
+-rw-rw-r-- 1 osamu osamu  557 Apr  8 22:54 control
+-rw-rw-r-- 1 osamu osamu 1668 Apr  6 22:36 copyright
+-rw-rw-r-- 1 osamu osamu  440 Apr  6 23:03 manpage.1
+-rw-rw-r-- 1 osamu osamu  120 Apr  6 23:03 README.Debian
+-rwxr-xr-x 1 osamu osamu  663 Apr  9 20:44 rules
+drwxr-xr-x 2 osamu osamu 4096 Apr  6 22:36 source
+$ cat deb/fridge-1.0/debian/control
+Source: fridge
+Section: unknown
+Priority: extra
+Maintainer: Osamu Aoki &lt;osamu@debian.org&gt;
+Build-Depends: debhelper (&gt;= 8.0.0), python3-minimal, python3
+Standards-Version: 3.9.3
+X-Python3-Version: &gt;= 3.1
+Homepage: &lt;insert the upstream URL, if relevant&gt;
+#Vcs-Git: git://git.debian.org/collab-maint/fridge.git
+#Vcs-Browser: http://git.debian.org/?p=collab-maint/fridge.git;a=summary
+
+Package: fridge
+Architecture: all
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: &lt;insert up to 60 chars description&gt;
+ &lt;insert long description, indented with spaces&gt;
+$ cat deb/fridge-1.0/debian/rules
+#!/usr/bin/make -f
+#export DH_VERBOSE=1
+ifeq ($(DH_VERBOSE),1)
+    DH_VERBOSE_OPT = -ex
+else
+    DH_VERBOSE_OPT = -e
+endif
+PY3REQUESTED := $(shell py3versions -r)
+PY3DEFAULT := $(shell py3versions -d)
+PYTHON3 := $(filter-out $(PY3DEFAULT),$(PY3REQUESTED)) python3
+
+%:
+    dh $@ --with python3
+
+override_dh_auto_clean:
+    rm -rf build
+
+override_dh_auto_build:
+    set $(DH_VERBOSE_OPT); for python in $(PYTHON3); do \
+        $$python setup.py build; \
+    done
+
+# use fridge instead of tmp since it is single binary package
+override_dh_auto_install:
+    set $(DH_VERBOSE_OPT); for python in $(PYTHON3); do \
+        $$python setup.py install --root=debian/fridge --install-layout=deb; \
+    done
+
+</code></pre>
+
+<p>Here, I am working around lack of Python3 support
+(<a href="http://bugs.debian.org/538978">#538978</a> and
+<a href="http://bugs.debian.org/597105">#597105</a> bugs) by <code>debhelper</code> using the
+customized build script <code>debian/rules</code> following
+<a href="http://developer.ubuntu.com/packaging/html/python-packaging.html%5BUbuntu">http://developer.ubuntu.com/packaging/html/python-packaging.html[Ubuntu</a>
+documentation on &ldquo;Packaging Python modules and applications&rdquo;]</p>
+<p>Let&rsquo;s make Debian binary package.</p>
+
+<pre><code>$ cd deb/fridge-1.0; debuild -us -uc; cd -
+/path/to/package2/deb/fridge-1.0
+ dpkg-buildpackage -rfakeroot -D -us -uc -I -i
+dpkg-buildpackage: source package fridge
+dpkg-buildpackage: source version 1.0-1
+dpkg-buildpackage: source distribution unstable
+dpkg-buildpackage: source changed by Osamu Aoki &lt;osamu@debian.org&gt;
+ dpkg-source -I -i --before-build fridge-1.0
+dpkg-buildpackage: host architecture amd64
+ fakeroot debian/rules clean
+dh clean --with python3
+   dh_testdir
+   debian/rules override_dh_auto_clean
+make[1]: Entering directory `/path/to/package2/deb/fridge-1.0&#39;
+rm -rf build
+make[1]: Leaving directory `/path/to/package2/deb/fridge-1.0&#39;
+   dh_clean
+ dpkg-source -I -i -b fridge-1.0
+dpkg-source: info: using source format `3.0 (quilt)&#39;
+dpkg-source: info: building fridge using existing ./fridge_1.0.orig.tar.xz
+dpkg-source: info: building fridge in fridge_1.0-1.debian.tar.gz
+dpkg-source: info: building fridge in fridge_1.0-1.dsc
+ debian/rules build
+dh build --with python3
+   dh_testdir
+   dh_auto_configure
+   debian/rules override_dh_auto_build
+make[1]: Entering directory `/path/to/package2/deb/fridge-1.0&#39;
+set -e; for python in  python3; do \
+        $python setup.py build; \
+    done
+running build
+running build_py
+creating build
+creating build/lib
+copying fridge.py -&gt; build/lib
+running build_scripts
+creating build/scripts-3.3
+copying and adjusting scripts/jane -&gt; build/scripts-3.3
+copying and adjusting scripts/joe -&gt; build/scripts-3.3
+copying and adjusting scripts/tom -&gt; build/scripts-3.3
+changing mode of build/scripts-3.3/jane from 644 to 755
+changing mode of build/scripts-3.3/joe from 644 to 755
+changing mode of build/scripts-3.3/tom from 644 to 755
+make[1]: Leaving directory `/path/to/package2/deb/fridge-1.0&#39;
+   dh_auto_test
+ fakeroot debian/rules binary
+dh binary --with python3
+   dh_testroot
+   dh_prep
+   debian/rules override_dh_auto_install
+make[1]: Entering directory `/path/to/package2/deb/fridge-1.0&#39;
+set -e; for python in  python3; do \
+        $python setup.py install --root=debian/fridge --install-layout=deb; \
+    done
+running install
+running build
+running build_py
+running build_scripts
+running install_lib
+creating debian/fridge
+creating debian/fridge/usr
+creating debian/fridge/usr/lib
+creating debian/fridge/usr/lib/python3
+creating debian/fridge/usr/lib/python3/dist-packages
+copying build/lib/fridge.py -&gt; debian/fridge/usr/lib/python3/dist-packages
+byte-compiling debian/fridge/usr/lib/python3/dist-packages/fridge.py to fridge.cp...
+running install_scripts
+creating debian/fridge/usr/bin
+copying build/scripts-3.3/jane -&gt; debian/fridge/usr/bin
+copying build/scripts-3.3/joe -&gt; debian/fridge/usr/bin
+copying build/scripts-3.3/tom -&gt; debian/fridge/usr/bin
+changing mode of debian/fridge/usr/bin/jane to 755
+changing mode of debian/fridge/usr/bin/joe to 755
+changing mode of debian/fridge/usr/bin/tom to 755
+running install_egg_info
+Writing debian/fridge/usr/lib/python3/dist-packages/fridge-1.0.egg-info
+make[1]: Leaving directory `/path/to/package2/deb/fridge-1.0&#39;
+   dh_installdocs
+   dh_installchangelogs
+   dh_pysupport
+dh_pysupport: This program is deprecated, you should use dh_python2 instead. Migr...
+   dh_python3
+   dh_perl
+   dh_link
+   dh_compress
+   dh_fixperms
+   dh_installdeb
+   dh_gencontrol
+dpkg-gencontrol: warning: Depends field of package fridge: unknown substitution v...
+dpkg-gencontrol: warning: package fridge: unused substitution variable ${python3:...
+   dh_md5sums
+   dh_builddeb
+dpkg-deb: building package `fridge&#39; in `../fridge_1.0-1_all.deb&#39;.
+ dpkg-genchanges  &gt;../fridge_1.0-1_amd64.changes
+dpkg-genchanges: including full source code in upload
+ dpkg-source -I -i --after-build fridge-1.0
+dpkg-buildpackage: full upload (original source is included)
+Now running lintian...
+W: fridge source: superfluous-clutter-in-homepage &lt;insert the upstream URL, if re...
+N:
+N:    The &#34;Homepage:&#34; field in this package&#39;s control file contains
+N:    superfluous markup around the URL, like enclosing &lt; and &gt;. This is
+N:    unnecessary and needlessly complicates using this information.
+N:
+N:    Refer to Debian Policy Manual section 5.6.23 (Homepage) for details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: fields, Type: binary, udeb, source
+N:
+W: fridge source: bad-homepage &lt;insert the upstream URL, if relevant&gt;
+N:
+N:    The &#34;Homepage:&#34; field in this package&#39;s control file does not contain a
+N:    valid absolute URL. Most probably you forgot to specify the scheme (e.g.
+N:    http).
+N:
+N:    This tag is also triggered if the scheme is not known by Lintian.
+N:
+N:    Please file a bug against Lintian, if this tag is triggered for a valid
+N:    homepage URL.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: fields, Type: binary, udeb, source
+N:
+W: fridge source: out-of-date-standards-version 3.9.3 (current is 3.9.4)
+N:
+N:    The source package refers to a Standards-Version older than the one that
+N:    was current at the time the package was created (according to the
+N:    timestamp of the latest debian/changelog entry). Please consider
+N:    updating the package to current Policy and setting this control field
+N:    appropriately.
+N:
+N:    If the package is already compliant with the current standards, you
+N:    don&#39;t have to re-upload the package just to adjust the Standards-Version
+N:    control field. However, please remember to update this field next time
+N:    you upload the package.
+N:
+N:    See /usr/share/doc/debian-policy/upgrading-checklist.txt.gz in the
+N:    debian-policy package for a summary of changes in newer versions of
+N:    Policy.
+N:
+N:    Refer to http://www.debian.org/doc/debian-policy/upgrading-checklist for
+N:    details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: standards-version, Type: source
+N:
+W: fridge: wrong-bug-number-in-closes l3:#nnnn
+N:
+N:    Bug numbers can only contain digits.
+N:
+N:    Refer to Debian Policy Manual section 4.4 (Debian changelog:
+N:    debian/changelog) for details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: changelog-file, Type: binary
+N:
+W: fridge: new-package-should-close-itp-bug
+N:
+N:    This package appears to be the first packaging of a new upstream
+N:    software package (there is only one changelog entry and the Debian
+N:    revision is 1), but it does not close any bugs. The initial upload of a
+N:    new package should close the corresponding ITP bug for that package.
+N:
+N:    This warning can be ignored if the package is not intended for Debian or
+N:    if it is a split of an existing Debian package.
+N:
+N:    Refer to Debian Developer&#39;s Reference section 5.1 (New packages) for
+N:    details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: changelog-file, Type: binary
+N:
+E: fridge: helper-templates-in-copyright
+N:
+N:    The /usr/share/doc/&lt;pkg&gt;/copyright file still contains template markers
+N:    from a packaging helper. Please fill in the actual license, upstream
+N:    copyright holders, and download information about the package and remove
+N:    any remaining templates generated by the packaging helper.
+N:
+N:    Severity: important, Certainty: certain
+N:
+N:    Check: copyright-file, Type: binary
+N:
+W: fridge: copyright-has-url-from-dh_make-boilerplate
+N:
+N:    There is &#34;url://example.com&#34; in your copyright file. This was most
+N:    likely a remnant from the dh_make template.
+N:
+N:    Make sure you include the real location where you obtained the upstream
+N:    sources (if any).
+N:
+N:    Refer to Debian Policy Manual section 12.5 (Copyright information) for
+N:    details.
+N:
+N:    Severity: normal, Certainty: certain
+N:
+N:    Check: copyright-file, Type: binary
+N:
+E: fridge: copyright-contains-dh_make-todo-boilerplate
+N:
+N:    The string &#34;Please also look if...&#34; appears in the copyright file, which
+N:    indicates that you either didn&#39;t check the whole source to find
+N:    additional copyright/license, or that you didn&#39;t remove that paragraph
+N:    after having done so.
+N:
+N:    Refer to Debian Policy Manual section 12.5 (Copyright information) for
+N:    details.
+N:
+N:    Severity: serious, Certainty: possible
+N:
+N:    Check: copyright-file, Type: binary
+N:
+E: fridge: description-is-dh_make-template
+N:
+N:    The synopsis or the extended description has not been changed from the
+N:    template provided by dh_make.
+N:
+N:    Severity: serious, Certainty: certain
+N:
+N:    Check: description, Type: binary, udeb
+N:
+E: fridge: section-is-dh_make-template
+N:
+N:    The &#34;Section:&#34; field in this package&#39;s control file is set to unknown.
+N:    This is not a valid section, and usually means a dh_make template
+N:    control file was used and never modified to set the correct section.
+N:
+N:    Refer to Debian Policy Manual section 2.4 (Sections) for details.
+N:
+N:    Severity: serious, Certainty: certain
+N:
+N:    Check: fields, Type: binary, udeb, source
+N:
+W: fridge: superfluous-clutter-in-homepage &lt;insert the upstream URL, if relevant&gt;...
+W: fridge: bad-homepage &lt;insert the upstream URL, if relevant&gt;
+W: fridge: binary-without-manpage usr/bin/jane
+N:
+N:    Each binary in /usr/bin, /usr/sbin, /bin, /sbin or /usr/games should
+N:    have a manual page
+N:
+N:    Note that though the man program has the capability to check for several
+N:    program names in the NAMES section, each of these programs should have
+N:    its own manual page (a symbolic link to the appropriate manual page is
+N:    sufficient) because other manual page viewers such as xman or tkman
+N:    don&#39;t support this.
+N:
+N:    If the name of the man page differs from the binary by case, man may be
+N:    able to find it anyway; however, it is still best practice to make the
+N:    case of the man page match the case of the binary.
+N:
+N:    If the man pages are provided by another package on which this package
+N:    depends, lintian may not be able to determine that man pages are
+N:    available. In this case, after confirming that all binaries do have man
+N:    pages after this package and its dependencies are installed, please add
+N:    a lintian override.
+N:
+N:    Refer to Debian Policy Manual section 12.1 (Manual pages) for details.
+N:
+N:    Severity: normal, Certainty: possible
+N:
+N:    Check: manpages, Type: binary
+N:
+W: fridge: binary-without-manpage usr/bin/joe
+W: fridge: binary-without-manpage usr/bin/tom
+E: fridge: python-script-but-no-python-dep usr/bin/jane
+N:
+N:    Packages with Python scripts should depend on the package python. Those
+N:    with scripts that specify a specific version of Python must depend on
+N:    that version of Python (exactly).
+N:
+N:    For example, if a script in the package uses #!/usr/bin/python, the
+N:    package needs a dependency on python. If a script uses
+N:    #!/usr/bin/python2.6, the package needs a dependency on python2.6. A
+N:    dependency on python (&gt;= 2.6) is not correct, since later versions of
+N:    Python may not provide the /usr/bin/python2.6 binary.
+N:
+N:    If you are using debhelper, adding ${python:Depends} to the Depends
+N:    field and ensuring dh_pysupport or dh_pycentral are run during the build
+N:    should take care of adding the correct dependency.
+N:
+N:    In some cases a weaker relationship, such as Suggests or Recommends,
+N:    will be more appropriate.
+N:
+N:    Severity: important, Certainty: certain
+N:
+N:    Check: scripts, Type: binary
+N:
+E: fridge: python-script-but-no-python-dep usr/bin/joe
+E: fridge: python-script-but-no-python-dep usr/bin/tom
+Finished running lintian.
+/path/to/package2
+$ ls -l deb
+total 36
+drwxrwxr-x 5 osamu osamu  4096 Aug 17 23:43 fridge-1.0
+-rw-r--r-- 1 osamu osamu  3254 Aug 17 23:43 fridge_1.0-1_all.deb
+-rw-r--r-- 1 osamu osamu 11805 Aug 17 23:43 fridge_1.0-1_amd64.build
+-rw-r--r-- 1 osamu osamu  1419 Aug 17 23:43 fridge_1.0-1_amd64.changes
+-rw-r--r-- 1 osamu osamu  2265 Aug 17 23:43 fridge_1.0-1.debian.tar.gz
+-rw-r--r-- 1 osamu osamu   810 Aug 17 23:43 fridge_1.0-1.dsc
+-rw-rw-r-- 1 osamu osamu  1212 Aug 17 23:43 fridge_1.0.orig.tar.xz
+$ dpkg -c deb/fridge_1.0-1_all.deb
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/lib/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/lib/python3/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/lib/python3/dist-packages/
+-rw-r--r-- root/root       233 2013-08-17 23:43 ./usr/lib/python3/dist-packages/f...
+-rw-r--r-- root/root      1586 2013-08-17 23:43 ./usr/lib/python3/dist-packages/f...
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/bin/
+-rwxr-xr-x root/root       124 2013-08-17 23:43 ./usr/bin/jane
+-rwxr-xr-x root/root        93 2013-08-17 23:43 ./usr/bin/joe
+-rwxr-xr-x root/root        81 2013-08-17 23:43 ./usr/bin/tom
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/share/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/share/doc/
+drwxr-xr-x root/root         0 2013-08-17 23:43 ./usr/share/doc/fridge/
+-rw-r--r-- root/root      1668 2013-04-06 22:36 ./usr/share/doc/fridge/copyright
+-rw-r--r-- root/root       120 2013-04-06 23:03 ./usr/share/doc/fridge/README.Deb...
+-rw-r--r-- root/root       172 2013-04-06 22:36 ./usr/share/doc/fridge/changelog....
+</code></pre>
+
+<p>Now we have Debian package <code>fridge_1.0-1_all.deb</code> which can be installed and removed easily.</p>
+<h3 id="debian-package-from-python2-source-distribution-debmake">Debian package from Python2 source distribution (debmake)</h3>
+<p>The <code>debmake</code> is even more handier for making a Debian package.  I will be very sloppy for now as well.  (More work is needed to make package suitable for Debian.)</p>
+<p>Let&rsquo;s make Debian source package.</p>
+
+<pre><code>$ cd fridge; debmake -d -u 1.0 -b :python; cd -
+/path/to/package1/fridge
+running sdist
+running check
+warning: sdist: manifest template &#39;MANIFEST.in&#39; does not exist (using default fil...
+
+writing manifest file &#39;MANIFEST&#39;
+creating fridge-1.0
+creating fridge-1.0/scripts
+making hard links in fridge-1.0...
+hard linking README -&gt; fridge-1.0
+hard linking fridge.py -&gt; fridge-1.0
+hard linking setup.py -&gt; fridge-1.0
+hard linking scripts/jane -&gt; fridge-1.0/scripts
+hard linking scripts/joe -&gt; fridge-1.0/scripts
+hard linking scripts/tom -&gt; fridge-1.0/scripts
+Creating tar archive
+removing &#39;fridge-1.0&#39; (and everything under it)
+fridge-1.0/
+fridge-1.0/scripts/
+fridge-1.0/scripts/jane
+fridge-1.0/scripts/joe
+fridge-1.0/scripts/tom
+fridge-1.0/fridge.py
+fridge-1.0/PKG-INFO
+fridge-1.0/setup.py
+fridge-1.0/README
+I: sanity check of parameters
+I: process &#34;make dist&#34; equivalent
+I: pwd = /path/to/package1/fridge
+I: setup.py (Python): sdist
+I:  tar-ball made
+I: pwd = /path/to/package1
+I: create symlink at /path/to/package1/fridge_1.0.orig.tar.gz pointing to fridge/...
+I: process untar
+I: run &#34;tar -xvzf fridge_1.0.orig.tar.gz&#34;.
+I: untared.
+I: pwd = /path/to/package1/fridge-1.0
+I: analyze source
+I: generate debian/*
+I: File written: debian/source/format
+I: File written: debian/source/local-options
+I: File written: debian/patches/series
+I: File written: debian/compat
+I: File written: debian/rules
+I: File written: debian/README.Debian
+I: File written: debian/changelog
+I: File written: debian/copyright
+I: File written: debian/control
+I: File written: debian/fridge.install
+I: run &#34;debmake -x&#34; to get more template files
+I: upon return to the shell, current directory becomes /path/to/package1/fridge
+I: please execute &#34;cd /path/to/package1/fridge-1.0&#34;
+I: before building binary package with dpkg-buildpackage (or debuild, pdebuild, s...
+/path/to/package1
+$ ls -lR fridge-1.0
+fridge-1.0:
+total 24
+drwxrwxr-x 4 osamu osamu 4096 Aug 17 23:43 debian
+-rw-r--r-- 1 osamu osamu 1579 Apr  8 21:16 fridge.py
+-rw-rw-r-- 1 osamu osamu  233 Aug 17 23:43 PKG-INFO
+-rw-rw-r-- 1 osamu osamu   31 Mar 28 22:17 README
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 scripts
+-rwxr-xr-x 1 osamu osamu  361 Apr  8 21:13 setup.py
+
+fridge-1.0/debian:
+total 36
+-rw-rw-r-- 1 osamu osamu  185 Aug 17 23:43 changelog
+-rw-rw-r-- 1 osamu osamu    2 Aug 17 23:43 compat
+-rw-rw-r-- 1 osamu osamu  737 Aug 17 23:43 control
+-rw-rw-r-- 1 osamu osamu 1025 Aug 17 23:43 copyright
+-rw-rw-r-- 1 osamu osamu    1 Aug 17 23:43 fridge.install
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 patches
+-rw-rw-r-- 1 osamu osamu  255 Aug 17 23:43 README.Debian
+-rwxr-xr-x 1 osamu osamu  219 Aug 17 23:43 rules
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 source
+
+fridge-1.0/debian/patches:
+total 4
+-rw-rw-r-- 1 osamu osamu 211 Aug 17 23:43 series
+
+fridge-1.0/debian/source:
+total 8
+-rw-rw-r-- 1 osamu osamu  12 Aug 17 23:43 format
+-rw-rw-r-- 1 osamu osamu 123 Aug 17 23:43 local-options
+
+fridge-1.0/scripts:
+total 12
+-rw-r--r-- 1 osamu osamu 124 Apr  6 18:14 jane
+-rw-r--r-- 1 osamu osamu  93 Mar 28 20:18 joe
+-rw-r--r-- 1 osamu osamu  81 Mar 28 20:19 tom
+$ cat fridge-1.0/debian/control
+Source: fridge
+Section: unknown
+Priority: extra
+Maintainer: Osamu Aoki &lt;osamu@debian.org&gt;
+Build-Depends: python-all,
+    debhelper (&gt;=9)
+Standards-Version: 3.9.4
+Homepage: &lt;insert the upstream URL, if relevant&gt;
+Vcs-Git: git://git.debian.org/collab-maint/fridge.git
+Vcs-Browser: http://git.debian.org/?p=collab-maint/fridge.git
+X-Python-Version: &gt;= 2.6
+
+Package: fridge
+Architecture: all
+Multi-Arch: foreign
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends},
+    ${python:Depends}
+Description: &lt;insert up to 60 chars description&gt;
+ &lt;insert long description, indented with spaces&gt;
+ &lt;continued long description lines ...&gt;
+ .
+ &lt;continued long description line after a line break indicated by &#34; .&#34;&gt;
+ &lt;continued long description lines ...&gt;
+
+
+$ cat fridge-1.0/debian/rules
+#!/usr/bin/make -f
+# uncomment to enable verbose mode for debhelper
+#DH_VERBOSE = 1
+# uncomment to exclude VCS paths
+#DH_ALWAYS_EXCLUDE=CVS:.svn:.git
+
+%:
+    dh $@ --with &#34;python2&#34;
+
+# Customize by adding override scripts
+
+</code></pre>
+
+<p>Now we have Debian package <code>fridge_1.0-1_all.deb</code> which can be installed and removed easily.</p>
+<h3 id="debian-package-from-python3-source-distribution-debmake">Debian package from Python3 source distribution (debmake)</h3>
+<p>Let&rsquo;s do the same for Python3 (The <code>debmake</code> does hard work for you).</p>
+<p>Let&rsquo;s make Debian source package.</p>
+
+<pre><code>$ cd fridge; debmake -d -u 1.0 -b :python; cd -
+/path/to/package2/fridge
+running sdist
+running check
+warning: sdist: manifest template &#39;MANIFEST.in&#39; does not exist (using default fil...
+
+writing manifest file &#39;MANIFEST&#39;
+creating fridge-1.0
+creating fridge-1.0/scripts
+making hard links in fridge-1.0...
+hard linking README -&gt; fridge-1.0
+hard linking fridge.py -&gt; fridge-1.0
+hard linking setup.py -&gt; fridge-1.0
+hard linking scripts/jane -&gt; fridge-1.0/scripts
+hard linking scripts/joe -&gt; fridge-1.0/scripts
+hard linking scripts/tom -&gt; fridge-1.0/scripts
+Creating tar archive
+removing &#39;fridge-1.0&#39; (and everything under it)
+fridge-1.0/
+fridge-1.0/scripts/
+fridge-1.0/scripts/jane
+fridge-1.0/scripts/joe
+fridge-1.0/scripts/tom
+fridge-1.0/fridge.py
+fridge-1.0/PKG-INFO
+fridge-1.0/setup.py
+fridge-1.0/README
+I: sanity check of parameters
+I: process &#34;make dist&#34; equivalent
+I: pwd = /path/to/package2/fridge
+I: setup.py (Python3): sdist
+I:  tar-ball made
+I: pwd = /path/to/package2
+I: create symlink at /path/to/package2/fridge_1.0.orig.tar.gz pointing to fridge/...
+I: process untar
+I: run &#34;tar -xvzf fridge_1.0.orig.tar.gz&#34;.
+I: untared.
+I: pwd = /path/to/package2/fridge-1.0
+I: analyze source
+I: generate debian/*
+I: File written: debian/source/format
+I: File written: debian/source/local-options
+I: File written: debian/patches/series
+I: File written: debian/compat
+I: File written: debian/rules
+I: File written: debian/README.Debian
+I: File written: debian/changelog
+I: File written: debian/copyright
+I: File written: debian/control
+I: File written: debian/fridge.install
+I: run &#34;debmake -x&#34; to get more template files
+I: upon return to the shell, current directory becomes /path/to/package2/fridge
+I: please execute &#34;cd /path/to/package2/fridge-1.0&#34;
+I: before building binary package with dpkg-buildpackage (or debuild, pdebuild, s...
+/path/to/package2
+$ ls -lR fridge-1.0
+fridge-1.0:
+total 24
+drwxrwxr-x 4 osamu osamu 4096 Aug 17 23:43 debian
+-rw-r--r-- 1 osamu osamu 1586 Aug 17 23:43 fridge.py
+-rw-rw-r-- 1 osamu osamu  233 Aug 17 23:43 PKG-INFO
+-rw-rw-r-- 1 osamu osamu   31 Mar 28 22:17 README
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 scripts
+-rwxr-xr-x 1 osamu osamu  362 Apr  5 23:58 setup.py
+
+fridge-1.0/debian:
+total 36
+-rw-rw-r-- 1 osamu osamu  185 Aug 17 23:43 changelog
+-rw-rw-r-- 1 osamu osamu    2 Aug 17 23:43 compat
+-rw-rw-r-- 1 osamu osamu  764 Aug 17 23:43 control
+-rw-rw-r-- 1 osamu osamu 1025 Aug 17 23:43 copyright
+-rw-rw-r-- 1 osamu osamu    1 Aug 17 23:43 fridge.install
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 patches
+-rw-rw-r-- 1 osamu osamu  255 Aug 17 23:43 README.Debian
+-rwxr-xr-x 1 osamu osamu  763 Aug 17 23:43 rules
+drwxrwxr-x 2 osamu osamu 4096 Aug 17 23:43 source
+
+fridge-1.0/debian/patches:
+total 4
+-rw-rw-r-- 1 osamu osamu 211 Aug 17 23:43 series
+
+fridge-1.0/debian/source:
+total 8
+-rw-rw-r-- 1 osamu osamu  12 Aug 17 23:43 format
+-rw-rw-r-- 1 osamu osamu 123 Aug 17 23:43 local-options
+
+fridge-1.0/scripts:
+total 12
+-rw-r--r-- 1 osamu osamu 124 Apr  6 18:14 jane
+-rw-r--r-- 1 osamu osamu  93 Mar 28 20:18 joe
+-rw-r--r-- 1 osamu osamu  81 Mar 28 20:19 tom
+$ cat fridge-1.0/debian/control
+Source: fridge
+Section: unknown
+Priority: extra
+Maintainer: Osamu Aoki &lt;osamu@debian.org&gt;
+Build-Depends: debhelper (&gt;=9),
+    python3-all
+Standards-Version: 3.9.4
+Homepage: &lt;insert the upstream URL, if relevant&gt;
+Vcs-Git: git://git.debian.org/collab-maint/fridge.git
+Vcs-Browser: http://git.debian.org/?p=collab-maint/fridge.git
+X-Python-Version: &gt;= 2.6
+X-Python3-Version: &gt;= 3.2
+
+Package: fridge
+Architecture: all
+Multi-Arch: foreign
+Pre-Depends: ${misc:Pre-Depends}
+Depends: ${misc:Depends},
+    ${python:Depends}
+Description: &lt;insert up to 60 chars description&gt;
+ &lt;insert long description, indented with spaces&gt;
+ &lt;continued long description lines ...&gt;
+ .
+ &lt;continued long description line after a line break indicated by &#34; .&#34;&gt;
+ &lt;continued long description lines ...&gt;
+
+
+$ cat fridge-1.0/debian/rules
+#!/usr/bin/make -f
+# uncomment to enable verbose mode for debhelper
+#DH_VERBOSE = 1
+# uncomment to exclude VCS paths
+#DH_ALWAYS_EXCLUDE=CVS:.svn:.git
+
+%:
+    dh $@ --with &#34;python2,python3&#34;
+
+# special work around for python3 (#538978 and #597105 bugs)
+PY3REQUESTED := $(shell py3versions -r)
+PY3DEFAULT := $(shell py3versions -d)
+PYTHON3 := $(filter-out $(PY3DEFAULT),$(PY3REQUESTED)) python3
+
+override_dh_auto_clean:
+    -rm -rf build
+
+override_dh_auto_build:
+    set -ex; for python in $(PYTHON3); do \
+        $$python setup.py build; \
+    done
+
+override_dh_auto_install:
+    set -ex; for python in $(PYTHON3); do \
+        $$python setup.py install \
+            --root=debian/fridge\
+            --force\
+            --install-layout=deb; \
+    done
+
+# Customize by adding override scripts
+
+</code></pre>
+
+<p>Now we have Debian package <code>fridge_1.0-1_all.deb</code> which can be installed and removed easily.</p>
+<h3 id="python--c">Python + C</h3>
+<p>For non-trivial tasks, it is good idea to write major parts of the program in
+some high level programing language such as Python using modules, with some
+mission-critical small parts of the program as Python modules written in C (or
+in any compiled languages) for speed.</p>
+<p>There are several approaches to mix <a href="http://docs.python.org/3/">Python</a> and C/C++
+code.</p>
+<ul>
+<li><a href="http://docs.python.org/3/library/ctypes.html">ctypes</a>:
+<ul>
+<li>ctypes can use existing C libraries as a Python extension module without
+compilation.</li>
+<li>You need to understand how C works to use this.</li>
+<li>This is not as fast as other methods but is easier to use.</li>
+</ul>
+</li>
+<li><a href="http://swig.org/Doc2.0/Python.html">Python support of SWIG</a>:
+<ul>
+<li><a href="http://www.swig.org/">SWIG</a> is a specialized compiler that transforms
+ANSI C/C++ declarations into scripting language extension wrappers.
+<ul>
+<li>The interface file &ldquo;*.i&rdquo; wraps ANSI C/C++ declarations.</li>
+<li>Python is one of many scripting languages supported by SWIG.</li>
+</ul>
+</li>
+<li>You need to understand how C/C++ works to use this.</li>
+<li>This is good if you have many libraries to be wrapped.</li>
+</ul>
+</li>
+<li><a href="https://live.gnome.org/PyGObject">PyGObject</a>
+<ul>
+<li>This is basically for GNOME3 (see <a href="/en/2013/08/17/fun2prog-gnome/#pygobject">PyGObject</a>).</li>
+<li>PyGObject binds
+<a href="http://developer.gnome.org/gobject/unstable/pt02.html">GObject</a>
+as Python extension module using
+<a href="https://live.gnome.org/GObjectIntrospection">GObject Introspection</a> with a
+&ldquo;*.gir&rdquo; file.</li>
+<li><a href="https://live.gnome.org/GObjectIntrospection">GObject Introspection</a> provides
+tighter binding than <a href="http://www.swig.org/">SWIG</a>.</li>
+</ul>
+</li>
+<li><a href="http://www.cython.org/">Cython</a>:
+<ul>
+<li>Cython is a superset of the <a href="http://docs.python.org/3/">Python</a> language.
+<ul>
+<li>Cython code &ldquo;*.pyx&rdquo; generates an optimized C code.</li>
+<li>Cython supports calling C functions and declaring C types on variables and
+class attributes.</li>
+</ul>
+</li>
+<li>Cython makes writing C extensions for the Python language as easy as Python
+itself.
+<ul>
+<li><a href="http://docs.cython.org/src/tutorial">Tutorials</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="http://docs.python.org/3/extending/index.html">Python/C API</a>:
+<ul>
+<li>A custom C/C++ code with the header <code>#include &quot;Python.h&quot;</code>
+can access the native Python/C API.</li>
+<li>You need to understand how C/C++ works to use this.</li>
+<li>You need to understand how the Python Interpreter works to use this.</li>
+<li>This enables both extending and embedding of the
+<a href="http://www.python.org/">Python</a> Interpreter.</li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/13/fun2prog-debug-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/15/fun2prog-build/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Fibonacci numbers | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Fibonacci numbers</span></h1>
+
+<h3 class="date">Date:
+2013/08/04 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/03/fun2prog-cli/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/05/fun2prog-prime/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="fibonacci-numbers">Fibonacci numbers</h2>
+<p>The <a href="http://en.wikipedia.org/wiki/Fibonacci_number">Fibonacci numbers</a> are a
+sequence of integers, starting with 0, 1 and continuing 1, 2, 3, 5, 8, 13, &hellip;,
+each new number being the sum of the previous two.</p>
+<p>Let&rsquo;s check simple code snippets to obtain Fibonacci numbers implemented in
+different languages to study the following:</p>
+<ul>
+<li>basic while-loop syntax</li>
+<li>integer overflow behavior</li>
+</ul>
+<h3 id="shell">Shell</h3>
+<p>Before we start, let&rsquo;s check the integer overflow behavior of the shell on the
+64-bit GNU/Linux platform.</p>
+<p>Dash behavior for the integer overflow etc.</p>
+
+<pre><code>$ echo &#34;$(echo 2^62 | bc)    $((4611686018427387904))&#34;
+4611686018427387904    4611686018427387904
+$ echo &#34;$(echo 2^63-1 | bc)  $((9223372036854775807))&#34;
+9223372036854775807  9223372036854775807
+$ echo &#34;$(echo 2^63 | bc)    $((9223372036854775808))&#34;
+9223372036854775808    9223372036854775807
+$ echo &#34;$(echo 2^64-1 | bc) $((18446744073709551615))&#34;
+18446744073709551615 9223372036854775807
+$ echo &#34;$(echo 2^64 | bc)   $((18446744073709551616))&#34;
+18446744073709551616   9223372036854775807
+$ echo &#34;$((2**62))&#34;
+/path/to/sh/../../bin/p: 1: eval: arithmetic expression: expecting primary: &#34;2**
+62&#34;
+</code></pre>
+
+<p>Bash behavior for the integer overflow etc.</p>
+
+<pre><code>$ echo &#34;$(echo 2^62 | bc)    $((4611686018427387904))&#34;
+4611686018427387904    4611686018427387904
+$ echo &#34;$(echo 2^63-1 | bc)  $((9223372036854775807))&#34;
+9223372036854775807  9223372036854775807
+$ echo &#34;$(echo 2^63 | bc)    $((9223372036854775808))&#34;
+9223372036854775808    -9223372036854775808
+$ echo &#34;$(echo 2^64-1 | bc) $((18446744073709551615))&#34;
+18446744073709551615 -1
+$ echo &#34;$(echo 2^64 | bc)   $((18446744073709551616))&#34;
+18446744073709551616   0
+$ echo &#34;$((2**62))&#34;
+4611686018427387904
+</code></pre>
+
+<p>The arithmetic expression always returns the largest positive integer when overflows for Dash.</p>
+<p>The &ldquo;<code>**</code>&rdquo; operator for arithmetic expression in &ldquo;<code>$((...))</code>&rdquo; is not POSIX but an usable extension for Bash.</p>
+<p>TIP: For arbitrary precision calculation, always use &ldquo;<code>bc</code>&rdquo;.</p>
+<p>Here is a shell program for the Fibonacci numbers.</p>
+<p>Source code for the shell script: fibo</p>
+
+<pre><code>#!/bin/sh 
+N=&#34;$1&#34;
+A=0
+B=1
+while [ &#34;$B&#34; -lt &#34;$N&#34; ]; do
+    echo &#34;$B&#34;
+    C=$B 
+    B=$(($A&#43;$B))
+    A=$C 
+    if [ &#34;$B&#34; -lt &#34;0&#34; ]; then
+        echo &#34;E: OVER FLOW at $B, stopped.&#34;
+        exit 1
+    fi
+done
+</code></pre>
+
+<p>Even with some overflow protection is coded in this to avoid infinite loop, if
+you provide an argument to &ldquo;<code>./fibo</code>&rdquo; which is larger than &ldquo;<code>$(echo '2^63' | bc)</code>&rdquo;
+then this program will fail in a cryptic way.</p>
+<p>Error with the integer overflow for the shell script</p>
+
+<pre><code>$ ./fibo &#34;$(echo 2^63-1 | bc)&#34;|tail
+160500643816367088
+259695496911122585
+420196140727489673
+679891637638612258
+1100087778366101931
+1779979416004714189
+2880067194370816120
+4660046610375530309
+7540113804746346429
+E: OVER FLOW at -6246583658587674878, stopped.
+$ ./fibo &#34;$(echo 2^63 | bc)&#34;|tail
+./fibo: 5: [: Illegal number: 9223372036854775808
+</code></pre>
+
+<p>TIP: Do not abuse shell code when integer overflow may occur.  Its response to the overflow is cryptic.</p>
+<h3 id="python">Python</h3>
+<p>Here is a Python program for the Fibonacci numbers.</p>
+<p>Source code for the Python script: fibo</p>
+
+<pre><code>#!/usr/bin/python3
+import sys
+n = int(sys.argv[1])
+a, b = 0, 1
+while b &lt; n:
+    print(b)
+    a, b = b, a &#43; b
+</code></pre>
+
+<p>TIP: Python3 integer supports the arbitrary precision number which does not overflow :-)</p>
+<h3 id="lua">Lua</h3>
+<p>Here is a Lua program for the Fibonacci numbers.</p>
+<p>Source code for the Lua script: fibo</p>
+
+<pre><code>#!/usr/bin/lua
+    n = arg[1] &#43;0;
+    a = 0;
+    b = 1;
+    while ( b &lt; n ) do
+        print(b);
+        a, b = b, a &#43; b;
+    end
+</code></pre>
+
+<p>Lua automatically converts large integer numbers to the double type.</p>
+<p>Behavior with the large integer for the Lua script</p>
+
+<pre><code>$ ./fibo &#34;$(echo 2^51 | bc)&#34;|tail
+27777890035288
+44945570212853
+72723460248141
+1.1766903046099e&#43;14
+1.9039249070914e&#43;14
+3.0806152117013e&#43;14
+4.9845401187926e&#43;14
+8.0651553304939e&#43;14
+1.3049695449287e&#43;15
+2.111485077978e&#43;15
+</code></pre>
+
+<p>TIP: Be careful with the behavior of Lua for large integer numbers :-)</p>
+<h3 id="perl">Perl</h3>
+<p>Here is a Perl program for the Fibonacci numbers.</p>
+<p>Source code for the Perl script: fibo</p>
+
+<pre><code>#!/usr/bin/perl -w
+    $n = &#34;$ARGV[0]&#34; &#43; 0;
+    $a = 0;
+    $b = 1;
+    while ( $b &lt; $n ) {
+        print &#34;$b\n&#34;;
+        $c = $b;
+        $b = $a &#43; $b;
+        $a = $c;
+    }
+</code></pre>
+
+<p>Perl automatically converts large integer numbers to the double type.</p>
+<p>Behavior with the large integer for the Perl script</p>
+
+<pre><code>$ ./fibo &#34;$(echo 2^65 | bc)&#34;|tail
+420196140727489673
+679891637638612258
+1100087778366101931
+1779979416004714189
+2880067194370816120
+4660046610375530309
+7540113804746346429
+12200160415121876738
+1.97402742198682e&#43;19
+3.19404346349901e&#43;19
+</code></pre>
+
+<p>TIP: Be careful with the behavior of Perl for large integer numbers :-)</p>
+<h3 id="c">C</h3>
+<p>Before we start, let&rsquo;s check the integer overflow behavior of &ldquo;<code>strtol</code>&rdquo; on the
+64-bit GNU/Linux platform using simple test code.  (This is more like how Dash
+behaves as of 2013.)</p>
+<p>C long behavior for the integer overflow</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+int main(int argc, char **argv)
+{
+    long n = strtol(argv[1], NULL, 10);
+    printf(&#34;Parsed as %ld\n&#34;, n);
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Let&rsquo;s compile and test this C code.</p>
+<p>Testing the C <code>strtol</code> with the integer overflow</p>
+
+<pre><code>$ gcc -Wall -o strtol-test strtol-test.c
+$ ./strtol-test 9223372036854775807
+Parsed as 9223372036854775807
+$ ./strtol-test 9223372036854775808
+Parsed as 9223372036854775807
+$ ./strtol-test 18446744073709551615
+Parsed as 9223372036854775807
+$ ./strtol-test 18446744073709551616
+Parsed as 9223372036854775807
+</code></pre>
+
+<p>The C <code>strtol</code> always returns the largest positive integer when overflows,</p>
+<p>Here is a C program for the Fibonacci numbers.</p>
+<p>Source code for the C: fibo.c</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+int main(int argc, char **argv)
+{
+    long n = strtol(argv[1], NULL, 10);
+    long a = 0;
+    long b = 1;
+    long c;
+    while (b &lt; n) {
+        printf(&#34;%ld\n&#34;, b);
+        c = b;
+        b = a &#43; b;
+        a = c;
+        if (b &lt; 0) {
+            printf(&#34;E: overflow %ld\n&#34;, b);
+            exit(EXIT_FAILURE);
+        }
+    }
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>The C long sufferes overflow and needs to be dealt carefully.</p>
+<p>Error with the integer overflow for C</p>
+
+<pre><code>$ ./fibo &#34;$(echo 2^63-1 | bc)&#34;|tail
+160500643816367088
+259695496911122585
+420196140727489673
+679891637638612258
+1100087778366101931
+1779979416004714189
+2880067194370816120
+4660046610375530309
+7540113804746346429
+E: overflow -6246583658587674878
+</code></pre>
+
+<p>TIP: Be careful with overflow.</p>
+<h3 id="vala">Vala</h3>
+<p>Here is a vala program for the Fibonacci numbers.</p>
+<p>Source code for the C: fibo.c</p>
+
+<pre><code>int main (string[] args) {
+    long n = long.parse(args[1]);
+    long a = 0;
+    long b = 1;
+    long c;
+    while (b &lt; n) {
+        stdout.printf (&#34;%ld\n&#34;, b);
+        c = b;
+        b = a &#43; b;
+        a = c;
+        if (b &lt; 0) {
+            stdout.printf (&#34;E: overflow %ld\n&#34;, b);
+            return 0;
+        }
+    }
+    return 0;
+}
+</code></pre>
+
+<p>The C long sufferes overflow and needs to be dealt carefully.</p>
+<p>Error with the integer overflow for C</p>
+
+<pre><code>$ ./fibo &#34;$(echo 2^63-1 | bc)&#34;|tail
+160500643816367088
+259695496911122585
+420196140727489673
+679891637638612258
+1100087778366101931
+1779979416004714189
+2880067194370816120
+4660046610375530309
+7540113804746346429
+E: overflow -6246583658587674878
+</code></pre>
+
+<p>TIP: Be careful with overflow.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/03/fun2prog-cli/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/05/fun2prog-prime/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

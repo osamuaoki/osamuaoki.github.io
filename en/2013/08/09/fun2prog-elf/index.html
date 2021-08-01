@@ -1,0 +1,1695 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- ELF | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; ELF</span></h1>
+
+<h3 class="date">Date:
+2013/08/09 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/08/fun2prog-library/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/10/fun2prog-debug-1/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="elf">ELF</h2>
+<p>In this chapter, I will play with
+<a href="http://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF</a> files
+generated from the same <code>hello.c</code> program file as the one in the
+<a href="/en/2013/08/17/fun2prog-hello/#c">Hello World: C</a> with the debug information to learn how it works.</p>
+<p>See the following for the he <a href="http://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF</a>:</p>
+<ul>
+<li>The wikipedia: <a href="http://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF</a></li>
+<li>The man page <code>elf</code>(5).</li>
+<li><a href="http://www.iecc.com/linker/">Linkers and Loaders</a> (draft) for their mechanism.</li>
+<li><a href="http://www.ualberta.ca/CNS/RESEARCH/LinuxClusters/mem.html">Understanding Memory</a> for mechanism of the memory system on Linux.</li>
+<li><a href="http://www.acsu.buffalo.edu/~charngda/elf.html">Executable and Linkable Format (ELF)</a></li>
+<li><a href="http://www.acsu.buffalo.edu/~charngda/bfd.html">GNU Binutils and BFD</a></li>
+</ul>
+<p>An ELF file has two views:</p>
+<ul>
+<li>The section header lists the set of sections of the binary. (<code>readelf -S</code>)</li>
+<li>The program header shows the segments used at run-time. (<code>readelf -l</code>)</li>
+</ul>
+<p>TIP: Both <code>readelf</code> and <code>objdump</code> offer similar functions.  The <code>readelf</code>
+command exists independently of the BFD library, so if there is a bug in the
+BFD <code>objdump</code> command then <code>readelf</code> will not be affected.  Only the <code>objdump</code>
+command can do disassemble.</p>
+<h3 id="compile-hello-gdb">Compile hello-gdb</h3>
+<p>Let&rsquo;s compile the <code>hello.c</code> program file into the
+<a href="http://en.wikipedia.org/wiki/Executable_and_Linkable_Format">ELF</a> executable
+<code>hello-gdb</code> with the additional flags.</p>
+<ul>
+<li><code>-g</code> flag produces debugging information in the operating system&rsquo;s native format (<a href="http://en.wikipedia.org/wiki/DWARF">DWARF</a> on GNU/Linux).</li>
+<li><code>-v</code> flag produces verbose output of the commands executed to run the stages of compilation.</li>
+</ul>
+
+<pre><code>$ gcc -v -Wall -g -o hello-gdb hello.c
+Using built-in specs.
+COLLECT_GCC=gcc
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.8/lto-wrapper
+Target: x86_64-linux-gnu
+Configured with: ../src/configure -v --with-pkgversion=&#39;Debian 4.8.1-9&#39; --with-b
+ugurl=file:///usr/share/doc/gcc-4.8/README.Bugs --enable-languages=c,c&#43;&#43;,java,go
+,d,fortran,objc,obj-c&#43;&#43; --prefix=/usr --program-suffix=-4.8 --enable-shared --en
+able-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-t
+hreads=posix --with-gxx-include-dir=/usr/include/c&#43;&#43;/4.8 --libdir=/usr/lib --ena
+ble-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-
+libstdcxx-time=yes --enable-gnu-unique-object --enable-plugin --with-system-zlib
+ --disable-browser-plugin --enable-java-awt=gtk --enable-gtk-cairo --with-java-h
+ome=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64/jre --enable-java-home --with-jvm-root
+-dir=/usr/lib/jvm/java-1.5.0-gcj-4.8-amd64 --with-jvm-jar-dir=/usr/lib/jvm-expor
+ts/java-1.5.0-gcj-4.8-amd64 --with-arch-directory=amd64 --with-ecj-jar=/usr/shar
+e/java/eclipse-ecj.jar --enable-objc-gc --enable-multiarch --with-arch-32=i586 -
+-with-abi=m64 --with-multilib-list=m32,m64,mx32 --with-tune=generic --enable-che
+cking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-l
+inux-gnu
+Thread model: posix
+gcc version 4.8.1 (Debian 4.8.1-9)
+COLLECT_GCC_OPTIONS=&#39;-v&#39; &#39;-Wall&#39; &#39;-g&#39; &#39;-o&#39; &#39;hello-gdb&#39; &#39;-mtune=generic&#39; &#39;-march=
+x86-64&#39;
+ /usr/lib/gcc/x86_64-linux-gnu/4.8/cc1 -quiet -v -imultiarch x86_64-linux-gnu he
+llo.c -quiet -dumpbase hello.c -mtune=generic -march=x86-64 -auxbase hello -g -W
+all -version -o /tmp/ccOf8WkQ.s
+GNU C (Debian 4.8.1-9) version 4.8.1 (x86_64-linux-gnu)
+    compiled by GNU C version 4.8.1, GMP version 5.1.2, MPFR version 3.1.1-p2, M
+PC version 1.0.1
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+ignoring nonexistent directory &#34;/usr/local/include/x86_64-linux-gnu&#34;
+ignoring nonexistent directory &#34;/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../x8
+6_64-linux-gnu/include&#34;
+#include &#34;...&#34; search starts here:
+#include &lt;...&gt; search starts here:
+ /usr/lib/gcc/x86_64-linux-gnu/4.8/include
+ /usr/local/include
+ /usr/lib/gcc/x86_64-linux-gnu/4.8/include-fixed
+ /usr/include/x86_64-linux-gnu
+ /usr/include
+End of search list.
+GNU C (Debian 4.8.1-9) version 4.8.1 (x86_64-linux-gnu)
+    compiled by GNU C version 4.8.1, GMP version 5.1.2, MPFR version 3.1.1-p2, M
+PC version 1.0.1
+GGC heuristics: --param ggc-min-expand=100 --param ggc-min-heapsize=131072
+Compiler executable checksum: 7de91109c57f16a4863bda169a999c04
+COLLECT_GCC_OPTIONS=&#39;-v&#39; &#39;-Wall&#39; &#39;-g&#39; &#39;-o&#39; &#39;hello-gdb&#39; &#39;-mtune=generic&#39; &#39;-march=
+x86-64&#39;
+ as -v --64 -o /tmp/ccejjg1t.o /tmp/ccOf8WkQ.s
+GNU assembler version 2.23.52 (x86_64-linux-gnu) using BFD version (GNU Binutils
+ for Debian) 2.23.52.20130727
+COMPILER_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4
+.8/:/usr/lib/gcc/x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/g
+cc/x86_64-linux-gnu/
+LIBRARY_PATH=/usr/lib/gcc/x86_64-linux-gnu/4.8/:/usr/lib/gcc/x86_64-linux-gnu/4.
+8/../../../x86_64-linux-gnu/:/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../../lib/:
+/lib/x86_64-linux-gnu/:/lib/../lib/:/usr/lib/x86_64-linux-gnu/:/usr/lib/../lib/:
+/usr/lib/gcc/x86_64-linux-gnu/4.8/../../../:/lib/:/usr/lib/
+COLLECT_GCC_OPTIONS=&#39;-v&#39; &#39;-Wall&#39; &#39;-g&#39; &#39;-o&#39; &#39;hello-gdb&#39; &#39;-mtune=generic&#39; &#39;-march=
+x86-64&#39;
+ /usr/lib/gcc/x86_64-linux-gnu/4.8/collect2 --sysroot=/ --build-id --eh-frame-hd
+r -m elf_x86_64 --hash-style=gnu -dynamic-linker /lib64/ld-linux-x86-64.so.2 -o 
+hello-gdb /usr/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crt1.o /us
+r/lib/gcc/x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu/crti.o /usr/lib/gcc/x86
+_64-linux-gnu/4.8/crtbegin.o -L/usr/lib/gcc/x86_64-linux-gnu/4.8 -L/usr/lib/gcc/
+x86_64-linux-gnu/4.8/../../../x86_64-linux-gnu -L/usr/lib/gcc/x86_64-linux-gnu/4
+.8/../../../../lib -L/lib/x86_64-linux-gnu -L/lib/../lib -L/usr/lib/x86_64-linux
+-gnu -L/usr/lib/../lib -L/usr/lib/gcc/x86_64-linux-gnu/4.8/../../.. /tmp/ccejjg1
+t.o -lgcc --as-needed -lgcc_s --no-as-needed -lc -lgcc --as-needed -lgcc_s --no-
+as-needed /usr/lib/gcc/x86_64-linux-gnu/4.8/crtend.o /usr/lib/gcc/x86_64-linux-g
+nu/4.8/../../../x86_64-linux-gnu/crtn.o
+</code></pre>
+
+<p>Here the <code>gcc</code> command steps through 3 stages of compilation with 3 sub-commands:</p>
+<ul>
+<li><code>/usr/lib/gcc/x86_64-linux-gnu/4.7/cc1</code> which is roughly the <code>gcc -S</code> command (Compiler from the C code to the assembler code).</li>
+<li><code>as</code> which is the assembler. (The <code>gcc -c</code> stops after this.)</li>
+<li><code>/usr/lib/gcc/x86_64-linux-gnu/4.7/collect2</code> which is roughly equivalent of the good old <code>ld</code> (linker).</li>
+</ul>
+<p>FYI:</p>
+
+<pre><code>$ /usr/lib/gcc/x86_64-linux-gnu/4.7/cc1 --help |grep &#34;language C:&#34; -A1
+The following options are specific to just the language C:
+ None found.  Use --help=C to show *all* the options supported by the C front-en
+d
+$ /usr/lib/gcc/x86_64-linux-gnu/4.7/cc1 --help=C
+The following options are supported by the language C:
+  --all-warnings
+  --ansi
+  --assert
+  --assert=
+  --comments
+  --comments-in-macros
+  --define-macro
+  --define-macro=
+   ... (snip)
+$ /usr/lib/gcc/x86_64-linux-gnu/4.7/collect2 --help
+Usage: collect2 [options]
+ Wrap linker and generate constructor code if needed.
+ Options:
+  -debug          Enable debug output
+  --help          Display this information
+  -v, --version   Display this program&#39;s version number
+
+Overview: http://gcc.gnu.org/onlinedocs/gccint/Collect2.html
+Report bugs: &lt;file:///usr/share/doc/gcc-4.7/README.Bugs&gt;
+   ... (snip)
+</code></pre>
+
+<p>In order to understand how linker works to create an executable from an object file, let me make the <code>hello.o</code> and <code>hello-gdb.o</code> ELF object files with the <code>gcc -c</code> command.</p>
+
+<pre><code>$ gcc -Wall -o hello.o -c hello.c
+$ gcc -Wall -g -o hello-gdb.o -c hello.c
+</code></pre>
+
+<p>So including the <code>hello</code> file generated in <a href="/en/2013/08/17/fun2prog-hello/#c">Hello World!: C</a>, we have 4 ELF files to play with.</p>
+<p>Summary of options and generated output files from <code>hello.c</code>.</p>
+<table>
+<thead>
+<tr>
+<th><em>option</em></th>
+<th><em>output</em> file</th>
+<th><em>content</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><em><strong>NONE</strong></em></td>
+<td><code>hello</code></td>
+<td>executable file</td>
+</tr>
+<tr>
+<td><code>-g</code></td>
+<td><code>hello-gdb</code></td>
+<td>executable file with debug symbol</td>
+</tr>
+<tr>
+<td><code>-c</code></td>
+<td><code>hello.o</code></td>
+<td>object file</td>
+</tr>
+<tr>
+<td><code>-c -g</code></td>
+<td><code>hello-gdb.o</code></td>
+<td>object file with debug symbol</td>
+</tr>
+</tbody>
+</table>
+<h3 id="size">size</h3>
+<p>Here is the size of the ELF files.</p>
+<p>Size of the ELF file generated from <code>hello.c</code>.</p>
+
+<pre><code>$ ls -l hello.o hello hello-gdb.o hello-gdb
+-rwxrwxr-x 1 osamu osamu 6687 Aug 17 23:41 hello
+-rwxrwxr-x 1 osamu osamu 7719 Aug 17 23:41 hello-gdb
+-rw-rw-r-- 1 osamu osamu 3296 Aug 17 23:41 hello-gdb.o
+-rw-rw-r-- 1 osamu osamu 1480 Aug 17 23:41 hello.o
+$ size  hello.o hello hello-gdb.o hello-gdb
+   text       data        bss        dec        hex    filename
+     91          0          0         91         5b    hello.o
+   1216        560          8       1784        6f8    hello
+     91          0          0         91         5b    hello-gdb.o
+   1216        560          8       1784        6f8    hello-gdb
+</code></pre>
+
+<p>The GNU <code>size</code> command lists the section sizes &ndash; and the total size &ndash; for each of the object or archive files in its argument list.</p>
+<ul>
+<li>The <code>text</code> column is the size of the executable instructions of a program in the decimal expression.</li>
+<li>The <code>data</code> column is the size of the initialized data that contribute to the program&rsquo;s memory image in the decimal expression.</li>
+<li>The <code>bss</code> column is the size of the uninitialized data that contributes to the program&rsquo;s memory image in the decimal expression.</li>
+<li>The <code>dec</code> column is the total size of the <code>text</code>, <code>data</code>, and <code>bss</code> sections in the decimal expression.</li>
+<li>The <code>hex</code> column is the total size of the <code>text</code>, <code>data</code>, and <code>bss</code> sections in the hexadecimal expression.</li>
+</ul>
+<p>Since the difference between <code>hello</code> and <code>hello-gdb</code> is the debug information, they share the same values with <code>size</code>(1) but their file size is different with <code>ls</code>(1).</p>
+<p>The <code>text</code> column of <code>hello-gdb</code> is much larger than that of <code>hello-gdb.o</code> since the linker seems to link few additional object files such as <code>crt1.o</code>, <code>crti.o</code>, etc.</p>
+<p>These will be elucidated from the following results.</p>
+<h3 id="readelf---file-header">readelf &ndash;file-header</h3>
+<p>Here are the ELF file header of the <code>hello</code> file.</p>
+<p>ELF file Header of the <code>hello</code> file.</p>
+
+<pre><code>$ readelf -h hello.o
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
+  Class:                             ELF64
+  Data:                              2&#39;s complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              REL (Relocatable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x0
+  Start of program headers:          0 (bytes into file)
+  Start of section headers:          288 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           0 (bytes)
+  Number of program headers:         0
+  Size of section headers:           64 (bytes)
+  Number of section headers:         13
+  Section header string table index: 10
+</code></pre>
+
+<p>TIP: <code>-h</code> = <code>--file-header</code></p>
+<p>Let&rsquo;s compare the ELF file headers of the compiled <code>hello.c</code>.</p>
+<p>ELF file headers of the compiled <code>hello.c</code></p>
+<!-- raw HTML omitted -->
+<table>
+<thead>
+<tr>
+<th>Item</th>
+<th><code>hello.o</code></th>
+<th><code>hello-gdb.o</code></th>
+<th><code>hello</code></th>
+<th><code>hello-gdb</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Magic</td>
+<td>7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00</td>
+<td>←</td>
+<td>←</td>
+<td>←</td>
+</tr>
+<tr>
+<td>Class</td>
+<td>ELF64</td>
+<td>←</td>
+<td>←</td>
+<td>←</td>
+</tr>
+<tr>
+<td>Data</td>
+<td>2&rsquo;s complement, little endian</td>
+<td>←</td>
+<td>←</td>
+<td>←</td>
+</tr>
+<tr>
+<td>Version (EI_VERSION)</td>
+<td>1 (current)</td>
+<td>←</td>
+<td>←</td>
+<td>←</td>
+</tr>
+<tr>
+<td>OS/ABI</td>
+<td>UNIX - System V</td>
+<td>←</td>
+<td>←</td>
+<td>←</td>
+</tr>
+<tr>
+<td>ABI Version</td>
+<td>0</td>
+<td>←</td>
+<td>←</td>
+<td>←</td>
+</tr>
+<tr>
+<td>Type</td>
+<td>REL (Relocatable file)</td>
+<td>←</td>
+<td>EXEC (Executable file)</td>
+<td>←</td>
+</tr>
+<tr>
+<td>Machine</td>
+<td>Advanced Micro Devices X86-64</td>
+<td>←</td>
+<td>←</td>
+<td>←</td>
+</tr>
+<tr>
+<td>Version (e_version)</td>
+<td>0x1</td>
+<td>0x1</td>
+<td>0x1</td>
+<td>0x1</td>
+</tr>
+<tr>
+<td>Entry point address</td>
+<td>0x0</td>
+<td>0x0</td>
+<td>0x400410</td>
+<td>0x400410</td>
+</tr>
+<tr>
+<td>Start of program headers (bytes into file)</td>
+<td>0</td>
+<td>0</td>
+<td>64</td>
+<td>64</td>
+</tr>
+<tr>
+<td>Start of section headers (bytes into file)</td>
+<td>288</td>
+<td>944</td>
+<td>2640</td>
+<td>3232</td>
+</tr>
+<tr>
+<td>Flags</td>
+<td>0x0</td>
+<td>0x0</td>
+<td>0x0</td>
+<td>0x0</td>
+</tr>
+<tr>
+<td>Size of this header (bytes)</td>
+<td>64</td>
+<td>64</td>
+<td>64</td>
+<td>64</td>
+</tr>
+<tr>
+<td>Size of program headers (bytes)</td>
+<td>0</td>
+<td>0</td>
+<td>56</td>
+<td>56</td>
+</tr>
+<tr>
+<td>Number of program headers</td>
+<td>0</td>
+<td>0</td>
+<td>8</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Size of section headers (bytes)</td>
+<td>64</td>
+<td>64</td>
+<td>64</td>
+<td>64</td>
+</tr>
+<tr>
+<td>Number of section headers</td>
+<td>13</td>
+<td>21</td>
+<td>30</td>
+<td>35</td>
+</tr>
+<tr>
+<td>Section header string table index</td>
+<td>10</td>
+<td>18</td>
+<td>27</td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
+<h3 id="readelf---sections">readelf &ndash;sections</h3>
+<p>The section header lists the set of sections of the binary.</p>
+<p>Here are the sections in these ELF files.</p>
+<p>Sections of the <code>hello-gdb</code> file.</p>
+
+<pre><code>$ readelf -S hello-gdb
+There are 35 section headers, starting at offset 0xca0:
+
+Section Headers:
+  [Nr] Name              Type             Address           Offset
+       Size              EntSize          Flags  Link  Info  Align
+  [ 0]                   NULL             0000000000000000  00000000
+       0000000000000000  0000000000000000           0     0     0
+  [ 1] .interp           PROGBITS         0000000000400200  00000200
+       000000000000001c  0000000000000000   A       0     0     1
+  [ 2] .note.ABI-tag     NOTE             000000000040021c  0000021c
+       0000000000000020  0000000000000000   A       0     0     4
+  [ 3] .note.gnu.build-i NOTE             000000000040023c  0000023c
+       0000000000000024  0000000000000000   A       0     0     4
+  [ 4] .gnu.hash         GNU_HASH         0000000000400260  00000260
+       000000000000001c  0000000000000000   A       5     0     8
+  [ 5] .dynsym           DYNSYM           0000000000400280  00000280
+       0000000000000060  0000000000000018   A       6     1     8
+  [ 6] .dynstr           STRTAB           00000000004002e0  000002e0
+       000000000000003d  0000000000000000   A       0     0     1
+  [ 7] .gnu.version      VERSYM           000000000040031e  0000031e
+       0000000000000008  0000000000000002   A       5     0     2
+  [ 8] .gnu.version_r    VERNEED          0000000000400328  00000328
+       0000000000000020  0000000000000000   A       6     1     8
+  [ 9] .rela.dyn         RELA             0000000000400348  00000348
+       0000000000000018  0000000000000018   A       5     0     8
+  [10] .rela.plt         RELA             0000000000400360  00000360
+       0000000000000048  0000000000000018   A       5    12     8
+  [11] .init             PROGBITS         00000000004003a8  000003a8
+       000000000000001a  0000000000000000  AX       0     0     4
+  [12] .plt              PROGBITS         00000000004003d0  000003d0
+       0000000000000040  0000000000000010  AX       0     0     16
+  [13] .text             PROGBITS         0000000000400410  00000410
+       00000000000001a2  0000000000000000  AX       0     0     16
+  [14] .fini             PROGBITS         00000000004005b4  000005b4
+       0000000000000009  0000000000000000  AX       0     0     4
+  [15] .rodata           PROGBITS         00000000004005c0  000005c0
+       0000000000000012  0000000000000000   A       0     0     4
+  [16] .eh_frame_hdr     PROGBITS         00000000004005d4  000005d4
+       0000000000000034  0000000000000000   A       0     0     4
+  [17] .eh_frame         PROGBITS         0000000000400608  00000608
+       00000000000000d4  0000000000000000   A       0     0     8
+  [18] .init_array       INIT_ARRAY       00000000006006e0  000006e0
+       0000000000000008  0000000000000000  WA       0     0     8
+  [19] .fini_array       FINI_ARRAY       00000000006006e8  000006e8
+       0000000000000008  0000000000000000  WA       0     0     8
+  [20] .jcr              PROGBITS         00000000006006f0  000006f0
+       0000000000000008  0000000000000000  WA       0     0     8
+  [21] .dynamic          DYNAMIC          00000000006006f8  000006f8
+       00000000000001d0  0000000000000010  WA       6     0     8
+  [22] .got              PROGBITS         00000000006008c8  000008c8
+       0000000000000008  0000000000000008  WA       0     0     8
+  [23] .got.plt          PROGBITS         00000000006008d0  000008d0
+       0000000000000030  0000000000000008  WA       0     0     8
+  [24] .data             PROGBITS         0000000000600900  00000900
+       0000000000000010  0000000000000000  WA       0     0     8
+  [25] .bss              NOBITS           0000000000600910  00000910
+       0000000000000008  0000000000000000  WA       0     0     1
+  [26] .comment          PROGBITS         0000000000000000  00000910
+       0000000000000038  0000000000000001  MS       0     0     1
+  [27] .debug_aranges    PROGBITS         0000000000000000  00000948
+       0000000000000030  0000000000000000           0     0     1
+  [28] .debug_info       PROGBITS         0000000000000000  00000978
+       000000000000009f  0000000000000000           0     0     1
+  [29] .debug_abbrev     PROGBITS         0000000000000000  00000a17
+       0000000000000042  0000000000000000           0     0     1
+  [30] .debug_line       PROGBITS         0000000000000000  00000a59
+       000000000000003c  0000000000000000           0     0     1
+  [31] .debug_str        PROGBITS         0000000000000000  00000a95
+       00000000000000bc  0000000000000001  MS       0     0     1
+  [32] .shstrtab         STRTAB           0000000000000000  00000b51
+       0000000000000148  0000000000000000           0     0     1
+  [33] .symtab           SYMTAB           0000000000000000  00001560
+       0000000000000690  0000000000000018          34    50     8
+  [34] .strtab           STRTAB           0000000000000000  00001bf0
+       0000000000000237  0000000000000000           0     0     1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), l (large)
+  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)
+  O (extra OS processing required) o (OS specific), p (processor specific)
+</code></pre>
+
+<p>TIP: <code>-S</code> = <code>--sections</code> = <code>--section-headers</code></p>
+<p>Let&rsquo;s compare the ELF file sections of the compiled <code>hello.c</code>.</p>
+<p>ELF file sections of the compiled <code>hello.c</code></p>
+<!-- raw HTML omitted -->
+<table>
+<thead>
+<tr>
+<th>section</th>
+<th>type</th>
+<th><code>hello.o</code></th>
+<th><code>hello-gdb.o</code></th>
+<th><code>hello</code></th>
+<th><code>hello-gdb</code></th>
+<th><code>size</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td></td>
+<td>NULL</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td></td>
+</tr>
+<tr>
+<td>.interp</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x1c</td>
+<td>0x1c</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.note.ABI-tag</td>
+<td>NOTE</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x20</td>
+<td>0x20</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.note.gnu.build-i</td>
+<td>NOTE</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x24</td>
+<td>0x24</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.dynsym</td>
+<td>DYNSYM</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x60</td>
+<td>0x60</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.dynstr</td>
+<td>STRTAB</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x3d</td>
+<td>0x3d</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.gnu.hash</td>
+<td>GNU_HASH</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x1c</td>
+<td>0x1c</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.gnu.version</td>
+<td>VERSYM</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x8</td>
+<td>0x8</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.gnu.version_r</td>
+<td>VERNEED</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x20</td>
+<td>0x20</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.rela.dyn</td>
+<td>RELA</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x18</td>
+<td>0x18</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.rela.plt</td>
+<td>RELA</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x48</td>
+<td>0x48</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.init</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x1a</td>
+<td>0x1a</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.plt</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x40</td>
+<td>0x40</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.text</td>
+<td>PROGBITS</td>
+<td>0x15</td>
+<td>0x15</td>
+<td>0x1a2</td>
+<td>0x1a2</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.fini</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x9</td>
+<td>0x9</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.rodata</td>
+<td>PROGBITS</td>
+<td>0xe</td>
+<td>0xe</td>
+<td>0x12</td>
+<td>0x12</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.eh_frame</td>
+<td>PROGBITS</td>
+<td>0x38</td>
+<td>0x38</td>
+<td>0xd4</td>
+<td>0xd4</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.eh_frame_hdr</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x34</td>
+<td>0x34</td>
+<td>text</td>
+</tr>
+<tr>
+<td>.dynamic</td>
+<td>DYNAMIC</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x1d0</td>
+<td>0x1d0</td>
+<td>data</td>
+</tr>
+<tr>
+<td>.got</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x8</td>
+<td>0x8</td>
+<td>data</td>
+</tr>
+<tr>
+<td>.got.plt</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x30</td>
+<td>0x30</td>
+<td>data</td>
+</tr>
+<tr>
+<td>.data</td>
+<td>PROGBITS</td>
+<td>0</td>
+<td>0</td>
+<td>0x10</td>
+<td>0x10</td>
+<td>data</td>
+</tr>
+<tr>
+<td>.jcr</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x8</td>
+<td>0x8</td>
+<td>data</td>
+</tr>
+<tr>
+<td>.fini_array</td>
+<td>FINI_ARRAY</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x8</td>
+<td>0x8</td>
+<td>data</td>
+</tr>
+<tr>
+<td>.init_array</td>
+<td>INIT_ARRAY</td>
+<td>N/A</td>
+<td>N/A</td>
+<td>0x8</td>
+<td>0x8</td>
+<td>data</td>
+</tr>
+<tr>
+<td>.bss</td>
+<td>NOBITS</td>
+<td>0</td>
+<td>0</td>
+<td>0x8</td>
+<td>0x8</td>
+<td>bss</td>
+</tr>
+<tr>
+<td>.comment</td>
+<td>PROGBITS</td>
+<td>0x1d</td>
+<td>0x1d</td>
+<td>0x38</td>
+<td>0x38</td>
+<td>???</td>
+</tr>
+<tr>
+<td>.debug_info</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>0x9f</td>
+<td>N/A</td>
+<td>0x9f</td>
+<td>???</td>
+</tr>
+<tr>
+<td>.debug_abbrev</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>0x42</td>
+<td>N/A</td>
+<td>0x42</td>
+<td>???</td>
+</tr>
+<tr>
+<td>.debug_aranges</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>0x30</td>
+<td>N/A</td>
+<td>0x30</td>
+<td>???</td>
+</tr>
+<tr>
+<td>.debug_line</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>0x3c</td>
+<td>N/A</td>
+<td>0x3c</td>
+<td>???</td>
+</tr>
+<tr>
+<td>.debug_str</td>
+<td>PROGBITS</td>
+<td>N/A</td>
+<td>0xf5</td>
+<td>N/A</td>
+<td>0xbc</td>
+<td>???</td>
+</tr>
+<tr>
+<td>.symtab</td>
+<td>SYMTAB</td>
+<td>0x108</td>
+<td>0x180</td>
+<td>0x618</td>
+<td>0x690</td>
+<td>???</td>
+</tr>
+<tr>
+<td>.strtab</td>
+<td>STRTAB</td>
+<td>0x13</td>
+<td>0x13</td>
+<td>0x237</td>
+<td>0x237</td>
+<td>???</td>
+</tr>
+<tr>
+<td>.shstrtab</td>
+<td>STRTAB</td>
+<td>0x61</td>
+<td>0xb0</td>
+<td>0x108</td>
+<td>0x148</td>
+<td>???</td>
+</tr>
+</tbody>
+</table>
+<p>Here, N/A stands for &ldquo;not available&rdquo;.</p>
+<p>Let&rsquo;s compare the <code>.text</code> size reported by <code>size</code> and <code>readelf -S</code>.</p>
+<p>Comparison of the reported size.</p>
+<table>
+<thead>
+<tr>
+<th><em>file</em></th>
+<th><em>size</em></th>
+<th><em>readelf</em></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>hello.o</code></td>
+<td><em>text</em> = 91 = 0x5b</td>
+<td><em>.text</em> + <em>.rodata</em> + <em>.eh_frame</em> = 0x5b</td>
+</tr>
+<tr>
+<td><code>hello</code></td>
+<td><em>text</em> = 1350 = 0x546</td>
+<td>all marked <code>text</code> in <code>size</code> column = 0x53b = 1339 (11 bytes mismatch)</td>
+</tr>
+<tr>
+<td><code>hello</code></td>
+<td><em>data</em> = 568 = 0x238</td>
+<td><em>.dynamic</em> + <em>.got</em> + <em>.got.plt</em> + <em>.data</em> + <em>.jcr</em> + <em>.fini_array</em> + <em>.init.array</em> = 0x238</td>
+</tr>
+<tr>
+<td><code>hello</code></td>
+<td><em>bss</em>  = 4   = 0x4</td>
+<td><em>.bss</em>  = 0x4</td>
+</tr>
+</tbody>
+</table>
+<p>FIXME: Why different?</p>
+<p>Here you see some additional sections marked as <code>.debug_*</code> exist since you compiled the <code>hello-gdb.o</code> and <code>hello-gdb</code> files with the <code>-g</code> option.  The <code>hello.o</code> and <code>hello</code> files do not have these debug sections.</p>
+<p>Various sections are described in the man page <code>elf</code>(5) after &ldquo;Various sections hold program and control information:&rdquo;.</p>
+<p>TIP: The <code>objdump -h</code> outputs very similar results.</p>
+<h3 id="readelf---segments">readelf &ndash;segments</h3>
+<p>The program header shows the segments used at run-time.  So this is only available for the ELF executable files.</p>
+<p>Here are the program headers (=segments) in these ELF files.</p>
+<p>Program headers of the <code>hello</code> file.</p>
+
+<pre><code>$ readelf -l hello
+
+Elf file type is EXEC (Executable file)
+Entry point 0x400410
+There are 8 program headers, starting at offset 64
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  PHDR           0x0000000000000040 0x0000000000400040 0x0000000000400040
+                 0x00000000000001c0 0x00000000000001c0  R E    8
+  INTERP         0x0000000000000200 0x0000000000400200 0x0000000000400200
+                 0x000000000000001c 0x000000000000001c  R      1
+      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]
+  LOAD           0x0000000000000000 0x0000000000400000 0x0000000000400000
+                 0x00000000000006dc 0x00000000000006dc  R E    200000
+  LOAD           0x00000000000006e0 0x00000000006006e0 0x00000000006006e0
+                 0x0000000000000230 0x0000000000000238  RW     200000
+  DYNAMIC        0x00000000000006f8 0x00000000006006f8 0x00000000006006f8
+                 0x00000000000001d0 0x00000000000001d0  RW     8
+  NOTE           0x000000000000021c 0x000000000040021c 0x000000000040021c
+                 0x0000000000000044 0x0000000000000044  R      4
+  GNU_EH_FRAME   0x00000000000005d4 0x00000000004005d4 0x00000000004005d4
+                 0x0000000000000034 0x0000000000000034  R      4
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000000000000  RW     10
+
+ Section to Segment mapping:
+  Segment Sections...
+   00
+   01     .interp
+   02     .interp .note.ABI-tag .note.gnu.build-id .gnu.hash .dynsym .dynstr .gn
+u.version .gnu.version_r .rela.dyn .rela.plt .init .plt .text .fini .rodata .eh_
+frame_hdr .eh_frame
+   03     .init_array .fini_array .jcr .dynamic .got .got.plt .data .bss
+   04     .dynamic
+   05     .note.ABI-tag .note.gnu.build-id
+   06     .eh_frame_hdr
+   07
+</code></pre>
+
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Segment headers of the <code>hello-gdb</code> file is the same as that of the <code>hello</code> file.</p>
+<p>TIP: <code>-l</code> = <code>--segments</code> = <code>--program-headers</code></p>
+<p>Various sections are described mostly in the man page <code>elf</code>(5) under <code>p_type</code>.</p>
+<ul>
+<li><code>PHDR</code> is for the program header table.</li>
+<li><code>INTERP</code> is for the interpreter path ASCIIZ string for starting the executable file.</li>
+<li><code>LOAD</code> is for the loadable segment. (may be repeated)</li>
+<li><code>DYNAMIC</code> is for the dynamic linking information.</li>
+<li><code>NOTE</code> is for auxiliary information.</li>
+<li><code>GNU_EH_FRAME</code> is for exception handling. (DWARF, see <a href="http://refspecs.linuxfoundation.org/LSB_3.0.0/LSB-Core-generic/LSB-Core-generic/ehframechpt.html">LSB Exception Frames</a>)</li>
+<li><code>GNU_STACK</code> is for the controling the stack on Linux. (GNU extension)</li>
+</ul>
+<p>TIP: The <code>objdump -p</code> outputs somewhat similar results.</p>
+<h3 id="hexdump">hexdump</h3>
+<p>Here is a plain hexadecimal dump of the entire <code>hello-gdb</code> file.  (some parts trimmed)</p>
+<p>Hexdump of the <code>hello-gdb</code> file.</p>
+
+<pre><code>$ hd hello-gdb
+00000000  7f 45 4c 46 02 01 01 00  00 00 00 00 00 00 00 00  |.ELF............|
+00000010  02 00 3e 00 01 00 00 00  10 04 40 00 00 00 00 00  |..&gt;.......@.....|
+   ... (snip)
+00000200  2f 6c 69 62 36 34 2f 6c  64 2d 6c 69 6e 75 78 2d  |/lib64/ld-linux-|
+00000210  78 38 36 2d 36 34 2e 73  6f 2e 32 00 04 00 00 00  |x86-64.so.2.....|
+00000220  10 00 00 00 01 00 00 00  47 4e 55 00 00 00 00 00  |........GNU.....|
+00000230  02 00 00 00 06 00 00 00  20 00 00 00 04 00 00 00  |........ .......|
+00000240  14 00 00 00 03 00 00 00  47 4e 55 00 f7 12 5f 2e  |........GNU..._.|
+00000250  ca fb f7 11 b9 30 d4 c6  3e 86 52 bd 59 36 23 38  |.....0..&gt;.R.Y6#8|
+00000260  01 00 00 00 01 00 00 00  01 00 00 00 00 00 00 00  |................|
+   ... (snip)
+00000300  6e 00 5f 5f 67 6d 6f 6e  5f 73 74 61 72 74 5f 5f  |n.__gmon_start__|
+00000310  00 47 4c 49 42 43 5f 32  2e 32 2e 35 00 00 00 00  |.GLIBC_2.2.5....|
+00000320  02 00 02 00 00 00 00 00  01 00 01 00 01 00 00 00  |................|
+00000330  10 00 00 00 00 00 00 00  75 1a 69 09 00 00 02 00  |........u.i.....|
+00000340  31 00 00 00 00 00 00 00  c8 08 60 00 00 00 00 00  |1.........`.....|
+00000350  06 00 00 00 03 00 00 00  00 00 00 00 00 00 00 00  |................|
+00000360  e8 08 60 00 00 00 00 00  07 00 00 00 01 00 00 00  |..`.............|
+00000370  00 00 00 00 00 00 00 00  f0 08 60 00 00 00 00 00  |..........`.....|
+00000380  07 00 00 00 02 00 00 00  00 00 00 00 00 00 00 00  |................|
+   ... (snip)
+</code></pre>
+
+<p>Here is a nicer hexadecimal dump with all sections clearly marked by the <code>objdump</code> command for the <code>hello-gdb</code> ELF object.</p>
+<p>Hexadecimal dump for all sections of the <code>hello-gdb</code> ELF object.</p>
+
+<pre><code>$ objdump -s hello-gdb
+
+hello-gdb:     file format elf64-x86-64
+
+Contents of section .interp:
+ 400200 2f6c6962 36342f6c 642d6c69 6e75782d  /lib64/ld-linux-
+ 400210 7838362d 36342e73 6f2e3200           x86-64.so.2.
+Contents of section .note.ABI-tag:
+ 40021c 04000000 10000000 01000000 474e5500  ............GNU.
+ 40022c 00000000 02000000 06000000 20000000  ............ ...
+Contents of section .note.gnu.build-id:
+ 40023c 04000000 14000000 03000000 474e5500  ............GNU.
+ 40024c f7125f2e cafbf711 b930d4c6 3e8652bd  .._......0..&gt;.R.
+ 40025c 59362338                             Y6#8
+Contents of section .gnu.hash:
+ 400260 01000000 01000000 01000000 00000000  ................
+ 400270 00000000 00000000 00000000           ............
+Contents of section .dynsym:
+ 400280 00000000 00000000 00000000 00000000  ................
+ 400290 00000000 00000000 0b000000 12000000  ................
+   ... (snip)
+</code></pre>
+
+<p>Here is another hexadecimal dump for a section by the <code>readelf</code> command for the <code>hello-gdb</code> ELF object.</p>
+<p>Hexadecimal dump for the <code>.text</code> section of the <code>hello-gdb</code> ELF object.</p>
+
+<pre><code>$ readelf -x.text hello-gdb
+
+Hex dump of section &#39;.text&#39;:
+  0x00400410 31ed4989 d15e4889 e24883e4 f0505449 1.I..^H..H...PTI
+  0x00400420 c7c0b005 400048c7 c1200540 0048c7c7 ....@.H.. .@.H..
+  0x00400430 fd044000 e8b7ffff fff4660f 1f440000 ..@.......f..D..
+  0x00400440 b8170960 0055482d 10096000 4883f80e ...`.UH-..`.H...
+  0x00400450 4889e577 025dc3b8 00000000 4885c074 H..w.]......H..t
+  0x00400460 f45dbf10 096000ff e00f1f80 00000000 .]...`..........
+  0x00400470 b8100960 0055482d 10096000 48c1f803 ...`.UH-..`.H...
+  0x00400480 4889e548 89c248c1 ea3f4801 d048d1f8 H..H..H..?H..H..
+  0x00400490 75025dc3 ba000000 004885d2 74f45d48 u.]......H..t.]H
+  0x004004a0 89c6bf10 096000ff e20f1f80 00000000 .....`..........
+  0x004004b0 803d5904 20000075 11554889 e5e87eff .=Y. ..u.UH...~.
+  0x004004c0 ffff5dc6 05460420 0001f3c3 0f1f4000 ..]..F. ......@.
+  0x004004d0 48833d18 02200000 741eb800 00000048 H.=.. ..t......H
+  0x004004e0 85c07414 55bff006 60004889 e5ffd05d ..t.U...`.H....]
+  0x004004f0 e97bffff ff0f1f00 e973ffff ff554889 .{.......s...UH.
+  0x00400500 e5bfc405 4000e8d5 feffffb8 00000000 ....@...........
+  0x00400510 5dc3662e 0f1f8400 00000000 0f1f4000 ].f...........@.
+  0x00400520 48896c24 d84c8964 24e0488d 2db70120 H.l$.L.d$.H.-..
+  0x00400530 004c8d25 a8012000 48895c24 d04c896c .L.%.. .H.\$.L.l
+  0x00400540 24e84c89 7424f04c 897c24f8 4883ec38 $.L.t$.L.|$.H..8
+  0x00400550 4c29e541 89ff4989 f648c1fd 034989d5 L).A..I..H...I..
+  0x00400560 31dbe841 feffff48 85ed741a 0f1f4000 1..A...H..t...@.
+  0x00400570 4c89ea4c 89f64489 ff41ff14 dc4883c3 L..L..D..A...H..
+  0x00400580 014839eb 75ea488b 5c240848 8b6c2410 .H9.u.H.\$.H.l$.
+  0x00400590 4c8b6424 184c8b6c 24204c8b 7424284c L.d$.L.l$ L.t$(L
+  0x004005a0 8b7c2430 4883c438 c30f1f80 00000000 .|$0H..8........
+  0x004005b0 f3c3                                ..
+
+</code></pre>
+
+<p>As expected, these are all almost incomprehensible for human.</p>
+<p>The <code>readelf</code> and <code>objdump</code> commands display the correct
+<a href="http://en.wikipedia.org/wiki/Virtual_memory">virtual memory</a> address for the ELF
+object after this is loaded to the memory.  The base address to load this is at
+0x400000 (4 MiB) for GNU/Linux(amd64 = X86-64).  The above plain hexadecimal
+dump displays the physical address in the file and does not count this base
+address offset in the
+<a href="http://en.wikipedia.org/wiki/Virtual_memory">virtual memory</a>.</p>
+<h3 id="readelf--a">readelf -a</h3>
+<p>Here are all non-debug contents by the <code>readelf</code> command of the <code>hello-gdb</code> ELF object.</p>
+<p>All contents by the <code>readelf</code> command for the <code>hello-gdb</code> ELF object.</p>
+
+<pre><code>$ readelf -a hello-gdb
+ELF Header:
+  Magic:   7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00
+  Class:                             ELF64
+  Data:                              2&#39;s complement, little endian
+  Version:                           1 (current)
+  OS/ABI:                            UNIX - System V
+  ABI Version:                       0
+  Type:                              EXEC (Executable file)
+  Machine:                           Advanced Micro Devices X86-64
+  Version:                           0x1
+  Entry point address:               0x400410
+  Start of program headers:          64 (bytes into file)
+  Start of section headers:          3232 (bytes into file)
+  Flags:                             0x0
+  Size of this header:               64 (bytes)
+  Size of program headers:           56 (bytes)
+  Number of program headers:         8
+  Size of section headers:           64 (bytes)
+  Number of section headers:         35
+  Section header string table index: 32
+
+Section Headers:
+  [Nr] Name              Type             Address           Offset
+       Size              EntSize          Flags  Link  Info  Align
+  [ 0]                   NULL             0000000000000000  00000000
+       0000000000000000  0000000000000000           0     0     0
+  [ 1] .interp           PROGBITS         0000000000400200  00000200
+       000000000000001c  0000000000000000   A       0     0     1
+  [ 2] .note.ABI-tag     NOTE             000000000040021c  0000021c
+       0000000000000020  0000000000000000   A       0     0     4
+  [ 3] .note.gnu.build-i NOTE             000000000040023c  0000023c
+       0000000000000024  0000000000000000   A       0     0     4
+  [ 4] .gnu.hash         GNU_HASH         0000000000400260  00000260
+       000000000000001c  0000000000000000   A       5     0     8
+  [ 5] .dynsym           DYNSYM           0000000000400280  00000280
+       0000000000000060  0000000000000018   A       6     1     8
+  [ 6] .dynstr           STRTAB           00000000004002e0  000002e0
+       000000000000003d  0000000000000000   A       0     0     1
+  [ 7] .gnu.version      VERSYM           000000000040031e  0000031e
+       0000000000000008  0000000000000002   A       5     0     2
+  [ 8] .gnu.version_r    VERNEED          0000000000400328  00000328
+       0000000000000020  0000000000000000   A       6     1     8
+  [ 9] .rela.dyn         RELA             0000000000400348  00000348
+       0000000000000018  0000000000000018   A       5     0     8
+  [10] .rela.plt         RELA             0000000000400360  00000360
+       0000000000000048  0000000000000018   A       5    12     8
+  [11] .init             PROGBITS         00000000004003a8  000003a8
+       000000000000001a  0000000000000000  AX       0     0     4
+  [12] .plt              PROGBITS         00000000004003d0  000003d0
+       0000000000000040  0000000000000010  AX       0     0     16
+  [13] .text             PROGBITS         0000000000400410  00000410
+       00000000000001a2  0000000000000000  AX       0     0     16
+  [14] .fini             PROGBITS         00000000004005b4  000005b4
+       0000000000000009  0000000000000000  AX       0     0     4
+  [15] .rodata           PROGBITS         00000000004005c0  000005c0
+       0000000000000012  0000000000000000   A       0     0     4
+  [16] .eh_frame_hdr     PROGBITS         00000000004005d4  000005d4
+       0000000000000034  0000000000000000   A       0     0     4
+  [17] .eh_frame         PROGBITS         0000000000400608  00000608
+       00000000000000d4  0000000000000000   A       0     0     8
+  [18] .init_array       INIT_ARRAY       00000000006006e0  000006e0
+       0000000000000008  0000000000000000  WA       0     0     8
+  [19] .fini_array       FINI_ARRAY       00000000006006e8  000006e8
+       0000000000000008  0000000000000000  WA       0     0     8
+  [20] .jcr              PROGBITS         00000000006006f0  000006f0
+       0000000000000008  0000000000000000  WA       0     0     8
+  [21] .dynamic          DYNAMIC          00000000006006f8  000006f8
+       00000000000001d0  0000000000000010  WA       6     0     8
+  [22] .got              PROGBITS         00000000006008c8  000008c8
+       0000000000000008  0000000000000008  WA       0     0     8
+  [23] .got.plt          PROGBITS         00000000006008d0  000008d0
+       0000000000000030  0000000000000008  WA       0     0     8
+  [24] .data             PROGBITS         0000000000600900  00000900
+       0000000000000010  0000000000000000  WA       0     0     8
+  [25] .bss              NOBITS           0000000000600910  00000910
+       0000000000000008  0000000000000000  WA       0     0     1
+  [26] .comment          PROGBITS         0000000000000000  00000910
+       0000000000000038  0000000000000001  MS       0     0     1
+  [27] .debug_aranges    PROGBITS         0000000000000000  00000948
+       0000000000000030  0000000000000000           0     0     1
+  [28] .debug_info       PROGBITS         0000000000000000  00000978
+       000000000000009f  0000000000000000           0     0     1
+  [29] .debug_abbrev     PROGBITS         0000000000000000  00000a17
+       0000000000000042  0000000000000000           0     0     1
+  [30] .debug_line       PROGBITS         0000000000000000  00000a59
+       000000000000003c  0000000000000000           0     0     1
+  [31] .debug_str        PROGBITS         0000000000000000  00000a95
+       00000000000000bc  0000000000000001  MS       0     0     1
+  [32] .shstrtab         STRTAB           0000000000000000  00000b51
+       0000000000000148  0000000000000000           0     0     1
+  [33] .symtab           SYMTAB           0000000000000000  00001560
+       0000000000000690  0000000000000018          34    50     8
+  [34] .strtab           STRTAB           0000000000000000  00001bf0
+       0000000000000237  0000000000000000           0     0     1
+Key to Flags:
+  W (write), A (alloc), X (execute), M (merge), S (strings), l (large)
+  I (info), L (link order), G (group), T (TLS), E (exclude), x (unknown)
+  O (extra OS processing required) o (OS specific), p (processor specific)
+
+There are no section groups in this file.
+
+Program Headers:
+  Type           Offset             VirtAddr           PhysAddr
+                 FileSiz            MemSiz              Flags  Align
+  PHDR           0x0000000000000040 0x0000000000400040 0x0000000000400040
+                 0x00000000000001c0 0x00000000000001c0  R E    8
+  INTERP         0x0000000000000200 0x0000000000400200 0x0000000000400200
+                 0x000000000000001c 0x000000000000001c  R      1
+      [Requesting program interpreter: /lib64/ld-linux-x86-64.so.2]
+  LOAD           0x0000000000000000 0x0000000000400000 0x0000000000400000
+                 0x00000000000006dc 0x00000000000006dc  R E    200000
+  LOAD           0x00000000000006e0 0x00000000006006e0 0x00000000006006e0
+                 0x0000000000000230 0x0000000000000238  RW     200000
+  DYNAMIC        0x00000000000006f8 0x00000000006006f8 0x00000000006006f8
+                 0x00000000000001d0 0x00000000000001d0  RW     8
+  NOTE           0x000000000000021c 0x000000000040021c 0x000000000040021c
+                 0x0000000000000044 0x0000000000000044  R      4
+  GNU_EH_FRAME   0x00000000000005d4 0x00000000004005d4 0x00000000004005d4
+                 0x0000000000000034 0x0000000000000034  R      4
+  GNU_STACK      0x0000000000000000 0x0000000000000000 0x0000000000000000
+                 0x0000000000000000 0x0000000000000000  RW     10
+
+ Section to Segment mapping:
+  Segment Sections...
+   00
+   01     .interp
+   02     .interp .note.ABI-tag .note.gnu.build-id .gnu.hash .dynsym .dynstr .gn
+u.version .gnu.version_r .rela.dyn .rela.plt .init .plt .text .fini .rodata .eh_
+frame_hdr .eh_frame
+   03     .init_array .fini_array .jcr .dynamic .got .got.plt .data .bss
+   04     .dynamic
+   05     .note.ABI-tag .note.gnu.build-id
+   06     .eh_frame_hdr
+   07
+
+Dynamic section at offset 0x6f8 contains 24 entries:
+  Tag        Type                         Name/Value
+ 0x0000000000000001 (NEEDED)             Shared library: [libc.so.6]
+ 0x000000000000000c (INIT)               0x4003a8
+ 0x000000000000000d (FINI)               0x4005b4
+ 0x0000000000000019 (INIT_ARRAY)         0x6006e0
+ 0x000000000000001b (INIT_ARRAYSZ)       8 (bytes)
+ 0x000000000000001a (FINI_ARRAY)         0x6006e8
+ 0x000000000000001c (FINI_ARRAYSZ)       8 (bytes)
+ 0x000000006ffffef5 (GNU_HASH)           0x400260
+ 0x0000000000000005 (STRTAB)             0x4002e0
+ 0x0000000000000006 (SYMTAB)             0x400280
+ 0x000000000000000a (STRSZ)              61 (bytes)
+ 0x000000000000000b (SYMENT)             24 (bytes)
+ 0x0000000000000015 (DEBUG)              0x0
+ 0x0000000000000003 (PLTGOT)             0x6008d0
+ 0x0000000000000002 (PLTRELSZ)           72 (bytes)
+ 0x0000000000000014 (PLTREL)             RELA
+ 0x0000000000000017 (JMPREL)             0x400360
+ 0x0000000000000007 (RELA)               0x400348
+ 0x0000000000000008 (RELASZ)             24 (bytes)
+ 0x0000000000000009 (RELAENT)            24 (bytes)
+ 0x000000006ffffffe (VERNEED)            0x400328
+ 0x000000006fffffff (VERNEEDNUM)         1
+ 0x000000006ffffff0 (VERSYM)             0x40031e
+ 0x0000000000000000 (NULL)               0x0
+
+Relocation section &#39;.rela.dyn&#39; at offset 0x348 contains 1 entries:
+  Offset          Info           Type           Sym. Value    Sym. Name &#43; Addend
+0000006008c8  000300000006 R_X86_64_GLOB_DAT 0000000000000000 __gmon_start__ &#43; 0
+
+Relocation section &#39;.rela.plt&#39; at offset 0x360 contains 3 entries:
+  Offset          Info           Type           Sym. Value    Sym. Name &#43; Addend
+0000006008e8  000100000007 R_X86_64_JUMP_SLO 0000000000000000 puts &#43; 0
+0000006008f0  000200000007 R_X86_64_JUMP_SLO 0000000000000000 __libc_start_main 
+&#43; 0
+0000006008f8  000300000007 R_X86_64_JUMP_SLO 0000000000000000 __gmon_start__ &#43; 0
+
+The decoding of unwind sections for machine type Advanced Micro Devices X86-64 i
+s not currently supported.
+
+Symbol table &#39;.dynsym&#39; contains 4 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+     1: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND puts@GLIBC_2.2.5 (2)
+     2: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@GLI
+BC_2.2.5 (2)
+     3: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+
+Symbol table &#39;.symtab&#39; contains 70 entries:
+   Num:    Value          Size Type    Bind   Vis      Ndx Name
+     0: 0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+     1: 0000000000400200     0 SECTION LOCAL  DEFAULT    1
+     2: 000000000040021c     0 SECTION LOCAL  DEFAULT    2
+     3: 000000000040023c     0 SECTION LOCAL  DEFAULT    3
+     4: 0000000000400260     0 SECTION LOCAL  DEFAULT    4
+     5: 0000000000400280     0 SECTION LOCAL  DEFAULT    5
+     6: 00000000004002e0     0 SECTION LOCAL  DEFAULT    6
+     7: 000000000040031e     0 SECTION LOCAL  DEFAULT    7
+     8: 0000000000400328     0 SECTION LOCAL  DEFAULT    8
+     9: 0000000000400348     0 SECTION LOCAL  DEFAULT    9
+    10: 0000000000400360     0 SECTION LOCAL  DEFAULT   10
+    11: 00000000004003a8     0 SECTION LOCAL  DEFAULT   11
+    12: 00000000004003d0     0 SECTION LOCAL  DEFAULT   12
+    13: 0000000000400410     0 SECTION LOCAL  DEFAULT   13
+    14: 00000000004005b4     0 SECTION LOCAL  DEFAULT   14
+    15: 00000000004005c0     0 SECTION LOCAL  DEFAULT   15
+    16: 00000000004005d4     0 SECTION LOCAL  DEFAULT   16
+    17: 0000000000400608     0 SECTION LOCAL  DEFAULT   17
+    18: 00000000006006e0     0 SECTION LOCAL  DEFAULT   18
+    19: 00000000006006e8     0 SECTION LOCAL  DEFAULT   19
+    20: 00000000006006f0     0 SECTION LOCAL  DEFAULT   20
+    21: 00000000006006f8     0 SECTION LOCAL  DEFAULT   21
+    22: 00000000006008c8     0 SECTION LOCAL  DEFAULT   22
+    23: 00000000006008d0     0 SECTION LOCAL  DEFAULT   23
+    24: 0000000000600900     0 SECTION LOCAL  DEFAULT   24
+    25: 0000000000600910     0 SECTION LOCAL  DEFAULT   25
+    26: 0000000000000000     0 SECTION LOCAL  DEFAULT   26
+    27: 0000000000000000     0 SECTION LOCAL  DEFAULT   27
+    28: 0000000000000000     0 SECTION LOCAL  DEFAULT   28
+    29: 0000000000000000     0 SECTION LOCAL  DEFAULT   29
+    30: 0000000000000000     0 SECTION LOCAL  DEFAULT   30
+    31: 0000000000000000     0 SECTION LOCAL  DEFAULT   31
+    32: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+    33: 00000000006006f0     0 OBJECT  LOCAL  DEFAULT   20 __JCR_LIST__
+    34: 0000000000400440     0 FUNC    LOCAL  DEFAULT   13 deregister_tm_clones
+    35: 0000000000400470     0 FUNC    LOCAL  DEFAULT   13 register_tm_clones
+    36: 00000000004004b0     0 FUNC    LOCAL  DEFAULT   13 __do_global_dtors_aux
+    37: 0000000000600910     1 OBJECT  LOCAL  DEFAULT   25 completed.6392
+    38: 00000000006006e8     0 OBJECT  LOCAL  DEFAULT   19 __do_global_dtors_aux
+_fin
+    39: 00000000004004d0     0 FUNC    LOCAL  DEFAULT   13 frame_dummy
+    40: 00000000006006e0     0 OBJECT  LOCAL  DEFAULT   18 __frame_dummy_init_ar
+ray_
+    41: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS hello.c
+    42: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS crtstuff.c
+    43: 00000000004006d8     0 OBJECT  LOCAL  DEFAULT   17 __FRAME_END__
+    44: 00000000006006f0     0 OBJECT  LOCAL  DEFAULT   20 __JCR_END__
+    45: 0000000000000000     0 FILE    LOCAL  DEFAULT  ABS
+    46: 00000000006006e8     0 NOTYPE  LOCAL  DEFAULT   18 __init_array_end
+    47: 00000000006006f8     0 OBJECT  LOCAL  DEFAULT   21 _DYNAMIC
+    48: 00000000006006e0     0 NOTYPE  LOCAL  DEFAULT   18 __init_array_start
+    49: 00000000006008d0     0 OBJECT  LOCAL  DEFAULT   23 _GLOBAL_OFFSET_TABLE_
+    50: 00000000004005b0     2 FUNC    GLOBAL DEFAULT   13 __libc_csu_fini
+    51: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_deregisterTMClon
+eTab
+    52: 0000000000600900     0 NOTYPE  WEAK   DEFAULT   24 data_start
+    53: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND puts@@GLIBC_2.2.5
+    54: 0000000000600910     0 NOTYPE  GLOBAL DEFAULT   24 _edata
+    55: 00000000004005b4     0 FUNC    GLOBAL DEFAULT   14 _fini
+    56: 0000000000000000     0 FUNC    GLOBAL DEFAULT  UND __libc_start_main@@GL
+IBC_
+    57: 0000000000600900     0 NOTYPE  GLOBAL DEFAULT   24 __data_start
+    58: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND __gmon_start__
+    59: 0000000000600908     0 OBJECT  GLOBAL HIDDEN    24 __dso_handle
+    60: 00000000004005c0     4 OBJECT  GLOBAL DEFAULT   15 _IO_stdin_used
+    61: 0000000000400520   137 FUNC    GLOBAL DEFAULT   13 __libc_csu_init
+    62: 0000000000600918     0 NOTYPE  GLOBAL DEFAULT   25 _end
+    63: 0000000000400410     0 FUNC    GLOBAL DEFAULT   13 _start
+    64: 0000000000600910     0 NOTYPE  GLOBAL DEFAULT   25 __bss_start
+    65: 00000000004004fd    21 FUNC    GLOBAL DEFAULT   13 main
+    66: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _Jv_RegisterClasses
+    67: 0000000000600910     0 OBJECT  GLOBAL HIDDEN    24 __TMC_END__
+    68: 0000000000000000     0 NOTYPE  WEAK   DEFAULT  UND _ITM_registerTMCloneT
+able
+    69: 00000000004003a8     0 FUNC    GLOBAL DEFAULT   11 _init
+
+Version symbols section &#39;.gnu.version&#39; contains 4 entries:
+ Addr: 000000000040031e  Offset: 0x00031e  Link: 5 (.dynsym)
+  000:   0 (*local*)       2 (GLIBC_2.2.5)   2 (GLIBC_2.2.5)   0 (*local*)
+
+Version needs section &#39;.gnu.version_r&#39; contains 1 entries:
+ Addr: 0x0000000000400328  Offset: 0x000328  Link: 6 (.dynstr)
+  000000: Version: 1  File: libc.so.6  Cnt: 1
+  0x0010:   Name: GLIBC_2.2.5  Flags: none  Version: 2
+
+Displaying notes found at file offset 0x0000021c with length 0x00000020:
+  Owner                 Data size    Description
+  GNU                  0x00000010    NT_GNU_ABI_TAG (ABI version tag)
+    OS: Linux, ABI: 2.6.32
+
+Displaying notes found at file offset 0x0000023c with length 0x00000024:
+  Owner                 Data size    Description
+  GNU                  0x00000014    NT_GNU_BUILD_ID (unique build ID bitstring)
+    Build ID: f7125f2ecafbf711b930d4c63e8652bd59362338
+</code></pre>
+
+<p>The ELF file data structure is clearly analyzed excluding the debug contents.</p>
+<p>The code content of the program is not disassembled.</p>
+<h3 id="readelf--wl">readelf -wL</h3>
+<p>The <code>readelf -wL</code> command lists the decoded dump of debug contents of section <code>.debug_line</code>.</p>
+<p>It lists the source file name with path.  Then each C source line nember is matched with its starting address.</p>
+<p>For the <code>hello-gdb</code> ELF object, the <code>readelf -wL</code> command lists the C source line numbers as follows.</p>
+<p>All the source line numbers listed by the <code>readelf -wL</code> command for the <code>hello-gdb</code> ELF object.</p>
+
+<pre><code>$ readelf -wL hello-gdb
+Decoded dump of debug contents of section .debug_line:
+
+CU: hello.c:
+File name                            Line number    Starting address
+hello.c                                        5            0x4004fd
+hello.c                                        6            0x400501
+hello.c                                        7            0x40050b
+hello.c                                        8            0x400510
+
+</code></pre>
+
+<p>TIP: The <code>objdump -WL</code> outputs very similar results. (The upper case W!)</p>
+<p>TIP: All debug contents can be displayed at once by the <code>readelf -w</code> (or <code>objdump -W</code>) command.</p>
+<h3 id="objdump--d">objdump -d</h3>
+<p>Here is a disassembled code dump by the <code>objdump</code> command for the <code>hello-gdb.o</code> ELF object.</p>
+<p>Disassembled code dump by the <code>objdump</code> command for the <code>hello-gdb.o</code> ELF object.</p>
+
+<pre><code>$ objdump -d hello-gdb.o
+
+hello-gdb.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 &lt;main&gt;:
+   0:    55                       push   %rbp
+   1:    48 89 e5                 mov    %rsp,%rbp
+   4:    bf 00 00 00 00           mov    $0x0,%edi
+   9:    e8 00 00 00 00           callq  e &lt;main&#43;0xe&gt;
+   e:    b8 00 00 00 00           mov    $0x0,%eax
+  13:    5d                       pop    %rbp
+  14:    c3                       retq
+</code></pre>
+
+<p>Now we see the binary code in the readable assembler format.</p>
+<p>Since code is not linked, some address data are left as 0 which will be filled by the linker.</p>
+<p>Here is a disassembled code dump by the <code>objdump</code> command for the <code>hello-gdb</code> ELF object.</p>
+<p>Disassembled code dump by the <code>objdump</code> command for the <code>hello-gdb</code> ELF object.</p>
+
+<pre><code>$ objdump -d hello-gdb
+
+hello-gdb:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+00000000004003a8 &lt;_init&gt;:
+  4003a8:    48 83 ec 08              sub    $0x8,%rsp
+  4003ac:    48 8b 05 15 05 20 00     mov    0x200515(%rip),%rax        # 6008c8
+ &lt;_DYNAMIC&#43;0x1d0&gt;
+  4003b3:    48 85 c0                 test   %rax,%rax
+  4003b6:    74 05                    je     4003bd &lt;_init&#43;0x15&gt;
+  4003b8:    e8 43 00 00 00           callq  400400 &lt;__gmon_start__@plt&gt;
+  4003bd:    48 83 c4 08              add    $0x8,%rsp
+  4003c1:    c3                       retq
+
+Disassembly of section .plt:
+
+00000000004003d0 &lt;puts@plt-0x10&gt;:
+  4003d0:    ff 35 02 05 20 00        pushq  0x200502(%rip)        # 6008d8 &lt;_GL
+OBAL_OFFSET_TABLE_&#43;0x8&gt;
+  4003d6:    ff 25 04 05 20 00        jmpq   *0x200504(%rip)        # 6008e0 &lt;_G
+LOBAL_OFFSET_TABLE_&#43;0x10&gt;
+  4003dc:    0f 1f 40 00              nopl   0x0(%rax)
+
+00000000004003e0 &lt;puts@plt&gt;:
+  4003e0:    ff 25 02 05 20 00        jmpq   *0x200502(%rip)        # 6008e8 &lt;_G
+LOBAL_OFFSET_TABLE_&#43;0x18&gt;
+  4003e6:    68 00 00 00 00           pushq  $0x0
+  4003eb:    e9 e0 ff ff ff           jmpq   4003d0 &lt;_init&#43;0x28&gt;
+
+00000000004003f0 &lt;__libc_start_main@plt&gt;:
+  4003f0:    ff 25 fa 04 20 00        jmpq   *0x2004fa(%rip)        # 6008f0 &lt;_G
+LOBAL_OFFSET_TABLE_&#43;0x20&gt;
+  4003f6:    68 01 00 00 00           pushq  $0x1
+  4003fb:    e9 d0 ff ff ff           jmpq   4003d0 &lt;_init&#43;0x28&gt;
+
+0000000000400400 &lt;__gmon_start__@plt&gt;:
+  400400:    ff 25 f2 04 20 00        jmpq   *0x2004f2(%rip)        # 6008f8 &lt;_G
+LOBAL_OFFSET_TABLE_&#43;0x28&gt;
+  400406:    68 02 00 00 00           pushq  $0x2
+  40040b:    e9 c0 ff ff ff           jmpq   4003d0 &lt;_init&#43;0x28&gt;
+
+Disassembly of section .text:
+
+0000000000400410 &lt;_start&gt;:
+  400410:    31 ed                    xor    %ebp,%ebp
+  400412:    49 89 d1                 mov    %rdx,%r9
+  400415:    5e                       pop    %rsi
+  400416:    48 89 e2                 mov    %rsp,%rdx
+  400419:    48 83 e4 f0              and    $0xfffffffffffffff0,%rsp
+  40041d:    50                       push   %rax
+  40041e:    54                       push   %rsp
+  40041f:    49 c7 c0 b0 05 40 00     mov    $0x4005b0,%r8
+  400426:    48 c7 c1 20 05 40 00     mov    $0x400520,%rcx
+  40042d:    48 c7 c7 fd 04 40 00     mov    $0x4004fd,%rdi
+  400434:    e8 b7 ff ff ff           callq  4003f0 &lt;__libc_start_main@plt&gt;
+  400439:    f4                       hlt
+  40043a:    66 0f 1f 44 00 00        nopw   0x0(%rax,%rax,1)
+
+0000000000400440 &lt;deregister_tm_clones&gt;:
+  400440:    b8 17 09 60 00           mov    $0x600917,%eax
+  400445:    55                       push   %rbp
+  400446:    48 2d 10 09 60 00        sub    $0x600910,%rax
+  40044c:    48 83 f8 0e              cmp    $0xe,%rax
+  400450:    48 89 e5                 mov    %rsp,%rbp
+  400453:    77 02                    ja     400457 &lt;deregister_tm_clones&#43;0x17&gt;
+  400455:    5d                       pop    %rbp
+  400456:    c3                       retq
+  400457:    b8 00 00 00 00           mov    $0x0,%eax
+  40045c:    48 85 c0                 test   %rax,%rax
+  40045f:    74 f4                    je     400455 &lt;deregister_tm_clones&#43;0x15&gt;
+  400461:    5d                       pop    %rbp
+  400462:    bf 10 09 60 00           mov    $0x600910,%edi
+  400467:    ff e0                    jmpq   *%rax
+  400469:    0f 1f 80 00 00 00 00     nopl   0x0(%rax)
+
+0000000000400470 &lt;register_tm_clones&gt;:
+  400470:    b8 10 09 60 00           mov    $0x600910,%eax
+  400475:    55                       push   %rbp
+  400476:    48 2d 10 09 60 00        sub    $0x600910,%rax
+  40047c:    48 c1 f8 03              sar    $0x3,%rax
+  400480:    48 89 e5                 mov    %rsp,%rbp
+  400483:    48 89 c2                 mov    %rax,%rdx
+  400486:    48 c1 ea 3f              shr    $0x3f,%rdx
+  40048a:    48 01 d0                 add    %rdx,%rax
+  40048d:    48 d1 f8                 sar    %rax
+  400490:    75 02                    jne    400494 &lt;register_tm_clones&#43;0x24&gt;
+  400492:    5d                       pop    %rbp
+  400493:    c3                       retq
+  400494:    ba 00 00 00 00           mov    $0x0,%edx
+  400499:    48 85 d2                 test   %rdx,%rdx
+  40049c:    74 f4                    je     400492 &lt;register_tm_clones&#43;0x22&gt;
+  40049e:    5d                       pop    %rbp
+  40049f:    48 89 c6                 mov    %rax,%rsi
+  4004a2:    bf 10 09 60 00           mov    $0x600910,%edi
+  4004a7:    ff e2                    jmpq   *%rdx
+  4004a9:    0f 1f 80 00 00 00 00     nopl   0x0(%rax)
+
+00000000004004b0 &lt;__do_global_dtors_aux&gt;:
+  4004b0:    80 3d 59 04 20 00 00     cmpb   $0x0,0x200459(%rip)        # 600910
+ &lt;__TMC_END__&gt;
+  4004b7:    75 11                    jne    4004ca &lt;__do_global_dtors_aux&#43;0x1a&gt;
+  4004b9:    55                       push   %rbp
+  4004ba:    48 89 e5                 mov    %rsp,%rbp
+  4004bd:    e8 7e ff ff ff           callq  400440 &lt;deregister_tm_clones&gt;
+  4004c2:    5d                       pop    %rbp
+  4004c3:    c6 05 46 04 20 00 01     movb   $0x1,0x200446(%rip)        # 600910
+ &lt;__TMC_END__&gt;
+  4004ca:    f3 c3                    repz retq
+  4004cc:    0f 1f 40 00              nopl   0x0(%rax)
+
+00000000004004d0 &lt;frame_dummy&gt;:
+  4004d0:    48 83 3d 18 02 20 00     cmpq   $0x0,0x200218(%rip)        # 6006f0
+ &lt;__JCR_END__&gt;
+  4004d7:    00
+  4004d8:    74 1e                    je     4004f8 &lt;frame_dummy&#43;0x28&gt;
+  4004da:    b8 00 00 00 00           mov    $0x0,%eax
+  4004df:    48 85 c0                 test   %rax,%rax
+  4004e2:    74 14                    je     4004f8 &lt;frame_dummy&#43;0x28&gt;
+  4004e4:    55                       push   %rbp
+  4004e5:    bf f0 06 60 00           mov    $0x6006f0,%edi
+  4004ea:    48 89 e5                 mov    %rsp,%rbp
+  4004ed:    ff d0                    callq  *%rax
+  4004ef:    5d                       pop    %rbp
+  4004f0:    e9 7b ff ff ff           jmpq   400470 &lt;register_tm_clones&gt;
+  4004f5:    0f 1f 00                 nopl   (%rax)
+  4004f8:    e9 73 ff ff ff           jmpq   400470 &lt;register_tm_clones&gt;
+
+00000000004004fd &lt;main&gt;:
+  4004fd:    55                       push   %rbp
+  4004fe:    48 89 e5                 mov    %rsp,%rbp
+  400501:    bf c4 05 40 00           mov    $0x4005c4,%edi
+  400506:    e8 d5 fe ff ff           callq  4003e0 &lt;puts@plt&gt;
+  40050b:    b8 00 00 00 00           mov    $0x0,%eax
+  400510:    5d                       pop    %rbp
+  400511:    c3                       retq
+  400512:    66 2e 0f 1f 84 00 00     nopw   %cs:0x0(%rax,%rax,1)
+  400519:    00 00 00
+  40051c:    0f 1f 40 00              nopl   0x0(%rax)
+
+0000000000400520 &lt;__libc_csu_init&gt;:
+  400520:    48 89 6c 24 d8           mov    %rbp,-0x28(%rsp)
+  400525:    4c 89 64 24 e0           mov    %r12,-0x20(%rsp)
+  40052a:    48 8d 2d b7 01 20 00     lea    0x2001b7(%rip),%rbp        # 6006e8
+ &lt;__init_array_end&gt;
+  400531:    4c 8d 25 a8 01 20 00     lea    0x2001a8(%rip),%r12        # 6006e0
+ &lt;__frame_dummy_init_array_entry&gt;
+  400538:    48 89 5c 24 d0           mov    %rbx,-0x30(%rsp)
+  40053d:    4c 89 6c 24 e8           mov    %r13,-0x18(%rsp)
+  400542:    4c 89 74 24 f0           mov    %r14,-0x10(%rsp)
+  400547:    4c 89 7c 24 f8           mov    %r15,-0x8(%rsp)
+  40054c:    48 83 ec 38              sub    $0x38,%rsp
+  400550:    4c 29 e5                 sub    %r12,%rbp
+  400553:    41 89 ff                 mov    %edi,%r15d
+  400556:    49 89 f6                 mov    %rsi,%r14
+  400559:    48 c1 fd 03              sar    $0x3,%rbp
+  40055d:    49 89 d5                 mov    %rdx,%r13
+  400560:    31 db                    xor    %ebx,%ebx
+  400562:    e8 41 fe ff ff           callq  4003a8 &lt;_init&gt;
+  400567:    48 85 ed                 test   %rbp,%rbp
+  40056a:    74 1a                    je     400586 &lt;__libc_csu_init&#43;0x66&gt;
+  40056c:    0f 1f 40 00              nopl   0x0(%rax)
+  400570:    4c 89 ea                 mov    %r13,%rdx
+  400573:    4c 89 f6                 mov    %r14,%rsi
+  400576:    44 89 ff                 mov    %r15d,%edi
+  400579:    41 ff 14 dc              callq  *(%r12,%rbx,8)
+  40057d:    48 83 c3 01              add    $0x1,%rbx
+  400581:    48 39 eb                 cmp    %rbp,%rbx
+  400584:    75 ea                    jne    400570 &lt;__libc_csu_init&#43;0x50&gt;
+  400586:    48 8b 5c 24 08           mov    0x8(%rsp),%rbx
+  40058b:    48 8b 6c 24 10           mov    0x10(%rsp),%rbp
+  400590:    4c 8b 64 24 18           mov    0x18(%rsp),%r12
+  400595:    4c 8b 6c 24 20           mov    0x20(%rsp),%r13
+  40059a:    4c 8b 74 24 28           mov    0x28(%rsp),%r14
+  40059f:    4c 8b 7c 24 30           mov    0x30(%rsp),%r15
+  4005a4:    48 83 c4 38              add    $0x38,%rsp
+  4005a8:    c3                       retq
+  4005a9:    0f 1f 80 00 00 00 00     nopl   0x0(%rax)
+
+00000000004005b0 &lt;__libc_csu_fini&gt;:
+  4005b0:    f3 c3                    repz retq
+
+Disassembly of section .fini:
+
+00000000004005b4 &lt;_fini&gt;:
+  4005b4:    48 83 ec 08              sub    $0x8,%rsp
+  4005b8:    48 83 c4 08              add    $0x8,%rsp
+  4005bc:    c3                       retq
+</code></pre>
+
+<p>Now we see the binary code in the readable assembler format.</p>
+<p>You also see many codes in addition to the <code>main</code> function existed in the <code>hello-gdb.o</code> ELF object since the linker seems to link few additional object files such as <code>crt1.o</code>, <code>crti.o</code>, etc.</p>
+<p>Also some unresolved address references in the <code>hello-gdb.o</code> ELF object is resolved.</p>
+<p>For example, let&rsquo;s trace <code>call puts</code> in the assembler source <code>hello.s</code> as follows.</p>
+<p>Code to <code>call puts</code> in the <code>hello.s</code>. (No address resolution)</p>
+<pre><code>    call    puts
+</code></pre><p>We see the following for the relocatable object <code>hello-gdb.o</code>.</p>
+<p>Code to <code>call puts</code> in the <code>hello-gdb.o</code>. (No address resolution)</p>
+<pre><code>     9:    e8 00 00 00 00           callq  e &lt;main+0xe&gt;
+</code></pre><p>We see the following for the executable <code>hello-gdb</code>.</p>
+<p>Code to <code>call puts</code> in the <code>hello-gdb</code>. (Address resolved)</p>
+<pre><code>4005b5:    e8 d6 fe ff ff           callq  400490 &lt;puts@plt&gt;
+</code></pre><p>Later we will see the following under GDB.</p>
+<p>Code to <code>call puts</code> in the <code>hello-gdb</code> viewed from <code>(gdb) disassembler/r main</code>. (Address resolved)</p>
+<pre><code>0x00000000004005b5 &lt;+9&gt;:	e8 d6 fe ff ff	callq  0x400490 &lt;puts@plt&gt;
+</code></pre><h3 id="objdump--s">objdump -S</h3>
+<p>Here is a disassembled code dump by the <code>objdump</code> command for the <code>hello-gdb.o</code> ELF object with the original C source code.</p>
+<p>Disassembled code dump by the <code>objdump</code> command for the <code>hello-gdb.o</code> ELF object with the original C source code.</p>
+
+<pre><code>$ objdump -S hello-gdb.o
+
+hello-gdb.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 &lt;main&gt;:
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+/* my first C program */
+int main()
+{
+   0:    55                       push   %rbp
+   1:    48 89 e5                 mov    %rsp,%rbp
+    printf(&#34;Hello, world!\n&#34;);
+   4:    bf 00 00 00 00           mov    $0x0,%edi
+   9:    e8 00 00 00 00           callq  e &lt;main&#43;0xe&gt;
+    return EXIT_SUCCESS;
+   e:    b8 00 00 00 00           mov    $0x0,%eax
+}
+  13:    5d                       pop    %rbp
+  14:    c3                       retq
+</code></pre>
+
+<p>The ELF file only contains the location of the original C source code and correspondence to lines in it.</p>
+<p>Since code is not linked, some address data are left as 0 which will be filled by the linker.</p>
+<p>If you run <code>objdump -S hello-gdb</code>, you get a long disassembled list with the original C source code.  Its addresses are resolved.</p>
+<h3 id="core-dump">Core dump</h3>
+<p>When a user-process crashes, traditional Unix-like systems create a <code>core</code> file
+in the current directory if it is enabled.  This is called
+<a href="http://en.wikipedia.org/wiki/Core_dump">core dump</a> file which records the state
+of the working memory of the crashed user-process program.  It is stored in the
+ELF file format on Linux.</p>
+<p>In order to enable the creation of this <code>core</code> file, you need to set the core
+file size to <code>unlimited</code> with the shell&rsquo;s <code>ulimit -c unlimited</code> command in
+advance.</p>
+<p>Set the core file size to <code>unlimited</code> with <code>ulimit -c unlimited</code>.</p>
+<pre><code>$ ulimit -c
+0
+$ ulimit -c unlimited
+$ ulimit -c
+unlimited
+</code></pre><p>Modern Linux system may behave somewhat differently.  In order to achieve this
+simple classical core dump behavior, please ensure the following.</p>
+<ul>
+<li>Purge packages such as <code>apport-gtk</code> and <code>apport</code>.</li>
+<li>The <code>/proc/sys/kernel/core_pattern</code> file contains <code>core</code>.</li>
+<li>The <code>/proc/sys/kernel/core_uses_pid</code> file contains <code>0</code>.</li>
+</ul>
+<p>Please read the <code>core</code>(5) manpage and the <code>ulimit</code> section in the <code>bash</code>(1)
+manpage for more.</p>
+<p>You can use GDB to inspect the <code>core</code> file as <a href="/en/2013/08/17/fun2prog-debug-3/#gdb-prime8-gdb">Debug: level 3: gdb prime8-gdb</a>.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/08/fun2prog-library/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/10/fun2prog-debug-1/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

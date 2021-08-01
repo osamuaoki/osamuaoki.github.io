@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- XML | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; XML</span></h1>
+
+<h3 class="date">Date:
+2013/08/19 (initial publish),
+2021/08/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/18/fun2prog-sqlite/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/20/fun2prog-lua/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="xml">XML</h2>
+<p><a href="http://en.wikipedia.org/wiki/XML">XML</a> is a representation of the textual data structure.  For example, it is used for web pages (<a href="http://en.wikipedia.org/wiki/XHTML">XHTML</a>) and DocBook source files (<a href="http://en.wikipedia.org/wiki/DocBook">DocBook</a>).</p>
+<p>The tag pair &ldquo;<code>&lt;tag&gt; ... &lt;/tag&gt;</code>&rdquo; or selfclosing tag &ldquo;<code>&lt;tag /&gt;</code>&rdquo; are used to markup the text data.  This simple XML data structure allows to create its generic data processing tools such as XSLT, DOM, SAX, &hellip; .</p>
+<h3 id="xslt">XSLT</h3>
+<p>I used <a href="http://en.wikipedia.org/wiki/XSLT">XSLT</a> (Extensible Stylesheet Language Transformations) to manupulate DocBook XML source files for my <a href="http://www.debian.org/doc/manuals/debian-reference/">Debian Reference</a>.</p>
+<p>It automated inserting popcon data and reformatted URLs suitable for <a href="http://po4a.alioth.debian.org/">po4a</a> translation framework.</p>
+<p>Its source is available at <a href="http://anonscm.debian.org/viewvc/ddp/manuals/trunk/quick-reference/">alioth subversion repo for debian-reference</a>.</p>
+<p>My impression is, &ldquo;yes we can write &hellip; but debugging is hell and code is un-intuitive.&rdquo;.</p>
+<p>So my next update of these build scripts may not use XSLT.</p>
+<h3 id="python">Python</h3>
+<p>There are several <a href="http://docs.python.org/3/library/xml.html">Python XML processing modules</a> to chose from.</p>
+<ul>
+<li><a href="http://docs.python.org/3/library/xml.dom.html">DOM</a> (generic XML parser to read a whole document first and to organoze its objects in a tree structure.)</li>
+<li><a href="http://docs.python.org/3/library/xml.sax.html">Sax</a> (generic XML parser to read it sequentially with an event-driven API.)</li>
+<li><a href="http://docs.python.org/3/library/xml.etree.elementtree.html">ElementTree</a> (new easy-to-use pythonic API, now lxml is merged.)
+<ul>
+<li><code>parse()</code> is like DOM</li>
+<li><code>iterparse()</code> is like SAX</li>
+<li>Limitted <a href="http://en.wikipedia.org/wiki/XPath">Xpath</a> support (no parent node)</li>
+</ul>
+</li>
+<li>&hellip; others</li>
+</ul>
+<p>When I wanted to extract the list of the <a href="http://en.wikipedia.org/wiki/J%C5%8Dy%C5%8D_kanji">jōyō kanji</a> (literally &ldquo;regular-use Chinese characters&rdquo;) data from the <a href="http://ja.wikipedia.org/wiki/%E5%B8%B8%E7%94%A8%E6%BC%A2%E5%AD%97%E4%B8%80%E8%A6%A7">常用漢字一覧</a> page of the Japanese Wikipedia site, I chose <strong>Elementtree</strong> since it looked easier to program.</p>
+<h3 id="download-data">Download data</h3>
+<p>Let&rsquo;s download target HTML page (in XHTML).</p>
+<p>Download XML file</p>
+
+<pre><code>$ wget -4 -O - http://ja.wikipedia.org/wiki/%E5%B8%B8%E7%94%A8%E6%BC%A2%E5%AD%97
+%E4%B8%80%E8%A6%A7 |zcat - &gt; jouyou.xml
+--2013-08-18 10:17:35--  http://ja.wikipedia.org/wiki/%E5%B8%B8%E7%94%A8%E6%BC%A
+2%E5%AD%97%E4%B8%80%E8%A6%A7
+Resolving ja.wikipedia.org (ja.wikipedia.org)... 208.80.154.225
+Connecting to ja.wikipedia.org (ja.wikipedia.org)|208.80.154.225|:80... connecte
+d.
+HTTP request sent, awaiting response... 200 OK
+Length: 102499 (100K) [text/html]
+Saving to: ‘STDOUT’
+
+     0K .......... .......... .......... .......... .......... 49%  134K 0s
+    50K .......... .......... .......... .......... .......... 99%  266K 0s
+   100K                                                       100%  184G=0.6s
+
+2013-08-18 10:17:36 (179 KB/s) - written to stdout [102499/102499]
+
+</code></pre>
+
+<p>Please note the original downloaded data was compressed.</p>
+<h3 id="find-xpath-to-target">Find XPath to target</h3>
+<p>Since it is very awkward to count the XPath location manually, I created a text pattern to XPath conversion tool.  (This works for XML somewhat like what <code>grep</code> does for the plain text.)</p>
+<p>Program to search XPath (search-xpath.py)</p>
+
+<pre><code>#!/usr/bin/python3
+# vim: set sts=4 expandtab:
+#
+import xml.etree.ElementTree as ET
+import re
+
+def search_retext(element, text, xpath=&#39;&#39;):
+    retext = re.compile(text)
+    if xpath == &#39;&#39;:
+        xpath = element.tag
+    subelements = element.findall(&#39;*&#39;)
+    tagcount = {}
+    if subelements != []:
+        for s in subelements:
+            if s.tag in tagcount:
+                tagcount[s.tag] &#43;= 1
+            else:
+                tagcount[s.tag] = 1
+            subxpath = xpath &#43; &#39;/&#39; &#43; s.tag &#43; &#39;[&#39; &#43; str(tagcount[s.tag]) &#43; &#39;]&#39;
+            if not (s.text is None):
+                if retext.search(s.text.strip()):
+                    print(&#34;=&gt; %s&#34; % subxpath)
+                    print(&#34;with &#39;%s&#39;: &#39;%s&#39;&#34; % (text, s.text.strip()))
+            search_retext(s, text,  subxpath)
+    return
+if __name__ == &#39;__main__&#39;:
+    tree = ET.parse(&#39;jouyou.xml&#39;)
+    root = tree.getroot()
+    print(&#34;search_retext(root, &#39;^一覧&#39;)&#34;)
+    search_retext(root, &#39;^一覧&#39;)
+    print(&#34;search_retext(root, &#39;^本表&#39;)&#34;)
+    search_retext(root, &#39;^本表&#39;)
+    print(&#34;search_retext(root, &#39;^亜&#39;)&#34;)
+    search_retext(root, &#39;^亜&#39;)
+    print(&#34;search_retext(root, &#39;^葛&#39;)&#34;)
+    search_retext(root, &#39;^葛&#39;)
+</code></pre>
+
+<p>Let&rsquo;s run this script to find the XPath to key locations having specific texts such as &ldquo;一覧&rdquo;.</p>
+<p>Saerching XPath</p>
+
+<pre><code>$ ./search-xpath.py
+search_retext(root, &#39;^一覧&#39;)
+=&gt; html/body[1]/div[3]/div[3]/div[4]/div[1]/ul[1]/li[1]/a[1]/span[2]
+with &#39;^一覧&#39;: &#39;一覧&#39;
+=&gt; html/body[1]/div[3]/div[3]/div[4]/h2[1]/span[1]
+with &#39;^一覧&#39;: &#39;一覧&#39;
+search_retext(root, &#39;^本表&#39;)
+=&gt; html/body[1]/div[3]/div[3]/div[4]/div[1]/ul[1]/li[1]/ul[1]/li[1]/a[1]/span[2]
+with &#39;^本表&#39;: &#39;本表&#39;
+=&gt; html/body[1]/div[3]/div[3]/div[4]/h3[1]/span[1]
+with &#39;^本表&#39;: &#39;本表&#39;
+search_retext(root, &#39;^亜&#39;)
+=&gt; html/body[1]/div[3]/div[3]/div[4]/table[2]/tr[2]/td[2]/a[1]
+with &#39;^亜&#39;: &#39;亜&#39;
+search_retext(root, &#39;^葛&#39;)
+=&gt; html/body[1]/div[3]/div[3]/div[4]/ul[1]/li[7]/ul[1]/li[20]/span[1]
+with &#39;^葛&#39;: &#39;葛&#39;
+=&gt; html/body[1]/div[3]/div[3]/div[4]/table[2]/tr[239]/td[2]/a[1]
+with &#39;^葛&#39;: &#39;葛&#39;
+</code></pre>
+
+<h3 id="extract-data-from-xml">Extract data from XML</h3>
+<p>Now that we know the kanji data is under <code>html/body[1]/div[3]/div[3]/div[4]/table[2]/tr[*]/td[2]/a[1]</code> where * iterates over lines.  (This works for XML somewhat like what <code>sed</code> does for the plain text.)</p>
+<p>Program to extract data (kanji.py)</p>
+
+<pre><code>#!/usr/bin/python3
+# vim: set sts=4 expandtab:
+
+import xml.etree.ElementTree as ET
+
+def search_kanji(element):
+    kanji = [] 
+    for row in element.findall(&#39;body[1]/div[3]/div[3]/div[4]/table[2]/tr&#39;):
+        # processing table for each row (expandable!)
+        k = row.find(&#39;td[2]/a&#39;)
+        if k is None:
+            continue
+        kanji.append(k.text)
+    return kanji
+
+if __name__ == &#39;__main__&#39;:
+    element = ET.parse(&#39;jouyou.xml&#39;)
+    root = element.getroot()
+    print(search_kanji(root))
+</code></pre>
+
+<p>Let&rsquo;s run this script to list all Jouyou kanjis.</p>
+<p>Lists all jouyou kanjis (trancated).</p>
+
+<pre><code>$ ./kanji.py
+[&#39;亜&#39;, &#39;哀&#39;, &#39;挨&#39;, &#39;愛&#39;, &#39;曖&#39;, &#39;悪&#39;, &#39;握&#39;, &#39;圧&#39;, &#39;扱&#39;, &#39;宛&#39;, &#39;嵐&#39;, &#39;安&#39;, &#39;案&#39;, &#39;暗&#39;, &#39;以&#39;, &#39;衣&#39;, ...
+</code></pre>
+
+<h3 id="xml-with-namespace">XML with namespace</h3>
+<p>For example, this fun2prog web page is in the typical XHTML format having namespace embedded in the &ldquo;<code>&lt;html&gt;</code>&rdquo; tag attiribute as &ldquo;<code>&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot;&gt;</code>&rdquo;.  This declaration applies to child elements until it is overriden by another definition.</p>
+<p>In an Element tree, such qualified names are stored as universal names in Clark’s notatioion.  So if &ldquo;<code>&lt;tag&gt;</code>&rdquo; apears in such XML, Elementtree read it as:</p>
+<pre><code>{http://www.w3.org/1999/xhtml}tag
+</code></pre><p>For example, let&rsquo;s consider that a copy of this web page fun2prog.html in this current directory.  The first thing to do is to change above example code to the following.</p>
+<pre><code>..
+    tree = ET.parse('jouyou.xml')
+    root = tree.getroot()
+..
+</code></pre><p>Running this will produce very noisy output (folded to fit to the screen).</p>
+<pre><code>{http://www.w3.org/1999/xhtml}html/ \
+{[1](http://www.w3.org/1999/xhtml}body)/ \
+{[2](http://www.w3.org/1999/xhtml}div)/ ...
+</code></pre><p>The following should let you supress these curly brakets.</p>
+<pre><code>..
+    f = open('fun2prog.html', 'r')
+    xhtmlstring = f.read()
+    f.close()
+    xhtmlstring = re.sub(' xmlns=&quot;[^&quot;]+&quot;', '', xhtmlstring, count=1)
+    root = ET.fromstring(xhtmlstring)
+..
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/18/fun2prog-sqlite/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/20/fun2prog-lua/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
