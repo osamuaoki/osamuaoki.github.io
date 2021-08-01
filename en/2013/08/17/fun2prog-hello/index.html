@@ -1,0 +1,1070 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Hello World! | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Hello World!</span></h1>
+
+<h3 class="date">Date:
+2013/08/17 (initial publish),
+2021/08/01 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-open/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-cli/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="hello-world">&ldquo;Hello World!&rdquo;</h2>
+<p>Here are example code snippets to print &ldquo;Hello World!&rdquo; and
+somethings we should be aware of for each language.</p>
+<h3 id="shell">Shell</h3>
+<p>The most basic programing language: Shell.</p>
+<ul>
+<li>Interpreter (slow)</li>
+<li>Easy to write a small program.</li>
+<li>Not easy to write a big program.</li>
+<li>Test code snippet under the normal console (or by &ldquo;<code>sh -i</code>&quot;).</li>
+</ul>
+<p>Source code for the hello shell script</p>
+
+<pre><code>#!/bin/sh
+# my first shell program
+echo &#34;Hello, world!&#34;
+</code></pre>
+
+<p>Execution of the hello shell script</p>
+
+<pre><code>$ chmod 755 hello
+$ ls -l ./hello
+-rwxr-xr-x 1 osamu osamu 56 Mar 11 21:52 ./hello
+$ file ./hello
+./hello: POSIX shell script, ASCII text executable
+$ ./hello
+Hello, world!
+</code></pre>
+
+<p>TIP: Here, the interactive shell to be Bash and the non-interactive shell to be Dash unless explicitly mentioned.  They are POSIX shell.</p>
+<h3 id="python">Python</h3>
+<ul>
+<li>Interpreter (with fast JIT compiler)</li>
+<li>One of the most versatile language.</li>
+<li>Guide you to write readable program.</li>
+<li>Good for dynamic data.</li>
+<li>Test code snippet under the console provided by &ldquo;<code>python3</code>&rdquo;.</li>
+</ul>
+<p>Source code for the hello Python script (simple)</p>
+
+<pre><code>#!/usr/bin/env python3
+# My first Python program (bare bones)
+print(&#34;Hello, world!&#34;)
+</code></pre>
+
+<p>Python programs are usually written as follows:</p>
+<p>Source code for the hello Python script (with <code>__name__</code>)</p>
+
+<pre><code>#!/usr/bin/env python3
+# My first Python program (nicer style)
+def main():
+    print(&#34;Hello, world!&#34;)
+
+if __name__ == &#39;__main__&#39;: 
+    main() 
+</code></pre>
+
+<p>If you use wish to ensure to use the Python interpreter offered by the Debian
+system, the starting line should use as follows.</p>
+<p>Source code for the hello Python script (force the Python interpreter offered by the Debian system)</p>
+
+<pre><code>#!/usr/bin/python3
+def main():
+    print(&#34;Hello, world!&#34;)
+
+if __name__ == &#39;__main__&#39;: 
+    main() 
+</code></pre>
+
+<p>Execution of the hello Python script</p>
+
+<pre><code>$ chmod 755 hello
+$ ls -l ./hello
+-rwxr-xr-x 1 osamu osamu 99 Mar 11 21:52 ./hello
+$ file ./hello
+./hello: Python script, ASCII text executable
+$ ./hello
+Hello, world!
+</code></pre>
+
+<h3 id="lua">Lua</h3>
+<ul>
+<li>Interpreter</li>
+<li>Small but very versatile.</li>
+<li>Good for embedding into C/C++.</li>
+<li>Good for dynamic data.</li>
+<li>Test code snippet under the console provided by &ldquo;<code>lua</code>&rdquo;.</li>
+</ul>
+<p>Source code for the hello Lua script</p>
+
+<pre><code>#!/usr/bin/lua
+-- my first lua program --
+print(&#34;Hello, world!&#34;)
+</code></pre>
+
+<p>Execution of the hello Lua script</p>
+
+<pre><code>$ chmod 755 hello
+$ ls -l ./hello
+-rwxr-xr-x 1 osamu osamu 65 Mar 11 21:52 ./hello
+$ file ./hello
+./hello: Lua script, ASCII text executable
+$ ./hello
+Hello, world!
+</code></pre>
+
+<h3 id="perl">Perl</h3>
+<ul>
+<li>Interpreter (with fast JIT compiler)</li>
+<li>One of the most versatile language with history.</li>
+<li>Without discipline, you can write mess.</li>
+<li>Good for dynamic data.</li>
+<li>Test code snippet under the console provided by &ldquo;<code>perl -d -e 1</code>&rdquo;.</li>
+</ul>
+<p>Source code for the hello Perl script</p>
+
+<pre><code>#!/usr/bin/perl
+# my first python program
+print(&#34;Hello, world!\n&#34;);
+</code></pre>
+
+<p>Execution of the hello Perl script</p>
+
+<pre><code>$ chmod 755 hello
+$ ls -l ./hello
+-rwxr-xr-x 1 osamu osamu 68 Mar 11 21:52 ./hello
+$ file ./hello
+./hello: Perl script, ASCII text executable
+$ ./hello
+Hello, world!
+</code></pre>
+
+<h3 id="c">C</h3>
+<ul>
+<li>Super fast binary (Compiler)</li>
+<li>Very versatile.</li>
+<li>Not so easy for dynamic data without special libraries.</li>
+<li>You need to compile code to test it.</li>
+<li>ABI compatibility issue is less complex.</li>
+</ul>
+<p>Source code in C language</p>
+
+<pre><code>#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+/* my first C program */
+int main()
+{
+    printf(&#34;Hello, world!\n&#34;);
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Here, I need to include header files:</p>
+<ul>
+<li>&ldquo;<code>#include &lt;stdio.h&gt;</code>&rdquo; for <code>printf</code>.</li>
+<li>&ldquo;<code>#include &lt;stdlib.h&gt;</code>&rdquo; for <code>EXIT_SUCCESS</code>. (<code>EXIT_SUCCESS = 0</code>)</li>
+</ul>
+<p>Let&rsquo;s compile hello.c to create the ELF object <code>hello</code> and run it.</p>
+
+<pre><code>$ gcc -Wall -o hello hello.c
+$ ls -l ./hello
+-rwxrwxr-x 1 osamu osamu 6687 Aug 17 23:41 ./hello
+$ file ./hello
+./hello: ELF 64-bit LSB  executable, x86-64, version 1 (SYSV), dynamically linke
+d (uses shared libs), for GNU/Linux 2.6.32, BuildID[sha1]=0e6a4d2048e4d49278a909
+8394272f2138f9cf14, not stripped
+$ ./hello
+Hello, world!
+</code></pre>
+
+<p>Let&rsquo;s list linked libraries to the ELF object <code>hello</code>.</p>
+
+<pre><code>$ ldd hello
+    linux-vdso.so.1 (0x00007fffb233b000)
+    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00002aaaaaccf000)
+    /lib64/ld-linux-x86-64.so.2 (0x00002aaaaaaab000)
+</code></pre>
+
+<p>Here, notable libraries are:</p>
+<ul>
+<li><code>linux-vdso.so.1</code> : Linux Virtual Dynamic Shared Object</li>
+<li><code>libc.so.6</code> : The GNU C Library (glibc)</li>
+<li><code>/lib64/ld-linux-x86-64.so.2</code> :  dynamic linker/loader</li>
+</ul>
+<p>Let&rsquo;s list symbols defined in the ELF object <code>hello</code>.</p>
+
+<pre><code>$ nm -n hello
+                 w __gmon_start__
+                 w _ITM_deregisterTMCloneTable
+                 w _ITM_registerTMCloneTable
+                 w _Jv_RegisterClasses
+                 U __libc_start_main@@GLIBC_2.2.5
+                 U puts@@GLIBC_2.2.5
+00000000004003a8 T _init
+0000000000400410 T _start
+0000000000400440 t deregister_tm_clones
+0000000000400470 t register_tm_clones
+00000000004004b0 t __do_global_dtors_aux
+00000000004004d0 t frame_dummy
+00000000004004fd T main
+0000000000400520 T __libc_csu_init
+00000000004005b0 T __libc_csu_fini
+00000000004005b4 T _fini
+00000000004005c0 R _IO_stdin_used
+00000000004006d8 r __FRAME_END__
+00000000006006e0 t __frame_dummy_init_array_entry
+00000000006006e0 t __init_array_start
+00000000006006e8 t __do_global_dtors_aux_fini_array_entry
+00000000006006e8 t __init_array_end
+00000000006006f0 d __JCR_END__
+00000000006006f0 d __JCR_LIST__
+00000000006006f8 d _DYNAMIC
+00000000006008d0 d _GLOBAL_OFFSET_TABLE_
+0000000000600900 D __data_start
+0000000000600900 W data_start
+0000000000600908 D __dso_handle
+0000000000600910 B __bss_start
+0000000000600910 b completed.6392
+0000000000600910 D _edata
+0000000000600910 D __TMC_END__
+0000000000600918 B _end
+</code></pre>
+
+<p>Here, symbol types are:</p>
+<ul>
+<li><code>A</code> : value is absolute</li>
+<li><code>b</code> : uninitialized data (local)</li>
+<li><code>D</code> : initialized data (global)</li>
+<li><code>d</code> : initialized data (local)</li>
+<li><code>R</code> : read only data (global)</li>
+<li><code>r</code> : read only data (local)</li>
+<li><code>T</code> : text (code) section (global)</li>
+<li><code>t</code> : text (code) section (local)</li>
+<li><code>U</code> : undefined</li>
+<li><code>w</code> : weak symbol</li>
+<li><code>W</code> : weak symbol</li>
+</ul>
+<p>Let&rsquo;s look into how <code>hello.c</code> is compiled by stopping before the assembler by creating assembler code as <code>hello.s</code> with the <code>-S</code> option.</p>
+
+<pre><code>$ gcc -S hello.c
+$ cat hello.s
+    .file    &#34;hello.c&#34;
+    .section    .rodata
+.LC0:
+    .string    &#34;Hello, world!&#34;
+    .text
+    .globl    main
+    .type    main, @function
+main:
+.LFB2:
+    .cfi_startproc
+    pushq    %rbp
+    .cfi_def_cfa_offset 16
+    .cfi_offset 6, -16
+    movq    %rsp, %rbp
+    .cfi_def_cfa_register 6
+    movl    $.LC0, %edi
+    call    puts
+    movl    $0, %eax
+    popq    %rbp
+    .cfi_def_cfa 7, 8
+    ret
+    .cfi_endproc
+.LFE2:
+    .size    main, .-main
+    .ident    &#34;GCC: (Debian 4.8.1-9) 4.8.1&#34;
+    .section    .note.GNU-stack,&#34;&#34;,@progbits
+</code></pre>
+
+<p>Please note this is written in the AT&amp;T assembler style. We will get back to
+its details later.</p>
+<p>TIP: Several lines with <code>.cfi_...</code> in the assembler code are the <a href="http://en.wikipedia.org/wiki/DWARF">DWARF</a> CFI directives which help debugger to do backtrace on the modern ABI system without frame pointers (FP). See <a href="http://www.logix.cz/michal/devel/gas-cfi/">CFI support for GNU assembler (GAS)</a>.</p>
+<h3 id="c-1">C++</h3>
+<ul>
+<li>Super fast binary (Compiler)</li>
+<li>Very versatile.</li>
+<li>Good for dynamic data.</li>
+<li>You need to compile code to test it.</li>
+<li>ABI compatibility issue is more complex.</li>
+</ul>
+<p>Source code in C++ language</p>
+
+<pre><code>#include &lt;iostream&gt;
+#include &lt;stdlib.h&gt;
+//  my first C&#43;&#43; program
+int main ()
+{
+    using namespace std;
+    cout &lt;&lt; &#34;Hello World!&#34; &lt;&lt; endl;
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Let&rsquo;s compile <code>hello.cxx</code> to create the ELF object <code>hello</code> and run it.</p>
+
+<pre><code>$ g&#43;&#43; -Wall -o hello hello.cxx
+$ ls -l ./hello
+-rwxrwxr-x 1 osamu osamu 8368 Aug 17 23:41 ./hello
+$ file ./hello
+./hello: ELF 64-bit LSB  executable, x86-64, version 1 (SYSV), dynamically linked...
+$ ./hello
+Hello World!
+</code></pre>
+
+<p>Let&rsquo;s list linked libraries to the ELF object <code>hello</code>.</p>
+
+<pre><code>$ ldd hello
+    linux-vdso.so.1 (0x00007ffff85fe000)
+    libstdc&#43;&#43;.so.6 =&gt; /usr/lib/x86_64-linux-gnu/libstdc&#43;&#43;.so.6 (0x00002aaaaaccf00...
+    libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00002aaaaafd2000)
+    libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00002aaaab2d0000)
+    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00002aaaab4e6000)
+    /lib64/ld-linux-x86-64.so.2 (0x00002aaaaaaab000)
+</code></pre>
+
+<ul>
+<li><code>linux-vdso.so.1</code> : Linux Virtual Dynamic Shared Object</li>
+<li><code>libstdc++.so.6</code> : The GNU Standard C++ Library</li>
+<li><code>libm.so.6</code> : The GNU C Library (glibc, support math functions)</li>
+<li><code>libgcc_s.so.1</code> : The runtime library of GCC</li>
+<li><code>libc.so.6</code> : The GNU C Library (glibc)</li>
+<li><code>/lib64/ld-linux-x86-64.so.2</code> :  dynamic linker/loader</li>
+</ul>
+<p>Let&rsquo;s list symbols defined in the ELF object <code>hello</code>.</p>
+
+<pre><code>$ nm -n hello
+                 U __cxa_atexit@@GLIBC_2.2.5
+                 w __gmon_start__
+                 w _ITM_deregisterTMCloneTable
+                 w _ITM_registerTMCloneTable
+                 w _Jv_RegisterClasses
+                 U __libc_start_main@@GLIBC_2.2.5
+                 U _ZNSolsEPFRSoS_E@@GLIBCXX_3.4
+                 U _ZNSt8ios_base4InitC1Ev@@GLIBCXX_3.4
+                 U _ZNSt8ios_base4InitD1Ev@@GLIBCXX_3.4
+                 U _ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@@GL...
+                 U _ZStlsISt11char_traitsIcEERSt13basic_ostreamIcT_ES5_PKc@@GLIBC...
+0000000000400698 T _init
+0000000000400750 T _start
+0000000000400780 t deregister_tm_clones
+00000000004007b0 t register_tm_clones
+00000000004007f0 t __do_global_dtors_aux
+0000000000400810 t frame_dummy
+000000000040083d T main
+0000000000400864 t _Z41__static_initialization_and_destruction_0ii
+00000000004008a1 t _GLOBAL__sub_I_main
+00000000004008c0 T __libc_csu_init
+0000000000400950 T __libc_csu_fini
+0000000000400954 T _fini
+0000000000400960 R _IO_stdin_used
+0000000000400ac8 r __FRAME_END__
+0000000000600ad0 t __frame_dummy_init_array_entry
+0000000000600ad0 t __init_array_start
+0000000000600ae0 t __do_global_dtors_aux_fini_array_entry
+0000000000600ae0 t __init_array_end
+0000000000600ae8 d __JCR_END__
+0000000000600ae8 d __JCR_LIST__
+0000000000600af0 d _DYNAMIC
+0000000000600cf8 d _GLOBAL_OFFSET_TABLE_
+0000000000600d50 D __data_start
+0000000000600d50 W data_start
+0000000000600d58 D __dso_handle
+0000000000600d60 B __bss_start
+0000000000600d60 D _edata
+0000000000600d60 D __TMC_END__
+0000000000600d60 B _ZSt4cout@@GLIBCXX_3.4
+0000000000600e70 b completed.6392
+0000000000600e71 b _ZStL8__ioinit
+0000000000600e78 B _end
+</code></pre>
+
+<p>There are many symbols starting with <code>_Z</code>.  These are mangled symbols.  We need
+to demangle these symbol with <code>c++filt</code> to make this readable.</p>
+
+<pre><code>$ nm -n hello|c&#43;&#43;filt|fold
+                 U __cxa_atexit@@GLIBC_2.2.5
+                 w __gmon_start__
+                 w _ITM_deregisterTMCloneTable
+                 w _ITM_registerTMCloneTable
+                 w _Jv_RegisterClasses
+                 U __libc_start_main@@GLIBC_2.2.5
+                 U std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;::operator&lt;&lt;
+(std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp; (*)(std::basic_ostream&lt;char,
+ std::char_traits&lt;char&gt; &gt;&amp;))@@GLIBCXX_3.4
+                 U std::ios_base::Init::Init()@@GLIBCXX_3.4
+                 U std::ios_base::Init::~Init()@@GLIBCXX_3.4
+                 U std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp; std::endl&lt;
+char, std::char_traits&lt;char&gt; &gt;(std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;
+&amp;)@@GLIBCXX_3.4
+                 U std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp; std::opera
+tor&lt;&lt; &lt;std::char_traits&lt;char&gt; &gt;(std::basic_ostream&lt;char, std::char_traits&lt;char&gt;
+&gt;&amp;, char const*)@@GLIBCXX_3.4
+0000000000400698 T _init
+0000000000400750 T _start
+0000000000400780 t deregister_tm_clones
+00000000004007b0 t register_tm_clones
+00000000004007f0 t __do_global_dtors_aux
+0000000000400810 t frame_dummy
+000000000040083d T main
+0000000000400864 t __static_initialization_and_destruction_0(int, int)
+00000000004008a1 t _GLOBAL__sub_I_main
+00000000004008c0 T __libc_csu_init
+0000000000400950 T __libc_csu_fini
+0000000000400954 T _fini
+0000000000400960 R _IO_stdin_used
+0000000000400ac8 r __FRAME_END__
+0000000000600ad0 t __frame_dummy_init_array_entry
+0000000000600ad0 t __init_array_start
+0000000000600ae0 t __do_global_dtors_aux_fini_array_entry
+0000000000600ae0 t __init_array_end
+0000000000600ae8 d __JCR_END__
+0000000000600ae8 d __JCR_LIST__
+0000000000600af0 d _DYNAMIC
+0000000000600cf8 d _GLOBAL_OFFSET_TABLE_
+0000000000600d50 D __data_start
+0000000000600d50 W data_start
+0000000000600d58 D __dso_handle
+0000000000600d60 B __bss_start
+0000000000600d60 D _edata
+0000000000600d60 D __TMC_END__
+0000000000600d60 B std::cout@@GLIBCXX_3.4
+0000000000600e70 b completed.6392
+0000000000600e71 b std::__ioinit
+0000000000600e78 B _end
+</code></pre>
+
+<p>Although the source code for both C and C++ are as simple,
+C++ creates more complicated code linked to more libraries
+with mangled symbols.</p>
+<p>Let&rsquo;s look into how <code>hello.cxx</code> is compiled by stopping before the assembler
+by creating assembler code with the <code>-S</code> option and demangling it
+with <code>c++filt -n</code>.</p>
+
+<pre><code>$ g&#43;&#43; -S hello.cxx
+$ c&#43;&#43;filt -n &lt;hello.s |fold
+    .file    &#34;hello.cxx&#34;
+    .local    std::__ioinit
+    .comm    std::__ioinit,1,1
+    .section    .rodata
+.LC0:
+    .string    &#34;Hello World!&#34;
+    .text
+    .globl    main
+    .type    main, @function
+main:
+.LFB971:
+    .cfi_startproc
+    pushq    %rbp
+    .cfi_def_cfa_offset 16
+    .cfi_offset 6, -16
+    movq    %rsp, %rbp
+    .cfi_def_cfa_register 6
+    movl    $.LC0, %esi
+    movl    std::cout, %edi
+    call    std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp; std::operator
+&lt;&lt; &lt;std::char_traits&lt;char&gt; &gt;(std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp;,
+ char const*)
+    movl    std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp; std::endl&lt;cha
+r, std::char_traits&lt;char&gt; &gt;(std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp;),
+ %esi
+    movq    %rax, %rdi
+    call    std::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;::operator&lt;&lt;(st
+d::basic_ostream&lt;char, std::char_traits&lt;char&gt; &gt;&amp; (*)(std::basic_ostream&lt;char, st
+d::char_traits&lt;char&gt; &gt;&amp;))
+    movl    $0, %eax
+    popq    %rbp
+    .cfi_def_cfa 7, 8
+    ret
+    .cfi_endproc
+.LFE971:
+    .size    main, .-main
+    .type    __static_initialization_and_destruction_0(int, int), @function
+__static_initialization_and_destruction_0(int, int):
+.LFB980:
+    .cfi_startproc
+    pushq    %rbp
+    .cfi_def_cfa_offset 16
+    .cfi_offset 6, -16
+    movq    %rsp, %rbp
+    .cfi_def_cfa_register 6
+    subq    $16, %rsp
+    movl    %edi, -4(%rbp)
+    movl    %esi, -8(%rbp)
+    cmpl    $1, -4(%rbp)
+    jne    .L3
+    cmpl    $65535, -8(%rbp)
+    jne    .L3
+    movl    std::__ioinit, %edi
+    call    std::ios_base::Init::Init()
+    movl    $__dso_handle, %edx
+    movl    std::__ioinit, %esi
+    movl    std::ios_base::Init::~Init(), %edi
+    call    __cxa_atexit
+.L3:
+    leave
+    .cfi_def_cfa 7, 8
+    ret
+    .cfi_endproc
+.LFE980:
+    .size    __static_initialization_and_destruction_0(int, int), .-__static_
+initialization_and_destruction_0(int, int)
+    .type    _GLOBAL__sub_I_main, @function
+_GLOBAL__sub_I_main:
+.LFB981:
+    .cfi_startproc
+    pushq    %rbp
+    .cfi_def_cfa_offset 16
+    .cfi_offset 6, -16
+    movq    %rsp, %rbp
+    .cfi_def_cfa_register 6
+    movl    $65535, %esi
+    movl    $1, %edi
+    call    __static_initialization_and_destruction_0(int, int)
+    popq    %rbp
+    .cfi_def_cfa 7, 8
+    ret
+    .cfi_endproc
+.LFE981:
+    .size    _GLOBAL__sub_I_main, .-_GLOBAL__sub_I_main
+    .section    .init_array,&#34;aw&#34;
+    .align 8
+    .quad    _GLOBAL__sub_I_main
+    .hidden    __dso_handle
+    .ident    &#34;GCC: (Debian 4.8.1-9) 4.8.1&#34;
+    .section    .note.GNU-stack,&#34;&#34;,@progbits
+</code></pre>
+
+<p>For more on C++ ABI issues, see:</p>
+<ul>
+<li><a href="http://techbase.kde.org/Policies/Binary_Compatibility_Issues_With_C">http://techbase.kde.org/Policies/Binary_Compatibility_Issues_With_C</a>++[Policies/Binary Compatibility Issues With C++]</li>
+</ul>
+<h3 id="vala">Vala</h3>
+<ul>
+<li>C#, Java like source code</li>
+<li>Super fast binary (C compiler as its backend, no byte code interpreter)</li>
+<li>Easy support for GLib and GObject.</li>
+<li>Good for dynamic data.</li>
+<li>Automatic memory management.</li>
+<li>You need to compile code to test it.</li>
+</ul>
+<h4 id="simple-non-oop-style-no-class">Simple non-OOP style (no class)</h4>
+<p>Source code <code>hello-1.vala</code> in Vala language</p>
+
+<pre><code>int main(string[] args) {
+    stdout.printf(&#34;Hello, world!\n&#34;);
+    return 0;
+}
+</code></pre>
+
+<p>Let&rsquo;s compile <code>hello-1.vala</code> to create the ELF object <code>hello-1</code> and run it.</p>
+
+<pre><code>$ valac -v hello-1.vala
+/path/to/vala/hello-1.vala.c: In function ‘main’:
+/path/to/vala/hello-1.vala.c:28:2: warning: ‘g_type_init’ is deprecated (declared...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+cc -o &#39;/path/to/vala/hello-1&#39; &#39;/path/to/vala/hello-1.vala.c&#39; -I/usr/include/glib-...
+$ ./hello-1
+Hello, world!
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C hello-1.vala
+$ wc -l hello-1.vala ; wc -l hello-1.c
+4 hello-1.vala
+33 hello-1.c
+$ cat hello-1.c
+/* hello-1.c generated by valac 0.20.1, the Vala compiler
+ * generated from hello-1.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+
+
+
+gint _vala_main (gchar** args, int args_length1);
+
+
+gint _vala_main (gchar** args, int args_length1) {
+    gint result = 0;
+    FILE* _tmp0_;
+    _tmp0_ = stdout;
+    fprintf (_tmp0_, &#34;Hello, world!\n&#34;);
+    result = 0;
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return _vala_main (argv, argc);
+}
+
+
+
+</code></pre>
+
+<p>Since no OOP techniques are used, the resulting C code is logically as simple as
+the Vala code except for some <code>#include</code> directives to pertinent libraries automatically
+included for the Vala code.</p>
+<h4 id="oop-style-main-outside-of-class">OOP style (main outside of class)</h4>
+<p>Source code <code>hello-2.vala</code> in the Vala language</p>
+
+<pre><code>using GLib;
+public class Demo.HelloWorld : GLib.Object {
+    public int hello() {
+        stdout.printf(&#34;Hello, world!\n&#34;);
+        return 0;
+    }
+}
+
+int main(string[] args) {
+    var obj = new Demo.HelloWorld();
+    obj.hello();
+    return 0;
+}
+</code></pre>
+
+<p>TIP: Since the use of <code>GLib</code> for the parent class is the default for Vala, the
+line of <code>using GLib;</code> and the prefix of <code>GLib.</code> in the above example may be
+dropped as an exception.</p>
+<p>Let&rsquo;s compile <code>hello-2.vala</code> to create the ELF object <code>hello-2</code> and run it.</p>
+
+<pre><code>$ valac -v hello-2.vala
+/path/to/vala/hello-2.vala.c: In function ‘main’:
+/path/to/vala/hello-2.vala.c:104:2: warning: ‘g_type_init’ is deprecated (declare...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+cc -o &#39;/path/to/vala/hello-2&#39; &#39;/path/to/vala/hello-2.vala.c&#39; -I/usr/include/glib-...
+$ ./hello-2
+Hello, world!
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C hello-2.vala
+$ wc -l hello-2.vala ; wc -l hello-2.c
+13 hello-2.vala
+109 hello-2.c
+$ cat hello-2.c|sed -e &#39;s/      /    /g&#39;|fold # tab =&gt; 4 spaces
+/* hello-2.c generated by valac 0.20.1, the Vala compiler
+ * generated from hello-2.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+
+#define DEMO_TYPE_HELLO_WORLD (demo_hello_world_get_type ())
+#define DEMO_HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), DEMO_TYPE_HELL
+O_WORLD, DemoHelloWorld))
+#define DEMO_HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), DEMO_TY
+PE_HELLO_WORLD, DemoHelloWorldClass))
+#define DEMO_IS_HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), DEMO_TYPE_H
+ELLO_WORLD))
+#define DEMO_IS_HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), DEMO
+_TYPE_HELLO_WORLD))
+#define DEMO_HELLO_WORLD_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), DEMO_
+TYPE_HELLO_WORLD, DemoHelloWorldClass))
+
+typedef struct _DemoHelloWorld DemoHelloWorld;
+typedef struct _DemoHelloWorldClass DemoHelloWorldClass;
+typedef struct _DemoHelloWorldPrivate DemoHelloWorldPrivate;
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+
+struct _DemoHelloWorld {
+    GObject parent_instance;
+    DemoHelloWorldPrivate * priv;
+};
+
+struct _DemoHelloWorldClass {
+    GObjectClass parent_class;
+};
+
+
+static gpointer demo_hello_world_parent_class = NULL;
+
+GType demo_hello_world_get_type (void) G_GNUC_CONST;
+enum  {
+    DEMO_HELLO_WORLD_DUMMY_PROPERTY
+};
+gint demo_hello_world_hello (DemoHelloWorld* self);
+DemoHelloWorld* demo_hello_world_new (void);
+DemoHelloWorld* demo_hello_world_construct (GType object_type);
+gint _vala_main (gchar** args, int args_length1);
+
+
+gint demo_hello_world_hello (DemoHelloWorld* self) {
+    gint result = 0;
+    FILE* _tmp0_;
+    g_return_val_if_fail (self != NULL, 0);
+    _tmp0_ = stdout;
+    fprintf (_tmp0_, &#34;Hello, world!\n&#34;);
+    result = 0;
+    return result;
+}
+
+
+DemoHelloWorld* demo_hello_world_construct (GType object_type) {
+    DemoHelloWorld * self = NULL;
+    self = (DemoHelloWorld*) g_object_new (object_type, NULL);
+    return self;
+}
+
+
+DemoHelloWorld* demo_hello_world_new (void) {
+    return demo_hello_world_construct (DEMO_TYPE_HELLO_WORLD);
+}
+
+
+static void demo_hello_world_class_init (DemoHelloWorldClass * klass) {
+    demo_hello_world_parent_class = g_type_class_peek_parent (klass);
+}
+
+
+static void demo_hello_world_instance_init (DemoHelloWorld * self) {
+}
+
+
+GType demo_hello_world_get_type (void) {
+    static volatile gsize demo_hello_world_type_id__volatile = 0;
+    if (g_once_init_enter (&amp;demo_hello_world_type_id__volatile)) {
+        static const GTypeInfo g_define_type_info = { sizeof (DemoHelloWorldClas
+s), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) demo_hello_
+world_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (DemoHelloWorld), 0, (
+GInstanceInitFunc) demo_hello_world_instance_init, NULL };
+        GType demo_hello_world_type_id;
+        demo_hello_world_type_id = g_type_register_static (G_TYPE_OBJECT, &#34;DemoH
+elloWorld&#34;, &amp;g_define_type_info, 0);
+        g_once_init_leave (&amp;demo_hello_world_type_id__volatile, demo_hello_world
+_type_id);
+    }
+    return demo_hello_world_type_id__volatile;
+}
+
+
+gint _vala_main (gchar** args, int args_length1) {
+    gint result = 0;
+    DemoHelloWorld* _tmp0_;
+    DemoHelloWorld* obj;
+    _tmp0_ = demo_hello_world_new ();
+    obj = _tmp0_;
+    demo_hello_world_hello (obj);
+    result = 0;
+    _g_object_unref0 (obj);
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return _vala_main (argv, argc);
+}
+
+
+
+</code></pre>
+
+<p>It is obvious Vala code is much shorter than C.</p>
+<p>The Vala class definition of <code>Demo.HelloWorld</code> subclassed from <code>GLib.Object</code>
+are converted into the C code defining GObject with many macros.  These C code
+macros are cliches to use GLib and GObject in C.  The Vala compiler takes care
+these chores for you.</p>
+<ul>
+<li><code>demo</code>, <code>DEMO</code>, <code>Demo</code>: prefix taken from library or application name</li>
+<li><code>hello_world</code>, <code>HELLO_WORLD</code>, <code>HelloWorld</code>: object type (= class) name</li>
+<li><code>demo_hello_world_get_type()</code>: returning GType of object HELLO_WORLD defined in DEMO</li>
+</ul>
+<p>The instantiation of the <code>obj</code> object by the Vala <code>new</code> expression is converted
+into the C <code>demo_hello_world_new()</code> function which in turn calls the C
+<code>demo_hello_world_construct()</code> function.  The dynamic memory management by the
+reference counting in the GLib is used to assign memory to the <code>obj</code> object.</p>
+<p>The Vala also adds a wrapper macro <code>_g_object_unref0(obj)</code> to the C code which
+is required to free memory properly for the <code>obj</code> object.</p>
+<p>In general, these macro cliches of GObject are defined as follows:</p>
+<p>#define FOO_TYPE_BAR		(foo_bar_get_type ())
+#define FOO_BAR(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj),<br>
+FOO_TYPE_BAR, FooBar))
+#define FOO_BAR_CLASS(klass)	(G_TYPE_CHECK_CLASS_CAST ((klass), <br>
+FOO_TYPE_BAR, FooBarClass))
+#define FOO_IS_BAR(obj)		(G_TYPE_CHECK_INSTANCE_TYPE ((obj),<br>
+FOO_TYPE_BAR))
+#define FOO_IS_BAR_CLASS(klass)	(G_TYPE_CHECK_CLASS_TYPE ((klass), <br>
+FOO_TYPE_BAR))
+#define FOO_BAR_GET_CLASS(obj)	(G_TYPE_INSTANCE_GET_CLASS ((obj), <br>
+FOO_TYPE_BAR, FooBarClass))</p>
+<p>Here:</p>
+<ul>
+<li><code>foo</code>, <code>FOO</code>, <code>Foo</code>: prefix taken from library or application name (Optional)</li>
+<li><code>bar</code>, <code>BAR</code>, <code>Bar</code>: object type (= class) name</li>
+<li><code>foo_bar_get_type()</code>: returning GType of object BAR defined in FOO</li>
+</ul>
+<h4 id="oop-style-main-inside-of-class">OOP style (main inside of class)</h4>
+<p>Source code <code>hello-3.vala</code> in the Vala language</p>
+
+<pre><code>using GLib;
+public class Demo.HelloWorld : GLib.Object {
+    private int hello() {
+        stdout.printf(&#34;Hello, world!\n&#34;);
+        return 0;
+    }
+    public static int main(string[] args) {
+        var obj = new Demo.HelloWorld();
+        obj.hello();
+        return 0;
+    }
+}
+
+</code></pre>
+
+<p>TIP: Since the use of <code>GLib</code> for the parent class is the default for Vala, the
+line of <code>using GLib;</code> and the prefix of <code>GLib.</code> in the above example may be
+dropped as an exception.</p>
+<p>Let&rsquo;s compile <code>hello-3.vala</code> to create the ELF object <code>hello-3</code> and run it.</p>
+
+<pre><code>$ valac -v hello-3.vala
+/path/to/vala/hello-3.vala.c: In function ‘main’:
+/path/to/vala/hello-3.vala.c:71:2: warning: ‘g_type_init’ is deprecated (declared...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+cc -o &#39;/path/to/vala/hello-3&#39; &#39;/path/to/vala/hello-3.vala.c&#39; -I/usr/include/glib-...
+$ ./hello-3
+Hello, world!
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C hello-3.vala
+$ wc -l hello-3.vala ; wc -l hello-3.c
+13 hello-3.vala
+109 hello-3.c
+$ cat hello-3.c|sed -e &#39;s/      /    /g&#39;|fold # tab =&gt; 4 spaces
+/* hello-3.c generated by valac 0.20.1, the Vala compiler
+ * generated from hello-3.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+
+#define DEMO_TYPE_HELLO_WORLD (demo_hello_world_get_type ())
+#define DEMO_HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), DEMO_TYPE_HELL
+O_WORLD, DemoHelloWorld))
+#define DEMO_HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), DEMO_TY
+PE_HELLO_WORLD, DemoHelloWorldClass))
+#define DEMO_IS_HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), DEMO_TYPE_H
+ELLO_WORLD))
+#define DEMO_IS_HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), DEMO
+_TYPE_HELLO_WORLD))
+#define DEMO_HELLO_WORLD_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), DEMO_
+TYPE_HELLO_WORLD, DemoHelloWorldClass))
+
+typedef struct _DemoHelloWorld DemoHelloWorld;
+typedef struct _DemoHelloWorldClass DemoHelloWorldClass;
+typedef struct _DemoHelloWorldPrivate DemoHelloWorldPrivate;
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+
+struct _DemoHelloWorld {
+    GObject parent_instance;
+    DemoHelloWorldPrivate * priv;
+};
+
+struct _DemoHelloWorldClass {
+    GObjectClass parent_class;
+};
+
+
+static gpointer demo_hello_world_parent_class = NULL;
+
+GType demo_hello_world_get_type (void) G_GNUC_CONST;
+enum  {
+    DEMO_HELLO_WORLD_DUMMY_PROPERTY
+};
+static gint demo_hello_world_hello (DemoHelloWorld* self);
+gint demo_hello_world_main (gchar** args, int args_length1);
+DemoHelloWorld* demo_hello_world_new (void);
+DemoHelloWorld* demo_hello_world_construct (GType object_type);
+
+
+static gint demo_hello_world_hello (DemoHelloWorld* self) {
+    gint result = 0;
+    FILE* _tmp0_;
+    g_return_val_if_fail (self != NULL, 0);
+    _tmp0_ = stdout;
+    fprintf (_tmp0_, &#34;Hello, world!\n&#34;);
+    result = 0;
+    return result;
+}
+
+
+gint demo_hello_world_main (gchar** args, int args_length1) {
+    gint result = 0;
+    DemoHelloWorld* _tmp0_;
+    DemoHelloWorld* obj;
+    _tmp0_ = demo_hello_world_new ();
+    obj = _tmp0_;
+    demo_hello_world_hello (obj);
+    result = 0;
+    _g_object_unref0 (obj);
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return demo_hello_world_main (argv, argc);
+}
+
+
+DemoHelloWorld* demo_hello_world_construct (GType object_type) {
+    DemoHelloWorld * self = NULL;
+    self = (DemoHelloWorld*) g_object_new (object_type, NULL);
+    return self;
+}
+
+
+DemoHelloWorld* demo_hello_world_new (void) {
+    return demo_hello_world_construct (DEMO_TYPE_HELLO_WORLD);
+}
+
+
+static void demo_hello_world_class_init (DemoHelloWorldClass * klass) {
+    demo_hello_world_parent_class = g_type_class_peek_parent (klass);
+}
+
+
+static void demo_hello_world_instance_init (DemoHelloWorld * self) {
+}
+
+
+GType demo_hello_world_get_type (void) {
+    static volatile gsize demo_hello_world_type_id__volatile = 0;
+    if (g_once_init_enter (&amp;demo_hello_world_type_id__volatile)) {
+        static const GTypeInfo g_define_type_info = { sizeof (DemoHelloWorldClas
+s), (GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) demo_hello_
+world_class_init, (GClassFinalizeFunc) NULL, NULL, sizeof (DemoHelloWorld), 0, (
+GInstanceInitFunc) demo_hello_world_instance_init, NULL };
+        GType demo_hello_world_type_id;
+        demo_hello_world_type_id = g_type_register_static (G_TYPE_OBJECT, &#34;DemoH
+elloWorld&#34;, &amp;g_define_type_info, 0);
+        g_once_init_leave (&amp;demo_hello_world_type_id__volatile, demo_hello_world
+_type_id);
+    }
+    return demo_hello_world_type_id__volatile;
+}
+
+
+
+</code></pre>
+
+<p>It is obvious Vala code is much shorter than C.  Many CPP macros are defined
+here, too.  These are cliches to use GLib and GObject in C.  The Vala compiler takes care
+these chores for you.</p>
+<ul>
+<li><code>demo</code>, <code>DEMO</code>, <code>Demo</code>: prefix taken from library or application name</li>
+<li><code>hello_world</code>, <code>HELLO_WORLD</code>, <code>HelloWorld</code>: object type (= class) name</li>
+<li><code>demo_hello_world_get_type()</code>: returning GType of object HELLO_WORLD defined in DEMO</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-open/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-cli/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

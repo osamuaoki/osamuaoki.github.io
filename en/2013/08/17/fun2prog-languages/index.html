@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Language basics | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Language basics</span></h1>
+
+<h3 class="date">Date:
+2013/08/17 (initial publish),
+2021/08/01 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-vim/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-clang/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="language-basics">Language basics</h2>
+<p>See <a href="http://en.wikipedia.org/wiki/Comparison_of_programming_languages_(syntax)">Wikipedia article on programing language</a>.</p>
+<p>Please note this may be inaccurate.</p>
+<ul>
+<li>statement
+<ul>
+<li><code>;</code> as statement terminator: C, C++, Java, Vala, &hellip;</li>
+<li><code>;</code> as statement separator: Perl, Pascal, PL/I, SQL, &hellip;</li>
+<li>EOL as statement terminator: Python</li>
+<li><code>;</code> or EOL as statement terminator: Shell</li>
+<li><code>;</code> as NOP statement: Lua</li>
+</ul>
+</li>
+<li>block statement
+<ul>
+<li><code>{</code> <code>statement...</code> <code>}</code> : C, C++, Java, Vala, Perl, Shell, Lua, &hellip;</li>
+<li><code>BEGIN</code> <code>statement...</code> <code>END</code> : Pascal</li>
+<li>indented block : Python</li>
+</ul>
+</li>
+<li>comment
+<ul>
+<li><code>/* ... */</code> or <code>// ...</code> : C, C++, Java, Vala</li>
+<li><code># ...</code> : Perl, Python, Shell</li>
+<li><code>-- ...</code> or <code>--[[ ... ]]</code>: Lua (line and block comment)</li>
+</ul>
+</li>
+<li>character constant
+<ul>
+<li><code>'a'</code>: C, C++</li>
+</ul>
+</li>
+<li>string
+<ul>
+<li><code>&quot;abcdef&quot;</code> : C, C++, Vala, Python, Perl, Lua; Shell(subst)</li>
+<li><code>'abcdef'</code> : Python, Perl, Lua; Shell(non-subst.)</li>
+<li><code>&quot;&quot;&quot;abcdef&quot;&quot;&quot;</code> : Vala, Python (string literals that span multiple lines)</li>
+<li><code>[==[abcdef]==]</code> : Lua (string literals that span multiple lines)</li>
+</ul>
+</li>
+<li>string concatenate operator
+<ul>
+<li><code>.</code> : Perl</li>
+<li><code>..</code> : Lua</li>
+<li><code>+</code> : Vala, Python, Pascal</li>
+<li>put together side by side: Shell</li>
+<li>call some function: C (think about glib)</li>
+</ul>
+</li>
+<li>modulo
+<ul>
+<li><code>%</code> : C, C++, Vala, Python, Perl, Lua</li>
+<li><code>mod</code> : Pascal</li>
+</ul>
+</li>
+<li>floor
+<ul>
+<li><code>//</code> : Python</li>
+<li><code>div</code> : Pascal</li>
+</ul>
+</li>
+<li>power operator
+<ul>
+<li><code>**</code> : Python, Perl</li>
+<li><code>^</code> : Lua</li>
+<li>use <code>pow(...)</code> function : C, C++, Vala</li>
+</ul>
+</li>
+<li>bit not operator
+<ul>
+<li><code>~</code> : C, C++, Vala, Python, Perl</li>
+</ul>
+</li>
+<li>bit or operator:
+<ul>
+<li><code>|</code> : C, C++, Vala, Python, Perl</li>
+</ul>
+</li>
+<li>bit and operator:
+<ul>
+<li><code>&amp;</code> : C, C++, Vala, Python, Perl</li>
+</ul>
+</li>
+<li>bit exclusive-or operator:
+<ul>
+<li><code>^</code> : C, C++, Vala, Python, Perl</li>
+</ul>
+</li>
+<li>logical not operator
+<ul>
+<li><code>!</code> : C, C++, Vala, Shell, Perl</li>
+<li><code>not</code> : Python, Lua</li>
+</ul>
+</li>
+<li>logical or operator:
+<ul>
+<li><code>|</code> : Python</li>
+<li><code>||</code> : C, C++, Vala, Perl, Shell</li>
+<li><code>or</code> : Lua</li>
+</ul>
+</li>
+<li>logical or operator:
+<ul>
+<li><code>&amp;</code> : Python</li>
+<li><code>&amp;&amp;</code> : C, C++, Vala, Perl, Shell</li>
+<li><code>and</code> : Lua</li>
+</ul>
+</li>
+<li><code>if</code> &ndash; triple choices as example
+<ul>
+<li><code>if</code> <code>(...)</code> <code>{</code> <code>statement...</code> <code>}</code> <code>else</code> <code>if</code> <code>(...)</code> <code>{</code> <code>statement...</code> }<code> </code>else<code> </code>{ <code>statement...</code> }` : C, C++, Vala, Java</li>
+<li><code>if</code> <code>...:</code> <code>statement...</code> <code>elif</code> <code>...:</code> <code>statement...</code> <code>else:</code> <code>statement...</code> : Python (multilined and indented)</li>
+<li><code>if</code> <code>(...)</code> <code>{</code> <code>statement...</code> <code>}</code> <code>elsif</code> <code>(...)</code> <code>{</code> <code>statement...</code> <code>}</code> <code>else</code> <code>{</code> <code>statement...</code> <code>}</code> : Perl</li>
+<li><code>if</code> <code>...</code> <code>then</code> <code>statement...</code> <code>elseif</code> <code>...</code> <code>then</code> <code>statement...</code> <code>else</code> <code>statement...</code> <code>end</code> : Lua</li>
+<li><code>if</code> <code>[...];</code> <code>then</code> <code>statement; ...</code> <code>elif</code> <code>[...]</code> <code>;</code> <code>statement; ...</code> <code>else</code> <code>statement; ...</code> <code>fi</code> : Shell</li>
+</ul>
+</li>
+<li>for &ndash; indexed loop
+<ul>
+<li><code>for (i = 1; i &lt;= n; i++)</code> <code>{</code> <code>statement...</code> <code>}</code> : C, C++, Vala, Java</li>
+<li><code>for i in range(1,n):</code> <code>statement...</code> : Python (multilined and indented)</li>
+<li><code>for ($i = 1; $i &lt;= $n; $i++)</code> <code>{</code> <code>statement...</code> <code>}</code> : Perl</li>
+<li><code>for i=1, n, 1</code> <code>do</code> <code>statement...</code> <code>end</code> : Lua</li>
+</ul>
+</li>
+<li>foreach &ndash; iterator loop
+<ul>
+<li><code>for (type &amp;i : items)</code> <code>{</code> <code>statement...</code> <code>}</code> : C++11</li>
+<li><code>foreach (type i in items)</code> <code>{</code> <code>statement...</code> <code>}</code> : Vala</li>
+<li><code>for (type i : items)</code> <code>{</code> <code>statement...</code> <code>}</code> : Java</li>
+<li><code>for i in items:</code> <code>statement...</code> : Python (multilined and indented)</li>
+<li><code>foreach $i (@items)</code> <code>{</code> <code>statement...</code> <code>}</code> : Perl</li>
+<li><code>for i in items ... ;</code> <code>do</code> <code>statement; ...</code> <code>done</code> : Shell</li>
+</ul>
+</li>
+<li>while loop
+<ul>
+<li><code>while</code> <code>(loop_true)</code> <code>{</code> <code>statement...</code> <code>}</code> : C, C++, Vala, Java, Perl</li>
+<li><code>while</code> <code>loop_true:</code> <code>statement...</code> : Python (multilined and indented)</li>
+<li><code>while</code> <code>(loop_true)</code> <code>do</code> <code>statement...</code> <code>end</code> : Lua</li>
+<li><code>while</code> <code>[...];</code> <code>do</code> <code>statement; ...</code> <code>done</code> : Shell</li>
+</ul>
+</li>
+<li>do while loop
+<ul>
+<li><code>do</code> <code>{</code> <code>statement...</code> <code>}</code> <code>while</code> <code>(loop_true)</code> <code>;</code> : C, C++, Vala, Java, Perl</li>
+<li><code>while true:</code> <code>statement...</code> <code>if</code> <code>!</code> <code>loop_true:</code> <code>break</code> : Python (multilined and indented)</li>
+<li><code>repeat</code> <code>statement...</code> <code>until</code> <code>!</code> <code>loop_true</code> : Lua</li>
+</ul>
+</li>
+<li><code>break</code>
+<ul>
+<li>supported : C, C++, Vala, Java, Python, Lua, Shell</li>
+<li>Instead, use <code>last</code>: Perl</li>
+</ul>
+</li>
+<li><code>continue</code>
+<ul>
+<li>supported : C, C++, Vala, Java, Python, Shell</li>
+<li>Instead, use <code>next</code>: Perl</li>
+<li>NOT supported : Lua (Use <code>if</code> to skip the rest.)</li>
+</ul>
+</li>
+<li><code>return</code>
+<ul>
+<li>supported : C, C++, Vala, Java, Python, Lua, Shell</li>
+</ul>
+</li>
+<li>multiple branching
+<ul>
+<li><code>switch(c)</code> <code>{</code> <code>case 'a':</code> statement&hellip; <code>break;</code> <code>default:</code> <code>statement...</code> <code>}</code> : C, C++, Vala, Java</li>
+<li><code>case</code> <code>$x</code> <code>in</code> <code>a)</code> <code>statement;...</code> <code>;;</code> <code>?)</code> <code>statement;...</code> <code>;;</code> <code>esac</code> : Shell</li>
+<li>NOT supported.  Use <code>if ...</code>: Perl, Python, Lua</li>
+</ul>
+</li>
+</ul>
+<p>Both <code>return</code> and <code>exit</code> are used for similar purposes for many languages.</p>
+<ul>
+<li><em>C</em> : <code>exit</code> is a function in the <code>libc</code> library.
+<ul>
+<li>when <code>exit</code> is called, it <em>terminates</em> the process.</li>
+</ul>
+</li>
+<li><em>C</em> : <code>return</code> is a reserved keyword of the C language.
+<ul>
+<li>when <code>return</code> is in the <code>main()</code> function, it <em>terminates</em> the process.</li>
+<li>when <code>return</code> is not in the <code>main()</code> function, it <em>returns</em> to the calling function code.</li>
+</ul>
+</li>
+<li><em>Shell</em> : <code>exit</code> is a builtin.
+<ul>
+<li>when <code>exit</code> is called, it <em>terminates</em> the shell code.</li>
+</ul>
+</li>
+<li><em>Shell</em> : <code>return</code> is a builtin.
+<ul>
+<li>when <code>return</code> is in the main shell code, it <em>terminates</em> the main shell code.</li>
+<li>when <code>return</code> is in the block code <code>{ ...; }</code>, it <em>terminates</em> the main shell code.</li>
+<li>when <code>return</code> is in the subshell <code>( ...; )</code>, it <em>returns</em> to the main shell code.</li>
+<li>when <code>return</code> is in the sourced file, it <em>returns</em> to the sourcing shell code.</li>
+</ul>
+</li>
+</ul>
+<p>For the C++ language, you need to be careful uing <code>exit</code> in <code>main()</code> since no
+destructor will be called for the locally scoped objects for <code>exit</code>.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-vim/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-clang/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

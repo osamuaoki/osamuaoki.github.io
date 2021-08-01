@@ -1,0 +1,2724 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- GTK&#43; GUI program | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; GTK+ GUI program</span></h1>
+
+<h3 class="date">Date:
+2013/08/17 (initial publish),
+2021/08/01 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-glib/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-sqlite/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="gtk-gui-programs">GTK+ GUI programs</h2>
+<p>Here are some pointers to example codes for GNOME GUI:</p>
+<ul>
+<li><a href="https://live.gnome.org/DocumentationProject/Tasks/DeveloperDocs/BeginnerTutorials">Beginner Gtk+ Course</a> (August 20, 2012)</li>
+<li><a href="http://developer.gnome.org/gnome-devel-demos/stable/">GNOME Developer Platform Demos</a> (These are mostly empty templates as of 2012.)</li>
+</ul>
+<p>Let me record my practice codes which create executables with the following
+same behaviour.</p>
+<p>First it displays a small window as:</p>
+<pre><code> +----------------X
+ |    Click me!   |
+ |                |
+ +----------------+ 
+</code></pre><p>If you click it with the mouse pointer, it updates its display via call
+backfunction mechanism.  For example, after 3 clicks, it displays a small
+window as:</p>
+<pre><code> +--------------------X
+ |   Hello World!     |
+ |   Click count = 3  |
+ +--------------------+
+</code></pre><p>If you click the right top corner of window, this window is closed and program
+is terminated.</p>
+<p>My first set of example codes do not use Glade while my second set of example
+codes use Glade for defining GUI design.</p>
+<h3 id="c">C</h3>
+<p>Let&rsquo;s try to use the gtk+3.0 GUI libraries to build GUI version of a
+&ldquo;Hello World!&rdquo; program in simple C.</p>
+<p>Source code: gui.c</p>
+
+<pre><code>#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;gtk/gtk.h&gt;
+
+static void
+hello(GtkWidget* button, gpointer self);
+
+static void
+quit(GtkWidget* button, gpointer self);
+
+static int i;
+
+static void
+hello(GtkWidget* button, gpointer self) {
+    i &#43;&#43;;
+    gtk_button_set_label(GTK_BUTTON(button), 
+        g_strdup_printf(&#34;Hello, World!\nClick count = %i&#34;, i));
+}
+
+static void
+quit(GtkWidget* button, gpointer self) {
+    gtk_main_quit ();
+}
+
+int
+main(int argc, char ** args) {
+    GtkWidget* window;
+    GtkWidget* button;
+
+    i = 0;
+    g_type_init();
+    gtk_init(&amp;argc, &amp;args);
+    window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+    gtk_window_set_title(GTK_WINDOW(window), &#34;My first GUI program&#34;);
+    gtk_container_set_border_width(GTK_CONTAINER(window), (guint) 10);
+    g_object_set(GTK_WINDOW(window), &#34;window-position&#34;,
+        GTK_WIN_POS_CENTER, NULL);
+    gtk_window_set_default_size(GTK_WINDOW(window), 400, 100);
+    g_signal_connect(window, &#34;destroy&#34;, G_CALLBACK(quit), NULL);
+    button = gtk_button_new_with_label(&#34;Click me!&#34;);
+    g_signal_connect_data(button, &#34;clicked&#34;, G_CALLBACK(hello), NULL, NULL, 0);
+    gtk_container_add(GTK_CONTAINER(window), button);
+    gtk_widget_show_all(window);
+    gtk_main();
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Let&rsquo;s look for the right compile and link options for the gtk+3.0 GUI libraries.</p>
+<p>Search the development package of gtk+3.0</p>
+
+<pre><code>$ apt-cache search &#39;libgtk[0-9.-]*-dev&#39;
+libgtk2.0-dev - development files for the GTK&#43; library
+libgtk-3-dev - development files for the GTK&#43; library
+</code></pre>
+
+<p>If the <code>libgtk-3-dev</code> package has not been installed, install it now.</p>
+<p>Search the right <code>*.pc</code> file for gtk+3.0 for use with <code>pkg-config</code>.</p>
+<p>Search the right *.pc file for gtk+3.0</p>
+
+<pre><code>$ dpkg -L libgtk-3-dev|grep &#39;/pkgconfig/&#39;
+/usr/lib/x86_64-linux-gnu/pkgconfig/gdk-3.0.pc
+/usr/lib/x86_64-linux-gnu/pkgconfig/gtk&#43;-x11-3.0.pc
+/usr/lib/x86_64-linux-gnu/pkgconfig/gtk&#43;-3.0.pc
+/usr/lib/x86_64-linux-gnu/pkgconfig/gdk-x11-3.0.pc
+/usr/lib/x86_64-linux-gnu/pkgconfig/gtk&#43;-unix-print-3.0.pc
+</code></pre>
+
+<p>Now you can obtain the right compile and link options used by gtk+3.0.</p>
+<p>Compile and link options used by gtk+3.0</p>
+
+<pre><code>$ pkg-config --cflags --libs gtk&#43;-3.0
+-pthread -I/usr/include/gtk-3.0 -I/usr/include/atk-1.0 -I/usr/include/at-spi2-atk...
+</code></pre>
+
+<p>Let&rsquo;s compile <code>gui.c</code> program with gtk+3.0.</p>
+<p>Compilation of gui.c into the gtk+3.0 GUI program gui.</p>
+
+<pre><code>$ gcc -Wall `pkg-config --cflags --libs gtk&#43;-3.0` -o gui gui.c
+gui.c: In function ‘main’:
+gui.c:33:5: warning: ‘g_type_init’ is deprecated (declared at /usr/include/glib-2...
+     g_type_init();
+     ^
+</code></pre>
+
+<p>Let&rsquo;s list linked libraries to the ELF object hello with the <code>nm</code> command.
+..  Impressive &hellip; or too much.</p>
+<h3 id="python">Python</h3>
+<p>Let&rsquo;s try to use the gtk+3.0 GUI libraries to build GUI version of a &ldquo;Hello
+World!&rdquo; program with simple Python.</p>
+<p>Source code <code>gui</code> in Python language</p>
+
+<pre><code>#!/usr/bin/python3
+from gi.repository import Gtk
+
+class TopWindow(Gtk.Window):
+
+    def __init__(self):
+        Gtk.Window.__init__(self)
+        self.title = &#34;Hello World!&#34;
+        self.counter = 0
+        self.border_width = 10
+        self.set_default_size(400, 100)
+        self.set_position(Gtk.WindowPosition.CENTER)
+        self.button = Gtk.Button(label=&#34;Click me!&#34;)
+        self.button.connect(&#34;clicked&#34;, self.on_button_clicked)
+        self.add(self.button)
+        self.connect(&#34;delete-event&#34;, self.on_window_destroy)
+
+    def on_window_destroy(self, *args):
+        Gtk.main_quit(*args)
+
+    def on_button_clicked(self, widget):
+        self.counter &#43;= 1
+        widget.set_label(&#34;Hello, World!\nClick count = %i&#34; % self.counter)
+
+def main():
+    window = TopWindow()
+    window.show_all()
+    Gtk.main()
+
+if __name__ == &#39;__main__&#39;:
+    main()
+
+</code></pre>
+
+<p>Please note, &ldquo;<code>from gi.repository import Gtk</code>&rdquo; at the top.</p>
+<h3 id="vala">Vala</h3>
+<p>Let&rsquo;s try to use the gtk+3.0 GUI libraries to build GUI version of a &ldquo;Hello
+World!&rdquo; program with simple Vala.  Just like the Vala examples for &ldquo;CLI
+programs&rdquo;, we present codes in 3 different styles.</p>
+<h4 id="simple-non-oop-style-no-class">Simple non-OOP style (no class)</h4>
+<p>Source code <code>gui-1.vala</code> in Vala language</p>
+
+<pre><code>using Gtk;
+
+int main (string[] args) {
+    Gtk.init (ref args);
+    int i;
+
+    var window = new Window ();
+    window.title = &#34;My first GUI program&#34;;
+    window.border_width = 10;
+    window.window_position = WindowPosition.CENTER;
+    window.set_default_size (400, 100);
+    window.destroy.connect (Gtk.main_quit);
+
+    i = 0;
+    var button = new Button.with_label (&#34;Click me!&#34;);
+    button.clicked.connect (() =&gt; {
+        i &#43;&#43;;
+        button.label = &#34;Hello, World!\nClick count = %i&#34;.printf(i);
+        });
+
+    window.add (button);
+    window.show_all ();
+
+    Gtk.main ();
+    return 0;
+}
+</code></pre>
+
+<p>Let&rsquo;s compile <code>gui-1.vala</code> to create the ELF object <code>gui-1</code>.</p>
+
+<pre><code>$ valac -v --pkg gtk&#43;-3.0 gui-1.vala
+/path/to/vala/gui-1.vala.c: In function ‘main’:
+/path/to/vala/gui-1.vala.c:104:2: warning: ‘g_type_init’ is deprecated (declared ...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gtk&#43;-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gio-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/atk.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/cairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-pixbuf-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pango.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pangocairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/x11.vapi&#39;
+cc -o &#39;/path/to/vala/gui-1&#39; &#39;/path/to/vala/gui-1.vala.c&#39; -pthread -I/usr/include/...
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C --pkg gtk&#43;-3.0 gui-1.vala
+$ wc -l gui-1.vala ; wc -l gui-1.c
+26 gui-1.vala
+109 gui-1.c
+$ cat gui-1.c |sed -e &#39;s/       /    /g&#39;|fold
+/* gui-1.c generated by valac 0.20.1, the Vala compiler
+ * generated from gui-1.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;gtk/gtk.h&gt;
+
+typedef struct _Block1Data Block1Data;
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+#define _g_free0(var) (var = (g_free (var), NULL))
+
+struct _Block1Data {
+    int _ref_count_;
+    gint i;
+    GtkButton* button;
+};
+
+
+
+gint _vala_main (gchar** args, int args_length1);
+static Block1Data* block1_data_ref (Block1Data* _data1_);
+static void block1_data_unref (void * _userdata_);
+static void _gtk_main_quit_gtk_widget_destroy (GtkWidget* _sender, gpointer self
+);
+static void __lambda2_ (Block1Data* _data1_);
+static void ___lambda2__gtk_button_clicked (GtkButton* _sender, gpointer self);
+
+
+static Block1Data* block1_data_ref (Block1Data* _data1_) {
+    g_atomic_int_inc (&amp;_data1_-&gt;_ref_count_);
+    return _data1_;
+}
+
+
+static void block1_data_unref (void * _userdata_) {
+    Block1Data* _data1_;
+    _data1_ = (Block1Data*) _userdata_;
+    if (g_atomic_int_dec_and_test (&amp;_data1_-&gt;_ref_count_)) {
+        _g_object_unref0 (_data1_-&gt;button);
+        g_slice_free (Block1Data, _data1_);
+    }
+}
+
+
+static void _gtk_main_quit_gtk_widget_destroy (GtkWidget* _sender, gpointer self
+) {
+    gtk_main_quit ();
+}
+
+
+static void __lambda2_ (Block1Data* _data1_) {
+    gint _tmp0_;
+    gchar* _tmp1_ = NULL;
+    gchar* _tmp2_;
+    _tmp0_ = _data1_-&gt;i;
+    _data1_-&gt;i = _tmp0_ &#43; 1;
+    _tmp1_ = g_strdup_printf (&#34;Hello, World!\nClick count = %i&#34;, _data1_-&gt;i);
+    _tmp2_ = _tmp1_;
+    gtk_button_set_label (_data1_-&gt;button, _tmp2_);
+    _g_free0 (_tmp2_);
+}
+
+
+static void ___lambda2__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+    __lambda2_ (self);
+}
+
+
+gint _vala_main (gchar** args, int args_length1) {
+    gint result = 0;
+    Block1Data* _data1_;
+    GtkWindow* _tmp0_;
+    GtkWindow* window;
+    GtkButton* _tmp1_;
+    _data1_ = g_slice_new0 (Block1Data);
+    _data1_-&gt;_ref_count_ = 1;
+    gtk_init (&amp;args_length1, &amp;args);
+    _tmp0_ = (GtkWindow*) gtk_window_new (GTK_WINDOW_TOPLEVEL);
+    g_object_ref_sink (_tmp0_);
+    window = _tmp0_;
+    gtk_window_set_title (window, &#34;My first GUI program&#34;);
+    gtk_container_set_border_width ((GtkContainer*) window, (guint) 10);
+    g_object_set (window, &#34;window-position&#34;, GTK_WIN_POS_CENTER, NULL);
+    gtk_window_set_default_size (window, 400, 100);
+    g_signal_connect ((GtkWidget*) window, &#34;destroy&#34;, (GCallback) _gtk_main_quit
+_gtk_widget_destroy, NULL);
+    _data1_-&gt;i = 0;
+    _tmp1_ = (GtkButton*) gtk_button_new_with_label (&#34;Click me!&#34;);
+    g_object_ref_sink (_tmp1_);
+    _data1_-&gt;button = _tmp1_;
+    g_signal_connect_data (_data1_-&gt;button, &#34;clicked&#34;, (GCallback) ___lambda2__g
+tk_button_clicked, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref
+, 0);
+    gtk_container_add ((GtkContainer*) window, (GtkWidget*) _data1_-&gt;button);
+    gtk_widget_show_all ((GtkWidget*) window);
+    gtk_main ();
+    result = 0;
+    _g_object_unref0 (window);
+    block1_data_unref (_data1_);
+    _data1_ = NULL;
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return _vala_main (argv, argc);
+}
+
+
+
+</code></pre>
+
+<p>It is obvious that the Vala code is much shorter than the generated C code.</p>
+<p>One notable logical difference from the corresponding C program example is the
+use of dynamically assigned object pointed by <code>Block1Data* _data1_</code> and maneged
+by reference counting.</p>
+<p>Since no OOP techniques are used, the resulting C code does not have GObject
+related macros.</p>
+<h4 id="oop-style-main-outside-of-class">OOP style (main outside of class)</h4>
+<p>Source code <code>gui-2.vala</code> in Vala language</p>
+
+<pre><code>using Gtk;
+
+class Gui : Gtk.Window {
+
+    private int i;
+
+    public int run() {
+        this.title = &#34;My first GUI program&#34;;
+        this.border_width = 10;
+        this.window_position = WindowPosition.CENTER;
+        this.set_default_size (400, 100);
+        this.destroy.connect (Gtk.main_quit);
+    
+        this.i = 0;
+        var button = new Button.with_label (&#34;Click me!&#34;);
+        button.clicked.connect (() =&gt; {
+            this.i &#43;&#43;;
+            button.label = &#34;Hello, World!\nClick count = %i&#34;.printf(this.i);
+            });
+    
+        this.add (button);
+    	this.show_all ();
+	return 0;
+    }
+
+}
+int main (string[] args) {
+    Gtk.init (ref args);
+
+    var window = new Gui ();
+    window.run();
+    Gtk.main ();
+    return 0;
+}
+</code></pre>
+
+<p>TIP: The above example skips specifying <code>GLib</code> for the parent class since it is
+the default for Vala.</p>
+<p>Let&rsquo;s compile <code>gui-2.vala</code> to create the ELF object <code>gui-2</code> and run it.</p>
+
+<pre><code>$ valac -v --pkg gtk&#43;-3.0 gui-2.vala
+/path/to/vala/gui-2.vala.c: In function ‘main’:
+/path/to/vala/gui-2.vala.c:198:2: warning: ‘g_type_init’ is deprecated (declared ...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gtk&#43;-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gio-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/atk.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/cairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-pixbuf-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pango.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pangocairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/x11.vapi&#39;
+cc -o &#39;/path/to/vala/gui-2&#39; &#39;/path/to/vala/gui-2.vala.c&#39; -pthread -I/usr/include/...
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C --pkg gtk&#43;-3.0 gui-2.vala
+$ wc -l gui-2.vala ; wc -l gui-2.c
+34 gui-2.vala
+203 gui-2.c
+$ cat gui-2.c |sed -e &#39;s/       /    /g&#39;|fold
+/* gui-2.c generated by valac 0.20.1, the Vala compiler
+ * generated from gui-2.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+
+#define TYPE_GUI (gui_get_type ())
+#define GUI(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_GUI, Gui))
+#define GUI_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_GUI, GuiClass))
+#define IS_GUI(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_GUI))
+#define IS_GUI_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_GUI))
+#define GUI_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_GUI, GuiClass
+))
+
+typedef struct _Gui Gui;
+typedef struct _GuiClass GuiClass;
+typedef struct _GuiPrivate GuiPrivate;
+typedef struct _Block1Data Block1Data;
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+#define _g_free0(var) (var = (g_free (var), NULL))
+
+struct _Gui {
+    GtkWindow parent_instance;
+    GuiPrivate * priv;
+};
+
+struct _GuiClass {
+    GtkWindowClass parent_class;
+};
+
+struct _GuiPrivate {
+    gint i;
+};
+
+struct _Block1Data {
+    int _ref_count_;
+    Gui * self;
+    GtkButton* button;
+};
+
+
+static gpointer gui_parent_class = NULL;
+
+GType gui_get_type (void) G_GNUC_CONST;
+#define GUI_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_GUI, GuiPriva
+te))
+enum  {
+    GUI_DUMMY_PROPERTY
+};
+gint gui_run (Gui* self);
+static Block1Data* block1_data_ref (Block1Data* _data1_);
+static void block1_data_unref (void * _userdata_);
+static void _gtk_main_quit_gtk_widget_destroy (GtkWidget* _sender, gpointer self
+);
+static void __lambda2_ (Block1Data* _data1_);
+static void ___lambda2__gtk_button_clicked (GtkButton* _sender, gpointer self);
+Gui* gui_new (void);
+Gui* gui_construct (GType object_type);
+static void gui_finalize (GObject* obj);
+gint _vala_main (gchar** args, int args_length1);
+
+
+static Block1Data* block1_data_ref (Block1Data* _data1_) {
+    g_atomic_int_inc (&amp;_data1_-&gt;_ref_count_);
+    return _data1_;
+}
+
+
+static void block1_data_unref (void * _userdata_) {
+    Block1Data* _data1_;
+    _data1_ = (Block1Data*) _userdata_;
+    if (g_atomic_int_dec_and_test (&amp;_data1_-&gt;_ref_count_)) {
+        Gui * self;
+        self = _data1_-&gt;self;
+        _g_object_unref0 (_data1_-&gt;button);
+        _g_object_unref0 (self);
+        g_slice_free (Block1Data, _data1_);
+    }
+}
+
+
+static void _gtk_main_quit_gtk_widget_destroy (GtkWidget* _sender, gpointer self
+) {
+    gtk_main_quit ();
+}
+
+
+static void __lambda2_ (Block1Data* _data1_) {
+    Gui * self;
+    gint _tmp0_;
+    gint _tmp1_;
+    gchar* _tmp2_ = NULL;
+    gchar* _tmp3_;
+    self = _data1_-&gt;self;
+    _tmp0_ = self-&gt;priv-&gt;i;
+    self-&gt;priv-&gt;i = _tmp0_ &#43; 1;
+    _tmp1_ = self-&gt;priv-&gt;i;
+    _tmp2_ = g_strdup_printf (&#34;Hello, World!\nClick count = %i&#34;, _tmp1_);
+    _tmp3_ = _tmp2_;
+    gtk_button_set_label (_data1_-&gt;button, _tmp3_);
+    _g_free0 (_tmp3_);
+}
+
+
+static void ___lambda2__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+    __lambda2_ (self);
+}
+
+
+gint gui_run (Gui* self) {
+    gint result = 0;
+    Block1Data* _data1_;
+    GtkButton* _tmp0_;
+    g_return_val_if_fail (self != NULL, 0);
+    _data1_ = g_slice_new0 (Block1Data);
+    _data1_-&gt;_ref_count_ = 1;
+    _data1_-&gt;self = g_object_ref (self);
+    gtk_window_set_title ((GtkWindow*) self, &#34;My first GUI program&#34;);
+    gtk_container_set_border_width ((GtkContainer*) self, (guint) 10);
+    g_object_set ((GtkWindow*) self, &#34;window-position&#34;, GTK_WIN_POS_CENTER, NULL
+);
+    gtk_window_set_default_size ((GtkWindow*) self, 400, 100);
+    g_signal_connect ((GtkWidget*) self, &#34;destroy&#34;, (GCallback) _gtk_main_quit_g
+tk_widget_destroy, NULL);
+    self-&gt;priv-&gt;i = 0;
+    _tmp0_ = (GtkButton*) gtk_button_new_with_label (&#34;Click me!&#34;);
+    g_object_ref_sink (_tmp0_);
+    _data1_-&gt;button = _tmp0_;
+    g_signal_connect_data (_data1_-&gt;button, &#34;clicked&#34;, (GCallback) ___lambda2__g
+tk_button_clicked, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref
+, 0);
+    gtk_container_add ((GtkContainer*) self, (GtkWidget*) _data1_-&gt;button);
+    gtk_widget_show_all ((GtkWidget*) self);
+    result = 0;
+    block1_data_unref (_data1_);
+    _data1_ = NULL;
+    return result;
+}
+
+
+Gui* gui_construct (GType object_type) {
+    Gui * self = NULL;
+    self = (Gui*) g_object_new (object_type, NULL);
+    return self;
+}
+
+
+Gui* gui_new (void) {
+    return gui_construct (TYPE_GUI);
+}
+
+
+static void gui_class_init (GuiClass * klass) {
+    gui_parent_class = g_type_class_peek_parent (klass);
+    g_type_class_add_private (klass, sizeof (GuiPrivate));
+    G_OBJECT_CLASS (klass)-&gt;finalize = gui_finalize;
+}
+
+
+static void gui_instance_init (Gui * self) {
+    self-&gt;priv = GUI_GET_PRIVATE (self);
+}
+
+
+static void gui_finalize (GObject* obj) {
+    Gui * self;
+    self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_GUI, Gui);
+    G_OBJECT_CLASS (gui_parent_class)-&gt;finalize (obj);
+}
+
+
+GType gui_get_type (void) {
+    static volatile gsize gui_type_id__volatile = 0;
+    if (g_once_init_enter (&amp;gui_type_id__volatile)) {
+        static const GTypeInfo g_define_type_info = { sizeof (GuiClass), (GBaseI
+nitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) gui_class_init, (GClas
+sFinalizeFunc) NULL, NULL, sizeof (Gui), 0, (GInstanceInitFunc) gui_instance_ini
+t, NULL };
+        GType gui_type_id;
+        gui_type_id = g_type_register_static (GTK_TYPE_WINDOW, &#34;Gui&#34;, &amp;g_define_
+type_info, 0);
+        g_once_init_leave (&amp;gui_type_id__volatile, gui_type_id);
+    }
+    return gui_type_id__volatile;
+}
+
+
+gint _vala_main (gchar** args, int args_length1) {
+    gint result = 0;
+    Gui* _tmp0_;
+    Gui* window;
+    gtk_init (&amp;args_length1, &amp;args);
+    _tmp0_ = gui_new ();
+    g_object_ref_sink (_tmp0_);
+    window = _tmp0_;
+    gui_run (window);
+    gtk_main ();
+    result = 0;
+    _g_object_unref0 (window);
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return _vala_main (argv, argc);
+}
+
+
+
+</code></pre>
+
+<p>It is obvious that the Vala code is much shorter than the generated C code.<br>
+The Vala compiler took care chores of generating CPP macros for GObject
+with.</p>
+<ul>
+<li>No prefix.</li>
+<li><code>gui</code>, <code>GUI</code>, <code>Gui</code>: object type (= class) name</li>
+<li><code>gui_get_type()</code>: returning GType of object GUI</li>
+</ul>
+<h4 id="oop-style-main-inside-of-class">OOP style (main inside of class)</h4>
+<p>Source code <code>gui-3.vala</code> in Vala language</p>
+
+<pre><code>using Gtk;
+
+class Gui : Gtk.Window {
+
+    private int i;
+
+    private int run() {
+        this.title = &#34;My first GUI program&#34;;
+        this.border_width = 10;
+        this.window_position = WindowPosition.CENTER;
+        this.set_default_size (400, 100);
+        this.destroy.connect (Gtk.main_quit);
+    
+        this.i = 0;
+        var button = new Button.with_label (&#34;Click me!&#34;);
+        button.clicked.connect (() =&gt; {
+            this.i &#43;&#43;;
+            button.label = &#34;Hello, World!\nClick count = %i&#34;.printf(this.i);
+            });
+    
+        this.add (button);
+    	this.show_all ();
+	return 0;
+    }
+
+    public static int main (string[] args) {
+        Gtk.init (ref args);
+    
+        var window = new Gui ();
+        window.run();
+        Gtk.main ();
+        return 0;
+    }
+}
+</code></pre>
+
+<p>TIP: The above example skips specifying <code>GLib</code> for the parent class since it is
+the default for Vala.</p>
+<p>Let&rsquo;s compile <code>gui-3.vala</code> to create the ELF object <code>gui-3</code> and run it.</p>
+
+<pre><code>$ valac -v --pkg gtk&#43;-3.0 gui-3.vala
+/path/to/vala/gui-3.vala.c: In function ‘main’:
+/path/to/vala/gui-3.vala.c:155:2: warning: ‘g_type_init’ is deprecated (declared ...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gtk&#43;-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gio-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/atk.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/cairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-pixbuf-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pango.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pangocairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/x11.vapi&#39;
+cc -o &#39;/path/to/vala/gui-3&#39; &#39;/path/to/vala/gui-3.vala.c&#39; -pthread -I/usr/include/...
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C --pkg gtk&#43;-3.0 gui-3.vala
+$ wc -l gui-3.vala ; wc -l gui-3.c
+34 gui-3.vala
+203 gui-3.c
+$ cat gui-3.c |sed -e &#39;s/       /    /g&#39;|fold
+/* gui-3.c generated by valac 0.20.1, the Vala compiler
+ * generated from gui-3.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+
+
+#define TYPE_GUI (gui_get_type ())
+#define GUI(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_GUI, Gui))
+#define GUI_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_GUI, GuiClass))
+#define IS_GUI(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_GUI))
+#define IS_GUI_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_GUI))
+#define GUI_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_GUI, GuiClass
+))
+
+typedef struct _Gui Gui;
+typedef struct _GuiClass GuiClass;
+typedef struct _GuiPrivate GuiPrivate;
+typedef struct _Block1Data Block1Data;
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+#define _g_free0(var) (var = (g_free (var), NULL))
+
+struct _Gui {
+    GtkWindow parent_instance;
+    GuiPrivate * priv;
+};
+
+struct _GuiClass {
+    GtkWindowClass parent_class;
+};
+
+struct _GuiPrivate {
+    gint i;
+};
+
+struct _Block1Data {
+    int _ref_count_;
+    Gui * self;
+    GtkButton* button;
+};
+
+
+static gpointer gui_parent_class = NULL;
+
+GType gui_get_type (void) G_GNUC_CONST;
+#define GUI_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_GUI, GuiPriva
+te))
+enum  {
+    GUI_DUMMY_PROPERTY
+};
+static gint gui_run (Gui* self);
+static Block1Data* block1_data_ref (Block1Data* _data1_);
+static void block1_data_unref (void * _userdata_);
+static void _gtk_main_quit_gtk_widget_destroy (GtkWidget* _sender, gpointer self
+);
+static void __lambda2_ (Block1Data* _data1_);
+static void ___lambda2__gtk_button_clicked (GtkButton* _sender, gpointer self);
+gint gui_main (gchar** args, int args_length1);
+Gui* gui_new (void);
+Gui* gui_construct (GType object_type);
+static void gui_finalize (GObject* obj);
+
+
+static Block1Data* block1_data_ref (Block1Data* _data1_) {
+    g_atomic_int_inc (&amp;_data1_-&gt;_ref_count_);
+    return _data1_;
+}
+
+
+static void block1_data_unref (void * _userdata_) {
+    Block1Data* _data1_;
+    _data1_ = (Block1Data*) _userdata_;
+    if (g_atomic_int_dec_and_test (&amp;_data1_-&gt;_ref_count_)) {
+        Gui * self;
+        self = _data1_-&gt;self;
+        _g_object_unref0 (_data1_-&gt;button);
+        _g_object_unref0 (self);
+        g_slice_free (Block1Data, _data1_);
+    }
+}
+
+
+static void _gtk_main_quit_gtk_widget_destroy (GtkWidget* _sender, gpointer self
+) {
+    gtk_main_quit ();
+}
+
+
+static void __lambda2_ (Block1Data* _data1_) {
+    Gui * self;
+    gint _tmp0_;
+    gint _tmp1_;
+    gchar* _tmp2_ = NULL;
+    gchar* _tmp3_;
+    self = _data1_-&gt;self;
+    _tmp0_ = self-&gt;priv-&gt;i;
+    self-&gt;priv-&gt;i = _tmp0_ &#43; 1;
+    _tmp1_ = self-&gt;priv-&gt;i;
+    _tmp2_ = g_strdup_printf (&#34;Hello, World!\nClick count = %i&#34;, _tmp1_);
+    _tmp3_ = _tmp2_;
+    gtk_button_set_label (_data1_-&gt;button, _tmp3_);
+    _g_free0 (_tmp3_);
+}
+
+
+static void ___lambda2__gtk_button_clicked (GtkButton* _sender, gpointer self) {
+    __lambda2_ (self);
+}
+
+
+static gint gui_run (Gui* self) {
+    gint result = 0;
+    Block1Data* _data1_;
+    GtkButton* _tmp0_;
+    g_return_val_if_fail (self != NULL, 0);
+    _data1_ = g_slice_new0 (Block1Data);
+    _data1_-&gt;_ref_count_ = 1;
+    _data1_-&gt;self = g_object_ref (self);
+    gtk_window_set_title ((GtkWindow*) self, &#34;My first GUI program&#34;);
+    gtk_container_set_border_width ((GtkContainer*) self, (guint) 10);
+    g_object_set ((GtkWindow*) self, &#34;window-position&#34;, GTK_WIN_POS_CENTER, NULL
+);
+    gtk_window_set_default_size ((GtkWindow*) self, 400, 100);
+    g_signal_connect ((GtkWidget*) self, &#34;destroy&#34;, (GCallback) _gtk_main_quit_g
+tk_widget_destroy, NULL);
+    self-&gt;priv-&gt;i = 0;
+    _tmp0_ = (GtkButton*) gtk_button_new_with_label (&#34;Click me!&#34;);
+    g_object_ref_sink (_tmp0_);
+    _data1_-&gt;button = _tmp0_;
+    g_signal_connect_data (_data1_-&gt;button, &#34;clicked&#34;, (GCallback) ___lambda2__g
+tk_button_clicked, block1_data_ref (_data1_), (GClosureNotify) block1_data_unref
+, 0);
+    gtk_container_add ((GtkContainer*) self, (GtkWidget*) _data1_-&gt;button);
+    gtk_widget_show_all ((GtkWidget*) self);
+    result = 0;
+    block1_data_unref (_data1_);
+    _data1_ = NULL;
+    return result;
+}
+
+
+gint gui_main (gchar** args, int args_length1) {
+    gint result = 0;
+    Gui* _tmp0_;
+    Gui* window;
+    gtk_init (&amp;args_length1, &amp;args);
+    _tmp0_ = gui_new ();
+    g_object_ref_sink (_tmp0_);
+    window = _tmp0_;
+    gui_run (window);
+    gtk_main ();
+    result = 0;
+    _g_object_unref0 (window);
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return gui_main (argv, argc);
+}
+
+
+Gui* gui_construct (GType object_type) {
+    Gui * self = NULL;
+    self = (Gui*) g_object_new (object_type, NULL);
+    return self;
+}
+
+
+Gui* gui_new (void) {
+    return gui_construct (TYPE_GUI);
+}
+
+
+static void gui_class_init (GuiClass * klass) {
+    gui_parent_class = g_type_class_peek_parent (klass);
+    g_type_class_add_private (klass, sizeof (GuiPrivate));
+    G_OBJECT_CLASS (klass)-&gt;finalize = gui_finalize;
+}
+
+
+static void gui_instance_init (Gui * self) {
+    self-&gt;priv = GUI_GET_PRIVATE (self);
+}
+
+
+static void gui_finalize (GObject* obj) {
+    Gui * self;
+    self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_GUI, Gui);
+    G_OBJECT_CLASS (gui_parent_class)-&gt;finalize (obj);
+}
+
+
+GType gui_get_type (void) {
+    static volatile gsize gui_type_id__volatile = 0;
+    if (g_once_init_enter (&amp;gui_type_id__volatile)) {
+        static const GTypeInfo g_define_type_info = { sizeof (GuiClass), (GBaseI
+nitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) gui_class_init, (GClas
+sFinalizeFunc) NULL, NULL, sizeof (Gui), 0, (GInstanceInitFunc) gui_instance_ini
+t, NULL };
+        GType gui_type_id;
+        gui_type_id = g_type_register_static (GTK_TYPE_WINDOW, &#34;Gui&#34;, &amp;g_define_
+type_info, 0);
+        g_once_init_leave (&amp;gui_type_id__volatile, gui_type_id);
+    }
+    return gui_type_id__volatile;
+}
+
+
+
+</code></pre>
+
+<p>It is obvious that the Vala code is much shorter than the generated C code.<br>
+The Vala compiler took care chores of generating CPP macros for GObject
+with.</p>
+<ul>
+<li>No prefix.</li>
+<li><code>gui</code>, <code>GUI</code>, <code>Gui</code>: object type (= class) name</li>
+<li><code>gui_get_type()</code>: returning GType of object GUI</li>
+</ul>
+<h3 id="glade">Glade</h3>
+<p>Let&rsquo;s try to design GUI for a &ldquo;Hello World!&rdquo; with Glade and try to be used by
+the gtk+3.0 GUI libraries.  For most cases, we should create <code>clickme.glade</code>.</p>
+<p>GUI design XML file <code>clickme.glade</code> generated by Glade.</p>
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;interface&gt;
+  &lt;!-- interface-requires gtk&#43; 3.0 --&gt;
+  &lt;object class=&#34;GtkWindow&#34; id=&#34;window1&#34;&gt;
+    &lt;property name=&#34;can_focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;border_width&#34;&gt;10&lt;/property&gt;
+    &lt;property name=&#34;title&#34; translatable=&#34;yes&#34;&gt;My first GUI program&lt;/property&gt;
+    &lt;property name=&#34;window_position&#34;&gt;center-always&lt;/property&gt;
+    &lt;property name=&#34;default_width&#34;&gt;400&lt;/property&gt;
+    &lt;property name=&#34;default_height&#34;&gt;100&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;on_window1_destroy&#34; swapped=&#34;no&#34;/&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkButton&#34; id=&#34;button1&#34;&gt;
+        &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Click me!&lt;/property&gt;
+        &lt;property name=&#34;use_action_appearance&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can_focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;receives_default&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;use_action_appearance&#34;&gt;False&lt;/property&gt;
+        &lt;signal name=&#34;clicked&#34; handler=&#34;on_button1_clicked&#34; swapped=&#34;no&#34;/&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/object&gt;
+&lt;/interface&gt;
+</code></pre>
+
+<p>TIP: You can check this by &ldquo;<code>glade clickme.glade</code>&rdquo;.</p>
+<p>For Vala, the Gtk.Builder&rsquo;s signal auto-connection mechanism uses the C name.
+The CamelCase namespace and class name prefix for the callback method name is
+converted to the lower_case C name prefix.</p>
+<p>So for such cases as described later, we create <code>clickme-ext.glade</code>, instead.</p>
+<p>Alternative GUI design XML file <code>clickme-ext.glade</code> generated by Glade.</p>
+
+<pre><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
+&lt;interface&gt;
+  &lt;!-- interface-requires gtk&#43; 3.0 --&gt;
+  &lt;object class=&#34;GtkWindow&#34; id=&#34;window1&#34;&gt;
+    &lt;property name=&#34;can_focus&#34;&gt;False&lt;/property&gt;
+    &lt;property name=&#34;border_width&#34;&gt;10&lt;/property&gt;
+    &lt;property name=&#34;title&#34; translatable=&#34;yes&#34;&gt;My first GUI program&lt;/property&gt;
+    &lt;property name=&#34;window_position&#34;&gt;center-always&lt;/property&gt;
+    &lt;property name=&#34;default_width&#34;&gt;400&lt;/property&gt;
+    &lt;property name=&#34;default_height&#34;&gt;100&lt;/property&gt;
+    &lt;signal name=&#34;destroy&#34; handler=&#34;hello_world_on_window1_destroy&#34; swapped=&#34;no&#34;/&gt;
+    &lt;child&gt;
+      &lt;object class=&#34;GtkButton&#34; id=&#34;button1&#34;&gt;
+        &lt;property name=&#34;label&#34; translatable=&#34;yes&#34;&gt;Click me!&lt;/property&gt;
+        &lt;property name=&#34;use_action_appearance&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;visible&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;can_focus&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;receives_default&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;use_action_appearance&#34;&gt;False&lt;/property&gt;
+        &lt;signal name=&#34;clicked&#34; handler=&#34;hello_world_on_button1_clicked&#34; swapped=&#34;no&#34;/&gt;
+      &lt;/object&gt;
+    &lt;/child&gt;
+  &lt;/object&gt;
+&lt;/interface&gt;
+</code></pre>
+
+<p>TIP: The class name prefix &ldquo;<code>HelloWorld.</code>&rdquo; is converted to the C name prefix
+&ldquo;<code>hello_world_</code>&rdquo; in the Glade XML file used by the Gtk.Builder.</p>
+<h3 id="c-with-glade">C with Glade</h3>
+<p>Let&rsquo;s try to use the gtk+3.0 GUI libraries and Glade generated XML file to
+build GUI version of a &ldquo;Hello World!&rdquo; program in C.</p>
+<p>Source code: gui.c</p>
+
+<pre><code>#include &lt;gtk/gtk.h&gt;
+
+static int i;
+
+static void 
+on_window1_destroy (GtkWidget *object, gpointer user_data)
+{
+    gtk_main_quit ();
+}
+
+static void
+hello(GtkWidget* button, gpointer self) {
+    i &#43;&#43;;
+    gtk_button_set_label(GTK_BUTTON(button), 
+        g_strdup_printf(&#34;Hello, World!\nClick count = %i&#34;, i));
+}
+
+int
+main (int argc, char *argv[])
+{
+    GtkBuilder      *builder; 
+    GtkWidget       *window;
+    GtkWidget       *button;
+
+    gtk_init (&amp;argc, &amp;argv);
+    i = 0;
+    builder = gtk_builder_new ();
+    gtk_builder_add_from_file (builder, &#34;clickme.glade&#34;, NULL);
+    window = GTK_WIDGET (gtk_builder_get_object (builder, &#34;window1&#34;));
+    g_signal_connect (window, &#34;destroy&#34;, (GCallback) on_window1_destroy, NULL);
+    button = GTK_WIDGET (gtk_builder_get_object (builder, &#34;button1&#34;));
+    g_signal_connect (button, &#34;clicked&#34;, (GCallback) hello, NULL);
+    g_object_unref (G_OBJECT (builder));
+        
+    gtk_widget_show (window);                
+    gtk_main ();
+
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Let&rsquo;s compile <code>gui.c</code> program with gtk+3.0.</p>
+<p>Compilation of gui.c into the gtk+3.0 GUI program gui.</p>
+
+<pre><code>$ gcc -Wall `pkg-config --cflags --libs gtk&#43;-3.0` -o gui gui.c
+gui.c: In function ‘main’:
+gui.c:38:12: error: ‘EXIT_SUCCESS’ undeclared (first use in this function)
+     return EXIT_SUCCESS;
+            ^
+gui.c:38:12: note: each undeclared identifier is reported only once for each func...
+gui.c:39:1: warning: control reaches end of non-void function [-Wreturn-type]
+ }
+ ^
+</code></pre>
+
+<p>Let&rsquo;s list linked libraries to the ELF object hello with the <code>nm</code> command.
+..  Impressive &hellip; or too much.</p>
+<h3 id="python-with-glade">Python with Glade</h3>
+<p>Let&rsquo;s try to use the gtk+3.0 GUI libraries to build GUI program with Python.</p>
+<p>Source code <code>gui</code> in Python language</p>
+
+<pre><code>#!/usr/bin/python3
+from gi.repository import Gtk
+
+class Handler:
+    def __init__(self, *args):
+        self.counter = 0
+
+    def on_window1_destroy(self, *args):
+        Gtk.main_quit(*args)
+
+    def on_button1_clicked(self, widget):
+        self.counter &#43;= 1
+        widget.set_label(&#34;Hello, World!\nClick count = %i&#34; % self.counter)
+
+def main():
+    builder = Gtk.Builder()
+    builder.add_from_file(&#34;clickme.glade&#34;)
+    builder.connect_signals(Handler())
+    window = builder.get_object(&#34;window1&#34;)
+    window.show_all()
+    Gtk.main()
+
+if __name__ == &#39;__main__&#39;:
+    main()
+
+</code></pre>
+
+<p>TIP: The content of the &ldquo;<code>class Handler:</code>&rdquo; class provides the callback handlers.</p>
+<h3 id="vala-with-glade">Vala with Glade</h3>
+<p>Let&rsquo;s try to use the gtk+3.0 GUI libraries to build GUI version of a &ldquo;Hello
+World!&rdquo; program in Vala with the Glade generated GUI definition XML
+configuration file.</p>
+<p>TIP: You need to specify the additional gmodule module to the Vala compiler
+option as &ldquo;<code>--pkg gmodule-2.0</code>&rdquo;.  This enables the dynamic loading of methods
+based on the glade XML data during the program execution.</p>
+<h4 id="simple-non-oop-style-no-class-1">Simple non-OOP style (no class)</h4>
+<p>Source code <code>gui-1.vala</code> in Vala language</p>
+
+<pre><code>using Gtk;
+
+int i;
+
+public void on_button1_clicked (Button button) {
+    i &#43;= 1;
+    button.label = &#34;Hello, World!\nClick count = %i&#34;.printf(i);
+}
+
+public void on_window1_destroy (Window window) {
+    Gtk.main_quit ();
+}
+
+int main (string[] args) {     
+    Gtk.init (ref args);
+    i = 0;
+    try {
+        var builder = new Builder ();
+        builder.add_from_file (&#34;clickme.glade&#34;);
+        builder.connect_signals (null);
+        var window = builder.get_object (&#34;window1&#34;) as Window;
+        window.show_all ();
+    } catch (Error e) {
+        stderr.printf (&#34;Could not load UI: %s\n&#34;, e.message);
+        return 1;
+    } 
+    Gtk.main ();
+    return 0;
+}
+</code></pre>
+
+<p>Since no namespace nor class isused, simple &ldquo;<code>clickme.glade</code>&rdquo; is used here.</p>
+<p>Let&rsquo;s compile <code>gui-1.vala</code> to create the ELF object <code>gui-1</code>.</p>
+
+<pre><code>$ valac -v --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-1.vala
+/path/to/vala-glade/gui-1.vala.c: In function ‘main’:
+/path/to/vala-glade/gui-1.vala.c:118:2: warning: ‘g_type_init’ is deprecated (dec...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gtk&#43;-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gio-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/atk.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/cairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-pixbuf-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pango.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pangocairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/x11.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gmodule-2.0.vapi&#39;
+cc -o &#39;/path/to/vala-glade/gui-1&#39; &#39;/path/to/vala-glade/gui-1.vala.c&#39; -pthread -I/...
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-1.vala
+$ wc -l gui-1.vala ; wc -l gui-1.c
+29 gui-1.vala
+123 gui-1.c
+$ cat gui-1.c |sed -e &#39;s/       /    /g&#39;|fold
+/* gui-1.c generated by valac 0.20.1, the Vala compiler
+ * generated from gui-1.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+#define _g_free0(var) (var = (g_free (var), NULL))
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var),
+NULL)))
+
+
+extern gint i;
+gint i = 0;
+
+void on_button1_clicked (GtkButton* button);
+void on_window1_destroy (GtkWindow* window);
+gint _vala_main (gchar** args, int args_length1);
+
+
+void on_button1_clicked (GtkButton* button) {
+    gint _tmp0_;
+    GtkButton* _tmp1_;
+    gint _tmp2_;
+    gchar* _tmp3_ = NULL;
+    gchar* _tmp4_;
+    g_return_if_fail (button != NULL);
+    _tmp0_ = i;
+    i = _tmp0_ &#43; 1;
+    _tmp1_ = button;
+    _tmp2_ = i;
+    _tmp3_ = g_strdup_printf (&#34;Hello, World!\nClick count = %i&#34;, _tmp2_);
+    _tmp4_ = _tmp3_;
+    gtk_button_set_label (_tmp1_, _tmp4_);
+    _g_free0 (_tmp4_);
+}
+
+
+void on_window1_destroy (GtkWindow* window) {
+    g_return_if_fail (window != NULL);
+    gtk_main_quit ();
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+    return self ? g_object_ref (self) : NULL;
+}
+
+
+gint _vala_main (gchar** args, int args_length1) {
+    gint result = 0;
+    GError * _inner_error_ = NULL;
+    gtk_init (&amp;args_length1, &amp;args);
+    i = 0;
+    {
+        GtkBuilder* _tmp0_;
+        GtkBuilder* builder;
+        GtkBuilder* _tmp1_;
+        GtkBuilder* _tmp2_;
+        GtkBuilder* _tmp3_;
+        GObject* _tmp4_ = NULL;
+        GtkWindow* _tmp5_;
+        GtkWindow* window;
+        GtkWindow* _tmp6_;
+        _tmp0_ = gtk_builder_new ();
+        builder = _tmp0_;
+        _tmp1_ = builder;
+        gtk_builder_add_from_file (_tmp1_, &#34;clickme.glade&#34;, &amp;_inner_error_);
+        if (_inner_error_ != NULL) {
+            _g_object_unref0 (builder);
+            goto __catch0_g_error;
+        }
+        _tmp2_ = builder;
+        gtk_builder_connect_signals (_tmp2_, NULL);
+        _tmp3_ = builder;
+        _tmp4_ = gtk_builder_get_object (_tmp3_, &#34;window1&#34;);
+        _tmp5_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp4_, GTK_TYPE_WI
+NDOW) ? ((GtkWindow*) _tmp4_) : NULL);
+        window = _tmp5_;
+        _tmp6_ = window;
+        gtk_widget_show_all ((GtkWidget*) _tmp6_);
+        _g_object_unref0 (window);
+        _g_object_unref0 (builder);
+    }
+    goto __finally0;
+    __catch0_g_error:
+    {
+        GError* e = NULL;
+        FILE* _tmp7_;
+        GError* _tmp8_;
+        const gchar* _tmp9_;
+        e = _inner_error_;
+        _inner_error_ = NULL;
+        _tmp7_ = stderr;
+        _tmp8_ = e;
+        _tmp9_ = _tmp8_-&gt;message;
+        fprintf (_tmp7_, &#34;Could not load UI: %s\n&#34;, _tmp9_);
+        result = 1;
+        _g_error_free0 (e);
+        return result;
+    }
+    __finally0:
+    if (_inner_error_ != NULL) {
+        g_critical (&#34;file %s: line %d: uncaught error: %s (%s, %d)&#34;, __FILE__, _
+_LINE__, _inner_error_-&gt;message, g_quark_to_string (_inner_error_-&gt;domain), _inn
+er_error_-&gt;code);
+        g_clear_error (&amp;_inner_error_);
+        return 0;
+    }
+    gtk_main ();
+    result = 0;
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return _vala_main (argv, argc);
+}
+
+
+
+</code></pre>
+
+<p>It is obvious that the Vala code is much shorter than the generated C code.</p>
+<p>One notable logical difference from the corresponding C program example is the
+use of dynamically assigned object pointed by <code>Block1Data* _data1_</code> and maneged
+by reference counting.</p>
+<p>Since no OOP techniques are used, the resulting C code does not have GObject
+related macros.</p>
+<h4 id="oop-style-main-outside-of-class-callback-as-static">OOP style (main outside of class, callback as static)</h4>
+<p>Source code <code>gui-2.vala</code> in Vala language</p>
+
+<pre><code>using Gtk;
+
+class HelloWorld : Object {
+
+    private static int i;
+
+    public static void on_button1_clicked (Button button) {
+        i &#43;= 1;
+        button.label = &#34;Hello, World!\nClick count = %i&#34;.printf(i);
+    }
+
+    public static void on_window1_destroy (Window window) {
+        Gtk.main_quit ();
+    }
+
+    public int run (string[] args) {     
+        i = 0;
+        try {
+            var builder = new Builder ();
+            builder.add_from_file (&#34;clickme-ext.glade&#34;);
+            var window = builder.get_object (&#34;window1&#34;) as Window;
+            builder.connect_signals (builder);
+            window.show_all ();
+        } catch (Error e) {
+            stderr.printf (&#34;Could not load UI: %s\n&#34;, e.message);
+            return 1;
+        } 
+        return 0;
+    }
+}
+int main (string[] args) {     
+    Gtk.init (ref args);
+    var h = new HelloWorld();
+    h.run(args);
+    Gtk.main ();
+    return 0;
+}
+
+</code></pre>
+
+<p>Since class is isused, &ldquo;<code>clickme-ext.glade</code>&rdquo; is used here.</p>
+<p>Although you see compiler warnings like &ldquo;<code>warning: method ... never used</code>&rdquo;, do
+not worry.  They are used via Gtk.Builder callback mechanism.</p>
+<p>Let&rsquo;s compile <code>gui-2.vala</code> to create the ELF object <code>gui-2</code> and run it.</p>
+
+<pre><code>$ valac -v --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-2.vala
+gui-2.vala:7.5-7.41: warning: method `HelloWorld.on_button1_clicked&#39; never used
+    public static void on_button1_clicked (Button button) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gui-2.vala:12.5-12.41: warning: method `HelloWorld.on_window1_destroy&#39; never used...
+    public static void on_window1_destroy (Window window) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/path/to/vala-glade/gui-2.vala.c: In function ‘main’:
+/path/to/vala-glade/gui-2.vala.c:208:2: warning: ‘g_type_init’ is deprecated (dec...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gtk&#43;-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gio-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/atk.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/cairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-pixbuf-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pango.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pangocairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/x11.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gmodule-2.0.vapi&#39;
+cc -o &#39;/path/to/vala-glade/gui-2&#39; &#39;/path/to/vala-glade/gui-2.vala.c&#39; -pthread -I/...
+Compilation succeeded - 2 warning(s)
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-2.vala
+gui-2.vala:7.5-7.41: warning: method `HelloWorld.on_button1_clicked&#39; never used
+    public static void on_button1_clicked (Button button) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gui-2.vala:12.5-12.41: warning: method `HelloWorld.on_window1_destroy&#39; never used...
+    public static void on_window1_destroy (Window window) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Compilation succeeded - 2 warning(s)
+$ wc -l gui-2.vala ; wc -l gui-2.c
+38 gui-2.vala
+213 gui-2.c
+$ cat gui-2.c |sed -e &#39;s/       /    /g&#39;|fold
+/* gui-2.c generated by valac 0.20.1, the Vala compiler
+ * generated from gui-2.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+
+#define TYPE_HELLO_WORLD (hello_world_get_type ())
+#define HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_HELLO_WORLD, H
+elloWorld))
+#define HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_HELLO_W
+ORLD, HelloWorldClass))
+#define IS_HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_HELLO_WORLD
+))
+#define IS_HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_HELL
+O_WORLD))
+#define HELLO_WORLD_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_HELLO
+_WORLD, HelloWorldClass))
+
+typedef struct _HelloWorld HelloWorld;
+typedef struct _HelloWorldClass HelloWorldClass;
+typedef struct _HelloWorldPrivate HelloWorldPrivate;
+#define _g_free0(var) (var = (g_free (var), NULL))
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var),
+NULL)))
+
+struct _HelloWorld {
+    GObject parent_instance;
+    HelloWorldPrivate * priv;
+};
+
+struct _HelloWorldClass {
+    GObjectClass parent_class;
+};
+
+
+static gpointer hello_world_parent_class = NULL;
+static gint hello_world_i;
+static gint hello_world_i = 0;
+
+GType hello_world_get_type (void) G_GNUC_CONST;
+enum  {
+    HELLO_WORLD_DUMMY_PROPERTY
+};
+void hello_world_on_button1_clicked (GtkButton* button);
+void hello_world_on_window1_destroy (GtkWindow* window);
+gint hello_world_run (HelloWorld* self, gchar** args, int args_length1);
+HelloWorld* hello_world_new (void);
+HelloWorld* hello_world_construct (GType object_type);
+static void hello_world_finalize (GObject* obj);
+gint _vala_main (gchar** args, int args_length1);
+
+
+void hello_world_on_button1_clicked (GtkButton* button) {
+    gint _tmp0_;
+    GtkButton* _tmp1_;
+    gint _tmp2_;
+    gchar* _tmp3_ = NULL;
+    gchar* _tmp4_;
+    g_return_if_fail (button != NULL);
+    _tmp0_ = hello_world_i;
+    hello_world_i = _tmp0_ &#43; 1;
+    _tmp1_ = button;
+    _tmp2_ = hello_world_i;
+    _tmp3_ = g_strdup_printf (&#34;Hello, World!\nClick count = %i&#34;, _tmp2_);
+    _tmp4_ = _tmp3_;
+    gtk_button_set_label (_tmp1_, _tmp4_);
+    _g_free0 (_tmp4_);
+}
+
+
+void hello_world_on_window1_destroy (GtkWindow* window) {
+    g_return_if_fail (window != NULL);
+    gtk_main_quit ();
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+    return self ? g_object_ref (self) : NULL;
+}
+
+
+gint hello_world_run (HelloWorld* self, gchar** args, int args_length1) {
+    gint result = 0;
+    GError * _inner_error_ = NULL;
+    g_return_val_if_fail (self != NULL, 0);
+    hello_world_i = 0;
+    {
+        GtkBuilder* _tmp0_;
+        GtkBuilder* builder;
+        GtkBuilder* _tmp1_;
+        GtkBuilder* _tmp2_;
+        GObject* _tmp3_ = NULL;
+        GtkWindow* _tmp4_;
+        GtkWindow* window;
+        GtkBuilder* _tmp5_;
+        GtkBuilder* _tmp6_;
+        GtkWindow* _tmp7_;
+        _tmp0_ = gtk_builder_new ();
+        builder = _tmp0_;
+        _tmp1_ = builder;
+        gtk_builder_add_from_file (_tmp1_, &#34;clickme-ext.glade&#34;, &amp;_inner_error_);
+        if (_inner_error_ != NULL) {
+            _g_object_unref0 (builder);
+            goto __catch0_g_error;
+        }
+        _tmp2_ = builder;
+        _tmp3_ = gtk_builder_get_object (_tmp2_, &#34;window1&#34;);
+        _tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, GTK_TYPE_WI
+NDOW) ? ((GtkWindow*) _tmp3_) : NULL);
+        window = _tmp4_;
+        _tmp5_ = builder;
+        _tmp6_ = builder;
+        gtk_builder_connect_signals (_tmp5_, _tmp6_);
+        _tmp7_ = window;
+        gtk_widget_show_all ((GtkWidget*) _tmp7_);
+        _g_object_unref0 (window);
+        _g_object_unref0 (builder);
+    }
+    goto __finally0;
+    __catch0_g_error:
+    {
+        GError* e = NULL;
+        FILE* _tmp8_;
+        GError* _tmp9_;
+        const gchar* _tmp10_;
+        e = _inner_error_;
+        _inner_error_ = NULL;
+        _tmp8_ = stderr;
+        _tmp9_ = e;
+        _tmp10_ = _tmp9_-&gt;message;
+        fprintf (_tmp8_, &#34;Could not load UI: %s\n&#34;, _tmp10_);
+        result = 1;
+        _g_error_free0 (e);
+        return result;
+    }
+    __finally0:
+    if (_inner_error_ != NULL) {
+        g_critical (&#34;file %s: line %d: uncaught error: %s (%s, %d)&#34;, __FILE__, _
+_LINE__, _inner_error_-&gt;message, g_quark_to_string (_inner_error_-&gt;domain), _inn
+er_error_-&gt;code);
+        g_clear_error (&amp;_inner_error_);
+        return 0;
+    }
+    result = 0;
+    return result;
+}
+
+
+HelloWorld* hello_world_construct (GType object_type) {
+    HelloWorld * self = NULL;
+    self = (HelloWorld*) g_object_new (object_type, NULL);
+    return self;
+}
+
+
+HelloWorld* hello_world_new (void) {
+    return hello_world_construct (TYPE_HELLO_WORLD);
+}
+
+
+static void hello_world_class_init (HelloWorldClass * klass) {
+    hello_world_parent_class = g_type_class_peek_parent (klass);
+    G_OBJECT_CLASS (klass)-&gt;finalize = hello_world_finalize;
+}
+
+
+static void hello_world_instance_init (HelloWorld * self) {
+}
+
+
+static void hello_world_finalize (GObject* obj) {
+    HelloWorld * self;
+    self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_HELLO_WORLD, HelloWorld);
+    G_OBJECT_CLASS (hello_world_parent_class)-&gt;finalize (obj);
+}
+
+
+GType hello_world_get_type (void) {
+    static volatile gsize hello_world_type_id__volatile = 0;
+    if (g_once_init_enter (&amp;hello_world_type_id__volatile)) {
+        static const GTypeInfo g_define_type_info = { sizeof (HelloWorldClass),
+(GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) hello_world_cla
+ss_init, (GClassFinalizeFunc) NULL, NULL, sizeof (HelloWorld), 0, (GInstanceInit
+Func) hello_world_instance_init, NULL };
+        GType hello_world_type_id;
+        hello_world_type_id = g_type_register_static (G_TYPE_OBJECT, &#34;HelloWorld
+&#34;, &amp;g_define_type_info, 0);
+        g_once_init_leave (&amp;hello_world_type_id__volatile, hello_world_type_id);
+    }
+    return hello_world_type_id__volatile;
+}
+
+
+gint _vala_main (gchar** args, int args_length1) {
+    gint result = 0;
+    HelloWorld* _tmp0_;
+    HelloWorld* h;
+    gchar** _tmp1_;
+    gint _tmp1__length1;
+    gtk_init (&amp;args_length1, &amp;args);
+    _tmp0_ = hello_world_new ();
+    h = _tmp0_;
+    _tmp1_ = args;
+    _tmp1__length1 = args_length1;
+    hello_world_run (h, _tmp1_, _tmp1__length1);
+    gtk_main ();
+    result = 0;
+    _g_object_unref0 (h);
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return _vala_main (argv, argc);
+}
+
+
+
+</code></pre>
+
+<p>It is obvious that the Vala code is much shorter than the generated C code.<br>
+The Vala compiler took care chores of generating CPP macros for GObject
+with.</p>
+<ul>
+<li>No prefix.</li>
+<li><code>gui</code>, <code>GUI</code>, <code>Gui</code>: object type (= class) name</li>
+<li><code>gui_get_type()</code>: returning GType of object GUI</li>
+</ul>
+<h4 id="oop-style-main-outside-of-class-callback-as-instance">OOP style (main outside of class, callback as instance)</h4>
+<p>Source code <code>gui-3.vala</code> in Vala language</p>
+
+<pre><code>using Gtk;
+
+class HelloWorld : Object {
+
+    private int i;
+
+    [CCode (instance_pos = -1)]
+    public void on_button1_clicked (Button button) {
+        this.i &#43;= 1;
+        button.label = &#34;Hello, World!\nClick count = %i&#34;.printf(this.i);
+    }
+
+    [CCode (instance_pos = -1)]
+    public void on_window1_destroy (Window window) {
+        Gtk.main_quit ();
+    }
+
+    public int run (string[] args) {     
+        this.i = 0;
+        try {
+            var builder = new Builder ();
+            builder.add_from_file (&#34;clickme-ext.glade&#34;);
+            var window = builder.get_object (&#34;window1&#34;) as Window;
+            builder.connect_signals (builder);
+            window.show_all ();
+        } catch (Error e) {
+            stderr.printf (&#34;Could not load UI: %s\n&#34;, e.message);
+            return 1;
+        } 
+        return 0;
+    }
+}
+int main (string[] args) {     
+    Gtk.init (ref args);
+    var h = new HelloWorld();
+    h.run(args);
+    Gtk.main ();
+    return 0;
+}
+
+</code></pre>
+
+<p>Since class is isused, &ldquo;<code>clickme-ext.glade</code>&rdquo; is used here.</p>
+<p>Although you see compiler warnings like &ldquo;<code>warning: method ... never used</code>&rdquo;, do
+not worry.  They are used via Gtk.Builder callback mechanism.</p>
+<p>Please make sure to use &ldquo;<code>[CCode (instance_pos = -1)]</code>&rdquo; when using instance
+methods instead of static methods as callback handlers for the Gtk.Builder&rsquo;s
+signal auto-connection mechanism.</p>
+<p>Let&rsquo;s compile <code>gui-3.vala</code> to create the ELF object <code>gui-3</code> and run it.</p>
+
+<pre><code>$ valac -v --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-3.vala
+gui-3.vala:8.5-8.34: warning: method `HelloWorld.on_button1_clicked&#39; never used
+    public void on_button1_clicked (Button button) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gui-3.vala:14.5-14.34: warning: method `HelloWorld.on_window1_destroy&#39; never used...
+    public void on_window1_destroy (Window window) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/path/to/vala-glade/gui-3.vala.c: In function ‘main’:
+/path/to/vala-glade/gui-3.vala.c:215:2: warning: ‘g_type_init’ is deprecated (dec...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gtk&#43;-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gio-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/atk.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/cairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-pixbuf-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pango.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pangocairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/x11.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gmodule-2.0.vapi&#39;
+cc -o &#39;/path/to/vala-glade/gui-3&#39; &#39;/path/to/vala-glade/gui-3.vala.c&#39; -pthread -I/...
+Compilation succeeded - 2 warning(s)
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-3.vala
+gui-3.vala:8.5-8.34: warning: method `HelloWorld.on_button1_clicked&#39; never used
+    public void on_button1_clicked (Button button) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gui-3.vala:14.5-14.34: warning: method `HelloWorld.on_window1_destroy&#39; never used...
+    public void on_window1_destroy (Window window) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Compilation succeeded - 2 warning(s)
+$ wc -l gui-3.vala ; wc -l gui-3.c
+40 gui-3.vala
+220 gui-3.c
+$ cat gui-3.c |sed -e &#39;s/       /    /g&#39;|fold
+/* gui-3.c generated by valac 0.20.1, the Vala compiler
+ * generated from gui-3.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+
+#define TYPE_HELLO_WORLD (hello_world_get_type ())
+#define HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_HELLO_WORLD, H
+elloWorld))
+#define HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_HELLO_W
+ORLD, HelloWorldClass))
+#define IS_HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_HELLO_WORLD
+))
+#define IS_HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_HELL
+O_WORLD))
+#define HELLO_WORLD_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_HELLO
+_WORLD, HelloWorldClass))
+
+typedef struct _HelloWorld HelloWorld;
+typedef struct _HelloWorldClass HelloWorldClass;
+typedef struct _HelloWorldPrivate HelloWorldPrivate;
+#define _g_free0(var) (var = (g_free (var), NULL))
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var),
+NULL)))
+
+struct _HelloWorld {
+    GObject parent_instance;
+    HelloWorldPrivate * priv;
+};
+
+struct _HelloWorldClass {
+    GObjectClass parent_class;
+};
+
+struct _HelloWorldPrivate {
+    gint i;
+};
+
+
+static gpointer hello_world_parent_class = NULL;
+
+GType hello_world_get_type (void) G_GNUC_CONST;
+#define HELLO_WORLD_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_HELLO
+_WORLD, HelloWorldPrivate))
+enum  {
+    HELLO_WORLD_DUMMY_PROPERTY
+};
+void hello_world_on_button1_clicked (GtkButton* button, HelloWorld* self);
+void hello_world_on_window1_destroy (GtkWindow* window, HelloWorld* self);
+gint hello_world_run (HelloWorld* self, gchar** args, int args_length1);
+HelloWorld* hello_world_new (void);
+HelloWorld* hello_world_construct (GType object_type);
+static void hello_world_finalize (GObject* obj);
+gint _vala_main (gchar** args, int args_length1);
+
+
+void hello_world_on_button1_clicked (GtkButton* button, HelloWorld* self) {
+    gint _tmp0_;
+    GtkButton* _tmp1_;
+    gint _tmp2_;
+    gchar* _tmp3_ = NULL;
+    gchar* _tmp4_;
+    g_return_if_fail (self != NULL);
+    g_return_if_fail (button != NULL);
+    _tmp0_ = self-&gt;priv-&gt;i;
+    self-&gt;priv-&gt;i = _tmp0_ &#43; 1;
+    _tmp1_ = button;
+    _tmp2_ = self-&gt;priv-&gt;i;
+    _tmp3_ = g_strdup_printf (&#34;Hello, World!\nClick count = %i&#34;, _tmp2_);
+    _tmp4_ = _tmp3_;
+    gtk_button_set_label (_tmp1_, _tmp4_);
+    _g_free0 (_tmp4_);
+}
+
+
+void hello_world_on_window1_destroy (GtkWindow* window, HelloWorld* self) {
+    g_return_if_fail (self != NULL);
+    g_return_if_fail (window != NULL);
+    gtk_main_quit ();
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+    return self ? g_object_ref (self) : NULL;
+}
+
+
+gint hello_world_run (HelloWorld* self, gchar** args, int args_length1) {
+    gint result = 0;
+    GError * _inner_error_ = NULL;
+    g_return_val_if_fail (self != NULL, 0);
+    self-&gt;priv-&gt;i = 0;
+    {
+        GtkBuilder* _tmp0_;
+        GtkBuilder* builder;
+        GtkBuilder* _tmp1_;
+        GtkBuilder* _tmp2_;
+        GObject* _tmp3_ = NULL;
+        GtkWindow* _tmp4_;
+        GtkWindow* window;
+        GtkBuilder* _tmp5_;
+        GtkBuilder* _tmp6_;
+        GtkWindow* _tmp7_;
+        _tmp0_ = gtk_builder_new ();
+        builder = _tmp0_;
+        _tmp1_ = builder;
+        gtk_builder_add_from_file (_tmp1_, &#34;clickme-ext.glade&#34;, &amp;_inner_error_);
+        if (_inner_error_ != NULL) {
+            _g_object_unref0 (builder);
+            goto __catch0_g_error;
+        }
+        _tmp2_ = builder;
+        _tmp3_ = gtk_builder_get_object (_tmp2_, &#34;window1&#34;);
+        _tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, GTK_TYPE_WI
+NDOW) ? ((GtkWindow*) _tmp3_) : NULL);
+        window = _tmp4_;
+        _tmp5_ = builder;
+        _tmp6_ = builder;
+        gtk_builder_connect_signals (_tmp5_, _tmp6_);
+        _tmp7_ = window;
+        gtk_widget_show_all ((GtkWidget*) _tmp7_);
+        _g_object_unref0 (window);
+        _g_object_unref0 (builder);
+    }
+    goto __finally0;
+    __catch0_g_error:
+    {
+        GError* e = NULL;
+        FILE* _tmp8_;
+        GError* _tmp9_;
+        const gchar* _tmp10_;
+        e = _inner_error_;
+        _inner_error_ = NULL;
+        _tmp8_ = stderr;
+        _tmp9_ = e;
+        _tmp10_ = _tmp9_-&gt;message;
+        fprintf (_tmp8_, &#34;Could not load UI: %s\n&#34;, _tmp10_);
+        result = 1;
+        _g_error_free0 (e);
+        return result;
+    }
+    __finally0:
+    if (_inner_error_ != NULL) {
+        g_critical (&#34;file %s: line %d: uncaught error: %s (%s, %d)&#34;, __FILE__, _
+_LINE__, _inner_error_-&gt;message, g_quark_to_string (_inner_error_-&gt;domain), _inn
+er_error_-&gt;code);
+        g_clear_error (&amp;_inner_error_);
+        return 0;
+    }
+    result = 0;
+    return result;
+}
+
+
+HelloWorld* hello_world_construct (GType object_type) {
+    HelloWorld * self = NULL;
+    self = (HelloWorld*) g_object_new (object_type, NULL);
+    return self;
+}
+
+
+HelloWorld* hello_world_new (void) {
+    return hello_world_construct (TYPE_HELLO_WORLD);
+}
+
+
+static void hello_world_class_init (HelloWorldClass * klass) {
+    hello_world_parent_class = g_type_class_peek_parent (klass);
+    g_type_class_add_private (klass, sizeof (HelloWorldPrivate));
+    G_OBJECT_CLASS (klass)-&gt;finalize = hello_world_finalize;
+}
+
+
+static void hello_world_instance_init (HelloWorld * self) {
+    self-&gt;priv = HELLO_WORLD_GET_PRIVATE (self);
+}
+
+
+static void hello_world_finalize (GObject* obj) {
+    HelloWorld * self;
+    self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_HELLO_WORLD, HelloWorld);
+    G_OBJECT_CLASS (hello_world_parent_class)-&gt;finalize (obj);
+}
+
+
+GType hello_world_get_type (void) {
+    static volatile gsize hello_world_type_id__volatile = 0;
+    if (g_once_init_enter (&amp;hello_world_type_id__volatile)) {
+        static const GTypeInfo g_define_type_info = { sizeof (HelloWorldClass),
+(GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) hello_world_cla
+ss_init, (GClassFinalizeFunc) NULL, NULL, sizeof (HelloWorld), 0, (GInstanceInit
+Func) hello_world_instance_init, NULL };
+        GType hello_world_type_id;
+        hello_world_type_id = g_type_register_static (G_TYPE_OBJECT, &#34;HelloWorld
+&#34;, &amp;g_define_type_info, 0);
+        g_once_init_leave (&amp;hello_world_type_id__volatile, hello_world_type_id);
+    }
+    return hello_world_type_id__volatile;
+}
+
+
+gint _vala_main (gchar** args, int args_length1) {
+    gint result = 0;
+    HelloWorld* _tmp0_;
+    HelloWorld* h;
+    gchar** _tmp1_;
+    gint _tmp1__length1;
+    gtk_init (&amp;args_length1, &amp;args);
+    _tmp0_ = hello_world_new ();
+    h = _tmp0_;
+    _tmp1_ = args;
+    _tmp1__length1 = args_length1;
+    hello_world_run (h, _tmp1_, _tmp1__length1);
+    gtk_main ();
+    result = 0;
+    _g_object_unref0 (h);
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return _vala_main (argv, argc);
+}
+
+
+
+</code></pre>
+
+<p>It is obvious that the Vala code is much shorter than the generated C code.<br>
+The Vala compiler took care chores of generating CPP macros for GObject
+with.</p>
+<ul>
+<li>No prefix.</li>
+<li><code>gui</code>, <code>GUI</code>, <code>Gui</code>: object type (= class) name</li>
+<li><code>gui_get_type()</code>: returning GType of object GUI</li>
+</ul>
+<h4 id="oop-style-main-inside-of-class-callback-as-static">OOP style (main inside of class, callback as static)</h4>
+<p>Source code <code>gui-4.vala</code> in Vala language</p>
+
+<pre><code>using Gtk;
+
+class HelloWorld : Object {
+
+    private static int i;
+
+    public static void on_button1_clicked (Button button) {
+        i &#43;= 1;
+        button.label = &#34;Hello, World!\nClick count = %i&#34;.printf(i);
+    }
+
+    public static void on_window1_destroy (Window window) {
+        Gtk.main_quit ();
+    }
+
+    private int run (string[] args) {     
+        i = 0;
+        try {
+            var builder = new Builder ();
+            builder.add_from_file (&#34;clickme-ext.glade&#34;);
+            var window = builder.get_object (&#34;window1&#34;) as Window;
+            builder.connect_signals (builder);
+            window.show_all ();
+        } catch (Error e) {
+            stderr.printf (&#34;Could not load UI: %s\n&#34;, e.message);
+            return 1;
+        } 
+        return 0;
+    }
+    public static int main (string[] args) {     
+        Gtk.init (ref args);
+        var h = new HelloWorld();
+        h.run(args);
+        Gtk.main ();
+        return 0;
+    }
+}
+
+</code></pre>
+
+<p>Since class is isused, &ldquo;<code>clickme-ext.glade</code>&rdquo; is used here.</p>
+<p>Although you see compiler warnings like &ldquo;<code>warning: method ... never used</code>&rdquo;, do
+not worry.  They are used via Gtk.Builder callback mechanism.</p>
+<p>Let&rsquo;s compile <code>gui-4.vala</code> to create the ELF object <code>gui-4</code> and run it.</p>
+
+<pre><code>$ valac -v --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-4.vala
+gui-4.vala:7.5-7.41: warning: method `HelloWorld.on_button1_clicked&#39; never used
+    public static void on_button1_clicked (Button button) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gui-4.vala:12.5-12.41: warning: method `HelloWorld.on_window1_destroy&#39; never used...
+    public static void on_window1_destroy (Window window) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/path/to/vala-glade/gui-4.vala.c: In function ‘main’:
+/path/to/vala-glade/gui-4.vala.c:167:2: warning: ‘g_type_init’ is deprecated (dec...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gtk&#43;-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gio-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/atk.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/cairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-pixbuf-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pango.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pangocairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/x11.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gmodule-2.0.vapi&#39;
+cc -o &#39;/path/to/vala-glade/gui-4&#39; &#39;/path/to/vala-glade/gui-4.vala.c&#39; -pthread -I/...
+Compilation succeeded - 2 warning(s)
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-4.vala
+gui-4.vala:7.5-7.41: warning: method `HelloWorld.on_button1_clicked&#39; never used
+    public static void on_button1_clicked (Button button) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gui-4.vala:12.5-12.41: warning: method `HelloWorld.on_window1_destroy&#39; never used...
+    public static void on_window1_destroy (Window window) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Compilation succeeded - 2 warning(s)
+$ wc -l gui-4.vala ; wc -l gui-4.c
+38 gui-4.vala
+213 gui-4.c
+$ cat gui-4.c |sed -e &#39;s/       /    /g&#39;|fold
+/* gui-4.c generated by valac 0.20.1, the Vala compiler
+ * generated from gui-4.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+
+#define TYPE_HELLO_WORLD (hello_world_get_type ())
+#define HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_HELLO_WORLD, H
+elloWorld))
+#define HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_HELLO_W
+ORLD, HelloWorldClass))
+#define IS_HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_HELLO_WORLD
+))
+#define IS_HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_HELL
+O_WORLD))
+#define HELLO_WORLD_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_HELLO
+_WORLD, HelloWorldClass))
+
+typedef struct _HelloWorld HelloWorld;
+typedef struct _HelloWorldClass HelloWorldClass;
+typedef struct _HelloWorldPrivate HelloWorldPrivate;
+#define _g_free0(var) (var = (g_free (var), NULL))
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var),
+NULL)))
+
+struct _HelloWorld {
+    GObject parent_instance;
+    HelloWorldPrivate * priv;
+};
+
+struct _HelloWorldClass {
+    GObjectClass parent_class;
+};
+
+
+static gpointer hello_world_parent_class = NULL;
+static gint hello_world_i;
+static gint hello_world_i = 0;
+
+GType hello_world_get_type (void) G_GNUC_CONST;
+enum  {
+    HELLO_WORLD_DUMMY_PROPERTY
+};
+void hello_world_on_button1_clicked (GtkButton* button);
+void hello_world_on_window1_destroy (GtkWindow* window);
+static gint hello_world_run (HelloWorld* self, gchar** args, int args_length1);
+gint hello_world_main (gchar** args, int args_length1);
+HelloWorld* hello_world_new (void);
+HelloWorld* hello_world_construct (GType object_type);
+static void hello_world_finalize (GObject* obj);
+
+
+void hello_world_on_button1_clicked (GtkButton* button) {
+    gint _tmp0_;
+    GtkButton* _tmp1_;
+    gint _tmp2_;
+    gchar* _tmp3_ = NULL;
+    gchar* _tmp4_;
+    g_return_if_fail (button != NULL);
+    _tmp0_ = hello_world_i;
+    hello_world_i = _tmp0_ &#43; 1;
+    _tmp1_ = button;
+    _tmp2_ = hello_world_i;
+    _tmp3_ = g_strdup_printf (&#34;Hello, World!\nClick count = %i&#34;, _tmp2_);
+    _tmp4_ = _tmp3_;
+    gtk_button_set_label (_tmp1_, _tmp4_);
+    _g_free0 (_tmp4_);
+}
+
+
+void hello_world_on_window1_destroy (GtkWindow* window) {
+    g_return_if_fail (window != NULL);
+    gtk_main_quit ();
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+    return self ? g_object_ref (self) : NULL;
+}
+
+
+static gint hello_world_run (HelloWorld* self, gchar** args, int args_length1) {
+    gint result = 0;
+    GError * _inner_error_ = NULL;
+    g_return_val_if_fail (self != NULL, 0);
+    hello_world_i = 0;
+    {
+        GtkBuilder* _tmp0_;
+        GtkBuilder* builder;
+        GtkBuilder* _tmp1_;
+        GtkBuilder* _tmp2_;
+        GObject* _tmp3_ = NULL;
+        GtkWindow* _tmp4_;
+        GtkWindow* window;
+        GtkBuilder* _tmp5_;
+        GtkBuilder* _tmp6_;
+        GtkWindow* _tmp7_;
+        _tmp0_ = gtk_builder_new ();
+        builder = _tmp0_;
+        _tmp1_ = builder;
+        gtk_builder_add_from_file (_tmp1_, &#34;clickme-ext.glade&#34;, &amp;_inner_error_);
+        if (_inner_error_ != NULL) {
+            _g_object_unref0 (builder);
+            goto __catch0_g_error;
+        }
+        _tmp2_ = builder;
+        _tmp3_ = gtk_builder_get_object (_tmp2_, &#34;window1&#34;);
+        _tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, GTK_TYPE_WI
+NDOW) ? ((GtkWindow*) _tmp3_) : NULL);
+        window = _tmp4_;
+        _tmp5_ = builder;
+        _tmp6_ = builder;
+        gtk_builder_connect_signals (_tmp5_, _tmp6_);
+        _tmp7_ = window;
+        gtk_widget_show_all ((GtkWidget*) _tmp7_);
+        _g_object_unref0 (window);
+        _g_object_unref0 (builder);
+    }
+    goto __finally0;
+    __catch0_g_error:
+    {
+        GError* e = NULL;
+        FILE* _tmp8_;
+        GError* _tmp9_;
+        const gchar* _tmp10_;
+        e = _inner_error_;
+        _inner_error_ = NULL;
+        _tmp8_ = stderr;
+        _tmp9_ = e;
+        _tmp10_ = _tmp9_-&gt;message;
+        fprintf (_tmp8_, &#34;Could not load UI: %s\n&#34;, _tmp10_);
+        result = 1;
+        _g_error_free0 (e);
+        return result;
+    }
+    __finally0:
+    if (_inner_error_ != NULL) {
+        g_critical (&#34;file %s: line %d: uncaught error: %s (%s, %d)&#34;, __FILE__, _
+_LINE__, _inner_error_-&gt;message, g_quark_to_string (_inner_error_-&gt;domain), _inn
+er_error_-&gt;code);
+        g_clear_error (&amp;_inner_error_);
+        return 0;
+    }
+    result = 0;
+    return result;
+}
+
+
+gint hello_world_main (gchar** args, int args_length1) {
+    gint result = 0;
+    HelloWorld* _tmp0_;
+    HelloWorld* h;
+    gchar** _tmp1_;
+    gint _tmp1__length1;
+    gtk_init (&amp;args_length1, &amp;args);
+    _tmp0_ = hello_world_new ();
+    h = _tmp0_;
+    _tmp1_ = args;
+    _tmp1__length1 = args_length1;
+    hello_world_run (h, _tmp1_, _tmp1__length1);
+    gtk_main ();
+    result = 0;
+    _g_object_unref0 (h);
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return hello_world_main (argv, argc);
+}
+
+
+HelloWorld* hello_world_construct (GType object_type) {
+    HelloWorld * self = NULL;
+    self = (HelloWorld*) g_object_new (object_type, NULL);
+    return self;
+}
+
+
+HelloWorld* hello_world_new (void) {
+    return hello_world_construct (TYPE_HELLO_WORLD);
+}
+
+
+static void hello_world_class_init (HelloWorldClass * klass) {
+    hello_world_parent_class = g_type_class_peek_parent (klass);
+    G_OBJECT_CLASS (klass)-&gt;finalize = hello_world_finalize;
+}
+
+
+static void hello_world_instance_init (HelloWorld * self) {
+}
+
+
+static void hello_world_finalize (GObject* obj) {
+    HelloWorld * self;
+    self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_HELLO_WORLD, HelloWorld);
+    G_OBJECT_CLASS (hello_world_parent_class)-&gt;finalize (obj);
+}
+
+
+GType hello_world_get_type (void) {
+    static volatile gsize hello_world_type_id__volatile = 0;
+    if (g_once_init_enter (&amp;hello_world_type_id__volatile)) {
+        static const GTypeInfo g_define_type_info = { sizeof (HelloWorldClass),
+(GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) hello_world_cla
+ss_init, (GClassFinalizeFunc) NULL, NULL, sizeof (HelloWorld), 0, (GInstanceInit
+Func) hello_world_instance_init, NULL };
+        GType hello_world_type_id;
+        hello_world_type_id = g_type_register_static (G_TYPE_OBJECT, &#34;HelloWorld
+&#34;, &amp;g_define_type_info, 0);
+        g_once_init_leave (&amp;hello_world_type_id__volatile, hello_world_type_id);
+    }
+    return hello_world_type_id__volatile;
+}
+
+
+
+</code></pre>
+
+<p>It is obvious that the Vala code is much shorter than the generated C code.<br>
+The Vala compiler took care chores of generating CPP macros for GObject
+with.</p>
+<ul>
+<li>No prefix.</li>
+<li><code>gui</code>, <code>GUI</code>, <code>Gui</code>: object type (= class) name</li>
+<li><code>gui_get_type()</code>: returning GType of object GUI</li>
+</ul>
+<h4 id="oop-style-main-inside-of-class-callback-as-instance">OOP style (main inside of class, callback as instance)</h4>
+<p>Source code <code>gui-5.vala</code> in Vala language</p>
+
+<pre><code>using Gtk;
+
+class HelloWorld : Object {
+
+    private int i;
+
+    [CCode (instance_pos = -1)]
+    public void on_button1_clicked (Button button) {
+        this.i &#43;= 1;
+        button.label = &#34;Hello, World!\nClick count = %i&#34;.printf(this.i);
+    }
+
+    [CCode (instance_pos = -1)]
+    public void on_window1_destroy (Window window) {
+        Gtk.main_quit ();
+    }
+
+    private int run (string[] args) {     
+        this.i = 0;
+        try {
+            var builder = new Builder ();
+            builder.add_from_file (&#34;clickme-ext.glade&#34;);
+            var window = builder.get_object (&#34;window1&#34;) as Window;
+            builder.connect_signals (builder);
+            window.show_all ();
+        } catch (Error e) {
+            stderr.printf (&#34;Could not load UI: %s\n&#34;, e.message);
+            return 1;
+        } 
+        return 0;
+    }
+    public static int main (string[] args) {     
+        Gtk.init (ref args);
+        var h = new HelloWorld();
+        h.run(args);
+        Gtk.main ();
+        return 0;
+    }
+}
+
+</code></pre>
+
+<p>Since class is isused, &ldquo;<code>clickme-ext.glade</code>&rdquo; is used here.</p>
+<p>Although you see compiler warnings like &ldquo;<code>warning: method ... never used</code>&rdquo;, do
+not worry.  They are used via Gtk.Builder callback mechanism.</p>
+<p>Please make sure to use &ldquo;<code>[CCode (instance_pos = -1)]</code>&rdquo; when using instance
+methods instead of static methods as callback handlers for the Gtk.Builder&rsquo;s
+signal auto-connection mechanism.</p>
+<p>Let&rsquo;s compile <code>gui-5.vala</code> to create the ELF object <code>gui-5</code> and run it.</p>
+
+<pre><code>$ valac -v --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-5.vala
+gui-5.vala:8.5-8.34: warning: method `HelloWorld.on_button1_clicked&#39; never used
+    public void on_button1_clicked (Button button) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gui-5.vala:14.5-14.34: warning: method `HelloWorld.on_window1_destroy&#39; never used...
+    public void on_window1_destroy (Window window) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+/path/to/vala-glade/gui-5.vala.c: In function ‘main’:
+/path/to/vala-glade/gui-5.vala.c:172:2: warning: ‘g_type_init’ is deprecated (dec...
+  g_type_init ();
+  ^
+Loaded package `/usr/share/vala-0.20/vapi/glib-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gobject-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gtk&#43;-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gio-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/atk.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/cairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-pixbuf-2.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gdk-3.0.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pango.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/pangocairo.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/x11.vapi&#39;
+Loaded package `/usr/share/vala-0.20/vapi/gmodule-2.0.vapi&#39;
+cc -o &#39;/path/to/vala-glade/gui-5&#39; &#39;/path/to/vala-glade/gui-5.vala.c&#39; -pthread -I/...
+Compilation succeeded - 2 warning(s)
+</code></pre>
+
+<p>You can get the C source as:</p>
+
+<pre><code>$ valac -C --pkg gtk&#43;-3.0 --pkg gmodule-2.0 gui-5.vala
+gui-5.vala:8.5-8.34: warning: method `HelloWorld.on_button1_clicked&#39; never used
+    public void on_button1_clicked (Button button) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+gui-5.vala:14.5-14.34: warning: method `HelloWorld.on_window1_destroy&#39; never used...
+    public void on_window1_destroy (Window window) {
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Compilation succeeded - 2 warning(s)
+$ wc -l gui-5.vala ; wc -l gui-5.c
+40 gui-5.vala
+220 gui-5.c
+$ cat gui-5.c |sed -e &#39;s/       /    /g&#39;|fold
+/* gui-5.c generated by valac 0.20.1, the Vala compiler
+ * generated from gui-5.vala, do not modify */
+
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;gtk/gtk.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+
+#define TYPE_HELLO_WORLD (hello_world_get_type ())
+#define HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_CAST ((obj), TYPE_HELLO_WORLD, H
+elloWorld))
+#define HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_CAST ((klass), TYPE_HELLO_W
+ORLD, HelloWorldClass))
+#define IS_HELLO_WORLD(obj) (G_TYPE_CHECK_INSTANCE_TYPE ((obj), TYPE_HELLO_WORLD
+))
+#define IS_HELLO_WORLD_CLASS(klass) (G_TYPE_CHECK_CLASS_TYPE ((klass), TYPE_HELL
+O_WORLD))
+#define HELLO_WORLD_GET_CLASS(obj) (G_TYPE_INSTANCE_GET_CLASS ((obj), TYPE_HELLO
+_WORLD, HelloWorldClass))
+
+typedef struct _HelloWorld HelloWorld;
+typedef struct _HelloWorldClass HelloWorldClass;
+typedef struct _HelloWorldPrivate HelloWorldPrivate;
+#define _g_free0(var) (var = (g_free (var), NULL))
+#define _g_object_unref0(var) ((var == NULL) ? NULL : (var = (g_object_unref (va
+r), NULL)))
+#define _g_error_free0(var) ((var == NULL) ? NULL : (var = (g_error_free (var),
+NULL)))
+
+struct _HelloWorld {
+    GObject parent_instance;
+    HelloWorldPrivate * priv;
+};
+
+struct _HelloWorldClass {
+    GObjectClass parent_class;
+};
+
+struct _HelloWorldPrivate {
+    gint i;
+};
+
+
+static gpointer hello_world_parent_class = NULL;
+
+GType hello_world_get_type (void) G_GNUC_CONST;
+#define HELLO_WORLD_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), TYPE_HELLO
+_WORLD, HelloWorldPrivate))
+enum  {
+    HELLO_WORLD_DUMMY_PROPERTY
+};
+void hello_world_on_button1_clicked (GtkButton* button, HelloWorld* self);
+void hello_world_on_window1_destroy (GtkWindow* window, HelloWorld* self);
+static gint hello_world_run (HelloWorld* self, gchar** args, int args_length1);
+gint hello_world_main (gchar** args, int args_length1);
+HelloWorld* hello_world_new (void);
+HelloWorld* hello_world_construct (GType object_type);
+static void hello_world_finalize (GObject* obj);
+
+
+void hello_world_on_button1_clicked (GtkButton* button, HelloWorld* self) {
+    gint _tmp0_;
+    GtkButton* _tmp1_;
+    gint _tmp2_;
+    gchar* _tmp3_ = NULL;
+    gchar* _tmp4_;
+    g_return_if_fail (self != NULL);
+    g_return_if_fail (button != NULL);
+    _tmp0_ = self-&gt;priv-&gt;i;
+    self-&gt;priv-&gt;i = _tmp0_ &#43; 1;
+    _tmp1_ = button;
+    _tmp2_ = self-&gt;priv-&gt;i;
+    _tmp3_ = g_strdup_printf (&#34;Hello, World!\nClick count = %i&#34;, _tmp2_);
+    _tmp4_ = _tmp3_;
+    gtk_button_set_label (_tmp1_, _tmp4_);
+    _g_free0 (_tmp4_);
+}
+
+
+void hello_world_on_window1_destroy (GtkWindow* window, HelloWorld* self) {
+    g_return_if_fail (self != NULL);
+    g_return_if_fail (window != NULL);
+    gtk_main_quit ();
+}
+
+
+static gpointer _g_object_ref0 (gpointer self) {
+    return self ? g_object_ref (self) : NULL;
+}
+
+
+static gint hello_world_run (HelloWorld* self, gchar** args, int args_length1) {
+    gint result = 0;
+    GError * _inner_error_ = NULL;
+    g_return_val_if_fail (self != NULL, 0);
+    self-&gt;priv-&gt;i = 0;
+    {
+        GtkBuilder* _tmp0_;
+        GtkBuilder* builder;
+        GtkBuilder* _tmp1_;
+        GtkBuilder* _tmp2_;
+        GObject* _tmp3_ = NULL;
+        GtkWindow* _tmp4_;
+        GtkWindow* window;
+        GtkBuilder* _tmp5_;
+        GtkBuilder* _tmp6_;
+        GtkWindow* _tmp7_;
+        _tmp0_ = gtk_builder_new ();
+        builder = _tmp0_;
+        _tmp1_ = builder;
+        gtk_builder_add_from_file (_tmp1_, &#34;clickme-ext.glade&#34;, &amp;_inner_error_);
+        if (_inner_error_ != NULL) {
+            _g_object_unref0 (builder);
+            goto __catch0_g_error;
+        }
+        _tmp2_ = builder;
+        _tmp3_ = gtk_builder_get_object (_tmp2_, &#34;window1&#34;);
+        _tmp4_ = _g_object_ref0 (G_TYPE_CHECK_INSTANCE_TYPE (_tmp3_, GTK_TYPE_WI
+NDOW) ? ((GtkWindow*) _tmp3_) : NULL);
+        window = _tmp4_;
+        _tmp5_ = builder;
+        _tmp6_ = builder;
+        gtk_builder_connect_signals (_tmp5_, _tmp6_);
+        _tmp7_ = window;
+        gtk_widget_show_all ((GtkWidget*) _tmp7_);
+        _g_object_unref0 (window);
+        _g_object_unref0 (builder);
+    }
+    goto __finally0;
+    __catch0_g_error:
+    {
+        GError* e = NULL;
+        FILE* _tmp8_;
+        GError* _tmp9_;
+        const gchar* _tmp10_;
+        e = _inner_error_;
+        _inner_error_ = NULL;
+        _tmp8_ = stderr;
+        _tmp9_ = e;
+        _tmp10_ = _tmp9_-&gt;message;
+        fprintf (_tmp8_, &#34;Could not load UI: %s\n&#34;, _tmp10_);
+        result = 1;
+        _g_error_free0 (e);
+        return result;
+    }
+    __finally0:
+    if (_inner_error_ != NULL) {
+        g_critical (&#34;file %s: line %d: uncaught error: %s (%s, %d)&#34;, __FILE__, _
+_LINE__, _inner_error_-&gt;message, g_quark_to_string (_inner_error_-&gt;domain), _inn
+er_error_-&gt;code);
+        g_clear_error (&amp;_inner_error_);
+        return 0;
+    }
+    result = 0;
+    return result;
+}
+
+
+gint hello_world_main (gchar** args, int args_length1) {
+    gint result = 0;
+    HelloWorld* _tmp0_;
+    HelloWorld* h;
+    gchar** _tmp1_;
+    gint _tmp1__length1;
+    gtk_init (&amp;args_length1, &amp;args);
+    _tmp0_ = hello_world_new ();
+    h = _tmp0_;
+    _tmp1_ = args;
+    _tmp1__length1 = args_length1;
+    hello_world_run (h, _tmp1_, _tmp1__length1);
+    gtk_main ();
+    result = 0;
+    _g_object_unref0 (h);
+    return result;
+}
+
+
+int main (int argc, char ** argv) {
+    g_type_init ();
+    return hello_world_main (argv, argc);
+}
+
+
+HelloWorld* hello_world_construct (GType object_type) {
+    HelloWorld * self = NULL;
+    self = (HelloWorld*) g_object_new (object_type, NULL);
+    return self;
+}
+
+
+HelloWorld* hello_world_new (void) {
+    return hello_world_construct (TYPE_HELLO_WORLD);
+}
+
+
+static void hello_world_class_init (HelloWorldClass * klass) {
+    hello_world_parent_class = g_type_class_peek_parent (klass);
+    g_type_class_add_private (klass, sizeof (HelloWorldPrivate));
+    G_OBJECT_CLASS (klass)-&gt;finalize = hello_world_finalize;
+}
+
+
+static void hello_world_instance_init (HelloWorld * self) {
+    self-&gt;priv = HELLO_WORLD_GET_PRIVATE (self);
+}
+
+
+static void hello_world_finalize (GObject* obj) {
+    HelloWorld * self;
+    self = G_TYPE_CHECK_INSTANCE_CAST (obj, TYPE_HELLO_WORLD, HelloWorld);
+    G_OBJECT_CLASS (hello_world_parent_class)-&gt;finalize (obj);
+}
+
+
+GType hello_world_get_type (void) {
+    static volatile gsize hello_world_type_id__volatile = 0;
+    if (g_once_init_enter (&amp;hello_world_type_id__volatile)) {
+        static const GTypeInfo g_define_type_info = { sizeof (HelloWorldClass),
+(GBaseInitFunc) NULL, (GBaseFinalizeFunc) NULL, (GClassInitFunc) hello_world_cla
+ss_init, (GClassFinalizeFunc) NULL, NULL, sizeof (HelloWorld), 0, (GInstanceInit
+Func) hello_world_instance_init, NULL };
+        GType hello_world_type_id;
+        hello_world_type_id = g_type_register_static (G_TYPE_OBJECT, &#34;HelloWorld
+&#34;, &amp;g_define_type_info, 0);
+        g_once_init_leave (&amp;hello_world_type_id__volatile, hello_world_type_id);
+    }
+    return hello_world_type_id__volatile;
+}
+
+
+
+</code></pre>
+
+<p>It is obvious that the Vala code is much shorter than the generated C code.<br>
+The Vala compiler took care chores of generating CPP macros for GObject
+with.</p>
+<ul>
+<li>No prefix.</li>
+<li><code>gui</code>, <code>GUI</code>, <code>Gui</code>: object type (= class) name</li>
+<li><code>gui_get_type()</code>: returning GType of object GUI</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-glib/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-sqlite/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

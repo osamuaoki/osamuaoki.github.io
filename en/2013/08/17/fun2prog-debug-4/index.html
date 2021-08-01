@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Debug: level 4 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Debug: level 4</span></h1>
+
+<h3 class="date">Date:
+2013/08/17 (initial publish),
+2021/08/01 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-debug-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-python/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="debug-level-4">Debug: level 4</h2>
+<p>Dynamically tracing program execution to understand the general behavior of the program is
+the major part of debugging.</p>
+<p>There are several ways to trace programs interactively.  The <code>perf</code> tool
+facilitate this without any modifications to the source.</p>
+<h3 id="perf">perf</h3>
+<p>The <code>linux-tools-*</code> package matching your running kernel provides the <code>perf</code>
+command on your system.</p>
+<p>The <code>perf</code> command provides Linux profiling with performance counters.</p>
+<ul>
+<li><code>perf stat</code>: obtain event counts (better <code>time</code>(1), <code>sar</code>(1), &hellip;)</li>
+<li><code>perf record</code>: record events for later reporting</li>
+<li><code>perf report</code>: break down events by process, function, etc. (better <code>strace</code>(1), <code>ltrace</code>(1), &hellip;)</li>
+<li><code>perf annotate</code>: annotate assembly or source code with event counts</li>
+<li><code>perf top</code>: see live event count (better <code>top</code>(1) with disassembler but need to be <code>root</code>)</li>
+</ul>
+<p>Unlike other profiling tools, this does not require the recompilation of the
+source nor the source file.  This is also very light weight.  But this is a
+Linux specific tool.</p>
+<p>See <a href="https://perf.wiki.kernel.org/">perf: Linux profiling with performance counters</a> for more information.</p>
+<h3 id="profiling-prime">Profiling prime</h3>
+<p>Let&rsquo;s investigate why the compiled Vala <code>prime</code> program with Glib was
+very slow as described in &laquo;_benchmark,Benchmark&raquo; using the <code>perf stat</code>
+command.</p>
+<p>Global performance counter stats for the various <code>prime</code> programs.</p>
+<!-- raw HTML omitted -->
+<table>
+<thead>
+<tr>
+<th>Performance counter stats</th>
+<th>C</th>
+<th>Vala (Gee)</th>
+<th>Python</th>
+<th>Vala (GLib)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>seconds time elapsed</td>
+<td>0.167983287</td>
+<td>0.575971153</td>
+<td>5.645002396</td>
+<td>9.481985276</td>
+</tr>
+<tr>
+<td>task-clock</td>
+<td>167.373524</td>
+<td>575.422353</td>
+<td>5644.228565</td>
+<td>9480.929621</td>
+</tr>
+<tr>
+<td>context-switches</td>
+<td>1</td>
+<td>1</td>
+<td>9</td>
+<td>19</td>
+</tr>
+<tr>
+<td>cpu-migrations</td>
+<td>1</td>
+<td>1</td>
+<td>3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>page-faults</td>
+<td>785</td>
+<td>643</td>
+<td>3,380</td>
+<td>1,042</td>
+</tr>
+<tr>
+<td>cycles</td>
+<td>514,939,216</td>
+<td>1,706,530,307</td>
+<td>16,964,435,086</td>
+<td>27,931,279,895</td>
+</tr>
+<tr>
+<td>stalled-cycles-frontend</td>
+<td>177,126,811</td>
+<td>804,510,638</td>
+<td>3,982,808,734</td>
+<td>23,873,332,537</td>
+</tr>
+<tr>
+<td>stalled-cycles-backend</td>
+<td>25,597,018</td>
+<td>225,726,193</td>
+<td>1,219,951,714</td>
+<td>18,391,463,018</td>
+</tr>
+<tr>
+<td>branches</td>
+<td>57,299,268</td>
+<td>270,933,180</td>
+<td>7,548,747,415</td>
+<td>3,431,684,225</td>
+</tr>
+<tr>
+<td>branch-misses</td>
+<td>431,965</td>
+<td>534,024</td>
+<td>48,326,241</td>
+<td>616,496</td>
+</tr>
+</tbody>
+</table>
+<p>You see the compiled Vala <code>prime</code> program with GLib has much more
+stalled-cycles.  This seems to be the primary source of its slowness. (The
+execution speed of the interpreted Python <code>prime</code> program is more than double
+of that of the compiled Vala one.  If the value of the stalled-cycles is not as
+high for the compiled Vala <code>prime</code> program, the execution speed of the
+interpreted Python one should be much slower.)</p>
+<p>You can obtain interactive performance counter stats with the following method.</p>
+<p>Method to obtain interactive performance counter stats.</p>
+<pre><code>$ perf record ./prime &quot;$(echo 2^20 | bc)&quot;&gt;/dev/null
+
+
+$ perf report
+</code></pre><p>This brings out interactive performance counter stats itemized for each
+function calls etc.  The key parts of results are the following.</p>
+<p>Itemized performance counter stats for <code>prime</code> from the C (list) source</p>
+
+<pre><code># Overhead  Command      Shared Object                            Symbol
+# ........  .......  .................  ................................
+#
+    93.41%    prime  prime              [.] main                        
+     1.34%    prime  libc-2.17.so       [.] vfprintf                    
+     0.90%    prime  libc-2.17.so       [.] _itoa_word                  
+     0.89%    prime  libc-2.17.so       [.] _int_malloc                 
+     0.75%    prime  libc-2.17.so       [.] free                        
+     0.75%    prime  libc-2.17.so       [.] _IO_file_xsputn@@GLIBC_2.2.5
+</code></pre>
+
+<p>Itemized performance counter stats for the compiled Vala <code>prime</code> with Gee.</p>
+
+<pre><code># Overhead  Command               Shared Object                                Symbol
+# ........  .......  ..........................  ....................................
+#
+    77.30%    prime  prime                       [.] _vala_main                      
+     5.60%    prime  libglib-2.0.so.0.3600.4     [.] g_datalist_get_flags            
+     4.28%    prime  libgobject-2.0.so.0.3600.4  [.] g_object_unref                  
+     3.84%    prime  libgee.so.2.0.0             [.] gee_array_list_real_get         
+     2.27%    prime  libgee.so.2.0.0             [.] gee_abstract_list_get           
+     2.22%    prime  libgobject-2.0.so.0.3600.4  [.] g_type_check_instance_is_a      
+     1.45%    prime  libgobject-2.0.so.0.3600.4  [.] g_object_ref                    
+     0.85%    prime  libgee.so.2.0.0             [.] gee_abstract_collection_get_size
+     0.61%    prime  libc-2.17.so                [.] vfprintf                        
+     0.26%    prime  libc-2.17.so                [.] _IO_file_xsputn@@GLIBC_2.2.5    
+     0.22%    prime  prime                       [.] _g_object_ref0                  
+</code></pre>
+
+<p>Itemized performance counter stats for the interpreted Python <code>prime</code>.</p>
+
+<pre><code># Overhead  Command      Shared Object                            Symbol
+# ........  .......  .................  ................................
+#
+    39.25%    prime  python3.3          [.] 0x00000000001a2e1f          
+    30.29%    prime  python3.3          [.] PyEval_EvalFrameEx          
+     8.19%    prime  python3.3          [.] PyDict_GetItem              
+     5.69%    prime  python3.3          [.] PyDict_SetItem              
+     2.22%    prime  python3.3          [.] _PyLong_New                 
+     2.22%    prime  python3.3          [.] PyTuple_New                 
+     1.39%    prime  python3.3          [.] PyArg_UnpackTuple           
+     1.11%    prime  python3.3          [.] PyObject_Free               
+     0.97%    prime  libc-2.17.so       [.] __memset_sse2               
+     0.75%    prime  libc-2.17.so       [.] __memcpy_ssse3_back         
+     0.56%    prime  python3.3          [.] PyLong_FromLong             
+     0.49%    prime  [kernel.kallsyms]  [k] radix_tree_lookup_element   
+     0.43%    prime  libc-2.17.so       [.] _int_free                   
+     0.42%    prime  [kernel.kallsyms]  [k] clear_page_c                
+</code></pre>
+
+<p>Itemized performance counter stats for the compiled Vala <code>prime</code> with GLib.</p>
+
+<pre><code># Overhead  Command            Shared Object                                    Symbol
+# ........  .......  .......................  ........................................
+#
+    95.20%    prime  libglib-2.0.so.0.3600.4  [.] g_list_last                         
+     4.17%    prime  prime                    [.] _vala_main                          
+     0.21%    prime  [kernel.kallsyms]        [k] read_hpet                           
+     0.04%    prime  libc-2.17.so             [.] vfprintf                            
+     0.03%    prime  libglib-2.0.so.0.3600.4  [.] g_list_append                       
+     0.03%    prime  libglib-2.0.so.0.3600.4  [.] g_private_get_impl                  
+     0.02%    prime  libglib-2.0.so.0.3600.4  [.] g_slice_alloc                       
+     0.02%    prime  libpthread-2.17.so       [.] pthread_getspecific                 
+     0.01%    prime  libc-2.17.so             [.] _itoa_word                          
+     0.01%    prime  libglib-2.0.so.0.3600.4  [.] g_private_get                       
+     0.01%    prime  [kernel.kallsyms]        [k] do_timer                            
+</code></pre>
+
+<p>Now you see the <code>g_list_last</code> function in the <code>libglib-2.0</code> library is the big
+overhead making the compiled Vala <code>prime</code> program with GLib to run very
+slow.  You get more information from the interactive screen by pressing ENTER
+on the line of the <code>g_list_last</code> function and then on the <code>Annotate g_list_last</code> line.</p>
+<p>Annotated g_list_last</p>
+<pre><code>g_list_last                                                                     
+       │
+       │    Disassembly of section .text:
+       │
+       │    0000000000047480 &lt;g_list_last&gt;:
+       │      test   %rdi,%rdi
+       │      mov    %rdi,%rax
+       │    ↓ jne    13
+       │    ↓ jmp    1e
+       │      nop
+ 13.28 │10:   mov    %rdx,%rax
+       │13:   mov    0x8(%rax),%rdx
+ 86.72 │      test   %rdx,%rdx
+       │    ↑ jne    10
+       │      repz   retq
+       │1e:   repz   retq
+</code></pre><p>This looks like searching the end of list by scanning from the head of the
+list.  This not only wastes many instructions but also runs through
+large memory space causing stalled-cycles for the cached memory system.</p>
+<p>The assembly code &ldquo;<code>repz   retq</code>&rdquo; did not make sense to me.  As I searched the
+web for the answer, I found this to be for <a href="http://repzret.org/p/repzret/%5Bthe">http://repzret.org/p/repzret/[the</a> code
+optimization of the branch prediction mechanism].  For us to read the generated
+assembly code, this is practically the same as &ldquo;<code>retq</code>&rdquo;, though.</p>
+<p>In the (&laquo;_c_with_the_list,C with the list&raquo;) source, the code is compact and
+the pointer to the tail of the list is kept in the <code>tail</code> pointer variable
+which is updated without scanning the whole list from the head.</p>
+<p>Let&rsquo;s output the Vala source with GLib into C source using the <code>valac -C</code>
+command and touch it up into a readable C source to inspect the situation.</p>
+<p>A equivalent C source for the Vala source with GLib.</p>
+
+<pre><code>/* prime.c generated by valac 0.16.1, the Vala compiler
+ * generated from prime.vala, and touched up :-) */
+
+/* The same result as Vala code for slowness */
+
+#include &lt;glib.h&gt;
+#include &lt;glib-object.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdio.h&gt;
+
+
+int main (int argc, char ** argv) {
+	/* g_type_init (); */
+	glong n_max = atol (argv[1]);
+	GList* p = NULL;
+	glong n;
+	n = (glong) 1;
+	while (TRUE) {
+		n = n &#43; 1;
+		gboolean flag_prime;
+		flag_prime = FALSE;
+		if (!(n &lt; n_max)) {
+			break;
+		}
+		flag_prime = TRUE;
+		GList* i_it = NULL;
+		for (i_it = p; i_it != NULL; i_it = i_it-&gt;next) {
+			glong i = GPOINTER_TO_INT (i_it-&gt;data);
+			glong n_div_i;
+			glong n_mod_i;
+			n_div_i = n / i;
+			n_mod_i = n - (n_div_i * i);
+			if (n_mod_i == ((glong) 0)) {
+				flag_prime = FALSE;
+				break;
+			}
+			if (n_div_i &lt; i) {
+				break;
+			}
+		}
+		if (flag_prime == TRUE) {
+			p = g_list_append (p, GINT_TO_POINTER (n));
+		}
+	}
+	GList* i_it = NULL;
+	for (i_it = p; i_it != NULL; i_it = i_it-&gt;next) {
+		glong i = 0L;
+		i = GPOINTER_TO_INT (i_it-&gt;data);
+		{
+			fprintf (stdout, &#34;%ld\n&#34;, i);
+		}
+	}
+        if (p != NULL) {
+            p = (g_list_free (p), NULL);
+        }
+	return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Here, the Vala does not generate a C source with the tail tracking for the
+list.  The <code>p = g_list_append (p, GINT_TO_POINTER (n));</code> code should cause many
+calls to <code>g_list_last</code> for every prime numbers found. No wonder <code>g_list_last</code>
+is called so many times.</p>
+<p>The use of <a href="https://live.gnome.org/Libgee">Gee</a> solves this problem.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-debug-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-python/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

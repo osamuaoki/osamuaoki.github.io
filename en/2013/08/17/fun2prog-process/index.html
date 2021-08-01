@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Process | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Process</span></h1>
+
+<h3 class="date">Date:
+2013/08/17 (initial publish),
+2021/08/01 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-prime/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-gcc/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="process">Process</h2>
+<p>Here are some practice results to play with
+<a href="http://en.wikipedia.org/wiki/Process_(computing)">process</a> and
+<a href="http://en.wikipedia.org/wiki/Inter-process_communication">inter process communication (IPC)</a>
+(<a href="http://en.wikipedia.org/wiki/Unix_signal">signal</a> and <a href="http://en.wikipedia.org/wiki/Network_socket">network socket</a>)
+on Debian wheezy.</p>
+<h3 id="signal">Signal</h3>
+<p>Signal is explained in <code>signal</code>(7).</p>
+<p>Here are default actions for notable signals.</p>
+<ul>
+<li>Default action is to terminate the process.
+<ul>
+<li><code>SIGHUP</code> = 1 : Death of controlling process</li>
+<li><code>SIGINT</code> = 2 : Interrupt from keyboard (Ctrl-<code>C</code>)</li>
+<li><code>SIGKILL</code> = 9 : Kill signal (<strong>non-trappable</strong>)</li>
+<li><code>SIGALRM</code> = 14 : Timer signal from alarm(2)</li>
+<li><code>SIGTERM</code> = 15 : Termination signal (default for <code>kill</code>)</li>
+<li><code>SIGUSR1</code> = 10 : User-defined signal 1</li>
+<li><code>SIGUSR2</code> = 12 : User-defined signal 2</li>
+</ul>
+</li>
+<li>Default action is to terminate the process and dump core.
+<ul>
+<li><code>SIGQUIT</code> = 3 : Quit from keyboard (Ctrl-<code>\</code>)</li>
+<li><code>SIGTRAP</code> = 5 : Trace/breakpoint trap</li>
+<li><code>SIGSEGV</code> = 11 : Invalid memory reference</li>
+</ul>
+</li>
+<li>Default action is to continue the process
+<ul>
+<li><code>SIGCONT</code> = 18 : Continue if stopped</li>
+</ul>
+</li>
+<li>Default action is to stop the process.
+<ul>
+<li><code>SIGSTOP</code> = 19 : Stop process (<strong>non-trappable</strong>)</li>
+<li><code>SIGTSTP</code> = 20 : Stop typed at tty (Ctrl-<code>Z</code>)</li>
+</ul>
+</li>
+<li>Default action is to ignore the signal.
+<ul>
+<li><code>SIGWINCH</code> = 28 : Gracefully shutdown the worker processes (httpd, non-POSIX)</li>
+</ul>
+</li>
+</ul>
+<p>I can check signal assignment situation quickly with the Bash builtin &ldquo;<code>kill -l</code>&rdquo;
+command.  (Not with other shells and command!)</p>
+<p>List of signal names and signal numbers with the Bash builtin &ldquo;<code>kill -l</code>&rdquo;</p>
+
+<pre><code>$ kill -l
+ 1) SIGHUP       2) SIGINT       3) SIGQUIT      4) SIGILL       5) SIGTRAP
+ 6) SIGABRT      7) SIGBUS       8) SIGFPE       9) SIGKILL     10) SIGUSR1
+11) SIGSEGV     12) SIGUSR2     13) SIGPIPE     14) SIGALRM     15) SIGTERM
+16) SIGSTKFLT   17) SIGCHLD     18) SIGCONT     19) SIGSTOP     20) SIGTSTP
+21) SIGTTIN     22) SIGTTOU     23) SIGURG      24) SIGXCPU     25) SIGXFSZ
+26) SIGVTALRM   27) SIGPROF     28) SIGWINCH    29) SIGIO       30) SIGPWR
+31) SIGSYS      34) SIGRTMIN    35) SIGRTMIN&#43;1  36) SIGRTMIN&#43;2  37) SIGRTMIN&#43;3
+38) SIGRTMIN&#43;4  39) SIGRTMIN&#43;5  40) SIGRTMIN&#43;6  41) SIGRTMIN&#43;7  42) SIGRTMIN&#43;8
+43) SIGRTMIN&#43;9  44) SIGRTMIN&#43;10 45) SIGRTMIN&#43;11 46) SIGRTMIN&#43;12 47) SIGRTMIN&#43;13
+48) SIGRTMIN&#43;14 49) SIGRTMIN&#43;15 50) SIGRTMAX-14 51) SIGRTMAX-13 52) SIGRTMAX-12
+53) SIGRTMAX-11 54) SIGRTMAX-10 55) SIGRTMAX-9  56) SIGRTMAX-8  57) SIGRTMAX-7
+58) SIGRTMAX-6  59) SIGRTMAX-5  60) SIGRTMAX-4  61) SIGRTMAX-3  62) SIGRTMAX-2
+63) SIGRTMAX-1  64) SIGRTMAX
+</code></pre>
+
+<p>TIP: Please note that <code>SIGABRT</code> and <code>SIGIOT</code> share the same signal value 6; and
+<code>SIGIO</code> and <code>SIGLOST</code> share the same signal value 29.</p>
+<h3 id="shell-kill">Shell: kill</h3>
+<p>The <code>kill</code> commands behave differently depending on which one used.  Let&rsquo;s
+check their syntax to send signals.</p>
+<p>The example of <code>kill</code> commands</p>
+
+<pre><code>$ bash -c kill
+kill: usage: kill [-s sigspec | -n signum | -sigspec] pid | jobspec ... or kill
+-l [sigspec]
+$ dash -c kill
+dash: 1: kill: Usage: kill [-s sigspec | -signum | -sigspec] [pid | job]... or
+kill -l [exitstatus]
+$ /bin/kill
+
+Usage:
+ kill [options] &lt;pid&gt; [...]
+
+Options:
+ &lt;pid&gt; [...]            send signal to every &lt;pid&gt; listed
+ -&lt;signal&gt;, -s, --signal &lt;signal&gt;
+                        specify the &lt;signal&gt; to be sent
+ -l, --list=[&lt;signal&gt;]  list all signal names, or convert one to a name
+ -L, --table            list all signal names in a nice table
+
+ -h, --help     display this help and exit
+ -V, --version  output version information and exit
+
+For more details see kill(1).
+$ bash -c &#34;kill -l 15&#34;
+TERM
+$ dash -c &#34;kill -l 15&#34;
+TERM
+$ /bin/kill -l15
+TERM
+</code></pre>
+
+<ul>
+<li>Only the Bash builtin <code>kill</code> can use jobspec such as <code>%1</code> as its argument.</li>
+<li>If signal number argument is given to &ldquo;<code>/bin/kill -l</code>&rdquo;, there should be no space before it.</li>
+</ul>
+<h3 id="shell-trap">Shell: trap</h3>
+<p>The <code>trap</code> command can trap signals.</p>
+<p>Example shell code with trap and infinite loop.</p>
+
+<pre><code>#!/bin/sh
+trap_hup() {
+    echo &#34;SIGHUP detected.&#34;
+}
+trap trap_hup HUP
+trap &#34;echo &#39;SIGTSTP detected.&#39;&#34; TSTP
+trap &#34;&#34; TERM
+while true; do sleep 0.01;done
+</code></pre>
+
+<p>Let&rsquo;s play with this on the Bash shell.</p>
+<!-- raw HTML omitted -->
+<p>Example of kill used with <code>./sigtrap</code></p>
+
+<pre><code>$ ./sigtrap &amp;
+[1] 12692
+$ kill -s HUP %1
+SIGHUP detected.
+$ kill -s TSTP %1
+SIGTSTP detected.
+$ kill -n 1 %1
+SIGHUP detected.
+$ kill -1 %1
+SIGHUP detected.
+$ ps
+  PID TTY          TIME CMD
+12589 pts/9    00:00:00 bash
+12692 pts/9    00:00:31 sigtrap
+12697 pts/9    00:00:00 ps
+$ jobs
+[1]&#43;  Running                 ./sigtrap &amp;
+$ kill -s INT %1
+$ jobs
+[1]&#43;  Interrupt               ./sigtrap
+$ jobs
+$ dash
+$ ./sigtrap &amp;
+$ ps
+  PID TTY          TIME CMD
+12589 pts/9    00:00:00 bash
+12705 pts/9    00:00:00 dash
+12710 pts/9    00:00:10 sigtrap
+12712 pts/9    00:00:00 ps
+$ kill -s INT 12710
+$ ps
+  PID TTY          TIME CMD
+12589 pts/9    00:00:00 bash
+12705 pts/9    00:00:00 dash
+12733 pts/9    00:00:00 ps
+[1] &#43; Interrupt                  ./sigtrap
+$ ps
+  PID TTY          TIME CMD
+12589 pts/9    00:00:00 bash
+12705 pts/9    00:00:00 dash
+12734 pts/9    00:00:00 ps
+
+</code></pre>
+
+<p>If you are not on the Bash shell, you have to use PID &ldquo;<code>10951</code>&rdquo;, instead of jobspec &ldquo;<code>%1</code>&rdquo;.</p>
+<p>When writing a shell script which is usually the Dash shell, PID changes every
+invocation.  The use of <code>kill</code> is non-trivial for such case.  So we use the
+<code>killall</code>(1) command instead.</p>
+<p>Example of <code>killall</code> used with <code>./sigtrap</code></p>
+
+<pre><code>$ ./sigtrap &amp;
+$ ps
+  PID TTY          TIME CMD
+ 6764 pts/4    00:00:00 sh
+ 6765 pts/4    00:00:00 sh
+ 6766 pts/4    00:00:00 sigtrap
+ 6767 pts/4    00:00:00 ps
+ 6768 pts/4    00:00:00 sleep
+$ jobs
+[1] &#43; Running
+$ killall -s HUP sigtrap
+SIGHUP detected.
+$ killall -s TSTP sigtrap
+SIGTSTP detected.
+$ killall -s 1 sigtrap
+SIGHUP detected.
+$ killall -HUP sigtrap
+$ ps
+SIGHUP detected.
+  PID TTY          TIME CMD
+ 6764 pts/4    00:00:00 sh
+ 6765 pts/4    00:00:00 sh
+ 6766 pts/4    00:00:00 sigtrap
+ 6825 pts/4    00:00:00 ps
+ 6826 pts/4    00:00:00 sleep
+$ jobs
+[1] &#43; Running
+$ killall -s TERM sigtrap
+$ ps
+  PID TTY          TIME CMD
+ 6764 pts/4    00:00:00 sh
+ 6765 pts/4    00:00:00 sh
+ 6766 pts/4    00:00:00 sigtrap
+ 6829 pts/4    00:00:00 ps
+$ jobs
+[1] &#43; Running
+$ killall -s KILL sigtrap
+$ ps
+  PID TTY          TIME CMD
+ 6764 pts/4    00:00:00 sh
+ 6765 pts/4    00:00:00 sh
+ 6832 pts/4    00:00:00 ps
+$ jobs
+[1] &#43; Killed
+</code></pre>
+
+<p>The most common use of the <code>trap</code> command is to set up a hook script for the
+program <a href="http://en.wikipedia.org/wiki/Exit_(operating_system)">exit</a>.  Here a special signal <code>EXIT</code> is used in addition to other normal
+signals with the <code>trap</code> command.  This <code>EXIT</code> signal is raised when shell
+script itself exits without external signals.</p>
+<p>Example shell code with trap and remove a file.</p>
+
+<pre><code>#!/bin/sh
+set -x
+trap &#39;echo &#34;Exit! Removing foo.tmp.&#34;; rm foo.tmp&#39; EXIT HUP INT TERM
+touch foo.tmp
+# actual code to use foo.tmp
+ls -l foo.tmp
+sleep 1 # timing to ensure ls output
+</code></pre>
+
+<p>Let&rsquo;s play with this.</p>
+<p>Example of <code>./traprm</code></p>
+
+<pre><code>$ ls -l foo.tmp
+ls: cannot access foo.tmp: No such file or directory
+$ ./traprm
+&#43; trap echo &#34;Exit! Removing foo.tmp.&#34;; rm foo.tmp EXIT HUP INT TERM
+&#43; touch foo.tmp
+&#43; ls -l foo.tmp
+-rw-rw-r-- 1 osamu osamu 0 Aug 17 23:43 foo.tmp
+&#43; sleep 1
+&#43; echo Exit! Removing foo.tmp.
+Exit! Removing foo.tmp.
+&#43; rm foo.tmp
+$ ls -l foo.tmp
+ls: cannot access foo.tmp: No such file or directory
+</code></pre>
+
+<h3 id="shell-new-process">Shell: new process</h3>
+<p>Shell can start a new process easily by:</p>
+<ul>
+<li>starting another shell program as a command.</li>
+<li>starting a block of shell code list enclosed in <code>( ... )</code> as subshell.</li>
+</ul>
+<p>TIP: Use of <code>&amp;</code> after starting the new process enables the current shell to
+continue processing the subsequent part of the current shell and the new
+process in parrallel.  It moves the new process to the background.</p>
+<p>TIP: Use the alternative syntax of a block of shell code list enclosed in
+<code>{ ... ; }</code> to execute them in the current shell environment.</p>
+<h3 id="python-new-process">Python: new process</h3>
+<p>Python can start a new process easily by:</p>
+<ul>
+<li>starting a command &ldquo;<code>foo</code>&rdquo; using the <code>os.system(&quot;foo&quot;)</code> function after &ldquo;<code>import os</code>&rdquo;.</li>
+<li>starting a command &ldquo;<code>foo</code>&rdquo; using the <code>os.popen(&quot;foo&quot;)</code> function after &ldquo;<code>import os</code>&rdquo;.</li>
+</ul>
+<p>TIP: The new subprocess module can be used to replace many process related
+modules and functions to make them more secure easily.  See
+<a href="http://docs.python.org/3.3/library/subprocess.html">subprocess — Subprocess management</a></p>
+<h3 id="lua-new-process">Lua: new process</h3>
+<p>Lua can start a new process easily by:</p>
+<ul>
+<li>starting a command &ldquo;<code>foo</code>&rdquo; using the <code>os.execute(&quot;foo&quot;)</code>.</li>
+<li>starting a command &ldquo;<code>foo</code>&rdquo; using the <code>io.popen(&quot;foo&quot;)</code>.</li>
+</ul>
+<h3 id="c-new-process">C: new process</h3>
+<p>Let&rsquo;s execute a command as a new process from the C program in 3 ways.</p>
+<ul>
+<li><code>system</code>(3) : The <code>system()</code> function starts a command by calling &ldquo;<code>/bin/sh -c</code>&rdquo; command, and returns after its completion.  During execution of the command, <code>SIGCHLD</code> will be blocked, and <code>SIGINT</code> and <code>SIGQUIT</code> will be ignored.</li>
+<li><code>popen</code>(3) : The <code>popen()</code> function opens a process by creating a <a href="http://en.wikipedia.org/wiki/Anonymous_pipe">pipe</a>(read-only or write-only), <a href="http://en.wikipedia.org/wiki/Fork_(operating_system)">forking</a>, and invoking the shell.</li>
+<li><code>fork</code>(2) + <code>exec</code>(3) : The <code>fork()</code> function creates a new process by duplicating the calling process.  The <code>exec()</code> family of functions replaces the current process image with a new process image.</li>
+</ul>
+<h4 id="c-system">C: system</h4>
+<p>Let&rsquo;s start a command from the C program with <code>system</code>(3) while checking environment variables.</p>
+<p>Command execution: <code>system.c</code></p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt;     /* exit getenv system */
+#include &lt;stdio.h&gt;      /* [f]printf perror */
+
+int
+main(int argc, char* argv[])
+{
+    printf(&#34;main    HOME    = %s\n&#34;, getenv(&#34;HOME&#34;));
+    printf(&#34;main    PATH    = %s\n&#34;, getenv(&#34;PATH&#34;));
+    printf(&#34;main    TERM    = %s\n&#34;, getenv(&#34;TERM&#34;));
+    printf(&#34;main    DISPLAY = %s\n&#34;, getenv(&#34;DISPLAY&#34;));
+    printf(&#34;--- Let&#39;s fake shell command prompt with system\n&#34;);
+    printf(&#34;$ ls -li system.c\n&#34;);
+    system(&#34;ls -li system.c&#34;);
+    return EXIT_SUCCESS;
+
+}
+</code></pre>
+
+<p>Run <code>./system</code></p>
+
+<pre><code>$ gcc -Wall -o system system.c
+$ ./system
+main    HOME    = /home/osamu
+main    PATH    = /path/to/c/../../bin:(CURDIR)/bin:/home/osamu/bin:/home/osamu/....
+main    TERM    = dumb
+main    DISPLAY = :0
+--- Let&#39;s fake shell command prompt with system
+$ ls -li system.c
+3558352 -rw-rw-r-- 1 osamu osamu 545 Mar 12 21:26 system.c
+</code></pre>
+
+<h4 id="c-popen">C: popen</h4>
+<p>Let&rsquo;s start a child process with <code>popen</code>(3) and pass messages via pipe from the <a href="http://en.wikipedia.org/wiki/Child_process">child process</a> to the <a href="http://en.wikipedia.org/wiki/Parent_process">parent process</a>.</p>
+<p>Command execution: <code>popen.c</code></p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt;     /* exit getenv */
+#include &lt;stdio.h&gt;      /* [f]printf perror */
+#include &lt;unistd.h&gt;     /* getpid getppid fork exec sleep */
+#include &lt;sys/types.h&gt;  /* getpid getppid */
+
+int
+main(int argc, char* argv[])
+{
+    FILE* f;
+    char * p;
+    size_t size;
+    p = malloc(1024);
+    size = (size_t) 1024;
+    fprintf(stderr, &#34;main    PID     = %d\n&#34;, getpid());
+    fprintf(stderr, &#34;main    PPID    = %d\n&#34;, getppid());
+    fprintf(stderr, &#34;--- Let&#39;s fake shell command prompt with popen.\n&#34;);
+    fprintf(stderr, &#34;$ ls -li *.c; echo PPID=$PPID; echo PID=$$\n&#34;);
+    f = popen(&#34;ls -li *.c; echo PPID=$PPID; echo PID=$$&#34;, &#34;r&#34;);
+    if (f &lt; 0) {
+        perror(&#34;E: popen&#34;);
+        exit(EXIT_FAILURE);
+    }
+    fprintf(stderr, &#34;--- Let&#39;s print result of popen.\n&#34;);
+    while (getline(&amp;p, &amp;size, f) &gt;= 0) {
+        fprintf(stderr, &#34;%s&#34;, p);
+    }
+    pclose(f);
+    return EXIT_SUCCESS;
+
+}
+</code></pre>
+
+<p>Run <code>./popen</code></p>
+
+<pre><code>$ gcc -Wall -o popen popen.c
+$ echo PID=$$
+PID=6435
+$ echo PPID=$PPID
+PPID=6434
+$ ./popen
+main    PID     = 6446
+main    PPID    = 6435
+--- Let&#39;s fake shell command prompt with popen.
+$ ls -li *.c; echo PPID=$PPID; echo PID=$$
+--- Let&#39;s print result of popen.
+3546581 -rw-rw-r-- 1 osamu osamu 2056 Mar 12 22:12 forkexec.c
+3546585 -rw-rw-r-- 1 osamu osamu  942 Mar 12 22:16 popen.c
+3561347 -rw-rw-r-- 1 osamu osamu 1292 Mar 17 00:58 sigaction.c
+3545799 -rw-rw-r-- 1 osamu osamu  723 Mar 16 23:00 signal.c
+3558352 -rw-rw-r-- 1 osamu osamu  545 Mar 12 21:26 system.c
+PPID=6446
+PID=6447
+$ ./popen 2&gt;/dev/null
+$ ./popen &gt;/dev/null
+main    PID     = 6452
+main    PPID    = 6435
+--- Let&#39;s fake shell command prompt with popen.
+$ ls -li *.c; echo PPID=$PPID; echo PID=$$
+--- Let&#39;s print result of popen.
+3546581 -rw-rw-r-- 1 osamu osamu 2056 Mar 12 22:12 forkexec.c
+3546585 -rw-rw-r-- 1 osamu osamu  942 Mar 12 22:16 popen.c
+3561347 -rw-rw-r-- 1 osamu osamu 1292 Mar 17 00:58 sigaction.c
+3545799 -rw-rw-r-- 1 osamu osamu  723 Mar 16 23:00 signal.c
+3558352 -rw-rw-r-- 1 osamu osamu  545 Mar 12 21:26 system.c
+PPID=6452
+PID=6453
+</code></pre>
+
+<h4 id="c-fork--exec">C: fork + exec</h4>
+<p>Let&rsquo;s start a child process with <code>fork</code>(2) and pass messages from the <a href="http://en.wikipedia.org/wiki/Child_process">child process</a> to the <a href="http://en.wikipedia.org/wiki/Parent_process">parent process</a> via pipe.</p>
+<p>Fork and exec example: <code>forkexec.c</code></p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt;     /* exit getenv */
+#include &lt;stdio.h&gt;      /* [f]printf perror */
+#include &lt;string.h&gt;     /* strlen */
+#include &lt;unistd.h&gt;     /* getpid getppid fork exec sleep */
+#include &lt;sys/types.h&gt;  /* getpid getppid wait */
+#include &lt;sys/wait.h&gt;   /* wait */
+
+int
+main(int argc, char* argv[])
+{
+    pid_t p;
+    int pipefd[2], e;
+    char buf;
+    char * b = &#34;MESSAGE: passed from child to parent via pipe\n&#34;;
+    fprintf(stderr, &#34;parent  PID     = %d\n&#34;, getpid());
+    fprintf(stderr, &#34;parent  PPID    = %d\n&#34;, getppid());
+    if (pipe(pipefd) == -1) {   /* create pipe */
+        perror(&#34;E: pipe&#34;);
+        exit(EXIT_FAILURE);
+    }
+    fprintf(stderr, &#34;--- Let&#39;s fork ...\n&#34;);
+    p = fork();
+    if (p == -1) {
+        perror(&#34;E: Fork error\n&#34;);
+        exit(EXIT_FAILURE);
+    } else if (p == 0) {    /* child process */
+        close(pipefd[0]);   /* Close unused read end fd */
+        printf(&#34;child   PID     = %d\n&#34;, getpid());
+        printf(&#34;child   PPID    = %d\n&#34;, getppid());
+        printf(&#34;child   write to pipe\n&#34;);
+        write(pipefd[1], b, strlen(b));
+        dup2(pipefd[1], STDOUT_FILENO);
+        printf(&#34;child&gt;  ls -l forkexec.c\n&#34;);
+        e = execlp(&#34;/bin/ls&#34;, &#34;ls&#34;, &#34;-l&#34;, &#34;forkexec.c&#34;, NULL);   /* execute ls -l */
+        close(pipefd[1]);   /* Close used write end fd */
+        _exit(e);           /* idiom to end child process &#34;immediately&#34; */
+    } else {                /* parent process */
+        close(pipefd[1]);   /* Close unused write end fd */
+        fprintf(stderr, &#34;parent  PID     = %d\n&#34;, getpid());
+        fprintf(stderr, &#34;parent  PPID    = %d\n&#34;, getppid());
+        fprintf(stderr, &#34;parent  forked  = %d\n&#34;, p);
+        fprintf(stderr, &#34;parent  read from pipe\n&#34;);
+        while (read(pipefd[0], &amp;buf, 1) &gt; 0) {
+            write(STDERR_FILENO, &amp;buf, 1);
+        }
+        close(pipefd[0]);   /* Close used read end fd */
+        wait(NULL);         /* Wait for child */
+        fprintf(stderr, &#34;parent  child exited.\n&#34;);
+    }
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Run <code>./forkexec</code></p>
+
+<pre><code>$ gcc -Wall -o forkexec forkexec.c
+$ ./forkexec
+parent  PID     = 6417
+parent  PPID    = 6406
+--- Let&#39;s fork ...
+parent  PID     = 6417
+parent  PPID    = 6406
+parent  forked  = 6418
+parent  read from pipe
+child   PID     = 6418
+child   PPID    = 6417
+child   write to pipe
+MESSAGE: passed from child to parent via pipe
+child&gt;  ls -l forkexec.c
+-rw-rw-r-- 1 osamu osamu 2056 Mar 12 22:12 forkexec.c
+parent  child exited.
+$
+$ ./forkexec 2&gt;/dev/null
+child   PID     = 6420
+child   PPID    = 6419
+child   write to pipe
+$
+$ ./forkexec &gt;/dev/null
+parent  PID     = 6421
+parent  PPID    = 6406
+--- Let&#39;s fork ...
+parent  PID     = 6421
+parent  PPID    = 6406
+parent  forked  = 6422
+parent  read from pipe
+MESSAGE: passed from child to parent via pipe
+-rw-rw-r-- 1 osamu osamu 2056 Mar 12 22:12 forkexec.c
+parent  child exited.
+</code></pre>
+
+<p>This last method uses the <code>exec</code>(3) family of functions with various argument usages.</p>
+<ul>
+<li><code>l</code>-suffix: <code>execl</code>, <code>execlp</code>, <code>execle</code>
+<ul>
+<li>The argument list available to the new program is directly used as the later part of the arguments.</li>
+</ul>
+</li>
+<li><code>v</code>-suffix: <code>execv</code>, <code>execvp</code>, <code>execvpe</code>
+<ul>
+<li>An array of pointers to null-terminated strings are used to represent the argument list available to the new program.</li>
+</ul>
+</li>
+<li><code>p</code>-suffix: <code>execlp</code> <code>execvp</code>, <code>execvpe</code>
+<ul>
+<li>This indicates that the function duplicates the shell function for searching an executable file indicated by the <code>$PATH</code> environment variable.</li>
+</ul>
+</li>
+<li><code>e</code>-suffix : <code>execle</code> <code>execvpe</code>
+<ul>
+<li>This indicates that the function specifys the environment of the executed program via the argument <code>envp</code>.</li>
+</ul>
+</li>
+</ul>
+<h3 id="c-signal-macro">C: signal macro</h3>
+<p>Since the signal number assignment is system dependent, we should use macro to specify signal in the C program.</p>
+<p>Signal macros defined in <code>/usr/include/asm/signal.h</code>.</p>
+
+<pre><code>$ grep &#34;# *define *SIG.*        [ 0-9][0-9]$&#34; /usr/include/asm/signal.h
+#define SIGHUP           1
+#define SIGINT           2
+#define SIGQUIT          3
+#define SIGILL           4
+#define SIGTRAP          5
+#define SIGABRT          6
+#define SIGIOT           6
+#define SIGBUS           7
+#define SIGFPE           8
+#define SIGKILL          9
+#define SIGUSR1         10
+#define SIGSEGV         11
+#define SIGUSR2         12
+#define SIGPIPE         13
+#define SIGALRM         14
+#define SIGTERM         15
+#define SIGSTKFLT       16
+#define SIGCHLD         17
+#define SIGCONT         18
+#define SIGSTOP         19
+#define SIGTSTP         20
+#define SIGTTIN         21
+#define SIGTTOU         22
+#define SIGURG          23
+#define SIGXCPU         24
+#define SIGXFSZ         25
+#define SIGVTALRM       26
+#define SIGPROF         27
+#define SIGWINCH        28
+#define SIGIO           29
+#define SIGLOST         29
+#define SIGPWR          30
+#define SIGSYS          31
+#define SIGRTMIN        32
+</code></pre>
+
+<h3 id="c-signal2">C: signal(2)</h3>
+<p>For the simplicity, I start with the traditional <code>signal</code>(2).</p>
+<p>TIP: The POSIX.1 <code>sigaction</code>(2) is more portable than the <code>signal</code>(2).
+The effects of <code>signal</code>(2) in a multithreaded process are unspecified.  See
+<code>signal</code>(2) for details.</p>
+<p>Signal example: <code>signal.c</code></p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt;     /* exit */
+#include &lt;stdio.h&gt;      /* [f]printf perror */
+#include &lt;signal.h&gt;     /* signal */
+#include &lt;unistd.h&gt;     /* getpid pause */
+
+void
+handler(int signum)
+{
+    printf(&#34;\n=== SIGNAL %d handler ===\n&#34;, signum);
+    printf(&#34;First round ... ignored.  Next round activated.\n&#34;);
+    (void) signal(SIGINT, SIG_DFL); /* set signal behavior to default */
+}
+int
+main(int argc, char* argv[])
+{
+    printf(&#34;PID=%d&#34;, getpid());
+    (void) signal(SIGINT, handler); /* set signal behavior to handler */
+    (void) signal(SIGHUP, SIG_IGN); /* set signal behavior to ignore */
+    while(1) {
+        pause();    /* waiting for signal */
+    }
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Run <code>./signal</code>, etc.</p>
+
+<pre><code>$ gcc -Wall -o signal signal.c
+$ ./signal &amp;
+$  jobs
+[1] &#43; Running
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6557  6556  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6558  6557  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6569  6558  0  80   0 -  1019 -      pts/4    00:00:00 signal
+0 R  1000  6576  6574  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ killall -v -s INT signal
+PID=6569
+=== SIGNAL 2 handler ===
+First round ... ignored.  Next round activated.
+Killed signal(6569) with signal 2
+$  jobs
+[1] &#43; Running
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6557  6556  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6558  6557  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6569  6558  0  80   0 -  1019 -      pts/4    00:00:00 signal
+0 R  1000  6589  6587  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ killall -v -s INT signal
+Killed signal(6569) with signal 2
+$  jobs
+[1] &#43; Interrupt
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6557  6556  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6558  6557  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 R  1000  6602  6600  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ ./signal &amp;
+$  jobs
+[1] &#43; Running
+$ ./signal &amp;
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6557  6556  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6558  6557  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6603  6558  0  80   0 -  1019 -      pts/4    00:00:00 signal
+0 R  1000  6612  6610  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ killall -v -s HUP signal
+Killed signal(6603) with signal 1
+$  jobs
+[1] &#43; Running
+$ ./signal &amp;
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6557  6556  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6558  6557  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6603  6558  0  80   0 -  1019 -      pts/4    00:00:00 signal
+0 R  1000  6625  6623  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ killall -v -s KILL signal
+Killed signal(6603) with signal 9
+$  jobs
+[1] &#43; Killed
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6557  6556  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6558  6557  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 R  1000  6638  6636  0  80   0 -  2655 -      pts/4    00:00:00 ps
+</code></pre>
+
+<h3 id="c-sigaction2">C: sigaction(2)</h3>
+<p>Let&rsquo;s try basically the same with the new <code>sigaction</code>(2) while preventing the
+reentrant signal situation.</p>
+<p>Signal example: <code>sigaction.c</code></p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdlib.h&gt;     /* exit */
+#include &lt;stdio.h&gt;      /* [f]printf perror */
+#include &lt;signal.h&gt;     /* signaction */
+#include &lt;unistd.h&gt;     /* getpid pause */
+
+static struct sigaction saint, sahup;
+
+void
+handler(int signum)
+{
+    printf(&#34;\n=== SIGNAL %d handler ===\n&#34;, signum);
+    printf(&#34;First round ... ignored.  Next round activated.\n&#34;);
+    saint.sa_handler = SIG_DFL;     /* signal behavior to default */
+    sigaction(SIGINT, &amp;saint, 0);   /* set signal */
+
+}
+int
+main(int argc, char* argv[])
+{
+    printf(&#34;PID=%d&#34;, getpid());
+    saint.sa_flags = 0;             /* default */
+    sigemptyset(&amp;saint.sa_mask);    /* create a open mask */
+    /* sigaddset(&amp;saint.sa_mask, SIGINT); no need since no SA_NODEFER */
+    saint.sa_handler = handler;     /* signal behavior to handler */
+    sigaction(SIGINT, &amp;saint, 0);   /* set signal */
+
+    sahup.sa_flags = SA_NODEFER;    /* set SA_NODEFER */
+    sigemptyset(&amp;sahup.sa_mask);    /* create a open mask */
+    sigaddset(&amp;sahup.sa_mask, SIGHUP); /* mask SIGHUP since SA_NODEFER */
+    sahup.sa_handler = SIG_IGN;     /* signal behavior to ignore */
+    sigaction(SIGHUP, &amp;sahup, 0);   /* set signal */
+
+    while(1) {
+        pause();    /* waiting for signal */
+    }
+    return EXIT_SUCCESS;
+}
+</code></pre>
+
+<p>Run <code>./sigaction</code>, etc.</p>
+
+<pre><code>$ gcc -Wall -o sigaction sigaction.c
+$ ./sigaction &amp;
+$  jobs
+[1] &#43; Running
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6466  6465  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6467  6466  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6478  6467  0  80   0 -  1019 -      pts/4    00:00:00 sigaction
+0 R  1000  6485  6483  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ killall -v -s INT sigaction
+PID=6478
+=== SIGNAL 2 handler ===
+First round ... ignored.  Next round activated.
+Killed sigaction(6478) with signal 2
+$  jobs
+[1] &#43; Running
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6466  6465  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6467  6466  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6478  6467  0  80   0 -  1019 -      pts/4    00:00:00 sigaction
+0 R  1000  6498  6496  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ killall -v -s INT sigaction
+Killed sigaction(6478) with signal 2
+$  jobs
+[1] &#43; Interrupt
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6466  6465  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6467  6466  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 R  1000  6511  6509  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ ./sigaction &amp;
+$  jobs
+[1] &#43; Running
+$ ./sigaction &amp;
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6466  6465  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6467  6466  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6512  6467  0  80   0 -  1019 -      pts/4    00:00:00 sigaction
+0 R  1000  6519  6517  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ killall -v -s HUP sigaction
+Killed sigaction(6512) with signal 1
+$  jobs
+[1] &#43; Running
+$ ./sigaction &amp;
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6466  6465  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6467  6466  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6512  6467  0  80   0 -  1019 -      pts/4    00:00:00 sigaction
+0 R  1000  6532  6530  0  80   0 -  2655 -      pts/4    00:00:00 ps
+$ killall -v -s KILL sigaction
+Killed sigaction(6512) with signal 9
+$  jobs
+[1] &#43; Killed
+$ ps -l
+F S   UID   PID  PPID  C PRI  NI ADDR SZ WCHAN  TTY          TIME CMD
+0 S  1000  6466  6465  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 S  1000  6467  6466  0  80   0 -  1079 -      pts/4    00:00:00 sh
+0 R  1000  6545  6543  0  80   0 -  2655 -      pts/4    00:00:00 ps
+</code></pre>
+
+<p>In above example, <code>SA_NODEFER</code> was set for the <code>SIGHUP</code> side of code just to
+show how to prevent reentrant signal situation explicitly by the <code>sigaddset</code>(3)
+command.</p>
+<p>TIP: You can set up fine grained signal mask with the <code>sigprocmask</code>(3).</p>
+<h3 id="httpd-in-c">httpd in C</h3>
+<p>Let&rsquo;s try coding a simple httpd server program, <code>httpd6</code>.  This can provide good
+insight into how the httpd server works with the bottom up approach.  Here is the
+design guide line I used.</p>
+<ul>
+<li>IPv6 protocol.</li>
+<li>the port number as the first argument (required, range=1024-60000)</li>
+<li>the document root path as the optional second argument.</li>
+<li>the default document root path as &ldquo;~/public_html&rdquo;</li>
+<li>no CGI script support</li>
+<li>no &ldquo;<code>..</code>&rdquo; in the URL string for security.</li>
+<li>write simple for the easier to understand code.</li>
+</ul>
+<p>TIP: See
+<a href="http://www.ibm.com/developerworks/systems/library/es-nweb/index.html%5Bnweb:">http://www.ibm.com/developerworks/systems/library/es-nweb/index.html[nweb:</a> a
+tiny, safe Web server (static pages only)] for IPv4 protocol example code.  It
+comes with detailed explanation on how things work.  (My example is basically a
+rewrite for IPv6 in my coding style.)</p>
+<p>Common header : <code>common.h</code></p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &lt;stdio.h&gt;          /* [fs]printf */
+#include &lt;stdlib.h&gt;         /* exit getpid getenv */
+#include &lt;string.h&gt;         /* strncmp */
+#include &lt;unistd.h&gt;         /* lseek read write fork sleep */
+#include &lt;sys/types.h&gt;      /* lseek getpid BSD_portability */
+#include &lt;errno.h&gt;          /* errno */
+#include &lt;fcntl.h&gt;          /* open close */
+#include &lt;signal.h&gt;         /* sigaction */
+#include &lt;sys/socket.h&gt;     /* socket bind listen accept */
+#include &lt;arpa/inet.h&gt;      /* htonl htons */
+
+#define WEB_ROOT    &#34;public_html/&#34;
+#define LOG_FILE    &#34;httpd6.log&#34;
+#define MAXFD       32
+#define MAXBACKLOG  64
+#define PIPE_BUF    (8*1024)
+
+/* provide &#34;FILE *f;&#34; by the caller routine */
+/* ## is GNU extension to allow zero __VA_ARGS__ */
+#define log_printf(fmt, ...)  \
+    f = fopen(LOG_FILE, &#34;a&#34;);\
+    (void) fprintf(f, fmt, ##__VA_ARGS__);\
+    (void) fflush(f);\
+    fclose(f);\
+    sync();
+
+void httpd6(int fdsock, int hit);
+int main (int argc, char **argv);
+</code></pre>
+
+<p>This is a common header file.  Most notable is a macro <code>log_printf</code> which
+enables to write to the log file with <code>printf</code> syntax.</p>
+<p>Routine to daemonize httpd6: <code>main.c</code></p>
+
+<pre><code>/* vi:set ts=4 sts=4 expandtab: */
+#include &#34;common.h&#34;
+
+int main (int argc, char **argv)
+{
+    FILE *f;              /* for log_printf */
+    int port, fdbl, hit, fdsock, pid, i;
+    socklen_t addrlen;
+    static struct sockaddr_in6 client_address, server_address;
+    static struct sigaction sacld, sahup;
+    if (argc &lt; 1 || argc &gt; 3) {
+        (void) fprintf(stderr, &#34;Mini-httpd6:\nUsage: httpd6 [port [PATH]]\n&#34;);
+        exit(EXIT_FAILURE);
+    } else if (argc == 1) {
+        port = 8080;
+    } else {
+        if ((int) strlen(argv[1]) &gt; 6) {
+            (void) fprintf(stderr, &#34;E: port is more than 5 digits.\n&#34;);
+            exit(EXIT_FAILURE);
+        }
+        port = atoi(argv[1]);
+    }
+    if (port &lt; 1024 || port &gt; 60000) {
+        (void) fprintf(stderr, &#34;E: Invalid port number as argument. &#34;
+                &#34;Try 1024-60000.\n&#34;);
+        exit(EXIT_FAILURE);
+    }
+    if (argc == 3) {
+        if ((int) strlen(argv[2]) &gt; 81) {
+            (void) fprintf(stderr, &#34;E: PATH is more than 80 chars.\n&#34;);
+            exit(EXIT_FAILURE);
+        }
+        if (chdir(argv[2])) {
+            (void) fprintf(stderr, &#34;E: Can not change to directory %s.\n&#34;, argv[2]);
+            exit(EXIT_FAILURE);
+        }
+    } else { /* default argc = 1 or 2 */
+        if (chdir(getenv(&#34;HOME&#34;))) {
+            (void) fprintf(stderr, &#34;E: Can not change to directory %s.\n&#34;, 
+                getenv(&#34;HOME&#34;));
+            exit(EXIT_FAILURE);
+        }
+        if (chdir(WEB_ROOT)) {
+            (void) fprintf(stderr, &#34;E: Can not change to directory %s.\n&#34;, 
+                WEB_ROOT);
+            exit(EXIT_FAILURE);
+        }
+    }
+    sacld.sa_flags = 0;             /* default */
+    sigemptyset(&amp;sacld.sa_mask);    /* create a open mask */
+    sacld.sa_handler = SIG_IGN;     /* ignore child death */
+    sigaction(SIGINT, &amp;sacld, 0);   /* set signal */
+    sahup.sa_flags = 0;             /* default */
+    sigemptyset(&amp;sahup.sa_mask);    /* create a open mask */
+    sahup.sa_handler = SIG_IGN;     /* ignore terminal hungup */
+    sigaction(SIGINT, &amp;sahup, 0);   /* set signal */
+    for (i = 0; i &lt;= MAXFD; i&#43;&#43;) {
+        (void) close(i);            /* close STDIN, STDOUT, ... */
+    }
+    pid = fork();
+    if (pid == -1) {
+        log_printf(&#34;ERROR: system call: fork, %s, exiting pid=%d.\n&#34;, 
+                strerror(errno), getpid());
+        exit(EXIT_FAILURE);
+    } else if (pid != 0) {
+        (void) fprintf(stderr, &#34;I: Sucessfully daemonize httpd6.\n&#34;);
+        return EXIT_SUCCESS;        /* parent exit and deamonize */
+    }
+    if (setpgrp()) {                /* set PGID of child to PGID of parent */
+        log_printf(&#34;ERROR: system call: setgrp, %s, exiting pid=%d.\n&#34;, 
+                strerror(errno), getpid());
+        exit(EXIT_FAILURE);
+    }
+    log_printf(&#34;LOG: httpd starting with parent pid=%d.\n&#34;, getpid());
+    fdbl = socket(AF_INET6, SOCK_STREAM, 0);
+    if (fdbl == -1) {
+        log_printf(&#34;ERROR: system call: socket, %s, exiting pid=%d.\n&#34;, 
+                strerror(errno), getpid());
+        exit(EXIT_FAILURE);
+    }
+    server_address.sin6_family = AF_INET6;              /* IPV6 , see ip(7)*/
+    server_address.sin6_addr = in6addr_any;
+    server_address.sin6_port = htons(port);             /* host to network */
+    if (bind(fdbl, (struct sockaddr *) &amp;server_address, 
+            sizeof(server_address)) == -1) {
+        log_printf(&#34;ERROR: system call: bind, %s, exiting pid=%d.\n&#34;, 
+                    strerror(errno), getpid());
+        exit(EXIT_FAILURE);
+    } else {
+        log_printf(&#34;LOG: bind: with IPv6 accept, port=%d.\n&#34;, port);
+    }
+    if (listen(fdbl, MAXBACKLOG) == -1) {
+        log_printf(&#34;ERROR: system call: listen, %s, exiting pid=%d.\n&#34;, 
+                strerror(errno), getpid());
+        exit(EXIT_FAILURE);
+    }
+    log_printf(&#34;LOG: httpd successfuly bind and listen at port %i.\n&#34;, port);
+    for (hit = 1; ; hit&#43;&#43;) {
+        addrlen = sizeof(client_address);
+        fdsock = accept(fdbl, (struct sockaddr *) &amp;client_address, &amp;addrlen);
+        if (fdsock == -1) {
+            log_printf(&#34;ERROR: system call: accept, %s, exiting pid=%d.\n&#34;, 
+                    strerror(errno), getpid());
+            exit(EXIT_FAILURE);
+        }
+        log_printf(&#34;LOG: httpd hit=%i.\n&#34;, hit);
+        pid = fork();
+        if (pid == -1) {
+            log_printf(&#34;ERROR: system call: fork, %s, exiting pid=%d.\n&#34;, 
+                    strerror(errno), getpid());
+            exit(EXIT_FAILURE);
+        } else if (pid != 0) {
+            (void) close(fdsock);                   /* parent */
+        } else {
+            (void) close(fdbl);                     /* child */
+            log_printf(&#34;LOG: httpd forked child pid=%i.\n&#34;, getpid());
+            httpd6(fdsock, hit);                     /* no return */
+        }
+    }
+}
+
+</code></pre>
+
+<p>This essentially starts a daemonized <code>httpd6</code> process.  The daemonized <code>httpd6</code>
+process is the infinite loop routine.  It creates a
+<a href="http://en.wikipedia.org/wiki/Network_socket">network socket</a> and listens to the
+TCP connection port specified on the command line and assume IPv6 connection.
+Every time<code> httpd6</code> is hit, it starts a child process to handle the HTTP
+request.</p>
+<p>Main routine providing httpd6: <code>httpd6.c</code></p>
+<p>include::net/c/<a href="httpd6.c"></a></p>
+<p>This is the routine to handle the HTTP request in the child process of the
+daemon.  Since I put HTML protocol related text data in the codes, this is very
+top heavy.  But this is relatively simple :-)</p>
+<p>You can see this <code>httpd6</code> can serve as IPv6 web server.</p>
+
+<pre><code>$ ./httpd6 8080 ../01_static
+$ wget localhost:8080
+--2013-03-25 21:57:02--  http://localhost:8080/
+Resolving localhost (localhost)... ::1, 127.0.0.1
+Connecting to localhost (localhost)|::1|:8080... connected.
+HTTP request sent, awaiting response... 200 OK
+Length: 2175 (2.1K) [text/html]
+Saving to: ‘index.html’
+
+     0K ..                                                    100% 86.8M=0s
+
+2013-03-25 21:57:02 (86.8 MB/s) - ‘index.html’ saved [2175/2175]
+
+</code></pre>
+
+<h3 id="httpd-in-python">httpd in Python</h3>
+<p>Coding in the Python environment provides us with bigger building blocks to
+work with than that in the C environment.</p>
+<p>The <code>http.server</code> module in the Python3 library contains basic HTTP server classes.  Let&rsquo;s use this.</p>
+<p>Just like the <code>argparse</code> module in &laquo;_python_2,CLI programs: Python&raquo;, I read
+the library source comments to get good idea.</p>
+<pre><code>$ /usr/bin/python3 -q
+&gt;&gt;&gt; print(sys.path)
+['', '/usr/lib/python3.2', '/usr/lib/python3.2/plat-linux2', '/usr/lib/python3.2
+/lib-dynload', '/usr/local/lib/python3.2/dist-packages', '/usr/lib/python3/dist-
+packages']
+&gt;&gt;&gt; import http.server
+&gt;&gt;&gt; print (http.server.__file__)
+/usr/lib/python3.2/http/server.py
+&gt;&gt;&gt; exit()
+$ head /usr/lib/python3.2/http/server.py
+&quot;&quot;&quot;HTTP server classes.
+
+Note: BaseHTTPRequestHandler doesn't implement any HTTP request; see
+SimpleHTTPRequestHandler for simple implementations of GET, HEAD and POST,
+and CGIHTTPRequestHandler for CGI scripts.
+
+It does, however, optionally implement HTTP/1.1 persistent connections,
+as of version 0.3.
+
+Notes on CGIHTTPRequestHandler
+</code></pre><p>The <code>test</code> function towards the end of the <code>/usr/lib/python3.2/http/server.py</code>
+file seems to be good template to start with if its HTTP handler is changed to
+<code>SimpleHTTPRequestHandler</code>.</p>
+<p>Simple Python HTTP server: <code>httpd</code></p>
+
+<pre><code>#!/usr/bin/python3
+
+import http.server
+import sys
+
+def run(HandlerClass = http.server.BaseHTTPRequestHandler,
+         ServerClass = http.server.HTTPServer, protocol=&#34;HTTP/1.0&#34;):
+    &#34;&#34;&#34;Test the HTTP request handler class.
+
+    This runs an HTTP server on port 8080 (or the first command line
+    argument).
+
+    &#34;&#34;&#34;
+
+    if sys.argv[1:]:
+        port = int(sys.argv[1])
+    else:
+        port = 8080
+    server_address = (&#39;&#39;, port)
+
+    HandlerClass.protocol_version = protocol
+    httpd = ServerClass(server_address, HandlerClass)
+
+    sa = httpd.socket.getsockname()
+    print(&#34;Serving HTTP on&#34;, sa[0], &#34;port&#34;, sa[1], &#34;...&#34;)
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print(&#34;\nKeyboard interrupt received, exiting.&#34;)
+        httpd.server_close()
+        sys.exit(0)
+
+if __name__ == &#39;__main__&#39;:
+    run(HandlerClass=http.server.SimpleHTTPRequestHandler)
+</code></pre>
+
+<p>You can see this <code>httpd</code> can serve as IPv4 web server.</p>
+
+<pre><code>$ ./httpd 8080 &amp;
+Serving HTTP on 0.0.0.0 port 8080 ...
+$ wget -O index2.html localhost:8080
+--2013-03-25 22:03:26--  http://localhost:8080/
+Resolving localhost (localhost)... ::1, 127.0.0.1
+Connecting to localhost (localhost)|::1|:8080... failed: Connection refused.
+Connecting to localhost (localhost)|127.0.0.1|:8080... connected.
+127.0.0.1 - - [25/Mar/2013 22:03:27] &#34;GET / HTTP/1.1&#34; 200 -
+HTTP request sent, awaiting response... 200 OK
+Length: 2175 (2.1K) [text/html]
+Saving to: ‘index2.html’
+
+     0K ..                                                    100% 5.23M=0s
+
+2013-03-25 22:03:26 (5.23 MB/s) - ‘index2.html’ saved [2175/2175]
+
+</code></pre>
+
+<p>See:</p>
+<ul>
+<li><a href="http://docs.python.org/3/library/http.server.html">&ldquo;http.server — HTTP servers&rdquo; in &ldquo;The Python Standard Library &ldquo;</a></li>
+<li><a href="http://wiki.python.org/moin/BaseHttpServer">&ldquo;BaseHttpServer&rdquo; in &ldquo;The Python Wiki&rdquo;</a></li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-prime/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-gcc/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

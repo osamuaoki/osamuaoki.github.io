@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Coding style | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Coding style</span></h1>
+
+<h3 class="date">Date:
+2013/08/17 (initial publish),
+2021/08/01 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-53/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-utilities/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="coding-style">Coding style</h2>
+<p>Follow the existing practice for the source.</p>
+<p>Osamu&rsquo;s preference at this moment is as follows:</p>
+<ul>
+<li>For this document, 4 spaces as much as possible for any codes &hellip;</li>
+<li>C and alike: normally Linux-style hardtab. (ts=8 noet)</li>
+<li>Python: 4 spaces (<a href="http://www.python.org/dev/peps/pep-0008/">The official indentation rule for Python</a>, ts=4 sts=4 et)</li>
+<li>Other scripts: also 4 spaces or hardtab. (ts=4 sts=4 et/ts=8 noet)</li>
+<li>Lua: Language tutorial uses 2 spaces &hellip; but sometimes hardtab</li>
+</ul>
+<h3 id="c-coding-style">C coding style</h3>
+<p>There are 2 major practices for the C coding style.</p>
+<ul>
+<li><a href="http://en.wikipedia.org/wiki/Indent_style#K.26R_style">K&amp;R style</a></li>
+<li><a href="http://en.wikipedia.org/wiki/Indent_style#GNU_style">GNU style</a></li>
+</ul>
+<p>There are many variants in use.</p>
+<ul>
+<li>K: <a href="http://www.kernel.org/doc/Documentation/CodingStyle">Linux kernel coding style</a> (system &ndash; K&amp;R)</li>
+<li>B: <a href="http://git.busybox.net/busybox/tree/docs/style-guide.txt">Busybox Style Guide</a> (command line tool &ndash; K&amp;R)</li>
+<li>G: <a href="http://git.gnome.org/browse/gtk+/plain/docs/CODING-STYLE">GTK+ Coding Style</a> (GUI tool &ndash; GNU)</li>
+</ul>
+<p>Here are summary of the K&amp;R styles.</p>
+<ul>
+<li>Keep it simple, Stupid! (KISS)</li>
+<li>Indentation and line style
+<ul>
+<li>Use tab for indentation.
+<ul>
+<li>K: Use &ldquo;<code>set tabstop=8 noexpandtab shiftwidth=8 textwidth=78</code>&rdquo; but do not use vi modeline in the code.
+(For more: <a href="http://www.jukie.net/bart/blog/vim-and-linux-coding-style">http://www.jukie.net/bart/blog/vim-and-linux-coding-style</a>)</li>
+<li>B: Use vi modeline &ldquo;<code>vi: set sw=4 ts=4:</code>&rdquo; in the code.</li>
+</ul>
+</li>
+<li>Opening brace is at the last on the line with a preceding space (except for function)
+<ul>
+<li>K: Do not unnecessarily use braces where a single statement will do.</li>
+<li>B: Use braces even for a single statement. (The &ldquo;bracketless&rdquo; approach is error prone.)</li>
+<li>&ldquo;opening word&rdquo; &ndash; &ldquo;<code>switch</code>&rdquo; &ndash; &ldquo;<code>case ...:</code>&rdquo; &ndash; &ldquo;<code>default:</code>&rdquo; &ndash; &ldquo;<code>}</code>&rdquo; in the same tabstop.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Space:
+<ul>
+<li>No spaces used for indentation outside of comments and documentation.</li>
+<li>No spaces between function and its argument.</li>
+<li>No spaces between function like (pointer/address/type/size) operator and operand:
+<ul>
+<li><code>sizeof  typeof  alignof  __attribute__  defined &amp;  * . -&gt;</code></li>
+</ul>
+</li>
+<li>No spaces between unary operators and its operand:
+<ul>
+<li><code>+  -  ~  !  ++  --</code></li>
+</ul>
+</li>
+<li>No spaces (inside) parenthesized expressions.</li>
+<li>A space after (most) keywords:
+<ul>
+<li><code>if switch case for do while</code> &hellip;</li>
+</ul>
+</li>
+<li>A space around (most) binary and ternary operators:
+<ul>
+<li><code>=  +  -  &lt;  &gt;  *  /  %  |  &amp;  ^  &lt;=  &gt;=  ==  !=  ?  :</code></li>
+</ul>
+</li>
+<li>No trailing whitespaces.</li>
+</ul>
+</li>
+<li>Names:
+<ul>
+<li><em>GLOBAL</em> variables: descriptive, lowercase with <code>_</code>, no encoding of type.</li>
+<li><em>LOCAL</em> variables: short and to the point, lowercase.</li>
+<li><em>MACRO</em> constants: all uppercase</li>
+</ul>
+</li>
+<li>K: Function code length should be 2 screens or less.</li>
+<li>K: Comment on <em>WHAT</em> but never explain <em>WHY</em> with <code>/* ... */</code></li>
+<li>B: Comment before the logical block.</li>
+<li>K: Functions return values:
+<ul>
+<li>Action function: add_work()
+<ul>
+<li>=&gt; return error code integer: (non-zero = failure, 0 = success)</li>
+</ul>
+</li>
+<li>Predicate function: pci_dev_present()
+<ul>
+<li>=&gt; return boolean: (0 = failure, non-zero = success)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Do not use pre-ANSI function declaration.</li>
+</ul>
+<p>See also <a href="http://www.teamten.com/lawrence/style/notes.html%5BNotes">http://www.teamten.com/lawrence/style/notes.html[Notes</a> on Programming
+Practices] by Lawrence Kesteloot for some detail C style examples.</p>
+<ul>
+<li>Some style avoids the use of <a href="https://live.gnome.org/GTK+/BestPractices">C99 style line comment</a> preceded by &ldquo;<code>//</code>&rdquo; for compatibility.</li>
+<li>Some style promotes the use of C99 style <a href="http://www.greenend.org.uk/rjk/tech/inline.html">inline functions in C</a> over macro.</li>
+<li>Some style promotes the use of &ldquo;<code>enum { VAR = VALUE };</code>&rdquo; or C99 style &ldquo;<code>const &lt;type&gt; var = value;</code>&rdquo; over macro &ldquo;<code>#define VAR VALUE</code>&rdquo;.</li>
+<li>GNU style uses <a href="http://www.gnu.org/prep/standards/standards.html#Writing-C">GNU Coding Standards: Formatting Your Source Code</a> which is significantly different from K&amp;R such as indentation with 2 spaces etc.</li>
+</ul>
+<h3 id="naming-conventions">Naming conventions</h3>
+<p>Basic naming convention used in C is:</p>
+<ul>
+<li>normal identifiers: <code>lowercase</code>, <code>lower_case</code>, &hellip;
+<ul>
+<li>integer temporary variables: <code>i</code>, <code>j</code>, <code>k</code>, <code>m</code>, <code>n</code>, &hellip;</li>
+<li>character temporary variables: <code>c</code>, <code>d</code>, <code>e</code>, &hellip;</li>
+<li>macro names: <code>UPPERCASE</code>, <code>UPPER_CASE</code></li>
+</ul>
+</li>
+<li>system reserved identifiers: <code>__???</code>, <code>_Uppercase</code>, <code>???__</code>, <code>__???__</code>, &hellip;</li>
+</ul>
+<p>For many object oriented languages,
+<a href="http://en.wikipedia.org/wiki/CamelCase">CamelCase</a> naming convention is
+introduced to differentiate between class name and class instance name.</p>
+<ul>
+<li>class, interfaces, enums: <code>UpperCamelCase</code></li>
+<li>methods,  local variables, fields:
+<ul>
+<li><code>lowerCamelCase</code> : Java, JavaScript, <a href="http://google-styleguide.googlecode.com/svn/trunk/cppguide.xml?showone=Type_Names#Type_Names">C++ (Google)</a>, &hellip;</li>
+<li><code>lower_case</code> : Python, Ruby, Vala, Lua, &hellip;</li>
+</ul>
+</li>
+<li>constant: <code>UPPER_CASE</code></li>
+</ul>
+<p>The <a href="http://en.wikipedia.org/wiki/Hungarian_notation">Hungarian Notation</a>
+especially Systems Hungarian which encodes the physical data type into prefix is
+deplored.  There are <a href="http://www.joelonsoftware.com/articles/Wrong.html%5Bsome">http://www.joelonsoftware.com/articles/Wrong.html[some</a>
+defense to Apps Hungarian which encodes the logical data type into prefix].</p>
+<ul>
+<li><a href="http://www.ibm.com/developerworks/java/library/j-noaccent/index.html">Speaking the Java language without an accent</a> (IBM DW, Jan. 2010)</li>
+</ul>
+<h3 id="reformat">Reformat</h3>
+<p>Reformat source with <code>indent</code>:</p>
+<pre><code>$ indent -linux foo.c
+</code></pre><ul>
+<li>-linux : Linux</li>
+<li>-kr    : K&amp;R coding style</li>
+<li>-gnu   : GNU coding style</li>
+</ul>
+<h2 id="document-style">Document style</h2>
+<h3 id="gnome">GNOME</h3>
+<p>There are four golden rules:</p>
+<ul>
+<li>Limit each sentence to less than 25 words.</li>
+<li>Limit each paragraph to one topic.</li>
+<li>Provide instructions rather than descriptions.</li>
+<li>Write in a neutral tone.</li>
+</ul>
+<p>See more at
+<a href="http://developer.gnome.org/gdp-style-guide/stable/">GNOME Documentation Style Guide</a>
+and
+<a href="http://developer.gnome.org/gdp-handbook/stable/">GDP Documentation Guidelines</a> .</p>
+<h3 id="suse">SUSE</h3>
+<p>See
+<a href="http://doc.opensuse.org/products/opensuse/Styleguide/opensuse_documentation_styleguide_sd/">Documentation Style Guide</a> .</p>
+<h3 id="gnu">GNU</h3>
+<p>See
+<a href="http://www.fsf.org/licensing/gnu-press/GNU-Press-styleguide.pdf">A Style Guide for GNU Documentation (PDF)</a> .</p>
+<h3 id="ec">EC</h3>
+<p>European Commission recommends in
+<a href="http://ec.europa.eu/translation/english/guidelines/documents/styleguide_english_dgt_en.pdf">How to write clearly (PDF)</a>
+(<a href="http://www.fjfhs.eu/">HTML</a>) as:</p>
+<ul>
+<li>Think before you write</li>
+<li>Focus on the reader — be direct and interesting</li>
+<li>Get your document into shape</li>
+<li>KISS: Keep It Short and Simple</li>
+<li>Make sense — structure your sentences</li>
+<li>Cut out excess nouns – verb forms are livelier</li>
+<li>Be concrete, not abstract</li>
+<li>Prefer active verbs to passive — and name the agent</li>
+<li>Beware of false friends, jargon and abbreviations</li>
+<li>Revise and check</li>
+</ul>
+<h3 id="wikipedia">Wikipedia</h3>
+<p>See
+<a href="http://en.wikipedia.org/wiki/List_of_style_guides">Wikipedia: List of style guides</a> .</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-53/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-utilities/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- GNOME | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; GNOME</span></h1>
+
+<h3 class="date">Date:
+2013/08/17 (initial publish),
+2021/08/01 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-build/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-glib/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="gnome">GNOME</h2>
+<p>The choice of the best GUI program practice is not simple since there are many
+choices for GUI platforms, many outdated documentations, new features without
+updated tutorials, and future uncertainties.</p>
+<p>Despite people had very negative reaction to the GNOME3 due to its new default
+user experience, I chose it as my GUI example platform for its fundamental
+internal technical merits.  We can always customize the user experience part.</p>
+<p>Here is my best effort to capture the recent GUI framework history for GNOME
+and best sources for references.  (The latest stable is GNOME3.4 as of 2012 Summer.)</p>
+<h3 id="gnome-history">GNOME history</h3>
+<p><a href="http://en.wikipedia.org/wiki/GTK+">GTK+</a> is the GUI toolkit for
+<a href="http://en.wikipedia.org/wiki/GNOME">GNOME</a> and is build on the top of C with
+<a href="http://en.wikipedia.org/wiki/GLib">GLib</a> and
+<a href="http://en.wikipedia.org/wiki/GObject">GObject</a>.  It requires many chores with
+boiler plate macro definitions when used directly from a C program.  Its
+modularity as a GUI toolkit has evolved roughly as follows.</p>
+<ul>
+<li>GTK+1.0 (1998): just separated from <a href="http://www.gimp.org/about/ancient_history.html">GIMP</a>.</li>
+<li>GTK+1.2 (1999): reasonable shape for general applications.</li>
+<li>GTK+2.0 (2002): for GNOME2 based on GLib, GObject, GIO, ATK, GDK, GdkPixbuff</li>
+<li>GTK+3.0 (2011): for GNOME3 based on GLib, GObject, GIO, ATK, GDK, GdkPixbuff, <a href="http://en.wikipedia.org/wiki/Pango">Pango</a>
+<ul>
+<li>GTK+3.0 works with <a href="http://en.wikipedia.org/wiki/Cairo_(graphics)">Cairo</a>, <a href="http://en.wikipedia.org/wiki/Clutter_(toolkit)">Clutter</a>, and <a href="https://live.gnome.org/GObjectIntrospection/">GObject-introspection</a>, &hellip;</li>
+</ul>
+</li>
+</ul>
+<p><a href="http://en.wikipedia.org/wiki/GNOME">GNOME</a> has evolved significantly with its
+<a href="http://en.wikipedia.org/wiki/Inter-process_communication%5Binter-process">http://en.wikipedia.org/wiki/Inter-process_communication[inter-process</a>
+communication (IPC)] structure.  Its history is roughly as follows.</p>
+<ul>
+<li>GNOME1 (1999): <a href="http://en.wikipedia.org/wiki/CORBA">CORBA</a> (= <a href="http://en.wikipedia.org/wiki/Bonobo_(component_model)">Bonobo</a> + libIDL + ORBit) as IPC established.</li>
+<li>GNOME2 (2002): Antialiased fonts, UNICODE support (internationalization), HIG compliance (accessibility), &hellip;
+<ul>
+<li>GNOME2 cycle: IPC migrated from CORBA to <a href="http://en.wikipedia.org/wiki/D-Bus">D-Bus</a>.</li>
+</ul>
+</li>
+<li>GNOME3 (2011): D-Bus as IPC established. (<a href="http://developer.gnome.org/platform-overview/2.32/bonobo-corba.html.en">CORBA deprecated</a>)
+<ul>
+<li>GNOME3 cycle: <a href="https://live.gnome.org/GObjectIntrospection/">GObject-Introspection</a> is introduced.
+<ul>
+<li><a href="https://live.gnome.org/Vala">Vala</a> is becoming a popular choice to write applications for the native binary target instead of traditional and complicated C code with many boiler plate macro definitions.</li>
+<li><a href="http://en.wikipedia.org/wiki/Python_(programming_language)">Python</a> with <a href="https://live.gnome.org/PyGObject">PyGObject</a> is a popular choice to write applications under the high level interpreter language with <a href="http://en.wikipedia.org/wiki/Just-in-time_compilation">JIT compilation</a>.</li>
+<li><a href="http://en.wikipedia.org/wiki/JavaScript">Javascript</a> is becoming the choice for the embedded language of applications with the <a href="https://live.gnome.org/Gjs">Gjs</a> binding.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>GNOME3 applications are just plain GTK+3 applications.  There is no code bloat
+by <a href="http://en.wikipedia.org/wiki/CORBA">CORBA</a> any more.</p>
+<p><a href="https://live.gnome.org/GObjectIntrospection/Users%5BThe">https://live.gnome.org/GObjectIntrospection/Users[The</a> language binding system
+based on GObject-Introspection] can provide:</p>
+<ul>
+<li>tighter binding including the memory management than the generic language binding systems such as <a href="http://www.swig.org/">SWIG</a> can, and</li>
+<li>more consistent binding across different languages.</li>
+</ul>
+<p>GObject-Introspection xml data of each library can be found under the <code>/usr/share/gir-1.0</code> directory.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-build/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-glib/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

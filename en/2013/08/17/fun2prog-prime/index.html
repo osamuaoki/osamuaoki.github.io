@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Fun to Program -- Prime numbers | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Fun to Program &ndash; Prime numbers</span></h1>
+
+<h3 class="date">Date:
+2013/08/17 (initial publish),
+2021/08/01 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-fibo/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-process/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<blockquote>
+<p>This was originally written and created around 2013 and may require to be
+updated. (2021)</p>
+</blockquote>
+<h2 id="prime-numbers">Prime numbers</h2>
+<p>A <a href="http://en.wikipedia.org/wiki/Prime_number">prime number</a> (or a prime) is a
+natural number greater than 1 that has no positive divisors other than 1 and
+itself.</p>
+<p>Let&rsquo;s check simple code snippets to obtain prime numbers via the same trial
+division algorithm implemented in different languages to study the following:</p>
+<ul>
+<li>basic for-loop syntax</li>
+<li>relative execution speed</li>
+</ul>
+<p>Please note this algorithm to obtain prime numbers is not the best one.</p>
+<h3 id="shell">Shell</h3>
+<p>Here is a shell program to search the prime numbers.</p>
+<p>Source code for the Shell script: prime</p>
+
+<pre><code>#!/bin/sh
+N_MAX=$1
+P=&#34;&#34; # list containing all primes found
+for N in $(seq 2 $N_MAX); do
+    FLAG_PRIME=1 # True
+    # search for all pimes found
+    for I in $P; do
+        N_DIV_I=$(($N / $I))
+        N_MOD_I=$(($N % $I))
+        if [ $N_MOD_I = 0 ]; then
+            FLAG_PRIME=0 # False
+            break # found not to be prime
+        fi
+        if [ $N_DIV_I -lt $I ]; then
+            break # no use doing more i-loop if N &lt; I*I
+        fi
+    done
+    if [ $FLAG_PRIME = 1 ] ; then
+        P=&#34;$P $N&#34;
+    fi
+done
+# space separated to line break separated
+echo &#34;$P&#34; |xargs -n1 echo
+</code></pre>
+
+<p>Let&rsquo;s check time to compute prime numbers up to some numbers.</p>
+<p>Behavior of the shell script</p>
+
+<pre><code>$ /usr/bin/time -p ./prime &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 23.91
+user 19.38
+sys 0.48
+</code></pre>
+
+<h3 id="python">Python</h3>
+<p>Here is a Python program for the prime numbers.</p>
+<p>Source code for the Python script: prime</p>
+
+<pre><code>#!/usr/bin/python3
+import sys
+n_max = int(sys.argv[1])
+p = [] # list containing all primes found
+for n in range(2, n_max):
+    flag_prime = True
+    # search for all pimes found
+    for i in p:
+        (n_div_i, n_mod_i) = divmod(n,i)
+        if n_mod_i == 0:
+            flag_prime = False
+            break # found not to be prime
+        if n_div_i &lt; i:
+            break # no loop over i if n &lt; i*i
+    if flag_prime:
+        p.append(n)
+for i in p:
+    print(i)
+</code></pre>
+
+<p>Behavior of the Perl script</p>
+
+<pre><code>$ /usr/bin/time -p ./prime &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 0.16
+user 0.16
+sys 0.00
+$ /usr/bin/time -p ./prime &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 4.86
+user 4.86
+sys 0.00
+</code></pre>
+
+<h3 id="lua">Lua</h3>
+<p>Here is a Lua program for the prime numbers with BASIC style &ldquo;<code>for</code>&rdquo;.</p>
+<p>Source code for the Lua script: prime</p>
+
+<pre><code>#!/usr/bin/lua
+n_max = tonumber(arg[1])
+True = 1
+False = 0
+p = {}; -- list containing all primes found
+for n = 2, n_max do
+    flag_prime = True
+    -- search for all pimes found
+    for ii = 1, (#p) do
+        i = p[ii]
+        n_div_i = math.floor(n / i)
+        n_mod_i = n % i
+        if n_mod_i == 0 then
+            flag_prime = False
+            break -- found not to be prime
+        end
+        if n_div_i &lt; i then
+            break -- no use doing more i-loop if n &lt; i*i
+        end
+    end
+    if flag_prime == True then
+        table.insert(p,n)
+    end
+end
+for ii = 1, (#p) do
+    print(p[ii])
+end
+</code></pre>
+
+<p>Here is an alternative Lua program with &ldquo;<code>for ... in </code>&rdquo; and a iterator function.</p>
+<p>Source code for the Lua script with &ldquo;<code>for ... in </code>&quot;: prime0</p>
+
+<pre><code>#!/usr/bin/lua
+n_max = tonumber(arg[1])
+True = 1
+False = 0
+function iter(a) -- ordered iterator
+  local i = 0
+  return function()
+    i = i &#43; 1
+    return a[i]
+  end
+end
+p = {}; -- list containing all primes found
+for n = 2, n_max do
+    flag_prime = True
+    -- search for all pimes found
+    for i in iter(p) do
+        n_div_i = math.floor(n / i)
+        n_mod_i = n % i
+        if n_mod_i == 0 then
+            flag_prime = False
+            break -- found not to be prime
+        end
+        if n_div_i &lt; i then
+            break -- no use doing more i-loop if n &lt; i*i
+        end
+    end
+    if flag_prime == True then
+        table.insert(p,n)
+    end
+end
+for i in iter(p) do
+    print(i)
+end
+</code></pre>
+
+<p>Behavior of the Lua script</p>
+
+<pre><code>$ /usr/bin/time -p ./prime &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 0.16
+user 0.16
+sys 0.00
+$ /usr/bin/time -p ./prime &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 5.23
+user 5.22
+sys 0.00
+$ /usr/bin/time -p ./prime0 &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 5.11
+user 5.10
+sys 0.01
+</code></pre>
+
+<h3 id="perl">Perl</h3>
+<p>Here is a Perl program for the prime numbers.</p>
+<p>Source code for the Perl script: prime</p>
+
+<pre><code>#!/usr/bin/perl -w
+use constant false =&gt; 0;
+use constant true  =&gt; 1;
+$n_max = &#34;$ARGV[0]&#34; &#43; 0;
+@p = (); # list containing all primes found
+for ($n = 2; $n &lt; $n_max; $n&#43;&#43;) {
+    $flag_prime = true;
+    # search for all pimes found
+    foreach $i (@p) {
+        $n_div_i = int($n / $i);
+        $n_mod_i = $n % $i;
+        if ($n_mod_i == 0) {
+            # found to be non-prime
+            $flag_prime = false;
+            last; # found not to be prime
+        }
+        if ($n_div_i &lt; $i) {
+            last; # no use doing more i-loop if n &lt; i*i
+        }
+    }
+    if ($flag_prime == true) {
+        push (@p, $n);
+    }
+}
+foreach $i (@p) {
+    print &#34;$i\n&#34;;
+}
+
+</code></pre>
+
+<p>Behavior of the Perl script</p>
+
+<pre><code>$ /usr/bin/time -p ./prime &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 0.16
+user 0.16
+sys 0.00
+$ /usr/bin/time -p ./prime &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 4.86
+user 4.86
+sys 0.00
+</code></pre>
+
+<h3 id="c">C</h3>
+<h4 id="c-with-the-array">C with the array</h4>
+<p>Here is a C program with the array for the prime numbers.</p>
+<p>Source code for the C program with the array: prime.c</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+
+#define ARRAY_SIZE 100000000
+#define TRUE 1
+#define FALSE 0
+
+int main (int argc, char ** argv) {
+    long n_max = atol (argv[1]);
+    long j = 1;
+    long p[ARRAY_SIZE];
+    long n, k, i, n_div_i, n_mod_i;
+    int flag_prime;
+    for (n = 2; n &lt; n_max; n&#43;&#43;) {
+        flag_prime = TRUE;
+        /* search for all pimes found */
+        for (k = 1; k &lt; j; k&#43;&#43;) {
+            i = p[k];
+            n_div_i = n / i;
+            n_mod_i = n % i;
+            if (n_mod_i == 0) {
+                flag_prime = FALSE;
+                break; /* found not to be prime */
+            }
+            if (n_div_i &lt; i) {
+                break; /* no use doing more i-loop if n &lt; i*i */
+            }
+        }
+        if (flag_prime == TRUE) {
+            p[j]=n;
+            j&#43;&#43;;
+            if (j&gt;ARRAY_SIZE) {
+                printf (&#34;E: Overflow array after %ld\n&#34;, p[j-1]);
+                return EXIT_FAILURE;
+            }
+        }
+    }
+    for (k=1; k &lt; j; k&#43;&#43;) {
+        printf (&#34;%ld\n&#34;, p[k]);
+    }
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>Let&rsquo;s compile this into a binary executable.</p>
+<p>Compilation of the C program with the array</p>
+
+<pre><code>$ gcc -O9 -Wall -o prime prime.c
+</code></pre>
+
+<p>Behavior of the C program with the array</p>
+
+<pre><code>$ /usr/bin/time -p ./prime &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 0.00
+user 0.00
+sys 0.00
+$ /usr/bin/time -p ./prime &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 0.16
+user 0.16
+sys 0.00
+</code></pre>
+
+<h4 id="c-with-the-list">C with the list</h4>
+<p>Here is a C program with the list for the prime numbers.</p>
+<p>Source code for the C program with the list: prime.c</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#define TRUE 1
+#define FALSE 0
+
+struct _primelist {
+    long prime; 
+    struct _primelist *next;
+    };
+typedef struct _primelist primelist;
+
+primelist *head=NULL, *tail=NULL;
+
+int checkprime(long n) {
+    primelist *p;
+    long i, n_div_i, n_mod_i;
+    int flag;
+    flag = TRUE;
+    for (p = head; p != NULL ; p = p-&gt;next) {
+        i = p-&gt;prime;
+        n_div_i = n / i;
+        n_mod_i = n % i;
+        if (n_mod_i == 0) {
+            flag = FALSE;
+            break; /* found not to be prime */
+        }
+        if (n_div_i &lt; i) {
+            break; /* no use doing more i-loop if n &lt; i*i */
+        }
+    }
+    return flag;
+}
+
+int main(int argc, char **argv) {
+    primelist *p=NULL, *q=NULL;
+    long n, n_max;
+    n_max = atol(argv[1]);
+    for (n = 2; n &lt;= n_max; n&#43;&#43;) {
+        if (checkprime(n)) {
+            q= calloc(1, sizeof(primelist));
+            q-&gt;prime = n;
+            if (head == NULL) {
+                head = q;
+            } else {
+                tail-&gt;next=q;
+            }
+            tail = q;
+        }
+    }
+    for (p = head; p != NULL; p = p-&gt;next) {
+        printf (&#34;%ld\n&#34;, p-&gt;prime);
+    }
+    for (p = head; p != NULL; q = p-&gt;next, free(p), p = q) {}
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>TIP: It is a good practice to free memory properly to avoid <a href="http://en.wikipedia.org/wiki/C_dynamic_memory_allocation#Common_errors">common errors in C dynamic memory allocation</a> even when OS may take care.</p>
+<p>Let&rsquo;s compile this into a binary executable.</p>
+<p>Compilation of the C program with the list</p>
+
+<pre><code>$ gcc -O9 -Wall -o prime prime.c
+</code></pre>
+
+<p>Behavior of the C program with the list</p>
+
+<pre><code>$ /usr/bin/time -p ./prime &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 0.00
+user 0.00
+sys 0.00
+$ /usr/bin/time -p ./prime &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 0.17
+user 0.17
+sys 0.00
+</code></pre>
+
+<h4 id="c-with-the-list-variants">C with the list (variants)</h4>
+<p>Since this is very good example to learn C with the dynamic memory allocation, I made a combination code of several styles.</p>
+<p>Source code for the C program with the list: prime-all.c</p>
+
+<pre><code>#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#define TRUE 1
+#define FALSE 0
+
+#if STYLE==1
+typedef struct _primelist {
+    long prime; 
+    struct _primelist *next;
+    } primelist;
+#elif STYLE==2
+typedef struct _primelist primelist;
+struct _primelist {
+    long prime; 
+    primelist *next;
+    };
+#else /* default */
+struct _primelist {
+    long prime; 
+    struct _primelist *next;
+    };
+typedef struct _primelist primelist;
+#endif
+
+primelist *head=NULL, *tail=NULL;
+
+int checkprime(long n) {
+    primelist *p;
+    long i, n_div_i, n_mod_i;
+    int flag;
+    flag = TRUE;
+#if STYLE == 4
+    p = head;
+    while(p) {
+#else /* default */
+    for (p = head; p != NULL ; p = p-&gt;next) {
+#endif
+        i = p-&gt;prime;
+        n_div_i = n / i;
+        n_mod_i = n % i;
+        if (n_mod_i == 0) {
+            flag = FALSE;
+            break; /* found not to be prime */
+        }
+        if (n_div_i &lt; i) {
+            break; /* no use doing more i-loop if n &lt; i*i */
+        }
+#if STYLE == 4
+        p = p-&gt;next;
+#endif
+    }
+    return flag;
+}
+
+int main(int argc, char **argv) {
+    primelist *p=NULL, *q=NULL;
+    long n, n_max;
+    n_max = atol(argv[1]);
+#if STYLE == 4
+    n = 1;
+    while(n &lt;= n_max) {
+        n&#43;&#43;;
+#else /* default */
+    for (n = 2; n &lt;= n_max; n&#43;&#43;) {
+#endif
+        if (checkprime(n)) {
+#if STYLE == 3
+            q = malloc(sizeof(primelist));
+            q-&gt;next = NULL;
+#else /* default */
+            q= calloc(1, sizeof(primelist));
+#endif
+            q-&gt;prime = n;
+            if (head == NULL) {
+                head = q;
+            } else {
+                tail-&gt;next=q;
+            }
+            tail = q;
+        }
+    }
+#if STYLE == 4
+    p=head;
+    while(p) {
+        printf (&#34;%ld\n&#34;, p-&gt;prime);
+        p = p-&gt;next;
+    }
+    p=head;
+    while(p) {
+        q = p-&gt;next;
+        free(p);
+        p = q;
+    }
+#else /* default */
+    for (p = head; p != NULL; p = p-&gt;next) {
+        printf (&#34;%ld\n&#34;, p-&gt;prime);
+    }
+    for (p = head; p != NULL; q = p-&gt;next, free(p), p = q) {}
+#endif
+    return EXIT_SUCCESS;
+}
+
+</code></pre>
+
+<p>This code uses CPP macro to change its style.</p>
+<ul>
+<li>&ldquo;<code>#define STYLE 0</code>&rdquo; enables the basic style of the <code>struct</code> and <code>typedef</code> combination.</li>
+<li>&ldquo;<code>#define STYLE 1</code>&rdquo; enables the shorthand style of the <code>struct</code> and <code>typedef</code> combination.</li>
+<li>&ldquo;<code>#define STYLE 2</code>&rdquo; enables the alternative style of the <code>struct</code> and <code>typedef</code> combination using the <code>typedef</code> feature allowing the incomplete type. (Vala generated C code uses this style.)</li>
+<li>&ldquo;<code>#define STYLE 3</code>&rdquo; enables the alternative style of memory allocation using <code>malloc</code> instead of <code>calloc</code>.</li>
+<li>&ldquo;<code>#define STYLE 4</code>&rdquo; enables the <code>while</code>-loop style instead of <code>for</code>-loop.</li>
+</ul>
+<p>Here, I used the <code>_primelist</code> tag for <code>struct</code> to distinguish from the
+<code>primelist</code> identifier for <code>typedef</code>.   The <code>_primelist</code> tags can be replaced
+with <code>primelist</code> without problem in C since <code>struct</code> tags and typedefs are in
+separate namespaces in C (But C++ is a different story &hellip;).</p>
+<p>The first 3 memory allocation styles generate exactly the same code.  The
+difference between <code>calloc</code> and <code>malloc</code> codes is because only <code>calloc</code> sets
+the allocated memory to zero.</p>
+<p>The &ldquo;<code>-D NAME=DEFINITION</code>&rdquo; compiler option is processed effectively as
+&ldquo;<code>#define NAME DEFINITION</code>&rdquo; at the top of the source. (See more in the info
+page for CPP.)</p>
+<p>Let&rsquo;s compile this into 5 binaries using this &ldquo;<code>-D NAME=DEFINITION</code>&rdquo; compiler
+option.</p>
+<p>Compilation of the C program with the list in several styles</p>
+
+<pre><code>$ gcc -O9 -Wall -D&#39;STYLE=0&#39; -o prime0 prime-all.c
+$ gcc -O9 -Wall -D&#39;STYLE=1&#39; -o prime1 prime-all.c
+$ gcc -O9 -Wall -D&#39;STYLE=2&#39; -o prime2 prime-all.c
+$ gcc -O9 -Wall -D&#39;STYLE=3&#39; -o prime3 prime-all.c
+$ gcc -O9 -Wall -D&#39;STYLE=4&#39; -o prime4 prime-all.c
+</code></pre>
+
+<p>All these generated binary executable programs work the same (i.e., the same execution speed).</p>
+<p>The <code>prime-all.c</code> code can be simplified to <code>prime.c</code> by removing preprocessor conditionals with <code>unifdef</code>(1).</p>
+<p>Removal of preprocessor conditionals from <code>prime-all.c</code></p>
+
+<pre><code>$ unifdef -D&#39;STYLE=0&#39; -o prime.c prime-all.c
+$ unifdef -D&#39;STYLE=1&#39; -o prime1.c prime-all.c
+$ unifdef -D&#39;STYLE=2&#39; -o prime2.c prime-all.c
+$ unifdef -D&#39;STYLE=3&#39; -o prime3.c prime-all.c
+$ unifdef -D&#39;STYLE=4&#39; -o prime4.c prime-all.c
+</code></pre>
+
+<h3 id="vala-glib">Vala (Glib)</h3>
+<p>Here is a Vala program for the prime numbers using only Glib.</p>
+<p>(This is a bad program example. I know this is problematic only after making this program and analyzing the problem I faced. See &laquo;_benchmark, Prime: Benchmark&raquo;.)</p>
+<p>Source code for the Vala program: prime.vala</p>
+
+<pre><code>int main (string[] args) {
+    long n_max = long.parse(args[1]);
+    var p = new List&lt;long&gt; ();
+    for (long n = 2; n &lt; n_max; n&#43;&#43;) {
+        bool flag_prime = true;
+        // search for all pimes found
+        foreach (long i in p) {
+            long n_div_i = n / i;
+            long n_mod_i = n % i;
+            if (n_mod_i == 0) {
+                flag_prime = false;
+                break; // found not to be prime
+            }
+            if (n_div_i &lt; i) {
+                break; // no use doing more i-loop if n &lt; i*i
+            }
+        }
+        if (flag_prime == true) {
+            p.append(n);
+        }
+    }
+    foreach (long i in p) {
+        stdout.printf (&#34;%lld\n&#34;, i);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>Behavior of the Vala program</p>
+
+<pre><code>$ /usr/bin/time -p ./prime &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 0.07
+user 0.06
+sys 0.00
+$ /usr/bin/time -p ./prime &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 9.45
+user 9.44
+sys 0.00
+</code></pre>
+
+<p>Havoc Pennington said &ldquo;<a href="https://mail.gnome.org/archives/gtk-devel-list/2000-October/msg00059.html">g_list_last() and g_list_append() are defined to be O(n) operations; they are not fast for long lists. GList is modeled on the lists found in Scheme, Haskell, etc. which behave the same way.</a>&rdquo;  I should have known &hellip;</p>
+<h3 id="vala-gee">Vala (Gee)</h3>
+<p>Here is a Vala program for the prime numbers using <a href="https://live.gnome.org/Libgee">Gee</a>.</p>
+<p>(This is an improved program example over previous Vala (GLib) one. See &laquo;_benchmark,Prime: Benchmark&raquo;.)</p>
+<p><code>ArrayList&lt;G&gt;</code> provided by Gee is used instead of <code>List&lt;G&gt;</code> provided by Glib.  This type of list structure is very fast for adding data at the end of the list.</p>
+<p>Source code for the Vala program: prime.vala</p>
+
+<pre><code>using Gee;
+int main (string[] args) {
+    long n_max = long.parse(args[1]);
+    var p = new ArrayList&lt;long&gt; ();
+    for (long n = 2; n &lt; n_max; n&#43;&#43;) {
+        bool flag_prime = true;
+        // search for all pimes found
+        foreach (long i in p) {
+            long n_div_i = n / i;
+            long n_mod_i = n % i;
+            if (n_mod_i == 0) {
+                flag_prime = false;
+                break; // found not to be prime
+            }
+            if (n_div_i &lt; i) {
+                break; // no use doing more i-loop if n &lt; i*i
+            }
+        }
+        if (flag_prime == true) {
+            p.add(n);
+        }
+    }
+    foreach (long i in p) {
+        stdout.printf (&#34;%lld\n&#34;, i);
+    }
+    return 0;
+}
+</code></pre>
+
+<p>Behavior of the Vala program</p>
+
+<pre><code>$ /usr/bin/time -p ./prime &#34;$(echo 2^16 | bc)&#34;&gt;/dev/null
+real 0.02
+user 0.02
+sys 0.00
+$ /usr/bin/time -p ./prime &#34;$(echo 2^20 | bc)&#34;&gt;/dev/null
+real 0.57
+user 0.57
+sys 0.00
+</code></pre>
+
+<h3 id="benchmark">Benchmark</h3>
+<p>Here are benchmark results of various program languages.</p>
+<p>Speed benchmark of various program languages</p>
+<!-- raw HTML omitted -->
+<table>
+<thead>
+<tr>
+<th>Program</th>
+<th style="text-align:right">real(2^16)</th>
+<th style="text-align:right">user(2^16)</th>
+<th style="text-align:right">sys(2^16)</th>
+<th style="text-align:right">real(2^20)</th>
+<th style="text-align:right">user(2^20)</th>
+<th style="text-align:right">sys(2^20)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Shell</td>
+<td style="text-align:right">23.91</td>
+<td style="text-align:right">19.38</td>
+<td style="text-align:right">0.48</td>
+<td style="text-align:right">&ndash;</td>
+<td style="text-align:right">&ndash;</td>
+<td style="text-align:right">&ndash;</td>
+</tr>
+<tr>
+<td>Python</td>
+<td style="text-align:right">0.19</td>
+<td style="text-align:right">0.19</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">5.58</td>
+<td style="text-align:right">5.58</td>
+<td style="text-align:right">0.00</td>
+</tr>
+<tr>
+<td>Lua</td>
+<td style="text-align:right">0.16</td>
+<td style="text-align:right">0.16</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">5.23</td>
+<td style="text-align:right">5.22</td>
+<td style="text-align:right">0.00</td>
+</tr>
+<tr>
+<td>Lua (for &hellip; in)</td>
+<td style="text-align:right">&ndash;</td>
+<td style="text-align:right">&ndash;</td>
+<td style="text-align:right">&ndash;</td>
+<td style="text-align:right">5.11</td>
+<td style="text-align:right">5.10</td>
+<td style="text-align:right">0.01</td>
+</tr>
+<tr>
+<td>Perl</td>
+<td style="text-align:right">0.16</td>
+<td style="text-align:right">0.16</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">4.86</td>
+<td style="text-align:right">4.86</td>
+<td style="text-align:right">0.00</td>
+</tr>
+<tr>
+<td>C (array)</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.16</td>
+<td style="text-align:right">0.16</td>
+<td style="text-align:right">0.00</td>
+</tr>
+<tr>
+<td>C (list)</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.17</td>
+<td style="text-align:right">0.17</td>
+<td style="text-align:right">0.00</td>
+</tr>
+<tr>
+<td>Vala (glib)</td>
+<td style="text-align:right">0.07</td>
+<td style="text-align:right">0.06</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">9.45</td>
+<td style="text-align:right">9.44</td>
+<td style="text-align:right">0.00</td>
+</tr>
+<tr>
+<td>Vala (gee)</td>
+<td style="text-align:right">0.02</td>
+<td style="text-align:right">0.02</td>
+<td style="text-align:right">0.00</td>
+<td style="text-align:right">0.57</td>
+<td style="text-align:right">0.57</td>
+<td style="text-align:right">0.00</td>
+</tr>
+</tbody>
+</table>
+<p>Here, the time reported by the <code>/usr/bin/time -p</code> command is in POSIX standard 1003.2 style:</p>
+<ul>
+<li><code>real</code>: Elapsed real (wall clock) time used by the process, in seconds.</li>
+<li><code>user</code>: Total number of CPU-seconds that the process used directly (in user mode), in seconds.</li>
+<li><code>sys</code>: Total number of CPU-seconds used by the system on behalf of the process (in kernel mode), in seconds.</li>
+</ul>
+<p>Please disregard minor differences such as 20% since this benchmark is not
+meant to be very accurate.</p>
+<p>The speed differences are several orders of magnitudes.</p>
+<p>A code written in any compiler language is faster than one written in any interpreter in normal situation.</p>
+<p>But looking at <code>real (2^20)</code> case, the Vala program with GLib result is very
+odd. For now, let me just say &ldquo;The root cause is the way GLib is used.  There
+are many operations to add an item at the end of the long list. This is slow
+o(n) operation.&rdquo;</p>
+<p>This will be analyzed in &laquo;_profiling_prime,Profiling prime&raquo;.</p>
+<p>TIP: The use of the compiler does not guarantee the faster code.  Algorithm is important.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2013/08/17/fun2prog-fibo/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2013/08/17/fun2prog-process/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
