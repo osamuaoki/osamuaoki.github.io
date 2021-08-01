@@ -225,17 +225,11 @@ cli: error: unrecognized arguments: -b
 <li>Comments in the file such as <code>/usr/lib/python3.2/argparse.py</code> providing the <code>argparse</code> module.</li>
 </ul>
 <p>Actual module file on the system can be obtained by running The Python interpreter interactively as follows.</p>
-<p>$ /usr/bin/python3 -q</p>
-<blockquote>
-<blockquote>
-<blockquote>
-<p>import argparse
-print (argparse.<strong>file</strong>)
-/usr/lib/python3.2/argparse.py</p>
-</blockquote>
-</blockquote>
-</blockquote>
-<h4 id="python-script-with-cliapp">Python script with cliapp</h4>
+<pre><code>$ /usr/bin/python3 -q
+&gt;&gt;&gt; import argparse
+&gt;&gt;&gt; print (argparse.__file__)
+/usr/lib/python3.2/argparse.py
+</code></pre><h4 id="python-script-with-cliapp">Python script with cliapp</h4>
 <p><a href="http://code.liw.fi/cliapp/docs/">cliapp</a> is a Python framework for Unix-like
 command line programs and provides a unified supports for the command line and
 the configuration file.</p>

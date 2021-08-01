@@ -578,7 +578,7 @@ $ unifdef -D&#39;STYLE=4&#39; -o prime4.c prime-all.c
 
 <h3 id="vala-glib">Vala (Glib)</h3>
 <p>Here is a Vala program for the prime numbers using only Glib.</p>
-<p>(This is a bad program example. I know this is problematic only after making this program and analyzing the problem I faced. See &laquo;_benchmark, Prime: Benchmark&raquo;.)</p>
+<p>(This is a bad program example. I know this is problematic only after making this program and analyzing the problem I faced. See <a href="#benchmark">Benchmark</a>.)</p>
 <p>Source code for the Vala program: prime.vala</p>
 
 <pre><code>int main (string[] args) {
@@ -624,7 +624,7 @@ sys 0.00
 <p>Havoc Pennington said &ldquo;<a href="https://mail.gnome.org/archives/gtk-devel-list/2000-October/msg00059.html">g_list_last() and g_list_append() are defined to be O(n) operations; they are not fast for long lists. GList is modeled on the lists found in Scheme, Haskell, etc. which behave the same way.</a>&rdquo;  I should have known &hellip;</p>
 <h3 id="vala-gee">Vala (Gee)</h3>
 <p>Here is a Vala program for the prime numbers using <a href="https://live.gnome.org/Libgee">Gee</a>.</p>
-<p>(This is an improved program example over previous Vala (GLib) one. See &laquo;_benchmark,Prime: Benchmark&raquo;.)</p>
+<p>(This is an improved program example over previous Vala (GLib) one. See <a href="#benchmark">Benchmark</a>.)</p>
 <p><code>ArrayList&lt;G&gt;</code> provided by Gee is used instead of <code>List&lt;G&gt;</code> provided by Glib.  This type of list structure is very fast for adding data at the end of the list.</p>
 <p>Source code for the Vala program: prime.vala</p>
 
@@ -783,7 +783,7 @@ meant to be very accurate.</p>
 odd. For now, let me just say &ldquo;The root cause is the way GLib is used.  There
 are many operations to add an item at the end of the long list. This is slow
 o(n) operation.&rdquo;</p>
-<p>This will be analyzed in &laquo;_profiling_prime,Profiling prime&raquo;.</p>
+<p>This will be analyzed in <a href="/en/2013/08/17/fun2prog-debug-4/#profiling-prime">Profiling prime</a>.</p>
 <p>TIP: The use of the compiler does not guarantee the faster code.  Algorithm is important.</p>
 <!-- raw HTML omitted -->
 
