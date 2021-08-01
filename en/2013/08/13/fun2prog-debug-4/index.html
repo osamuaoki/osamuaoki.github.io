@@ -83,7 +83,7 @@ Linux specific tool.</p>
 <p>See <a href="https://perf.wiki.kernel.org/">perf: Linux profiling with performance counters</a> for more information.</p>
 <h3 id="profiling-prime">Profiling prime</h3>
 <p>Let&rsquo;s investigate why the compiled Vala <code>prime</code> program with Glib was
-very slow as described in <a href="/en/2013/08/17/fun2prog-prime/#benchmark">Benchmark</a> using the <code>perf stat</code>
+very slow as described in <a href="/en/2013/08/05/fun2prog-prime/#benchmark">Benchmark</a> using the <code>perf stat</code>
 command.</p>
 <p>Global performance counter stats for the various <code>prime</code> programs.</p>
 <!-- raw HTML omitted -->
@@ -282,7 +282,7 @@ large memory space causing stalled-cycles for the cached memory system.</p>
 web for the answer, I found this to be for <a href="http://repzret.org/p/repzret/%5Bthe">http://repzret.org/p/repzret/[the</a> code
 optimization of the branch prediction mechanism].  For us to read the generated
 assembly code, this is practically the same as &ldquo;<code>retq</code>&rdquo;, though.</p>
-<p>In the (<a href="/en/2013/08/17/fun2prog-prime/#c-with-the-list">C with the list</a>) source, the code is compact and
+<p>In the (<a href="/en/2013/08/05/fun2prog-prime/#c-with-the-list">C with the list</a>) source, the code is compact and
 the pointer to the tail of the list is kept in the <code>tail</code> pointer variable
 which is updated without scanning the whole list from the head.</p>
 <p>Let&rsquo;s output the Vala source with GLib into C source using the <code>valac -C</code>
