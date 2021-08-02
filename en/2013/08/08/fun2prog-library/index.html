@@ -1416,7 +1416,7 @@ library installed in the system.</p>
 <li><a href="http://en.wikipedia.org/wiki/Cache_coherence">Cache coherence</a></li>
 <li><a href="http://en.wikipedia.org/wiki/Amdahl">http://en.wikipedia.org/wiki/Amdahl</a>'s_law[Amdahl&rsquo;s law]</li>
 </ul>
-<p>I am no expert to tell how all these fit together.  But seeing is believing. Let&rsquo;s use a touched-up C programs to list prime numbers based on <code>while</code>-loop style in <a href="/en/2013/08/05/fun2prog-prime/#c-with-the-list-variants">C with the list (variants)</a> to to experiment with the POSIX thread programing.  This algorithm has some sequential nature.  So the task of partitioning the program into parallel and mostly independent code is non-trivial.  The observed execution time figures are significantly different.</p>
+<p>I am no expert to tell how all these fit together.  But seeing is believing. Let&rsquo;s use a touched-up C programs to list prime numbers based on <code>while</code>-loop style in <a href="/en/2013/08/05/fun2prog-prime/#c-with-the-list-variants">C with the list (variants)</a> to to experiment with the POSIX thread programming.  This algorithm has some sequential nature.  So the task of partitioning the program into parallel and mostly independent code is non-trivial.  The observed execution time figures are significantly different.</p>
 <ul>
 <li><code>prime5.c</code>: fast
 <ul>
@@ -1499,7 +1499,7 @@ library installed in the system.</p>
 <li><code>user</code>: Total number of CPU-seconds that the process used directly (in user mode), in seconds.</li>
 <li><code>sys</code>: Total number of CPU-seconds used by the system on behalf of the process (in kernel mode), in seconds.</li>
 </ul>
-<p>It seems that the <code>user</code> time and the <code>sys</code> time add up all multi-threaded time figures so they may end up in larger figure than the <code>real</code> time figure for multi-threaded programs.  There are a similar <code>sar</code> command offered by the <code>sysstat</code> and <code>atsar</code> packages which has more functionalities.  But if you are looking for more insight for the time, you should consider using the <code>perf</code> command. See <a href="/en/2013/08/11/fun2prog-debug-2/#perf">Debug: level 2; perf</a>.</p>
+<p>It seems that the <code>user</code> time and the <code>sys</code> time add up all multi-threaded time figures so they may end up in larger figure than the <code>real</code> time figure for multi-threaded programs.  There are a similar <code>sar</code> command offered by the <code>sysstat</code> and <code>atsar</code> packages which has more functionalities.  But if you are looking for more insight for the time, you should consider using the <code>perf</code> command. See <a href="/en/2013/08/13/fun2prog-debug-4/#perf">Debug: level 4; perf</a>.</p>
 <p>TIP: Unless properly used, the use of the thread mechanism does not guarantee the faster code.</p>
 <h4 id="prime5c-single-threaded-program-a-uninterrupted-tight-code"><code>prime5.c</code>: single-threaded program, a uninterrupted tight code.</h4>
 <p>Source code for the C program: prime5.c</p>
