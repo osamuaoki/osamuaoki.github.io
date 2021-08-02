@@ -57,6 +57,49 @@
   </tbody>
 </table>
 
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#git-annexの基本コンセプト">Git Annexの基本コンセプト</a></li>
+    <li><a href="#git-annexの注意点">Git Annexの注意点</a></li>
+    <li><a href="#git-annexの基本操作">Git Annexの基本操作</a>
+      <ul>
+        <li><a href="#git-annexレポジトリーの初期化init">Git Annexレポジトリーの初期化(init)</a></li>
+        <li><a href="#ファイル実体のgit-annexへの追加add">ファイル実体のGit Annexへの追加(add)</a></li>
+        <li><a href="#作業ディレクトリーツリー中のファイルの編集更新unlocklock">作業ディレクトリーツリー中のファイルの編集・更新(unlock/lock)</a></li>
+        <li><a href="#作業ディレクトリーツリー中のファイル移動複製">作業ディレクトリーツリー中のファイル移動・複製</a></li>
+        <li><a href="#リモートの追加と初期化init">リモートの追加と初期化(init)</a></li>
+        <li><a href="#git-annexレポジトリー間の同期sync">Git Annexレポジトリー間の同期(sync)</a></li>
+        <li><a href="#ファイル実体のgit-annexレポジトリー間移動move">ファイル実体のGit Annexレポジトリー間移動(move)</a></li>
+        <li><a href="#ファイル実体のgit-annexレポジトリー間複製copy">ファイル実体のGit Annexレポジトリー間複製(copy)</a></li>
+        <li><a href="#ファイル実体のgit-annexレポジトリーからの削除drop">ファイル実体のGit Annexレポジトリーからの削除(drop)</a></li>
+        <li><a href="#ファイル実体の他git-annexレポジトリーからの獲得get">ファイル実体の他Git Annexレポジトリーからの獲得(get)</a></li>
+        <li><a href="#未使用ファイル実体のgit-annexレポジトリーからの整理unused">未使用ファイル実体のGit Annexレポジトリーからの整理(unused)</a></li>
+      </ul>
+    </li>
+    <li><a href="#git-annex操作のヒント集">Git Annex操作のヒント集</a>
+      <ul>
+        <li><a href="#git-annexのgui操作">Git AnnexのGUI操作</a></li>
+        <li><a href="#git-annexレポジトリーの重複保存数">Git Annexレポジトリーの重複保存数</a></li>
+        <li><a href="#git-annexレポジトリーのファイルの探索や適度の冗長保存">Git Annexレポジトリーのファイルの探索や適度の冗長保存</a></li>
+        <li><a href="#git-annexレポジトリーの整合性確認">Git Annexレポジトリーの整合性確認</a></li>
+        <li><a href="#git-annexレポジトリーの変更回復undo">Git Annexレポジトリーの変更回復(undo)</a></li>
+        <li><a href="#作業ディレクトリーからのダングリングシムリンク削除">作業ディレクトリーからのダングリングシムリンク削除</a></li>
+        <li><a href="#git-configとgit-annex-configの違い"><code>git config</code>と<code>git annex config</code>の違い</a></li>
+        <li><a href="#ハードリンク利用によるディスクスペース節約">ハードリンク利用によるディスクスペース節約</a></li>
+        <li><a href="#レポジトリーの連結">レポジトリーの連結</a></li>
+        <li><a href="#ファイル数の多いレポジトリー">ファイル数の多いレポジトリー</a></li>
+        <li><a href="#ファイルの自動振り分け保存">ファイルの自動振り分け保存</a></li>
+        <li><a href="#ファイルパーミッションやタイムスタンプ">ファイルパーミッションやタイムスタンプ</a></li>
+        <li><a href="#暗号化保存">暗号化保存</a></li>
+        <li><a href="#metadataとview">MetadataとView</a></li>
+      </ul>
+    </li>
+    <li><a href="#git-annexを使っての所感">Git Annexを使っての所感</a></li>
+  </ul>
+</nav>
+
 <blockquote>
 <p>正直なところ、今は Git Annexを 使っていません。rsync と btrfs の
 組み合わせでバックアップしています。(2021/07/07)</p>
@@ -413,7 +456,7 @@ gitを直接操作する手法もあります。
   
   
   <hr/>
-  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/04/29 (initial publish),
-2021/07/13 (last update)
+2021/08/02 (last update)
 </h3>
 </div>
 
@@ -57,6 +57,16 @@
   </tbody>
 </table>
 
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#dmesg-from-sata">dmesg from SATA</a></li>
+    <li><a href="#dpo-and-fua">DPO and FUA</a></li>
+  </ul>
+</nav>
+
+<h2 id="dmesg-from-sata">dmesg from SATA</h2>
 <p>After having a loose SATA cable problem and fixed it, I happen to see <code>dmesg</code>
 as:</p>
 <pre><code>$ sudo dmesg
@@ -70,7 +80,8 @@ as:</p>
 [    2.373180] sd 2:0:0:0: [sdb] Mode Sense: 00 3a 00 00
 [    2.373185] sd 2:0:0:0: [sdb] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
 ...
-</code></pre><p>This <code>doesn't support DPO or FUA</code> caught my attention.</p>
+</code></pre><h2 id="dpo-and-fua">DPO and FUA</h2>
+<p>This <code>doesn't support DPO or FUA</code> caught my attention.</p>
 <p>I thought this is normal but just to be absolutely sure, I googled.</p>
 <ul>
 <li>Conclusion: Normal and no problem</li>
@@ -99,7 +110,7 @@ as:</p>
   
   
   <hr/>
-  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

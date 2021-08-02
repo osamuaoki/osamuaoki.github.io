@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/05/30 (initial publish),
-2021/07/13 (last update)
+2021/08/02 (last update)
 </h3>
 </div>
 
@@ -57,6 +57,18 @@
   </tbody>
 </table>
 
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#boot-loader----super-grub2">Boot loader &ndash; Super Grub2</a></li>
+    <li><a href="#linux-live-image-for-super-grub2">Linux Live image for Super Grub2</a></li>
+    <li><a href="#debianのインストール用の最小isoイメージ">Debianのインストール用の最小ISOイメージ</a></li>
+    <li><a href="#インストール後の追加作業">インストール後の追加作業</a></li>
+  </ul>
+</nav>
+
+<h2 id="boot-loader----super-grub2">Boot loader &ndash; Super Grub2</h2>
 <p>UEFIとかMBRとかある昨今のシステムに対応する、Rescue mediaを探しました。</p>
 <p>Grubのレスキューイメージもありますが、これを直接操るのは結構大変
 と思っていたら、
@@ -75,6 +87,7 @@ DOSのFATファイルシステムのメディアに複数書き込むだけで�
 </code></pre><p>これだとNVRAM variablesの更新他いろいろするようです。さらにBIOSの
 ブートの優先順位をさわることも有効でした。(古いMBなのでBIOSが賢くない
 気がしました。)</p>
+<h2 id="linux-live-image-for-super-grub2">Linux Live image for Super Grub2</h2>
 <p>実際にSuper Grub2に用意した8GBのUSBキーでは、レスキュー用のLinuxの
 Live imageとして以下のISOイメージを入れました。</p>
 <ul>
@@ -87,6 +100,7 @@ Live imageとして以下のISOイメージを入れました。</p>
 <p>ここで使うISOイメージですが、Debianの標準のインストール用の
 ISOイメージは、上記が用いるGrub2のループマウントでは
 使えないようです。</p>
+<h2 id="debianのインストール用の最小isoイメージ">Debianのインストール用の最小ISOイメージ</h2>
 <p>Debianの標準のインストール用のISOイメージは、全イメージを
 生のUSBキーに直接<code>cp</code>か<code>dd</code>で書いたものを準備する必要があります。
 １つ古い小さなUSBキーに書いて手元に置いています。</p>
@@ -94,6 +108,7 @@ ISOイメージは、上記が用いるGrub2のループマウントでは
 わたしは視力があり音声サポートがいらないので、D-Iが作っている
 <a href="https://d-i.debian.org/daily-images/amd64/daily/netboot/">mini.iso</a>
 を使っています。46MBと極端に小さいので便利です。</p>
+<h2 id="インストール後の追加作業">インストール後の追加作業</h2>
 <p>実際のインストールの際には、キーファイル(GNUPG/SSHデーター)に加え
 チェックアウトされた</p>
 <ul>
@@ -125,7 +140,7 @@ ISOイメージは、上記が用いるGrub2のループマウントでは
   
   
   <hr/>
-  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

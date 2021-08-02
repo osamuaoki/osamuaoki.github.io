@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/06/17 (initial publish),
-2021/07/19 (last update)
+2021/08/02 (last update)
 </h3>
 </div>
 
@@ -57,6 +57,17 @@
   </tbody>
 </table>
 
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#コンテナ技術を用いる仮想環境利用の考察">コンテナ技術を用いる仮想環境利用の考察</a></li>
+    <li><a href="#python-venv--pip-manual">Python: venv + pip (manual)</a></li>
+    <li><a href="#python-pipx-automatic">Python: pipx (automatic)</a></li>
+  </ul>
+</nav>
+
+<h2 id="コンテナ技術を用いる仮想環境利用の考察">コンテナ技術を用いる仮想環境利用の考察</h2>
 <p>コンテナ技術を用いる仮想環境は、外部から導入するバイナリーを実行する
 際のリスク低減とメインのシステムの環境コンタミを防ぐのには悪くないので
 しょう。そういった意味でtesting環境では安定しないオフィス関係のデスク
@@ -74,6 +85,7 @@ CLIから用いるのは面倒です。</p>
 益々そう感じます。</p>
 <p>chrootにせよLXCにせよKernel以外のシステム全体のコピーを各環境毎に確保する
 ので重いことは否めません。</p>
+<h2 id="python-venv--pip-manual">Python: venv + pip (manual)</h2>
 <p>Debianが提供しなくなった<a href="https://pypi.org/project/grip/">grip</a>を、
 <a href="https://pypi.org/">PyPI</a>からのPythonのモジュールとしてpipで導入すると、
 すでにシステムに導入済みのPythonのモジュールまで、sudoしなかったので
@@ -81,7 +93,6 @@ CLIから用いるのは面倒です。</p>
 <code>~/.local/</code>の中への変更のみとはいえ、そこに最新版を依存関係で導入したり
 するのが気になっていました。さすがにこれだけのためにchrootやコンテナ環境
 を作るのは重いのでPython環境だけを仮想化しました。</p>
-<h2 id="python-venv--pip-manual">Python: venv + pip (manual)</h2>
 <p><a href="https://pypi.org/project/grip/">grip</a>をPython環境だけを仮想化して導入した
 ので、以下に例示します。</p>
 <pre><code>$ pip list --user
@@ -171,7 +182,7 @@ $ ln -sf venv/bin/grip grip
   
   
   <hr/>
-  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>

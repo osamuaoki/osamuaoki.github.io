@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/02/09 (initial publish),
-2019/09/19 (last update)
+2021/08/02 (last update)
 </h3>
 </div>
 
@@ -57,6 +57,16 @@
   </tbody>
 </table>
 
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#initial-hugo-setups">Initial hugo setups</a></li>
+    <li><a href="#check-hugo-generated-web-page">Check hugo generated web page</a></li>
+  </ul>
+</nav>
+
+<h2 id="initial-hugo-setups">Initial hugo setups</h2>
 <p>Let&rsquo;s set up a local git repository for a simple personal web pages with blog
 support using <code>hugo</code> on Debian.</p>
 <pre><code> $ sudo apt-get install hugo
@@ -93,7 +103,8 @@ controlled by the <code>hugo-xmin</code> submodule to the parent repository.</p>
  $ git commit -m &quot;template web site&quot;
 ...
 
-</code></pre><p>Let&rsquo;s check this website using <code>hugo server</code> which builds and serves the site.</p>
+</code></pre><h2 id="check-hugo-generated-web-page">Check hugo generated web page</h2>
+<p>Let&rsquo;s check this website using <code>hugo server</code> which builds and serves the site.</p>
 <pre><code> $ hugo server
 
                    | EN
@@ -115,7 +126,9 @@ Serving pages from memory
 Running in Fast Render Mode. For full rebuilds on change: hugo server --disableFastRender
 Web Server is available at //localhost:1313/ (bind address 127.0.0.1)
 Press Ctrl+C to stop
-</code></pre><p>Then open another terminal and start your browser.</p>
+</code></pre><p>TIP: <code>-D</code> to generate draft page and <code>-F</code> to generate future page may be handy
+for <code>hugo server</code>.</p>
+<p>Then open another terminal and start your browser.</p>
 <pre><code> $ sensible-browser localhost:1313
 </code></pre><p>This will display the same contents as the <a href="https://xmin.yihui.name/">DEMO site</a>.</p>
 <!-- raw HTML omitted -->
@@ -141,7 +154,7 @@ Press Ctrl+C to stop
   
   
   <hr/>
-  © 2019-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
   
   </footer>
   </body>
