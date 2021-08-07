@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Build source with meson (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Build source with meson (1)</span></h1>
+
+<h3 class="date">Date:
+2021/08/06 (initial publish),
+2021/08/07 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/23/pygi-a/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#build-infrastructure-history">Build infrastructure history</a></li>
+    <li><a href="#learning-meson">Learning Meson</a></li>
+    <li><a href="#note">Note</a></li>
+  </ul>
+</nav>
+
+<p>Since around 2017,
+<a href="https://wiki.gnome.org/Initiatives/GnomeGoals/MesonPorting">GNOME has pushed to use Meson to build its associated programs</a>.
+I now have no choice but to learn
+<a href="https://mesonbuild.com/index.html">Meson</a>.</p>
+<p>Here is my learning process note.</p>
+<h2 id="build-infrastructure-history">Build infrastructure history</h2>
+<p><a href="https://en.wikipedia.org/wiki/GNU_Autotools">GNU Autotools</a> on top of
+<a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a>has been the de facto
+standard for the portable build infrastructure since 1990s.</p>
+<p><a href="https://en.wikipedia.org/wiki/Configure_script">Configure script</a> generation
+utility, <a href="https://en.wikipedia.org/wiki/Autoconf">GNU Autoconf</a> has been a core
+part of GNU Autotools but it was extremely slow to execute and was not
+intuitive to customize.  Root cause of problem were requirements for:</p>
+<ul>
+<li>writing portable Bourne shell script snippets to customize it</li>
+<li>relying on text substitutions by not-so-much-used <a href="https://en.wikipedia.org/wiki/M4_(computer_language)">M4</a></li>
+<li>generating configuration files by the slow Bourne shell</li>
+<li>relying on <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a> as the final build infrastructure</li>
+<li>supporting only string as the configuration data type</li>
+</ul>
+<p><a href="https://en.wikipedia.org/wiki/CMake">CMake</a> initially release in 2000,
+addressed the first 3 issues listed in the above.</p>
+<p><a href="https://en.wikipedia.org/wiki/Ninja_(build_system)">Ninja</a> initially release
+in 2012, addressed the 4th issue by offering the alternative smaller and faster
+low level build tool of <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a>.</p>
+<p><a href="https://mesonbuild.com/index.html">Meson</a>
+<a href="https://en.wikipedia.org/wiki/Ninja_(build_system)">Ninja</a> initially release
+in 2013, is a higher level build tool in line with the functionalities of
+<a href="https://en.wikipedia.org/wiki/GNU_Autotools">GNU Autotools</a> and
+<a href="https://en.wikipedia.org/wiki/CMake">CMake</a>.  It used
+<a href="https://en.wikipedia.org/wiki/Ninja_(build_system)">Ninja</a> as its low level
+build infrastructure and supports string, list and dictionary data types.</p>
+<p>(Some of the configuration syntax of <a href="https://mesonbuild.com/index.html">Meson</a>
+seems to resemble <a href="https://en.wikipedia.org/wiki/SCons">SCons</a> initially
+release in 2000.)</p>
+<p>(Since around 2016, <a href="https://en.wikipedia.org/wiki/CMake">CMake</a> also supports
+the use of <a href="https://en.wikipedia.org/wiki/Ninja_(build_system)">Ninja</a> as its
+low level build infrastructure but still limited to the string data type.)</p>
+<p><a href="https://mesonbuild.com/index.html">Meson</a> using
+<a href="https://en.wikipedia.org/wiki/Ninja_(build_system)">Ninja</a> as its backend
+seems to me the winner these days with its modular and declarative simple
+configuration file syntax and its execution speed.</p>
+<p>See:</p>
+<ul>
+<li><a href="https://piware.de/post/2020-11-06-meson/">Blog post on Meson from Martin Pitt in 2020</a></li>
+<li><a href="https://mesonbuild.com/Comparisons.html">Comparing Meson with other build systems</a></li>
+</ul>
+<h2 id="learning-meson">Learning Meson</h2>
+<p><a href="https://mesonbuild.com/Commands.html">Command line options and the environment variables of Meson</a>
+are very similar to what we use in more traditional
+<a href="https://en.wikipedia.org/wiki/GNU_Autotools">GNU Autotools</a> and
+<a href="https://en.wikipedia.org/wiki/CMake">CMake</a>, including <code>DESTDIR</code> and
+<code>prefix</code>.</p>
+<p>I read the following basic documents first:</p>
+<ul>
+<li><a href="https://mesonbuild.com/Tutorial.html">Tutorial</a> (read line-by-line)</li>
+<li><a href="https://mesonbuild.com/FAQ.html">FAQ</a> (read)</li>
+<li><a href="https://mesonbuild.com/Manual.html">Manual</a> (just browsed)</li>
+<li><a href="https://mesonbuild.com/Modules.html">Modules</a> (just browsed)</li>
+</ul>
+<p>Meson has a well documented native support of most compiler languages.  But for
+building documentation,
+<a href="https://hotdoc.github.io/">HotDoc documentation</a>
+is the only documentation platform with the native support on
+<a href="https://mesonbuild.com/index.html">Meson</a>
+by the
+<a href="https://mesonbuild.com/Hotdoc-module.html">Hotdoc module</a>.</p>
+<p>Many document building activities usually involve processing files with
+sed/perl/python-scripts, or XSLT-transformation-scripts.  The answer to &ldquo;How do
+I build documents with Meson?&rdquo; involves running external commands, creating
+custom targets, and creating generator objects.  The followings seem to be useful.</p>
+<ul>
+<li><a href="https://mesonbuild.com/External-commands.html">External commands</a>
+<ul>
+<li><a href="https://mesonbuild.com/Reference-manual.html#run_command">Reference manual: run_command()</a></li>
+</ul>
+</li>
+<li><a href="https://mesonbuild.com/Generating-sources.html">Generating sources</a>
+<ul>
+<li><a href="https://mesonbuild.com/Reference-manual.html#custom_target">Reference manual: custom_target()</a></li>
+<li><a href="https://mesonbuild.com/Reference-manual.html#generator">Reference manual: generator()</a></li>
+</ul>
+</li>
+<li><a href="https://mesonbuild.com/Custom-build-targets.html">Custom build targets</a>
+<ul>
+<li><a href="https://mesonbuild.com/Reference-manual.html#custom_target">Reference manual: custom_target()</a></li>
+</ul>
+</li>
+</ul>
+<p>As for i18n,
+<a href="https://mesonbuild.com/i18n-module.html">I18n module</a>
+provides internationalization and localization functionality.  An
+implementation example can be found at
+<a href="https://mesonbuild.com/Localisation.html">Localization</a>.</p>
+<h2 id="note">Note</h2>
+<p><a href="https://mesonbuild.com/Release-notes-for-0-57-0.html#support-for-reading-files-at-configuration-time-with-the-fs-module">Support for reading files at configuration time with the fs module</a>
+is not available on Debian Bullseye/11 since its Meson version is 0.56.2.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/07/23/pygi-a/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
