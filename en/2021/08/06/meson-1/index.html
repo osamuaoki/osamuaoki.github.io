@@ -177,6 +177,7 @@ implementation example can be found at
 <li><a href="https://mesonbuild.com/Release-notes-for-0-58-0.html#introducing-format-strings-to-the-meson-language">Support of format string</a> (0.58 feature)</li>
 <li><a href="https://mesonbuild.com/Release-notes-for-0-58-0.html#string-replace">Support of String .replace()</a> (0.58 feature)</li>
 <li><a href="https://mesonbuild.com/Release-notes-for-0-58-0.html#new-range-function">Support of range() function</a> (0.58 feature)</li>
+<li><a href="https://mesonbuild.com/Release-notes-for-0-59-0.html#the-custom_target-function-now-accepts-a-feed-argument">Support of feed for custom_target()</a> (0.59 feature)</li>
 <li><a href="https://mesonbuild.com/Release-notes-for-0-59-0.html#fs-module-now-accepts-files-objects">Support of accepting files objects by the fs module</a> (0.59 feature)</li>
 <li><a href="https://mesonbuild.com/Release-notes-for-0-59-0.html#the-import-function-gains-required-and-disabler-arguments">Support of required and disabler arguments by the import() function</a> (0.59 feature)</li>
 </ul>
@@ -250,6 +251,8 @@ foo = custom_target(&#39;default&#39;,
 echo &#34;@msg@&#34;
 </code></pre>
 </p>
+<p>(Please note, new <code>feed</code> feature is not used to be compatible with Meson
+version 0.56.2)</p>
 <p>Let&rsquo;s configure and build script <code>foo</code>:</p>
 <pre><code>$ meson setup build       # configure
 $ meson compile -C build  # build
