@@ -65,7 +65,12 @@
     <li><a href="#learning-meson">Learning Meson</a></li>
     <li><a href="#note-on-recent-feature-enhancements">Note on recent feature enhancements</a></li>
     <li><a href="#learning-ninja">Learning Ninja</a></li>
-    <li><a href="#impression-of-meson-and-ninja">Impression of Meson and Ninja</a></li>
+    <li><a href="#impression-of-meson-and-ninja">Impression of Meson and Ninja</a>
+      <ul>
+        <li><a href="#functionalities">Functionalities</a></li>
+        <li><a href="#example-for-run_command-and-custom_target">Example for <code>run_command()</code> and <code>custom_target()</code></a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -185,14 +190,14 @@ implementation example can be found at
 <li>Python3 scripts for Meson/Ninja</li>
 <li>POSIX shell scripts for Autotools/Makefile</li>
 </ul>
-<p>Functionalities</p>
+<h3 id="functionalities">Functionalities</h3>
 <ul>
 <li><code>meson setup</code> configures the project &ndash; <code>autoreconf -ivf</code></li>
 <li><code>meson configure</code> changes project options &ndash; <code>./configure --prefix=/usr ...</code></li>
 <li><code>meson compile</code> builds the project &ndash; <code>make</code></li>
 <li><code>meson install</code> installs the project &ndash; <code>make install</code></li>
 </ul>
-<p>Most compilers are supported and there are many examples.</p>
+<h3 id="example-for-run_command-and-custom_target">Example for <code>run_command()</code> and <code>custom_target()</code></h3>
 <p>Here is a text conversion example to generate a shell script:</p>
 
 <pre><code>project(&#39;foo&#39;, version : &#39;0.1&#39;)
@@ -258,6 +263,7 @@ echo &#34;motd=Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 </code></pre>
 </p>
 <p>TODO: install using <code>install_data</code>.</p>
+<p>Most compilers are well supported by Meson and there are many examples.</p>
 <!-- raw HTML omitted -->
 
 
