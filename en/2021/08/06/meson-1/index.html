@@ -65,8 +65,9 @@
     <li><a href="#learning-meson">Learning Meson</a></li>
     <li><a href="#note-on-recent-feature-enhancements">Note on recent feature enhancements</a></li>
     <li><a href="#learning-ninja">Learning Ninja</a></li>
-    <li><a href="#impression-of-meson-and-ninja">Impression of Meson and Ninja</a>
+    <li><a href="#note-on-meson-and-ninja">Note on Meson and Ninja</a>
       <ul>
+        <li><a href="#syntax">Syntax</a></li>
         <li><a href="#functionalities">Functionalities</a></li>
         <li><a href="#example-for-run_command-and-custom_target">Example for <code>run_command()</code> and <code>custom_target()</code></a></li>
       </ul>
@@ -184,7 +185,8 @@ implementation example can be found at
 <h2 id="learning-ninja">Learning Ninja</h2>
 <p>In order to grok <a href="https://mesonbuild.com/index.html">Meson</a> generated
 <code>build.ninja</code>, I browsed <a href="https://ninja-build.org/manual.html">The Ninja build system</a>.</p>
-<h2 id="impression-of-meson-and-ninja">Impression of Meson and Ninja</h2>
+<h2 id="note-on-meson-and-ninja">Note on Meson and Ninja</h2>
+<h3 id="syntax">Syntax</h3>
 <p>Meson uses single quotations for the string.</p>
 <p>For the cross platform customization, tutorial documents tend to use:</p>
 <ul>
@@ -198,6 +200,7 @@ implementation example can be found at
 <li><code>meson compile</code> builds the project &ndash; <code>make</code></li>
 <li><code>meson install</code> installs the project &ndash; <code>make install</code></li>
 </ul>
+<p>Please note <em>setup</em> is <em>configure</em>.  (confusing&hellip;)</p>
 <h3 id="example-for-run_command-and-custom_target">Example for <code>run_command()</code> and <code>custom_target()</code></h3>
 <p>Here is a text conversion example to generate a shell script:</p>
 
@@ -245,14 +248,14 @@ foo = custom_target(&#39;default&#39;,
 
 </code></pre>
 
+<p>(Please note, new <code>feed</code> feature is not used to be compatible with Meson
+version 0.56.2)</p>
 <p>This starts with this template file:
 
 <pre><code>#!/bin/sh
 echo &#34;@msg@&#34;
 </code></pre>
 </p>
-<p>(Please note, new <code>feed</code> feature is not used to be compatible with Meson
-version 0.56.2)</p>
 <p>Let&rsquo;s configure and build script <code>foo</code>:</p>
 <pre><code>$ meson setup build       # configure
 $ meson compile -C build  # build
