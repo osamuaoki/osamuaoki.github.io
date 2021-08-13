@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/08/06 (initial publish),
-2021/08/07 (last update)
+2021/08/14 (last update)
 </h3>
 </div>
 
@@ -63,7 +63,9 @@
   <ul>
     <li><a href="#build-infrastructure-history">Build infrastructure history</a></li>
     <li><a href="#learning-meson">Learning Meson</a></li>
-    <li><a href="#note">Note</a></li>
+    <li><a href="#note-on-recent-feature-enhancements">Note on recent feature enhancements</a></li>
+    <li><a href="#learning-ninja">Learning Ninja</a></li>
+    <li><a href="#impression-of-meson-and-ninja">Impression of Meson and Ninja</a></li>
   </ul>
 </nav>
 
@@ -92,8 +94,7 @@ addressed the first 3 issues listed in the above.</p>
 <p><a href="https://en.wikipedia.org/wiki/Ninja_(build_system)">Ninja</a> initially release
 in 2012, addressed the 4th issue by offering the alternative smaller and faster
 low level build tool of <a href="https://en.wikipedia.org/wiki/Make_(software)">Make</a>.</p>
-<p><a href="https://mesonbuild.com/index.html">Meson</a>
-<a href="https://en.wikipedia.org/wiki/Ninja_(build_system)">Ninja</a> initially release
+<p><a href="https://mesonbuild.com/index.html">Meson</a> initially release
 in 2013, is a higher level build tool in line with the functionalities of
 <a href="https://en.wikipedia.org/wiki/GNU_Autotools">GNU Autotools</a> and
 <a href="https://en.wikipedia.org/wiki/CMake">CMake</a>.  It used
@@ -161,9 +162,102 @@ custom targets, and creating generator objects.  The followings seem to be usefu
 provides internationalization and localization functionality.  An
 implementation example can be found at
 <a href="https://mesonbuild.com/Localisation.html">Localization</a>.</p>
-<h2 id="note">Note</h2>
-<p><a href="https://mesonbuild.com/Release-notes-for-0-57-0.html#support-for-reading-files-at-configuration-time-with-the-fs-module">Support for reading files at configuration time with the fs module</a>
-is not available on Debian Bullseye/11 since its Meson version is 0.56.2.</p>
+<h2 id="note-on-recent-feature-enhancements">Note on recent feature enhancements</h2>
+<p><a href="https://mesonbuild.com/index.html">Meson</a> is still in pre-1.0 stage as of July
+2021 and is evolving quickly.  Since the Meson version of Debian Bullseye/11 is
+0.56.2, some features may not work on Debian Bullseye/11.  Notable ones are:</p>
+<ul>
+<li><a href="https://mesonbuild.com/Release-notes-for-0-57-0.html#support-for-reading-files-at-configuration-time-with-the-fs-module">Support of reading files at configuration time with the fs module</a> (0.57 feature)</li>
+<li><a href="https://mesonbuild.com/Release-notes-for-0-58-0.html#multiple-append-and-prepend-in-environment-object">Support of multiple append() and prepend() in environment() object</a> (0.58 feature)</li>
+<li><a href="https://mesonbuild.com/Release-notes-for-0-58-0.html#introducing-format-strings-to-the-meson-language">Support of format string</a> (0.58 feature)</li>
+<li><a href="https://mesonbuild.com/Release-notes-for-0-58-0.html#string-replace">Support of String .replace()</a> (0.58 feature)</li>
+<li><a href="https://mesonbuild.com/Release-notes-for-0-58-0.html#new-range-function">Support of range() function</a> (0.58 feature)</li>
+<li><a href="https://mesonbuild.com/Release-notes-for-0-59-0.html#fs-module-now-accepts-files-objects">Support of accepting files objects by the fs module</a> (0.59 feature)</li>
+<li><a href="https://mesonbuild.com/Release-notes-for-0-59-0.html#the-import-function-gains-required-and-disabler-arguments">Support of required and disabler arguments by the import() function</a> (0.59 feature)</li>
+</ul>
+<h2 id="learning-ninja">Learning Ninja</h2>
+<p>In order to grok <a href="https://mesonbuild.com/index.html">Meson</a> generated
+<code>build.ninja</code>, I browsed <a href="https://ninja-build.org/manual.html">The Ninja build system</a>.</p>
+<h2 id="impression-of-meson-and-ninja">Impression of Meson and Ninja</h2>
+<p>Meson uses single quotations for the string.</p>
+<p>For the cross platform customization, tutorial documents tend to use:</p>
+<ul>
+<li>Python3 scripts for Meson/Ninja</li>
+<li>POSIX shell scripts for Autotools/Makefile</li>
+</ul>
+<p>Functionalities</p>
+<ul>
+<li><code>meson setup</code> configures the project &ndash; <code>autoreconf -ivf</code></li>
+<li><code>meson configure</code> changes project options &ndash; <code>./configure --prefix=/usr ...</code></li>
+<li><code>meson compile</code> builds the project &ndash; <code>make</code></li>
+<li><code>meson install</code> installs the project &ndash; <code>make install</code></li>
+</ul>
+<p>Most compilers are supported and there are many examples.</p>
+<p>Here is a text conversion example to generate a shell script:</p>
+
+<pre><code>project(&#39;foo&#39;, version : &#39;0.1&#39;)
+# run in setup
+date = find_program(&#39;date&#39;)
+sed = find_program(&#39;sed&#39;)
+sh = find_program(&#39;sh&#39;)
+cat = find_program(&#39;cat&#39;)
+
+datex = &#39;s/@timestamp@/&#39; &#43; run_command(date, &#39;--iso=sec&#39;, &#39;-u&#39;).stdout().strip() &#43; &#39;/&#39;
+versionx = &#39;s/@version@/&#39; &#43; meson.project_version() &#43; &#39;/&#39;
+hellox = &#39;s/@msg@/date=@timestamp@ version=@version@ -- Hello World!/&#39;
+
+# run in compile
+date1 = custom_target(&#39;date1&#39;,
+  capture : true,
+  output : &#39;date1&#39;,
+  command : [ date, &#39;--iso=sec&#39;, &#39;-u&#39; ])
+
+date2 = custom_target(&#39;date2&#39;,
+  input : date1,
+  capture : true,
+  output : &#39;date2&#39;,
+  command : [ sed, &#39;-e&#39;, &#39;s/^/echo &#34;date=/&#39;, &#39;-e&#39;, &#39;s/$/&#34;/&#39;, &#39;@INPUT@&#39; ])
+
+foo1 = custom_target(&#39;foo1&#39;,
+  input : &#39;foo0&#39;,
+  capture : true,
+  output : &#39;foo1&#39;,
+  command : [ sed, &#39;-e&#39;, hellox , &#39;-e&#39;, datex, &#39;-e&#39;, versionx, &#39;@INPUT@&#39;])
+
+sh1 = custom_target(&#39;sh1&#39;,
+  input : &#39;/etc/motd&#39;,
+  capture : true,
+  output : &#39;sh1&#39;,
+  command : [ sh, &#39;-c&#39;, &#39;cat /etc/motd | grep -e GNU | sed -e \&#39;s/^/echo &#34;motd=/\&#39; -e \&#39;s/$/&#34;/\&#39; &#39;])
+
+foo = custom_target(&#39;default&#39;,
+  input : [foo1, date2, sh1],
+  build_by_default: true,
+  capture : true,
+  output : &#39;foo&#39;,
+  command : [ cat, &#39;@INPUT@&#39;])
+
+</code></pre>
+
+<p>This starts with this template file:
+
+<pre><code>#!/bin/sh
+echo &#34;@msg@&#34;
+</code></pre>
+</p>
+<p>Let&rsquo;s configure and build script <code>foo</code>:</p>
+<pre><code>$ meson setup build       # configure
+$ meson compile -C build  # build
+</code></pre><p>Generated <code>foo</code>:
+
+<pre><code>#!/bin/sh
+echo &#34;date=2021-08-13T16:58:55&#43;00:00 version=0.1 -- Hello World!&#34;
+echo &#34;date=2021-08-13T16:59:10&#43;00:00&#34;
+echo &#34;motd=The programs included with the Debian GNU/Linux system are free software;&#34;
+echo &#34;motd=Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent&#34;
+</code></pre>
+</p>
+<p>TODO: install using <code>install_data</code>.</p>
 <!-- raw HTML omitted -->
 
 
