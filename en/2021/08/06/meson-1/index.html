@@ -65,9 +65,9 @@
     <li><a href="#learning-meson">Learning Meson</a></li>
     <li><a href="#note-on-recent-feature-enhancements">Note on recent feature enhancements</a></li>
     <li><a href="#learning-ninja">Learning Ninja</a></li>
-    <li><a href="#note-on-meson-and-ninja">Note on Meson and Ninja</a>
+    <li><a href="#note-on-meson">Note on Meson</a>
       <ul>
-        <li><a href="#syntax">Syntax</a></li>
+        <li><a href="#basics">Basics</a></li>
         <li><a href="#functionalities">Functionalities</a></li>
         <li><a href="#example-for-run_command-and-custom_target">Example for <code>run_command()</code> and <code>custom_target()</code></a></li>
       </ul>
@@ -185,9 +185,10 @@ implementation example can be found at
 <h2 id="learning-ninja">Learning Ninja</h2>
 <p>In order to grok <a href="https://mesonbuild.com/index.html">Meson</a> generated
 <code>build.ninja</code>, I browsed <a href="https://ninja-build.org/manual.html">The Ninja build system</a>.</p>
-<h2 id="note-on-meson-and-ninja">Note on Meson and Ninja</h2>
-<h3 id="syntax">Syntax</h3>
-<p>Meson uses single quotations for the string.</p>
+<h2 id="note-on-meson">Note on Meson</h2>
+<h3 id="basics">Basics</h3>
+<p>Meson is for out-of-tree building.
+Meson uses single quotations for the string.</p>
 <p>For the cross platform customization, tutorial documents tend to use:</p>
 <ul>
 <li>Python3 scripts for Meson/Ninja</li>
@@ -243,6 +244,9 @@ foo = custom_target(&#39;default&#39;,
   input : [foo1, date2, sh1],
   build_by_default: true,
   capture : true,
+  install : true,
+  install_dir : &#39;bin&#39;,
+  install_mode : &#39;rwxr-xr-x&#39;,
   output : &#39;foo&#39;,
   command : [ cat, &#39;@INPUT@&#39;])
 
@@ -258,17 +262,19 @@ echo &#34;@msg@&#34;
 </p>
 <p>Let&rsquo;s configure and build script <code>foo</code>:</p>
 <pre><code>$ meson setup build       # configure
-$ meson compile -C build  # build
-</code></pre><p>Generated <code>foo</code>:
+$ cd build
+$ meson configure --prefix=~
+$ meson compile           # build
+$ meson install
+</code></pre><p>This generates <code>foo</code> with <code>meson compile</code> and install it to <code>~/bin/foo</code> with <code>meson install</code>:
 
 <pre><code>#!/bin/sh
-echo &#34;date=2021-08-13T16:58:55&#43;00:00 version=0.1 -- Hello World!&#34;
-echo &#34;date=2021-08-13T16:59:10&#43;00:00&#34;
+echo &#34;date=2021-08-14T06:24:31&#43;00:00 version=0.1 -- Hello World!&#34;
+echo &#34;date=2021-08-14T06:24:31&#43;00:00&#34;
 echo &#34;motd=The programs included with the Debian GNU/Linux system are free software;&#34;
 echo &#34;motd=Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent&#34;
 </code></pre>
 </p>
-<p>TODO: install using <code>install_data</code>.</p>
 <p>Most compilers are well supported by Meson and there are many examples.</p>
 <!-- raw HTML omitted -->
 
