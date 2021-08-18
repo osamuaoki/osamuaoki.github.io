@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/07/19 (last update)
+2021/08/19 (last update)
 </h3>
 </div>
 
@@ -77,7 +77,7 @@
     </li>
     <li><a href="#schroot-infrastructure">Schroot infrastructure</a>
       <ul>
-        <li><a href="#creating-a-schroot-environment">Creating a schroot environment</a></li>
+        <li><a href="#creating-schroot-environments">Creating schroot environments</a></li>
         <li><a href="#easy-access-to-the-schroot-environment">Easy access to the schroot environment</a></li>
       </ul>
     </li>
@@ -403,49 +403,63 @@ builder = sbuild -A -s --source-only-changes -v -d unstable
 </code></pre><p>(Actually, with the above <code>~/.sbuidrc</code>, we should be able to skip options after
 <code>sbuild</code> here.)</p>
 <h2 id="schroot-infrastructure">Schroot infrastructure</h2>
-<p>For package development, creating the latest minimal chroot environment for
-each test build as sbuild does is time consuming.</p>
-<h3 id="creating-a-schroot-environment">Creating a schroot environment</h3>
-<p>Let&rsquo;s create a package pre-loaded unstable chroot environment which can run
-x-apps using the schroot directly. (My user name is &ldquo;osamu&rdquo; and my hostname is
-&ldquo;goofy&rdquo;.)</p>
-<pre><code>$ sudo cp -a /srv/chroot/unstable-amd64-sbuild-\* /srv/chroot/unstable-amd64-dev
-$ sudo cp -a /etc/schroot/desktop /etc/schroot/osamu
-$ sudo tee /etc/schroot/chroot.d/unstable-amd64-dev &lt;&lt; EOF
-[unstable-dev]
-description=Debian unstable/amd64 chroot development environment
-groups=root,sbuild
-root-groups=root,sbuild
-source-groups=root,sbuild
-source-root-groups=root,sbuild
-profile=osamu
-type=directory
-preserve-environment=true
-directory=/srv/chroot/unstable-amd64-dev
-union-type=overlay
-command-prefix=eatmydata
-EOF
-</code></pre><p>Let&rsquo;s install basic build environment packages to the schroot.</p>
-<pre><code>$ cd /
-$ sudo schroot -c source:unstable-dev -u root
-(unstable-dev)root@goofy:/# apt update; apt full-upgrade
-(unstable-dev)root@goofy:/# apt install aptitude vim nano- mc devscripts sudo gitk imediff fzf
-(unstable-dev)root@goofy:/# exit
-</code></pre><p>I further customize mount points by editing <code>/etc/schroot/osamu/fstab</code>.</p>
-<p>I also copy setting from the host PC for sudo, fzf, &hellip; and
-add a few symlinks from <code>/home/osamu</code> to <code>/root</code> as in the host PC.</p>
+<p>For package development, creating the test build environment starting from the
+latest minimal chroot environment is time consuming.  For this situation, it&rsquo;s
+better to have all required packages installed.</p>
+<h3 id="creating-schroot-environments">Creating schroot environments</h3>
+<p>Let&rsquo;s create package pre-loaded chroot environments which can run x-apps using
+the schroot directly using a configuration based on <code>/etc/schroot/desktop/</code>.
+(My user name is &ldquo;osamu&rdquo; and my hostname is &ldquo;goofy&rdquo;.)</p>
+<p>Since this is a bit repetitive tasks for oldstable, stable, testing, and
+unstable, I created a simple shell script:</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/distsh">https://github.com/osamuaoki/osamu-utils/blob/main/distsh</a></li>
+</ul>
+<pre><code>$ distsh h
+NAME
+    distsh - start a shell in chroot with current home data etc.
+
+SYNOPSIS
+    distsh [|init|prep|upgrade]
+
+DESCRIPTION
+    Start persistent (source) chroot with schroot with
+    current home data based on the ${DIST} environment.
+    If DIST is unset, it defaults to 'unstable'
+
+    If 'init' is given as an argument, this initialize schroot
+    environment for this command and sbuild.
+      * /srv/chroot/${DIST}-amd64-sbuild used by sbuild as a minimum system
+      * /srv/chroot/${DIST}-amd64-term used by this program to start
+        terminal shell prompt as a source chroot of a loaded system
+
+    If 'prep' is given as an argument, this update schroot
+    environment with basic extra packages normally needed in
+    /srv/chroot/${DIST}-amd64-term
+
+    If 'upgrade' is given as an argument, this update schroot
+    environment
+</code></pre><p>I further customize mount points by editing my custom configuration
+<code>/etc/schroot/osamu/fstab</code> based on <code>/etc/schroot/desktop/fstab</code></p>
+<ul>
+<li>Explicitly bind mount subdirectories under my home directory which is on
+different device (including Btrfs subvolume).</li>
+<li>Bind mount /root</li>
+</ul>
 <h3 id="easy-access-to-the-schroot-environment">Easy access to the schroot environment</h3>
-<p>In order to access the pertinent schroot environment, I added 2 alias definitions.</p>
-<pre><code>$ echo 'alias devs=&quot;schroot -c source:unstable-dev&quot;' &gt;&gt;~/.bash_aliases
-$ echo 'alias devx=&quot;xhost +si:localuser:osamu ; schroot -c chroot:unstable-dev ; xhost -&quot;' &gt;&gt;~/.bash_aliases
-$ . .bashrc
-</code></pre><p>The <code>devs</code> command opens a shell prompt and allows us to modify the source
-chroot environment.  The changes made are persistent.  This is good for
-installing and upgrading packages in the chroot.</p>
-<p>The <code>devx</code> command opens a shell prompt and allows us to work in a chroot
-session to build a source tree with access to X applications such as <code>gitk</code> as
-usual.  The changes made aren&rsquo;t persistent.</p>
-<h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
+<p>In order to access the unstable chroot environment, I simply type.</p>
+<pre><code>$ distsh
+</code></pre><p>In order to update the unstable chroot environment, I simply type.</p>
+<pre><code>$ distsh upgrade
+</code></pre><p>In order to access the oldstable chroot environment, I simply type.</p>
+<pre><code>$ DIST=oldstable distsh
+</code></pre><p>In order to update the oldstable chroot environment, I simply type.</p>
+<pre><code>$ DIST=oldstable distsh upgrade
+</code></pre><p>For updating unstable chroot used by sbuild, use the standard command.</p>
+<pre><code>$ sbuild-update -udcar unstable
+</code></pre><p>For updating oldstable chroot used by sbuild, use the standard command.</p>
+<pre><code>$ sbuild-update -udcar oldstable
+</code></pre><h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
 <li>Read /usr/share/doc/libvirt-daemon/README.Debian.gz and follow it.</li>
