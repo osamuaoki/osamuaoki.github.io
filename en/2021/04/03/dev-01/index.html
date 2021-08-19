@@ -73,12 +73,13 @@
         <li><a href="#bench-mark">Bench mark</a></li>
         <li><a href="#package-build-with-sbuild">Package build with sbuild</a></li>
         <li><a href="#gbp-buildpackage-configuration">gbp-buildpackage configuration</a></li>
+        <li><a href="#access-to-the-source-chroot-environment-used-by-sbuild-as-root">Access to the source chroot environment used by sbuild as root</a></li>
       </ul>
     </li>
-    <li><a href="#schroot-infrastructure">Schroot infrastructure</a>
+    <li><a href="#schroot-infrastructure-shared-data-persistent">Schroot infrastructure (shared data, persistent)</a>
       <ul>
-        <li><a href="#creating-schroot-environments">Creating schroot environments</a></li>
-        <li><a href="#easy-access-to-the-schroot-environment">Easy access to the schroot environment</a></li>
+        <li><a href="#creating-pre-loaded-chroot-environments-for-schroot">Creating pre-loaded chroot environments for schroot</a></li>
+        <li><a href="#access-to-the-persistent-chroot-environment-as-user">Access to the persistent chroot environment as user</a></li>
       </ul>
     </li>
     <li><a href="#install-vm-infrastructure">Install VM infrastructure</a>
@@ -402,63 +403,81 @@ builder = sbuild -A -s --source-only-changes -v -d unstable
 ...
 </code></pre><p>(Actually, with the above <code>~/.sbuidrc</code>, we should be able to skip options after
 <code>sbuild</code> here.)</p>
-<h2 id="schroot-infrastructure">Schroot infrastructure</h2>
+<h3 id="access-to-the-source-chroot-environment-used-by-sbuild-as-root">Access to the source chroot environment used by sbuild as root</h3>
+<p>In order to access the minimum unstable chroot environment used by sbuild, use the standard command.</p>
+<pre><code>$ sudo sbuild-shell u
+</code></pre><p>In order to update the minimum unstable chroot environment used by sbuild, use the standard command.</p>
+<pre><code>$ sudo sbuild-update -udcar u
+</code></pre><p>In order to access the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
+<pre><code>$ sudo schroot-shell -u o
+</code></pre><p>In order to update the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
+<pre><code>$ sudo sbuild-update -udcar o
+</code></pre><h2 id="schroot-infrastructure-shared-data-persistent">Schroot infrastructure (shared data, persistent)</h2>
 <p>For package development, creating the test build environment starting from the
 latest minimal chroot environment is time consuming.  For this situation, it&rsquo;s
 better to have all required packages installed.</p>
-<h3 id="creating-schroot-environments">Creating schroot environments</h3>
+<h3 id="creating-pre-loaded-chroot-environments-for-schroot">Creating pre-loaded chroot environments for schroot</h3>
 <p>Let&rsquo;s create package pre-loaded chroot environments which can run x-apps using
 the schroot directly using a configuration based on <code>/etc/schroot/desktop/</code>.
 (My user name is &ldquo;osamu&rdquo; and my hostname is &ldquo;goofy&rdquo;.)</p>
 <p>Since this is a bit repetitive tasks for oldstable, stable, testing, and
 unstable, I created a simple shell script:</p>
 <ul>
-<li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/distsh">https://github.com/osamuaoki/osamu-utils/blob/main/distsh</a></li>
+<li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell">https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell</a></li>
 </ul>
-<pre><code>$ distsh h
+<pre><code>$ schroot-shell -h
 NAME
-    distsh - start a shell in chroot with current home data etc.
+    schroot-shell - start a shell in chroot with current home data.
 
 SYNOPSIS
-    distsh [|init|prep|upgrade]
+    schroot-shell [|--init|--prep|--upgrade] [DIST]
 
 DESCRIPTION
-    Start persistent (source) chroot with schroot with
-    current home data based on the ${DIST} environment.
-    If DIST is unset, it defaults to 'unstable'
+    This is modeled after *sbuild-shell* and *sbuild-update* commands.
 
-    If 'init' is given as an argument, this initialize schroot
-    environment for this command and sbuild.
-      * /srv/chroot/${DIST}-amd64-sbuild used by sbuild as a minimum system
-      * /srv/chroot/${DIST}-amd64-term used by this program to start
-        terminal shell prompt as a source chroot of a loaded system
+    This normally starts persistent (source) chroot environment for the
+    DIST distribution and provides a shell prompt in the current console
+    terminal with access to the data in the current home directory.
 
-    If 'prep' is given as an argument, this update schroot
-    environment with basic extra packages normally needed in
-    /srv/chroot/${DIST}-amd64-term
+    If DIST is unset, '${DIST}' environment variable is used instead.
+    If '${DIST}' environment variable is also unset, 'unstable' is used.
 
-    If 'upgrade' is given as an argument, this update schroot
-    environment
+    DIST can be 'unstable', 'testing', 'stable', 'oldstable', or 'oldoldstable'.
+    DIST can be their shortforms, i.e., 'u', 't', 's', 'o', or 'oo'.
+
+    If '--init' or '-i' is given as an option, this initializes schroot
+    environment for this command and optionally for sbuild.
+      * '/srv/chroot/${DIST}-amd64-sbuild' used by sbuild as a minimum system
+      * '/srv/chroot/${DIST}-amd64-term' used by this program to start
+        the terminal shell prompt as a source chroot of a loaded system
+
+    If '--prep' or '-p' is given as an option, this updates schroot
+    environment with basic extra packages normally needed for the console
+    terminal operations to '/srv/chroot/${DIST}-amd64-term'
+
+    If '--upgrade' or '-u' is given as an option, this updates schroot
+    environment of '/srv/chroot/${DIST}-amd64-term'
+
+    A customized schroot profile based on '/etc/schroot/desktop/*' needs
+    to be created.  Currently '/etc/schroot/osamu/*' profile
+    is used.  This default profile can be changed to '/etc/schroot/foo/*'
+    by setting '${SCHROOT_PROFILE}' environment variable to 'foo'.
 </code></pre><p>I further customize mount points by editing my custom configuration
 <code>/etc/schroot/osamu/fstab</code> based on <code>/etc/schroot/desktop/fstab</code></p>
 <ul>
-<li>Explicitly bind mount subdirectories under my home directory which is on
-different device (including Btrfs subvolume).</li>
+<li>Explicitly bind mount subdirectories under my home directory which are on
+different devices (including Btrfs subvolumes).</li>
 <li>Bind mount /root</li>
 </ul>
-<h3 id="easy-access-to-the-schroot-environment">Easy access to the schroot environment</h3>
-<p>In order to access the unstable chroot environment, I simply type.</p>
-<pre><code>$ distsh
-</code></pre><p>In order to update the unstable chroot environment, I simply type.</p>
-<pre><code>$ distsh upgrade
-</code></pre><p>In order to access the oldstable chroot environment, I simply type.</p>
-<pre><code>$ DIST=oldstable distsh
-</code></pre><p>In order to update the oldstable chroot environment, I simply type.</p>
-<pre><code>$ DIST=oldstable distsh upgrade
-</code></pre><p>For updating unstable chroot used by sbuild, use the standard command.</p>
-<pre><code>$ sbuild-update -udcar unstable
-</code></pre><p>For updating oldstable chroot used by sbuild, use the standard command.</p>
-<pre><code>$ sbuild-update -udcar oldstable
+<h3 id="access-to-the-persistent-chroot-environment-as-user">Access to the persistent chroot environment as user</h3>
+<p>In order to access the pre-loaded unstable chroot environment, I simply type.</p>
+<pre><code>$ schroot-shell
+</code></pre><p>In order to update the pre-loaded unstable chroot environment, I simply type.</p>
+<pre><code>$ schroot-shell -u
+</code></pre><p>In order to access the pre-loaded oldstable chroot environment, I simply type.</p>
+<pre><code>$ schroot-shell o
+</code></pre><p>In order to update the pre-loaded oldstable chroot environment, I simply type.</p>
+<pre><code>$ schroot-shell -u o
 </code></pre><h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
