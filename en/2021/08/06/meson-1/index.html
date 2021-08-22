@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/08/06 (initial publish),
-2021/08/15 (last update)
+2021/08/22 (last update)
 </h3>
 </div>
 
@@ -70,6 +70,7 @@
         <li><a href="#basics">Basics</a></li>
         <li><a href="#functionalities">Functionalities</a></li>
         <li><a href="#example-for-run_command-and-custom_target">Example for <code>run_command()</code> and <code>custom_target()</code></a></li>
+        <li><a href="#abusing-meson-with-shell-codes">Abusing meson with shell codes</a></li>
       </ul>
     </li>
   </ul>
@@ -238,7 +239,9 @@ sh1 = custom_target(&#39;sh1&#39;,
   input : &#39;/etc/motd&#39;,
   capture : true,
   output : &#39;sh1&#39;,
-  command : [ sh, &#39;-c&#39;, &#39;cat /etc/motd | grep -e GNU | sed -e \&#39;s/^/echo &#34;motd=/\&#39; -e \&#39;s/$/&#34;/\&#39; &#39;])
+  command : [ sh, &#39;-c&#39;,
+      &#39;cat /etc/motd | grep -e GNU | sed -e \&#39;s/^/echo &#34;motd=/\&#39; -e \&#39;s/$/&#34;/\&#39; &#39;
+    ])
 
 foo = custom_target(&#39;default&#39;,
   input : [foo1, date2, sh1],
@@ -269,13 +272,79 @@ $ meson install
 </code></pre><p>This generates <code>foo</code> with <code>meson compile</code> and install it to <code>~/bin/foo</code> with <code>meson install</code>:
 
 <pre><code>#!/bin/sh
-echo &#34;date=2021-08-14T06:24:31&#43;00:00 version=0.1 -- Hello World!&#34;
-echo &#34;date=2021-08-14T06:24:31&#43;00:00&#34;
+echo &#34;date=2021-08-22T07:24:15&#43;00:00 version=0.1 -- Hello World!&#34;
+echo &#34;date=2021-08-22T07:25:13&#43;00:00&#34;
 echo &#34;motd=The programs included with the Debian GNU/Linux system are free software;&#34;
 echo &#34;motd=Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent&#34;
 </code></pre>
 </p>
 <p>Most compilers are well supported by Meson and there are many examples.</p>
+<h3 id="abusing-meson-with-shell-codes">Abusing meson with shell codes</h3>
+<p>Please note that if we don&rsquo;t worry about Windows, we can embed shell codes
+almost as in the case of <code>Makefile</code>.</p>
+<p>Notable things are:</p>
+<ul>
+<li>You should not have multiple lines between a set of single quotes.</li>
+<li>New line between a set of triple quotes are mere whitespaces to the shell.</li>
+</ul>
+<p>Here is an example of handling of long lines and quoted lines.</p>
+
+<pre><code>project(&#39;foo&#39;, version : &#39;0.1&#39;)
+# run in setup
+date = find_program(&#39;date&#39;)
+sed = find_program(&#39;sed&#39;)
+sh = find_program(&#39;sh&#39;)
+cat = find_program(&#39;cat&#39;)
+
+datex = &#39;s/@timestamp@/&#39; &#43; run_command(date, &#39;--iso=sec&#39;, &#39;-u&#39;).stdout().strip() &#43; &#39;/&#39;
+versionx = &#39;s/@version@/&#39; &#43; meson.project_version() &#43; &#39;/&#39;
+hellox = &#39;s/@msg@/date=@timestamp@ version=@version@ -- Hello World!/&#39;
+
+# run in compile
+date1 = custom_target(&#39;date1&#39;,
+  capture : true,
+  output : &#39;date1&#39;,
+  command : [ date, &#39;--iso=sec&#39;, &#39;-u&#39; ])
+
+date2 = custom_target(&#39;date2&#39;,
+  input : date1,
+  capture : true,
+  output : &#39;date2&#39;,
+  command : [ sed, &#39;-e&#39;, &#39;s/^/echo &#34;date=/&#39;, &#39;-e&#39;, &#39;s/$/&#34;/&#39;, &#39;@INPUT@&#39; ])
+
+# Some NLs are OK and act as just whitespaces
+foo1 = custom_target(&#39;foo1&#39;,
+  input : &#39;foo0&#39;,
+  capture : true,
+  output : &#39;foo1&#39;,
+  command : [ sh, &#39;-c&#39;,
+      &#39;sed -e \&#39;&#39; &#43; hellox &#43; &#39;\&#39; -e \&#39;&#39; &#43; datex &#43; &#39;\&#39; -e \&#39;&#39;
+	  &#43; versionx &#43; &#39;\&#39; @INPUT@&#39;
+    ])
+
+# Triple-single-quote disables escaping
+# NLs in triple-single-quotes become just whitespaces
+sh1 = custom_target(&#39;sh1&#39;,
+  input : &#39;/etc/motd&#39;,
+  capture : true,
+  output : &#39;sh1&#39;,
+  command : [ sh, &#39;-c&#39;,
+      &#39;&#39;&#39;cat /etc/motd |
+      grep -e GNU |
+      sed -e &#39;s/^/echo &#34;motd=/&#39; -e &#39;s/$/&#34;/&#39; &#39;&#39;&#39;
+    ])
+
+foo = custom_target(&#39;default&#39;,
+  input : [foo1, date2, sh1],
+  build_by_default: true,
+  capture : true,
+  install : true,
+  install_dir : &#39;bin&#39;,
+  install_mode : &#39;rwxr-xr-x&#39;,
+  output : &#39;foo&#39;,
+  command : [ cat, &#39;@INPUT@&#39;])
+</code></pre>
+
 <!-- raw HTML omitted -->
 
 
