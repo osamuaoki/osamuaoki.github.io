@@ -415,11 +415,12 @@ builder = sbuild -A -s --source-only-changes -v -d unstable
 </code></pre><h2 id="schroot-infrastructure-shared-data-persistent">Schroot infrastructure (shared data, persistent)</h2>
 <p>For package development, creating the test build environment starting from the
 latest minimal chroot environment is time consuming.  For this situation, it&rsquo;s
-better to have all required packages installed.</p>
+better to have all required packages installed and have access to data in your
+home directory.</p>
 <h3 id="creating-pre-loaded-chroot-environments-for-schroot">Creating pre-loaded chroot environments for schroot</h3>
 <p>Let&rsquo;s create package pre-loaded chroot environments which can run x-apps using
-the schroot directly using a configuration based on <code>/etc/schroot/desktop/</code>.
-(My user name is &ldquo;osamu&rdquo; and my hostname is &ldquo;goofy&rdquo;.)</p>
+the schroot directly using a configuration profile based on
+<code>/etc/schroot/desktop/</code>.  (My user name is &ldquo;osamu&rdquo; and my hostname is &ldquo;goofy&rdquo;.)</p>
 <p>Since this is a bit repetitive tasks for oldstable, stable, testing, and
 unstable, I created a simple shell script:</p>
 <ul>
@@ -433,40 +434,41 @@ SYNOPSIS
     schroot-shell [|--init|--prep|--upgrade] [DIST]
 
 DESCRIPTION
-    This is modeled after *sbuild-shell* and *sbuild-update* commands.
+    This helps you to work with persistent pre-loaded (source) chroot
+    environment and is modeled after *sbuild-shell* and *sbuild-update*
+    but uses an independent chroot which is not used by sbuild.
 
-    A customized schroot profile based on '/etc/schroot/desktop/*' needs
-    to be created.  Currently '/etc/schroot/term/*' profile
-    is used.  This default profile can be changed to '/etc/schroot/foo/*'
-    by setting '${SCHROOT_PROFILE}' environment variable to 'foo'.
+    This uses schroot profile 'desktop'.  You must customize this
+    profile at '/etc/schroot/desktop/fstab' to list all mounted
+    devices in your home directory.  The actual profile used can be
+    changed by setting the '${SCHROOT_PROFILE}' environment variable.
 
     This normally starts persistent (source) chroot environment for the
     DIST distribution and provides a shell prompt in the current console
-    terminal with access to the data in the current home directory.
+    terminal with access to the data in your home directory.
     This is modeled after *sbuild-shell*.
 
     If DIST is unset, '${DIST}' environment variable is used instead.
     If '${DIST}' environment variable is also unset, 'unstable' is used.
 
-    DIST can be 'unstable', 'testing', 'stable', 'oldstable', or 'oldoldstable'.
-    DIST can be their shortforms, i.e., 'u', 't', 's', 'o', or 'oo'.
+    DIST can be 'unstable', 'testing', 'stable', 'oldstable', or
+    'oldoldstable'; and can be shortened as 'u', 't', 's', 'o', or 'oo'.
 
     If '--init' or '-i' is given as an option, this initializes schroot
     environment for this command and optionally for sbuild.
       * '/srv/chroot/${DIST}-amd64-sbuild' used by sbuild as a minimum system.
-      * '/srv/chroot/${DIST}-amd64-term' used by this program to
+      * '/srv/chroot/${DIST}-amd64-desktop' used by this program to
         start the terminal shell prompt as a source chroot of a loaded system.
     This is a wrapper around *sbuild-createchroot*.
 
     If '--prep' or '-p' is given as an option, this updates schroot
     environment with basic extra packages normally needed for the console
-    terminal operations to '/srv/chroot/${DIST}-amd64-term'
+    terminal operations to '/srv/chroot/${DIST}-amd64-desktop'
 
     If '--upgrade' or '-u' is given as an option, this updates schroot
-    environment of '/srv/chroot/${DIST}-amd64-term'
+    environment of '/srv/chroot/${DIST}-amd64-desktop'
     This is modeled after *sbuild-update*.
-</code></pre><p>I further customize mount points by editing my custom configuration
-<code>/etc/schroot/term/fstab</code> based on <code>/etc/schroot/desktop/fstab</code></p>
+</code></pre><p>I customized my desktop profile at <code>/etc/schroot/desktop/fstab</code> as follows:</p>
 <ul>
 <li>Explicitly bind mount subdirectories under my home directory which are on
 different devices (including Btrfs subvolumes).</li>
