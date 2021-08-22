@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/08/19 (last update)
+2021/08/22 (last update)
 </h3>
 </div>
 
@@ -435,9 +435,15 @@ SYNOPSIS
 DESCRIPTION
     This is modeled after *sbuild-shell* and *sbuild-update* commands.
 
+    A customized schroot profile based on '/etc/schroot/desktop/*' needs
+    to be created.  Currently '/etc/schroot/term/*' profile
+    is used.  This default profile can be changed to '/etc/schroot/foo/*'
+    by setting '${SCHROOT_PROFILE}' environment variable to 'foo'.
+
     This normally starts persistent (source) chroot environment for the
     DIST distribution and provides a shell prompt in the current console
     terminal with access to the data in the current home directory.
+    This is modeled after *sbuild-shell*.
 
     If DIST is unset, '${DIST}' environment variable is used instead.
     If '${DIST}' environment variable is also unset, 'unstable' is used.
@@ -447,9 +453,10 @@ DESCRIPTION
 
     If '--init' or '-i' is given as an option, this initializes schroot
     environment for this command and optionally for sbuild.
-      * '/srv/chroot/${DIST}-amd64-sbuild' used by sbuild as a minimum system
-      * '/srv/chroot/${DIST}-amd64-term' used by this program to start
-        the terminal shell prompt as a source chroot of a loaded system
+      * '/srv/chroot/${DIST}-amd64-sbuild' used by sbuild as a minimum system.
+      * '/srv/chroot/${DIST}-amd64-term' used by this program to
+        start the terminal shell prompt as a source chroot of a loaded system.
+    This is a wrapper around *sbuild-createchroot*.
 
     If '--prep' or '-p' is given as an option, this updates schroot
     environment with basic extra packages normally needed for the console
@@ -457,13 +464,9 @@ DESCRIPTION
 
     If '--upgrade' or '-u' is given as an option, this updates schroot
     environment of '/srv/chroot/${DIST}-amd64-term'
-
-    A customized schroot profile based on '/etc/schroot/desktop/*' needs
-    to be created.  Currently '/etc/schroot/osamu/*' profile
-    is used.  This default profile can be changed to '/etc/schroot/foo/*'
-    by setting '${SCHROOT_PROFILE}' environment variable to 'foo'.
+    This is modeled after *sbuild-update*.
 </code></pre><p>I further customize mount points by editing my custom configuration
-<code>/etc/schroot/osamu/fstab</code> based on <code>/etc/schroot/desktop/fstab</code></p>
+<code>/etc/schroot/term/fstab</code> based on <code>/etc/schroot/desktop/fstab</code></p>
 <ul>
 <li>Explicitly bind mount subdirectories under my home directory which are on
 different devices (including Btrfs subvolumes).</li>
