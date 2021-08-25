@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/24 (initial publish),
-2021/07/13 (last update)
+2021/08/25 (last update)
 </h3>
 </div>
 
@@ -61,7 +61,7 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#osamuaoki00-vimrc"><code>osamuaoki/00-vimrc</code></a>
+    <li><a href="#vimvimrc"><code>~/.vim/vimrc</code></a>
       <ul>
         <li><a href="#map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</a></li>
         <li><a href="#map-q-to-q-in-normal-mode">Map <code>Q</code> to <code>@q</code> in NORMAL MODE</a></li>
@@ -71,24 +71,18 @@
     <li><a href="#ntpetersvim-better-whitespace"><code>ntpeters/vim-better-whitespace</code></a></li>
     <li><a href="#nathanaelkanevim-indent-guides"><code>nathanaelkane/vim-indent-guides</code></a></li>
     <li><a href="#osamuaokivim-spell-under"><code>osamuaoki/vim-spell-under</code></a></li>
-    <li><a href="#romainlvim-qlist"><code>romainl/vim-qlist</code></a></li>
     <li><a href="#vim-airlinevim-airline"><code>vim-airline/vim-airline</code></a></li>
-    <li><a href="#dense-analysisale"><code>dense-analysis/ale</code></a>
-      <ul>
-        <li><a href="#airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></a></li>
-      </ul>
-    </li>
+    <li><a href="#dense-analysisale"><code>dense-analysis/ale</code></a></li>
+    <li><a href="#romainlvim-qlist"><code>romainl/vim-qlist</code></a></li>
+    <li><a href="#not-used-airbladevim-gitgutter">NOT USED: <code>airblade/vim-gitgutter</code></a></li>
   </ul>
 </nav>
 
 <p>Let&rsquo;s review a few interesting plugins.</p>
-<p>Please note that I manage plugins via GUI reconfiguration framework using the
-<code>vimconf</code> command.  See
-<a href="https://github.com/osamuaoki/dot-vim">osamuaoki/dot-vim</a>.  I admit my scheme
-is not the main stream one.</p>
-<p>As of 2021-04-01, I enabled:</p>
+<p>Please note that I manage plugins via Vim 8&rsquo;s native plugin management
+framework.</p>
+<p>As of 2021-08-27, I enabled:</p>
 <ul>
-<li>00-vimrc</li>
 <li>ale</li>
 <li>vim-airline</li>
 <li>vim-airline-themes (automatic)</li>
@@ -97,15 +91,13 @@ is not the main stream one.</p>
 <li>vim-spell-under</li>
 </ul>
 <p>(vim-gitgutter is interesting but I don&rsquo;t work on repo with many contributors.)</p>
-<p>Please note very basic configuration is at
+<p>Please note some basic configuration settings including plugin management are at
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">~/.vim/vimrc</a>.</p>
 <p>All other initialization code is provided as plugin.</p>
 <p>Basic rule: Less customization is better.</p>
 <p>For hard to reach Esc-key issue, use CapsLock for it via GNOME Tweak setting.</p>
-<h2 id="osamuaoki00-vimrc"><code>osamuaoki/00-vimrc</code></h2>
-<p>My kitchen sink initialization
-<a href="https://github.com/osamuaoki/00-vimrc/blob/master/plugin/00-vimrc.vim">script</a>.</p>
-<p>Let&rsquo;s list its highlights.</p>
+<h2 id="vimvimrc"><code>~/.vim/vimrc</code></h2>
+<p>Let&rsquo;s list highlight of configuraton.</p>
 <h3 id="map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</h3>
 <p>Adjust PASTE MODE by <code>F2</code>-key.</p>
 <pre><code>set nopaste
@@ -150,15 +142,6 @@ underline.</p>
 <p>See my
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/conf/preconf.available/vim-qlist">configuration</a>
 for an example configuration.</p>
-<h2 id="romainlvim-qlist"><code>romainl/vim-qlist</code></h2>
-<p>Native behavior of <code>[I</code>, <code>]I</code>, <code>[D</code>, and <code>]D</code> to search the keyword and the
-macro definition is a bit half baked.  It should be much nicer if it allows to
-jump to pertinent positions as in the QuickFix list.</p>
-<p>This script replaces these NORMAL MODE commands with more desirable behavior
-ones of the QuickFix list.</p>
-<p>See my
-<a href="https://github.com/osamuaoki/dot-vim/blob/master/conf/preconf.available/vim-qlist">configuration</a>
-for an example configuration.</p>
 <h2 id="vim-airlinevim-airline"><code>vim-airline/vim-airline</code></h2>
 <p>I understand this is only visual sugar candy and not much functionality
 improvement as Gurus told me.</p>
@@ -178,8 +161,15 @@ vim-airline is active, this setting is overridden.</p>
 <h2 id="dense-analysisale"><code>dense-analysis/ale</code></h2>
 <p><strong>This is used a lot</strong></p>
 <p>Very nice syntax checker.</p>
-<h3 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h3>
-<p><strong>This is not used but interesting.  I disable this via vimconf</strong></p>
+<h2 id="romainlvim-qlist"><code>romainl/vim-qlist</code></h2>
+<p><strong>This is not used but interesting.  (commented out)</strong></p>
+<p>Native behavior of <code>[I</code>, <code>]I</code>, <code>[D</code>, and <code>]D</code> to search the keyword and the
+macro definition is a bit half baked.  It should be much nicer if it allows to
+jump to pertinent positions as in the QuickFix list.</p>
+<p>This script replaces these NORMAL MODE commands with more desirable behavior
+ones of the QuickFix list.</p>
+<h2 id="not-used-airbladevim-gitgutter">NOT USED: <code>airblade/vim-gitgutter</code></h2>
+<p><strong>This is not used but interesting. (not used recently under this configuration)</strong></p>
 <p>Checks diff from the repository contents asynchronously without blocking editor
 response and mark changed lines.</p>
 <!-- raw HTML omitted -->
