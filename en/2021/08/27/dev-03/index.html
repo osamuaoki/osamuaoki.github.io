@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Development system (3) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Development system (3)</span></h1>
+
+<h3 class="date">Date:
+2021/08/27 (initial publish),
+2021/08/28 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/08/06/meson-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#shell">Shell</a>
+      <ul>
+        <li><a href="#shellcheck">shellcheck</a></li>
+        <li><a href="#vim-as-formtter">vim as formtter</a></li>
+      </ul>
+    </li>
+    <li><a href="#python">Python</a>
+      <ul>
+        <li><a href="#pylint">pylint</a></li>
+        <li><a href="#flake8----wrapper-around-pycodestyle-and-pyflakes-">flake8 &ndash; wrapper around pycodestyle and pyflakes &hellip;</a></li>
+        <li><a href="#black----formatter">Black &ndash; formatter</a></li>
+        <li><a href="#isort----formatter">isort &ndash; formatter</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>Pointers to linting tools.</p>
+<h2 id="shell">Shell</h2>
+<h3 id="shellcheck">shellcheck</h3>
+<ul>
+<li>deb package: shellcheck</li>
+<li>site: <a href="https://github.com/koalaman/shellcheck">https://github.com/koalaman/shellcheck</a></li>
+<li>use in vim via <a href="https://github.com/dense-analysis/ale">ALE</a></li>
+<li>ignore warning:
+<ul>
+<li>line: &ldquo;<code># shellcheck disable=SC2059</code>&rdquo; just above code line</li>
+<li>file: &ldquo;<code># shellcheck disable=SC2059</code>&rdquo; just below <code>#!/bin/sh</code></li>
+<li>user: &ldquo;<code>disable=SC2059</code>&rdquo; in <code>~/.shellcheckrc</code></li>
+</ul>
+</li>
+<li><a href="https://gist.github.com/eggplants/9fbe03453c3f3fd03295e88def6a1324#file-_shellcheck-md">list of warnings</a></li>
+</ul>
+<h3 id="vim-as-formtter">vim as formtter</h3>
+<ul>
+<li>NORMAL MODE: <code>gg=G</code></li>
+</ul>
+<h2 id="python">Python</h2>
+<h3 id="pylint">pylint</h3>
+<ul>
+<li>deb package: pylint</li>
+<li>src: <a href="https://github.com/PyCQA/pylint">https://github.com/PyCQA/pylint</a></li>
+<li>doc: <a href="https://pylint.readthedocs.io/en/latest/index.html">https://pylint.readthedocs.io/en/latest/index.html</a></li>
+<li>use in vim via <a href="https://github.com/dense-analysis/ale">ALE</a></li>
+<li>ignore warning:
+<ul>
+<li>line: &ldquo;<code># pylint: disable=no-member</code>&rdquo; just above code line</li>
+<li>file: &ldquo;<code># pylint: disable=missing-docstring</code>&rdquo; top of file</li>
+<li>user: <code>~/.pylintrc</code> (template <code>pylint --generate-rcfile &gt;~/.pylintrc</code>)</li>
+</ul>
+</li>
+<li><a href="http://pylint-messages.wikidot.com/all-codes">list of warnings</a></li>
+</ul>
+<h3 id="flake8----wrapper-around-pycodestyle-and-pyflakes-">flake8 &ndash; wrapper around pycodestyle and pyflakes &hellip;</h3>
+<ul>
+<li>deb package: python3-flake8</li>
+<li>src: <a href="https://github.com/PyCQA/flake8">https://github.com/PyCQA/flake8</a></li>
+<li>doc: <a href="https://flake8.readthedocs.io/en/latest/">https://flake8.readthedocs.io/en/latest/</a></li>
+<li>config: <a href="https://flake8.pycqa.org/en/latest/user/configuration.html">https://flake8.pycqa.org/en/latest/user/configuration.html</a>
+<ul>
+<li>user: <code>~/.config/flake8</code></li>
+<li>error code <a href="https://pep8.readthedocs.io/en/latest/intro.html#error-codes">https://pep8.readthedocs.io/en/latest/intro.html#error-codes</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="black----formatter">Black &ndash; formatter</h3>
+<ul>
+<li>deb package: black</li>
+<li>src: <a href="https://github.com/psf/black">https://github.com/psf/black</a></li>
+<li>doc: <a href="https://black.readthedocs.io/en/stable/">https://black.readthedocs.io/en/stable/</a></li>
+<li>config: <a href="https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html">https://black.readthedocs.io/en/stable/usage_and_configuration/the_basics.html</a>
+<ul>
+<li>project: <code>pyproject.toml</code></li>
+<li>user: <code>~/.config/black</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="isort----formatter">isort &ndash; formatter</h3>
+<ul>
+<li>deb: python3-isort</li>
+<li>doc: <a href="https://pycqa.github.io/isort/">https://pycqa.github.io/isort/</a></li>
+<li>src: <a href="https://github.com/PyCQA/isort">https://github.com/PyCQA/isort</a></li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/08/06/meson-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
