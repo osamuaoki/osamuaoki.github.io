@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/24 (initial publish),
-2021/08/27 (last update)
+2021/08/28 (last update)
 </h3>
 </div>
 
@@ -78,7 +78,6 @@
     <li><a href="#osamuaokivim-python-matchit"><code>osamuaoki/vim-python-matchit</code></a></li>
     <li><a href="#romainlvim-qlist"><code>romainl/vim-qlist</code></a></li>
     <li><a href="#jcebvim-orgmode"><code>jceb/vim-orgmode</code></a></li>
-    <li><a href="#romainlvim-qlist-1"><code>romainl/vim-qlist</code></a></li>
     <li><a href="#airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></a></li>
     <li><a href="#vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></a></li>
   </ul>
@@ -135,6 +134,16 @@ xnoremap Q :norm @q&lt;cr&gt;
 </code></pre><h2 id="dense-analysisale"><code>dense-analysis/ale</code></h2>
 <p><strong>This is used a lot</strong></p>
 <p>Very nice syntax checker.</p>
+<p>It is important to use static checker for interpreter languges since they
+usually don&rsquo;t complain even if typo causes unused/non-assigned variables.</p>
+<p>I use this with:</p>
+<ul>
+<li>shell: <code>shellcheck</code></li>
+<li>python3: <code>pylint</code> and <code>flake8</code> (These needs to be set to be quiet to avoid
+excessive noise.)  See
+<a href="https://github.com/osamuaoki/osamu-utils/tree/main/dot/.config">https://github.com/osamuaoki/osamu-utils/tree/main/dot/.config</a> for backed up
+settings.</li>
+</ul>
 <p>I may need to check:</p>
 <ul>
 <li><a href="https://github.com/dense-analysis/ale">https://github.com/dense-analysis/ale</a> (FAQ)</li>
@@ -184,8 +193,6 @@ jump to pertinent positions as in the QuickFix list.</p>
 <p>This script replaces these NORMAL MODE commands with more desirable behavior
 ones of the QuickFix list.</p>
 <h2 id="jcebvim-orgmode"><code>jceb/vim-orgmode</code></h2>
-<p><strong>This has not been used much but interesting.  (commented out now)</strong></p>
-<h2 id="romainlvim-qlist-1"><code>romainl/vim-qlist</code></h2>
 <p><strong>This has not been used much but interesting.  (commented out now)</strong></p>
 <h2 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h2>
 <p><strong>This is not used but interesting. (not used recently under this configuration)</strong></p>
