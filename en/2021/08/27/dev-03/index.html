@@ -70,7 +70,7 @@
     <li><a href="#python">Python</a>
       <ul>
         <li><a href="#pylint">pylint</a></li>
-        <li><a href="#flake8----wrapper-around-pycodestyle-and-pyflakes-">flake8 &ndash; wrapper around pycodestyle and pyflakes &hellip;</a></li>
+        <li><a href="#flake8----wrapper-around-pycodestyle-and-pyflakes-and-mccabe">flake8 &ndash; wrapper around pycodestyle and pyflakes and mccabe</a></li>
         <li><a href="#black----formatter">Black &ndash; formatter</a></li>
         <li><a href="#isort----formatter">isort &ndash; formatter</a></li>
       </ul>
@@ -99,6 +99,12 @@
 <li>NORMAL MODE: <code>gg=G</code></li>
 </ul>
 <h2 id="python">Python</h2>
+<p>In case of doubt, chose one lint in <code>~/.vim/vimrc</code> for ALE by UN-commenting
+out (instead of running 3 linters, use fast flake8-only):</p>
+<pre><code>  let g:ale_linters = {'python': ['flake8']}
+  &quot;let g:ale_linters = {'python': ['pylint']}
+  &quot;let g:ale_linters = {'python': ['mypy']}
+</code></pre><p>See <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a></p>
 <h3 id="pylint">pylint</h3>
 <ul>
 <li>deb package: pylint</li>
@@ -109,12 +115,27 @@
 <ul>
 <li>line: &ldquo;<code># pylint: disable=no-member</code>&rdquo; just above code line</li>
 <li>file: &ldquo;<code># pylint: disable=missing-docstring</code>&rdquo; top of file</li>
-<li>user: <code>~/.pylintrc</code> (template <code>pylint --generate-rcfile &gt;~/.pylintrc</code>)</li>
+<li>user: <code>~/.config/pylintrc</code></li>
 </ul>
 </li>
+<li>error code
+<ul>
 <li><a href="http://pylint-messages.wikidot.com/all-codes">list of warnings</a></li>
 </ul>
-<h3 id="flake8----wrapper-around-pycodestyle-and-pyflakes-">flake8 &ndash; wrapper around pycodestyle and pyflakes &hellip;</h3>
+</li>
+</ul>
+<p>The template for <code>~/.config/pylintrc</code> is created by :<code>pylint --generate-rcfile &gt;~/.config/pylintrc</code></p>
+<p><code>~/.config/pylintrc</code> mod:</p>
+<pre><code>disable=print-statement,
+        parameter-unpacking,
+        ...
+# extras
+        invalid-name,
+        line-too-long,
+        missing-function-docstring,
+        useless-return,
+        duplicate-code
+</code></pre><h3 id="flake8----wrapper-around-pycodestyle-and-pyflakes-and-mccabe">flake8 &ndash; wrapper around pycodestyle and pyflakes and mccabe</h3>
 <ul>
 <li>deb package: python3-flake8</li>
 <li>src: <a href="https://github.com/PyCQA/flake8">https://github.com/PyCQA/flake8</a></li>
@@ -124,11 +145,20 @@
 <li>line: &ldquo;<code># noqa</code>&rdquo; at the end of line</li>
 <li>project: <a href="https://flake8.pycqa.org/en/latest/user/configuration.html">https://flake8.pycqa.org/en/latest/user/configuration.html</a></li>
 <li>user: <code>~/.config/flake8</code></li>
-<li>error code <a href="https://pep8.readthedocs.io/en/latest/intro.html#error-codes">https://pep8.readthedocs.io/en/latest/intro.html#error-codes</a></li>
+</ul>
+</li>
+<li>error code
+<ul>
+<li>F&hellip;: <a href="https://flake8.pycqa.org/en/latest/user/error-codes.html">https://flake8.pycqa.org/en/latest/user/error-codes.html</a></li>
+<li>E&hellip;: <a href="https://pep8.readthedocs.io/en/latest/intro.html#error-codes">https://pep8.readthedocs.io/en/latest/intro.html#error-codes</a></li>
 </ul>
 </li>
 </ul>
-<h3 id="black----formatter">Black &ndash; formatter</h3>
+<p><code>~/.config/flake8</code>:</p>
+<pre><code>[flake8]
+ignore = E226,E302,E41
+max-line-length = 160
+</code></pre><h3 id="black----formatter">Black &ndash; formatter</h3>
 <ul>
 <li>deb package: black</li>
 <li>src: <a href="https://github.com/psf/black">https://github.com/psf/black</a></li>
