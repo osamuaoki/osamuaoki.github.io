@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/24 (initial publish),
-2021/08/29 (last update)
+2021/08/30 (last update)
 </h3>
 </div>
 
@@ -124,7 +124,10 @@ leading <code>&quot;</code>.)</p>
 <ul>
 <li>Use external packages as much with least exposure to them.</li>
 <li>For hard to reach Esc-key issue, use CapsLock for it via GNOME Tweak setting.</li>
-<li>Less keyboard customization is better.  For now, I set them up as:
+<li>Less keyboard customization is better.</li>
+<li>Give easy access to FZF.VIM provided functions with <code>&lt;leader&gt;</code></li>
+</ul>
+<p>For now, I set them up as:</p>
 <ul>
 <li><code>Q</code>: Paste MACRO</li>
 <li><code>&lt;C-t&gt;</code>: swap chars[-2],[-1]</li>
@@ -151,7 +154,7 @@ leading <code>&quot;</code>.)</p>
 <li><code>&lt;leader&gt;hp</code>: preview hunk (FZF.VIM)</li>
 <li><code>&lt;leader&gt;hu</code>: undo hunk (FZF.VIM)</li>
 <li><code>&lt;leader&gt;l</code>: Vim line indent formatter</li>
-<li><code>&lt;leader&gt;m</code>: Maps selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;m</code>: Maps listing with selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;r</code>: Rg search selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;s</code>: Strip tailing spaces</li>
 <li><code>&lt;leader&gt;t</code>: Tags search selection (FZF.VIM)</li>
@@ -162,7 +165,8 @@ leading <code>&quot;</code>.)</p>
 <li><code>&lt;leader&gt;t</code>: Tags search selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;w</code>: Close all</li>
 <li><code>&lt;leader&gt;z</code>: Un-fold all</li>
-<li>For selecting TAB opened from FZF with CTRL-T.
+</ul>
+<p>For selecting TAB opened from FZF with CTRL-T.</p>
 <ul>
 <li><code>&lt;leader&gt;1</code>: Tab 1</li>
 <li><code>&lt;leader&gt;2</code>: Tab 2</li>
@@ -174,15 +178,13 @@ leading <code>&quot;</code>.)</p>
 <li><code>&lt;leader&gt;8</code>: Tab 8</li>
 <li><code>&lt;leader&gt;9</code>: Tab 9</li>
 </ul>
-</li>
-</ul>
-</li>
-</ul>
 <p>Most of FZF commands <code>&lt;leader&gt;</code>-commands are not used much.  So I may change.</p>
-<p>I set the GNOME terminal&rsquo;s font to <a href="https://tracker.debian.org/pkg/fonts-hack">Hack</a>.
-Not all non-standard <code>powerline</code>fonts are included.  So skip them in <code>airline</code>
-This has easy-to-identify <code>0oO</code> and <code>1lI</code> fonts and the cute  non-standard
-glyphs used for producing cute bar with airline..</p>
+<p>I set the font setting of GNOME terminal and GVim to
+<a href="https://tracker.debian.org/pkg/fonts-hack">Hack</a> 14 point.</p>
+<p>Not all non-standard <code>powerline</code> fonts are included.  So skip them in <code>airline</code>
+in override.vim.</p>
+<p>This font has easy-to-identify <code>0oO</code> and <code>1lI</code> fonts and some cute non-standard
+glyphs used for producing cute bar with airline.</p>
 <h2 id="local-entry-point-vimvimrc">Local entry point: <code>~/.vim/vimrc</code></h2>
 <p>Let&rsquo;s list highlight of configuration.  Local configuration for each plugins
 are also included in this
