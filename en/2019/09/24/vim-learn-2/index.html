@@ -93,25 +93,29 @@ framework.</p>
 <h2 id="vim-general-settings-packages">Vim general settings (packages)</h2>
 <p>As of 2021-08-27, I mostly use the latest version from github:</p>
 <ul>
-<li>ale</li>
+<li>ale (on demand)</li>
 <li>securemodelines</li>
 <li>vim-spell-under (I wrote)</li>
 <li>vim-better-whitespace</li>
 <li>vim-indent-guides</li>
 <li>gnupg (provided by vim-scripts)</li>
 <li>matchit (provided by vim)</li>
-<li>fzf and fzf.vim with rg</li>
-<li>gitgutter</li>
+<li>fzf and fzf.vim with rg (with <code>&lt;leader&gt;</code>)</li>
+<li>gitgutter (on demand)</li>
 <li>vim-python-matchit (I use locally patched 0.5)</li>
 <li>vim-airline</li>
 <li>vim-airline-themes</li>
 </ul>
-<p>Please note some basic configuration settings including plugin management
+<p>Please note actual basic configuration settings including plugin management
 including <code>~/.vim/vimrc</code> are at
-<a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">dot-vim</a>.</p>
+<a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">dot-vim</a> which goes
+with my dotfiles:
+<a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a>.  No sensitive info&rsquo;s
+are in these.  That&rsquo;s backed up locally.</p>
 <p>I now set up those IDE-like heavy features as on-demand and low profile. (You
-can still disable package by comment out corresponding <code>packadd!</code> line with
+can further disable package by comment out corresponding <code>packadd!</code> line with
 leading <code>&quot;</code>.)</p>
+<p>Also, cursor remembers its position.</p>
 <h2 id="vim-general-settings-keyboard-bindings">Vim general settings (keyboard bindings)</h2>
 <p>Thought on configuration and keyboard bindings are:</p>
 <ul>
@@ -155,6 +159,8 @@ leading <code>&quot;</code>.)</p>
 <li><code>&lt;leader&gt;t</code>: Tags search selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;w</code>: Close all</li>
 <li><code>&lt;leader&gt;z</code>: Un-fold all</li>
+<li>For selecting TAB opened from FZF with CTRL-T.
+<ul>
 <li><code>&lt;leader&gt;1</code>: Tab 1</li>
 <li><code>&lt;leader&gt;2</code>: Tab 2</li>
 <li><code>&lt;leader&gt;3</code>: Tab 3</li>
@@ -167,6 +173,9 @@ leading <code>&quot;</code>.)</p>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+<p>Most of FZF commands <code>&lt;leader&gt;</code>-commands are not used much.  So I may change.</p>
 <p>I set the GNOME terminal&rsquo;s font to <a href="https://tracker.debian.org/pkg/fonts-hack">Hack</a>.
 Not all non-standard <code>powerline</code>fonts are included.  So skip them in <code>airline</code>
 This has easy-to-identify <code>0oO</code> and <code>1lI</code> fonts and the cute  non-standard

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>git submodule (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">git submodule (1)</span></h1>
+
+<h3 class="date">Date:
+2021/08/28 (initial publish),
+2021/08/29 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/08/27/dev-03/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#modulenamegitmodules"><code>&lt;modulename&gt;/.gitmodules</code></a></li>
+    <li><a href="#modulenamepackalegit"><code>&lt;modulename&gt;/pack/ale/.git</code></a></li>
+    <li><a href="#modulenamegitsubmodulepackgithuboptaleconfig"><code>&lt;modulename&gt;/.git/submodule/pack/github/opt/ale/config</code></a></li>
+    <li><a href="#modulenamegitconfig"><code>&lt;modulename&gt;/.git/config</code></a></li>
+  </ul>
+</nav>
+
+<p>The <code>git submodule update --init</code> is nice.  I checked how all these repos are managed.</p>
+<p>If I want to move submodule, I don&rsquo;t need delete and clone again.  I can simply move it with &ldquo;<code>git mv &lt;oldpath&gt; &lt;newpath&gt;</code>&rdquo; while we keep using the same local copy of repo.</p>
+<p>Let&rsquo;s see how this is done.</p>
+<h2 id="modulenamegitmodules"><code>&lt;modulename&gt;/.gitmodules</code></h2>
+<p>This file is checked in to the parent Git repository and contains:</p>
+<pre><code>[submodule &quot;pack/github/opt/ale&quot;]
+        path = pack/ale
+        url = https://github.com/dense-analysis/ale.git
+</code></pre><ul>
+<li><code>submodule</code>-line is where local bare cloned repo exists.  For this case,
+<code>&lt;modulename&gt;/.git/modules/pack/github/opt/ale</code> &ndash; <strong>PATH_BARE</strong></li>
+<li><code>path</code>-line is where the submodule are checked out. &ndash; <strong>PATH_CHECKOUT</strong></li>
+<li><code>url</code>-line is where remote repo is. &ndash; <strong>URL</strong></li>
+</ul>
+<p>The checked out repo can be moved by <code>git mv</code>.</p>
+<h2 id="modulenamepackalegit"><code>&lt;modulename&gt;/pack/ale/.git</code></h2>
+<p>This is created by <code>git submodule</code> in the submodule directory and has <code>gitdir: ../../.git/modules/pack/github/opt/ale</code> in it pointing to where local bare cloned repo exists. &ndash; <strong>PATH_BARE</strong></p>
+<h2 id="modulenamegitsubmodulepackgithuboptaleconfig"><code>&lt;modulename&gt;/.git/submodule/pack/github/opt/ale/config</code></h2>
+<p>This is deep in the subdirectory of the parent Git repository&rsquo;s <code>.git</code> directory where the bare clone of submodule repository exists.</p>
+<pre><code>[core]
+        repositoryformatversion = 0
+        filemode = true
+        bare = false
+        logallrefupdates = true
+        worktree = ../../../../../../pack/ale
+[remote &quot;origin&quot;]
+        url = https://github.com/dense-analysis/ale.git
+        fetch = +refs/heads/*:refs/remotes/origin/*
+[branch &quot;master&quot;]
+        remote = origin
+        merge = refs/heads/master
+</code></pre><ul>
+<li><code>worktree</code>-line s where the submodule are checked out.  &ndash; <strong>PATH_CHECKOUT</strong></li>
+<li><code>url</code>-line is where remote repo is. &ndash; <strong>URL</strong></li>
+</ul>
+<h2 id="modulenamegitconfig"><code>&lt;modulename&gt;/.git/config</code></h2>
+<p>This is in the parent Git repository&rsquo;s <code>.git</code> and its main configuration.  For submodule, this has:</p>
+<pre><code>[submodule &quot;pack/github/opt/ale&quot;]
+        active = true
+        url = https://github.com/dense-analysis/ale.git
+</code></pre><ul>
+<li><code>submodule</code>-line is where local bare cloned repo exists.  For this case,
+<code>&lt;modulename&gt;/.git/modules/pack/github/opt/ale</code>.  &ndash; <strong>PATH_BARE</strong></li>
+<li><code>url</code>-line is where remote repo is.  &ndash; <strong>URL</strong></li>
+</ul>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/08/27/dev-03/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
