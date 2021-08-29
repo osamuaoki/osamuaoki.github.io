@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/24 (initial publish),
-2021/08/28 (last update)
+2021/08/29 (last update)
 </h3>
 </div>
 
@@ -61,11 +61,13 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#vimvimrc"><code>~/.vim/vimrc</code></a>
+    <li><a href="#vim-general-settings-packages">Vim general settings (packages)</a></li>
+    <li><a href="#vim-general-settings-keyboard-bindings">Vim general settings (keyboard bindings)</a></li>
+    <li><a href="#local-entry-point-vimvimrc">Local entry point: <code>~/.vim/vimrc</code></a>
       <ul>
         <li><a href="#map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</a></li>
         <li><a href="#map-q-to-q-in-normal-mode">Map <code>Q</code> to <code>@q</code> in NORMAL MODE</a></li>
-        <li><a href="#map-escesc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</a></li>
+        <li><a href="#map-escesc-and-esc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> and <code>&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</a></li>
       </ul>
     </li>
     <li><a href="#dense-analysisale"><code>dense-analysis/ale</code></a></li>
@@ -76,9 +78,11 @@
     <li><a href="#gnupg-vim-scripts"><code>gnupg</code> (vim-scripts)</a></li>
     <li><a href="#matchit-vim-internal-and-optional"><code>matchit</code> (vim internal and optional)</a></li>
     <li><a href="#osamuaokivim-python-matchit"><code>osamuaoki/vim-python-matchit</code></a></li>
+    <li><a href="#junegunnfzf-and-junegunnfzfvim"><code>junegunn/fzf</code> and <code>junegunn/fzf.vim</code></a></li>
+    <li><a href="#airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></a></li>
     <li><a href="#romainlvim-qlist"><code>romainl/vim-qlist</code></a></li>
     <li><a href="#jcebvim-orgmode"><code>jceb/vim-orgmode</code></a></li>
-    <li><a href="#airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></a></li>
+    <li><a href="#airbladevim-gitgutter-1"><code>airblade/vim-gitgutter</code></a></li>
     <li><a href="#vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></a></li>
   </ul>
 </nav>
@@ -86,6 +90,7 @@
 <p>Let&rsquo;s review a few interesting plugins.</p>
 <p>Please note that I manage plugins via Vim 8&rsquo;s native plugin management
 framework.</p>
+<h2 id="vim-general-settings-packages">Vim general settings (packages)</h2>
 <p>As of 2021-08-27, I mostly use the latest version from github:</p>
 <ul>
 <li>ale</li>
@@ -95,21 +100,78 @@ framework.</p>
 <li>vim-indent-guides</li>
 <li>gnupg (provided by vim-scripts)</li>
 <li>matchit (provided by vim)</li>
+<li>fzf and fzf.vim with rg</li>
+<li>gitgutter</li>
 <li>vim-python-matchit (I use locally patched 0.5)</li>
 <li>vim-airline</li>
 <li>vim-airline-themes</li>
 </ul>
-<p>(vim-gitgutter is interesting but I don&rsquo;t work on repo with many contributors.)</p>
-<p>Please note some basic configuration settings including plugin management are at
-<a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">~/.vim/vimrc</a>.</p>
-<p>To disable package, comment out corresponding <code>packadd!</code> line with leading <code>&quot;</code>.</p>
-<p>All other initialization code is provided as plugin.</p>
-<p>Basic rule: Less customization is better.</p>
-<p>For hard to reach Esc-key issue, use CapsLock for it via GNOME Tweak setting.</p>
-<p>I set the GNOME terminal&rsquo;s font to Hack.  This has easy-to-identify <code>0oO</code> and
-<code>1lI</code> fonts and the cute  non-standard glyphs used for producing cute bar with
-airline..</p>
-<h2 id="vimvimrc"><code>~/.vim/vimrc</code></h2>
+<p>Please note some basic configuration settings including plugin management
+including <code>~/.vim/vimrc</code> are at
+<a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">dot-vim</a>.</p>
+<p>I now set up those IDE-like heavy features as on-demand and low profile. (You
+can still disable package by comment out corresponding <code>packadd!</code> line with
+leading <code>&quot;</code>.)</p>
+<h2 id="vim-general-settings-keyboard-bindings">Vim general settings (keyboard bindings)</h2>
+<p>Thought on configuration and keyboard bindings are:</p>
+<ul>
+<li>Use external packages as much with least exposure to them.</li>
+<li>For hard to reach Esc-key issue, use CapsLock for it via GNOME Tweak setting.</li>
+<li>Less keyboard customization is better.  For now, I set them up as:
+<ul>
+<li><code>Q</code>: Paste MACRO</li>
+<li><code>&lt;C-t&gt;</code>: swap chars[-2],[-1]</li>
+<li><code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor
+<ul>
+<li><code>&lt;C-L&gt;</code> to clear</li>
+<li><code>#</code> to replace</li>
+</ul>
+</li>
+<li><code>&lt;leader&gt;&lt;CR&gt;</code>: TERMINAL-JOB start
+<ul>
+<li><code>&lt;Esc&gt;&lt;Esc&gt;</code> or <code>&lt;Esc&gt;</code>: get out to TERMINAL-NORMAL</li>
+<li><code>i</code>: get back to TERMINAL-JOB</li>
+</ul>
+</li>
+<li><code>&lt;leader&gt;a</code>: Toggle ALE</li>
+<li><code>&lt;leader&gt;B</code>: BTags selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;b</code>: Buffers selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;c</code>: Color selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;i</code>: Toggle GitGutter</li>
+<li><code>&lt;leader&gt;f</code>: Files selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;G</code>: GFiles selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;g</code>: GFiles? selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;hp</code>: preview hunk (FZF.VIM)</li>
+<li><code>&lt;leader&gt;hu</code>: undo hunk (FZF.VIM)</li>
+<li><code>&lt;leader&gt;l</code>: Vim line indent formatter</li>
+<li><code>&lt;leader&gt;m</code>: Maps selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;r</code>: Rg search selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;s</code>: Strip tailing spaces</li>
+<li><code>&lt;leader&gt;t</code>: Tags search selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;v</code>: History selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;x</code>: Command selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;/</code>: Text search history selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;:</code>: Ex-command search selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;t</code>: Tags search selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;w</code>: Close all</li>
+<li><code>&lt;leader&gt;z</code>: Un-fold all</li>
+<li><code>&lt;leader&gt;1</code>: Tab 1</li>
+<li><code>&lt;leader&gt;2</code>: Tab 2</li>
+<li><code>&lt;leader&gt;3</code>: Tab 3</li>
+<li><code>&lt;leader&gt;4</code>: Tab 4</li>
+<li><code>&lt;leader&gt;5</code>: Tab 5</li>
+<li><code>&lt;leader&gt;6</code>: Tab 6</li>
+<li><code>&lt;leader&gt;7</code>: Tab 7</li>
+<li><code>&lt;leader&gt;8</code>: Tab 8</li>
+<li><code>&lt;leader&gt;9</code>: Tab 9</li>
+</ul>
+</li>
+</ul>
+<p>I set the GNOME terminal&rsquo;s font to <a href="https://tracker.debian.org/pkg/fonts-hack">Hack</a>.
+Not all non-standard <code>powerline</code>fonts are included.  So skip them in <code>airline</code>
+This has easy-to-identify <code>0oO</code> and <code>1lI</code> fonts and the cute  non-standard
+glyphs used for producing cute bar with airline..</p>
+<h2 id="local-entry-point-vimvimrc">Local entry point: <code>~/.vim/vimrc</code></h2>
 <p>Let&rsquo;s list highlight of configuration.  Local configuration for each plugins
 are also included in this
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">~/.vim/vimrc</a> file.</p>
@@ -122,18 +184,21 @@ set pastetoggle=&lt;f2&gt;
 MACRO, &ldquo;qq&rdquo; to quit recording MACRO, &ldquo;Q&rdquo; to apply MACRO)</p>
 <pre><code>nnoremap Q @q
 xnoremap Q :norm @q&lt;cr&gt;
-</code></pre><h3 id="map-escesc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</h3>
+</code></pre><h3 id="map-escesc-and-esc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> and <code>&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</h3>
 <p>Since TERMINAL-JOB MODE feels like INSERT/REPLACE MODE, I didn&rsquo;t like vim style
 <code>&lt;C-w&gt;N</code> nor odd neovim style <code>&lt;C-\&gt;&lt;c-n&gt;</code> to get out.  I accidentally typed
 <code>&lt;C-w&gt;</code> in INSERT MODE to lose data.  Now I can always bang on <code>&lt;Esc&gt;&lt;Esc&gt;</code>
 everywhere first if I want to move around windows.</p>
-<p>Remapping <code>&lt;Esc&gt;&lt;Esc&gt;</code> instead of <code>&lt;Esc&gt;</code> avoids causing interference with the
-terminal escape code (ISO color etc.).</p>
-<pre><code>nnoremap Q @q
-xnoremap Q :norm @q&lt;cr&gt;
-</code></pre><h2 id="dense-analysisale"><code>dense-analysis/ale</code></h2>
+<p>Remapping <code>&lt;Esc&gt;&lt;Esc&gt;</code> in addition to <code>&lt;Esc&gt;</code> avoids causing interference with the
+terminal escape code (ISO color etc.) and mapping/keyboard delays.</p>
+<h2 id="dense-analysisale"><code>dense-analysis/ale</code></h2>
 <p><strong>This is used a lot</strong></p>
-<p>Very nice syntax checker.</p>
+<p>This is a very nice syntax checker front-end.
+.
+See <a href="/en/2021/08/27/dev-03/">Development system (3)</a> to understand how to
+set up backend linters.  Setting these to be not-so-noisy are important part of
+their configuration.  I also backuped them to my dotfiles:
+<a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a>.</p>
 <p>It is important to use static checker for interpreter languges since they
 usually don&rsquo;t complain even if typo causes unused/non-assigned variables.</p>
 <p>I use this with:</p>
@@ -144,7 +209,7 @@ excessive noise.)  See
 <a href="https://github.com/osamuaoki/osamu-utils/tree/main/dot/.config">https://github.com/osamuaoki/osamu-utils/tree/main/dot/.config</a> for backed up
 settings.</li>
 </ul>
-<p>I may need to check:</p>
+<p>LSP hasn&rsquo;t been used.</p>
 <ul>
 <li><a href="https://github.com/dense-analysis/ale">https://github.com/dense-analysis/ale</a> (FAQ)</li>
 <li><a href="https://www.vimfromscratch.com/articles/vim-and-language-server-protocol/">https://www.vimfromscratch.com/articles/vim-and-language-server-protocol/</a></li>
@@ -185,6 +250,14 @@ mouse-drags.</p>
 <p>This let you move between matching <code>if</code>/<code>try</code>-block sections and
 <code>for</code>/<code>while</code>-block sections in python.  Since <code>for</code>/<code>while</code> can have <code>else</code> in
 python, I patched upstream 0.5 to cover this case.</p>
+<h2 id="junegunnfzf-and-junegunnfzfvim"><code>junegunn/fzf</code> and <code>junegunn/fzf.vim</code></h2>
+<p>I installed this to manage most of my <code>&lt;leader&gt;</code> interface commands for files,
+buffers, text search, &hellip; .  I also installed <code>ripgrep</code>, too.  Nice window
+menus.</p>
+<p><code>ripgrep</code>(<code>rg</code>) and <code>ugrep</code>(<code>ug</code>) seems to be SMP aware and 10x faster than
+<code>ag</code>.  Since <code>rg</code> is Git aware (<code>.gitignore</code>), this was my choice.</p>
+<h2 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h2>
+<p>It is installed but not activated on demand and default off.</p>
 <h2 id="romainlvim-qlist"><code>romainl/vim-qlist</code></h2>
 <p><strong>This has not been used much but interesting.  (commented out now)</strong></p>
 <p>Native behavior of <code>[I</code>, <code>]I</code>, <code>[D</code>, and <code>]D</code> to search the keyword and the
@@ -194,14 +267,14 @@ jump to pertinent positions as in the QuickFix list.</p>
 ones of the QuickFix list.</p>
 <h2 id="jcebvim-orgmode"><code>jceb/vim-orgmode</code></h2>
 <p><strong>This has not been used much but interesting.  (commented out now)</strong></p>
-<h2 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h2>
+<h2 id="airbladevim-gitgutter-1"><code>airblade/vim-gitgutter</code></h2>
 <p><strong>This is not used but interesting. (not used recently under this configuration)</strong></p>
 <p>Checks diff from the repository contents asynchronously without blocking editor
 response and mark changed lines.</p>
 <h2 id="vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></h2>
 <p>I understand this is only visual sugar candy and not much functionality
 improvement as Gurus told me.</p>
-<p>But it was irresistible &hellip; sigh &hellip; forgive me for my weakness.  I try to use
+<p>But it was irresistible &hellip; sigh &hellip; Forgive me for my weakness.  I try to use
 this with minimal complications, though.</p>
 <p>Other similar packages such as <code>rbong/vim-crystalline</code> and
 <code>itchyny/lightline.vim</code> require you to write custom script from scratch and if
