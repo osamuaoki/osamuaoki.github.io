@@ -127,21 +127,33 @@ user&rsquo;s view. (You can further disable packages by comment out correspondin
 <h2 id="vim-general-settings-keyboard-bindings">Vim general settings (keyboard bindings)</h2>
 <p>Thought on configuration and keyboard bindings are:</p>
 <ul>
-<li>Use external packages as much with least exposure to them.</li>
-<li>For hard to reach Esc-key issue, use CapsLock for it via GNOME Tweak setting.</li>
-<li>Less keyboard customization is better.</li>
-<li>Avoid redefining keys with similar <strong>improved</strong> variants (instead, define new ones)</li>
-<li>Some shell-like control key bindings in INSERT and COMMAND modes.</li>
-<li>Give easy access to FZF.VIM provided functions with <code>&lt;leader&gt;</code></li>
+<li>Use external packages as little exposure as possible.</li>
+<li>Use CapsLock for Esc via GNOME Tweak setting.</li>
+<li>Less key binding customization is better.</li>
+<li>Add some missing shell-like control key bindings in INSERT and COMMAND modes.</li>
+<li>Avoid redefining keys with similar <strong>improved</strong> variants
+<ul>
+<li>If functionalities are needed, instead, define new ones to unused keys such
+as <code>&lt;leader&gt;</code>-combinations.</li>
+<li>Give easy access to FZF.VIM provided functions with <code>&lt;leader&gt;</code>.</li>
+</ul>
+</li>
+<li>Don&rsquo;t try to do things with Vim when other tools do them better.
+<ul>
+<li><code>gitk</code> for Git history and diff</li>
+<li><code>mc</code> for interactive file explorer.</li>
+</ul>
+</li>
 </ul>
 <p>For now, I set them up as:</p>
 <ul>
-<li><code>Q</code>: Paste MACRO</li>
-<li><code>&lt;C-t&gt;</code>: swap chars[-2],[-1]</li>
+<li><code>Q</code>: Paste MACRO (routine for keyboard MACRO just with <code>q</code>-key. NORMAL
+MODE: <code>qq</code> + &hellip; + <code>&lt;Esc&gt;</code> + <code>q</code> + <code>Q</code>&hellip;) with Q == &lsquo;@q&rsquo;</li>
+<li><code>&lt;C-t&gt;</code>: swap(ch[-2],ch[-1])</li>
 <li><code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor in NORMAL, or exact selected word in VISUAL to z-register
 <ul>
-<li><code>&lt;C-L&gt;</code> to clear highlight</li>
-<li><code>&lt;leader&gt;s</code> to create substitute all template</li>
+<li><code>&lt;C-L&gt;</code> to clear highlight (Redefinition but harmless)XXX</li>
+<li><code>&lt;leader&gt;s</code> to create substitution template</li>
 </ul>
 </li>
 <li><code>&lt;leader&gt;&lt;CR&gt;</code>: TERMINAL-JOB start
@@ -152,7 +164,7 @@ user&rsquo;s view. (You can further disable packages by comment out correspondin
 </li>
 <li><code>&lt;leader&gt;a</code>: Toggle ALE (ALE)
 <ul>
-<li>Set up linters</li>
+<li>Set up linters as <a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a></li>
 </ul>
 </li>
 <li><code>&lt;leader&gt;d</code>: Strip tailing spaces (vim-better-whitespace)</li>
@@ -166,7 +178,7 @@ user&rsquo;s view. (You can further disable packages by comment out correspondin
 <li><code>&lt;leader&gt;hu</code>: hunk undo (GitGutter) &ndash; default</li>
 </ul>
 </li>
-<li>FZF commands
+<li>FZF commands (down-selection tool)
 <ul>
 <li><code>&lt;leader&gt;b</code>: Buffers selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;c</code>: Color selection (FZF.VIM)</li>
