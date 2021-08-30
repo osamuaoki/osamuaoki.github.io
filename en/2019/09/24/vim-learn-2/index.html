@@ -63,10 +63,11 @@
   <ul>
     <li><a href="#vim-general-settings-packages">Vim general settings (packages)</a></li>
     <li><a href="#vim-general-settings-keyboard-bindings">Vim general settings (keyboard bindings)</a></li>
-    <li><a href="#local-entry-point-vimvimrc">Local entry point: <code>~/.vim/vimrc</code></a>
+    <li><a href="#local-entry-point-vimvimrc-and-vimgvimrc">Local entry point: <code>~/.vim/vimrc</code> and <code>~/.vim/gvimrc</code></a>
       <ul>
         <li><a href="#map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</a></li>
         <li><a href="#map-q-to-q-in-normal-mode">Map <code>Q</code> to <code>@q</code> in NORMAL MODE</a></li>
+        <li><a href="#map-leaderleader-in-normal-mode">Map <code>&lt;leader&gt;&lt;leader&gt;</code> in NORMAL MODE</a></li>
         <li><a href="#map-escesc-and-esc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> and <code>&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</a></li>
       </ul>
     </li>
@@ -96,28 +97,29 @@ framework.</p>
 <h2 id="vim-general-settings-packages">Vim general settings (packages)</h2>
 <p>As of 2021-08-27, I mostly use the latest version from github:</p>
 <ul>
-<li>ale (on demand)</li>
+<li>ale (on demand linter)</li>
 <li>securemodelines</li>
 <li>vim-spell-under (I wrote)</li>
 <li>vim-better-whitespace</li>
 <li>vim-indent-guides</li>
 <li>gnupg (provided by vim-scripts)</li>
 <li>matchit (provided by vim)</li>
-<li>fzf and fzf.vim with rg (with <code>&lt;leader&gt;</code>)</li>
+<li>fzf and fzf.vim with rg (access functionalities with <code>&lt;leader&gt;</code>)</li>
 <li>gitgutter (on demand)</li>
 <li>vim-python-matchit (I use locally patched 0.5)</li>
 <li>vim-airline</li>
 <li>vim-airline-themes</li>
 </ul>
-<p>Please note actual basic configuration settings including plugin management
-including <code>~/.vim/vimrc</code> are at
-<a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">dot-vim</a> which goes
-with my dotfiles:
+<p>Please note actual basic configuration settings are in <code>~/.vim/vimrc</code>.  This
+file includes the Vim 8 native package management.  The whole <code>~/.vim/</code>
+contents are at <a href="https://github.com/osamuaoki/dot-vim/">dot-vim</a>.</p>
+<p>I use linters with very quiet configuration defined in my dotfiles.  The backup
+copies of these dotfiles are at
 <a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a>.  No sensitive info&rsquo;s
 are in these.  That&rsquo;s backed up locally.</p>
-<p>I now set up those IDE-like heavy features as on-demand and low profile. (You
-can further disable package by comment out corresponding <code>packadd!</code> line with
-leading <code>&quot;</code>.)</p>
+<p>I now set up those IDE-like heavy features as on-demand and low profilei from
+user&rsquo;s view. (You can further disable packages by comment out corresponding
+<code>packadd!</code> line with leading <code>&quot;</code>.)</p>
 <p>Also, cursor remembers its position.</p>
 <h2 id="vim-general-settings-keyboard-bindings">Vim general settings (keyboard bindings)</h2>
 <p>Thought on configuration and keyboard bindings are:</p>
@@ -180,12 +182,11 @@ leading <code>&quot;</code>.)</p>
 </ul>
 <p>Most of FZF commands <code>&lt;leader&gt;</code>-commands are not used much.  So I may change.</p>
 <p>I set the font setting of GNOME terminal and GVim to
-<a href="https://tracker.debian.org/pkg/fonts-hack">Hack</a> 14 point.</p>
-<p>Not all non-standard <code>powerline</code> fonts are included.  So skip them in <code>airline</code>
-in override.vim.</p>
-<p>This font has easy-to-identify <code>0oO</code> and <code>1lI</code> fonts and some cute non-standard
-glyphs used for producing cute bar with airline.</p>
-<h2 id="local-entry-point-vimvimrc">Local entry point: <code>~/.vim/vimrc</code></h2>
+<a href="https://tracker.debian.org/pkg/fonts-hack">Hack</a> 14 point. Not all
+non-standard <code>powerline</code> fonts are included.  So skip them in <code>airline</code> in
+<code>override.vim</code>.  This font has easy-to-identify <code>0oO</code> and <code>1lI</code> fonts and some
+cute non-standard glyphs used for producing cute bar with airline.</p>
+<h2 id="local-entry-point-vimvimrc-and-vimgvimrc">Local entry point: <code>~/.vim/vimrc</code> and <code>~/.vim/gvimrc</code></h2>
 <p>Let&rsquo;s list highlight of configuration.  Local configuration for each plugins
 are also included in this
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">~/.vim/vimrc</a> file.</p>
@@ -198,13 +199,17 @@ set pastetoggle=&lt;f2&gt;
 MACRO, &ldquo;qq&rdquo; to quit recording MACRO, &ldquo;Q&rdquo; to apply MACRO)</p>
 <pre><code>nnoremap Q @q
 xnoremap Q :norm @q&lt;cr&gt;
-</code></pre><h3 id="map-escesc-and-esc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> and <code>&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</h3>
+</code></pre><h3 id="map-leaderleader-in-normal-mode">Map <code>&lt;leader&gt;&lt;leader&gt;</code> in NORMAL MODE</h3>
+<p>This is to automatically select word below cursor.  Very useful for search and
+replace operation. <code>*</code> and <code>#</code>.</p>
+<h3 id="map-escesc-and-esc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> and <code>&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</h3>
 <p>Since TERMINAL-JOB MODE feels like INSERT/REPLACE MODE, I didn&rsquo;t like vim style
 <code>&lt;C-w&gt;N</code> nor odd neovim style <code>&lt;C-\&gt;&lt;c-n&gt;</code> to get out.  I accidentally typed
 <code>&lt;C-w&gt;</code> in INSERT MODE to lose data.  Now I can always bang on <code>&lt;Esc&gt;&lt;Esc&gt;</code>
 everywhere first if I want to move around windows.</p>
 <p>Remapping <code>&lt;Esc&gt;&lt;Esc&gt;</code> in addition to <code>&lt;Esc&gt;</code> avoids causing interference with the
 terminal escape code (ISO color etc.) and mapping/keyboard delays.</p>
+<p>FZF.VIM issues are handled.</p>
 <h2 id="dense-analysisale"><code>dense-analysis/ale</code></h2>
 <p><strong>This is used a lot</strong></p>
 <p>This is a very nice syntax checker front-end.
@@ -266,10 +271,12 @@ mouse-drags.</p>
 python, I patched upstream 0.5 to cover this case.</p>
 <h2 id="junegunnfzf-and-junegunnfzfvim"><code>junegunn/fzf</code> and <code>junegunn/fzf.vim</code></h2>
 <p>I installed this to manage most of my <code>&lt;leader&gt;</code> interface commands for files,
-buffers, text search, &hellip; .  I also installed <code>ripgrep</code>, too.  Nice window
-menus.</p>
-<p><code>ripgrep</code>(<code>rg</code>) and <code>ugrep</code>(<code>ug</code>) seems to be SMP aware and 10x faster than
-<code>ag</code>.  Since <code>rg</code> is Git aware (<code>.gitignore</code>), this was my choice.</p>
+buffers, text search, &hellip; .  Nice interactive window menus.</p>
+<p>As for grepping the source, <code>ripgrep</code>(<code>rg</code>) and <code>ugrep</code>(<code>ug</code>) seems to be SMP
+aware and 10x faster than <code>ag</code>.  Since <code>rg</code> is Git aware (<code>.gitignore</code>), this
+was my choice.  I installed the Debian <code>ripgrep</code> package.</p>
+<p>Since this use terminal mode, <code>&lt;Esc&gt;</code> handling needs to be adjusted to avoid
+crashing.</p>
 <h2 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h2>
 <p>It is installed but not activated on demand and default off.</p>
 <h2 id="romainlvim-qlist"><code>romainl/vim-qlist</code></h2>
@@ -288,13 +295,15 @@ response and mark changed lines.</p>
 <h2 id="vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></h2>
 <p>I understand this is only visual sugar candy and not much functionality
 improvement as Gurus told me.</p>
-<p>But it was irresistible &hellip; sigh &hellip; Forgive me for my weakness.  I try to use
+<p>But it was irresistible &hellip; Sigh &hellip; Forgive me for my weakness.  I try to use
 this with minimal complications, though.</p>
 <p>Other similar packages such as <code>rbong/vim-crystalline</code> and
 <code>itchyny/lightline.vim</code> require you to write custom script from scratch and if
 such scripts are added, their claimed advantages may not be true any more.
 On the other side, the popular <code>vim-airline</code> seems to have addressed all the
-interference issues already and works as out-of-box.</p>
+interference issues already and works as out-of-box as long as the latest
+version is obtained from github.  (Well.. sort of. I had to adjust local font
+glyph availability issues.)</p>
 <p>If I need really light statusline, I use bare static status line string defined
 in <code>~/.vim/vimrc</code>).  If vim-airline is active, this setting is overridden.</p>
 <h2 id="terminal-job-mode">TERMINAL-JOB MODE</h2>
@@ -305,8 +314,8 @@ becomes &lsquo;terminal&rsquo; type.</p>
 <h2 id="quote-and-comment-and-line-continuation-in-vim">Quote and comment and line continuation in Vim</h2>
 <ul>
 <li>Quoted string in VimScript is single quote.</li>
-<li>Comment lines start with double qupote</li>
-<li>Line continuation is reverse sladh prepended to the following line.  It seems
+<li>Comment lines start with double quote</li>
+<li>Line continuation is reverse slash prepended to the following line.  It seems
 leading blank characters are allowed.</li>
 </ul>
 <!-- raw HTML omitted -->
