@@ -65,6 +65,7 @@
     <li><a href="#vim-general-settings-keyboard-bindings">Vim general settings (keyboard bindings)</a></li>
     <li><a href="#local-entry-point-vimvimrc-and-vimgvimrc">Local entry point: <code>~/.vim/vimrc</code> and <code>~/.vim/gvimrc</code></a>
       <ul>
+        <li><a href="#quote-and-comment-and-line-continuation-in-vimscript">Quote and comment and line continuation in VimScript</a></li>
         <li><a href="#map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</a></li>
         <li><a href="#map-q-to-q-in-normal-mode">Map <code>Q</code> to <code>@q</code> in NORMAL MODE</a></li>
         <li><a href="#map-leaderleader-in-normal-mode">Map <code>&lt;leader&gt;&lt;leader&gt;</code> in NORMAL MODE</a></li>
@@ -72,22 +73,24 @@
         <li><a href="#gvim-font-setting"><code>gvim</code> font setting</a></li>
       </ul>
     </li>
-    <li><a href="#dense-analysisale"><code>dense-analysis/ale</code></a></li>
-    <li><a href="#ciaranmsecuremodelines"><code>ciaranm/securemodelines</code></a></li>
-    <li><a href="#osamuaokivim-spell-under"><code>osamuaoki/vim-spell-under</code></a></li>
-    <li><a href="#ntpetersvim-better-whitespace"><code>ntpeters/vim-better-whitespace</code></a></li>
-    <li><a href="#nathanaelkanevim-indent-guides"><code>nathanaelkane/vim-indent-guides</code></a></li>
-    <li><a href="#gnupg-vim-scripts"><code>gnupg</code> (vim-scripts)</a></li>
-    <li><a href="#matchit-vim-internal-and-optional"><code>matchit</code> (vim internal and optional)</a></li>
-    <li><a href="#osamuaokivim-python-matchit"><code>osamuaoki/vim-python-matchit</code></a></li>
-    <li><a href="#junegunnfzf-and-junegunnfzfvim"><code>junegunn/fzf</code> and <code>junegunn/fzf.vim</code></a></li>
-    <li><a href="#airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></a></li>
-    <li><a href="#romainlvim-qlist"><code>romainl/vim-qlist</code></a></li>
-    <li><a href="#jcebvim-orgmode"><code>jceb/vim-orgmode</code></a></li>
-    <li><a href="#airbladevim-gitgutter-1"><code>airblade/vim-gitgutter</code></a></li>
-    <li><a href="#vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></a></li>
-    <li><a href="#terminal-job-mode">TERMINAL-JOB MODE</a></li>
-    <li><a href="#quote-and-comment-and-line-continuation-in-vim">Quote and comment and line continuation in Vim</a></li>
+    <li><a href="#external-packages">External packages</a>
+      <ul>
+        <li><a href="#dense-analysisale"><code>dense-analysis/ale</code></a></li>
+        <li><a href="#ciaranmsecuremodelines"><code>ciaranm/securemodelines</code></a></li>
+        <li><a href="#osamuaokivim-spell-under"><code>osamuaoki/vim-spell-under</code></a></li>
+        <li><a href="#ntpetersvim-better-whitespace"><code>ntpeters/vim-better-whitespace</code></a></li>
+        <li><a href="#nathanaelkanevim-indent-guides"><code>nathanaelkane/vim-indent-guides</code></a></li>
+        <li><a href="#gnupg-vim-scripts"><code>gnupg</code> (vim-scripts)</a></li>
+        <li><a href="#matchit-vim-internal-and-optional"><code>matchit</code> (vim internal and optional)</a></li>
+        <li><a href="#osamuaokivim-python-matchit"><code>osamuaoki/vim-python-matchit</code></a></li>
+        <li><a href="#junegunnfzf-and-junegunnfzfvim"><code>junegunn/fzf</code> and <code>junegunn/fzf.vim</code></a></li>
+        <li><a href="#airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></a></li>
+        <li><a href="#romainlvim-qlist"><code>romainl/vim-qlist</code></a></li>
+        <li><a href="#jcebvim-orgmode"><code>jceb/vim-orgmode</code></a></li>
+        <li><a href="#airbladevim-gitgutter-1"><code>airblade/vim-gitgutter</code></a></li>
+        <li><a href="#vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -127,16 +130,18 @@ user&rsquo;s view. (You can further disable packages by comment out correspondin
 <li>Use external packages as much with least exposure to them.</li>
 <li>For hard to reach Esc-key issue, use CapsLock for it via GNOME Tweak setting.</li>
 <li>Less keyboard customization is better.</li>
+<li>Avoid redefining keys with similar <strong>improved</strong> variants (instead, define new ones)</li>
+<li>Some shell-like control key bindings in INSERT and COMMAND modes.</li>
 <li>Give easy access to FZF.VIM provided functions with <code>&lt;leader&gt;</code></li>
 </ul>
 <p>For now, I set them up as:</p>
 <ul>
 <li><code>Q</code>: Paste MACRO</li>
 <li><code>&lt;C-t&gt;</code>: swap chars[-2],[-1]</li>
-<li><code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor
+<li><code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor in NORMAL, or exact selected word in VISUAL to z-register
 <ul>
-<li><code>&lt;C-L&gt;</code> to clear</li>
-<li><code>#</code> to replace</li>
+<li><code>&lt;C-L&gt;</code> to clear highlight</li>
+<li><code>&lt;leader&gt;s</code> to create substitute all template</li>
 </ul>
 </li>
 <li><code>&lt;leader&gt;&lt;CR&gt;</code>: TERMINAL-JOB start
@@ -145,40 +150,45 @@ user&rsquo;s view. (You can further disable packages by comment out correspondin
 <li><code>i</code>: get back to TERMINAL-JOB</li>
 </ul>
 </li>
-<li><code>&lt;leader&gt;a</code>: Toggle ALE</li>
-<li><code>&lt;leader&gt;B</code>: BTags selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;a</code>: Toggle ALE (ALE)
+<ul>
+<li>Set up linters</li>
+</ul>
+</li>
+<li><code>&lt;leader&gt;d</code>: Strip tailing spaces (vim-better-whitespace)</li>
+<li><code>&lt;leader&gt;w</code>: Close all</li>
+<li><code>&lt;leader&gt;z</code>: Un-fold all</li>
+<li><code>&lt;leader&gt;=</code>: Vim indent formatter</li>
+<li><code>&lt;leader&gt;gg</code>: Toggle GitGutter (GitGutter)
+<ul>
+<li><code>&lt;leader&gt;hp</code>: hunk preview (GitGutter) &ndash; default</li>
+<li><code>&lt;leader&gt;hs</code>: hunk stage (GitGutter) &ndash; default</li>
+<li><code>&lt;leader&gt;hu</code>: hunk undo (GitGutter) &ndash; default</li>
+</ul>
+</li>
+<li>FZF commands
+<ul>
 <li><code>&lt;leader&gt;b</code>: Buffers selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;c</code>: Color selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;i</code>: Toggle GitGutter</li>
 <li><code>&lt;leader&gt;f</code>: Files selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;G</code>: GFiles selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;g</code>: GFiles? selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;hp</code>: preview hunk (FZF.VIM)</li>
-<li><code>&lt;leader&gt;hu</code>: undo hunk (FZF.VIM)</li>
-<li><code>&lt;leader&gt;l</code>: Vim line indent formatter</li>
+<li><code>&lt;leader&gt;gl</code>: GFiles selection (FZF.VIM) &ndash; <code>git ls-files</code></li>
+<li><code>&lt;leader&gt;gs</code>: GFiles? selection (FZF.VIM) &ndash; <code>git status</code></li>
 <li><code>&lt;leader&gt;m</code>: Maps listing with selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;r</code>: Rg search selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;s</code>: Strip tailing spaces</li>
-<li><code>&lt;leader&gt;t</code>: Tags search selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;v</code>: History selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;x</code>: Command selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;/</code>: Text search history selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;:</code>: Ex-command search selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;t</code>: Tags search selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;w</code>: Close all</li>
-<li><code>&lt;leader&gt;z</code>: Un-fold all</li>
+<li><code>&lt;leader&gt;...</code>: many others (FZF.VIM)</li>
+</ul>
+</li>
 </ul>
 <p>For selecting TAB opened from FZF with CTRL-T.</p>
 <ul>
 <li><code>&lt;leader&gt;1</code>: Tab 1</li>
 <li><code>&lt;leader&gt;2</code>: Tab 2</li>
-<li><code>&lt;leader&gt;3</code>: Tab 3</li>
-<li><code>&lt;leader&gt;4</code>: Tab 4</li>
-<li><code>&lt;leader&gt;5</code>: Tab 5</li>
-<li><code>&lt;leader&gt;6</code>: Tab 6</li>
-<li><code>&lt;leader&gt;7</code>: Tab 7</li>
-<li><code>&lt;leader&gt;8</code>: Tab 8</li>
-<li><code>&lt;leader&gt;9</code>: Tab 9</li>
+<li>&hellip;</li>
 </ul>
 <p>Most of FZF commands <code>&lt;leader&gt;</code>-commands are not used much.  So I may change.</p>
 <p>I set the font setting of GNOME terminal and GVim to
@@ -190,6 +200,13 @@ cute non-standard glyphs used for producing cute bar with airline.</p>
 <p>Let&rsquo;s list highlight of configuration.  Local configuration for each plugins
 are also included in this
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/vimrc">~/.vim/vimrc</a> file.</p>
+<h3 id="quote-and-comment-and-line-continuation-in-vimscript">Quote and comment and line continuation in VimScript</h3>
+<ul>
+<li>Quoted string in VimScript is single quote.</li>
+<li>Comment lines start with double quote</li>
+<li>Line continuation is reverse slash prepended to the following line.  It seems
+leading blank characters are allowed.</li>
+</ul>
 <h3 id="map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</h3>
 <p>Adjust PASTE MODE by <code>F2</code>-key.</p>
 <pre><code>set nopaste
@@ -213,7 +230,8 @@ terminal escape code (ISO color etc.) and mapping/keyboard delays.</p>
 <h3 id="gvim-font-setting"><code>gvim</code> font setting</h3>
 <p>Setting to &lsquo;<code>Hack 14</code>&rsquo; required to use escaped space in the
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/gvimrc">~/.vim/gvimrc</a> file.</p>
-<h2 id="dense-analysisale"><code>dense-analysis/ale</code></h2>
+<h2 id="external-packages">External packages</h2>
+<h3 id="dense-analysisale"><code>dense-analysis/ale</code></h3>
 <p><strong>This is used a lot</strong></p>
 <p>This is a very nice syntax checker front-end.
 .
@@ -238,17 +256,17 @@ settings.</li>
 <li><a href="https://github.com/rhysd/vim-lsp-ale">https://github.com/rhysd/vim-lsp-ale</a></li>
 <li><a href="https://github.com/prabirshrestha/vim-lsp">https://github.com/prabirshrestha/vim-lsp</a></li>
 </ul>
-<h2 id="ciaranmsecuremodelines"><code>ciaranm/securemodelines</code></h2>
+<h3 id="ciaranmsecuremodelines"><code>ciaranm/securemodelines</code></h3>
 <p>Features like &ldquo;modeline&rdquo; is very convenient but it may become source of
 security concern.  This plugin disables Vim&rsquo;s native capability for &ldquo;modeline&rdquo;
 but still enables very limited commands to be parsed.</p>
 <p>Since this works even under &ldquo;<code>:set nomodeline</code>&rdquo; default start scheme, I am
 using this all the time.</p>
-<h2 id="osamuaokivim-spell-under"><code>osamuaoki/vim-spell-under</code></h2>
+<h3 id="osamuaokivim-spell-under"><code>osamuaoki/vim-spell-under</code></h3>
 <p>When syntax highlist and spell checker are activated together, text becomes
 difficult to read in some cases in terminal.  This forces spell checker to use
 underline.</p>
-<h2 id="ntpetersvim-better-whitespace"><code>ntpeters/vim-better-whitespace</code></h2>
+<h3 id="ntpetersvim-better-whitespace"><code>ntpeters/vim-better-whitespace</code></h3>
 <p>This is a new improved version of <code>bronson/vim-trailing-whitespace</code> .  This
 takes care all weird UTF-8 spaces too.</p>
 <ul>
@@ -258,21 +276,21 @@ takes care all weird UTF-8 spaces too.</p>
 <p>My configuration marks all problematic spaces but only remove problematic
 dangling spaces upon explicit user request.  (So the annoyance noticed by #vim
 Recommendations is addressed.)</p>
-<h2 id="nathanaelkanevim-indent-guides"><code>nathanaelkane/vim-indent-guides</code></h2>
+<h3 id="nathanaelkanevim-indent-guides"><code>nathanaelkane/vim-indent-guides</code></h3>
 <p>This is a plugin for visually displaying indent levels in Vim.</p>
 <p>Unlike using vim native approach of &ldquo;<code>:set list</code>&rdquo; with &ldquo;<code>:set listchars=...</code>&rdquo;
 to visualize TAB and tailing spaces, <code>vim-better-whitespace</code> and
 <code>vim-indent-guides</code> doesn&rsquo;t cause problem when selecting screen area with
 mouse-drags.</p>
-<h2 id="gnupg-vim-scripts"><code>gnupg</code> (vim-scripts)</h2>
+<h3 id="gnupg-vim-scripts"><code>gnupg</code> (vim-scripts)</h3>
 <p>This let you use gnupg.</p>
-<h2 id="matchit-vim-internal-and-optional"><code>matchit</code> (vim internal and optional)</h2>
+<h3 id="matchit-vim-internal-and-optional"><code>matchit</code> (vim internal and optional)</h3>
 <p>This let you move between matching <code>{</code> and <code>}</code> and similar pairs.</p>
-<h2 id="osamuaokivim-python-matchit"><code>osamuaoki/vim-python-matchit</code></h2>
+<h3 id="osamuaokivim-python-matchit"><code>osamuaoki/vim-python-matchit</code></h3>
 <p>This let you move between matching <code>if</code>/<code>try</code>-block sections and
 <code>for</code>/<code>while</code>-block sections in python.  Since <code>for</code>/<code>while</code> can have <code>else</code> in
 python, I patched upstream 0.5 to cover this case.</p>
-<h2 id="junegunnfzf-and-junegunnfzfvim"><code>junegunn/fzf</code> and <code>junegunn/fzf.vim</code></h2>
+<h3 id="junegunnfzf-and-junegunnfzfvim"><code>junegunn/fzf</code> and <code>junegunn/fzf.vim</code></h3>
 <p>I installed this to manage most of my <code>&lt;leader&gt;</code> interface commands for files,
 buffers, text search, &hellip; .  Nice interactive window menus.</p>
 <p>As for grepping the source, <code>ripgrep</code>(<code>rg</code>) and <code>ugrep</code>(<code>ug</code>) seems to be SMP
@@ -280,22 +298,22 @@ aware and 10x faster than <code>ag</code>.  Since <code>rg</code> is Git aware (
 was my choice.  I installed the Debian <code>ripgrep</code> package.</p>
 <p>Since this use terminal mode, <code>&lt;Esc&gt;</code> handling needs to be adjusted to avoid
 crashing.</p>
-<h2 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h2>
+<h3 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h3>
 <p>It is installed but not activated on demand and default off.</p>
-<h2 id="romainlvim-qlist"><code>romainl/vim-qlist</code></h2>
+<h3 id="romainlvim-qlist"><code>romainl/vim-qlist</code></h3>
 <p><strong>This has not been used much but interesting.  (commented out now)</strong></p>
 <p>Native behavior of <code>[I</code>, <code>]I</code>, <code>[D</code>, and <code>]D</code> to search the keyword and the
 macro definition is a bit half baked.  It should be much nicer if it allows to
 jump to pertinent positions as in the QuickFix list.</p>
 <p>This script replaces these NORMAL MODE commands with more desirable behavior
 ones of the QuickFix list.</p>
-<h2 id="jcebvim-orgmode"><code>jceb/vim-orgmode</code></h2>
+<h3 id="jcebvim-orgmode"><code>jceb/vim-orgmode</code></h3>
 <p><strong>This has not been used much but interesting.  (commented out now)</strong></p>
-<h2 id="airbladevim-gitgutter-1"><code>airblade/vim-gitgutter</code></h2>
+<h3 id="airbladevim-gitgutter-1"><code>airblade/vim-gitgutter</code></h3>
 <p><strong>This is not used but interesting. (not used recently under this configuration)</strong></p>
 <p>Checks diff from the repository contents asynchronously without blocking editor
 response and mark changed lines.</p>
-<h2 id="vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></h2>
+<h3 id="vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></h3>
 <p>I understand this is only visual sugar candy and not much functionality
 improvement as Gurus told me.</p>
 <p>But it was irresistible &hellip; Sigh &hellip; Forgive me for my weakness.  I try to use
@@ -309,16 +327,6 @@ version is obtained from github.  (Well.. sort of. I had to adjust local font
 glyph availability issues.)</p>
 <p>If I need really light statusline, I use bare static status line string defined
 in <code>~/.vim/vimrc</code>).  If vim-airline is active, this setting is overridden.</p>
-<h2 id="terminal-job-mode">TERMINAL-JOB MODE</h2>
-<p>Don&rsquo;t run Vim inside TERMINAL-JOB MODE.  I ended with &lsquo;buftype&rsquo; error.  It
-becomes &lsquo;terminal&rsquo; type.</p>
-<h2 id="quote-and-comment-and-line-continuation-in-vim">Quote and comment and line continuation in Vim</h2>
-<ul>
-<li>Quoted string in VimScript is single quote.</li>
-<li>Comment lines start with double quote</li>
-<li>Line continuation is reverse slash prepended to the following line.  It seems
-leading blank characters are allowed.</li>
-</ul>
 <!-- raw HTML omitted -->
 
 
