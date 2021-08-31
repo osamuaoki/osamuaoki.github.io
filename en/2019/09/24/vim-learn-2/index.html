@@ -86,11 +86,12 @@
         <li><a href="#junegunnfzf-and-junegunnfzfvim"><code>junegunn/fzf</code> and <code>junegunn/fzf.vim</code></a></li>
         <li><a href="#airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></a></li>
         <li><a href="#romainlvim-qlist"><code>romainl/vim-qlist</code></a></li>
-        <li><a href="#jcebvim-orgmode"><code>jceb/vim-orgmode</code></a></li>
         <li><a href="#airbladevim-gitgutter-1"><code>airblade/vim-gitgutter</code></a></li>
+        <li><a href="#jcebvim-orgmode"><code>jceb/vim-orgmode</code></a></li>
         <li><a href="#vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></a></li>
       </ul>
     </li>
+    <li><a href="#netrw"><code>netrw</code></a></li>
   </ul>
 </nav>
 
@@ -157,13 +158,14 @@ good compromise.)</li>
 </ul>
 </li>
 </ul>
+<p>As I read &ldquo;<a href="https://www.vi-improved.org/recommendations/">Recommendations</a>&rdquo;
+again, I may need to cut back on packages more.</p>
 <p>For now, I set them up as:</p>
 <ul>
 <li><code>Q</code>: Paste MACRO (routine for keyboard MACRO just with <code>q</code>-key. NORMAL
 MODE: <code>qq</code> + &hellip; + <code>&lt;Esc&gt;</code> + <code>q</code> + <code>Q</code>&hellip;) by defining unused &lsquo;Q&rsquo; as &lsquo;@q&rsquo;</li>
 <li><code>&lt;C-F&gt;</code> as <code>&lt;Right&gt;</code>, <code>&lt;C-B&gt;</code> as <code>&lt;Left&gt;</code>, <code>&lt;C-D&gt;</code> as<code> </code><!-- raw HTML omitted -->` for
 INSERT and REPLACE and COMMAND.</li>
-<li><code>&lt;C-t&gt;</code>: swap(ch[-2],ch[-1])</li>
 <li><code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor in NORMAL, or exact selected word in VISUAL to z-register
 <ul>
 <li><code>&lt;C-L&gt;</code> to clear highlight (Redefinition but harmless modification to
@@ -252,14 +254,13 @@ terminal escape code (ISO color etc.) and mapping/keyboard delays.</p>
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/gvimrc">~/.vim/gvimrc</a> file.</p>
 <h2 id="external-packages">External packages</h2>
 <h3 id="dense-analysisale"><code>dense-analysis/ale</code></h3>
-<p><strong>This is used a lot</strong></p>
-<p>This is a very nice syntax checker front-end.
-.
-See <a href="/en/2021/08/27/dev-03/">Development system (3)</a> to understand how to
+<p><strong>This is used a lot for writing shell and python</strong></p>
+<p>This is a very nice syntax checker front-end.</p>
+<p>See <a href="/en/2021/08/27/dev-03/">Development system (3)</a> to understand how to
 set up backend linters.  Setting these to be not-so-noisy are important part of
 their configuration.  I also backuped them to my dotfiles:
 <a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a>.</p>
-<p>It is important to use static checker for interpreter languges since they
+<p>It is important to use static checker for interpreter languages since they
 usually don&rsquo;t complain even if typo causes unused/non-assigned variables.</p>
 <p>I use this with:</p>
 <ul>
@@ -269,6 +270,8 @@ excessive noise.)  See
 <a href="https://github.com/osamuaoki/osamu-utils/tree/main/dot/.config">https://github.com/osamuaoki/osamu-utils/tree/main/dot/.config</a> for backed up
 settings.</li>
 </ul>
+<p>Since these can clutter screen, I am setting its display of reports to be
+toggles on demand.</p>
 <p>LSP hasn&rsquo;t been used.</p>
 <ul>
 <li><a href="https://github.com/dense-analysis/ale">https://github.com/dense-analysis/ale</a> (FAQ)</li>
@@ -321,21 +324,23 @@ crashing.</p>
 <h3 id="airbladevim-gitgutter"><code>airblade/vim-gitgutter</code></h3>
 <p>It is installed but not activated on demand and default off.</p>
 <h3 id="romainlvim-qlist"><code>romainl/vim-qlist</code></h3>
-<p><strong>This has not been used much but interesting.  (commented out now)</strong></p>
+<p><strong>This has not been used much.</strong></p>
 <p>Native behavior of <code>[I</code>, <code>]I</code>, <code>[D</code>, and <code>]D</code> to search the keyword and the
 macro definition is a bit half baked.  It should be much nicer if it allows to
 jump to pertinent positions as in the QuickFix list.</p>
 <p>This script replaces these NORMAL MODE commands with more desirable behavior
 ones of the QuickFix list.</p>
-<h3 id="jcebvim-orgmode"><code>jceb/vim-orgmode</code></h3>
-<p><strong>This has not been used much but interesting.  (commented out now)</strong></p>
 <h3 id="airbladevim-gitgutter-1"><code>airblade/vim-gitgutter</code></h3>
-<p><strong>This is not used but interesting. (not used recently under this configuration)</strong></p>
+<p><strong>This is not used much.</strong></p>
 <p>Checks diff from the repository contents asynchronously without blocking editor
 response and mark changed lines.</p>
+<p>The display of git status is toggled on demand.</p>
+<h3 id="jcebvim-orgmode"><code>jceb/vim-orgmode</code></h3>
+<p><strong>This has not been used. (Interesting)  (commented out now)</strong></p>
 <h3 id="vim-airlinevim-airline-and-vim-airlinevim-airline-themes"><code>vim-airline/vim-airline</code> and <code>vim-airline/vim-airline-themes</code></h3>
 <p>I understand this is only visual sugar candy and not much functionality
-improvement as Gurus told me.</p>
+improvement as Gurus told me.  My startup time is 150ms with this and 80 ms
+without.</p>
 <p>But it was irresistible &hellip; Sigh &hellip; Forgive me for my weakness.  I try to use
 this with minimal complications, though.</p>
 <p>Other similar packages such as <code>rbong/vim-crystalline</code> and
@@ -347,6 +352,10 @@ version is obtained from github.  (Well.. sort of. I had to adjust local font
 glyph availability issues.)</p>
 <p>If I need really light statusline, I use bare static status line string defined
 in <code>~/.vim/vimrc</code>).  If vim-airline is active, this setting is overridden.</p>
+<h2 id="netrw"><code>netrw</code></h2>
+<p>I was wondering <code>~/.vim/.netrwhist</code> file.  I realize this is related to
+<code>netrw</code> which is the native Vim filer.</p>
+<p>Filers provided by FZF.VIM is cute but I should learn this one too.</p>
 <!-- raw HTML omitted -->
 
 
