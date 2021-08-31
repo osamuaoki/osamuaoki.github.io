@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/24 (initial publish),
-2021/08/30 (last update)
+2021/08/31 (last update)
 </h3>
 </div>
 
@@ -94,24 +94,31 @@
   </ul>
 </nav>
 
-<p>Let&rsquo;s review a few interesting plugins.</p>
-<p>Please note that I manage plugins via Vim 8&rsquo;s native plugin management
-framework.</p>
+<p>Let&rsquo;s review how I initialize Vim and use a few interesting packages.</p>
+<p>Please note that I now manage package directly via the Vim 8&rsquo;s native package
+management framework with <code>packadd!</code> without using so-called package managers.</p>
 <h2 id="vim-general-settings-packages">Vim general settings (packages)</h2>
 <p>As of 2021-08-27, I mostly use the latest version from github:</p>
 <ul>
-<li>ale (on demand linter)</li>
-<li>securemodelines</li>
-<li>vim-spell-under (I wrote)</li>
-<li>vim-better-whitespace</li>
-<li>vim-indent-guides</li>
-<li>vim-sensible ( matchit &ndash; provided by vim is loaded.)</li>
-<li>gnupg &ndash; provided by vim-scripts is loaded.)</li>
-<li>fzf and fzf.vim with rg (access functionalities with <code>&lt;leader&gt;</code>)</li>
-<li>gitgutter (on demand)</li>
-<li>vim-python-matchit (I use locally patched 0.5)</li>
-<li>vim-airline</li>
-<li>vim-airline-themes</li>
+<li><strong>vim-sensible</strong> &ndash; basics
+<ul>
+<li><strong>matchit</strong> &ndash; provided by vim is loaded.</li>
+</ul>
+</li>
+<li><strong>securemodelines</strong></li>
+<li><strong>vim-spell-under</strong> &ndash; I wrote to get syntax highlight to work with spell checker</li>
+<li><strong>vim-python-matchit</strong> &ndash; I patched 0.5 to jump to &ldquo;else&rdquo;, too for &ldquo;for&rdquo; and &ldquo;while&rdquo;</li>
+<li><strong>vim-better-whitespace</strong></li>
+<li><strong>vim-indent-guides</strong></li>
+<li><strong>ale</strong> &ndash; linter interface configured to be on-demand display</li>
+<li><strong>gitgutter</strong> &ndash; git interface configured to be on-demand display</li>
+<li><strong>fzf</strong> and <strong>fzf.vim</strong> with <strong>rg</strong> &ndash; menu based selection interface
+<ul>
+<li>access extra functionalities with <code>&lt;leader&gt;</code>-sequences.</li>
+</ul>
+</li>
+<li><strong>gnupg</strong> &ndash; provided by vim-scripts</li>
+<li><strong>vim-airline</strong> and <strong>vim-airline-themes</strong> &ndash; nerdy look</li>
 </ul>
 <p>Please note actual basic configuration settings are in <code>~/.vim/vimrc</code>.  This
 file includes the Vim 8 native package management.  The whole <code>~/.vim/</code>
@@ -120,21 +127,26 @@ contents are at <a href="https://github.com/osamuaoki/dot-vim/">dot-vim</a>.</p>
 copies of these dotfiles are at
 <a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a>.  No sensitive info&rsquo;s
 are in these.  That&rsquo;s backed up locally.</p>
-<p>I now set up those IDE-like heavy features as on-demand and low profilei from
-user&rsquo;s view. (You can further disable packages by comment out corresponding
-<code>packadd!</code> line with leading <code>&quot;</code>.)</p>
+<p>I now set up those IDE-like fancy heavy features as on-demand display and low
+profile from user&rsquo;s view. (We can further disable packages by comment out
+corresponding <code>packadd!</code> line with leading <code>&quot;</code>.)</p>
 <p>Also, cursor remembers its position.</p>
 <h2 id="vim-general-settings-keyboard-bindings">Vim general settings (keyboard bindings)</h2>
 <p>Thought on configuration and keyboard bindings are:</p>
 <ul>
 <li>Use external packages as little exposure as possible.</li>
 <li>Use CapsLock for Esc via GNOME Tweak setting.</li>
-<li>Less key binding customization is better.</li>
-<li>Add some missing shell-like control key bindings in INSERT and COMMAND modes.</li>
+<li>Less key binding customization is better.
+<ul>
+<li>Never change data modifying functionality</li>
+<li>Adding limited shell-like control key bindings to undefined in INSERT and COMMAND modes.</li>
+</ul>
+</li>
 <li>Avoid redefining keys with similar <strong>improved</strong> variants
 <ul>
 <li>If functionalities are needed, instead, define new ones to unused keys such
-as <code>&lt;leader&gt;</code>-combinations.</li>
+as <code>&lt;leader&gt;</code>-combinations (usually with 2 keys.  I think that 2 keys are
+good compromise.)</li>
 <li>Give easy access to FZF.VIM provided functions with <code>&lt;leader&gt;</code>.</li>
 </ul>
 </li>
@@ -148,12 +160,15 @@ as <code>&lt;leader&gt;</code>-combinations.</li>
 <p>For now, I set them up as:</p>
 <ul>
 <li><code>Q</code>: Paste MACRO (routine for keyboard MACRO just with <code>q</code>-key. NORMAL
-MODE: <code>qq</code> + &hellip; + <code>&lt;Esc&gt;</code> + <code>q</code> + <code>Q</code>&hellip;) with Q == &lsquo;@q&rsquo;</li>
+MODE: <code>qq</code> + &hellip; + <code>&lt;Esc&gt;</code> + <code>q</code> + <code>Q</code>&hellip;) by defining unused &lsquo;Q&rsquo; as &lsquo;@q&rsquo;</li>
+<li><code>&lt;C-F&gt;</code> as <code>&lt;Right&gt;</code>, <code>&lt;C-B&gt;</code> as <code>&lt;Left&gt;</code>, <code>&lt;C-D&gt;</code> as<code> </code><!-- raw HTML omitted -->` for
+INSERT and REPLACE and COMMAND.</li>
 <li><code>&lt;C-t&gt;</code>: swap(ch[-2],ch[-1])</li>
 <li><code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor in NORMAL, or exact selected word in VISUAL to z-register
 <ul>
-<li><code>&lt;C-L&gt;</code> to clear highlight (Redefinition but harmless)XXX</li>
-<li><code>&lt;leader&gt;s</code> to create substitution template</li>
+<li><code>&lt;C-L&gt;</code> to clear highlight (Redefinition but harmless modification to
+its presentation details)</li>
+<li><code>&lt;leader&gt;sb</code> to create substitution template</li>
 </ul>
 </li>
 <li><code>&lt;leader&gt;&lt;CR&gt;</code>: TERMINAL-JOB start
@@ -162,15 +177,13 @@ MODE: <code>qq</code> + &hellip; + <code>&lt;Esc&gt;</code> + <code>q</code> + <
 <li><code>i</code>: get back to TERMINAL-JOB</li>
 </ul>
 </li>
-<li><code>&lt;leader&gt;a</code>: Toggle ALE (ALE)
+<li><code>&lt;leader&gt;al</code>: Toggle ALE (ALE)
 <ul>
 <li>Set up linters as <a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a></li>
 </ul>
 </li>
-<li><code>&lt;leader&gt;d</code>: Strip tailing spaces (vim-better-whitespace)</li>
-<li><code>&lt;leader&gt;w</code>: Close all</li>
-<li><code>&lt;leader&gt;z</code>: Un-fold all</li>
-<li><code>&lt;leader&gt;=</code>: Vim indent formatter</li>
+<li><code>&lt;leader&gt;sw</code>: Strip tailing whitespaces (vim-better-whitespace)</li>
+<li><code>&lt;leader&gt;wq</code>: Write all and quit (<code>:wall|q</code>)</li>
 <li><code>&lt;leader&gt;gg</code>: Toggle GitGutter (GitGutter)
 <ul>
 <li><code>&lt;leader&gt;hp</code>: hunk preview (GitGutter) &ndash; default</li>
@@ -180,19 +193,14 @@ MODE: <code>qq</code> + &hellip; + <code>&lt;Esc&gt;</code> + <code>q</code> + <
 </li>
 <li>FZF commands (down-selection tool)
 <ul>
-<li><code>&lt;leader&gt;b</code>: Buffers selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;c</code>: Color selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;f</code>: Files selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;fb</code>: Buffers selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;fc</code>: Color selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;ff</code>: Files selection (FZF.VIM)</li>
 <li><code>&lt;leader&gt;gl</code>: GFiles selection (FZF.VIM) &ndash; <code>git ls-files</code></li>
 <li><code>&lt;leader&gt;gs</code>: GFiles? selection (FZF.VIM) &ndash; <code>git status</code></li>
-<li><code>&lt;leader&gt;m</code>: Maps listing with selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;r</code>: Rg search selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;v</code>: History selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;x</code>: Command selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;/</code>: Text search history selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;:</code>: Ex-command search selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;t</code>: Tags search selection (FZF.VIM)</li>
-<li><code>&lt;leader&gt;...</code>: many others (FZF.VIM)</li>
+<li><code>&lt;leader&gt;fm</code>: Maps listing with selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;fr</code>: Rg search selection (FZF.VIM)</li>
+<li><code>&lt;leader&gt;??</code>: many others (FZF.VIM)</li>
 </ul>
 </li>
 </ul>
@@ -230,7 +238,7 @@ MACRO, &ldquo;qq&rdquo; to quit recording MACRO, &ldquo;Q&rdquo; to apply MACRO)
 xnoremap Q :norm @q&lt;cr&gt;
 </code></pre><h3 id="map-leaderleader-in-normal-mode">Map <code>&lt;leader&gt;&lt;leader&gt;</code> in NORMAL MODE</h3>
 <p>This is to automatically select word below cursor.  Very useful for search and
-replace operation. <code>*</code> and <code>#</code>.</p>
+replace operation. It selects like <code>*</code> <!-- raw HTML omitted --> and <code>#</code> but doesn&rsquo;t move cursor.</p>
 <h3 id="map-escesc-and-esc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> and <code>&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</h3>
 <p>Since TERMINAL-JOB MODE feels like INSERT/REPLACE MODE, I didn&rsquo;t like vim style
 <code>&lt;C-w&gt;N</code> nor odd neovim style <code>&lt;C-\&gt;&lt;c-n&gt;</code> to get out.  I accidentally typed
