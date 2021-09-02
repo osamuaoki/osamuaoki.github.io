@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/24 (initial publish),
-2021/09/01 (last update)
+2021/09/03 (last update)
 </h3>
 </div>
 
@@ -66,17 +66,19 @@
     <li><a href="#local-entry-point-vimvimrc-and-vimgvimrc">Local entry point: <code>~/.vim/vimrc</code> and <code>~/.vim/gvimrc</code></a>
       <ul>
         <li><a href="#quote-and-comment-and-line-continuation-in-vimscript">Quote and comment and line continuation in VimScript</a></li>
-        <li><a href="#map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</a></li>
-        <li><a href="#map-q-to-q-in-normal-mode">Map <code>Q</code> to <code>@q</code> in NORMAL MODE</a></li>
-        <li><a href="#map-leaderleader-in-normal-mode">Map <code>&lt;leader&gt;&lt;leader&gt;</code> in NORMAL MODE</a></li>
+        <li><a href="#map-leaderleader-in-normal-mode-and-visual-mode">Map <code>&lt;leader&gt;&lt;leader&gt;</code> in NORMAL MODE and VISUAL MODE</a></li>
         <li><a href="#map-escesc-and-esc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> and <code>&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</a></li>
+      </ul>
+    </li>
+    <li><a href="#map-esch-escj--esck-escl">Map <code>&lt;Esc&gt;h</code>, <code>&lt;Esc&gt;j</code>,  <code>&lt;Esc&gt;k</code>, <code>&lt;Esc&gt;l</code></a>
+      <ul>
         <li><a href="#gvim-font-setting"><code>gvim</code> font setting</a></li>
       </ul>
     </li>
     <li><a href="#external-packages">External packages</a>
       <ul>
         <li><a href="#dense-analysisale"><code>dense-analysis/ale</code></a></li>
-        <li><a href="#ciaranmsecuremodelines"><code>ciaranm/securemodelines</code></a></li>
+        <li><a href="#ciaranmsecuremodelines----vim-scripts"><code>ciaranm/securemodelines</code> &ndash; vim-scripts</a></li>
         <li><a href="#osamuaokivim-spell-under"><code>osamuaoki/vim-spell-under</code></a></li>
         <li><a href="#ntpetersvim-better-whitespace"><code>ntpeters/vim-better-whitespace</code></a></li>
         <li><a href="#nathanaelkanevim-indent-guides"><code>nathanaelkane/vim-indent-guides</code></a></li>
@@ -99,27 +101,31 @@
 <p>Please note that I now manage package directly via the Vim 8&rsquo;s native package
 management framework with <code>packadd!</code> without using so-called package managers.</p>
 <h2 id="vim-general-settings-packages">Vim general settings (packages)</h2>
-<p>As of 2021-08-27, I mostly use the latest version from github:</p>
+<p>As of 2021-09-02, I mostly use the latest version from github for some fancy
+fast developing packages but also use older mature packages from Debian
+<code>vim-scripts</code> package.</p>
 <ul>
 <li><strong>vim-sensible</strong> &ndash; basics
 <ul>
-<li><strong>matchit</strong> &ndash; provided by vim is loaded.</li>
+<li><strong>matchit</strong> &ndash; provided by vim</li>
 </ul>
 </li>
-<li><strong>securemodelines</strong></li>
-<li><strong>vim-spell-under</strong> &ndash; I wrote to get syntax highlight to work with spell checker</li>
-<li><strong>vim-python-matchit</strong> &ndash; I patched 0.5 to jump to &ldquo;else&rdquo;, too for &ldquo;for&rdquo; and &ldquo;while&rdquo;</li>
-<li><strong>vim-better-whitespace</strong></li>
-<li><strong>vim-indent-guides</strong></li>
-<li><strong>ale</strong> &ndash; linter interface configured to be on-demand display</li>
-<li><strong>gitgutter</strong> &ndash; git interface configured to be on-demand display</li>
-<li><strong>fzf</strong> and <strong>fzf.vim</strong> with <strong>rg</strong> &ndash; menu based selection interface
+<li><strong>securemodelines</strong> &ndash; vim-scripts</li>
+<li><strong>winmanager</strong> &ndash; vim-scripts</li>
+<li><strong>bufexplorer</strong> &ndash; vim-scripts</li>
+<li><strong>gnupg</strong> &ndash; vim-scripts</li>
+<li><strong>vim-spell-under</strong> &ndash; osamu: syntax highlight to work with spell checker</li>
+<li><strong>vim-python-matchit</strong> &ndash; osamu: patched 0.5 to jump to &ldquo;else&rdquo;, too for &ldquo;for&rdquo; and &ldquo;while&rdquo;</li>
+<li><strong>vim-better-whitespace</strong> &ndash; github</li>
+<li><strong>vim-indent-guides</strong> &ndash; github</li>
+<li><strong>ale</strong> &ndash; github: linter interface configured to be on-demand display</li>
+<li><strong>gitgutter</strong> &ndash; github: git interface configured to be on-demand display</li>
+<li><strong>fzf</strong> and <strong>fzf.vim</strong> with <strong>rg</strong> &ndash; github: menu based selection interface
 <ul>
 <li>access extra functionalities with <code>&lt;leader&gt;</code>-sequences.</li>
 </ul>
 </li>
-<li><strong>gnupg</strong> &ndash; provided by vim-scripts</li>
-<li><strong>vim-airline</strong> and <strong>vim-airline-themes</strong> &ndash; nerdy look</li>
+<li><strong>vim-airline</strong> and <strong>vim-airline-themes</strong> &ndash; github: nerdy look</li>
 </ul>
 <p>Please note actual basic configuration settings are in <code>~/.vim/vimrc</code>.  This
 file includes the Vim 8 native package management.  The whole <code>~/.vim/</code>
@@ -128,9 +134,10 @@ contents are at <a href="https://github.com/osamuaoki/dot-vim/">dot-vim</a>.</p>
 copies of these dotfiles are at
 <a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a>.  No sensitive info&rsquo;s
 are in these.  That&rsquo;s backed up locally.</p>
-<p>I now set up those IDE-like fancy heavy features as on-demand display and low
-profile from user&rsquo;s view. (We can further disable packages by comment out
-corresponding <code>packadd!</code> line with leading <code>&quot;</code>.)</p>
+<p>I now set up those IDE-like fancy heavy features (<strong>ale</strong>, <strong>gitgutter</strong>,
+<strong>fzf</strong>)  as on-demand display modification and low profile from user&rsquo;s view.
+(We can further disable packages by comment out corresponding <code>packadd!</code> line
+with leading <code>&quot;</code>.)</p>
 <p>Also, cursor remembers its position.</p>
 <h2 id="vim-general-settings-keyboard-bindings">Vim general settings (keyboard bindings)</h2>
 <p>Thought on configuration and keyboard bindings are:</p>
@@ -141,14 +148,15 @@ corresponding <code>packadd!</code> line with leading <code>&quot;</code>.)</p>
 <ul>
 <li>Never change data modifying functionality</li>
 <li>Adding limited shell-like control key bindings to undefined in INSERT and COMMAND modes.</li>
+<li>Provide alternative safer access to some keys (CTRL-W: this deletes a word in INSERT)</li>
 </ul>
 </li>
 <li>Avoid redefining keys with similar <strong>improved</strong> variants
 <ul>
 <li>If functionalities are needed, instead, define new ones to unused keys such
-as <code>&lt;leader&gt;</code>-combinations (usually with 2 keys.  I think that 2 keys are
-good compromise.)</li>
-<li>Give easy access to FZF.VIM provided functions with <code>&lt;leader&gt;</code>.</li>
+as <code>&lt;leader&gt;</code>-combinations (usually with 1 or 2 keys.  I think that 2 keys are
+good compromise for not so used functions.)</li>
+<li>Give access to FZF.VIM provided functions with <code>&lt;leader&gt;</code>+2 chars.</li>
 </ul>
 </li>
 <li>Don&rsquo;t try to do things with Vim when other tools do them better.
@@ -159,33 +167,35 @@ good compromise.)</li>
 </li>
 </ul>
 <p>As I read &ldquo;<a href="https://www.vi-improved.org/recommendations/">Recommendations</a>&rdquo;
-again, I may need to cut back on packages more.</p>
+again, I feel like I need to cut back on some fancy packages more.</p>
 <p>For now, I set them up as:</p>
 <ul>
 <li><code>Q</code>: Paste MACRO (routine for keyboard MACRO just with <code>q</code>-key. NORMAL
 MODE: <code>qq</code> + &hellip; + <code>&lt;Esc&gt;</code> + <code>q</code> + <code>Q</code>&hellip;) by defining unused &lsquo;Q&rsquo; as &lsquo;@q&rsquo;</li>
 <li><code>&lt;C-F&gt;</code> as <code>&lt;Right&gt;</code>, <code>&lt;C-B&gt;</code> as <code>&lt;Left&gt;</code>, <code>&lt;C-D&gt;</code> as<code> </code><!-- raw HTML omitted -->` for
 INSERT and REPLACE and COMMAND.</li>
-<li><code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor in NORMAL, or exact selected word in VISUAL to z-register
+<li><code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor in NORMAL, or exact selected word in VISUAL to &ldquo;-register
 <ul>
-<li><code>&lt;C-L&gt;</code> to clear highlight (Redefinition but harmless modification to
-its presentation details)</li>
-<li><code>&lt;leader&gt;sb</code> to create substitution template</li>
-</ul>
-</li>
+<li><code>&lt;C-L&gt;</code> to clear highlight (Redefinition but harmless modification to its presentation details)</li>
+<li><code>&lt;leader&gt;sa</code> to create substite-all template</li>
 <li><code>&lt;leader&gt;&lt;CR&gt;</code>: TERMINAL-JOB start
 <ul>
 <li><code>&lt;Esc&gt;&lt;Esc&gt;</code> or <code>&lt;Esc&gt;</code>: get out to TERMINAL-NORMAL</li>
 <li><code>i</code>: get back to TERMINAL-JOB</li>
 </ul>
 </li>
-<li><code>&lt;leader&gt;al</code>: Toggle ALE (ALE)
+</ul>
+</li>
+<li><code>&lt;leader&gt;sw</code>: Strip tailing whitespaces (vim-better-whitespace)</li>
+<li><code>&lt;leader&gt;ss</code>: Rotate SPELL and SYNTAX mode</li>
+<li><code>&lt;leader&gt;p</code>: Toggle Pase/NoPaste  (No more <!-- raw HTML omitted -->)</li>
+<li><code>&lt;leader&gt;w</code>: Toggle WinManager</li>
+<li><code>&lt;leader&gt;b</code>: Toggle BufferExplorer</li>
+<li><code>&lt;leader&gt;aa</code>: Toggle ALE (ALE)
 <ul>
 <li>Set up linters as <a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a></li>
 </ul>
 </li>
-<li><code>&lt;leader&gt;sw</code>: Strip tailing whitespaces (vim-better-whitespace)</li>
-<li><code>&lt;leader&gt;wq</code>: Write all and quit (<code>:wall|q</code>)</li>
 <li><code>&lt;leader&gt;gg</code>: Toggle GitGutter (GitGutter)
 <ul>
 <li><code>&lt;leader&gt;hp</code>: hunk preview (GitGutter) &ndash; default</li>
@@ -229,18 +239,11 @@ are also included in this
 <li>Line continuation is reverse slash prepended to the following line.  It seems
 leading blank characters are allowed.</li>
 </ul>
-<h3 id="map-f2-to-toggle-paste-mode-in-insert-mode">Map <code>&lt;F2&gt;</code> to toggle PASTE MODE in INSERT MODE</h3>
-<p>Adjust PASTE MODE by <code>F2</code>-key.</p>
-<pre><code>set nopaste
-set pastetoggle=&lt;f2&gt;
-</code></pre><h3 id="map-q-to-q-in-normal-mode">Map <code>Q</code> to <code>@q</code> in NORMAL MODE</h3>
-<p>Record and apply keyboard MACRO just with <code>q</code>-key. (&ldquo;qq&rdquo; to start recording
-MACRO, &ldquo;q&rdquo; to quit recording MACRO, &ldquo;Q&rdquo; to apply MACRO)</p>
-<pre><code>nnoremap Q @q
-xnoremap Q :norm @q&lt;cr&gt;
-</code></pre><h3 id="map-leaderleader-in-normal-mode">Map <code>&lt;leader&gt;&lt;leader&gt;</code> in NORMAL MODE</h3>
-<p>This is to automatically select word below cursor.  Very useful for search and
-replace operation. It selects like <code>*</code> <!-- raw HTML omitted --> and <code>#</code> but doesn&rsquo;t move cursor.</p>
+<h3 id="map-leaderleader-in-normal-mode-and-visual-mode">Map <code>&lt;leader&gt;&lt;leader&gt;</code> in NORMAL MODE and VISUAL MODE</h3>
+<p>This is to automatically select word below cursor (NORMAL, or visually
+highlighted word.  Very useful for search and replace operation by working with
+&lsquo;/&rsquo; and &lsquo;?&rsquo; and &lsquo;n&rsquo; and &lsquo;N&rsquo;.   It can also create substitute all template with
+<code>&lt;leader&gt;sa</code> so this is more than &lsquo;#&rsquo; and &lsquo;*&rsquo;.</p>
 <h3 id="map-escesc-and-esc-to-c-c-n-in-terminal-job-mode">Map <code>&lt;Esc&gt;&lt;Esc&gt;</code> and <code>&lt;Esc&gt;</code> to <code>&lt;C-\&gt;&lt;c-n&gt;</code> in TERMINAL-JOB MODE</h3>
 <p>Since TERMINAL-JOB MODE feels like INSERT/REPLACE MODE, I didn&rsquo;t like vim style
 <code>&lt;C-w&gt;N</code> nor odd neovim style <code>&lt;C-\&gt;&lt;c-n&gt;</code> to get out.  I accidentally typed
@@ -249,6 +252,9 @@ everywhere first if I want to move around windows.</p>
 <p>Remapping <code>&lt;Esc&gt;&lt;Esc&gt;</code> in addition to <code>&lt;Esc&gt;</code> avoids causing interference with the
 terminal escape code (ISO color etc.) and mapping/keyboard delays.</p>
 <p>FZF.VIM issues are handled.</p>
+<h2 id="map-esch-escj--esck-escl">Map <code>&lt;Esc&gt;h</code>, <code>&lt;Esc&gt;j</code>,  <code>&lt;Esc&gt;k</code>, <code>&lt;Esc&gt;l</code></h2>
+<p>I have typed <code>CTRL-W</code> in INSERT and REPLACE mode ending up with breaken code.
+These are safer alternatives to avoid such incidences.</p>
 <h3 id="gvim-font-setting"><code>gvim</code> font setting</h3>
 <p>Setting to &lsquo;<code>Hack 14</code>&rsquo; required to use escaped space in the
 <a href="https://github.com/osamuaoki/dot-vim/blob/master/gvimrc">~/.vim/gvimrc</a> file.</p>
@@ -279,7 +285,7 @@ toggles on demand.</p>
 <li><a href="https://github.com/rhysd/vim-lsp-ale">https://github.com/rhysd/vim-lsp-ale</a></li>
 <li><a href="https://github.com/prabirshrestha/vim-lsp">https://github.com/prabirshrestha/vim-lsp</a></li>
 </ul>
-<h3 id="ciaranmsecuremodelines"><code>ciaranm/securemodelines</code></h3>
+<h3 id="ciaranmsecuremodelines----vim-scripts"><code>ciaranm/securemodelines</code> &ndash; vim-scripts</h3>
 <p>Features like &ldquo;modeline&rdquo; is very convenient but it may become source of
 security concern.  This plugin disables Vim&rsquo;s native capability for &ldquo;modeline&rdquo;
 but still enables very limited commands to be parsed.</p>

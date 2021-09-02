@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/17 (initial publish),
-2021/08/30 (last update)
+2021/09/03 (last update)
 </h3>
 </div>
 
@@ -72,9 +72,9 @@
         <li><a href="#some-options">Some options</a></li>
       </ul>
     </li>
-    <li><a href="#insert-mode-and-command-mode">INSERT MODE and COMMAND MODE</a>
+    <li><a href="#insert-mode-and-command-mode">INSERT MODE and COMMAND MODE</a></li>
+    <li><a href="#command-mode">COMMAND MODE</a>
       <ul>
-        <li><a href="#last-resort-inputs-with-ctrl-keys">Last resort inputs with <code>CTRL</code>-keys</a></li>
         <li><a href="#tab-in-command-mode">TAB in COMMAND MODE</a></li>
         <li><a href="#basics-in-command-mode">Basics in COMMAND MODE</a></li>
       </ul>
@@ -212,30 +212,21 @@ etc.</p>
 <p>You can use NORMAL-MODE-like editing for COMMAND MODE situation by starting it
 with <code>q:</code> or <code>q/</code> or <code>q?</code>.  Alternatively, typing <code>^F</code> in COMMAND MODE
 situation also starts NORMAL-MODE-like editing.</p>
-<h3 id="last-resort-inputs-with-ctrl-keys">Last resort inputs with <code>CTRL</code>-keys</h3>
-<p>Here are some non-intuitive key sequences used by INSERT MODE used by INSERT
-MODE.  Some key sequences are also valid for COMMAND MODE.</p>
+<h2 id="command-mode">COMMAND MODE</h2>
+<p>Although it is tempting and easy to map some CONTROL-key sequences to some
+cursor keys, I hate to override use them since they are most likely used by
+Vim.  Use NORMAL MODE and COMMAND NORMAL MODE.</p>
+<p>Despite this, I decided to allow following minimal substitutions for COMMAND
+MODE and TERMINAL-JOB MODE  in line with the shell command line usage of them
+where NORMAL mode is not easily accessible.</p>
 <ul>
-<li><code>^H</code>: Delete a character before the cursor. (same as <code>&lt;BS&gt;</code>)</li>
-<li><code>^W</code>: Delete the word before the cursor.</li>
-<li><code>^U</code>: Delete all entered characters before the cursor.</li>
-<li><code>^P</code>: Find previous keyword.(map non-starter <code>&lt;S-TAB&gt;</code> to this)</li>
-<li><code>^N</code>: Find next keyword.    (map non-starter <code>&lt;TAB&gt;</code> to this)</li>
-<li><code>^Y</code>: Insert the character which is above the cursor. (Only INSERT MODE)</li>
-<li><code>^E</code>: Insert the character which is below the cursor. (Only INSERT MODE)</li>
-<li><code>^T</code>: Insert one shiftwidth of indent. (Only INSERT MODE)</li>
-<li><code>^D</code>: Delete one shiftwidth of indent. (Only INSERT MODE)</li>
-<li><code>^D</code>: List all possible choices. (Only Ex COMMAND MODE to start wildmenu)</li>
-<li><code>^F</code>: open editable command history. (only COMMAND MODE)</li>
-<li><code>^X</code>: start of sub-mode (<code>h: insert_expand</code>).</li>
-<li><code>0^D</code>: delete all indent.</li>
-<li><code>^Vxαα</code>: insert character at <code>0xαα</code>. (command mode)</li>
-<li><code>^Vuαααα</code>: insert unicode character at <code>0xαααα</code>. (command mode)</li>
-<li><code>^Vuαααααα</code>: insert unicode character at <code>0xαααααααα</code>. (command mode)</li>
+<li><code>CTRL-H</code> mapped to <code>&lt;BS&gt;</code> (actually, these are the same code)</li>
+<li><code>CTRL-D</code> mapped to <code>&lt;Del&gt;</code></li>
+<li><code>CTRL-B</code> mapped to <code>&lt;Left&gt;</code></li>
+<li><code>CTRL-F</code> mapped to <code>&lt;Right&gt;</code></li>
 </ul>
-<p>Although it is tempting to map some CONTROL-key sequences to some cursor keys,
-don&rsquo;t bother to do so since they are most likely used by Vim.  Use NORMAL MODE
-and COMMAND NORMAL MODE and native cursor keys.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h3 id="tab-in-command-mode">TAB in COMMAND MODE</h3>
 <p>Normally, <code>TAB</code> in COMMAND MODE starts <strong>wildmenu</strong> under <code>:set wildmenu</code>.  You
 can use <code>TAB</code> and <code>S-TAB</code> to chose the one you want.</p>
@@ -268,7 +259,7 @@ in its buffer, QUICKFIX MODE is the one to automate your process.  No more
 <li><code>:helpg[rep]</code>: Run internal-<code>grep</code> on all help text files for
 search-jump-read cycle. (<code>:h :helpgrep</code>)</li>
 </ul>
-<p>Then you access and use the jump listi from COMMAND MODE.</p>
+<p>Then you access and use the jump list from COMMAND MODE.</p>
 <ul>
 <li><code>:cw[indow]</code>: Open the quickfix window if error.</li>
 <li><code>:cope[n]</code>: Open a window to show the current list of errors.</li>
@@ -282,14 +273,18 @@ search-jump-read cycle. (<code>:h :helpgrep</code>)</li>
 more envying EMACS terminal mode.</p>
 <ul>
 <li><code>:ter[minal]</code>: Start TERMINAL MODE. (<code>:h :terminal</code>)</li>
-<li><code>^WN</code> or <code>^\^N</code>: Switch to TERMINAL-NORMAL MODE.</li>
-<li><code>^W^W</code>: Move focus to the next window</li>
-<li><code>^W:</code>: Enter an Ex COMMAND MODE.</li>
-<li><code>^W.</code>: Send a <code>^W</code> to the job in the terminal.</li>
-<li><code>^W^\</code>: Send a <code>^\</code> to the job in the terminal.</li>
-<li><code>^W^C</code>: Send a <code>^C</code> to the job in the terminal.</li>
+<li><code>^WN</code> or <code>^\^N</code>: Switch to TERMINAL-NORMAL MODE.
+<ul>
+<li>I will map <code>&lt;Esc&gt;&lt;Esc&gt;</code> to <code>^\^N</code> for more consistent UX</li>
 </ul>
-<p>Typing <code>i</code> etc. will get you back to TERMINAL MODE from TERMINAL-NORMAL MODE.</p>
+</li>
+<li><code>^W^C</code>: Send a <code>^C</code> (0x03, ETX) to the job in the terminal.</li>
+<li><code>^W.</code>:  Send a <code>^W</code> (0x17, DC1) to the job in the terminal.</li>
+<li><code>^W^\</code>: Send a <code>^\</code> (0x1C, FS)  to the job in the terminal.</li>
+<li><code>^W:</code>: Enter an Ex COMMAND MODE.</li>
+<li><code>^W^W</code>: Move focus to the next window</li>
+</ul>
+<p>From TERMINAL-NORMAL MODE, typing <code>i</code> gets you back to TERMINAL MODE.</p>
 <h3 id="terminal-job-mode">TERMINAL-JOB MODE</h3>
 <p>Don&rsquo;t run Vim inside TERMINAL-JOB MODE.  I ended with &lsquo;buftype&rsquo; error.  It
 becomes &lsquo;terminal&rsquo; type.</p>
