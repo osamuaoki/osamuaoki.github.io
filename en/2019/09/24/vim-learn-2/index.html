@@ -166,7 +166,7 @@ with leading <code>&quot;</code>.)</p>
 <ul>
 <li>If functionalities are needed, instead, define new ones to unused keys such
 as <code>&lt;leader&gt;</code>-combinations (usually with 1 or 2 keys.  I think that 2 keys are
-good compromise for not so used functions.)</li>
+good compromise for not so used functions.</li>
 <li>Give access to FZF.VIM provided functions with <code>&lt;leader&gt;</code>+2 chars.</li>
 </ul>
 </li>
@@ -178,26 +178,35 @@ good compromise for not so used functions.)</li>
 </li>
 </ul>
 <p>As I read &ldquo;<a href="https://www.vi-improved.org/recommendations/">Recommendations</a>&rdquo;
-again, I feel like I need to cut back on some fancy packages more.</p>
-<p>For now, I set them up as:
-* <code>Q</code>: Paste MACRO (routine for keyboard MACRO just with <code>q</code>-key. NORMAL
-MODE: <code>qq</code> + &hellip; + <code>&lt;Esc&gt;</code> + <code>q</code> + <code>Q</code>&hellip;) by defining unused &lsquo;Q&rsquo; as &lsquo;@q&rsquo;
-* <code>&lt;C-F&gt;</code> as <code>&lt;Right&gt;</code>, <code>&lt;C-B&gt;</code> as <code>&lt;Left&gt;</code>, <code>&lt;C-D&gt;</code> as <code>&lt;Del&gt;</code> for
-INSERT and REPLACE and COMMAND.
-* Use <code>&lt;C-O&gt;</code> as &lsquo;cedit&rsquo; for COMMAND MODE to open editable command history.
-(No more surprise)
-* <code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor in NORMAL, or exact selected word in VISUAL to &ldquo;-register
-* <code>&lt;C-L&gt;</code> to clear highlight (Redefinition but harmless modification to its presentation details)
-* <code>&lt;leader&gt;r</code> to create replace-all template
-* <code>&lt;leader&gt;&lt;CR&gt;</code>: TERMINAL-JOB start
-* <code>&lt;Esc&gt;&lt;Esc&gt;</code> or <code>&lt;Esc&gt;</code>: get out to TERMINAL-NORMAL
-* <code>i</code>: get back to TERMINAL-JOB
-* <code>&lt;leader&gt;e</code>: Strip whitespaces at EOL (vim-better-whitespace)
-* <code>&lt;leader&gt;ss</code>: Rotate SPELL and SYNTAX mode &ndash; default</p>
+again, I feel like I need to cut back on some fancy packages more.  But as
+long as they do not slow down start up time and hidden under longer key
+sequences, I may keep them there.  Currently, my start up time is about 70ms
+without airline+netrw enabled, and 300 ms with both enabled.</p>
+<p>For now, I set them up as:</p>
 <ul>
+<li><code>Q</code>: Paste MACRO (routine for keyboard MACRO just with <code>q</code>-key. NORMAL
+MODE: <code>qq</code> + &hellip; + <code>&lt;Esc&gt;</code> + <code>q</code> + <code>Q</code>&hellip;) by defining unused &lsquo;Q&rsquo; as &lsquo;@q&rsquo;</li>
+<li><code>&lt;C-F&gt;</code> as <code>&lt;Right&gt;</code>, <code>&lt;C-B&gt;</code> as <code>&lt;Left&gt;</code>, <code>&lt;C-D&gt;</code> as <code>&lt;Del&gt;</code> for
+INSERT and REPLACE and COMMAND.</li>
+<li>Use <code>&lt;C-O&gt;</code> as &lsquo;cedit&rsquo; for COMMAND MODE to open editable command history.
+(No more surprise)</li>
+<li><code>&lt;leader&gt;&lt;leader&gt;</code>: Highlight search word under the cursor in NORMAL, or exact selected word in VISUAL to &ldquo;-register
+<ul>
+<li><code>&lt;C-L&gt;</code> to clear highlight (Redefinition but harmless modification to its presentation details)</li>
+<li><code>&lt;leader&gt;r</code> to create replace-all template</li>
+</ul>
+</li>
+<li><code>&lt;leader&gt;&lt;CR&gt;</code>: TERMINAL-JOB start
+<ul>
+<li><code>&lt;Esc&gt;&lt;Esc&gt;</code> or <code>&lt;Esc&gt;</code>: get out to TERMINAL-NORMAL</li>
+<li><code>i</code>: get back to TERMINAL-JOB</li>
+</ul>
+</li>
+<li><code>&lt;leader&gt;e</code>: Strip whitespaces at EOL (vim-better-whitespace)</li>
 <li><code>&lt;leader&gt;p</code>: Toggle Pase/NoPaste  (No more <!-- raw HTML omitted -->)</li>
 <li><code>&lt;leader&gt;w</code>: Toggle WinManager</li>
 <li><code>&lt;leader&gt;b</code>: Toggle BufferExplorer</li>
+<li><code>&lt;leader&gt;ss</code>: Rotate SPELL and SYNTAX mode &ndash; default</li>
 <li><code>&lt;leader&gt;aa</code>: Toggle ALE (ALE)
 <ul>
 <li>Set up linters as <a href="https://github.com/osamuaoki/osamu-utils">osamu-utils</a></li>
@@ -229,7 +238,8 @@ INSERT and REPLACE and COMMAND.
 <li><code>&lt;leader&gt;2</code>: Tab 2</li>
 <li>&hellip;</li>
 </ul>
-<p>Most of FZF commands <code>&lt;leader&gt;</code>-commands are not used much.  So I may change.</p>
+<p>Most of FZF commands <code>&lt;leader&gt;</code>-commands are not used much.  This is why I
+chose 2-chars.  So I may change.</p>
 <p>I set the font setting of GNOME terminal and GVim to
 <a href="https://tracker.debian.org/pkg/fonts-hack">Hack</a> 14 point. Not all
 non-standard <code>powerline</code> fonts are included.  So skip them in <code>airline</code> in
