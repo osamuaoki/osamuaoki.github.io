@@ -72,7 +72,7 @@
         <li><a href="#some-options">Some options</a></li>
       </ul>
     </li>
-    <li><a href="#insert-mode-and-command-mode">INSERT MODE and COMMAND MODE</a></li>
+    <li><a href="#insert-mode">INSERT MODE</a></li>
     <li><a href="#command-mode">COMMAND MODE</a>
       <ul>
         <li><a href="#tab-in-command-mode">TAB in COMMAND MODE</a></li>
@@ -91,7 +91,7 @@
 <p>I could use Vim as a basic editor with TKL-keyboard while tapping some keys
 multiple times.  This was functional but not so elegant!</p>
 <p>I decided to re-learn Vim to use it <strong>properly</strong>.  Here is my learning memo.</p>
-<p>For simplicity, I use <code>^F</code> to mean <code>CTRL-F</code>.</p>
+<p>For simplicity, I may use <code>^F</code> to mean <code>CTRL-F</code>.</p>
 <h2 id="concept">Concept</h2>
 <ul>
 <li>Use default vim (minimum configuration, if possible).
@@ -204,20 +204,17 @@ set viminfo='100,&lt;5000,s100,h
 &quot; Allow to move cursor beyond for block
 set virtualedit=block
 
-</code></pre><h2 id="insert-mode-and-command-mode">INSERT MODE and COMMAND MODE</h2>
-<p>INSERT MODE and COMMAND MODE are intuitive with cursor keys.</p>
+</code></pre><h2 id="insert-mode">INSERT MODE</h2>
 <p>INSERT MODE is started from NORMAL MODE by pressing <code>i</code>, <code>I</code>,<code>a</code>,<code>A</code>,<code>o</code>, <code>O</code>,
 etc.</p>
-<p>COMMAND MODE is started from NORMAL MODE by pressing <code>:</code> or <code>/</code> or <code>?</code>.</p>
-<p>You can use NORMAL-MODE-like editing for COMMAND MODE situation by starting it
-with <code>q:</code> or <code>q/</code> or <code>q?</code>.  Alternatively, typing <code>^F</code> in COMMAND MODE
-situation also starts NORMAL-MODE-like editing.</p>
 <h2 id="command-mode">COMMAND MODE</h2>
+<p>COMMAND MODE is normally started from NORMAL MODE by pressing <code>:</code> or <code>/</code> or <code>?</code>.</p>
+<p>You can use NORMAL-MODE-like editing for COMMAND MODE situation by starting it
+with <code>q:</code> or <code>q/</code> or <code>q?</code>.</p>
 <p>Although it is tempting and easy to map some CONTROL-key sequences to some
-cursor keys, I hate to override them since they are most likely used by Vim.
-Use NORMAL MODE and COMMAND NORMAL MODE.</p>
+cursor keys, I hate to override them since they are most likely used by Vim.</p>
 <p>Despite this, I decided to allow following minimal substitutions for COMMAND
-MODE and TERMINAL-JOB MODE  in line with the shell command line usage of them
+MODE and TERMINAL-JOB MODE in line with the shell command line usage of them
 where NORMAL mode is not easily accessible.</p>
 <ul>
 <li><code>CTRL-H</code> mapped to <code>&lt;BS&gt;</code> (actually, these are the same code)</li>
@@ -225,6 +222,11 @@ where NORMAL mode is not easily accessible.</p>
 <li><code>CTRL-B</code> mapped to <code>&lt;Left&gt;</code></li>
 <li><code>CTRL-F</code> mapped to <code>&lt;Right&gt;</code></li>
 </ul>
+<p>So I can&rsquo;t type <code>CTRL-F</code> to start NORMAL-MODE-like COMMAND HISTORY editing.</p>
+<p>(I guess I need to set up &lsquo;cedit&rsquo; option to either <code>CTRL-O</code> or <code>CTRL-X</code> if I
+want this feature.)</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h3 id="tab-in-command-mode">TAB in COMMAND MODE</h3>
