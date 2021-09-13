@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/09/12 (initial publish),
-2021/09/13 (last update)
+2021/09/14 (last update)
 </h3>
 </div>
 
@@ -94,8 +94,14 @@ based packages to new new lua based ones.</p>
 </ul>
 </li>
 </ul>
-<p>For ease of customization, I chose NvChad.</p>
-<p>Here is my memo on how to use it and customize it.</p>
+<p>For ease of customization, I chose NvChad.  Result was great start-up time
+reduction.</p>
+<ul>
+<li>vim  230 ms (dot-vim in vimL)</li>
+<li>nvim 161 ms (dot-nvim in lua starting vimL packages)</li>
+<li>nvim  65 ms (NvChad in all lua)</li>
+</ul>
+<p>Here is my memo on how to use NvChad and customize it.</p>
 <h2 id="installation-non-invasive">Installation (non-invasive)</h2>
 <p>This will not change your current vi or vim behavior.</p>
 <p>You start nvim configured with NvChad by the <code>nv</code> command.</p>
@@ -130,8 +136,8 @@ functionalities beyond what I do normally with plain vim/nvim.</p>
 <ul>
 <li>User configuration file: `~/.config/nvim{-NvChad,}/lua/chadrc.lua
 <ul>
-<li>Change to <code>timeoutlen = 1500</code> until I get used to it.</li>
-<li>Change to <code>dashboard = true</code> until I get used to it.</li>
+<li>Change to <code>timeoutlen = 1500</code> &ndash; (until I get used to it.)</li>
+<li>Change to <code>dashboard = true</code> &ndash; (until I get used to it.)</li>
 </ul>
 </li>
 <li>Key bindings: <a href="https://nvchad.netlify.app/config#mappings">Let&rsquo;s see how different from my previous settings.</a>
@@ -404,11 +410,13 @@ NvChad default.</p>
 </tbody>
 </table>
 <p>I prefer SPACE over CTRL-key, lower case over upper case.</p>
-<p>(Overriding vi NORMAL MODE <code>T</code> is bad idea.)</p>
+<p>(NvChad to overrid non-esoteric vi NORMAL MODE <code>T</code> key was a very bad idea.  )</p>
 <p>I am keeping mostly default key bindings for now.</p>
 <p>I also set as:</p>
 <pre><code>$ git config pull.rebase true
-</code></pre><!-- raw HTML omitted -->
+</code></pre><p>(I proposed update of NvChad along this so we can make changes not just in
+chadrc)</p>
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
