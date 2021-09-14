@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/09/12 (initial publish),
-2021/09/14 (last update)
+2021/09/15 (last update)
 </h3>
 </div>
 
@@ -127,6 +127,27 @@ ways)</li>
 normal mode which invokes <code>:NvChadUpdate &lt;CR&gt;</code>.  It in turn invokes
 nvchad/update_nvchad in extension.  I need to come back what are the
 differences.</p>
+<p>Extra definition of key bindings are possible but those do not show up in list
+shown by <code>&lt;leader&gt;uk</code>.  Also, any syntax errors in the key binding definition
+cause very cryptic error messages.</p>
+<p>Any trouble seems to break <strong>:PackerCompile</strong> result.  Run it.</p>
+<p>I also set as:</p>
+<pre><code>$ git config pull.rebase true
+</code></pre><p>(I proposed update of NvChad along this so we can make changes not just in
+chadrc)</p>
+<p>My idea is to use 2 local repos.</p>
+<ul>
+<li>Make 2 repos.
+<ul>
+<li><strong>OFF</strong> configuration directory repo  (scratch pad repo)</li>
+<li><strong>ON</strong> configuration directory.       (configuration repo)</li>
+</ul>
+</li>
+<li>pull &ndash;rebase upstream changes to <strong>main</strong> of <strong>OFF</strong>-repo.</li>
+<li>Rebase <strong>local</strong> branch on to the tip of <strong>main</strong> safely in <strong>OFF</strong>-repo.</li>
+<li>Force push <strong>local</strong> to my remote repo as back up. (optional)</li>
+<li>After creating cleanly rebased <strong>local</strong> in *<em>OFF</em>-repo, pull <strong>local</strong>. branch from *<em>OFF</em>-repo to <strong>ON</strong>-repo.</li>
+</ul>
 <h2 id="dummys-guide-to-nvchad">Dummy&rsquo;s guide to NvChad</h2>
 <p>NvChad is so clean-looking without menu.  I need clue how to use its
 functionalities beyond what I do normally with plain vim/nvim.</p>
@@ -315,7 +336,7 @@ NvChad default.</p>
 </tr>
 <tr>
 <td><code>&lt;leader&gt;w</code></td>
-<td><code>&lt;leader&gt;w</code></td>
+<td></td>
 <td>new terminal over current window</td>
 </tr>
 </tbody>
@@ -412,10 +433,6 @@ NvChad default.</p>
 <p>I prefer SPACE over CTRL-key, lower case over upper case.</p>
 <p>(NvChad to overrid non-esoteric vi NORMAL MODE <code>T</code> key was a very bad idea.  )</p>
 <p>I am keeping mostly default key bindings for now.</p>
-<p>I also set as:</p>
-<pre><code>$ git config pull.rebase true
-</code></pre><p>(I proposed update of NvChad along this so we can make changes not just in
-chadrc)</p>
 <!-- raw HTML omitted -->
 
 
