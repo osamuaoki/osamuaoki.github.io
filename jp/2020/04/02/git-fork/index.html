@@ -209,32 +209,38 @@ $ git push -u origin dev_branch
 </ul>
 <p>(<code>-m</code> は<code>--move</code>のショートハンド)</p>
 <ul>
-<li>リモートブランチを削除する(新・旧の2アプローチ有り)
+<li>
+<p>リモートブランチを削除する(新・旧の2アプローチ有り)</p>
 <ul>
 <li><code>$ git push -d origin remote_branch_name</code> (注、<code>-d</code>は<code>--delete</code>のショートハンド)</li>
 <li><code>$ git push origin :remote_branch_name</code> (注、<code>:</code>の前はスペース)</li>
 </ul>
 </li>
-<li>削除したブランチを復活
+<li>
+<p>削除したブランチを復活</p>
 <pre><code>$ git reflog
  ...git remote set-url --push upstream DISABLED_FOR_PUSH
 $ git branch new_branch_name HEAD@{6}
 </code></pre></li>
-<li>間違って<code>git add filename</code>だけをしたが、まだコミット無しの状態
+<li>
+<p>間違って<code>git add filename</code>だけをしたが、まだコミット無しの状態
 の場合に、ユーザー編集中のファイルに手を付けずに、レポの状態をadd前の
-状態に復元
+状態に復元</p>
 <pre><code>$ git rm --cached filename
 </code></pre></li>
-<li>レポ中に存在するコミットと直接の親子関係のないコミットのためのブランチ
-<code>unconnected</code>を作成
+<li>
+<p>レポ中に存在するコミットと直接の親子関係のないコミットのためのブランチ
+<code>unconnected</code>を作成</p>
 <pre><code>$ git checkout --orphan unconnected
 </code></pre></li>
-<li>削除したブランチを復活
+<li>
+<p>削除したブランチを復活</p>
 <pre><code>$ git reflog
  ...git remote set-url --push upstream DISABLED_FOR_PUSH
 $ git branch new_branch_name HEAD@{6}
 </code></pre></li>
-<li><code>git</code>のデフォールト挙動設定例
+<li>
+<p><code>git</code>のデフォールト挙動設定例</p>
 <ul>
 <li>DOSファイルフォーマット自動変更をしない。(必須)
 <ul>
@@ -262,6 +268,15 @@ $ git branch new_branch_name HEAD@{6}
 <li><code>git config init.defaultBranch master</code></li>
 </ul>
 </li>
+</ul>
+</li>
+<li>
+<p>pushのデフォールト</p>
+<ul>
+<li><code>nothing</code>: 超コンサバ(必ずブランチ名を詳細指定)</li>
+<li><code>simple</code>: <code>過去の-u</code>指定に従い既存同名にpush</li>
+<li><code>current</code>: 同名にpush（必要に応じ新規リモートブランチ作成）</li>
+<li><code>upstream</code>: 既存<code>-u</code>指定に従いブランチ名が違ってもpush</li>
 </ul>
 </li>
 </ul>
@@ -426,7 +441,7 @@ branch.bar.merge=refs/heads/baz
 <pre><code>$ git pull --rebase origin
 </code></pre><p>ローカルのコミットは最新アップストリームにrebaseされます。</p>
 <p>２回目以降のpushでは、必ず明示指定が必要です。(以降は<code>-u</code>は不要です)
-(pushのデフォルトをを<code>upstream</code>に設定していれば別ですが、、、)</p>
+(<code>push.default</code>を<code>upstream</code>に設定していれば別ですが、、、)</p>
 <pre><code>$ git checkout bar
 ... hack
 $ git push origin bar:baz
