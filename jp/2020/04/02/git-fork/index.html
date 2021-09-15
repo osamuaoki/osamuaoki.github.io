@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/04/02 (initial publish),
-2021/07/13 (last update)
+2021/09/15 (last update)
 </h3>
 </div>
 
@@ -152,6 +152,31 @@ GUIメニューから出来ます。</p>
 <p>ただリモートレポURLの登録・変更や、リモートのレポ上のブランチの作成・設定変更
 等にはコマンドライン入力操作が必要です。</p>
 <ul>
+<li>レポのリモートの設定の状況確認
+<ul>
+<li><code>$ git remote -v</code></li>
+</ul>
+</li>
+<li>現在のブランチ設定の状況確認
+<ul>
+<li><code>$ git branch -vv</code></li>
+</ul>
+</li>
+<li>現在のコミットの最新タグ名を含めた参照名の確認
+<ul>
+<li><code>$ git describe</code></li>
+</ul>
+</li>
+<li>現在のローカルチェックアウトの全状況の確認
+<ul>
+<li><code>$ git status</code></li>
+</ul>
+</li>
+<li><code>git</code>挙動を規定する全設定リスト出力
+<ul>
+<li><code>git config -l</code></li>
+</ul>
+</li>
 <li>リモートレポの名前を<code>origin</code>から<code>upstream</code>に変更
 <ul>
 <li><code>$ git remote rename origin upstream</code></li>
@@ -172,27 +197,17 @@ GUIメニューから出来ます。</p>
 </li>
 <li>ローカルのブランチ<code>dev_branch</code>を作成後、それをリモート<code>origin</code>へ
 pushできるように設定
-<ul>
-<li>
-<!-- raw HTML omitted -->
-</li>
-</ul>
-</li>
-</ul>
 <pre><code>$ git checkout -b dev_branch
 $ git push -u origin dev_branch
-</code></pre><p><code>-u</code> は<code>--set-upstream</code>のショートハンド</p>
+</code></pre></li>
+</ul>
+<p><code>-u</code> は<code>--set-upstream</code>のショートハンド</p>
 <ul>
 <li>ローカルのブランチ名を<code>oldname</code>から<code>newname</code>に変更
-<ul>
-<li>
-<!-- raw HTML omitted -->
-</li>
-</ul>
-</li>
-</ul>
 <pre><code>$ git branch -m oldname newname
-</code></pre><p>(<code>-m</code> は<code>--move</code>のショートハンド)</p>
+</code></pre></li>
+</ul>
+<p>(<code>-m</code> は<code>--move</code>のショートハンド)</p>
 <ul>
 <li>リモートブランチを削除する(新・旧の2アプローチ有り)
 <ul>
@@ -201,33 +216,52 @@ $ git push -u origin dev_branch
 </ul>
 </li>
 <li>削除したブランチを復活
-<ul>
-<li>
-<!-- raw HTML omitted -->
-</li>
-</ul>
-</li>
-</ul>
 <pre><code>$ git reflog
  ...git remote set-url --push upstream DISABLED_FOR_PUSH
 $ git branch new_branch_name HEAD@{6}
-</code></pre><ul>
+</code></pre></li>
 <li>間違って<code>git add filename</code>だけをしたが、まだコミット無しの状態
 の場合に、ユーザー編集中のファイルに手を付けずに、レポの状態をadd前の
 状態に復元
-<ul>
-<li><code>$ git rm --cached filename</code></li>
-</ul>
-</li>
+<pre><code>$ git rm --cached filename
+</code></pre></li>
 <li>レポ中に存在するコミットと直接の親子関係のないコミットのためのブランチ
 <code>unconnected</code>を作成
+<pre><code>$ git checkout --orphan unconnected
+</code></pre></li>
+<li>削除したブランチを復活
+<pre><code>$ git reflog
+ ...git remote set-url --push upstream DISABLED_FOR_PUSH
+$ git branch new_branch_name HEAD@{6}
+</code></pre></li>
+<li><code>git</code>のデフォールト挙動設定例
 <ul>
-<li><code>$ git checkout --orphan unconnected</code></li>
+<li>DOSファイルフォーマット自動変更をしない。(必須)
+<ul>
+<li><code>git config --global core.autocrlf false</code></li>
 </ul>
 </li>
-<li>レポのリモートとの関連状況を確認
+<li>pushのデフォールトを<code>current</code>にする。(同名ブランチにpush)
 <ul>
-<li><code>$ git remote -v</code></li>
+<li><code>git config --global push.default current</code></li>
+<li>上記はブランチ名を変えたりするなら、レポ毎デフォルトの<code>simple</code>に設定</li>
+</ul>
+</li>
+<li>pullのデフォールトをrebaseにする。（ヒストリーが綺麗）
+<ul>
+<li><code>git config --global pull.rebase true</code></li>
+</ul>
+</li>
+<li>デフォールトブランチを<code>main</code>にする。(BLM時代です)
+<ul>
+<li><code>git config --global init.defaultBranch main</code></li>
+</ul>
+</li>
+<li>デフォールトブランチを<code>master</code>に設定。(salsaレポでの<code>dgit</code>のバグ対応)
+<ul>
+<li><code>git config init.defaultBranch master</code></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
