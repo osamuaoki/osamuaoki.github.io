@@ -395,14 +395,21 @@ GITHUBやGITLAB上でウエッブページを使いフォークしないとPULL 
 Default branch（デフォルトのブランチ）をもとの「<code>master</code>」ではない、
 フォークした内容がコミットされたブランチに設定することで解決します。</p>
 <h3 id="自由なブランチ名の設定">自由なブランチ名の設定</h3>
-<p>また、例えば<code>gitk</code>で見つけた既存のリモートブランチ（例えば<code>gitk</code>が
+<p>特段の理由なくローカルやリモートでブランチ名が変わる複雑な設定をする
+のは無用な混乱を起こすのでできるだけ避けるべきです。以下はあくまで
+参考情報です。</p>
+<p>この様なことをすると、push を便利な<code>current</code>に設定できなくなり、
+同名のブランチにpushするにも必ず<code>git push</code>コマンドラインの最後引数
+を明示する必要が出ます。</p>
+<p>さて本題です。</p>
+<p>例えば<code>gitk</code>で見つけた既存のリモートブランチ（例えば<code>gitk</code>が
 「<code>remotes/upstream/foo</code>」と表示するブランチ）のある最終コミットに
 GUIでローカルのブランチ（例えば「<code>bar</code>」）を新規追加した場合を考え
 ましょう。</p>
 <p>この「<code>bar</code>」ブランチを、自分が公開している<code>origin</code>という
 リモートレポに、他人からは「<code>baz</code>」ブランチと呼ばれることと
 なるブランチとして、(別の見方では自分の<code>gitk</code>で「<code>remotes/origin/baz</code>」
-と表示されるブランチとして)、pushするには以下の操作をします。</p>
+と表示されるブランチとして)、最初pushするには以下の操作をします。</p>
 <pre><code>$ git checkout bar
 $ git push -u origin bar:baz
 </code></pre><p>一度この操作をすると、<code>.git/comfig</code>ファイルにこの設定が記録され
@@ -414,15 +421,18 @@ $ git push -u origin bar:baz
 branch.bar.remote=origin
 branch.bar.merge=refs/heads/baz
 </code></pre><p>こう設定した後、「<code>bar</code>」ブランチをチェックアウトして、ファイル
-を変更後GITレポにコミットすると、この後は単に<code>git push</code>とするだ
-けで、「<code>bar</code>」ブランチの最新コミットが<code>gitk</code>で
+を変更しローカルにコミット後、アップストリームのGITレポからの変更
+を取り込むには以下とします。(設定していれば<code>--rebase</code>は不要。)</p>
+<pre><code>$ git pull --rebase origin
+</code></pre><p>ローカルのコミットは最新アップストリームにrebaseされます。</p>
+<p>２回目以降のpushでは、必ず明示指定が必要です。(以降は<code>-u</code>は不要です)
+(pushのデフォルトをを<code>upstream</code>に設定していれば別ですが、、、)</p>
+<pre><code>$ git checkout bar
+... hack
+$ git push origin bar:baz
+</code></pre><p>ややこしいですが、「<code>bar</code>」ブランチの最新コミットが<code>gitk</code>で
 「<code>remotes/origin/baz</code>」と表示される<code>origin</code>というリモートレポ上
-のリモートブランチ「<code>baz</code>」にpushされます。（ややこしい！）</p>
-<p>もちろん、特段の理由なくローカルやリモートでブランチ名がコロコロ
-変わる複雑な設定をするのは無用な混乱を起こすのでできるだけ避ける
-べきです。(ここで「<code>bar</code>」ブランチを同じ「<code>bar</code>」の名前でリモート
-にpushするなら、本例の<code>git push</code>コマンドラインの最後引数は<code>bar</code>と
-書くだけに省略できます。)</p>
+のリモートブランチ「<code>baz</code>」にpushされます。</p>
 <h2 id="参考cookbookサイト">参考Cookbookサイト</h2>
 <ul>
 <li><a href="https://github.com/k88hudson/git-flight-rules">Flight rules for Git</a></li>
