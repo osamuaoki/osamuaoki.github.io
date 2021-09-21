@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/09/12 (initial publish),
-2021/09/15 (last update)
+2021/09/22 (last update)
 </h3>
 </div>
 
@@ -62,8 +62,10 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#neovim-migration">Neovim migration</a></li>
-    <li><a href="#installation-non-invasive">Installation (non-invasive)</a></li>
-    <li><a href="#dummys-guide-to-nvchad">Dummy&rsquo;s guide to NvChad</a></li>
+    <li><a href="#terminal-settings">Terminal settings</a></li>
+    <li><a href="#key-bindings">Key bindings</a></li>
+    <li><a href="#dependency-package-management">Dependency package management</a></li>
+    <li><a href="#main-configuration-management">Main configuration management</a></li>
   </ul>
 </nav>
 
@@ -78,7 +80,7 @@ scripts.</p>
 , I realized this isn&rsquo;t going anywhere.  It was easy to convert
 <code>.config/nvim/init.vim</code> but it was hard to decide how to migrate all my vimL
 based packages to new new lua based ones.</p>
-<p>I found 2 interesting projects which offer examples for how this is done.</p>
+<p>I found 3 interesting projects which offer examples for how this is done.</p>
 <ul>
 <li>Lunar Vim
 <ul>
@@ -93,346 +95,61 @@ based packages to new new lua based ones.</p>
 <li>HOME: <a href="https://nvchad.netlify.app/">https://nvchad.netlify.app/</a></li>
 </ul>
 </li>
+<li>DOOM-NVIM
+<ul>
+<li>SRC: <a href="https://github.com/NTBBloodbath/doom-nvim">https://github.com/NTBBloodbath/doom-nvim</a></li>
+</ul>
+</li>
 </ul>
 <p>For ease of customization, I chose NvChad.  Result was great start-up time
 reduction.</p>
 <ul>
 <li>vim  230 ms (dot-vim in vimL)</li>
 <li>nvim 161 ms (dot-nvim in lua starting vimL packages)</li>
-<li>nvim  65 ms (NvChad in all lua)</li>
+<li>nvim  65 ms (NvChad in all lua)  &ndash; use lazy loading</li>
+<li>nvim  59 ms (doom-nvim in all lua) &ndash; use lazy loading more(?)</li>
 </ul>
-<p>Here is my memo on how to use NvChad and customize it.</p>
-<h2 id="installation-non-invasive">Installation (non-invasive)</h2>
-<p>This will not change your current vi or vim behavior.</p>
-<p>You start nvim configured with NvChad by the <code>nv</code> command.</p>
-<p>(For below, I assume <a href="https://github.com/NvChad/NvChad/pull/460">https://github.com/NvChad/NvChad/pull/460</a> and associated
-<a href="https://github.com/NvChad/extensions/pull/1">https://github.com/NvChad/extensions/pull/1</a>
-are accepted.  Until then use <a href="https://github.com/osamuaoki/NvChad">https://github.com/osamuaoki/NvChad</a> instead and
-rebase it to the upstream HEAD and hand patch extension locally.)</p>
-<pre><code>$ git clone git clone https://github.com/NvChad/NvChad ~/.config/nvim-NvChad
-$ cd ~/.config/nvim-NvChad
-$ ./nv -c &quot;autocmd User PackerComplete quitall&quot; -c &quot;PackerSync
-</code></pre><ul>
-<li>Copy <code>nv</code> file to a directory in early <code>$PATH</code> such as <code>$HOME/.local/bin</code>
-or <code>$HOME/bin</code>. <code>nv</code> will start NvChad configured nvim.</li>
-</ul>
-<pre><code>$ cp nv ~/.local/bin/
-</code></pre><ul>
-<li>(Optional) Rename or copy the nv to names such as <code>vi</code> or <code>vim</code> to
-start this as default for those names. (Remove them to get your old
-ways)</li>
-</ul>
-<p>NOTE: The above is based on docker install guide.
-<a href="https://nvchad.netlify.app/getting-started/setup">https://nvchad.netlify.app/getting-started/setup</a> suggests to use <code>&lt;SPACE&gt;uu</code> in
-normal mode which invokes <code>:NvChadUpdate &lt;CR&gt;</code>.  It in turn invokes
-nvchad/update_nvchad in extension.  I need to come back what are the
-differences.</p>
-<p>Extra definition of key bindings are possible but those do not show up in list
-shown by <code>&lt;leader&gt;uk</code>.  Also, any syntax errors in the key binding definition
-cause very cryptic error messages.</p>
-<p>Any trouble seems to break <strong>:PackerCompile</strong> result.  Run it.</p>
-<p>I also set as:</p>
-<pre><code>$ git config pull.rebase true
-</code></pre><p>(I proposed update of NvChad along this so we can make changes not just in
-chadrc)</p>
-<p>My idea is to use 2 local repos.</p>
-<ul>
-<li>Make 2 repos.
-<ul>
-<li><strong>OFF</strong> configuration directory repo  (scratch pad repo)</li>
-<li><strong>ON</strong> configuration directory.       (configuration repo)</li>
-</ul>
-</li>
-<li>pull &ndash;rebase upstream changes to <strong>main</strong> of <strong>OFF</strong>-repo.</li>
-<li>Rebase <strong>local</strong> branch on to the tip of <strong>main</strong> safely in <strong>OFF</strong>-repo.</li>
-<li>Force push <strong>local</strong> to my remote repo as back up. (optional)</li>
-<li>After creating cleanly rebased <strong>local</strong> in <strong>OFF</strong>-repo, pull <strong>local</strong>. branch from <strong>OFF</strong>-repo to <strong>ON</strong>-repo.</li>
-</ul>
-<h2 id="dummys-guide-to-nvchad">Dummy&rsquo;s guide to NvChad</h2>
-<p>NvChad is so clean-looking without menu.  I need clue how to use its
-functionalities beyond what I do normally with plain vim/nvim.</p>
-<p>Compared to my previous setup of total of 409 lines, it seems to involve over
-1721 lines in its main and extension has 544 lines.  So I need a place to start
-:-)</p>
-<ul>
-<li>User configuration file: `~/.config/nvim{-NvChad,}/lua/chadrc.lua
-<ul>
-<li>Change to <code>timeoutlen = 1500</code> &ndash; (until I get used to it.)</li>
-<li>Change to <code>dashboard = true</code> &ndash; (until I get used to it.)</li>
-</ul>
-</li>
-<li>Key bindings: <a href="https://nvchad.netlify.app/config#mappings">Let&rsquo;s see how different from my previous settings.</a>
-<ul>
-<li>INSERT mode:</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Key default</th>
-<th>My way</th>
-<th>function</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>jk</code></td>
-<td></td>
-<td>to NORMAL mode (as <code>&lt;ESC&gt;</code>)</td>
-</tr>
-<tr>
-<td><code>&lt;C-h&gt;</code></td>
-<td></td>
-<td><code>&lt;Left&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;C-j&gt;</code></td>
-<td></td>
-<td><code>&lt;Down&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;C-k&gt;</code></td>
-<td></td>
-<td><code>&lt;Up&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;C-l&gt;</code></td>
-<td></td>
-<td><code>&lt;Right&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;C-a&gt;</code></td>
-<td></td>
-<td><code>&lt;Home&gt;</code></td>
-</tr>
-<tr>
-<td><code>&lt;C-e&gt;</code></td>
-<td></td>
-<td><code>&lt;End&gt;</code></td>
-</tr>
-</tbody>
-</table>
-</li>
-</ul>
-<p>Although I wanted to keep these cursor key bindings to be along normal shell
-like key bindings, Nvim was tricky enough for me to set cedit from
-<code>&lt;C-F&gt;</code> to <code>&lt;C-O&gt;</code>.  So I gave up shell-like key bindings and now use the
-NvChad default.</p>
-<ul>
-<li>NORMAL MODE basic featurs (file, buffer and mode related settings):</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Key default</th>
-<th>My way</th>
-<th>function</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>&lt;C-n&gt;</code></td>
-<td><code>&lt;leader&gt;m</code></td>
-<td>toggle file manager window (nvim-tree)</td>
-</tr>
-<tr>
-<td><code>&lt;TAB&gt;</code></td>
-<td></td>
-<td>cycle active buffer (forward)</td>
-</tr>
-<tr>
-<td><code>&lt;S-TAB&gt;</code></td>
-<td></td>
-<td>cycle active buffer (backward)</td>
-</tr>
-<tr>
-<td><code>T</code></td>
-<td><code>&lt;leader&gt;o</code></td>
-<td>open a new buffer</td>
-</tr>
-<tr>
-<td><code>&lt;C-s&gt;</code></td>
-<td></td>
-<td>save buffers</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;x</code></td>
-<td></td>
-<td>close current buffer	(hides a terminal)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;bm</code></td>
-<td></td>
-<td>bookmark (dashboard)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;fn</code></td>
-<td></td>
-<td>create new buffer (dashboard)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;db</code></td>
-<td></td>
-<td>open dashboard (dashboard)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;l</code></td>
-<td></td>
-<td>load a saved session (dashboard)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;s</code></td>
-<td></td>
-<td>save a session (dashboard)</td>
-</tr>
-<tr>
-<td><code>&lt;C-a&gt;</code></td>
-<td><code>&lt;leader&gt;a</code></td>
-<td>copy all</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;n</code></td>
-<td></td>
-<td>toggle line number</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;/</code></td>
-<td></td>
-<td>toggle commenting a line</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;dk</code></td>
-<td></td>
-<td>View default key mappings (chadsheet)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;uk</code></td>
-<td></td>
-<td>View uset key mappings (chadsheet)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;uu</code></td>
-<td></td>
-<td>update NvChad</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;th</code></td>
-<td></td>
-<td>theme selector with demo</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;tt</code></td>
-<td></td>
-<td>theme toggler</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;h</code></td>
-<td></td>
-<td>new terminal with horizontal split</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;v</code></td>
-<td></td>
-<td>new terminal with vertical split</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;w</code></td>
-<td></td>
-<td>new terminal over current window</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>NORMAL MODE fancy featurs (Telescope etc.):</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th>Key default</th>
-<th>?</th>
-<th>function</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>&lt;leader&gt;ff</code></td>
-<td></td>
-<td>find a file (Telescope picker)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;fb</code></td>
-<td></td>
-<td>select a buffer (Telescope picker)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;cm</code></td>
-<td></td>
-<td>select a commit from commit history (Telescope picker)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;gt</code></td>
-<td>?</td>
-<td>git status	(Telescope picker)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;fh</code></td>
-<td></td>
-<td>select a tag from help tags (Telescope picker)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;fw</code></td>
-<td></td>
-<td>live grep (Telescope picker)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;fo</code></td>
-<td></td>
-<td>old files (Telescope picker)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;W</code></td>
-<td><code>&lt;leader&gt;p</code></td>
-<td>select terminal (Telescope picker)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;zz</code></td>
-<td>?</td>
-<td>center (True zen)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;zf</code></td>
-<td>?</td>
-<td>focus (True zen)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;zm</code></td>
-<td>?</td>
-<td>minimalistic (True zen)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;gh</code></td>
-<td>?</td>
-<td>diff2 (fugitives)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;gl</code></td>
-<td>?</td>
-<td>diff3 (fugitives)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;gs</code></td>
-<td>?</td>
-<td>git (fugitives)</td>
-</tr>
-<tr>
-<td><code>&lt;leader&gt;gb</code></td>
-<td>?</td>
-<td>git blame (fugitives)</td>
-</tr>
-</tbody>
-</table>
-<p>I prefer SPACE over CTRL-key, lower case over upper case.</p>
-<p>(NvChad to overrid non-esoteric vi NORMAL MODE <code>T</code> key was a very bad idea.  )</p>
+<p>Here is my memo on how to use DOOM-NVIM and customize it.</p>
+<h2 id="terminal-settings">Terminal settings</h2>
+<p>Set DEL-code(0x7F) for Backspace and use escape sequence for Delete.  This
+frees the ASCII BS (CTRL-H) code so window jump can be mapped to <code>&lt;C-H&gt;</code>.</p>
+<p>Now I see why this was default.</p>
+<h2 id="key-bindings">Key bindings</h2>
 <p>I am keeping mostly default key bindings for now.</p>
+<ul>
+<li>Vim&rsquo;s original key bindings:
+<ul>
+<li><code>:help index</code></li>
+</ul>
+</li>
+<li>Configuration introduced key bindings (with opened empty file):
+<ul>
+<li><code>:put =execute('nmap')</code> etc.</li>
+</ul>
+</li>
+<li><code>which-key.nvim</code> also solves allow us to set timeoutlen to be short (500ms
+instead of default 1000ms).
+<ul>
+<li><code>which-key.nvim</code> is good for dummy like me.</li>
+<li>This makes <code>jk</code> for <code>&lt;Esc&gt;</code> not so clunky.</li>
+</ul>
+</li>
+<li><code>&lt;C-SPACE&gt;</code> is used by some package.  This needs to be moved to allow
+Japanese input for me.
+<ul>
+<li><code>F6</code>-<code>F10</code>, <code>ALT</code>/<code>SHIFT</code>/<code>WIN-SPACE</code> should be off limit.</li>
+</ul>
+</li>
+<li>securemodelines, spell-under, ale &ndash; think about including</li>
+</ul>
+<p>In order to always start nvim, I created nv as its alias.</p>
+<h2 id="dependency-package-management">Dependency package management</h2>
+<p>Any of these packer based system, it is good idea to run followings after
+editing the system.</p>
+<pre><code>$ nvim -c &quot;autocmd User PackerComplete quitall&quot; -c &quot;PackerSync
+</code></pre><h2 id="main-configuration-management">Main configuration management</h2>
+<p>In order to minimize conflict, I now use <code>git pull --rebase</code> to my local
+branch.  (Probably using upstream provided interface)</p>
 <!-- raw HTML omitted -->
 
 
