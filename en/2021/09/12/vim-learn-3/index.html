@@ -134,22 +134,36 @@ instead of default 1000ms).
 <li>This makes <code>jk</code> for <code>&lt;Esc&gt;</code> not so clunky.</li>
 </ul>
 </li>
-<li><code>&lt;C-SPACE&gt;</code> is used by some package.  This needs to be moved to allow
+<li>TODO: <code>&lt;C-SPACE&gt;</code> is used by some package.  This needs to be moved to allow
 Japanese input for me.
 <ul>
 <li><code>F6</code>-<code>F10</code>, <code>ALT</code>/<code>SHIFT</code>/<code>WIN-SPACE</code> should be off limit.</li>
 </ul>
 </li>
-<li>securemodelines, spell-under, ale &ndash; think about including</li>
+<li>TODO: securemodelines, spell-under, ale &ndash; think about including</li>
 </ul>
-<p>In order to always start nvim, I created nv as its alias.</p>
+<p>Setting of <code>update-alternatives</code> settings:</p>
+<ul>
+<li><code>vi</code> to <code>nvim</code> (manual)</li>
+<li><code>vim</code> to <code>vim.gtk3</code> (default)</li>
+</ul>
 <h2 id="dependency-package-management">Dependency package management</h2>
-<p>Any of these packer based system, it is good idea to run followings after
-editing the system.</p>
-<pre><code>$ nvim -c &quot;autocmd User PackerComplete quitall&quot; -c &quot;PackerSync
+<p>Any of these packer based system, it is good idea to run followings in EX-mode
+after editing the system.</p>
+<pre><code>:PackerSync
+:PackerCompile
 </code></pre><h2 id="main-configuration-management">Main configuration management</h2>
 <p>In order to minimize conflict, I now use <code>git pull --rebase</code> to my local
 branch.  (Probably using upstream provided interface)</p>
+<ul>
+<li><code>main</code> tracks <code>main</code> by <code>upstream</code> (but no push)
+<ul>
+<li><code>upstream</code> is set to the official site</li>
+</ul>
+</li>
+<li><code>local</code> is rebased on <code>main</code> and commit actual used configuration with deep
+modification.</li>
+</ul>
 <!-- raw HTML omitted -->
 
 
