@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Usability tips: Backup and snapshots | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Usability tips: Backup and snapshots</span></h1>
+
+<h3 class="date">Date:
+2021/11/02 (initial publish),
+2021/11/04 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/09/12/vim-learn-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#backup-and-snapshot">Backup and snapshot</a></li>
+    <li><a href="#secure-backup">Secure backup</a>
+      <ul>
+        <li><a href="#create-and-format-an-encrypted-filesystem-in-a-disk-image">Create and format an encrypted filesystem in a disk image</a></li>
+        <li><a href="#mount-and-use-an-encrypted-filesystem-in-a-disk-image">Mount and use an encrypted filesystem in a disk image</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="backup-and-snapshot">Backup and snapshot</h2>
+<p>For <strong>backup</strong>, data needs to be moved to physically separate device.  <code>rsync ...</code> is
+my choice to do this.</p>
+<p>For <strong>snapshot</strong>, data can stay on the same device .  <code>btrfs subvolume snapshot ...</code>
+is my choice to do this.</p>
+<p>I created <a href="https://github.com/osamuaoki/bss">bss</a> script to help me do these easily.</p>
+<h2 id="secure-backup">Secure backup</h2>
+<p>In order to securely backup private data using non-secure remote storage, data
+needs to be encrypted.  Roughly, the following is an approach:</p>
+<ul>
+<li>create a disk image containing an encrypted filesystem</li>
+<li>mount the disk image un-encrypted for ease of use
+<ul>
+<li>use bind mount to offer ~/.gnupg etc.</li>
+</ul>
+</li>
+<li>backup the disk image file or directory tree (rsync, rclone, GUI google drive)</li>
+</ul>
+<p>This can be done using following tricks.</p>
+<ul>
+<li><a href="https://www.debian.org/doc/manuals/debian-reference/ch09.en.html#_making_the_empty_disk_image_file">Making the empty disk image file</a></li>
+<li><a href="https://www.debian.org/doc/manuals/debian-reference/ch09.en.html#_removable_disk_encryption_with_dm_crypt_luks">Removable disk encryption with dm-crypt/LUKS</a></li>
+<li><a href="https://www.debian.org/doc/manuals/debian-reference/ch09.en.html#_mounting_encrypted_disk_with_dm_crypt_luks">Mounting encrypted disk with dm-crypt/LUKS</a></li>
+<li><a href="https://www.debian.org/doc/manuals/debian-reference/ch09.en.html#_expansion_of_usable_storage_space_by_bind_mounting_another_directory">Expansion of usable storage space by bind-mounting another directory</a></li>
+<li><a href="https://www.debian.org/doc/manuals/debian-reference/ch09.en.html#_filesystem_creation_and_integrity_check">Filesystem creation and integrity check</a> (This is Ext4, do the same for Btrfs)</li>
+</ul>
+<h3 id="create-and-format-an-encrypted-filesystem-in-a-disk-image">Create and format an encrypted filesystem in a disk image</h3>
+<pre><code>$ dd bs=1 count=0 if=/dev/zero of=disk.img seek=7000M
+$ mkdir disk
+$ cryptsetup luksFormat disk.img
+WARNING: ...
+ ...
+$ sudo cryptsetup open disk.img disk --type luks
+Enter passphrase for disk.img:
+$ ls -l /dev/mapper
+total 0
+crw------- 1 root root 10, 236 Nov  3 07:45 control
+lrwxrwxrwx 1 root root       7 Nov  3 12:04 disk -&gt; ../dm-0
+$ sudo mkfs.btrfs /dev/mapper/disk
+ ...
+   ID        SIZE  PATH
+    1     6.82GiB  /dev/mapper/disk
+
+$ sudo mount /dev/mapper/disk /mnt
+$ sudo chown 1000:1000 /mnt
+$ sudo umount /mnt
+$ cryptsetup close disk
+</code></pre><h3 id="mount-and-use-an-encrypted-filesystem-in-a-disk-image">Mount and use an encrypted filesystem in a disk image</h3>
+<pre><code>$ mkdir -p ~/path/to/mnt
+$ sudo cryptsetup open disk.img disk --type luks
+Enter passphrase for disk.img:
+... (use files in ~/path/to/mnt as a user)
+$ sudo umount /dev/mapper/disk
+$ sudo cryptsetup close disk
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/09/12/vim-learn-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

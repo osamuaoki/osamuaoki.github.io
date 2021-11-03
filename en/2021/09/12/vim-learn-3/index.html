@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/09/12 (initial publish),
-2021/09/23 (last update)
+2021/11/04 (last update)
 </h3>
 </div>
 
@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/11/02/backup-1/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -69,6 +69,7 @@
     <li><a href="#help">help</a></li>
     <li><a href="#skipped-programs">Skipped programs</a></li>
     <li><a href="#note-on-delayed-loading">Note on delayed loading</a></li>
+    <li><a href="#map">map</a></li>
     <li><a href="#todo">TODO</a></li>
   </ul>
 </nav>
@@ -208,14 +209,14 @@ suda    &ndash; <code>sudo -E</code> can start editting with vi running as user
 autopairs &ndash; thank you but &hellip; I don&rsquo;t need this &quot;&quot; for &quot;</p>
 <h2 id="note-on-delayed-loading">Note on delayed loading</h2>
 <p>For example, <code>init.lua</code> has:</p>
-<pre><code>  -- Load keybindings module at the end because the keybindings module cost is high
-  vim.defer_fn(function()
-    load_modules(&quot;doom.extras&quot;, { &quot;keybindings&quot; })
-    vim.cmd([[
-      PackerLoad which-key.nvim
-      silent! bufdo e
-    ]])
-  end, 20)
+<pre><code>-- Load keybindings module at the end because the keybindings module cost is high
+vim.defer_fn(function()
+load_modules(&quot;doom.extras&quot;, { &quot;keybindings&quot; })
+vim.cmd([[
+  PackerLoad which-key.nvim
+  silent! bufdo e
+]])
+end, 20)
 </code></pre><ul>
 <li>This uses <code>defer_fn</code> to deffer calling keybinding change code until 20 ms passes.</li>
 <li>Set up <code>vim.g</code> variables for which-key.nvim.</li>
@@ -223,6 +224,16 @@ autopairs &ndash; thank you but &hellip; I don&rsquo;t need this &quot;&quot; fo
 <li>Then at the end, <code>e</code> reloads the current file and continues to edit it.</li>
 </ul>
 <p>Any heavy CPU/storage hungry programs can use this techniques.</p>
+<h2 id="map">map</h2>
+<p>For key bindings, <code>nvim-mapper</code> is used as the backend for doom-nvim.</p>
+<p><code>map(mode, keys, cmd, options, category, unique_identifier, description)</code> is
+used for usual <code>map(mode, keys, cmd, options)</code>.</p>
+<p>Actual code looks like:</p>
+<pre><code>map(&quot;n&quot;, &quot;&lt;leader&gt;v&quot;, &quot;&lt;cmd&gt;w&lt;cr&gt;&quot;, opts, &quot;Save&quot;, &quot;save_left&quot;, &quot;Save v&quot;)
+</code></pre><ul>
+<li>Packer load nvim-mapper&rsquo;s setup() and search keybindings at path <code>~/.config/nvim/lua</code></li>
+<li><code>lua/init.lua</code> &ndash;&gt; delayed &ndash;&gt; <code>lua/doom/extras/keybindings/init.lua</code></li>
+</ul>
 <h2 id="todo">TODO</h2>
 <ul>
 <li>securemodeline &ndash; done mostly, need to be better</li>
@@ -254,7 +265,7 @@ autopairs &ndash; thank you but &hellip; I don&rsquo;t need this &quot;&quot; fo
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2021/11/02/backup-1/">Next Post</a></td>
   
   </tr>
   </tbody>
