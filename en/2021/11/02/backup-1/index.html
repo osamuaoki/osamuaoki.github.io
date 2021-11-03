@@ -104,7 +104,7 @@ $ cryptsetup luksFormat disk.img
 WARNING: ...
  ...
 $ sudo cryptsetup open disk.img disk --type luks
-Enter passphrase for disk.img:
+Enter passphrase for disk.img: *****
 $ ls -l /dev/mapper
 total 0
 crw------- 1 root root 10, 236 Nov  3 07:45 control
@@ -121,7 +121,8 @@ $ cryptsetup close disk
 </code></pre><h3 id="mount-and-use-an-encrypted-filesystem-in-a-disk-image">Mount and use an encrypted filesystem in a disk image</h3>
 <pre><code>$ mkdir -p ~/path/to/mnt
 $ sudo cryptsetup open disk.img disk --type luks
-Enter passphrase for disk.img:
+Enter passphrase for disk.img: *****
+$ sudo mount /dev/mapper/disk ~/path/to/mnt
 ... (use files in ~/path/to/mnt as a user)
 $ sudo umount /dev/mapper/disk
 $ sudo cryptsetup close disk
