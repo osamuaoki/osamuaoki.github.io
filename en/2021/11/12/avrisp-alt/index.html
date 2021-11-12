@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>How to make ISP with TTL-232R-5V | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">How to make ISP with TTL-232R-5V</span></h1>
+
+<h3 class="date">Date:
+2021/11/12 (initial publish),
+2021/11/13 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/11/02/backup-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#circuit">Circuit</a></li>
+    <li><a href="#wiring-to-boardchip">Wiring to board/chip</a></li>
+  </ul>
+</nav>
+
+<p>I now use my <a href="/jp/2020/02/27/avrisp-mod-j/">Modified AVRISP MKII (in Japanese)</a>
+as my main programmer.  I moved old content from other place.</p>
+<h2 id="circuit">Circuit</h2>
+<p>It&rsquo;s a bit un-intuitive, but USB to TTL level RS-232 adapter (Serial adapter)
+can be used in a special bit-bang mode.  AVRDUDE supports this:</p>
+<p>I am talking specifically the original TTL-232R-5V found in these pages:</p>
+<ul>
+<li><a href="http://www.ftdichip.com/Products/Cables/USBTTLSerial.htm">http://www.ftdichip.com/Products/Cables/USBTTLSerial.htm</a></li>
+<li><a href="http://www.ftdichip.com/Support/Documents/DataSheets/Cables/DS_TTL-232R_CABLES.pdf">http://www.ftdichip.com/Support/Documents/DataSheets/Cables/DS_TTL-232R_CABLES.pdf</a></li>
+</ul>
+<p>Connections are:</p>
+<pre><code>TTL-232R-5V       ICPS connector
+ GND 1 Black  --&gt; GND   (6 pin)
+ CTS 2 Brown  --&gt; MOSI  (4 pin)
+ VCC 3 Red    --&gt; VCC   (2 pin)
+ TXD 4 Orange --&gt; RESET (5 pin)
+ RXD 5 Yellow --&gt; SCK   (3 pin)
+ RTS 6 Green  --&gt; MISO  (1 pin)
+</code></pre><p>Here, ICPS connector is the one used by Arduino Uno.  The standard AVRISP MKII
+cable support it.</p>
+<p>Except for VCC and GND, you can connect any pairs as long as the
+following setting in the default <code>/etc/avrdude.conf</code> is adjusted via
+<code>~/.avrduderc</code>.</p>
+<pre><code>programmer
+  id    = &quot;ttl232r&quot;;
+  desc  = &quot;FTDI TTL232R-5V with ICSP adapter&quot;;
+  type  = &quot;ftdi_syncbb&quot;;
+  connection_type = usb;
+  miso  = 2; # rts
+  sck   = 1; # rxd
+  mosi  = 3; # cts
+  reset = 0; # txd
+</code></pre><p>You can use double raw pin header as a converter.</p>
+<p><img src="/img/TTL232R-SPI.png" alt="TTL232R-SPI ADAPTER WIRING">
+<img src="/img/TTL232R-SPI-ADAPTER.jpeg" alt="TTL232R-SPI ADAPTER PHOTO"></p>
+<h2 id="wiring-to-boardchip">Wiring to board/chip</h2>
+<table>
+<thead>
+<tr>
+<th>FT232RL</th>
+<th>Bit-bang</th>
+<th>TTL-232R</th>
+<th>ADAPTER</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TXD  1</td>
+<td>D0</td>
+<td>4 ORANGE</td>
+<td>5 RESET</td>
+</tr>
+<tr>
+<td>RXD  5</td>
+<td>D1</td>
+<td>5 YELLOW</td>
+<td>3 SCK</td>
+</tr>
+<tr>
+<td>RTS# 3</td>
+<td>D2</td>
+<td>6 GREEN</td>
+<td>1 MISO</td>
+</tr>
+<tr>
+<td>CTS# 11</td>
+<td>D3</td>
+<td>2 BROWN</td>
+<td>4 MOSI</td>
+</tr>
+<tr>
+<td>VCC</td>
+<td>&ndash;</td>
+<td>3 RED</td>
+<td>2 VCC</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>&ndash;</td>
+<td>1 BLACK</td>
+<td>6 GND</td>
+</tr>
+<tr>
+<td>i</td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/11/02/backup-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
