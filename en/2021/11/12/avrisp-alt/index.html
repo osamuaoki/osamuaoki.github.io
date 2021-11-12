@@ -66,8 +66,11 @@
   </ul>
 </nav>
 
+<p>This is my manual for TTL-232R-5V based ISP which I made several years ago.
+I moved this content from other place to make it easy to find.  I still use
+this as my back up IPS.</p>
 <p>I now use my <a href="/jp/2020/02/27/avrisp-mod-j/">Modified AVRISP MKII (in Japanese)</a>
-as my main programmer.  I moved old content from other place.</p>
+as my main programmer.</p>
 <h2 id="circuit">Circuit</h2>
 <p>It&rsquo;s a bit un-intuitive, but USB to TTL level RS-232 adapter (Serial adapter)
 can be used in a special bit-bang mode.  AVRDUDE supports this:</p>
@@ -88,7 +91,7 @@ can be used in a special bit-bang mode.  AVRDUDE supports this:</p>
 cable support it.</p>
 <p>Except for VCC and GND, you can connect any pairs as long as the
 following setting in the default <code>/etc/avrdude.conf</code> is adjusted via
-<code>~/.avrduderc</code>.</p>
+<code>~/.avrduderc</code>.  (Yes, AVRDUDE supports this now without patch.)</p>
 <pre><code>programmer
   id    = &quot;ttl232r&quot;;
   desc  = &quot;FTDI TTL232R-5V with ICSP adapter&quot;;
