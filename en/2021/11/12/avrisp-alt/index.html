@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/11/12 (initial publish),
-2021/11/13 (last update)
+2021/11/15 (last update)
 </h3>
 </div>
 
@@ -62,7 +62,8 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#circuit">Circuit</a></li>
-    <li><a href="#wiring-to-boardchip">Wiring to board/chip</a></li>
+    <li><a href="#wiring-to-program-avr-chips-with-ttl-232r">Wiring to program AVR chips with TTL-232R</a></li>
+    <li><a href="#wiring-to-program-avr-chips-wit-ft232rl-on-dd">Wiring to program AVR chips wit FT232RL on D/D</a></li>
   </ul>
 </nav>
 
@@ -70,7 +71,7 @@
 I moved this content from other place to make it easy to find.  I still use
 this as my back up IPS.</p>
 <p>I now use my <a href="/jp/2020/02/27/avrisp-mod-j/">Modified AVRISP MKII (in Japanese)</a>
-as my main programmer.</p>
+as my main programmer. (If I every program AVR again.)</p>
 <h2 id="circuit">Circuit</h2>
 <p>It&rsquo;s a bit un-intuitive, but USB to TTL level RS-232 adapter (Serial adapter)
 can be used in a special bit-bang mode.  AVRDUDE supports this:</p>
@@ -104,14 +105,14 @@ following setting in the default <code>/etc/avrdude.conf</code> is adjusted via
 </code></pre><p>You can use double raw pin header as a converter.</p>
 <p><img src="/img/TTL232R-SPI.png" alt="TTL232R-SPI ADAPTER WIRING">
 <img src="/img/TTL232R-SPI-ADAPTER.jpeg" alt="TTL232R-SPI ADAPTER PHOTO"></p>
-<h2 id="wiring-to-boardchip">Wiring to board/chip</h2>
+<h2 id="wiring-to-program-avr-chips-with-ttl-232r">Wiring to program AVR chips with TTL-232R</h2>
 <table>
 <thead>
 <tr>
 <th>FT232RL</th>
-<th>Bit-bang</th>
+<th>BB</th>
 <th>TTL-232R</th>
-<th>ADAPTER</th>
+<th><strong>ICPS</strong></th>
 </tr>
 </thead>
 <tbody>
@@ -140,6 +141,30 @@ following setting in the default <code>/etc/avrdude.conf</code> is adjusted via
 <td>4 MOSI</td>
 </tr>
 <tr>
+<td>DTR# 2</td>
+<td>D4</td>
+<td>&mdash;</td>
+<td></td>
+</tr>
+<tr>
+<td>DSR# 9</td>
+<td>D5</td>
+<td>&mdash;</td>
+<td></td>
+</tr>
+<tr>
+<td>DCD# 10</td>
+<td>D6</td>
+<td>&mdash;</td>
+<td></td>
+</tr>
+<tr>
+<td>RI#  6</td>
+<td>D7</td>
+<td>&mdash;</td>
+<td></td>
+</tr>
+<tr>
 <td>VCC</td>
 <td>&ndash;</td>
 <td>3 RED</td>
@@ -153,6 +178,100 @@ following setting in the default <code>/etc/avrdude.conf</code> is adjusted via
 </tr>
 </tbody>
 </table>
+<ul>
+<li>FT232RL: IC chip in TTL-232R, D/D, Uncompatino</li>
+<li>BB: Bit-bang data bit</li>
+<li>TTL-232R: USB to TTL level RS232C converter adapter</li>
+<li><strong>ICPS</strong>: ISP Connector on Arduino boards</li>
+</ul>
+<h2 id="wiring-to-program-avr-chips-wit-ft232rl-on-dd">Wiring to program AVR chips wit FT232RL on D/D</h2>
+<table>
+<thead>
+<tr>
+<th>FT232RL</th>
+<th>BB</th>
+<th>D/D</th>
+<th>Uncompatino</th>
+<th>ATmega328</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TXD  1</td>
+<td>D0</td>
+<td></td>
+<td>(2 ATmega)</td>
+<td>&mdash;</td>
+</tr>
+<tr>
+<td>RXD  5</td>
+<td>D1</td>
+<td></td>
+<td>(3 ATmega)</td>
+<td>&mdash;</td>
+</tr>
+<tr>
+<td>RTS# 3</td>
+<td>D2</td>
+<td></td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+</tr>
+<tr>
+<td>CTS# 11</td>
+<td>D3</td>
+<td>X3-1</td>
+<td>:</td>
+<td>18 MISO</td>
+</tr>
+<tr>
+<td>DTR# 2</td>
+<td>D4</td>
+<td></td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+</tr>
+<tr>
+<td>DSR# 9</td>
+<td>D5</td>
+<td>X3-2</td>
+<td>:</td>
+<td>19 SCK</td>
+</tr>
+<tr>
+<td>DCD# 10</td>
+<td>D6</td>
+<td>X3-3</td>
+<td>:</td>
+<td>17 MOSI</td>
+</tr>
+<tr>
+<td>RI#  6</td>
+<td>D7</td>
+<td>X3-4</td>
+<td>:</td>
+<td>1  RESET</td>
+</tr>
+<tr>
+<td>VCC</td>
+<td>&ndash;</td>
+<td></td>
+<td>VCC (com.)</td>
+<td>VCC</td>
+</tr>
+<tr>
+<td>GND</td>
+<td>&ndash;</td>
+<td></td>
+<td>GND (com.)</td>
+<td>GND</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>D/D: Diecimila/Duemilnove pin outs for FT232RL</li>
+<li>Uncompatino: Cheap D/D Alternative with different PCB with short pins</li>
+</ul>
 <!-- raw HTML omitted -->
 
 

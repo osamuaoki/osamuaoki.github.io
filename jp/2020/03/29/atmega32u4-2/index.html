@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/03/29 (initial publish),
-2021/07/19 (last update)
+2021/11/15 (last update)
 </h3>
 </div>
 
@@ -111,7 +111,29 @@ USBコネクターを「左」に置き見て、「半時計回り」(CCW)で
 で位置表記し、ISPコネクターの端子は赤線側を上にして、
 コネクター穴側から見て位置表記することとします。</p>
 <p><a href="https://www.pjrc.com/teensy/pinout.html">Teensy 2.0開発ボード</a>の場合(所有)：</p>
-<ul>
+<pre><code>                              MINI
+下                            USB　　　　　　　　　　　　　　　　　上
+                    	+---+-----+---+
+Interior            GND |*  |     |  *|Vcc              Interior
+PE6         SS      PB0 |*  |     |  *|PF0  ADC0        AREF
+AIN0        SCLK    PB1 |*  |     |  *|PF1  ADC1          |
+INT6        MOSI    PB2 |*  +-----+  *|PF4  ADC4          |
+  +-&gt;       MISO    PB3 |*  *     *  *|PF5  ADC5        &lt;-+
+RTS OC1C    OC0A    PB7 |*           *|PF6  ADC6
+SCL OC0B    INT0    PD0 |*           *|PF7  ADC7
+SDA         INT1    PD1 |*           *|PB6  ADC13   OC1B    OC4B
+RXD1        INT2    PD2 |*           *|PB5  ADC12   OC1A    ~OC4B
+TXD1        INT3    PD3 |*           *|PB4  ADC11
+~OC4A       OC3A    PC6 |*           *|PD7  ADC10   T0      OC4D
+OC4A        ICP3    PC7 |* * * * * * *|PD6  ADC9    T1      ~OC4D  (LED)
+                        +-------------+
+                           ^ ^ ^ ^ ^
+CTS         XCK1    PD5 ---+ | | | +---PD4  ADC8    ICP1
+VCC * -----------------------+ | |
+GND * -------------------------+ |
+RST * ---------------------------+
+                                右
+</code></pre><ul>
 <li>ボード下0: GND</li>
 <li>ボード下2: SCLK &ndash;&gt; 3 コネクター右側中央</li>
 <li>ボード下3: MOSI &ndash;&gt; 4 コネクター左側中央(VCC/GND間)</li>
@@ -127,7 +149,37 @@ USBコネクターを「左」に置き見て、「半時計回り」(CCW)で
 </li>
 </ul>
 <p><a href="https://www.pjrc.com/teensy/pinout.html">Teensy 2.0++開発ボード</a>の場合(所有)：</p>
-<ul>
+<pre><code>                              MINI
+下                            USB　　　　　　　　　　　　　　　　　上
+                    	+---+-----+---+
+                    GND |*  |     |  *|Vcc
+     OC1C   OC0A    PB7 |*  |     |  *|PB6  OC1B
+SCL  OC0B   INT0    PD0 |*  |     |  *|PB5  OC1A
+SDA  OC2B   INT1    PD1 |*  +-----+  *|PB4  OC2A
+RXD1        INT2    PD2 |*           *|PB3  MISO
+TXD1        INT3    PD3 |*           *|PB2  MOSI
+ICP1                PD4 |*           *|PB1  SCLK
+XCK1                PD5 |*           *|PB0  SS
+T1 (LED)            PD6 |*           *|PE7  INT7    AINI
+T0                  PD7 |*           *|PE6  INT6    OC1A    ~OC4B
+                    PE0 |*           *|GND
+                    PE1 |*           *|AREF
+                    PC0 |*           *|PF0  ADC0
+                    PC1 |*           *|PF1  ADC1
+                    PC2 |*           *|PF2  ADC2
+T3                  PC3 |*           *|PF3  ADC3
+     OC3C           PC4 |*           *|PF4  ADC4
+     OC3B           PC5 |*           *|PF5  ADC5
+     OC3A           PC6 |*           *|PF6  ADC6
+ICP3                PC7 |*   * * *   *|PF7  ADC7    T1      ~OC4D  (LED)
+                        +-------------+
+                             ^ ^ ^
+CTS         XCK1             | | |
+VCC * -----------------------+ | |
+GND * -------------------------+ |
+RST * ---------------------------+
+                                右
+</code></pre><ul>
 <li>ボード下0: GND</li>
 <li>ボード右1: VCC  &ndash;&gt; 2 コネクター左側上(赤線側)（使わないときは抜く）</li>
 <li>ボード右2(CTR): GND  &ndash;&gt; 6 コネクター左側下</li>
