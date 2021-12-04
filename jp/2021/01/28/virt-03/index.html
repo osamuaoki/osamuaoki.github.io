@@ -73,7 +73,7 @@
 <h2 id="lxc仮想環境の停止">LXC仮想環境の停止</h2>
 <p>仮想環境のカスタマイズした起動をするためには、作成し起動した仮想環境の<code>STATE</code>を
 <code>STOPPED</code>(停止)に確実にします。</p>
-<pre><code>$ sudo lxc-stop -n sid
+<pre tabindex="0"><code>$ sudo lxc-stop -n sid
 $ sudo lxc-ls -f
 NAME   STATE   AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED
 buster STOPPED 0         -      -    -    false
@@ -83,7 +83,7 @@ sid    STOPPED 0         -      -    -    false
 <code>/home/fish/src</code>を仮想環境内の<code>/home/fish</code>としてアクセスできるように共有化
 された仮想環境として起動できます。この仮想環境環境にユーザーアカウントに
 ログインするまでの手順は以下です。</p>
-<pre><code>$ sudo lxc-start -n sid \
+<pre tabindex="0"><code>$ sudo lxc-start -n sid \
   -s &quot;lxc.mount.entry=/home/fish/src home/fish none bind 0 0&quot;
 $ sudo lxc-attach -n sid
 root@sid:/# login
@@ -100,7 +100,7 @@ fish@sid:~$
 <h2 id="lxc仮想環境とのデーター共有設定">LXC仮想環境とのデーター共有設定</h2>
 <p>立ち上げ毎に長い<code>-s</code>オプションを使ってのbindマウント指定をなくするには、<code>lxc-create</code>
 コマンドが作った基本の仮想環境の設定ファイル<code>config</code>を編集し、設定します。</p>
-<pre><code># cd /var/lib/lxc/sid
+<pre tabindex="0"><code># cd /var/lib/lxc/sid
 # cp config config.orig
 # vim config
  ...
@@ -118,7 +118,7 @@ fish@sid:~$
 </code></pre><p>これでホスト側の<code>/home/fish/src</code>を仮想環境内の<code>/home/fish</code>としてアクセス
 できるように共有化した仮想環境として立ち上げが、単純な以下の操作でできる
 ようになります。</p>
-<pre><code>$ sudo lxc-start -n sid
+<pre tabindex="0"><code>$ sudo lxc-start -n sid
 </code></pre><h2 id="使い捨てのlxc仮想環境">使い捨てのLXC仮想環境</h2>
 <p><code>pbuilder</code>でコアのシステム環境のコピーをベースにした使い捨ての仮想環境をchrootで準備し
 パッケージを作成するように、LXCででもコアのシステム環境のコピーをベースにした使い捨ての
@@ -128,7 +128,7 @@ fish@sid:~$
 <p><code>lxc-copy</code>には<code>lxc-start</code>の<code>-s</code>オプションのような機能がないので、仮想環境とのデーター
 共有を実現するには、コピー元の仮想環境の設定ファイル<code>config</code>を上記のように編集し
 <code>lxc.mount.entry</code>を追加設定しておく必要があります。</p>
-<pre><code>$ sudo lxc-stop -n sid
+<pre tabindex="0"><code>$ sudo lxc-stop -n sid
 $ sudo lxc-info -n sid
 Name:           sid
 State:          STOPPED
@@ -144,7 +144,7 @@ sid-dev01 RUNNING 0         -      10.0.3.220 -    false
 <p>こうして作った使い捨てのLXC仮想環境は、<code>lxc-attach</code>か<code>lxc-console</code>で入り利用できます。</p>
 <p>さらに、利用後の使い捨てのLXC仮想環境は、<code>lxc-stop</code>とするだけで<code>lxc-destroy</code>すること無く
 消滅するので、開発ホストシステム中のゴミファイルの蓄積を防げます。</p>
-<pre><code>$ sudo lxc-stop sid-dev01
+<pre tabindex="0"><code>$ sudo lxc-stop sid-dev01
 $ sudo lxc-ls -f
 NAME   STATE   AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED
 buster STOPPED 0         -      -    -    false

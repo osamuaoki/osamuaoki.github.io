@@ -121,7 +121,7 @@ LDS/STS命令に置き換えると言っているようです。</p>
 <p>メモリー消費は、<code>avr-size</code>コマンドで調べます。フラッシュ消費は「Program」、
 SRAM消費は「Data」で示されます。SRAMの初期化データーをフラッシュが
 保持するため、「.data」が両方でカウントされます。</p>
-<pre><code> $ avr-size --mcu=atmega328p --format=avr blink.elf
+<pre tabindex="0"><code> $ avr-size --mcu=atmega328p --format=avr blink.elf
 AVR Memory Usage
 ----------------
 Device: atmega328p
@@ -174,7 +174,7 @@ Data:          0 bytes (0.0% Full)
 シリアルに端子の接地状況を出力し、接続したPCのコンソールターミナルへ
 AVRの状態を出力する簡単なプログラムの<code>hello.c</code>を作成しました。</p>
 <p>（シリアル入力なしで、デモコードより簡単なところからスタートです。）</p>
-<pre><code>// Arduino nano board is 16 MHz
+<pre tabindex="0"><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 // Usable Baud Rate ... 9600 14400 19200 28800 38400 57600 2%
 #define BAUD 19200
@@ -273,10 +273,10 @@ AVRのサポートを考えてか、そのヘッダーで提供するハード�
 <code>util/setbaud.h</code>を使いました。</p>
 <p>さて、これをコンパイルしてできる<code>hello.hex</code>を、USB経由でチップに以下で
 プログラムしました。</p>
-<pre><code>$ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:hello.hex
+<pre tabindex="0"><code>$ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:hello.hex
 </code></pre><p>USBをつないだまま、以下を実行し、B端子や他の端子を接地したりすると、
 ターミナルプログラムを起動したホストPCに端子の接地状況が表示されます。</p>
-<pre><code>$ picocom -b 19200 /dev/ttyUSB0
+<pre tabindex="0"><code>$ picocom -b 19200 /dev/ttyUSB0
  ... (snip) ...
 Terminal ready
 Hello world!
@@ -285,7 +285,7 @@ PINB=3D PINC=3D PIND=FF
 PINB=3D PINC=3B PIND=FF
 PINB=3B PINC=3B PIND=FF
 </code></pre><p>メモリー消費を見てみましょう。</p>
-<pre><code> $ avr-size --mcu=atmega328p --format=avr hello.elf
+<pre tabindex="0"><code> $ avr-size --mcu=atmega328p --format=avr hello.elf
 Device: atmega328p
 
 Program:    2038 bytes (6.2% Full)
@@ -309,7 +309,7 @@ Data:         20 bytes (1.0% Full)
 <p>そもそも16進表示では見にくいのと、各端子の入出力やプルアップ設定も表示
 させたいし、メモリー消費も抑えたいので<code>printf()</code>を使わずにプログラムを
 書き直しました。</p>
-<pre><code>// Arduino nano board is 16 MHz
+<pre tabindex="0"><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 // Usable Baud Rate ... 9600 14400 19200 28800 38400 57600 2%
 #define BAUD 19200
@@ -437,7 +437,7 @@ int main(void) {
 }
 </code></pre><p>USBをつないだまま、以下を実行し、B端子や他の端子を接地したりすると、
 ターミナルプログラムを起動したホストPCに端子の接地状況が表示されます。</p>
-<pre><code>$ picocom -b 19200 /dev/ttyUSB0
+<pre tabindex="0"><code>$ picocom -b 19200 /dev/ttyUSB0
 ... (snip) ...
 Terminal ready
 Hello world!
@@ -460,7 +460,7 @@ PINB =00110111 PINC =00110111 PIND =11111101
 </code></pre><!-- raw HTML omitted -->
 <p>ソースコードが大幅に増え、表示する情報量も<code>printf()</code>を使う場合の
 約3倍となっています。</p>
-<pre><code> $ avr-size --mcu=atmega328p --format=avr hello.elf
+<pre tabindex="0"><code> $ avr-size --mcu=atmega328p --format=avr hello.elf
 AVR Memory Usage
 ----------------
 Device: atmega328p

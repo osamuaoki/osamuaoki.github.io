@@ -111,7 +111,7 @@ MCUが停止していたようです。さらにややこしくしたのは改�
 させるように書き換えます。こうすることでLチカが、このアプリケーションに
 よるのか、それともブートローダー中のコードによるのかを、外部LED挙動で
 簡単に判別できるようになります。</p>
-<pre><code>#define F_CPU 16000000UL
+<pre tabindex="0"><code>#define F_CPU 16000000UL
 
 #include &lt;avr/io.h&gt;
 #include &lt;util/delay.h&gt;
@@ -152,7 +152,7 @@ Teensy 2.0なのでATmega32u4/16MHzをターゲットに設定を書き換え、
 HID、DFUの3種類すべてをコンパイルし、この結果も
 <a href="https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result">フォークしたLUFAのブランチ</a>
 に保存しました。</p>
-<pre><code> dec  hex filename          programmer
+<pre tabindex="0"><code> dec  hex filename          programmer
 3886  f2e BootloaderCDC.hex avrdude -c avr109
 3938  f62 BootloaderDFU.hex dfu-programmer
 2118  846 BootloaderHID.hex hid_bootloader_cli

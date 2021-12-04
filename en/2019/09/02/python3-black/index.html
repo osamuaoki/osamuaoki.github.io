@@ -80,17 +80,17 @@
 <li><code>flake8</code> (bundle of: <code>pycodestyle</code> + <code>pyflakes</code>).</li>
 </ul>
 <h2 id="install-black">Install <code>black</code></h2>
-<pre><code> $ sudo apt install python3-black
+<pre tabindex="0"><code> $ sudo apt install python3-black
 </code></pre><h2 id="use-black">Use <code>black</code></h2>
-<pre><code> $ black a-python-code-directory/
+<pre tabindex="0"><code> $ black a-python-code-directory/
 </code></pre><p>or</p>
-<pre><code> $ black a-python-code-file.py
+<pre tabindex="0"><code> $ black a-python-code-file.py
 </code></pre><h2 id="skip-lint-prigram">Skip Lint prigram</h2>
 <p>Line with <code>#NOQA</code> at the end are skipped by <code>pycodestyle</code> for PEP-8 lint.</p>
 <p>Lines between <code># fmt: off</code> and <code># fmt: on</code> are skipped by the <code>black</code>.</p>
 <h2 id="make-black-to-work-with-other-tools">Make <code>black</code> to work with other tools</h2>
 <p>Adding followings to <code>pyproject.toml</code> may be useful.</p>
-<pre><code>[flake8]
+<pre tabindex="0"><code>[flake8]
 max-line-length = 88
 select = C,E,F,W,B,B950
 ignore = E203,W503,W504

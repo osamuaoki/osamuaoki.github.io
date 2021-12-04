@@ -81,7 +81,7 @@
 <p>LXC (1:4.0.6-1) をBulleseye環境で<code>/usr/share/doc/lxc/README.Debian</code>の
 &ldquo;Unprivileged containers&quot;に従って設定していきます。(2021/02)</p>
 <p>まずKERNELがunprivileged user namespacesを有効にしていることを確認します。</p>
-<pre><code>$ sudo uname -a
+<pre tabindex="0"><code>$ sudo uname -a
 Linux **** 5.10.0-3-amd64 #1 SMP Debian 5.10.13-1 (2021-02-06) x86_64 GNU/Linux
 $ sudo sysctl kernel.unprivileged_userns_clone
 kernel.unprivileged_userns_clone = 1
@@ -89,11 +89,11 @@ kernel.unprivileged_userns_clone = 1
 これらは親システムのUIDやGIDからLXCコンテナ内から見えるUIDやGIDへの対応関係定義
 しています。</p>
 <p>ネットワーク設定は以下を実行：</p>
-<pre><code>$ NAME=$(id -un)
+<pre tabindex="0"><code>$ NAME=$(id -un)
 $ sudo sh -c &quot;echo $NAME veth lxcbr0 10 &gt;&gt; /etc/lxc/lxc-usernet
 </code></pre><p>さらに、<code>~/.config/lxc/default.conf</code>のユーザー設定を<code>/etc/subuid</code>と
 <code>/etc/subgid</code>に合わせて以下でします。</p>
-<pre><code>$ mkdir -p ~/.config/lxc
+<pre tabindex="0"><code>$ mkdir -p ~/.config/lxc
 $ cat &gt;~/.config/lxc/default.conf &lt;&lt; EOF
 lxc.include = /etc/lxc/default.conf
 lxc.idmap = u 0 100000 65536
@@ -102,7 +102,7 @@ lxc.mount.auto = proc:mixed sys:ro cgroup:mixed
 lxc.apparmor.profile = unconfined
 EOF
 </code></pre><p><code>download</code> templateだけが使えるので、これを使って実行します。</p>
-<pre><code>$ lxc-create -t download -n bullseye-user -- -d debian -r bullseye -a amd64
+<pre tabindex="0"><code>$ lxc-create -t download -n bullseye-user -- -d debian -r bullseye -a amd64
 Setting up the GPG keyring
 Downloading the image index
 Downloading the rootfs
@@ -150,7 +150,7 @@ drwxr-xr-x 11 100000 100000 4096 Feb  3 14:26 var
 立ち上げようとしてもこけます。ここ、要注意です！</p>
 <p>ここは以下の様にlxcパッケージの<code>README.Debian</code>の指示どおり<strong>systemd-run</strong> を
 <strong>&ndash;property=Delegate=yes</strong> 等とともに用いて実行すればうまく立ち上がります。</p>
-<pre><code>$ systemd-run --scope --quiet --user --property=Delegate=yes lxc-start -n bullseye-user
+<pre tabindex="0"><code>$ systemd-run --scope --quiet --user --property=Delegate=yes lxc-start -n bullseye-user
 $ lxc-ls -f
 NAME          STATE   AUTOSTART GROUPS IPV4       IPV6 UNPRIVILEGED
 bullseye-user RUNNING 0         -      10.0.3.224 -    true
@@ -161,7 +161,7 @@ root@bullseye-user:/#
 操作同様に動きました。</p>
 <p>ちなみにこれをキーボードで毎回叩くのは大変なので、Bashの初期化ファイルで
 以下を定義して使うことにしました。</p>
-<pre><code>alias cgdo=&quot;systemd-run --scope --quiet --user --property=Delegate=yes&quot;
+<pre tabindex="0"><code>alias cgdo=&quot;systemd-run --scope --quiet --user --property=Delegate=yes&quot;
 </code></pre><p>また、非特権LXC仮想環境でも、仮想環境の設定ファイル<code>config</code>を前記の特権LXC
 仮想環境と同様に<code>lxc.mount.entry</code>の設定を追加設定することでデーター共有がで
 きました。</p>
@@ -174,7 +174,7 @@ User Namespacesだけを非特権LXCコンテナ内に切り替えられる<code
 <code>~/.local/share/lxc/bullseye-user</code>にいながらコンテナ内のUIDやGIDの
 特権ユーザー(UID=0, GID=0)となりファイルリスティングするには単純に
 以下とします。</p>
-<pre><code>$ lxc-usernsexec -- bash
+<pre tabindex="0"><code>$ lxc-usernsexec -- bash
 $ ls -la rootfs
 total 84
 drwxr-xr-x 21 root root    4096 Feb  3 14:29 .
@@ -215,7 +215,7 @@ drwxr-xr-x 11 root root    4096 Feb  3 14:26 var
 <h3 id="カーネルのlxcサポートの確認">カーネルのLXCサポートの確認</h3>
 <p>現在のカーネルが lxc に必要な機能をサポートしているか確認は
 <code>lxc-checkconfig</code>(1)を実行します。</p>
-<pre><code>$ lxc-checkconfig
+<pre tabindex="0"><code>$ lxc-checkconfig
 LXC version 4.0.6
 Kernel configuration not found at /proc/config.gz; searching...
 Kernel configuration found at /boot/config-5.10.0-3-amd64

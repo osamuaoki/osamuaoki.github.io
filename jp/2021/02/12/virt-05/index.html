@@ -82,7 +82,7 @@ User NamespacesはユーザーIDやグループID等のセキュリティー関�
 実現することができます。この際のユーザーIDの対応関係が<code>/proc/[pid]/uid_map</code>
 ファイルに記されています。(グループIDの場合は<code>/proc/[pid]/gid_map</code>)</p>
 <p>たとえばコンテナ環境外のシェルプロセスの<code>uid_map</code>以下です。</p>
-<pre><code>$ cat /proc/$$/uid_map
+<pre tabindex="0"><code>$ cat /proc/$$/uid_map
          0          0 4294967295
 </code></pre><p>これは、最初の<code>0</code> が現amespacesのユーザーID、次の<code>0</code> が(実在しない)親Namespaces
 のユーザーID に対応し、(2^32)-1の4294967295が対応関係範囲長となります。
@@ -93,7 +93,7 @@ User NamespacesはユーザーIDやグループID等のセキュリティー関�
 <p>LXC 4.0の非特権ユーザーのコンテナ起動は、<code>/usr/share/doc/lxc/README.Debian</code>に
 詳しく書かれています。この様な現在のシステムでは、各コンテナ環境では
 16ビットユーザーIDの 0 - 65536＝(2^16)-2 を使っているようです。</p>
-<pre><code>$ id -nu
+<pre tabindex="0"><code>$ id -nu
 osamu
 $ cat /etc/subuid
 osamu:100000:65536

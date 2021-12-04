@@ -137,7 +137,7 @@ cgroupメンバーシップをリストしているとのことでした。</p>
 <p>cgroup v2のunifiedヒエラルキー環境に合わせてでコマンドを調整をしながら
 <code>cgroup_namespaces</code>(7)の例を以下でtraceすることにします。この際に、
 各環境で以下の <code>cgck</code>関数を定義して状況の確認に利用します。</p>
-<pre><code>... # declare -f cgck
+<pre tabindex="0"><code>... # declare -f cgck
 cgck ()
 {
     for pid in 1 $(ps --no-headers -o pid);
@@ -154,11 +154,11 @@ cgck ()
 の意味は、<code>proc</code>(5)に説明されています。</p>
 <p>まずroot権限のBash shellを環境設定抜きで立ち上げ、バックグラウンド
 プロセスも立ち上げます。</p>
-<pre><code>$ PS1='sh1\$ ' sudo bash --norc
+<pre tabindex="0"><code>$ PS1='sh1\$ ' sudo bash --norc
 sh1# sleep 1000000 &amp;
 [1] 397732
 </code></pre><p>この状況を上記の<code>cgck</code>関数を定義して確認します。</p>
-<pre><code>sh1# cgck
+<pre tabindex="0"><code>sh1# cgck
       1 /sbin/init
 0::/init.scope
 32 22 0:27 / /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
@@ -205,7 +205,7 @@ cgroup PATHが長めです。</p>
 </tbody>
 </table>
 <p>さてこれらの気になるプロセスのcgroup帰属を変更します。</p>
-<pre><code>sh1# echo $$
+<pre tabindex="0"><code>sh1# echo $$
 392578
 sh1# mkdir -p /sys/fs/cgroup/freezer/sub
 sh1# echo $$ &gt;/sys/fs/cgroup/freezer/sub/cgroup.procs
@@ -259,9 +259,9 @@ sh1# cgck
 </table>
 <p>さて、<code>unshare</code>を用いて新規のcgroupやmountのnamespaces内に新規のshellを
 立ち上げましょう。</p>
-<pre><code>sh1# PS1='sh2\$ ' unshare --cgroup --mount bash --norc
+<pre tabindex="0"><code>sh1# PS1='sh2\$ ' unshare --cgroup --mount bash --norc
 </code></pre><p>さてこの状況を<code>cgck</code>関数を定義してそれを使って確認します。</p>
-<pre><code>sh2# cgck
+<pre tabindex="0"><code>sh2# cgck
       1 /sbin/init
 0::/../../init.scope
 32 22 0:27 /../.. /sys/fs/cgroup rw,nosuid,nodev,noexec,relatime shared:9 - cgroup2 cgroup2 rw
@@ -320,7 +320,7 @@ cgroup2のファイルシステムの mount pointも、<code>/sys/fs/cgroup/free
 </table>
 <p>ただこうして作成された新規のshell (PID=425474) のcgroup2-fs mount pointは<code>/</code>で
 あるべきでが、<code>/../..</code>となっています。これを直します。</p>
-<pre><code>sh2# mount --make-rslave /
+<pre tabindex="0"><code>sh2# mount --make-rslave /
 sh2# cgck
       1 /sbin/init
 0::/../../init.scope
@@ -394,7 +394,7 @@ sh2# cgck
 </tr>
 </tbody>
 </table>
-<pre><code>sh2# mount -t cgroup2  cgroup2 /sys/fs/cgroup/
+<pre tabindex="0"><code>sh2# mount -t cgroup2  cgroup2 /sys/fs/cgroup/
 sh2# cgck
       1 /sbin/init
 0::/../../init.scope
@@ -452,7 +452,7 @@ sh2# cgck
 プロセスと同じcgroupのnamespacesに属させる操作はできません。なぜなら
 <code>/freezer/sub</code> や <code>/freezer/sub2</code> が <code>/sys/fs/cgroup</code> 以下に無くなっ
 ているからです。</p>
-<pre><code>sh2# tree -L 2 /sys/fs/cgroup
+<pre tabindex="0"><code>sh2# tree -L 2 /sys/fs/cgroup
 /sys/fs/cgroup
 ├── cgroup.controllers
 ├── cgroup.events

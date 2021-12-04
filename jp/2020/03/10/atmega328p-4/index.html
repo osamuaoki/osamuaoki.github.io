@@ -174,19 +174,19 @@ ATtiny13A向けにコンパイル結果をアッセンブリーでハンド
 <p>現在(2020, Debian buster)のavr-gcc (GCC) 5.4.0を用いて実状を確認しました。
 （コードはエラーやワーニングが出ないようにちょっと手を入れてます）</p>
 <p>Program 1: 152 Byte</p>
-<pre><code>#include &lt;avr/io.h&gt;
+<pre tabindex="0"><code>#include &lt;avr/io.h&gt;
 /* Read UART value and convert it to ASCII*/
 char read_and_convert(void) { return (PINB + 0x48); }
 /* Write to UART*/
 int main(void) { UDR0 = read_and_convert(); }
 </code></pre><p>Program 2: 146 Byte</p>
-<pre><code>#include &lt;avr/io.h&gt;
+<pre tabindex="0"><code>#include &lt;avr/io.h&gt;
 /* A macro to read UART value and convert it to ASCII*/
 #define read_and_convert() (PINB + 0x48)
 /* Write to UART*/
 int main(void) { UDR0 = read_and_convert(); }
 </code></pre><p>Program 3: 146 Byte</p>
-<pre><code>#include &lt;avr/io.h&gt;
+<pre tabindex="0"><code>#include &lt;avr/io.h&gt;
 /* Read UART value and convert it to ASCII*/
 static inline char read_and_convert(void) { return (PINB + 0x48); }
 /* Write to UART*/
@@ -232,7 +232,7 @@ Pre-decrementが好ましいのも納得できます。</p>
 ATmega1284P やAT90USB1287などにフォーカスしてプログラムメモリー関係を
 調べました。(xmegaチップは本メモのスコープ外です。)</p>
 <p>GCCのAVRオプションに関するところに；</p>
-<pre><code>Pointers in the implementation are 16 bits wide. The address of a function or
+<pre tabindex="0"><code>Pointers in the implementation are 16 bits wide. The address of a function or
 label is represented as word address so that indirect jumps and calls can
 target any code address in the range of 64 Ki words.
 </code></pre><p>とあるのですが、フラッシュが128KBに大きくなりバイト単位アドレスが
@@ -252,7 +252,7 @@ target any code address in the range of 64 Ki words.
 が、Cのプログラムメモリー上のポインタータイプの<code>PGM_P</code>に関して
 <code>suzeof(PGM_P)</code>を確認すると2 BYTEとなっています。実際、
 <code>pgm_read_byte(s)</code>は以下のように2 BYTE命令２つにコンパイルされます。</p>
-<pre><code>fc 01           movw    r30, r24
+<pre tabindex="0"><code>fc 01           movw    r30, r24
 84 91           lpm     r24, Z
 </code></pre><p>これでは、LPMコマンドによる16ビットのZレジスター（R30, R31）によ
 り示されるアドレスからの１バイト読み込みなのでプログラムメモリー

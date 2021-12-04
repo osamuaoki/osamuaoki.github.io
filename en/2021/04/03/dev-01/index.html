@@ -161,14 +161,14 @@ backend.</p>
 <h3 id="setup">Setup</h3>
 <p>Here, I follow <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> (I have made a few updates there,
 too.).</p>
-<pre><code>$ sudo apt install sbuild piuparts autopkgtest lintian
+<pre tabindex="0"><code>$ sudo apt install sbuild piuparts autopkgtest lintian
 $ adduser osamu sbuild
 </code></pre><p>Logout and login to check you are a member of <code>sbuild</code> group.</p>
-<pre><code>$ id
+<pre tabindex="0"><code>$ id
 uid=1000(osamu) gid=1000(osamu) groups=1000(osamu),...,132(sbuild)
 </code></pre><p>Let&rsquo;s create the configuration file <code>~/.sbuildrc</code> in line with recent Debian
 practice <a href="https://wiki.debian.org/SourceOnlyUpload">https://wiki.debian.org/SourceOnlyUpload</a> as:</p>
-<pre><code>cat &gt;~/.sbuildrc &lt;&lt; 'EOF'
+<pre tabindex="0"><code>cat &gt;~/.sbuildrc &lt;&lt; 'EOF'
 ##############################################################################
 # PACKAGE BUILD RELATED (source-only-upload as default)
 ##############################################################################
@@ -204,19 +204,19 @@ EOF
 </code></pre><p>You can disable and enable each functionality by assigning 0 or 1 to
 corresponding variables.  You can customize this further for your GPG key etc.</p>
 <p>Then create the baseline chroot environment as:</p>
-<pre><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/ftp.us.debian.org/debian
+<pre tabindex="0"><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/ftp.us.debian.org/debian
 </code></pre><p>Please note that the above create <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to be used by <code>schroot</code>.</p>
 <p>(This file needs to be removed together with the directory tree under <code>/srv/chroot/unstable-amd64-sbuild</code> to rerun above <code>sbuild-createchroot</code> if you messed up chroot contents.)</p>
 <p>TODO: decide on technical merits: eatmydata or tmpfs for /build etc.</p>
 <p>Prior to every use, you need to keep it up to date.</p>
-<pre><code>$ sudo sbuild-update -udcar u
+<pre tabindex="0"><code>$ sudo sbuild-update -udcar u
 </code></pre><p>I added following line into
 <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to speed up the package
 installation process.</p>
-<pre><code>command-prefix=eatmydata
+<pre tabindex="0"><code>command-prefix=eatmydata
 </code></pre><p>Since I have enough DRAM and want to avoid ware out of SSD, I added
 following to my <code>/etc/fstab</code>:</p>
-<pre><code># For speeding up sbuild/schroot and prevent SSD wear-out
+<pre tabindex="0"><code># For speeding up sbuild/schroot and prevent SSD wear-out
 none /var/lib/schroot/session        tmpfs uid=root,gid=root,mode=0755 0 0
 none /var/lib/schroot/union/overlay  tmpfs uid=root,gid=root,mode=0755 0 0
 none /var/lib/sbuild/build           tmpfs uid=sbuild,gid=sbuild,mode=2770 0 0
@@ -390,14 +390,14 @@ parallel build.</p>
 </ul>
 <h3 id="package-build-with-sbuild">Package build with sbuild</h3>
 <p>Package build from the source directory is simply as:</p>
-<pre><code>$ sbuild
+<pre tabindex="0"><code>$ sbuild
 </code></pre><p>or using source package as:</p>
-<pre><code>$ sbuild &lt;packagename&gt;.dsc
+<pre tabindex="0"><code>$ sbuild &lt;packagename&gt;.dsc
 </code></pre><p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
 bind-mount kernel feature smartly to make build environment quickly.</p>
 <h3 id="gbp-buildpackage-configuration">gbp-buildpackage configuration</h3>
 <p>I changed gbp-buildpackage to use sbuild.</p>
-<pre><code>[DEFAULT]
+<pre tabindex="0"><code>[DEFAULT]
 # the default build command:
 builder = sbuild -A -s --source-only-changes -v -d unstable
 ...
@@ -405,13 +405,13 @@ builder = sbuild -A -s --source-only-changes -v -d unstable
 <code>sbuild</code> here.)</p>
 <h3 id="access-to-the-source-chroot-environment-used-by-sbuild-as-root">Access to the source chroot environment used by sbuild as root</h3>
 <p>In order to access the minimum unstable chroot environment used by sbuild, use the standard command.</p>
-<pre><code>$ sudo sbuild-shell u
+<pre tabindex="0"><code>$ sudo sbuild-shell u
 </code></pre><p>In order to update the minimum unstable chroot environment used by sbuild, use the standard command.</p>
-<pre><code>$ sudo sbuild-update -udcar u
+<pre tabindex="0"><code>$ sudo sbuild-update -udcar u
 </code></pre><p>In order to access the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
-<pre><code>$ sudo schroot-shell -u o
+<pre tabindex="0"><code>$ sudo schroot-shell -u o
 </code></pre><p>In order to update the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
-<pre><code>$ sudo sbuild-update -udcar o
+<pre tabindex="0"><code>$ sudo sbuild-update -udcar o
 </code></pre><h2 id="schroot-infrastructure-shared-data-persistent">Schroot infrastructure (shared data, persistent)</h2>
 <p>For package development, creating the test build environment starting from the
 latest minimal chroot environment is time consuming.  For this situation, it&rsquo;s
@@ -426,7 +426,7 @@ unstable, I created a simple shell script:</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell">https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell</a></li>
 </ul>
-<pre><code>$ schroot-shell -h
+<pre tabindex="0"><code>$ schroot-shell -h
 NAME
     schroot-shell - start a shell in chroot with current home data.
 
@@ -476,19 +476,19 @@ different devices (including Btrfs subvolumes).</li>
 </ul>
 <h3 id="access-to-the-persistent-chroot-environment-as-user">Access to the persistent chroot environment as user</h3>
 <p>In order to access the pre-loaded unstable chroot environment, I simply type.</p>
-<pre><code>$ schroot-shell
+<pre tabindex="0"><code>$ schroot-shell
 </code></pre><p>In order to update the pre-loaded unstable chroot environment, I simply type.</p>
-<pre><code>$ schroot-shell -u
+<pre tabindex="0"><code>$ schroot-shell -u
 </code></pre><p>In order to access the pre-loaded oldstable chroot environment, I simply type.</p>
-<pre><code>$ schroot-shell o
+<pre tabindex="0"><code>$ schroot-shell o
 </code></pre><p>In order to update the pre-loaded oldstable chroot environment, I simply type.</p>
-<pre><code>$ schroot-shell -u o
+<pre tabindex="0"><code>$ schroot-shell -u o
 </code></pre><h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
 <li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
 <li>Read /usr/share/doc/libvirt-daemon/README.Debian.gz and follow it.</li>
 </ul>
-<pre><code>$ sudo bash
+<pre tabindex="0"><code>$ sudo bash
 # virsh net-start default
 # virsh net-autostart default
 # mkdir /etc/dnsmasq.d
@@ -551,7 +551,7 @@ repository and than try again.  (Don&rsquo;t use <code>--fix-missing</code>)</li
 <li>Clone from &ldquo;debian10&rdquo; to &ldquo;sid-dev&rdquo;</li>
 <li>Change <code>/etc/apt/sources.list</code></li>
 </ul>
-<pre><code>deb http://ftp.us.debian.org/debian/ sid main
+<pre tabindex="0"><code>deb http://ftp.us.debian.org/debian/ sid main
 deb-src http://ftp.us.debian.org/debian/ sid main
 </code></pre><ul>
 <li><code>apt-get update &amp;&amp; apt-get dist-upgrade &amp;&amp; apt autoremove</code></li>
@@ -567,15 +567,15 @@ seen from other VMs and the host WS need reboot of the VM.)</p>
 <p>As long as the host WS and guest VMs are installed with <code>avahi-utils</code>, we can
 use each host name appended with &ldquo;<code>.local</code>&rdquo; to access using good old SSH.  For
 example between VMs.</p>
-<pre><code>osamu@sid-dev:~$ ssh sid-GNOME.local
+<pre tabindex="0"><code>osamu@sid-dev:~$ ssh sid-GNOME.local
 </code></pre><p>SSH login directly to root account of a system are probably blocked.  In that
 case, you must SSH into user account first and sudo/su to root.</p>
 <p>Use of SSH key placed in user&rsquo;s home directory is a good idea.  Typical key
 generation goes:</p>
-<pre><code>osamu@sid-dev:~$ ssh-keygen -t rsa
+<pre tabindex="0"><code>osamu@sid-dev:~$ ssh-keygen -t rsa
 </code></pre><h3 id="setting-up-sudo">Setting up <code>sudo</code></h3>
 <p>Following will configure <code>sudo</code> to allow user &ldquo;osamu&rdquo; for root privilege.</p>
-<pre><code> $ su
+<pre tabindex="0"><code> $ su
 Password:
 root@sid-dev:/home/osamu# /sbin/adduser osamu sudo
 ...

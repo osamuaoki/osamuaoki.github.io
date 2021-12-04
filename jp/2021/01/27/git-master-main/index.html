@@ -87,7 +87,7 @@
 <h3 id="ローカルブランチ名の変更">ローカルブランチ名の変更</h3>
 <p>次に、GITHUBのWEBインターフェースの吹き出しにある指示手順で、ローカルの
 repoのブランチ名を状態を確認しながら変更します。</p>
-<pre><code>$ git branch -a
+<pre tabindex="0"><code>$ git branch -a
 * master
   remotes/origin/HEAD -&gt; origin/master
   remotes/origin/master
@@ -102,7 +102,7 @@ $ git status -sb
 <p>さらに、GITHUBのWEBインターフェースの吹き出しにある指示手順で
 リモートのトラッキングがうまくするための追加の関連設定を
 状態を確認しながらします。</p>
-<pre><code>$ git fetch origin
+<pre tabindex="0"><code>$ git fetch origin
 From github.com:&lt;user_name&gt;/&lt;project_name&gt;
  * [new branch]      main       -&gt; origin/main
 $ git branch -a
@@ -125,7 +125,7 @@ $ git status -sb
 <p>上記でGITHUBのWEBインターフェースの吹き出しにある指示手順は終了し新ブランチ名で使えます。</p>
 <p>ただ、<code>remotes/origin/master</code>が残っているのが目障りです。綺麗に新ブランチ名に移行するには、
 これを消してHEADの整合性を確保します。</p>
-<pre><code>$ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
+<pre tabindex="0"><code>$ git symbolic-ref refs/remotes/origin/HEAD refs/remotes/origin/main
 $ git branch -a
 * main
   remotes/origin/HEAD -&gt; origin/main
@@ -140,11 +140,11 @@ $ git branch -a
 
 </code></pre><p>上記の最初の操作のHEADの関連付け先変更処理は、<code>git remote</code>を使っても
 できます。この方が見通し良いかもしれません。</p>
-<pre><code>$ git remote set-head origin main
+<pre tabindex="0"><code>$ git remote set-head origin main
 ... (以下同様)
 </code></pre><p>ここで行ったHEADの関連付け先変更処理は、以下のコマンド実行時のWARNINGの解消
 をしてくれます。</p>
-<pre><code>$ git branch -a
+<pre tabindex="0"><code>$ git branch -a
 warning: ignoring broken ref refs/remotes/origin/HEAD
 ...
 </code></pre><p>綺麗に新ブランチ名に移行するのは結構大変です。</p>
@@ -155,12 +155,12 @@ WEBインターフェースとの整合性がとれ無駄なデーターアッ�
 <p>ただ、直接アクセスできないREPOのホストサーバー上のブランチ名を変更する場合は、
 ローカルのブランチ名を変更してレポをPUSHした後で、REPOのホストサーバー上の古い
 ブランチ名<code>master</code>を消すという荒技を使うのも手です。</p>
-<pre><code>$ git checkout -b main
+<pre tabindex="0"><code>$ git checkout -b main
 $ git branch -D master
 $ echo &quot;renamed master to main&quot;
 $ git push origin :master
 </code></pre><p>以下でも同じです。</p>
-<pre><code>$ git branch -m master main
+<pre tabindex="0"><code>$ git branch -m master main
 $ echo &quot;renamed master to main&quot;
 $ git push --delete origin master
 </code></pre><h2 id="参考cookbookサイト">参考Cookbookサイト</h2>

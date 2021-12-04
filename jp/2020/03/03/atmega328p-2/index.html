@@ -90,7 +90,7 @@
 ボードがあるのが練習用にいい感じです。</p>
 <h2 id="開発環境">開発環境</h2>
 <p>クロスコンパイル開発環境は以下でOK（2020/03, Debian stable buster）</p>
-<pre><code> $ sudo apt install gcc-avr avr-libc binutils-avr
+<pre tabindex="0"><code> $ sudo apt install gcc-avr avr-libc binutils-avr
 </code></pre><h2 id="コードスタイル">コードスタイル</h2>
 <p>以下色々なところからコードを引っ張ってくると、コードスタイルが混じって
 見づらくなるし、手動で直すのもばかばかしいのでちょっとコードスタイル関係を
@@ -101,13 +101,13 @@
 に最も共感しました。</p>
 <p>今後はPython以外は全言語基本2スペースインデントにします。</p>
 <p>VIMのモードライン(C)</p>
-<pre><code>// vim: set sts=2 sw=2 ft=c ai si et tw=80:
+<pre tabindex="0"><code>// vim: set sts=2 sw=2 ft=c ai si et tw=80:
 </code></pre><p>VIMのモードライン(SH)</p>
-<pre><code># vim: set sts=2 sw=2 ft=sh ai si et tw=80:
+<pre tabindex="0"><code># vim: set sts=2 sw=2 ft=sh ai si et tw=80:
 </code></pre><p>VIMのモードライン(PYTHON)</p>
-<pre><code># vim: set sts=4 sw=4 ft=python ai si et:
+<pre tabindex="0"><code># vim: set sts=4 sw=4 ft=python ai si et:
 </code></pre><p>Cの自動リフォーマットは</p>
-<pre><code> $ clang-format -style=Google -i filename.c
+<pre tabindex="0"><code> $ clang-format -style=Google -i filename.c
 </code></pre><p>SHELLの全文リフォーマットはVIMで(modelineが無い場合は<code>:set syntax=sh</code>の後)<code>gg=G</code>とする。</p>
 <p>PYTHONの全文リフォーマットは「black」を使います。</p>
 <h2 id="レファレンス文書">レファレンス文書</h2>
@@ -128,7 +128,7 @@
 <h3 id="cのソースコード">Cのソースコード</h3>
 <p>以下にLチカのCのソースコード <code>blink.c</code>を示します。
 これでNanoのPB5ピンにぶら下がっているLEDを0.5秒間隔でON/OFFします。</p>
-<pre><code>// Arduino nano board is 16 MHz
+<pre tabindex="0"><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
 #include &lt;avr/io.h&gt;
@@ -149,7 +149,7 @@ int main(void) {
 inclideファイルがあります。これさえ分かれば後はコードを見ればほぼ自明です。</p>
 <p>例えば<code>_BV()</code>は、基本のヘッダーファイル<code>avr/io.h</code>が読み込む
 <code>avr/sfr_defs.h</code>中に定義されています。</p>
-<pre><code>#define _BV(bit) (1 &lt;&lt; (bit))
+<pre tabindex="0"><code>#define _BV(bit) (1 &lt;&lt; (bit))
 </code></pre><p>ところで、見慣れない変数名ですがその答えは、<code>avr/io.h</code>や<code>avr/sfr_defs.h</code>
 を読むと見えてきます。ちなみに、<code>avr/io.h</code>はチップのIO（入出力）の定義の
 ヘッダーファイルで、<code>avr/sfr_defs.h</code>は「AVR special function registers」
@@ -200,7 +200,7 @@ inclideファイルがあります。これさえ分かれば後はコードを�
 <h3 id="コンパイルリンクプログラム">コンパイル・リンク・プログラム</h3>
 <p><a href="/jp/2020/02/21/atmega328p-1/">AVRISP mkII をISP接続</a>した上で
 コンパイル・リンク・プログラムは次の様に進めます。</p>
-<pre><code> $ avr-gcc -mmcu=atmega328p -Wall -Os -o blink.elf blink.c
+<pre tabindex="0"><code> $ avr-gcc -mmcu=atmega328p -Wall -Os -o blink.elf blink.c
  $ avr-size --mcu=atmega328p --format=avr blink.elf
 Program:     162 bytes (0.5% Full)
 (.text + .data + .bootloader)
@@ -214,7 +214,7 @@ Data:          0 bytes (0.0% Full)
 <h2 id="例-led点灯">例: LED点灯</h2>
 <p>ビット値が1が、出力がHIGHであることを確認しましょう。上記ソースコードを
 以下の様に変更します。</p>
-<pre><code>// Arduino nano board is 16 MHz
+<pre tabindex="0"><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
 #include &lt;avr/io.h&gt;
@@ -233,7 +233,7 @@ int main(void) {
 <h2 id="例-led点滅-lチカの別の方法">例: LED点滅 (Lチカ)の別の方法</h2>
 <p>PINへの書き込みによる、トグルを使うようにオリジナルのLED点滅ソースコードを
 以下の様に変更します。</p>
-<pre><code>// Arduino nano board is 16 MHz
+<pre tabindex="0"><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
 #include &lt;avr/io.h&gt;
@@ -255,7 +255,7 @@ int main(void) {
 <h2 id="例-端子入力にあわせてled点滅">例: 端子入力にあわせてLED点滅</h2>
 <p>端子入力にあわせてLED点滅させるようにオリジナルのLED点滅ソースコードを
 以下の様に変更します。</p>
-<pre><code>// Arduino nano board is 16 MHz
+<pre tabindex="0"><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
 #include &lt;avr/io.h&gt;
@@ -285,7 +285,7 @@ USBコネクター側の端子)のどれかを接地(ground)するとLEDが消�
 <h2 id="例-端子入力にあわせてledタイマー点灯">例: 端子入力にあわせてLEDタイマー点灯</h2>
 <p>端子入力にあわせてLEDを3秒間タイマー点灯させるようにオリジナルの
 LED点滅ソースコードを以下の様に変更します。</p>
-<pre><code>// Arduino nano board is 16 MHz
+<pre tabindex="0"><code>// Arduino nano board is 16 MHz
 #define F_CPU 16000000UL
 
 #include &lt;avr/io.h&gt;
@@ -351,7 +351,7 @@ USB-Serial変換器（Arduino UnoはFT232Rが、Arduino Nano互換機では
 CH340がその役割）経由でATmega328PのD0/D1ピンにシリアルにデーター
 を流し込みプログラムするには、上記のISP経由の書き込みに換え、
 以下をホストPCから実行します。</p>
-<pre><code> $ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:blink.hex
+<pre tabindex="0"><code> $ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:blink.hex
 </code></pre><p>この方がプログラム更新にはISPよりはるかに手軽です。</p>
 <p>もちろんFUSE操作などにはISPは不可欠です。</p>
 <p>TIP: 上記で使用したシリアルデバイス名「ttyUSB0」は<code>sudo dmesg</code>などとして探します。</p>
@@ -359,7 +359,7 @@ CH340がその役割）経由でATmega328PのD0/D1ピンにシリアルにデー
 <p>毎回シェルにコマンドを打ち込むのも面倒です。</p>
 <p>こういった基本的な開発環境では、<code>Makefile</code>を使いたいですよね。
 <code>Makefile</code>の基本テンプレートは以下がよく使われます。</p>
-<pre><code> $ sudo apt install subversion
+<pre tabindex="0"><code> $ sudo apt install subversion
  $ svn checkout https://svn.code.sf.net/p/winavr/code/trunk winavr-code
 </code></pre><p>Linux系の開発環境だとGNU Make を使うので、この中の
 <code>winavr-code/Mfile/data/makefile_template.winavr</code>

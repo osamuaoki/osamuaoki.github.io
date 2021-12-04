@@ -90,7 +90,7 @@
 中にビルド時に生成される<code>mkworddic</code>により読み込まれ、さらに負の頻度を持つ
 「逆変換用辞書」データーが追加作成されます。</p>
 <p>これを詳しく見ていきましょう。</p>
-<p><code>mkworddic</code>が-f<code>オプションで</code>dict.args<code>を指定して起動されます。</code>dict.args<code>は通常同一ディレクトリー内の</code>dict.args.in`からビルド時作成されます。
+<p><code>mkworddic</code>が-f<code>オプションで</code>dict.args<code>を指定して起動されます。</code>dict.args<code> は通常同一ディレクトリー内の</code>dict.args.in`からビルド時作成されます。
 これを変更することで組み込まれる辞書は調節できます。</p>
 <p><code>dict.args</code>の設定内容の処理は、mkworddic/mkdic.c:execute_batch()で処理されます。</p>
 <ul>
@@ -109,7 +109,7 @@
 構造が分かります。</p>
 <p>最も典型的な辞書ソースデーターファイルの構造は、半角スペースで区切られた以下の
 構造をしています。</p>
-<pre><code>&lt;ひらがな見出し語&gt; [#&lt;品詞&gt;[*&lt;頻度&gt;] [&lt;変換後文字列&gt;]... ]...
+<pre tabindex="0"><code>&lt;ひらがな見出し語&gt; [#&lt;品詞&gt;[*&lt;頻度&gt;] [&lt;変換後文字列&gt;]... ]...
 </code></pre><ul>
 <li><code>&lt;ひらがな見出し語&gt;</code> (index)は、全角ひらがな以外の半角・全角の数字や記号も許されます。</li>
 <li><code>*&lt;頻度&gt;</code>は省略可能です。</li>
@@ -143,7 +143,7 @@ README中の文言は無視しましょう）</p>
 </ul>
 <h2 id="anthyの辞書ソースファイル構造複合語">Anthyの辞書ソースファイル構造（複合語）</h2>
 <p>複合語の収録のために、「&lt;変換後文字列&gt;」には特別の記述法があります。</p>
-<pre><code>かなかんじへんかんえんじん #T35 #_2仮名_3漢字_4変換_4エンジン
+<pre tabindex="0"><code>かなかんじへんかんえんじん #T35 #_2仮名_3漢字_4変換_4エンジン
 </code></pre><p>見てわかるように、<code>_</code>の後ろの数字は対応するindex中文字の字数です。
 「う゛」は2文字扱いとなります。頻度情報は省略されているので１です。
 当然ですが、index側や変換先文字列の有効部分には、半角数字や<code>#</code>
@@ -153,7 +153,7 @@ README中の文言は無視しましょう）</p>
 辞書中に記録されています。</p>
 <p>この複合語の数字は<code>mkworddic/mkdic.c:reverse_multi_segment_word()</code>の
 複合語の逆変換でも利用され以下の逆変換辞書が生成されています。</p>
-<pre><code>仮名漢字変換エンジン #T35 #_2かな_2かんじ_2へんかん_4えんじん
+<pre tabindex="0"><code>仮名漢字変換エンジン #T35 #_2かな_2かんじ_2へんかん_4えんじん
 </code></pre><h2 id="anthyの用例辞書ソースファイル">Anthyの用例辞書ソースファイル</h2>
 <p>Anthyの用例辞書（<code>udict</code>）ファイルは、以下の意味がある。</p>
 <ul>
@@ -163,7 +163,7 @@ README中の文言は無視しましょう）</p>
 <li><code>-</code>で始まる行は用例の区切り</li>
 </ul>
 <p>だから、以下のような感じとなる。</p>
-<pre><code># Comment
+<pre tabindex="0"><code># Comment
 あ (く) #K5r 空
 ばしょ () #T35 場所
 ようりょう () #T35 容量
@@ -186,7 +186,7 @@ README中の文言は無視しましょう）</p>
 <p>この、<code>src-worddic/wtab.h</code>は<code>src-worddic/wtype.c</code>の中で次のように利用され、
 <code>wttable wt_name_tab[]</code>という配列に読み込まれて、辞書内の品詞ニモニック文字列
 と品詞の属性ベクトル量を関連付けます。</p>
-<pre><code>struct wttable {
+<pre tabindex="0"><code>struct wttable {
   const char *name;
   int pos;
   int cos;
@@ -204,7 +204,7 @@ static struct wttable wt_name_tab[]= {
 大きさなので、<code>anthy/wtype.h</code>の中で定義された以下の構造体<code>wtype_t</code>を用いて
 29bit(4バイト以下なので8バイトの整数１つに収まる)のコンパクトな
 ビットフィールド表現でメモリー中に保持されます。</p>
-<pre><code>/** 品詞 */
+<pre tabindex="0"><code>/** 品詞 */
 struct wtype{
   unsigned int pos  : POS_BITS;
   unsigned int cos  : COS_BITS;
@@ -231,7 +231,7 @@ typedef struct wtype wtype_t;
 <p>また、この<code>#T35</code>は多用されています。<code>src-util/typetab</code>を見ると以下とあり、
 所謂、形容動詞語幹でも無く、形容詞語幹でも無く、サ変動詞の語幹でもない、
 平凡な「名詞」のようです。</p>
-<pre><code>T35
+<pre tabindex="0"><code>T35
 品詞            =       名詞
 な接続          =       n
 さ接続          =       n

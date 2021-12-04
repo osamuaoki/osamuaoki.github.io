@@ -127,7 +127,7 @@ ext4にしていたルートファイルシステムも含めてbtrfs化をめ�
 変更されます。例えば、<code>491a357c-822f-4f38-b56e-b998baea81a5</code> から
 <code>9be0d928-5892-4cdd-a647-1e8cce937b2e</code> に変わったとします。</p>
 <p>当然ですがこの変更に合わせ当然<code>/etc/fstab</code>に以下のdiffに相当する変更をします。</p>
-<pre><code>--- fstab.orig  2021-02-19 14:49:32.768895933 +0900
+<pre tabindex="0"><code>--- fstab.orig  2021-02-19 14:49:32.768895933 +0900
 +++ fstab       2021-02-19 14:49:19.860921576 +0900
 @@ -6,6 +6,6 @@
  #
@@ -141,7 +141,7 @@ ext4にしていたルートファイルシステムも含めてbtrfs化をめ�
 <code>/boot/grub/grub.cfg</code>もキチッと以下のdiffに相当する変更をします。</p>
 <p>これができていなくて発生した起動不良にかなり悩みました。(update-grubは他の
 パーティションのOSに関してはそれらのgrub.cfgの内容を参照するので)</p>
-<pre><code>--- grub.cfg-orig	2021-02-17 09:32:35.855910912 +0900
+<pre tabindex="0"><code>--- grub.cfg-orig	2021-02-17 09:32:35.855910912 +0900
 +++ grub.cfg	2021-02-19 14:26:12.728005239 +0900
 @@ -59,11 +59,11 @@
     font=unicode
@@ -249,7 +249,7 @@ ext4にしていたルートファイルシステムも含めてbtrfs化をめ�
 パーティションにあるDebian Bulleseye 11 が作成する Grub 起動メニューに
 <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=983107">当システムがうまくリストされないバグ</a>
 の回避策は以下です。</p>
-<pre><code>$ cd /mnt
+<pre tabindex="0"><code>$ cd /mnt
 $ sudo ln -sf @/boot boot
 $ sudo ln -sf @/etc  etc
 $ sudo ln -sf @/usr  usr
@@ -272,7 +272,7 @@ $ sudo umount /mnt
 mountする必要があります。</p>
 <p>例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、
 <code>/etc/fstab</code>のエントリーを以下とします。</p>
-<pre><code>UUID=???first  /      btrfs subvol=@,defaults    0    0
+<pre tabindex="0"><code>UUID=???first  /      btrfs subvol=@,defaults    0    0
 UUID=???second /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults    0    0
 </code></pre><p><code>btrfs</code>(5) mount option に以下の記載があるのに要注意です。&ldquo;most mount options
 apply to the whole filesystem and only options in the first mounted subvolume

@@ -1619,16 +1619,16 @@ Disassembly of section .fini:
 <p>Also some unresolved address references in the <code>hello-gdb.o</code> ELF object is resolved.</p>
 <p>For example, let&rsquo;s trace <code>call puts</code> in the assembler source <code>hello.s</code> as follows.</p>
 <p>Code to <code>call puts</code> in the <code>hello.s</code>. (No address resolution)</p>
-<pre><code>    call    puts
+<pre tabindex="0"><code>    call    puts
 </code></pre><p>We see the following for the relocatable object <code>hello-gdb.o</code>.</p>
 <p>Code to <code>call puts</code> in the <code>hello-gdb.o</code>. (No address resolution)</p>
-<pre><code>     9:    e8 00 00 00 00           callq  e &lt;main+0xe&gt;
+<pre tabindex="0"><code>     9:    e8 00 00 00 00           callq  e &lt;main+0xe&gt;
 </code></pre><p>We see the following for the executable <code>hello-gdb</code>.</p>
 <p>Code to <code>call puts</code> in the <code>hello-gdb</code>. (Address resolved)</p>
-<pre><code>4005b5:    e8 d6 fe ff ff           callq  400490 &lt;puts@plt&gt;
+<pre tabindex="0"><code>4005b5:    e8 d6 fe ff ff           callq  400490 &lt;puts@plt&gt;
 </code></pre><p>Later we will see the following under GDB.</p>
 <p>Code to <code>call puts</code> in the <code>hello-gdb</code> viewed from <code>(gdb) disassembler/r main</code>. (Address resolved)</p>
-<pre><code>0x00000000004005b5 &lt;+9&gt;:	e8 d6 fe ff ff	callq  0x400490 &lt;puts@plt&gt;
+<pre tabindex="0"><code>0x00000000004005b5 &lt;+9&gt;:	e8 d6 fe ff ff	callq  0x400490 &lt;puts@plt&gt;
 </code></pre><h3 id="objdump--s">objdump -S</h3>
 <p>Here is a disassembled code dump by the <code>objdump</code> command for the <code>hello-gdb.o</code> ELF object with the original C source code.</p>
 <p>Disassembled code dump by the <code>objdump</code> command for the <code>hello-gdb.o</code> ELF object with the original C source code.</p>
@@ -1671,7 +1671,7 @@ ELF file format on Linux.</p>
 file size to <code>unlimited</code> with the shell&rsquo;s <code>ulimit -c unlimited</code> command in
 advance.</p>
 <p>Set the core file size to <code>unlimited</code> with <code>ulimit -c unlimited</code>.</p>
-<pre><code>$ ulimit -c
+<pre tabindex="0"><code>$ ulimit -c
 0
 $ ulimit -c unlimited
 $ ulimit -c

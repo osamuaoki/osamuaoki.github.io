@@ -140,7 +140,7 @@ SUPER-a、SUPER-s、SUPER-n、SUPER-m、SUPER-TAB、SUPER-vも先約があるの
 <p><code>inputSources[0]</code>(GNOMEのキーボード入力ソース選択画面で最初の項目)
 がANTHYとすると、変換キーはないのでSUPER-j (Japanese)
 をあてがいましょう。Commandは長いけど１行で入れてください。</p>
-<pre><code>Name     InputMethod_0
+<pre tabindex="0"><code>Name     InputMethod_0
 Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&quot;
 Shortcut SUPER-j
 </code></pre><p>もし、これが嫌ならSUPER-,、SUPER-.、SUPER-/などの右下のキーとSUPERの
@@ -149,7 +149,7 @@ Shortcut SUPER-j
 <p><code>inputSources[1]</code>がENGLISHとすると、これには安心して戻れるように
 SUPER-RETURNをあてがいましょう。(SUPER-Eも考えたのですが
 アクセスが私にとって良くないので…)</p>
-<pre><code>Name     InputMethod_1
+<pre tabindex="0"><code>Name     InputMethod_1
 Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[1].activate()&quot;
 Shortcut SUPER-RETURN
 </code></pre><p>そしてANTHYは常にHiraganaとしておけばよしです。</p>

@@ -114,7 +114,7 @@ btrfs.</p>
 <h2 id="distribution-selection">Distribution selection</h2>
 <p>In order to have decent graphics support easily, current testing distribution
 (bullseye) is used.</p>
-<pre><code>$ uname -a
+<pre tabindex="0"><code>$ uname -a
 Linux goofy 5.9.0-5-amd64 #1 SMP Debian 5.9.15-1 (2020-12-17) x86_64 GNU/Linux
 </code></pre><h2 id="non-free-firmwares">Non-free firmwares</h2>
 <p>I think we need some non-free drivers.</p>
@@ -129,7 +129,7 @@ Linux goofy 5.9.0-5-amd64 #1 SMP Debian 5.9.15-1 (2020-12-17) x86_64 GNU/Linux
 <p>Since there are 2 Ethernet devices (one on right side and one accessible from
 docking station), I updated <code>/etc/network/interfaces</code> as follows to make them
 hot-pluggable.</p>
-<pre><code># This file describes the network interfaces available on your system
+<pre tabindex="0"><code># This file describes the network interfaces available on your system
 # and how to activate them. For more information, see interfaces(5).
 
 source /etc/network/interfaces.d/*
@@ -180,12 +180,12 @@ for this issue.</p>
 <h3 id="workaround-rev-1-manual">Workaround (rev. 1: manual)</h3>
 <p>I run the following from console after installing <code>pulseaudio-utils</code> once for
 every booting manually:</p>
-<pre><code> $ pactl load-module module-detect
+<pre tabindex="0"><code> $ pactl load-module module-detect
 </code></pre><h3 id="workaround-rev-2-automatic">Workaround (rev. 2: automatic)</h3>
 <p>Although modifying a distribution provided file as workaround is not my
 favorite move, I did it anyway to make this workarund automatic.</p>
 <p>Modify <code>/etc/pulse/default.pa</code> as follows:</p>
-<pre><code>$ cd /etc/pulse/
+<pre tabindex="0"><code>$ cd /etc/pulse/
 $ diff -u default.pa.orig  default.pa
 --- default.pa.orig	2020-02-06 11:06:41.000000000 +0900
 +++ default.pa	2021-01-08 11:15:09.001167903 +0900

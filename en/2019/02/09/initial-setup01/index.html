@@ -69,7 +69,7 @@
 <h2 id="initial-hugo-setups">Initial hugo setups</h2>
 <p>Let&rsquo;s set up a local git repository for a simple personal web pages with blog
 support using <code>hugo</code> on Debian.</p>
-<pre><code> $ sudo apt-get install hugo
+<pre tabindex="0"><code> $ sudo apt-get install hugo
  $ cd /path/to # where you can write
  $ hugo new site &lt;webbuildtree&gt;
 Congratulations! Your new Hugo site is created in /path/to/osamuaoki.
@@ -91,12 +91,12 @@ Visit https://gohugo.io/ for quickstart guide and full documentation.
 ...
 </code></pre><p>Let&rsquo;s add theme to this.  I use <a href="https://github.com/yihui/hugo-xmin">hugo-xmin</a>
 theme:</p>
-<pre><code> $ cd themes
+<pre tabindex="0"><code> $ cd themes
  $ git submodule add git@github.com:yihui/hugo-xmin.git
  $ cd ..
 </code></pre><p>Let&rsquo;s copy template web contents under <code>themes/hugo-xmin/exampleSite</code> directory
 controlled by the <code>hugo-xmin</code> submodule to the parent repository.</p>
-<pre><code> $ cp -rf themes/hugo-xmin/exampleSite/content .
+<pre tabindex="0"><code> $ cp -rf themes/hugo-xmin/exampleSite/content .
  $ cp -rf themes/hugo-xmin/exampleSite/layouts .
  $ cp -f  themes/hugo-xmin/exampleSite/config.toml .
  $ git add -A .
@@ -105,7 +105,7 @@ controlled by the <code>hugo-xmin</code> submodule to the parent repository.</p>
 
 </code></pre><h2 id="check-hugo-generated-web-page">Check hugo generated web page</h2>
 <p>Let&rsquo;s check this website using <code>hugo server</code> which builds and serves the site.</p>
-<pre><code> $ hugo server
+<pre tabindex="0"><code> $ hugo server
 
                    | EN
 +------------------+----+
@@ -129,7 +129,7 @@ Press Ctrl+C to stop
 </code></pre><p>TIP: <code>-D</code> to generate draft page and <code>-F</code> to generate future page may be handy
 for <code>hugo server</code>.</p>
 <p>Then open another terminal and start your browser.</p>
-<pre><code> $ sensible-browser localhost:1313
+<pre tabindex="0"><code> $ sensible-browser localhost:1313
 </code></pre><p>This will display the same contents as the <a href="https://xmin.yihui.name/">DEMO site</a>.</p>
 <!-- raw HTML omitted -->
 

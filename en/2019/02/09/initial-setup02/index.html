@@ -99,7 +99,7 @@ list of contents.</li>
 </ul>
 <p>Then create a github repository <code>osamuaoki-hugo</code> via github GUI and commit this
 source for hugo.</p>
-<pre><code> $ git add -A .
+<pre tabindex="0"><code> $ git add -A .
  $ git commit -m &quot;updated webpage source&quot;
  $ git remote add origin git@github.com:osamuaoki/osamuaoki-hugo.git
  $ git push -u origin master
@@ -110,7 +110,7 @@ source for hugo.</p>
 <code>/path/to/&lt;webbuildtree&gt;/publish</code> directory.</p>
 <p>Then create a github repository <code>osamuaoki.github.io</code> via github GUI and commit
 this generated HTML files.</p>
-<pre><code> $ hugo
+<pre tabindex="0"><code> $ hugo
  $ cd public
  $ git init
  $ git add .
@@ -119,7 +119,7 @@ this generated HTML files.</p>
  $ git push -u origin master
 </code></pre><p>This publishes web page at <a href="https://osamuaoki.github.io/">https://osamuaoki.github.io/</a></p>
 <p>Let&rsquo;s use  <code>git submodule</code> to manage these 2 repositories.</p>
-<pre><code> $ cd ..
+<pre tabindex="0"><code> $ cd ..
  $ rm -rf public
  $ git submodule add git@github.com:osamuaoki/osamuaoki.github.io.git public
  $ git add .
@@ -150,7 +150,7 @@ to a certain branch of a certain github repository to enable github pages.</p>
 <p>For more, follow
 <a href="https://gohugo.io/hosting-and-deployment/hosting-on-github/">Host on GitHub</a></p>
 <h2 id="updating-webpages">Updating webpages</h2>
-<pre><code> $ cd /path/to/&lt;webbuildtree&gt;/content
+<pre tabindex="0"><code> $ cd /path/to/&lt;webbuildtree&gt;/content
   ... hack source
  $ cd /path/to/&lt;webbuildtree&gt;
  $ git add -A .
@@ -168,7 +168,7 @@ as follows.</p>
 <ul>
 <li>Header of this page:</li>
 </ul>
-<pre><code>title: Initial setup for hugo (2)
+<pre tabindex="0"><code>title: Initial setup for hugo (2)
 date: 2019-02-09T11:15:56+09:00
 categories:
   - web
@@ -179,15 +179,15 @@ slug: initial-setup02
 </code></pre><ul>
 <li>Header to publish anytime after the start of the day of JST.</li>
 </ul>
-<pre><code>date: 2019-02-09T00:00:00+09:00
+<pre tabindex="0"><code>date: 2019-02-09T00:00:00+09:00
 </code></pre><ul>
 <li>Header to publish anytime after the end of the day of JST.</li>
 </ul>
-<pre><code>date: 2019-02-09T23:59:59+09:00
+<pre tabindex="0"><code>date: 2019-02-09T23:59:59+09:00
 </code></pre><p>If time zone is omitted, hugo seems to use UT.</p>
 <h2 id="draft">Draft</h2>
 <p>Add following to the header of the source.</p>
-<pre><code>date: 2999-12-31
+<pre tabindex="0"><code>date: 2999-12-31
 draft: true
 </code></pre><p>Check the resulting page with <code>hugo -F -D server</code> to include darft and future
 dated page.</p>

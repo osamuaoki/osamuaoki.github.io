@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/03/29 (initial publish),
-2021/11/15 (last update)
+2021/12/04 (last update)
 </h3>
 </div>
 
@@ -96,7 +96,7 @@ ST-LINK/V2等で書き換えするのにはメスのデュポンコネクター�
 <p>左右逆にしないことが大事なので、接続関係をここにまとめます。</p>
 <p>ISP接続フラットケーブルのコネクター
 （赤線側上です。コネクター穴側から見た「左図」が大事！)</p>
-<pre><code>                  RED SIDE 赤線側
+<pre tabindex="0"><code>                  RED SIDE 赤線側
 BTM VIEW コネクター穴側                 TOP VIEW
 VCC  2  1 MISO                        MISO 1  2 VCC
 MOSI 4  3 SCK                         SCK  3  4 MOSI
@@ -111,7 +111,7 @@ USBコネクターを「左」に置き見て、「半時計回り」(CCW)で
 で位置表記し、ISPコネクターの端子は赤線側を上にして、
 コネクター穴側から見て位置表記することとします。</p>
 <p><a href="https://www.pjrc.com/teensy/pinout.html">Teensy 2.0開発ボード</a>の場合(所有)：</p>
-<pre><code>                              MINI
+<pre tabindex="0"><code>                              MINI
 下                            USB　　　　　　　　　　　　　　　　　上
                     	+---+-----+---+
 Interior            GND |*  |     |  *|Vcc              Interior
@@ -149,7 +149,7 @@ RST * ---------------------------+
 </li>
 </ul>
 <p><a href="https://www.pjrc.com/teensy/pinout.html">Teensy 2.0++開発ボード</a>の場合(所有)：</p>
-<pre><code>                              MINI
+<pre tabindex="0"><code>                              MINI
 下                            USB　　　　　　　　　　　　　　　　　上
                     	+---+-----+---+
                     GND |*  |     |  *|Vcc
@@ -171,7 +171,7 @@ T3                  PC3 |*           *|PF3  ADC3
      OC3C           PC4 |*           *|PF4  ADC4
      OC3B           PC5 |*           *|PF5  ADC5
      OC3A           PC6 |*           *|PF6  ADC6
-ICP3                PC7 |*   * * *   *|PF7  ADC7    T1      ~OC4D  (LED)
+ICP3                PC7 |*   * * *   *|PF7  ADC7
                         +-------------+
                              ^ ^ ^
 CTS         XCK1             | | |
@@ -227,7 +227,7 @@ RST * ---------------------------+
 <h2 id="teensy-20-compat">teensy 2.0 compat.</h2>
 <p>ブレッドボードに挿し一部クリップ接続で検査！</p>
 <p><img src="/img/isp-clip.jpg" alt="ISP接続 ブレッドボード+クリップ"></p>
-<pre><code>$ sudo avrdude -c avrisp2 -P usb -p m32u4 -v
+<pre tabindex="0"><code>$ sudo avrdude -c avrisp2 -P usb -p m32u4 -v
 ....
 avrdude: stk500v2_command(): command failed
 avrdude: stk500v2_program_enable(): bad AVRISPmkII connection status: Unknown status 0x00
@@ -248,7 +248,7 @@ avrdude done.  Thank you.
 結線に意外と使い勝手が良かったのが意外でした。メスデュポンと
 Jフック型端子をつないだISPコネクター線を今度の機会に作りたく
 なりました。</p>
-<pre><code>$ sudo avrdude -c avrisp2 -P usb -p m32u4 -v -F
+<pre tabindex="0"><code>$ sudo avrdude -c avrisp2 -P usb -p m32u4 -v -F
 ...
 
 avrdude: Device signature = 0x1e9587 (probably m32u4)
@@ -283,7 +283,7 @@ avrdude done.  Thank you.
 <h2 id="teensy-20-compat-1">Teensy 2.0++ compat.</h2>
 <p>こっちはピン無し裸ボードなので、上記の直結用クリップワイヤーを
 使ってつなぎました。</p>
-<pre><code>$ sudo avrdude -c avrisp2 -P usb -p usb1286 -v -F
+<pre tabindex="0"><code>$ sudo avrdude -c avrisp2 -P usb -p usb1286 -v -F
 .....
 avrdude: AVR device initialized and ready to accept instructions
 

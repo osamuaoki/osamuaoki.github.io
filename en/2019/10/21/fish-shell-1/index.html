@@ -139,7 +139,7 @@ you can select the started shell from the menu.</p>
 situations such as the &ldquo;xterm&rdquo;, &ldquo;rxvt&rdquo;, &ldquo;LXterminal&rdquo;, and &ldquo;Qterminal&rdquo;, one
 workaround is to select Bash as the system default shell and to place the
 following at the first line of your <code>~/.bashrc</code> to start Fish:</p>
-<pre><code>exec /usr/bin/fish
+<pre tabindex="0"><code>exec /usr/bin/fish
 </code></pre><p>When you really need to start Bash, you can comment out this line to regain the
 normal Bash behavior.</p>
 <h2 id="gui-setup-of-fish">GUI setup of Fish</h2>
@@ -160,11 +160,11 @@ all shell programs set it.  Fish shell is no exception.  Some programs such as
 <code>mc</code> (Midnight Commander), <code>screen</code>, and <code>tmux</code> rely on the <code>$SHELL</code> environment
 variable to override the shell setting of of <code>/etc/passwd</code> updated by <code>chsh</code>.</p>
 <p>Set the <code>$SHELL</code> environment variable for Fish:</p>
-<pre><code>set -x SHELL /usr/bin/fish
+<pre tabindex="0"><code>set -x SHELL /usr/bin/fish
 </code></pre><p>Here, <code>set -x</code> is used to export the environment variable.</p>
 <h3 id="other-environment-variables">Other environment variables</h3>
 <p>The next step is to migrate your old settings in <code>~/.bashrc</code>.</p>
-<pre><code># Always override SHELL=/bin/bash and make mc/screen/tmux happy
+<pre tabindex="0"><code># Always override SHELL=/bin/bash and make mc/screen/tmux happy
 set -x SHELL /usr/bin/fish
 
 # Exported environment variables
@@ -193,7 +193,7 @@ if test -d ~/bin
 end
 </code></pre><h3 id="initializing-builtin-commands">Initializing Builtin commands</h3>
 <p>The next step is to initialize Fish sell using builtin commands.</p>
-<pre><code># User Private Groups: http://wiki.debian.org/UserPrivateGroups
+<pre tabindex="0"><code># User Private Groups: http://wiki.debian.org/UserPrivateGroups
 umask 002
 # make core file
 ulimit -c unlimited
@@ -203,7 +203,7 @@ set it up.</p>
 <p>Let&rsquo;s make <code>mc</code> (Midnight Commander) to change directory upon exit by
 translating <code>/usr/lib/mc/mc.sh</code> to create an auto-loading function
 <code>$XDG_CONFIG_HOME/fish/functions/mc.fish</code>:</p>
-<pre><code># Equivalent of /usr/lib/mc/mc.sh
+<pre tabindex="0"><code># Equivalent of /usr/lib/mc/mc.sh
 function mc --description Midnight\ Commander\ which\ changes\ directory\ upon\ exit.
   set -l SHELL_PID %self
   set -l MC_USER (id -un)
@@ -243,7 +243,7 @@ solution which uses auto-loading:</p>
 <p><strong>TODO</strong></p>
 <h3 id="configuring-less">Configuring <code>less</code></h3>
 <p><strong>TODO</strong></p>
-<pre><code># make less more friendly for non-text input files, see lesspipe(1)
+<pre tabindex="0"><code># make less more friendly for non-text input files, see lesspipe(1)
 #[ -x /usr/bin/lesspipe ] &amp;&amp; eval &quot;$(SHELL=/bin/sh lesspipe)&quot;
 
 </code></pre><!-- raw HTML omitted -->

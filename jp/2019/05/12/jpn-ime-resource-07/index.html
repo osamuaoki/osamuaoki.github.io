@@ -85,7 +85,7 @@
 <p>後者は文法係り受け定義関連を再構築必要がある。簡単にするには
 <code>debian/rules</code>を以下としてDebianのビルドシステムで<code>debuild</code>と
 してビルドする必要がある。</p>
-<pre><code>override_dh_auto_configure:
+<pre tabindex="0"><code>override_dh_auto_configure:
         dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode
 
 </code></pre><p>だが、上手くいかない。ソース壊れている?</p>
@@ -94,7 +94,7 @@
 確認した。</p>
 <p><code>anthy/anthy.h</code>に以下と定義されているので、<code>encoding</code>関係が
 初期値の0だと、どうも出力がEUCJPになってしまうようだ。</p>
-<pre><code>#define ANTHY_UTF8_ENCODING 2
+<pre tabindex="0"><code>#define ANTHY_UTF8_ENCODING 2
 </code></pre><p>これは、0にしておかないとdefault_encodingやencodingやprint_encoding
 などがUTF-8にならない懸念がある。2としている意味を感じなかったので
 これを変えた。特に以下への影響が気になる。</p>
@@ -118,16 +118,16 @@
 きっと連接の統計がまともにできていないので、連文節変換をすると変な
 結果が出るようになったのだろう。とりあえず、修正。</p>
 <p>さらによく見ると、<code>calctrans/proccorpus.c</code>が以下になっている。</p>
-<pre><code>  anthy_conf_override(&quot;CONFFILE&quot;, &quot;../anthy-conf&quot;);
+<pre tabindex="0"><code>  anthy_conf_override(&quot;CONFFILE&quot;, &quot;../anthy-conf&quot;);
 </code></pre><p>これは、ビルド中のソース内のファイルを見てほしいので以下にする。</p>
-<pre><code>  anthy_conf_override(&quot;CONFFILE&quot;, &quot;../anthy-test-conf&quot;);
+<pre tabindex="0"><code>  anthy_conf_override(&quot;CONFFILE&quot;, &quot;../anthy-test-conf&quot;);
 </code></pre><h2 id="無限ループ">無限ループ</h2>
 <p>上記を対策しても上手くビルドしない。</p>
 <p><code>proccorpus</code>は、たしかに読める<code>parsed_data0</code>を生成するが処理が止まってしまう。
 何か無限ループに落ち込んでいる感じ。</p>
 <p>こうなったら素人デバグの常套手段の「printf(stderr,&hellip;)」の嵐だ！
 すると見えてきた。</p>
-<pre><code>...
+<pre tabindex="0"><code>...
 step=8783
 proc_sentence=(あっぷでーとだよ〜ん)
 res_str=(|あっぷでーと|だよ〜ん|)
@@ -150,7 +150,7 @@ trim segment 10 12 1 (だよ~ん)
 が返す文字列は半角の<code>~</code>になっている。
 <code>calctrans/proccorpus.c:trim_segment()</code>の中の以下が半角文字化して
 返すようだ。</p>
-<pre><code>anthy_get_segment(ac, nth, NTH_UNCONVERTED_CANDIDATE, seg_buf, 1024);
+<pre tabindex="0"><code>anthy_get_segment(ac, nth, NTH_UNCONVERTED_CANDIDATE, seg_buf, 1024);
 </code></pre><p>anthyは入力文字をいろいろ正規化してからかな漢字変換をするので、
 テストコーパスの右は正規化された表現じゃないといけないね。
 もしかしたら逆変換問題？正確な問題の原因はもう少し調べる
@@ -159,17 +159,17 @@ trim segment 10 12 1 (だよ~ん)
 際に今回のように壷にはまる。</p>
 <h2 id="応急措置失敗例">応急措置（失敗例）</h2>
 <p>さて、とりあえず回避のためにデーターの問題部分を触ってみる。</p>
-<pre><code>-|あっぷでーと|だよ〜ん| |アップデート|だよ〜ん|
+<pre tabindex="0"><code>-|あっぷでーと|だよ〜ん| |アップデート|だよ〜ん|
 +|あっぷでーと|だよ~ん| |アップデート|だよ~ん|
 </code></pre><p>おー、変換入力文字から半角<code>~</code>が落ちている、、、ので以下が<code>fprint()</code>とされた。</p>
-<pre><code>proc_sentence=(あっぷでーとだよん)
+<pre tabindex="0"><code>proc_sentence=(あっぷでーとだよん)
 res_str=(|あっぷでーと|だよ~ん|)
 </code></pre><h2 id="応急措置成功例">応急措置（成功例）</h2>
 <p>とりあえず回避のためにデーターの問題部分を以下にした。</p>
-<pre><code>-|あっぷでーと|だよ〜ん| |アップデート|だよ〜ん|
+<pre tabindex="0"><code>-|あっぷでーと|だよ〜ん| |アップデート|だよ〜ん|
 +|あっぷでーと|だよ～ん| |アップデート|だよ~ん|
 </code></pre><p>すると、</p>
-<pre><code>step=8783
+<pre tabindex="0"><code>step=8783
 proc_sentence=(あっぷでーとだよ～ん)
 res_str=(|あっぷでーと|だよ～ん|)
 ** next ** nth=0 cur=(あっぷでーと|だよ～ん|)

@@ -471,7 +471,7 @@ by yourself using the <code>g-ir-doc-tool</code> command from the gobject-intros
 package as explained in
 <a href="https://live.gnome.org/GObjectIntrospection/Doctools%5BGObject">https://live.gnome.org/GObjectIntrospection/Doctools[GObject</a> Introspection
 Doctools].</p>
-<pre><code>$ g-ir-doc-tool --language Python -o ./output_dir /usr/share/gir-1.0/Gtk-3.0.gir
+<pre tabindex="0"><code>$ g-ir-doc-tool --language Python -o ./output_dir /usr/share/gir-1.0/Gtk-3.0.gir
 $ yelp ./output_dir/index.page
 </code></pre><p>Despite the efforts to make GTK+3 PyGObject as compatible to the older GTK+2
 PyGTK as possible, the differences are still huge.  See
@@ -582,12 +582,12 @@ or one parameter too much will result in a segmentation fault.</p>
 </li>
 </ul>
 <p>Let me explain the last case a bit more.  If the signal signature is</p>
-<pre><code>public class Area : Object {
+<pre tabindex="0"><code>public class Area : Object {
     public signal void clicked (int x, int y);
 }
 </code></pre><p>then the handler method must have <em>exactly</em> these parameters in order
 to work with Gtk.Builder&rsquo;s auto-connect:</p>
-<pre><code>
+<pre tabindex="0"><code>
 public void on_clicked (Area source, int x, int y) { }
 </code></pre><p>Vala can&rsquo;t recognize this mistake, because auto-connection happens at
 runtime an it doesn&rsquo;t know at compile-time which method will be connected

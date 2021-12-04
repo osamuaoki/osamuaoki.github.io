@@ -93,13 +93,13 @@ which is a Wayland application.</p>
 <h3 id="how-to-reassign-caps-key-as-esc-key-under-linux-console">How to reassign Caps-key as Esc-key under Linux console</h3>
 <p>For <strong>Linux console</strong>, the default keyboard layout is shared with X and
 described in <code>/etc/default/keyboard</code> on somewhat recent Debian.</p>
-<pre><code>...
+<pre tabindex="0"><code>...
 XKBOPTIONS=caps:escape
 </code></pre><p>Values used here can be found in <code>/usr/share/X11/xkb/rules/base.lst</code>.</p>
 <p>For Bulleseye 11, changing this only doesn&rsquo;t change actual keyboard layout
 behavior of Linux console upon reboot.  I needed to run the following command
 manually in Linux console to activate this configuration:</p>
-<pre><code> $ sudo setupcon -v -k
+<pre tabindex="0"><code> $ sudo setupcon -v -k
 ...
 </code></pre><p>I suppose, Wayland system doesn&rsquo;t run keyboard initialization code for Linux
 console upon reboot.</p>

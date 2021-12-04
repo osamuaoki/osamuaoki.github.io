@@ -75,11 +75,11 @@ I decided to go with <code>reprepro</code> package.</p>
 <p>Here, I follow <a href="https://wiki.debian.org/DebianRepository/SetupWithReprepro">https://wiki.debian.org/DebianRepository/SetupWithReprepro</a>
 (It was slightly outdated.  I update it.)</p>
 <h2 id="setting-up-an-web-server">Setting up an web server</h2>
-<pre><code> $ sudo apt install apache2
+<pre tabindex="0"><code> $ sudo apt install apache2
 </code></pre><p>Now you can see a nice &ldquo;Default Page&rdquo; at &ldquo;[::1]&rdquo; (or &ldquo;127.0.0.1&rdquo; for IPV4)
 using browser.</p>
 <p>Let&rsquo;s create a simple directory tree for single distribution case.</p>
-<pre><code> $ sudo bash -i
+<pre tabindex="0"><code> $ sudo bash -i
  # mkdir -p /var/www/html/repo
  # cat &gt; /etc/apache2/conf-available/repos.conf &lt;&lt;'EOF'
 &lt;Directory /var/www/html/repo/ &gt;
@@ -103,24 +103,24 @@ using browser.</p>
 &lt;/Directory&gt;
 EOF
 </code></pre><p>Let&rsquo;s enable configuration</p>
-<pre><code>$ sudo a2enconf repos
+<pre tabindex="0"><code>$ sudo a2enconf repos
 Enabling conf repos.
 To activate the new configuration, you need to run:
   systemctl reload apache2
 $ sudo systemctl reload apache2
 </code></pre><h2 id="gnu-pg">GNU PG</h2>
 <p>Since we need to use sub-key for this purpose, let me check:</p>
-<pre><code>$ gpg --list-secret-keys  --with-subkey-fingerprint
+<pre tabindex="0"><code>$ gpg --list-secret-keys  --with-subkey-fingerprint
 pub   rsa4096 2010-09-23 [SC]
       3133724D6207881579E95D621E1356881DD8D791
 uid           [ultimate] Osamu Aoki &lt;osamu@debian.org&gt;
 sub   rsa4096 2010-09-23 [E]
       FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
 </code></pre><h2 id="setting-up-apt-repository">Setting up APT repository</h2>
-<pre><code>$ sudo mkdir -p /var/www/html/repo/conf
+<pre tabindex="0"><code>$ sudo mkdir -p /var/www/html/repo/conf
 $ cd /var/www/html/repo/conf
 </code></pre><p>In there, <code>distributions</code>:</p>
-<pre><code>Origin: Osamu
+<pre tabindex="0"><code>Origin: Osamu
 Label: Osamu
 Codename: sid
 Architectures: amd64
@@ -128,7 +128,7 @@ Components: main
 Description: APT repository for Osamu's local infrastructure
 SignWith: FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
 </code></pre><p>Also, in there <code>options</code>:</p>
-<pre><code>verbose
+<pre tabindex="0"><code>verbose
 basedir /var/www/html/repo/
 ask-passphrase
 </code></pre><!-- raw HTML omitted -->

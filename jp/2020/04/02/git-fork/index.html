@@ -199,14 +199,14 @@ GUIメニューから出来ます。</p>
 </li>
 <li>ローカルのブランチ<code>dev_branch</code>を作成後、それをリモート<code>origin</code>へ
 pushできるように設定
-<pre><code>$ git checkout -b dev_branch
+<pre tabindex="0"><code>$ git checkout -b dev_branch
 $ git push -u origin dev_branch
 </code></pre></li>
 </ul>
 <p><code>-u</code> は<code>--set-upstream</code>のショートハンド</p>
 <ul>
 <li>ローカルのブランチ名を<code>oldname</code>から<code>newname</code>に変更
-<pre><code>$ git branch -m oldname newname
+<pre tabindex="0"><code>$ git branch -m oldname newname
 </code></pre></li>
 </ul>
 <p>(<code>-m</code> は<code>--move</code>のショートハンド)</p>
@@ -220,7 +220,7 @@ $ git push -u origin dev_branch
 </li>
 <li>
 <p>削除したブランチを復活</p>
-<pre><code>$ git reflog
+<pre tabindex="0"><code>$ git reflog
  ...git remote set-url --push upstream DISABLED_FOR_PUSH
 $ git branch new_branch_name HEAD@{6}
 </code></pre></li>
@@ -228,12 +228,12 @@ $ git branch new_branch_name HEAD@{6}
 <p>間違って<code>git add filename</code>だけをしたが、まだコミット無しの状態
 の場合に、ユーザー編集中のファイルに手を付けずに、レポの状態をadd前の
 状態に復元</p>
-<pre><code>$ git rm --cached filename
+<pre tabindex="0"><code>$ git rm --cached filename
 </code></pre></li>
 <li>
 <p>レポ中に存在するコミットと直接の親子関係のないコミットのためのブランチ
 <code>unconnected</code>を作成</p>
-<pre><code>$ git checkout --orphan unconnected
+<pre tabindex="0"><code>$ git checkout --orphan unconnected
 </code></pre></li>
 <li>
 <p><code>git</code>のデフォールト挙動設定例</p>
@@ -300,7 +300,7 @@ $ git branch new_branch_name HEAD@{6}
 <p>ブランチ名を変えたくないが作業中履歴を簡単に保存したい時には、
 リモートを変更する策があります。例えば、USBメモリー等に作った
 非公開レポをリモートに設定します。</p>
-<pre><code>$ cd /path/to
+<pre tabindex="0"><code>$ cd /path/to
 $ git clone https://some_site/repo_name.git
 $ cd repo_name
 $ git remote set-url --push origin DISABLED_FOR_PUSH
@@ -313,7 +313,7 @@ $ git push --all -u usbmemory
 </code></pre><p>ここまですれば、作業中履歴がそのまま非公開レポにも記録され
 るようになっています。ここでは、うっかり公開レポに<code>git push</code>しな
 いように、<code>git remote set-url ...</code>操作で安全錠を掛けています。</p>
-<pre><code>... hack source
+<pre tabindex="0"><code>... hack source
 $ git push --all
 $ git fetch -p origin
 $ git rebase -i origin/master
@@ -323,7 +323,7 @@ $ git push --all
 さらに念のため公開レポの<code>master</code>の最新内容に<code>git rebase</code>して同期して
 いきます。作業結果が満足となった時点で、安全錠を外して公開レポに綺麗な
 形で<code>git push</code>します。</p>
-<pre><code>$ git remote set-url --delete --push origin &quot;&quot;
+<pre tabindex="0"><code>$ git remote set-url --delete --push origin &quot;&quot;
 $ git push -u origin master
 ...
 </code></pre><p>ここで、合計２回行った<code>git remote set-url ...</code>操作は間違ってリモートの
@@ -341,7 +341,7 @@ $ git push -u origin master
 <p>例えばフォークされたレポの「<code>upstream-master</code>」を追跡に用いる
 ブランチの名前とします。「<code>upstream-master</code>」ブランチのコンテント
 をアップストリームのコンテントに同期させる操作は次のようになります。</p>
-<pre><code>$ git clone https://upstream_site/repo_name.git
+<pre tabindex="0"><code>$ git clone https://upstream_site/repo_name.git
 $ cd repo_name
 $ git branch upstream-master
 $ git remote rename origin upstream
@@ -421,24 +421,24 @@ GUIでローカルのブランチ（例えば「<code>bar</code>」）を新規�
 リモートレポに、他人からは「<code>baz</code>」ブランチと呼ばれることと
 なるブランチとして、(別の見方では自分の<code>gitk</code>で「<code>remotes/origin/baz</code>」
 と表示されるブランチとして)、最初pushするには以下の操作をします。</p>
-<pre><code>$ git checkout bar
+<pre tabindex="0"><code>$ git checkout bar
 $ git push -u origin bar:baz
 </code></pre><p>一度この操作をすると、<code>.git/comfig</code>ファイルにこの設定が記録され
 ます。この設定は<code>git comfig</code>コマンドで調整できますし、また
 エディターで<code>.git/comfig</code>ファイルを直接編集しても調整できます。</p>
 <p>さらにこの状況は以下のようにして確認できます。</p>
-<pre><code>$ git config --list
+<pre tabindex="0"><code>$ git config --list
 ...
 branch.bar.remote=origin
 branch.bar.merge=refs/heads/baz
 </code></pre><p>こう設定した後、「<code>bar</code>」ブランチをチェックアウトして、ファイル
 を変更しローカルにコミット後、アップストリームのGITレポからの変更
 を取り込むには以下とします。(設定していれば<code>--rebase</code>は不要。)</p>
-<pre><code>$ git pull --rebase origin
+<pre tabindex="0"><code>$ git pull --rebase origin
 </code></pre><p>ローカルのコミットは最新アップストリームにrebaseされます。</p>
 <p>２回目以降のpushでは、必ずブランチ名の明示指定が必要です。(一方、今回は<code>-u</code>不要)
 (<code>push.default</code>を<code>upstream</code>に設定していれば別ですが、、、)</p>
-<pre><code>$ git checkout bar
+<pre tabindex="0"><code>$ git checkout bar
 ... hack
 $ git push origin bar:baz
 </code></pre><p>ややこしいですが、「<code>bar</code>」ブランチの最新コミットが<code>gitk</code>で

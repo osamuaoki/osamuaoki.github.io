@@ -86,7 +86,7 @@ Uno等を使ってます。</p>
 <a href="https://www.microchip.com/webdoc/GUID-BEB648AA-8539-418A-9EFB-118BDC9DC77B/index.html">AVR ISP mkII User Guide</a></p>
 <h2 id="ソフト環境">ソフト環境</h2>
 <p>Debian GNU/Linux buster=stable 環境です。</p>
-<pre><code>$ sudo apt install avrdude
+<pre tabindex="0"><code>$ sudo apt install avrdude
 </code></pre><h2 id="接続">接続</h2>
 <p>AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、
 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。</p>
@@ -101,7 +101,7 @@ Nano <img src="/img/NANO-AVRISP2.jpg" alt="Nano ISPケーブル接続"></p>
 <p>AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。</p>
 <p>AVRISP mkII に赤いLEDが点滅は、ISPコネクター「逆差し」です。</p>
 <h3 id="uno">Uno</h3>
-<pre><code>$ sudo avrdude -c avrisp2 -P usb -p m328p -v
+<pre tabindex="0"><code>$ sudo avrdude -c avrisp2 -P usb -p m328p -v
 
 avrdude: Version 6.3-20171130
          Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/
@@ -197,7 +197,7 @@ avrdude: safemode: Fuses OK (E:FD, H:DE, L:FF)
 avrdude done.  Thank you.
 </code></pre><h3 id="nano">Nano</h3>
 <p>ISP ケーブルが、ボード上をUSB向けに伸びるので挿しにくいので注意。</p>
-<pre><code>$ sudo avrdude -c avrisp2 -P usb -p m328p -v
+<pre tabindex="0"><code>$ sudo avrdude -c avrisp2 -P usb -p m328p -v
 
 avrdude: Version 6.3-20171130
          Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/
@@ -309,7 +309,7 @@ avrdude done.  Thank you.
 <p>確かNano互換ボードは購入時は特にArduinoとしてチップが初期化されて
 いなかったので自分で初期化しました。それが良くなかったかも知れないので、
 とりあえずNanoのFUSEをISPで修正しました:</p>
-<pre><code> $ sudo avrdude -c avrisp2 -P usb -p m328p -F  \
+<pre tabindex="0"><code> $ sudo avrdude -c avrisp2 -P usb -p m328p -F  \
                 -U efuse:w:0xfd:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m
 </code></pre><p>なぜか書き換えられました。</p>
 <p>ともに、ブート領域設定をチップデフォルトのBOOTSZ00= 2048ワード（4K BYTE）から
@@ -339,7 +339,7 @@ Arduino用bootloaderのなかで一番小さな　Optiboot インストール法
 ISPプログラマーのAVRISP mkII を用い、まずFUSEを完全消去初期化（ロック解除）し、
 さらに<code>optiboot_atmega328.hex</code>をフラッシュメモリーに強引に書き込むことで
 Optiboot プログラムのインストールができます。</p>
-<pre><code> $ sudo avrdude -p m328p -c avrisp2 -e -F -U lock:w:0xFF:m \
+<pre tabindex="0"><code> $ sudo avrdude -p m328p -c avrisp2 -e -F -U lock:w:0xFF:m \
                 -U efuse:w:0xfd:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m
  $ sudo avrdude -p m328p -c avrisp2 -U flash:w:/path/to/optiboot_atmega328.hex
 

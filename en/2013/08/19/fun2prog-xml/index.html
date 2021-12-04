@@ -227,18 +227,18 @@ if __name__ == &#39;__main__&#39;:
 <h3 id="xml-with-namespace">XML with namespace</h3>
 <p>For example, this fun2prog web page is in the typical XHTML format having namespace embedded in the &ldquo;<code>&lt;html&gt;</code>&rdquo; tag attiribute as &ldquo;<code>&lt;html xmlns=&quot;http://www.w3.org/1999/xhtml&quot; xml:lang=&quot;en&quot;&gt;</code>&rdquo;.  This declaration applies to child elements until it is overriden by another definition.</p>
 <p>In an Element tree, such qualified names are stored as universal names in Clark’s notatioion.  So if &ldquo;<code>&lt;tag&gt;</code>&rdquo; apears in such XML, Elementtree read it as:</p>
-<pre><code>{http://www.w3.org/1999/xhtml}tag
+<pre tabindex="0"><code>{http://www.w3.org/1999/xhtml}tag
 </code></pre><p>For example, let&rsquo;s consider that a copy of this web page fun2prog.html in this current directory.  The first thing to do is to change above example code to the following.</p>
-<pre><code>..
+<pre tabindex="0"><code>..
     tree = ET.parse('jouyou.xml')
     root = tree.getroot()
 ..
 </code></pre><p>Running this will produce very noisy output (folded to fit to the screen).</p>
-<pre><code>{http://www.w3.org/1999/xhtml}html/ \
+<pre tabindex="0"><code>{http://www.w3.org/1999/xhtml}html/ \
 {[1](http://www.w3.org/1999/xhtml}body)/ \
 {[2](http://www.w3.org/1999/xhtml}div)/ ...
 </code></pre><p>The following should let you supress these curly brakets.</p>
-<pre><code>..
+<pre tabindex="0"><code>..
     f = open('fun2prog.html', 'r')
     xhtmlstring = f.read()
     f.close()
