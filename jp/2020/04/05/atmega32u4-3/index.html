@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/04/05 (initial publish),
-2021/12/05 (last update)
+2021/12/12 (last update)
 </h3>
 </div>
 
@@ -64,16 +64,7 @@
     <li><a href="#割り込みvector表">割り込みVector表</a></li>
     <li><a href="#isp接続とusb接続の干渉問題">ISP接続とUSB接続の干渉問題</a></li>
     <li><a href="#led点滅-lチカ">LED点滅 (Lチカ)</a></li>
-    <li><a href="#lufa-4kb-each-----cdc-dfu-hid-ブートローダー">LUFA (4KB each)  &ndash; CDC, DFU, HID ブートローダー</a></li>
-    <li><a href="#arduinoのcaterina----cdc-ブートローダー">ArduinoのCaterina &ndash; CDC ブートローダー</a></li>
-    <li><a href="#sparkfanの改造版caterina----cdc-ブートローダー">Sparkfanの改造版Caterina &ndash; CDC ブートローダー</a></li>
-    <li><a href="#katiana----cdc-ブートローダー">Katiana &ndash; CDC ブートローダー</a></li>
-    <li><a href="#nanoboot改led-512b----hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</a>
-      <ul>
-        <li><a href="#付録-hid_bootloader_cli">付録: <code>hid_bootloader_cli</code></a></li>
-      </ul>
-    </li>
-    <li><a href="#atmega32u4のプログラミング検証">ATmega32u4のプログラミング検証</a></li>
+    <li><a href="#cdc-dfu-hid-ブートローダー">CDC, DFU, HID ブートローダー</a></li>
   </ul>
 </nav>
 
@@ -141,8 +132,13 @@ FUSEがCKDIV8と設定された際にCPU供給周波数が分周され2MHzで
 になってしまいます。</p>
 <p>実際には、これをベースに２つのコードを作成しました。もちろんこれらの中の<code>Makefile</code>は、<code>MCU = atmega32u4</code>としています。</p>
 <ul>
-<li><a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/003_m32u4/blink1">1回光る blink1</a></li>
-<li><a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/003_m32u4/blink2">2回光る blink2</a></li>
+<li><a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/003_m32u4/blink1">1回光る blink1 atmega32u4</a></li>
+<li><a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/003_m32u4/blink2">2回光る blink2 atmega32u4</a></li>
+</ul>
+<p>さらに、<code>MCU = at90usb1286</code>とした２つのコードも作成しました。</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/004_usb1286/blink1">1回光る blink1 at90usb1286</a></li>
+<li><a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/004_usb1286/blink2">2回光る blink2 at90usb1286</a></li>
 </ul>
 <p>AVRISP mkIIを用いて、ATmega328Pと同じように<code>make program</code>を実行すれば
 <a href="/jp/2020/03/29/atmega32u4-2/">FUSEテストと同じISP接続</a>
@@ -151,175 +147,16 @@ FUSEがCKDIV8と設定された際にCPU供給周波数が分周され2MHzで
 ISPプログラマーをPCから抜くのではなく評価ボード側の
 少なくともリセットと電源供給を外す）、ミニUSBコネクター
 でPCとケーブル接続すると、PCから電源供給されLチカが始まります。</p>
-<h2 id="lufa-4kb-each-----cdc-dfu-hid-ブートローダー">LUFA (4KB each)  &ndash; CDC, DFU, HID ブートローダー</h2>
-<p>USB AVRのブートローダーには基本3種類あります。まず基本3種類すべてを提供
-しているLUFAのソースをforkして、ブランチ<code>teensy2</code>を作成し、そこで
-Teensy 2.0なのでATmega32u4/16MHzをターゲットに設定を書き換え、CDC、
-HID、DFUの3種類すべてをコンパイルし、この結果も
-<a href="https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result">フォークしたLUFAのブランチ</a>
-に保存しました。</p>
-<pre tabindex="0"><code> dec  hex filename          programmer
-3886  f2e BootloaderCDC.hex avrdude -c avr109
-3938  f62 BootloaderDFU.hex dfu-programmer
-2118  846 BootloaderHID.hex hid_bootloader_cli
-</code></pre><p>基本のブートローダーは上記3種で、いずれも、2KB-4KBの間です。</p>
-<ul>
-<li><a href="https://github.com/osamuaoki/lufa">https://github.com/osamuaoki/lufa</a> (上記コメント時、2019年)</li>
-<li><a href="https://github.com/abcminiuser/lufa">https://github.com/abcminiuser/lufa</a> (2021年にアップデートされている)</li>
-</ul>
-<h2 id="arduinoのcaterina----cdc-ブートローダー">ArduinoのCaterina &ndash; CDC ブートローダー</h2>
-<p>LUFAのCDC ブートローダーを少し改変しているようです。</p>
-<p>REPO:</p>
-<ul>
-<li><a href="https://github.com/arduino/ArduinoCore-avr/tree/master/bootloaders/caterina">https://github.com/arduino/ArduinoCore-avr/tree/master/bootloaders/caterina</a>
-(2012年)</li>
-</ul>
-<p>LUFAの11109 以降を使うと、
-<a href="https://github.com/abcminiuser/lufa/issues/155">32u4 Caterina はCaterinaをパッチしないとうまく動作しない</a>
-ようです。</p>
-<h2 id="sparkfanの改造版caterina----cdc-ブートローダー">Sparkfanの改造版Caterina &ndash; CDC ブートローダー</h2>
-<p><a href="https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/32U4Note.pdf">Sparkfanの改造版Caterinaの特徴</a></p>
-<ul>
-<li>リセットのダブルクリックでのみ、アプリ書き込みモードに8秒間なる。</li>
-<li>リセットのシングルクリックは、即刻アプリのリセットに入る。</li>
-</ul>
-<p>REPO:</p>
-<ul>
-<li><a href="https://github.com/sparkfun/Arduino_Boards/tree/main/sparkfun/avr/bootloaders/caterina">https://github.com/sparkfun/Arduino_Boards/tree/main/sparkfun/avr/bootloaders/caterina</a>
-(2015年)</li>
-<li><a href="https://github.com/jknofe/caterina">https://github.com/jknofe/caterina</a> (with LUFA-111009) (2017年)</li>
-</ul>
-<p>Sparkfanの改造版Caterinaはいい感じのCDCですが、バイナリーに
-TeensyのLEDに対応するものがなかったのでトライしていません。</p>
-<h2 id="katiana----cdc-ブートローダー">Katiana &ndash; CDC ブートローダー</h2>
-<p>googleで興味ある、<a href="https://forum.arduino.cc/t/new-version-of-caterina-bootloader/483909">フォーラムへのポスト</a>
-を見つけました。
-<a href="https://github.com/aweatherguy/Katiana/blob/master/Katiana-Bootloader.pdf">LUFAの2017ごろをベースに、Arduinoの改変を含め、USBシリアル番号等を含めた各種独自改造</a>
-をしています。
-カウントダウンすることで、クロックのプリスケーリングを
-１：１以外に設定することにも対応し、そえでも4KBに収まっ
-ているそうです。ただAtmega32u4専用だそうです。
-<a href="https://github.com/aweatherguy/Katiana/pull/3">GCC 5.4対応のPR</a>は要チェックです。</p>
-<p>REPO:</p>
-<ul>
-<li><a href="https://github.com/aweatherguy/Katiana">https://github.com/aweatherguy/Katiana</a></li>
-</ul>
-<h2 id="nanoboot改led-512b----hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</h2>
-<p>元々の<a href="https://github.com/volium/nanoBoot">nanoBoot</a>
-は512 Byteに収まる小さな優れものBootloaderです。これは
-LUFA HIDブートローダーを徹底的にハンドオプティマイズしたものです。
-ただし、オリジナルはCKDIV8と非設定限定で、LEDでの
-ブートローダーの起動確認もできませんでした。本物の
-<a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
-と同じFUSE設定では使えませんでした。それにつけても
-非常に丁寧にコメントが書き込まれているアッセンブラーの
-手動最適化手法が満載の素晴らしいコードとコメントでした。</p>
-<p>自分が欲しい機能のCKDIV8対応と、LED点灯でのブートローダー
-の起動確認を何とか押し込むように、限られたスペースに押し込む
-パズル感覚のコーディングで、フォークした
-<a href="https://github.com/osamuaoki/nanoBoot">nanoBoot改 LED付</a>
-を作りました。これなら、中華コンパチ評価ボードを本物の
-<a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
-と同じFUSE設定で使えるし、ブートローダー
-の起動確認もLEDで確実にでき快適です。もちろん512 Byteに収ま
-っています。また、8MHzでコンパイルすると510 Byteに収ま
-ります。</p>
-<p>コンパイル結果も含めて、
-<a href="https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result">フォークしたLUFAのブランチ</a>
-に保存しました。(2020年)</p>
-<p>2021年確認: LED機能はUPSTREAMがマージし、どうもさらに改良しています。また、
-<a href="https://github.com/sigprof/nanoBoot">sigprof</a>から興味ある
-PRが出ています：
-<a href="https://github.com/volium/nanoBoot/pull/13">Configure endpoint 1 to fix USB errors</a>。</p>
-<h3 id="付録-hid_bootloader_cli">付録: <code>hid_bootloader_cli</code></h3>
-<p>LUFAのhid bootloaderに対応する、ホストPC側のプログラムです。
-Debianでコンパイルするには、<code>libusb-dev</code>パッケージが導入されている
-必要があります。</p>
-<p>これもコンパイルし、この結果も
-<a href="https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result">フォークしたLUFAのブランチ</a>
-に保存しました。</p>
-<h2 id="atmega32u4のプログラミング検証">ATmega32u4のプログラミング検証</h2>
-<p>各種ブートローダーを、ISP接続でATmega32u4に導入しFUSE設定もする
-スクリプトを作成しました。</p>
-<ul>
-<li><code>avrisp-BootloaderCDC</code></li>
-<li><code>avrisp-BootloaderDFU</code></li>
-<li><code>avrisp-BootloaderHID</code></li>
-<li><code>avrisp-nanoBoot</code></li>
-</ul>
-<p>上記リンクのソースからコンパイルしてHEXファイルとしたテスト用
-アプリケーションも作成しました。</p>
-<ul>
-<li><code>blink1.hex</code> 1回光る</li>
-<li><code>blink2.hex</code> 2回光る</li>
-</ul>
-<p>USB接続で各種ブートローダーを利用してテスト用アプリケーションを
-導入するスクリプトを作成しました。Debianの<code>avrdude</code>と
-<code>dfu-programmer</code>等の必要パッケージは導入しています。
-また、<code>hid_bootloader_cli</code>は<code>/usr/local/bin/</code>にコピーしています。</p>
-<ul>
-<li><code>avrcdc</code> &ndash; <code>avrdude -c avr109</code></li>
-<li><code>avrdfu1</code> &ndash; <code>dfu-programmer</code></li>
-<li><code>avrdfu2</code> &ndash; <code>avrdude -c flip1</code></li>
-<li><code>avrhid</code> &ndash; <code>hid_bootloader_cli</code></li>
-</ul>
-<p>これの作成スクリプトも
-<a href="https://github.com/osamuaoki/lufa/tree/teensy2/Bootloaders/result">フォークしたLUFAのブランチ</a>
-に保存しました。</p>
-<p>まず、各種ブートローダーを、ISP接続でATmega32u4に導入しました。
-その後リセット線を確実に外し、USB接続し、リセットボタンを押して
-離した後(CDCの場合は8秒以内に)導入スクリプトを起動することで
-<code>blink1.hex</code>とか<code>blink2.hex</code>を導入しました。</p>
-<p>その後一度USB接続を抜き差ししてPORしてLEDアプリケーション( アプリ)
-の動作確認をしました。</p>
-<table>
-<thead>
-<tr>
-<th>ブートローダー</th>
-<th>サイズ</th>
-<th>ブートローダー動作</th>
-<th>アプリ導入スクリプト</th>
-<th>アプリ</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>BootloaderCDC.hex</code></td>
-<td>4KB</td>
-<td>LED　点滅で確認</td>
-<td><code>avrcdc</code></td>
-<td>動作良好</td>
-</tr>
-<tr>
-<td><code>BootloaderDFU.hex</code></td>
-<td>4KB</td>
-<td>LED　点滅で確認</td>
-<td><code>avrdfu1</code></td>
-<td>動作良好</td>
-</tr>
-<tr>
-<td><code>BootloaderDFU.hex</code></td>
-<td>4KB</td>
-<td>LED　点滅で確認</td>
-<td><code>avrdfu2</code></td>
-<td>動作良好</td>
-</tr>
-<tr>
-<td><code>BootloaderHID.hex</code></td>
-<td>4KB</td>
-<td>LED　変化なし</td>
-<td><code>avrhid</code></td>
-<td>動作良好</td>
-</tr>
-<tr>
-<td><code>nanoBoot.hex</code>(w/LED)</td>
-<td>512B</td>
-<td>LED　点灯で確認</td>
-<td><code>avrhid</code></td>
-<td>動作良好</td>
-</tr>
-</tbody>
-</table>
+<h2 id="cdc-dfu-hid-ブートローダー">CDC, DFU, HID ブートローダー</h2>
+<p>USB AVRのブートローダーには CDC, DFU, HID ブートローダーの3種類あります。
+TEENSY2++のボードを安く手に入れたので、ハンダ付けがしやすそうなので、
+作りかけで放置されていたキーボードはTEENSY2++にし、TEENSY2は１キーや、
+４キーの小型外付けキーボードに仕上げるようにします。</p>
+<p>そこで、ブートローダーももう一度見直しました。</p>
+<p>１年半ぶりに遊ぶに当たって、依然と共通点がないのでここにあった内容は削除し、
+その内容相当を
+<a href="https://osamuaoki.github.io/jp/2020/04/05/atmega32u4-4/">ATmega32u4 (4)</a>
+にもう一度見直しかきました。久しぶりにやると忘れていることも多かったです。</p>
 <!-- raw HTML omitted -->
 
 

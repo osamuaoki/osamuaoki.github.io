@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/02/27 (initial publish),
-2021/12/10 (last update)
+2021/12/12 (last update)
 </h3>
 </div>
 
@@ -70,6 +70,7 @@
         <li><a href="#完成写真">完成写真</a></li>
       </ul>
     </li>
+    <li><a href="#ピン接続のまとめ">ピン接続のまとめ</a></li>
   </ul>
 </nav>
 
@@ -100,7 +101,7 @@ DC/DC)　これは本改造とは違う修理改造。</li>
 ノイズまわりこみ防止に、チップ側にパスコン（0.1uF+10uF）を付けるのが賢明の
 ようです。普通の開発ボードだとパスコンは付いているので心配ないでしょう。</p>
 <p>保安回路ですが、過去事例にあったダイオード法は負の高圧には効ず、正の高圧
-がかかる事例がが想定できなかったので、半田付け点をUSBコネクターにした
+がかかる事例が想定できなかったので、半田付け点をUSBコネクターにした
 ため必要となるUSBからの５V入力側にポリスイッチを導入しました。</p>
 <h2 id="作成">作成</h2>
 <h3 id="設計方針">設計方針</h3>
@@ -161,6 +162,36 @@ AWG30の絶縁線を半田付けします。</p>
 中の上から <img src="/img/AVRISP2-mod-top.jpg" alt="中の上から"></p>
 <p>中のISP裏 <img src="/img/AVRISP2-mod-isp.jpg" alt="中のISP裏">
 中のUSB裏<img src="/img/AVRISP2-mod-usb.jpg" alt="USB裏"></p>
+<h2 id="ピン接続のまとめ">ピン接続のまとめ</h2>
+<p>なんか、プログラマーのピン接続の話で、ICSPとかISPとか出てきてややこしいですが、ほぼ同じことです。</p>
+<ul>
+<li>ICSP: In-Circuit Serial Programming の略語、Arduinoボード側の視点</li>
+<li>ISP: In-System-Programmer の略語、一般的用語、プログラマー側の視点</li>
+</ul>
+<p>ややこしいので、まとめると。</p>
+<ul>
+<li>
+<p>フラットケーブルの赤線側 -＞ １ PIN 側</p>
+</li>
+<li>
+<p>Arduino Uno のボードは、1 PINの横には白ポチマークがついている</p>
+</li>
+</ul>
+<pre tabindex="0"><code>Arduino Uno board (Top view)
+        ---------------------------- TAPE
+                #################### RED LINE
+1 - MISO   *  *   2 - Vcc (5v/3v)
+3 - SCK    *  *   4 - MOSI
+5 - RST    *  *   6 - GND
+        ---------------------------- TAPE
+</code></pre><pre tabindex="0"><code>Connector on flatcable end from AVRISP2 (Hole view)
+        ---------------------------- TAPE
+5 - RST    *  *   6 - GND
+3 - SCK    *  *   4 - MOSI
+1 - MISO   *  *   2 - Vcc (5v/3v)
+                #################### RED LINE
+        ---------------------------- TAPE
+</code></pre><p>これをメモにして、ICSP headerのついていないボードと繋ぐ際に分かりやすいように、プログラマーの箱の底にはりました。</p>
 <!-- raw HTML omitted -->
 
 

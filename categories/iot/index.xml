@@ -6,14 +6,30 @@
     <description>Recent content in iot on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 12 Nov 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/iot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 11 Dec 2021 00:00:00 +0000</lastBuildDate><atom:link href="/categories/iot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>ATmega32u4 (4)</title>
+      <link>/jp/2021/12/11/atmega32u4-4/</link>
+      <pubDate>Sat, 11 Dec 2021 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2021/12/11/atmega32u4-4/</guid>
+      <description>基本のUSB AVRのATmega32u4と AT90USB1286 を中心としたAVRチップに関して、ブートローダー関係を、１年半ぶりに見直し書きます。 ボードはTEENSY2とTEENSY2++に絞って行きます。
+最初に、ATmega328P (2)の開発環境を再現しました。
+AVRでとにかく疑問が出れば、/usr/lib/avr/include/以下を見ます。
+ /usr/lib/avr/include/avr/iom32u4.h &amp;ndash; teensy2.0 (ATmega32u4) /usr/lib/avr/include/avr/iousb1286.h &amp;ndash; teensy2.0++ (AT90USB1286)  ブートローダー起動時にUSB接続されたデバイスがどういうデバイスとして認識されるかにより、USB AVRのブートローダーには基本3種類のケースがあります。
+ CDC ブートローダー: シリアルデバイス  Arduino Leonardo等で使用   DFU ブートローダー: DFUデバイス  Arduino UNOで、USB-SERIAL変換機能を提供するサブMCUに使用、Atmel出荷時のデフォルト   HID ブートローダー: キーボードデバイス  Teensy等で使用    LUFA (4KB each) &amp;ndash; CDC, DFU, HID ブートローダー LUFAはCDC, DFU, HID の3種類すべてのブートローダーを提供しています。
+最新のLUFAベースで私がPRしたLUFAのブランチを、さらにBUILD用にパラメーター変更し 生成したHEXやビルドログもコミットしたLUFAのブランチを作りました。
+ビルドは以下のような感じで終わります。これが実際のAVR上のメモリサイズのようです。（Hexファイルに普通のsizeコマンドすると少し大きな数字がでる。）
+... avr-size --mcu=atmega32u4 --format=avr BootloaderCDC.elf AVR Memory Usage ---------------- Device: atmega32u4 Program: 3846 bytes (11.</description>
+    </item>
+    
     <item>
       <title>How to make ISP with TTL-232R-5V</title>
       <link>/en/2021/11/12/avrisp-alt/</link>
       <pubDate>Fri, 12 Nov 2021 00:00:00 +0000</pubDate>
       
       <guid>/en/2021/11/12/avrisp-alt/</guid>
-      <description>This is my manual for TTL-232R-5V based ISP which I made several years ago. I moved this content from other place to make it easy to find. I still use this as my back up IPS.
+      <description>This is my manual for TTL-232R-5V based ISP which I made several years ago. I moved this content from other place to make it easy to find. I still use this as my back up IPS. This is 5V only programmer.
 I now use my Modified AVRISP MKII (in Japanese) as my main programmer. (If I every program AVR again.)
 Circuit It&amp;rsquo;s a bit un-intuitive, but USB to TTL level RS-232 adapter (Serial adapter) can be used in a special bit-bang mode.</description>
     </item>
@@ -139,7 +155,7 @@ ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoの
 詳細な使用説明書（英文）： AVR ISP mkII User Guide
 ソフト環境 Debian GNU/Linux buster=stable 環境です。
 $ sudo apt install avrdude 接続 AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
-ちなみに、 TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、 これはあとで考えましょう。
+ちなみに、 昔TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、 これはあとで考えましょう。
 ISPケーブルの赤線は１ピン側です。
 Uno Nano AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。
 AVRISP mkII に赤いLEDが点滅は、ISPコネクター「逆差し」です。

@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ATmega32u4 (4) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">ATmega32u4 (4)</span></h1>
+
+<h3 class="date">Date:
+2021/12/11 (initial publish),
+2021/12/12 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/06/17/python-package/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#lufa-4kb-each-----cdc-dfu-hid-ブートローダー">LUFA (4KB each)  &ndash; CDC, DFU, HID ブートローダー</a>
+      <ul>
+        <li><a href="#hid_bootloader_cli"><code>hid_bootloader_cli</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#nanoboot改led-512b----hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</a></li>
+    <li><a href="#arduinoのブートローダー">Arduinoのブートローダー</a>
+      <ul>
+        <li><a href="#arduinoのcaterina-4kb----cdc-ブートローダー">ArduinoのCaterina (4KB) &ndash; CDC ブートローダー</a></li>
+        <li><a href="#sparkfanの改造版caterina-4kb----cdc-ブートローダー">Sparkfanの改造版Caterina (4KB) &ndash; CDC ブートローダー</a></li>
+        <li><a href="#katiana-4kb----cdc-ブートローダー">Katiana (4KB) &ndash; CDC ブートローダー</a></li>
+      </ul>
+    </li>
+    <li><a href="#isp接続でのブートローダー書き込み">ISP接続でのブートローダー書き込み</a>
+      <ul>
+        <li><a href="#teensy-20-と-teensy-20-の初期化と動作検証の準備">TEENSY 2.0 と TEENSY 2.0++ の初期化と動作検証の準備</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>基本のUSB AVRの<a href="https://www.microchip.com/wwwproducts/en/ATmega32u4">ATmega32u4</a>と
+<a href="https://www.microchip.com/wwwproducts/en/AT90USB1286">AT90USB1286</a>
+を中心としたAVRチップに関して、ブートローダー関係を、１年半ぶりに見直し書きます。
+ボードはTEENSY2とTEENSY2++に絞って行きます。</p>
+<p>最初に、<a href="https://osamuaoki.github.io/jp/2020/03/03/atmega328p-2">ATmega328P (2)</a>の開発環境を再現しました。</p>
+<p>AVRでとにかく疑問が出れば、<code>/usr/lib/avr/include/</code>以下を見ます。</p>
+<ul>
+<li><code>/usr/lib/avr/include/avr/iom32u4.h</code> &ndash; teensy2.0 (ATmega32u4)</li>
+<li><code>/usr/lib/avr/include/avr/iousb1286.h</code> &ndash; teensy2.0++ (AT90USB1286)</li>
+</ul>
+<p>ブートローダー起動時にUSB接続されたデバイスがどういうデバイスとして認識されるかにより、USB AVRのブートローダーには基本3種類のケースがあります。</p>
+<ul>
+<li>CDC ブートローダー: シリアルデバイス
+<ul>
+<li>Arduino Leonardo等で使用</li>
+</ul>
+</li>
+<li>DFU ブートローダー: DFUデバイス
+<ul>
+<li>Arduino UNOで、USB-SERIAL変換機能を提供するサブMCUに使用、Atmel出荷時のデフォルト</li>
+</ul>
+</li>
+<li>HID ブートローダー: キーボードデバイス
+<ul>
+<li>Teensy等で使用</li>
+</ul>
+</li>
+</ul>
+<h2 id="lufa-4kb-each-----cdc-dfu-hid-ブートローダー">LUFA (4KB each)  &ndash; CDC, DFU, HID ブートローダー</h2>
+<p>LUFAはCDC, DFU, HID の3種類すべてのブートローダーを提供しています。</p>
+<p>最新のLUFAベースで<a href="https://github.com/osamuaoki/lufa/tree/teensy2/">私がPRしたLUFAのブランチ</a>を、さらにBUILD用にパラメーター変更し
+<a href="https://github.com/osamuaoki/lufa/tree/osamu/">生成したHEXやビルドログもコミットしたLUFAのブランチ</a>を作りました。</p>
+<p>ビルドは以下のような感じで終わります。これが実際のAVR上のメモリサイズのようです。（Hexファイルに普通のsizeコマンドすると少し大きな数字がでる。）</p>
+<pre tabindex="0"><code>...
+avr-size --mcu=atmega32u4 --format=avr BootloaderCDC.elf
+AVR Memory Usage
+----------------
+Device: atmega32u4
+
+Program:    3846 bytes (11.7% Full)
+(.text + .data + .bootloader)
+
+Data:        164 bytes (6.4% Full)
+(.data + .bss + .noinit)
+
+
+ [INFO]    : Finished building project &quot;BootloaderCDC&quot;.
+</code></pre><p>すべてのビルド結果をまとめると以下で、いずれも4KBのブート領域確保が必要でした。</p>
+<table>
+<thead>
+<tr>
+<th>Program</th>
+<th>Data</th>
+<th>board</th>
+<th>mcu</th>
+<th>bootloader</th>
+<th>programmer</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>3846</td>
+<td>164</td>
+<td>teensy2</td>
+<td>atmega32u4</td>
+<td>BootloaderCDC</td>
+<td><code>avrdude -c avr109</code></td>
+</tr>
+<tr>
+<td>3882</td>
+<td>133</td>
+<td>teensy2</td>
+<td>atmega32u4</td>
+<td>BootloaderDFU</td>
+<td><code>dfu-programmer</code></td>
+</tr>
+<tr>
+<td>2118</td>
+<td>86</td>
+<td>teensy2</td>
+<td>atmega32u4</td>
+<td>BootloaderHID</td>
+<td><code>hid_bootloader_cli</code></td>
+</tr>
+<tr>
+<td>3790</td>
+<td>164</td>
+<td>teensy2pp</td>
+<td>at90usb1286</td>
+<td>BootloaderCDC</td>
+<td><code>avrdude -c avr109</code></td>
+</tr>
+<tr>
+<td>3812</td>
+<td>133</td>
+<td>teensy2pp</td>
+<td>at90usb1286</td>
+<td>BootloaderDFU</td>
+<td><code>dfu-programmer</code></td>
+</tr>
+<tr>
+<td>2124</td>
+<td>86</td>
+<td>teensy2pp</td>
+<td>at90usb1286</td>
+<td>BootloaderHID</td>
+<td><code>hid_bootloader_cli</code></td>
+</tr>
+</tbody>
+</table>
+<p>ここで、最近の<code>avrdude</code>はDFUもサポートしているので、<code>dfu-programmer</code> とあるところは<code>avrdude -c flip1</code> としても同じです。</p>
+<p>比較的機能が少なく小さいHIDブートローダーでも、わずかではありますが2KBを越えているので、ブート専用領域に4KBを取っておく必要があります。</p>
+<p>メモリーが少ないATmega32u4では下記のNanoBoot(512Bに収まる)を使います。</p>
+<h3 id="hid_bootloader_cli"><code>hid_bootloader_cli</code></h3>
+<p>LUFAのhid bootloaderに対応する、ホストPC側のプログラムです。
+Debianでコンパイルするには、<code>libusb-dev</code>パッケージが導入されている
+必要があります。</p>
+<p>これもコンパイルし、この結果も
+<a href="https://github.com/osamuaoki/lufa/blob/osamu/Bootloaders/HID/HostLoaderApp/hid_bootloader_cli">フォークしたLUFAのブランチ</a>
+に保存しました。</p>
+<h2 id="nanoboot改led-512b----hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</h2>
+<p>元々の<a href="https://github.com/volium/nanoBoot">nanoBoot</a>
+は512 Byteに収まる小さな優れものBootloaderです。これは
+LUFA HIDブートローダーを徹底的にハンドオプティマイズしたものです。
+ただし、オリジナルはCKDIV8と非設定限定で、LEDでの
+ブートローダーの起動確認もできませんでした。本物の
+<a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
+と同じFUSE設定では使えませんでした。それにつけても
+非常に丁寧にコメントが書き込まれているアッセンブラーの
+手動最適化手法が満載の素晴らしいコードとコメントでした。</p>
+<p>自分が欲しい機能のCKDIV8対応と、LED点灯でのブートローダー
+の起動確認を何とか押し込むように、限られたスペースに押し込む
+パズル感覚のコーディングで、フォークした
+<a href="https://github.com/osamuaoki/nanoBoot">nanoBoot改 LED付</a>
+を作りました。これなら、512Bに収まるので中華コンパチ評価ボードを本物の
+<a href="https://www.pjrc.com/store/teensy.html">Teensy 2.0</a>
+と同じFUSE設定で使えます。</p>
+<p>LED機能以外はUPSTREAMがマージし、どうもさらに改良しています。
+また、
+<a href="https://github.com/sigprof/nanoBoot">sigprof</a>から興味ある
+プログラム書き込みサイズ限定のPRが出ていました。</p>
+<p>これらをいいとこ取りして、自分の好きなLED点灯を組み込みました。</p>
+<p>私のレポの、<strong>led</strong> branchに私のソースの最新版を、<strong>led-hex</strong> branchに最新版の
+<a href="https://github.com/osamuaoki/nanoBoot/raw/led-hex/nanoBoot.hex">コンパイル結果のHEXファイル</a>
+までコミットしています。</p>
+<h2 id="arduinoのブートローダー">Arduinoのブートローダー</h2>
+<p>ARDUINOは元々シリアル接続して書き換えます。USB-SERIAL変換接続が、ARDUINO　UNOボードではFT232のような専用変換チップではなくサブMCUとなるATmega32u2に使われています。</p>
+<p>そのサブMCUには、このこのチップにはUSB-SERIAL変換をするいわゆるファームウエアーが通常導入されていて、
+さらにこのサブMCU自体の書き換えにもちいるブートローダーが存在します。</p>
+<p>ARDUINOボードのメインのMCUはシリアル接続(CDC)で書き換えるので、このサブMCU自体の書き換えに用いるブートローダーは別のプロトコルDFUを
+使うようになっています。そのため、DFUのブートローダーは
+<a href="https://github.com/arduino/ArduinoCore-avr/tree/master/firmwares">firmwares/</a>
+以下に置かれています。</p>
+<p>通常のシリアル接続(CDC)のブートローダーは
+<a href="https://github.com/arduino/ArduinoCore-avr/tree/master/bootloaders">bootloaders/</a>
+以下に置かれています。</p>
+<p>気にはなるので、以下に使えそうなArduino関連の関連情報を集めました。</p>
+<p>ただし、そのままTeensyのLEDに対応するものがなかったので、どれもTEENSY向けにリビルドはトライしていません。</p>
+<h3 id="arduinoのcaterina-4kb----cdc-ブートローダー">ArduinoのCaterina (4KB) &ndash; CDC ブートローダー</h3>
+<p>LUFAのCDC ブートローダーを少し改変しているようです。</p>
+<p>REPO:</p>
+<ul>
+<li><a href="https://github.com/arduino/ArduinoCore-avr/tree/master/bootloaders/caterina">https://github.com/arduino/ArduinoCore-avr/tree/master/bootloaders/caterina</a>
+(2012年)</li>
+</ul>
+<p>LUFAは現在 <code>LUFA-170418-125-gd10535a4b</code>なので当時の11109と違い、LUFAの11109 以降を使うと、
+<a href="https://github.com/abcminiuser/lufa/issues/155">32u4 Caterina はCaterinaをパッチしないとうまく動作しない</a>
+ようです。</p>
+<p>TeensyのLEDに対応するものがなかったので、リビルドはトライしていません。</p>
+<h3 id="sparkfanの改造版caterina-4kb----cdc-ブートローダー">Sparkfanの改造版Caterina (4KB) &ndash; CDC ブートローダー</h3>
+<p><a href="https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/32U4Note.pdf">Sparkfanの改造版Caterinaの特徴</a></p>
+<ul>
+<li>リセットのダブルクリックでのみ、アプリ書き込みモードに8秒間なる。</li>
+<li>リセットのシングルクリックは、即刻アプリのリセットに入る。</li>
+</ul>
+<p>REPO:</p>
+<ul>
+<li><a href="https://github.com/sparkfun/Arduino_Boards/tree/main/sparkfun/avr/bootloaders/caterina">https://github.com/sparkfun/Arduino_Boards/tree/main/sparkfun/avr/bootloaders/caterina</a>
+(2015年)</li>
+<li><a href="https://github.com/jknofe/caterina">https://github.com/jknofe/caterina</a> (with LUFA-111009) (2017年)</li>
+</ul>
+<p>Sparkfanの改造版Caterinaはいい感じのCDCですが、バイナリーに</p>
+<h3 id="katiana-4kb----cdc-ブートローダー">Katiana (4KB) &ndash; CDC ブートローダー</h3>
+<p>googleで興味ある、<a href="https://forum.arduino.cc/t/new-version-of-caterina-bootloader/483909">フォーラムへのポスト</a>
+を見つけました。
+<a href="https://github.com/aweatherguy/Katiana/blob/master/Katiana-Bootloader.pdf">LUFAの2017ごろをベースに、Arduinoの改変を含め、USBシリアル番号等を含めた各種独自改造</a>
+をしています。
+カウントダウンすることで、クロックのプリスケーリングを
+１：１以外に設定することにも対応し、そえでも4KBに収まっ
+ているそうです。ただAtmega32u4専用だそうです。
+<a href="https://github.com/aweatherguy/Katiana/pull/3">GCC 5.4対応のPR</a>は要チェックです。</p>
+<p>REPO:</p>
+<ul>
+<li><a href="https://github.com/aweatherguy/Katiana">https://github.com/aweatherguy/Katiana</a></li>
+</ul>
+<p>TeensyのLEDに対応するものがなかったので、リビルドはトライしていません。</p>
+<h2 id="isp接続でのブートローダー書き込み">ISP接続でのブートローダー書き込み</h2>
+<p>TEENSY系はARDUINOのようなISP接続でのブートローダー書き込み専用コネクターはついていません．</p>
+<p>接続はクリップを使い、ボード端の穴へ繋ぐのが簡単のようです。</p>
+<pre tabindex="0"><code>Connector on flatcable end from AVRISP2 (Hole view)
+        ---------------------------- TAPE
+5 - RST    *  *   6 - GND
+3 - SCK    *  *   4 - MOSI
+1 - MISO   *  *   2 - Vcc (5v/3v)
+                #################### RED LINE
+        ---------------------------- TAPE
+</code></pre><pre tabindex="0"><code>TEENSY 2.0 (TOP VIEW)
+                              MINI
+                              USB
+                    	+---+-----+---+
+                    GND |*  |     |  *|Vcc
+                    PB0 |*  |     |  *|PF0  ADC0
+SCLK 3 GREEN ------ PB1 |@  |     |  *|PF1  ADC1
+MOSI 4 BLACK ------ PB2 |@  +-----+  *|PF4  ADC4
+MISO 1 RED -------- PB3 |@  *     *  *|PF5  ADC5
+                    PB7 |*           *|PF6  ADC6
+                    PD0 |*           *|PF7  ADC7
+                    PD1 |*           *|PB6  ADC13
+                    PD2 |*           *|PB5  ADC12
+                    PD3 |*           *|PB4  ADC11
+                    PC6 |*           *|PD7  ADC10
+                    PC7 |* * @ @ @ * *|PD6  ADC9 (LED)
+                        +-------------+
+                           ^ ^ ^ ^ ^
+                    PD5 ---+ | | | +---PD4
+VCC 2 YELLOW ----------------+ | |
+GND 6 BLUE   ------------------+ |
+RST 5 WHITE  --------------------+
+</code></pre><pre tabindex="0"><code>TEENSY 2.0++ (TOP VIEW)
+                              MINI
+                              USB
+                    	+---+-----+---+
+                    GND |*  |     |  *|Vcc
+                    PB7 |*  |     |  *|PB6
+                    PD0 |*  |     |  *|PB5
+                    PD1 |*  +-----+  *|PB4
+                    PD2 |*           @|PB3 ---- RED   1 MISO
+                    PD3 |*           @|PB2 ---- BLACK 4 MOSI
+                    PD4 |*           @|PB1 ---- GREEN 3 SCLK
+                    PD5 |*           *|PB0
+              (LED) PD6 |*           *|PE7
+                    PD7 |*           *|PE6
+                    PE0 |*           *|GND
+                    PE1 |*           *|AREF
+                    PC0 |*           *|PF0
+                    PC1 |*           *|PF1
+                    PC2 |*           *|PF2
+                    PC3 |*           *|PF3
+                    PC4 |*           *|PF4
+                    PC5 |*           *|PF5
+                    PC6 |*           *|PF6
+                    PC7 |*   @ @ @   *|PF7
+                        +-------------+
+                             ^ ^ ^
+                             | | |
+VCC 2 YELLOW ----------------+ | |
+GND 6 BLUE   ------------------+ |
+RST 5 WHITE  --------------------+
+</code></pre><h3 id="teensy-20-と-teensy-20-の初期化と動作検証の準備">TEENSY 2.0 と TEENSY 2.0++ の初期化と動作検証の準備</h3>
+<p>各種ブートローダーを、ISP接続でATmega32u4やAT90USB1286に導入しFUSE設定もする
+スクリプトを作成しました。一式を、
+<a href="https://github.com/osamuaoki/osamuaoki-hugo-proj">https://github.com/osamuaoki/osamuaoki-hugo-proj</a> の
+中の<code>005_teensy</code>以下に起きます。その中で<code>./setup-teensy</code>
+とすると、作業環境が準備できました。</p>
+<p>次は、完全なチップの初期化のためにISP接続してFUSE設定とブートローダーの導入です。</p>
+<p>さらにblink系のプログラムを導入しブートローダーの動作検証をします。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/06/17/python-package/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
