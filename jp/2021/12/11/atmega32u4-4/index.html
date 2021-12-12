@@ -199,9 +199,6 @@ Data:        164 bytes (6.4% Full)
 <p>LUFAのhid bootloaderに対応する、ホストPC側のプログラムです。
 Debianでコンパイルするには、<code>libusb-dev</code>パッケージが導入されている
 必要があります。</p>
-<p>これもコンパイルし、この結果も
-<a href="https://github.com/osamuaoki/lufa/blob/osamu/Bootloaders/HID/HostLoaderApp/hid_bootloader_cli">フォークしたLUFAのブランチ</a>
-に保存しました。</p>
 <h2 id="nanoboot改led-512b----hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</h2>
 <p>元々の<a href="https://github.com/volium/nanoBoot">nanoBoot</a>
 は512 Byteに収まる小さな優れものBootloaderです。これは
@@ -345,10 +342,18 @@ RST 5 WHITE  --------------------+
 スクリプトを作成しました。一式を、
 <a href="https://github.com/osamuaoki/osamuaoki-hugo-proj">https://github.com/osamuaoki/osamuaoki-hugo-proj</a> の
 中の<code>005_teensy</code>以下に起きます。その中で<code>./setup-teensy</code>
-とすると、作業環境が準備できました。</p>
-<p>次は、完全なチップの初期化のためにISP接続してFUSE設定とブートローダーの導入です。</p>
-<p>さらにblink系のプログラムを導入しブートローダーの動作検証をします。</p>
+とすると、作業環境が準備でるようにしました。</p>
+<p>さて、まず<code>./avrdude...</code>コマンドでavrdudeを使い、完全なチップの初期化のためにISP接続してFUSE設定とブートローダーの導入をします。</p>
+<ul>
+<li>TEENSY 2.0 (atmega32u4) には、nanoBoot.hex を導入　（nanoBoot w/LED）</li>
+<li>TEENSY 2.0++ (at90usb1286) には、BootloaderHID.hex　(LUFA HIDにLED機能パッチ済み) を導入</li>
+</ul>
 <p><img src="/img/AVRISP2-teensy2.jpg" alt="TEENSY 2.0 ISPケーブル接続例"></p>
+<p>さらに、<code>./halfkey-update...</code>コマンドで、blink系のプログラムを導入しUSB経由でのブートローダーの動作検証をします。
+（うまくいかない場合は、ISP経由での導入でボードが壊れてないか確認します。）</p>
+<p>USB経由でのファームウエアの更新の際はプロンプトがあります。
+そこでRESETを押して<code>sudo dmesg --follow</code>でデバイス認識されてからという伝統的対応でも良いのですが、ブートローダーがここで作ったLED対応版だと、LEDがつくことでUSBデバイスが認識されたことが簡単に分かります。
+意外とコネクタの接触不良もあり、このLED機能良いです.</p>
 <!-- raw HTML omitted -->
 
 
