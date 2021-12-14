@@ -345,7 +345,11 @@ RST 5 WHITE  --------------------+
 VCC 2 YELLOW ----------------+ | |
 GND 6 BLUE   ------------------+ |
 RST 5 WHITE  --------------------+
-</code></pre><h3 id="teensy-20-と-teensy-20-の初期化と動作検証の準備">TEENSY 2.0 と TEENSY 2.0++ の初期化と動作検証の準備</h3>
+</code></pre><p>ここで、ボードの横の配線取り回しの順番は時計回りで見ると両者同じですが、
+コネクター側から見た順番が逆です。間違って繋ぐと、毎回IDが違うと言われて
+正しくないが同じIDが読み出されるのでノイズ問題じゃないようで頭を抱え込みました。
+後でつなぎ違いに気づいたときは、こわれそうにない間違いでほっとしましたが。。。</p>
+<h3 id="teensy-20-と-teensy-20-の初期化と動作検証の準備">TEENSY 2.0 と TEENSY 2.0++ の初期化と動作検証の準備</h3>
 <p>各種ブートローダーを、ISP接続でATmega32u4やAT90USB1286に導入しFUSE設定もする
 スクリプトを作成しました。一式を、
 <a href="https://github.com/osamuaoki/osamuaoki-hugo-proj">https://github.com/osamuaoki/osamuaoki-hugo-proj</a> の
