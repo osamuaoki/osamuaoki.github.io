@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/11/12 (initial publish),
-2021/12/12 (last update)
+2021/12/14 (last update)
 </h3>
 </div>
 
@@ -62,8 +62,8 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#circuit">Circuit</a></li>
-    <li><a href="#wiring-to-program-avr-chips-with-ttl-232r">Wiring to program AVR chips with TTL-232R</a></li>
-    <li><a href="#wiring-to-program-avr-chips-with-ft232rl-on-dd">Wiring to program AVR chips with FT232RL on D/D</a></li>
+    <li><a href="#wiring-to-program-avr-chips-with-ft-232rl-on-ttl-232r">Wiring to program AVR chips with FT-232RL on TTL-232R</a></li>
+    <li><a href="#wiring-to-program-avr-chips-with-ft232rl-on-old-arduinos">Wiring to program AVR chips with FT232RL on old-Arduinos</a></li>
   </ul>
 </nav>
 
@@ -81,13 +81,13 @@ can be used in a special bit-bang mode.  AVRDUDE supports this:</p>
 <li><a href="http://www.ftdichip.com/Support/Documents/DataSheets/Cables/DS_TTL-232R_CABLES.pdf">http://www.ftdichip.com/Support/Documents/DataSheets/Cables/DS_TTL-232R_CABLES.pdf</a></li>
 </ul>
 <p>Connections are:</p>
-<pre tabindex="0"><code>TTL-232R-5V       ICPS connector
- GND 1 Black  --&gt; GND   (6 pin)
- CTS 2 Brown  --&gt; MOSI  (4 pin)
- VCC 3 Red    --&gt; VCC   (2 pin)
- TXD 4 Orange --&gt; RESET (5 pin)
- RXD 5 Yellow --&gt; SCK   (3 pin)
- RTS 6 Green  --&gt; MISO  (1 pin)
+<pre tabindex="0"><code> TTL-232R-5V       ICPS connector
+ GND 1 Black  --&gt;  GND   (6 pin)
+ CTS 2 Brown  --&gt;  MOSI  (4 pin)
+ VCC 3 Red    --&gt;  VCC   (2 pin)
+ TXD 4 Orange --&gt;  RESET (5 pin)
+ RXD 5 Yellow --&gt;  SCK   (3 pin)
+ RTS 6 Green  --&gt;  MISO  (1 pin)
 </code></pre><p>Here, ICPS connector is the one used by Arduino Uno.  The standard AVRISP MKII
 cable support it.</p>
 <p>Except for VCC and GND, you can connect any pairs as long as the
@@ -105,7 +105,20 @@ following setting in the default <code>/etc/avrdude.conf</code> is adjusted via
 </code></pre><p>You can use double raw pin header as a converter.</p>
 <p><img src="/img/TTL232R-SPI.png" alt="TTL232R-SPI ADAPTER WIRING">
 <img src="/img/TTL232R-SPI-ADAPTER.jpeg" alt="TTL232R-SPI ADAPTER PHOTO"></p>
-<h2 id="wiring-to-program-avr-chips-with-ttl-232r">Wiring to program AVR chips with TTL-232R</h2>
+<pre tabindex="0"><code>Adapter PIN Top view (connect to flat cable or clip wires)
+                          TTL-232R-5V        ICPS connector
+                      *   GND 1 Black   --&gt;  GND   (6 pin)
+           LED        *   CTS 2 Brown   --&gt;  MOSI  (4 pin)
+           (*)        *   VCC 3 Red     --&gt;  VCC   (2 pin) 5V only
+                      *   TXD 4 Orange  --&gt;  RESET (5 pin)
+                      *   RXD 5 Yello   --&gt;  SCK   (3 pin)
+                      *   RTS 6 Green   --&gt;  MISO  (1 pin)
+                        #################### TAPE (RED LINE)
+YELLOW  2 - VCC    *  *   1 - MISO   RED
+BLACK   4 - MOSI   *  *   3 - SCK    GREEN
+BLUE    6 - GND    *  *   5 - RESET  WHITE (w/yellow)
+                        -------------------- TAPE
+</code></pre><h2 id="wiring-to-program-avr-chips-with-ft-232rl-on-ttl-232r">Wiring to program AVR chips with FT-232RL on TTL-232R</h2>
 <table>
 <thead>
 <tr>
@@ -184,7 +197,7 @@ following setting in the default <code>/etc/avrdude.conf</code> is adjusted via
 <li>TTL-232R: USB to TTL level RS232C converter adapter</li>
 <li><strong>ICPS</strong>: ISP Connector on Arduino boards</li>
 </ul>
-<h2 id="wiring-to-program-avr-chips-with-ft232rl-on-dd">Wiring to program AVR chips with FT232RL on D/D</h2>
+<h2 id="wiring-to-program-avr-chips-with-ft232rl-on-old-arduinos">Wiring to program AVR chips with FT232RL on old-Arduinos</h2>
 <table>
 <thead>
 <tr>

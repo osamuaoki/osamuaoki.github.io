@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/12/11 (initial publish),
-2021/12/12 (last update)
+2021/12/14 (last update)
 </h3>
 </div>
 
@@ -276,8 +276,8 @@ LUFA HIDブートローダーを徹底的にハンドオプティマイズした
 </ul>
 <p>TeensyのLEDに対応するものがなかったので、リビルドはトライしていません。</p>
 <h2 id="isp接続でのブートローダー書き込み">ISP接続でのブートローダー書き込み</h2>
-<p>TEENSY系はARDUINOのようなISP接続でのブートローダー書き込み専用コネクターはついていません．</p>
-<p>接続はクリップを使い、ボード端の穴へ繋ぐのが簡単のようです。</p>
+<p>TEENSY系はARDUINOのようなISP接続でのブートローダー書き込み専用コネクターはついていません．
+だから、AVRISP2から出ているケーブル端の以下のようなコネクター穴に、PIN-PINのアダプターを差し込みます。</p>
 <pre tabindex="0"><code>Connector on flatcable end from AVRISP2 (Hole view)
         ---------------------------- TAPE
 5 - RST    *  *   6 - GND
@@ -285,7 +285,15 @@ LUFA HIDブートローダーを徹底的にハンドオプティマイズした
 1 - MISO   *  *   2 - Vcc (5v/3v)
                 #################### RED LINE
         ---------------------------- TAPE
-</code></pre><pre tabindex="0"><code>TEENSY 2.0 (TOP VIEW)
+</code></pre><p>接続はクリップを使い、PIN-PINのアダプターからボード端の穴へ繋ぐのが簡単のようです。</p>
+<pre tabindex="0"><code>Adapter PIN Top view (connect to clip wires)
+###################TAPE (RED LINE)
+YELLOW  2 - VCC    *  *   1 - MISO   RED
+BLACK   4 - MOSI   *  *   3 - SCK    GREEN
+BLUE    6 - GND    *  *   5 - RESET  WHITE (w/yellow)
+-------------------- TAPE
+</code></pre><p>接続先は以下です。</p>
+<pre tabindex="0"><code>TEENSY 2.0 (TOP VIEW)
                               MINI
                               USB
                     	+---+-----+---+
