@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/12/11 (initial publish),
-2021/12/14 (last update)
+2021/12/18 (last update)
 </h3>
 </div>
 
@@ -77,6 +77,7 @@
     <li><a href="#isp接続でのブートローダー書き込み">ISP接続でのブートローダー書き込み</a>
       <ul>
         <li><a href="#teensy-20-と-teensy-20-の初期化と動作検証の準備">TEENSY 2.0 と TEENSY 2.0++ の初期化と動作検証の準備</a></li>
+        <li><a href="#teensy-20-の動作検証">TEENSY 2.0 の動作検証</a></li>
       </ul>
     </li>
   </ul>
@@ -308,10 +309,10 @@ MISO 1 RED -------- PB3 |@  *     *  *|PF5  ADC5
                     PD2 |*           *|PB5  ADC12
                     PD3 |*           *|PB4  ADC11
                     PC6 |*           *|PD7  ADC10
-                    PC7 |* * @ @ @ * *|PD6  ADC9 (LED)
+                    PC7 |* * @ @ @ * *|PD6  ADC9 (LED) -- low V for analog
                         +-------------+
                            ^ ^ ^ ^ ^
-                    PD5 ---+ | | | +---PD4
+                    PD5 ---+ | | | +---PD4  ADC8
 VCC 2 YELLOW ----------------+ | |
 GND 6 BLUE   ------------------+ |
 RST 5 WHITE  --------------------+
@@ -366,6 +367,18 @@ RST 5 WHITE  --------------------+
 <p>USB経由でのファームウエアの更新の際はプロンプトがあります。
 そこでRESETを押して<code>sudo dmesg --follow</code>でデバイス認識されてからという伝統的対応でも良いのですが、ブートローダーがここで作ったLED対応版だと、LEDがつくことでUSBデバイスが認識されたことが簡単に分かります。
 意外とコネクタの接触不良もあり、このLED機能良いです.</p>
+<h3 id="teensy-20-の動作検証">TEENSY 2.0 の動作検証</h3>
+<p>過去書いた、ATmega328P 用に書いた、https://github.com/osamuaoki/avrmon　を使って動作検証をしました。
+雑に書いたコードだったのでUSB AVRへの移植・デバグに少々手間どってしまいました。</p>
+<p>実験的に確認したのは以下です。</p>
+<ul>
+<li>デジタル入力は、1.4Vぐらいがしきい値の様でした。</li>
+<li>内部プルアップをしないとPINの読みとり値は、当たり前ですが暴れます。</li>
+<li>内部プルアップに対して、外部プルダウンは、10KΩだと1VでLOW、100KΩだと3.7VでHIGHでした。</li>
+<li>アナログも入力がつながってないと暴れます。LEDにつながっているD6は、ほぼ0Vでした。</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
