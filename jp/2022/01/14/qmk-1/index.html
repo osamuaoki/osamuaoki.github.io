@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QMK (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">QMK (1)</span></h1>
+
+<h3 class="date">Date:
+2022/01/14 (initial publish),
+2022/01/15 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/12/11/atmega32u4-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#qmkコマンドとビルド"><code>qmk</code>コマンドとビルド</a></li>
+    <li><a href="#参考文書">参考文書</a></li>
+    <li><a href="#開発環境">開発環境</a></li>
+    <li><a href="#キーボードレイアウト">キーボードレイアウト</a></li>
+    <li><a href="#qmkコードの全体感のメモ">QMKコードの全体感のメモ</a></li>
+    <li><a href="#注意点">注意点</a></li>
+  </ul>
+</nav>
+
+<p>どうもカスタムキーボードのフリーのファームウエアとしてはQMKが一番充実しているのですが、久しぶりにのぞくと2017年2月のころとかなり様子が変わっているようにも見えます。特に気になるのは<code>config.json</code>の存在です。</p>
+<p>とにかくカバーするキーボードハードウエアー数が大きくなってきたので、リファクターして共通部分の重複回避を試みている様です。</p>
+<p>復習を兼ねてコード・ドキュメントを追います。</p>
+<h2 id="qmkコマンドとビルド"><code>qmk</code>コマンドとビルド</h2>
+<p><code>pip</code>で導入する<code>qmk</code>という、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperのCLIコマンドが提供されています。</p>
+<p><code>qmk</code>は、作業環境設定や、firmwareのビルド、はたまた種々の処理プログラムの起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。</p>
+<p>まず、<a href="https://docs.qmk.fm/#/cli?id=install-using-easy_install-or-pip">Install Using pip</a>に従い環境をDebian 11 (Bullseye/testing)に導入しました。</p>
+<p><code>qmk setup</code>の自動設定でチェックアウトされるレポは、<code>git submodule</code>を使っていて、レボがうまくまとめられています。レポ内にグラフィクスなどを保存しなくなり、キーマッピングもキーボード間で共用可能なものをまとめたり、マッピングだけのユーザーカスタム化情報がメインの<code>keyboads/</code>以下のソースツリー外に置けるようです。ただソースを理解するのが少々手間となりました。</p>
+<p><code>qmk</code>は、導入時に<code>~/.bashrc</code>を変更し、shellの環境変数<code>QMK_HOME</code>にチェックアウトされるたレポの場所を保存しています。</p>
+<p><code>qmk</code>のコマンドの説明は<a href="https://docs.qmk.fm/#/cli_commands?id=qmk-list-keyboards">QMK CLI Commands</a>にあります。</p>
+<p>どうもビルドは公式には<code>qmk</code>コマンドを使うようになっているそうですが、その背後で何がどうなっているのかが気になります。</p>
+<p>レポを見ると、<code>791b9cc652</code> (&ldquo;remove all makefiles from keyboard directories&rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立の<code>Makefile</code>が無くなっています。だから、ビルドの実体はrootにある<code>Makefile</code>がしているはずです。いかんせんrootの<code>Makefile</code>は複雑なので閉口でした。</p>
+<p>今残っているrootにある<code>Makefile</code>にからむのかがwebにあるエンドユーザー向けの説明ではよく分からないので、試しにrootにある<code>Makefile</code>を無効なターゲットで動かすと以下のメッセージが出ます。</p>
+<pre tabindex="0"><code>$ make help
+QMK Firmware 0.15.12
+make: *** No rule to make target 'help'. Stop.
+|
+| QMK's make format is:
+|     make keyboard_folder:keymap_folder[:target]
+|
+| Where `keyboard_folder` is the path to the keyboard relative to
+| `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the
+| keymap folder under that board's `keymaps/` directory.
+|
+| Examples:
+|     keyboards/dz60, keyboards/dz60/keymaps/default
+|       -&gt; make dz60:default
+|       -&gt; qmk compile -kb dz60 -km default
+|     keyboards/planck/rev6, keyboards/planck/keymaps/default
+|       -&gt; make planck/rev6:default:flash
+|       -&gt; qmk flash -kb planck/rev6 -km default
+|
+WARNING: Some git submodules are out of date or modified.
+ Please consider running make git-submodule.
+</code></pre><p>これで、マニュアルどおりに<code>qmk</code>コマンドによりビルドする際に、バックエンドの<code>Makefile</code>がどう起動されているかが分かりました。</p>
+<p><code>Makefile</code>はかなり複雑ですが、<code>%</code>ターゲット中で呼ばれる<code>PARSE_RULE</code>がキーです。処理の実体は<code>PARSE_RULE</code>が呼ぶ<code>PARSE_KEYBOARD</code>です。<code>KEYMAPS := $$(sort $$(KEYMAPS) $$(LAYOUT_KEYMAPS))</code>となっているので、キーマップは旧来のスタイルの<code>keyboards/</code>以下の<code>.../keymaps/*/</code>に定義された専用の定義のみならず、<code>layouts/</code>以下に定義された汎用の定義も使えるようです。</p>
+<h2 id="参考文書">参考文書</h2>
+<p>現状のビルド環境のカスタマイズのために自力でコードを見たあと、見通しのよいカスタマイズ方法の入門参考文書を見つけました。</p>
+<ul>
+<li><a href="https://leico.github.io/TechnicalNote/QMK/key-customize">QMK : キーマップのカスタマイズ</a></li>
+</ul>
+<p>これで、ほぼ大枠がわかった気がしたので自力の努力はストップしました。</p>
+<p><a href="https://docs.qmk.fm/#/">公式のドキュメント</a>はエンドユーザー各論（Windows環境対応等…）が多すぎて迷いますが、少なくとも以下には目を通しましょう。</p>
+<ul>
+<li><a href="https://docs.qmk.fm/#/hardware_keyboard_guidelines">QMK Keyboard Guidelines</a></li>
+<li><a href="https://docs.qmk.fm/#/coding_conventions_c">Coding Conventions (C)</a></li>
+<li><a href="https://docs.qmk.fm/#/contributing">How to Contribute</a></li>
+<li><a href="https://docs.qmk.fm/#/data_driven_config">Data Driven Configuration</a> &ndash; <code>info.json</code>, <code>keymap.c</code>, 他のファイルの説明(INCLUDE順位の説明も)。</li>
+</ul>
+<h2 id="開発環境">開発環境</h2>
+<p>開発環境として<a href="https://github.com/qmk/qmk_web_stack">QMK Web Stack</a>を導入するのが良いみたい。</p>
+<p>Debianだと<code>docker.io</code>パッケージ以外に、<code>docker-compose</code>パッケージも必要みたい。</p>
+<pre tabindex="0"><code> $ cd path/to/LAYOUTマクロ定義
+ $ git clone -r https://github.com/qmk/qmk_web_stack.git
+ $ cd qmk_web_stack
+ $ ./fix-submodules.sh
+ $ sudo apt update
+ $ sudo apt install docker.io docker-compose
+ $ sudo docker-compose build
+ $ sudo docker-compose up
+</code></pre><p>この時に以下のような色々の警告が出ましたが、問題なく動いている様です。</p>
+<pre tabindex="0"><code>...
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead: https://pip.pypa.io/warnings/venv
+WARNING: You are using pip version 21.2.4; however, version 21.3.1 is available.
+You should consider upgrading via the '/usr/local/bin/python -m pip install --upgrade pip' command.
+...
+</code></pre><p>これらは気にせずさらに指示どおり進めます。</p>
+<pre tabindex="0"><code> $ cd path/to/qmk_web_stack
+ $ sudo ./populate_api.sh
+</code></pre><p>ローカルのQMK Configuratorが立ち上がってます: <a href="http://127.0.0.1:5000/">http://127.0.0.1:5000/</a></p>
+<p><code>docker-compose.yml</code>を変更すると、<code>qmk_firmware</code>のレポやブランチ指定が変更できるようなので、種々のレポへの変更をPUSHする前にローカルで試すのにはよさそうです。</p>
+<h2 id="キーボードレイアウト">キーボードレイアウト</h2>
+<p>新規キーボードレイアウトのデザインには外部ツールの <a href="http://www.keyboard-layout-editor.com/">WEB ベースのキーボードレイアウトエディター (a.k.a KLE)</a> を利用すると便利です。</p>
+<p>このKLEが生成するJSONファイル（<code>layouts/</code>以下には<code>layout.json</code>に保存されている）からQMKが利用するJSONファイル（<code>info.json</code>）に変換するのには、<a href="https://qmk.fm/converter/">Convert KLE raw to QMK info.json</a>を用います。</p>
+<p>以前は手動でコーディングしていたQMKの<code>keymap.c</code>は、<code>info.json</code> から<code>qmk c2json ...</code>として生成できます。一度これを作るとQMK自身のコンフィギュレーターでデーターを編集できます。この<code>info.json</code>を用いる<a href="https://docs.qmk.fm/#/data_driven_config">Data Driven Configuration</a>がQMKの今後の方向の様です。</p>
+<p>QMKが利用するJSONファイル<code>info.json</code>を直接編集するWEB上のQMKのコンフィギュレーターは、公式のqmk_firmwareに収録されている場合にのみつかえます。非公開の変更ソースに関してQMKのコンフィギュレーターを使うには、上記の様にローカルの<code>qmk_firmware</code>のGITレポを用いる開発環境をローカルで作り利用します。</p>
+<p>ちなみに、既存キーボードレイアウトが<code>keymap.c</code>で存在する場合、 これからQMKが利用するJSONファイル<code>info.json</code>を逆生成するには<code>qmk c2json ...</code>を利用します。</p>
+<h2 id="qmkコードの全体感のメモ">QMKコードの全体感のメモ</h2>
+<ul>
+<li>ビルド環境をBackward compatibilityを残しつつコードをリファクターしている様で、コードスタイルは参考にするには新旧玉石混交状態なので要注意。
+<ul>
+<li>2020年以降変更されていないコードは参考にしない。</li>
+</ul>
+</li>
+<li>MCUによるGPIOやUSB等のアクセス関連は、AVRだとLUFA、ARMだとchibiosが使われています。</li>
+<li>キーボード固有のGPIOの接続状態とそのスキャン方法等は、<code>keyboards/.../</code><em>name</em><code>/config.h</code>や<code>keyboards/.../</code><em>name</em><code>/</code><em>name</em><code>.c</code>や<code>keyboards/.../</code><em>name</em><code>/</code><em>name</em><code>.h</code>で定義されます。
+<ul>
+<li><code>keyboards/.../</code><em>name</em><code>/</code><em>name</em><code>.h</code>には、以前どおりのLAYOUTマクロ定義があることもある。</li>
+<li>LAYOUTマクロ定義はキーボード上の視覚位置をそのまま書くと、変換表のマトリクスの座標のマトリクスに変換します。</li>
+<li>「Clueboad」等では<code>*name*</code>.h<code>の中身が一見ないようで、一方</code>info.json<code>に関連情報がある。LAYOUTマクロ定義は</code>layouts/<code>にある定義を</code>info.json`に基づき自動INCLUDEされる模様？（未確認）</li>
+</ul>
+</li>
+<li>キー入力状態を処理し、「データー変換ルール」に従い出力データーを生成する共有コードには<code>quontum/</code>以下のコードが用いられます。
+<ul>
+<li>優先順位の低いダミー関数が<code>__attribute__((weak))</code>でhookとして多く提供されていて、ユーザーが同名前のコードを書くことで機能を挿入追加できる。</li>
+</ul>
+</li>
+<li>個別の「データー変換ルール」の表定義は、<code>keyboards/.../keymaps/</code>*<code>/keymap.c</code>にC言語のLAYOUTマクロ定義を用いて定義されています。
+<ul>
+<li>「データー変換ルール」の内容は、基本はGPIOがつながったピン入出力が生成するスイッチの押され具合へのレスポンスを記述したcolumn * rowの表です。<a href="https://docs.qmk.fm/#/keymap">Keymap Overview</a>参照。</li>
+<li>「データー変換ルール」の表を書き換えるとキーマップが変更できます。</li>
+<li>「データー変換ルール」の表は、各キーへのキーコード定義を、LAYOUTマクロを用い記述することであたかもキーボード上の視覚位置の見やすい形で表現します。</li>
+<li>「データー変換ルール」の表は、キー入力からの変換の自由度をあげるために、ノートパソコンの「Fn」キーのような多重化機能をサポートしています。
+<ul>
+<li>例えば「Fn」キーを用いると「データー変換ルール」が２層化でき、「Raise」・「Lower」キーを用いると「データー変換ルール」が4層化できます。</li>
+</ul>
+</li>
+<li>「データー変換ルール」表の内容は16ビットのデーターです。
+<ul>
+<li>上位8ビットが0の場合は、基本USBが送る「キーコード」その物です。</li>
+<li>上位8ビットが非0の場合は、QMK独自拡張で<code>quantum_keycodes.h</code>に定義されています。単純なシフト状態付きの特殊キーコードから、別のキーコードシーケンス定義のマクロ参照指示の特殊キーコード等複雑です。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>どうも今後の機能拡張の追加機能でキーのマッピングやLEDの設定をファームウエアーを変更せず、設定データーだけファームウエアーが受け取り書き換える機能が、<a href="https://caniusevia.com/">VIA</a>のようです。書き換えはどうも別のUSB endpointにデーターを送りつけ行うようです。だから、TERMINALは使え無いそうです。当面不要ですが、コンパチブルなコードは悪くないかもしれません。</li>
+<li>それにしても、巨大なレポです。使う部分だけの心配をすることにし、あとは実際に使ってみるのでしょう。</li>
+</ul>
+<h2 id="注意点">注意点</h2>
+<ul>
+<li><code>keymap.c</code>の記述に、<code>A</code>等とするのは古いスタイル。今は<code>KC_A</code>等とフルネームで書く。</li>
+<li><code>KEYMAP</code>マクロ名は非推奨となり、<code>LAYOUT</code>が代わりに用いられている。</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2021/12/11/atmega32u4-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

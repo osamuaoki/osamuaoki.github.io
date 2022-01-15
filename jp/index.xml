@@ -7,6 +7,27 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/jp/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>QMK (1)</title>
+      <link>/jp/2022/01/14/qmk-1/</link>
+      <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2022/01/14/qmk-1/</guid>
+      <description>どうもカスタムキーボードのフリーのファームウエアとしてはQMKが一番充実しているのですが、久しぶりにのぞくと2017年2月のころとかなり様子が変わっているようにも見えます。特に気になるのはconfig.jsonの存在です。
+とにかくカバーするキーボードハードウエアー数が大きくなってきたので、リファクターして共通部分の重複回避を試みている様です。
+復習を兼ねてコード・ドキュメントを追います。
+qmkコマンドとビルド pipで導入するqmkという、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperのCLIコマンドが提供されています。
+qmkは、作業環境設定や、firmwareのビルド、はたまた種々の処理プログラムの起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。
+まず、Install Using pipに従い環境をDebian 11 (Bullseye/testing)に導入しました。
+qmk setupの自動設定でチェックアウトされるレポは、git submoduleを使っていて、レボがうまくまとめられています。レポ内にグラフィクスなどを保存しなくなり、キーマッピングもキーボード間で共用可能なものをまとめたり、マッピングだけのユーザーカスタム化情報がメインのkeyboads/以下のソースツリー外に置けるようです。ただソースを理解するのが少々手間となりました。
+qmkは、導入時に~/.bashrcを変更し、shellの環境変数QMK_HOMEにチェックアウトされるたレポの場所を保存しています。
+qmkのコマンドの説明はQMK CLI Commandsにあります。
+どうもビルドは公式にはqmkコマンドを使うようになっているそうですが、その背後で何がどうなっているのかが気になります。
+レポを見ると、791b9cc652 (&amp;ldquo;remove all makefiles from keyboard directories&amp;rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立のMakefileが無くなっています。だから、ビルドの実体はrootにあるMakefileがしているはずです。いかんせんrootのMakefileは複雑なので閉口でした。
+今残っているrootにあるMakefileにからむのかがwebにあるエンドユーザー向けの説明ではよく分からないので、試しにrootにあるMakefileを無効なターゲットで動かすと以下のメッセージが出ます。
+$ make help QMK Firmware 0.15.12 make: *** No rule to make target &#39;help&#39;. Stop. | | QMK&#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&#39;s `keymaps/` directory.</description>
+    </item>
+    
+    <item>
       <title>ATmega32u4 (4)</title>
       <link>/jp/2021/12/11/atmega32u4-4/</link>
       <pubDate>Sat, 11 Dec 2021 00:00:00 +0000</pubDate>
