@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/01/14 (initial publish),
-2022/01/15 (last update)
+2022/01/18 (last update)
 </h3>
 </div>
 
@@ -160,6 +160,8 @@ You should consider upgrading via the '/usr/local/bin/python -m pip install --up
 <li><code>keyboards/.../</code><em>name</em><code>/</code><em>name</em><code>.h</code>には、以前どおりのLAYOUTマクロ定義があることもある。</li>
 <li>LAYOUTマクロ定義はキーボード上の視覚位置をそのまま書くと、変換表のマトリクスの座標のマトリクスに変換します。</li>
 <li>「Clueboad」等では<code>*name*</code>.h<code>の中身が一見ないようで、一方</code>info.json<code>に関連情報がある。LAYOUTマクロ定義は</code>layouts/<code>にある定義を</code>info.json`に基づき自動INCLUDEされる模様？（未確認）</li>
+<li><code>users/</code>以下のファイルは、いくつかのキーボード間で利用されるコードをユーザーが置くところの様です。</li>
+<li><code>tmk_core/</code> 下のファイルは、QMKのベースとなったTMKのコードで、QMKのコードの核心部分である<code>quontum/</code>から利用されている。</li>
 </ul>
 </li>
 <li>キー入力状態を処理し、「データー変換ルール」に従い出力データーを生成する共有コードには<code>quontum/</code>以下のコードが用いられます。
