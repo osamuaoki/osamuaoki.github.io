@@ -66,6 +66,7 @@
     <li><a href="#接続の考察">接続の考察</a></li>
     <li><a href="#ファームウエアーのビルド">ファームウエアーのビルド</a></li>
     <li><a href="#flash古いやり方">FLASH（古いやり方）</a></li>
+    <li><a href="#flashqmk">FLASH（qmk）</a></li>
     <li><a href="#githubへのpush">githubへのPUSH</a></li>
   </ul>
 </nav>
@@ -187,11 +188,41 @@ systemd-logind[939]: Watching system buttons on /dev/input/event21 (osamuaoki on
 mtp-probe[160236]: checking bus 4, device 14: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&quot;
 mtp-probe[160236]: bus: 4, device: 14 was not an MTP device
 </code></pre><p>ちゃんと、ミュートボタンとして機能しています。</p>
+<h2 id="flashqmk">FLASH（qmk）</h2>
+<pre tabindex="0"><code> $ qmk flash -kb=one -km=default
+Ψ Compiling keymap with gmake --jobs=1 one:default:flash
+
+
+QMK Firmware 0.15.15
+Making one with keymap default and target flash
+
+avr-gcc (GCC) 5.4.0
+Copyright (C) 2015 Free Software Foundation, Inc.
+This is free software; see the source for copying conditions.  There is NO
+warranty; not even for MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+Size before:
+   text	   data	    bss	    dec	    hex	filename
+      0	  12512	      0	  12512	   30e0	.build/one_default.hex
+
+Copying one_default.hex to qmk_firmware folder                                                      [OK]
+Checking file size of one_default.hex                                                               [OK]
+ * The firmware size is fine - 12512/28672 (43%, 16160 bytes free)
+Drashna's HID Bootloader, Command Line, Version 2.2
+Read &quot;.build/one_default.hex&quot;: 12512 bytes, 38.8% usage
+Waiting for HID Bootloader device...
+ (hint: press the reset button)
+Found HID Bootloader
+Read &quot;.build/one_default.hex&quot;: 12512 bytes, 38.8% usage
+Programming..................................................................................................
+Booting
+
+</code></pre><p>確かにこの方が見やすい。</p>
 <h2 id="githubへのpush">githubへのPUSH</h2>
 <p>大した変更じゃないので、UPSTREAMマージのための作業はせず、バックアップを兼ねて自分のアカウントにフォークしたqmk_firmwareにPUSHしておきます。</p>
 <pre tabindex="0"><code> $ git remote add origin git@github.com:osamuaoki/qmk_firmware.git
  $ git push -u origin osamu1
-</code></pre><p>これで、https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/one　ができました</p>
+</code></pre><p>これで、 <a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/one">https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/one</a> ができました</p>
 <!-- raw HTML omitted -->
 
 
