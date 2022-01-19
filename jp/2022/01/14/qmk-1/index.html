@@ -62,6 +62,7 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#qmkコマンドとビルド"><code>qmk</code>コマンドとビルド</a></li>
+    <li><a href="#makefileのターゲットの整理"><code>Makefile</code>のターゲットの整理</a></li>
     <li><a href="#参考文書">参考文書</a></li>
     <li><a href="#開発環境">開発環境</a></li>
     <li><a href="#キーボードレイアウト">キーボードレイアウト</a></li>
@@ -106,6 +107,16 @@ WARNING: Some git submodules are out of date or modified.
  Please consider running make git-submodule.
 </code></pre><p>これで、マニュアルどおりに<code>qmk</code>コマンドによりビルドする際に、バックエンドの<code>Makefile</code>がどう起動されているかが分かりました。</p>
 <p><code>Makefile</code>はかなり複雑ですが、<code>%</code>ターゲット中で呼ばれる<code>PARSE_RULE</code>がキーです。処理の実体は<code>PARSE_RULE</code>が呼ぶ<code>PARSE_KEYBOARD</code>です。<code>KEYMAPS := $$(sort $$(KEYMAPS) $$(LAYOUT_KEYMAPS))</code>となっているので、キーマップは旧来のスタイルの<code>keyboards/</code>以下の<code>.../keymaps/*/</code>に定義された専用の定義のみならず、<code>layouts/</code>以下に定義された汎用の定義も使えるようです。</p>
+<h2 id="makefileのターゲットの整理"><code>Makefile</code>のターゲットの整理</h2>
+<ul>
+<li><code>%</code> &ndash; ファームウエアーのビルド（<code>keyboard_folder:keymap_folder[:target]</code>で指定）</li>
+<li><code>clean</code> &ndash; 生成したファームウエアー以外の、ソースのクリーン</li>
+<li><code>distclean</code> &ndash; 全ソースのクリーン(生成したファームウエアーも含めて)</li>
+<li><code>generate-keyboards-file</code> &ndash; ソース内のキーボードのリスト（改行で区切る）</li>
+<li><code>list-keyboards</code> &ndash; ソース内のキーボードのリスト（空白で区切り１行化）</li>
+<li><code>git-submodule</code> &ndash; 全サブモジュールの再帰的 sync&amp;update</li>
+<li><code>lib/%</code> &ndash; 該当サブモジュールの再帰的 sync&amp;update</li>
+</ul>
 <h2 id="参考文書">参考文書</h2>
 <p>現状のビルド環境のカスタマイズのために自力でコードを見たあと、見通しのよいカスタマイズ方法の入門参考文書を見つけました。</p>
 <ul>
