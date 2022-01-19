@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/01/14 (initial publish),
-2022/01/18 (last update)
+2022/01/19 (last update)
 </h3>
 </div>
 
@@ -74,8 +74,8 @@
 <p>とにかくカバーするキーボードハードウエアー数が大きくなってきたので、リファクターして共通部分の重複回避を試みている様です。</p>
 <p>復習を兼ねてコード・ドキュメントを追います。</p>
 <h2 id="qmkコマンドとビルド"><code>qmk</code>コマンドとビルド</h2>
-<p><code>pip</code>で導入する<code>qmk</code>という、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperのCLIコマンドが提供されています。</p>
-<p><code>qmk</code>は、作業環境設定や、firmwareのビルド、はたまた種々の処理プログラムの起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。</p>
+<p>最近、<code>pip</code>経由で導入する、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperの<a href="https://docs.qmk.fm/#/cli">qmkというCLIコマンド</a>が提供されています。</p>
+<p><code>qmk</code>コマンドは、作業環境設定や、firmwareのビルド、はたまた種々の処理プログラムの起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。</p>
 <p>まず、<a href="https://docs.qmk.fm/#/cli?id=install-using-easy_install-or-pip">Install Using pip</a>に従い環境をDebian 11 (Bullseye/testing)に導入しました。</p>
 <p><code>qmk setup</code>の自動設定でチェックアウトされるレポは、<code>git submodule</code>を使っていて、レボがうまくまとめられています。レポ内にグラフィクスなどを保存しなくなり、キーマッピングもキーボード間で共用可能なものをまとめたり、マッピングだけのユーザーカスタム化情報がメインの<code>keyboads/</code>以下のソースツリー外に置けるようです。ただソースを理解するのが少々手間となりました。</p>
 <p><code>qmk</code>は、導入時に<code>~/.bashrc</code>を変更し、shellの環境変数<code>QMK_HOME</code>にチェックアウトされるたレポの場所を保存しています。</p>
