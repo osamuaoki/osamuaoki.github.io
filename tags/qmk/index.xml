@@ -6,7 +6,21 @@
     <description>Recent content in qmk on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 14 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/qmk/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 18 Jan 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/qmk/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>QMK (2)</title>
+      <link>/jp/2022/01/18/qmk-2/</link>
+      <pubDate>Tue, 18 Jan 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2022/01/18/qmk-2/</guid>
+      <description>手始めに、QMK : キーマップのカスタマイズ (2018年頃)も参考に、できるだけ今風の(2022年)qmkコマンドを使って、１つのキーのカスタムキーボードを作ります。
+対象ハードはatmega32u4が載ったTeensy2.0の中華コンパチボードです。本物のTeensy2.0でないのでatmel-dfuがBOOTLOADERだったはずです。ただ、BOOTLOADERはISP接続で小さな(512 bytes)HIDデバイスのnanoBoot (w/LED)に書き換えています。
+ .word 0x03EB // idVendor -- Vendor ID (Atmel VID, from LUFA) .word 0x2067 // idProduct -- Product ID (HID Class Bootloader PID, from LUFA) これってqmk-hidと同じIDです。ファームウエアーのサイズはqmk-hidの4KB(?)よりnanoBootは小さいメリットがあります。
+ファームエアーのアップロードプロトコルは同じ　halfkeyコンパチのID違いなので、指定は同じにして良い気がします。
+作成デバイスはメディアキーのMUTE１つのデバイスです。
+テンプレート作成  $ qmk cd $ gitk --all ... (最新の「master」ブランチのリリースが0.15.15と確認) $ git checkout 0.15.15 $ git checkout -b osamu1 $ qmk new-keyboard Ψ Generating a new QMK keyboard directory Keyboard Name: one Keyboard Type: 1.</description>
+    </item>
+    
     <item>
       <title>QMK (1)</title>
       <link>/jp/2022/01/14/qmk-1/</link>

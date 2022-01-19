@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2022/01/18/qmk-2/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -109,10 +109,10 @@ WARNING: Some git submodules are out of date or modified.
 <p><code>Makefile</code>はかなり複雑ですが、<code>%</code>ターゲット中で呼ばれる<code>PARSE_RULE</code>がキーです。処理の実体は<code>PARSE_RULE</code>が呼ぶ<code>PARSE_KEYBOARD</code>です。<code>KEYMAPS := $$(sort $$(KEYMAPS) $$(LAYOUT_KEYMAPS))</code>となっているので、キーマップは旧来のスタイルの<code>keyboards/</code>以下の<code>.../keymaps/*/</code>に定義された専用の定義のみならず、<code>layouts/</code>以下に定義された汎用の定義も使えるようです。</p>
 <h2 id="makefileのターゲットの整理"><code>Makefile</code>のターゲットの整理</h2>
 <ul>
-<li><code>%</code> &ndash; ファームウエアーのビルド（<code>keyboard_folder:keymap_folder[:target]</code>で指定）</li>
-<li><code>clean</code> &ndash; ソースのクリーン（生成したファームウエアーは残す）</li>
-<li><code>distclean</code> &ndash; 全ソースのクリーン(生成したファームウエアーも含めて)</li>
-<li><code>generate-keyboards-file</code> &ndash; ソース内のキーボードのリスト（改行で区切る）</li>
+<li><code>%</code> &ndash; ファームウエアーのビルド（<code>keyboard_folder:keymap_folder[:target]</code>で指定） &ndash; <code>qmk compile</code>  や <code>qmk flash</code></li>
+<li><code>clean</code> &ndash; ソースのクリーン（生成したファームウエアーは残す） &ndash; <code>qmk clean</code></li>
+<li><code>distclean</code> &ndash; 全ソースのクリーン(生成したファームウエアーも含めて) &ndash; <code>qmk clean -a</code></li>
+<li><code>generate-keyboards-file</code> &ndash; ソース内のキーボードのリスト（改行で区切る） &ndash; <code>qmk list-keyboards</code></li>
 <li><code>list-keyboards</code> &ndash; ソース内のキーボードのリスト（空白で区切り１行化）</li>
 <li><code>git-submodule</code> &ndash; 全サブモジュールの再帰的 sync&amp;update</li>
 <li><code>lib/%</code> &ndash; 該当サブモジュールの再帰的 sync&amp;update</li>
@@ -217,7 +217,7 @@ You should consider upgrading via the '/usr/local/bin/python -m pip install --up
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2022/01/18/qmk-2/">Next Post</a></td>
   
   </tr>
   </tbody>
