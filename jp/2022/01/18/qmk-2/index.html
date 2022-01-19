@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/01/18 (initial publish),
-2022/01/19 (last update)
+2022/01/20 (last update)
 </h3>
 </div>
 
@@ -133,15 +133,15 @@ Your real name: [osamuaoki] Osamu Aoki
 </code></pre><p><code>keyboards/one/one.h</code>の中の<code>LAYOUT</code>は以下に書き換えました。</p>
 <pre tabindex="0"><code>#define LAYOUT( k00 ) { { k00 } }
 </code></pre><p>さらにMUTEキーとすべく、<code>keyboards/one/keymaps/default /keymap.c</code>を以下としました。</p>
-<pre tabindex="0"><code>  // Defines names for use in layer keycodes and the keymap
-  enum layer_names {
-      _BASE,
-  };
+<pre tabindex="0"><code>// Defines names for use in layer keycodes and the keymap
+enum layer_names {
+    _BASE,
+};
 
-&gt;&gt;const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-      /* Base */
-      [_BASE] = LAYOUT( KC_AUDIO_MUTE )
-  };
+const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
+    /* Base */
+    [_BASE] = LAYOUT( KC_AUDIO_MUTE )
+};
 </code></pre><p>MCU中のBOOTLOADERはISP接続で小さな(512 bytes)HIDデバイスの<a href="https://github.com/osamuaoki/nanoBoot">nanoBoot (w/LED)</a>に書き換えているので、<code>rules.mk</code>中の<code>BOOTLOADER</code>は<code>qmk-hid</code>です。あと、直接の影響はないファイルをいくつか変更しました。</p>
 <h2 id="ファームウエアーのビルド">ファームウエアーのビルド</h2>
 <p>ファームウエアーを作成します。</p>
