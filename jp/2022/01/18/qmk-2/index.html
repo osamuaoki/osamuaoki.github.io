@@ -187,8 +187,11 @@ systemd-logind[939]: Watching system buttons on /dev/input/event24 (osamuaoki on
 systemd-logind[939]: Watching system buttons on /dev/input/event21 (osamuaoki one)
 mtp-probe[160236]: checking bus 4, device 14: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&quot;
 mtp-probe[160236]: bus: 4, device: 14 was not an MTP device
-</code></pre><p>ちゃんと、ミュートボタンとして機能しています。</p>
+</code></pre><p>qmkでコンパイルしたファームウエアーが、qmk導入以前から使っているMCU側HIDブートローダーのnanoBootとLUFAのPCホスト側ブートローダー<code>hid_bootloader_cli</code> @ <code>~/.local/bin</code>で導入できました。</p>
+<p>ちゃんと、ミュートボタンが機能しています。</p>
 <h2 id="flashqmk">FLASH（qmk）</h2>
+<p>ここまできたら、qmkでファームウエアーのコンパイルだけでなく、導入（FLASH）までしてみました。</p>
+<p>今回は、qmkが導入した<code>hid_bootloader_cli</code> @ <code>/usr/local/bin</code>が動いたようです。</p>
 <pre tabindex="0"><code> $ qmk flash -kb=one -km=default
 Ψ Compiling keymap with gmake --jobs=1 one:default:flash
 
@@ -217,12 +220,21 @@ Read &quot;.build/one_default.hex&quot;: 12512 bytes, 38.8% usage
 Programming..................................................................................................
 Booting
 
-</code></pre><p>確かにこの方が見やすい。</p>
+</code></pre><p>確かにこの方が見やすい。いい感じです。</p>
+<p>このあと、4つのスイッチを繋いだ別の<code>four</code>というデバイスを作成、これもFLASHしました。</p>
+<ul>
+<li>D0-D3: Key Switches (反対端子はGND)</li>
+<li>F0:    RGB  （最初は動くまでソフト設定せず）</li>
+</ul>
 <h2 id="githubへのpush">githubへのPUSH</h2>
-<p>大した変更じゃないので、UPSTREAMマージのための作業はせず、バックアップを兼ねて自分のアカウントにフォークしたqmk_firmwareにPUSHしておきます。</p>
+<p>これらは大した変更じゃないので、UPSTREAMマージのための作業はせず、バックアップを兼ねて自分のアカウントにフォークしたqmk_firmwareにPUSHしておきます。</p>
 <pre tabindex="0"><code> $ git remote add origin git@github.com:osamuaoki/qmk_firmware.git
  $ git push -u origin osamu1
-</code></pre><p>これで、 <a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/one">https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/one</a> ができました</p>
+</code></pre><p>これで、以下ができました</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/one">https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/one</a></li>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/four">https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/four</a></li>
+</ul>
 <!-- raw HTML omitted -->
 
 
