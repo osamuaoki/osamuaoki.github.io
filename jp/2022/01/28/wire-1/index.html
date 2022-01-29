@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>配線 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">配線</span></h1>
+
+<h3 class="date">Date:
+2022/01/28 (initial publish),
+2022/01/29 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/01/18/qmk-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#配線材料">配線材料</a></li>
+    <li><a href="#配線方法他">配線方法他</a></li>
+  </ul>
+</nav>
+
+<h2 id="配線材料">配線材料</h2>
+<p>趣味の工作の基本配線材料を整理しました。</p>
+<p>今私はジュンフロンETFE電線を使っています。配線サイズは、AWG-30 0.26mm 0.05mm2 の錫メッキ導線単線, 絶縁体ETFEで150°C耐熱です。
+オヤイデで50m 1320 JPY、10m 550 JPYぐらいです。</p>
+<p>海外製の安物配線材と何が違うのかが気になります。(Wire wrap本家のJonard toolsが売っているOKindustry品は銀メッキのフッ素系樹脂のPVDF被覆なので安物とは考えません。)海外サイトでは一見似た包装形態でもUL番号違いや中身がおかしい配線材あり要注意です。特に趣味用は見た目は似ているが中身が怪しい感じの配線材を散見します。PVCなのに105度耐熱は違和感があります。</p>
+<ul>
+<li>安物は、耐熱80度で、UL1007等と書かれています。PVC被覆と想定されます。難燃性は一定程度あるでしょう。~ 10 JPY/m以下</li>
+<li>標準品は、耐熱105度で、UL1422やUL1423等と書かれています。PVDF被覆と想定されます。Kynarとも言います
+<ul>
+<li>$15 @ 30m Jonard tools 純正品 ~ 50 JPY/m 相当</li>
+<li>$7.50@200m Adafruit　安すぎ???大丈夫かな？？</li>
+</ul>
+</li>
+<li>被覆素材としてはKynarより一ランク上品が、ジュンフロンのETFEで耐熱150度。約25 ~ 55 JPY/m　悪くはない値段</li>
+<li>実際には、UL番号表示と耐熱温度が矛盾したり10 JPY/m以下の商品は、耐熱80度で、UL1007のPVCでしょう。</li>
+<li>ラジコン用配線材は被覆が厚いシリコン樹脂で柔らかく200度耐熱が歌われています。 ~ 30 JPY/m</li>
+<li>極端に安価な配線材は架橋PE被覆もあるでしょう。難燃じゃないので絶対避けましょう。</li>
+</ul>
+<h2 id="配線方法他">配線方法他</h2>
+<ul>
+<li>ワイヤーストリッパー＋ハンダ付け
+<ul>
+<li><a href="https://www.ne.jp/asahi/shared/o-family/ElecRoom/ElecHint/ElecHint.html">電子工作のヒント</a> &ndash; ジュンフロンAWG30使用、実用性高い &ndash; 今の私の方法</li>
+<li><a href="http://www.chiaki.cc/Tools/index.htm">愛用の工具と材料</a> &ndash; OK industries AWG30銀メッキ使用 &ndash; <a href="http://www.chiaki.cc/Pyxis2010/index.htm">究極の実施例</a> &ndash; 真似できない</li>
+<li><a href="https://www.youtube.com/watch?v=J9Ig1Sxhe8Y">Circuit Board Prototyping Tips and Tricks</a></li>
+<li><a href="https://www.youtube.com/watch?v=VxMV6wGS3NY">How to Solder properly || Through-hole (THT) &amp; Surface-mount (SMD)</a></li>
+</ul>
+</li>
+<li>ワイヤーストリッパー無しのポリウレタン銅線(UEW線)利用、 耐熱温度130度、380度ではんだ付けが可能
+<ul>
+<li>ELM-CHAN さんのページはおもしろいが、これもちょっとレベルが高い
+<ul>
+<li><a href="http://www.elm-chan.org/docs/wire/wiring.html">プロト基板の配線テクニック</a> &ndash; UEW φ0.2～0.23使用 (AWG32単線に被覆のイメージ)</li>
+<li><a href="http://www.elm-chan.org/docs/pwrw.html">電源ラインの配線のコツ</a></li>
+<li><a href="http://www.elm-chan.org/docs/case/sk5.html">便利なプラケース</a></li>
+<li><a href="https://www.youtube.com/watch?v=i5MNLTc7YhY">https://www.youtube.com/watch?v=i5MNLTc7YhY</a></li>
+</ul>
+</li>
+<li>最近の評判は、、、
+<ul>
+<li>賛成派: <a href="https://miraluna.hatenablog.com/entry/poly_dousen">https://miraluna.hatenablog.com/entry/poly_dousen</a></li>
+<li>まだ少し懐疑派: <a href="https://shinshu-makers.net/shinshu_makers/2017/09/06/">配線：ジュンフロン線やめてＵＥＷ線へ＜コテＷ必要＞</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Wire wrap法
+<ul>
+<li><a href="https://www.nutsvolts.com/magazine/article/wire_wrap_is_alive_and_well">WIRE WRAP法のまとめ</a></li>
+<li>動画 <a href="https://www.youtube.com/watch?v=qLt6a6_Rm20">https://www.youtube.com/watch?v=qLt6a6_Rm20</a> (本家Jonard Tools Wrap/Strip/Unwrap Tools - WSU series Tools)</li>
+<li>動画 <a href="https://www.youtube.com/watch?v=IXvEDM-m9CE">https://www.youtube.com/watch?v=IXvEDM-m9CE</a> (おもしろい昔話)</li>
+<li>動画 <a href="https://www.youtube.com/watch?v=L-463vchW0o">https://www.youtube.com/watch?v=L-463vchW0o</a> (MCUプロジェクトへの応用) &ndash; プロトボードにPIN ヘッダーをハンダ付けし、ソケットではなくWire wrapで繋ぐのはおもしろい。</li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/01/18/qmk-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
