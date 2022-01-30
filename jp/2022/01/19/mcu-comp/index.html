@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>MCU (AVRとARM) の状況と比較 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">MCU (AVRとARM) の状況と比較</span></h1>
+
+<h3 class="date">Date:
+2022/01/19 (initial publish),
+2022/01/30 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/01/18/qmk-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/jp/2022/01/28/wire-1/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#mcu状況">MCU状況</a></li>
+    <li><a href="#mcu-avrとarm-の比較">MCU (AVRとARM) の比較</a></li>
+  </ul>
+</nav>
+
+<h2 id="mcu状況">MCU状況</h2>
+<p>しかし安いボードは実際に使っているMCUまで違う状況と知り驚いてます。ICチップパッケージの刻印が本家で中身が違うなら贋チップ使用というのでしょうか。</p>
+<p>AliExpressやbangoodを初めとした中華コマースサイトは便利なんだけど、魑魅魍魎の棲家ですね。</p>
+<p>とりあえずネットで見つけた関連情報のリンクをリストしておきます。</p>
+<ul>
+<li>Teensy
+<ul>
+<li><a href="https://www.pjrc.com/teensy/counterfeit.html">https://www.pjrc.com/teensy/counterfeit.html</a> &ndash; Aliexpress販売のTeensyは本物でない。
+<ul>
+<li>本物のTeensy 2.0++は製造終了で欠品中(2022/Jan.)。AT90USB1286使用のコンパクトなボードはコンパチ品しか手に入らない状況。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>ARM系(blue/blackpill)
+<ul>
+<li><a href="https://stm32-base.org/boards/">STM32-base のboard紹介</a>によると、安いblue/blackpillは贋STMチップが多いとのこと。</li>
+<li><a href="https://hackaday.com/2020/10/22/stm32-clones-the-good-the-bad-and-the-ugly/">https://hackaday.com/2020/10/22/stm32-clones-the-good-the-bad-and-the-ugly/</a></li>
+<li><a href="https://www.cnx-software.com/2019/02/10/cs32-mcu-stm32-clone-bluepill-board/">https://www.cnx-software.com/2019/02/10/cs32-mcu-stm32-clone-bluepill-board/</a></li>
+<li><a href="https://www.cnx-software.com/2019/12/24/stm32-black-pill-board-features-stm32f4-cortex-m4-mcu-optional-spi-flash/">https://www.cnx-software.com/2019/12/24/stm32-black-pill-board-features-stm32f4-cortex-m4-mcu-optional-spi-flash/</a></li>
+<li><a href="https://www.cnx-software.com/2020/03/22/how-to-detect-stm32-fakes/">https://www.cnx-software.com/2020/03/22/how-to-detect-stm32-fakes/</a></li>
+<li><a href="https://github.com/WeActTC/MiniSTM32F4x1/blob/master/README.md">https://github.com/WeActTC/MiniSTM32F4x1/blob/master/README.md</a> WeActの製品情報
+<ul>
+<li>怪しいパチ物(PCBパターンが同等？旧タイプ？)を売っているVENDERの実名リストがある（TZTは怪しい！）</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>STM32F103コンパチチップ状況
+<ul>
+<li>GD32F103: <a href="https://www.gigadevice.com/products/microcontrollers/gd32/arm-cortex-m3/">https://www.gigadevice.com/products/microcontrollers/gd32/arm-cortex-m3/</a> &ndash; Datasheet</li>
+<li><a href="https://www.usenix.org/system/files/woot20-paper-obermaier.pdf">https://www.usenix.org/system/files/woot20-paper-obermaier.pdf</a> &ndash; 本物とコンパチチップのセキュリティー解析比較(USENIX, 2020以降)</li>
+<li>評価 <a href="https://www.cnx-software.com/2015/12/21/gigadevice-gd32-is-a-faster-software-and-pin-to-pin-stm32-compatible-cortex-m3-mcu/">https://www.cnx-software.com/2015/12/21/gigadevice-gd32-is-a-faster-software-and-pin-to-pin-stm32-compatible-cortex-m3-mcu/</a></li>
+<li>評価 <a href="https://www.instructables.com/Alternative-to-STM32F103C8T6-by-GigaDevice/">https://www.instructables.com/Alternative-to-STM32F103C8T6-by-GigaDevice/</a></li>
+<li>コメント <a href="https://eetimes.itmedia.co.jp/ee/articles/2001/28/news032_2.html">https://eetimes.itmedia.co.jp/ee/articles/2001/28/news032_2.html</a></li>
+</ul>
+</li>
+<li>ATmega328P (Arduino Unoのチップ)
+<ul>
+<li>贋物は<a href="https://www.youtube.com/watch?v=PlGycKwnsSw">不良症状としてスリープモードの電流が多いこともあるようです</a>。流石に調査がしっかりしているとおもったら、部品の調査検定会社のYOUTUBE情報でした。</li>
+</ul>
+</li>
+<li>DS18B20 Temperature Sensors
+<ul>
+<li><a href="https://www.cnx-software.com/2020/07/13/fake-ds18b20-temperature-sensors-counterfeit-clones/">https://www.cnx-software.com/2020/07/13/fake-ds18b20-temperature-sensors-counterfeit-clones/</a></li>
+</ul>
+</li>
+<li>FTDI FT232RLの贋物騒動 &ndash; Windowsの正規品ドライバーで壊れる
+<ul>
+<li><a href="https://hackaday.com/2016/02/01/ftdi-drivers-break-fake-chips-again/">https://hackaday.com/2016/02/01/ftdi-drivers-break-fake-chips-again/</a></li>
+<li><a href="https://www.voltlog.com/identifying-replacing-a-fake-ftdi-ft232r-chip-voltlog-314/">https://www.voltlog.com/identifying-replacing-a-fake-ftdi-ft232r-chip-voltlog-314/</a></li>
+</ul>
+</li>
+<li>CH340 (FT232類似機能品、最近のArduino系コンパチボードの標準チップ)
+<ul>
+<li><a href="https://note.com/akita11/n/n0ef8b362c8fc">https://note.com/akita11/n/n0ef8b362c8fc</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="mcu-avrとarm-の比較">MCU (AVRとARM) の比較</h2>
+<p>QMKのプラットフォームのMCU (AVRとARM) の比較を、よく見かけるAtmel AVRとSTM ARMを使った、20mm幅程度のMCUボードでしました。</p>
+<pre tabindex="0"><code>使用チップ         Flash     SRAM       FRQ  Board
+AVR ATmega32u4      32KB    2.5KB    16 MHz  ProMicro, Teensy2.0  -- 770 @ Pro Micro遊舎工房
+AVR AT90USB1286    128KB    8  KB    16 MHz  Teensy2.0++   -- ~1500 JPY コンパチ品？、本物は$24@pjrc.com 欠品・終了？
+ARM STM32F042K6     32KB    6  KB    72 MHz  NUCLEO-F042K6 -- 1600 JPY＠秋月 (＋交通費)
+ARM STM32F303K8     64KB   14  KB    72 MHz  NUCLEO-F303K6 -- 1900 JPY＠秋月(＋交通費)
+ARM STM32F103C6T6   64KB   10  KB    72 MHz  Bluepill      -- 250 - 600　（送料130-300円）贋STM？
+ARM STM32F103C8T6  128KB   20  KB    72 MHz  Bluepill      -- 300 - 600　（送料130-300円）贋STM？
+ARM STM32F411CEU6  512KB  128  KB   100 MHz  Blackpill     -- 694 （送料348円）WeAct品
+</code></pre><p>有名なIOTパーツ販売サイトの<a href="https://www.adafruit.com/product/4877">Adafruit(USA)</a>が米国東海岸のNYCから売っているWeActの「Blackpill」は、<a href="https://stm32-base.org/boards/">STM32-base のboard紹介</a>他の上記情報を聞くに、しっかりしたPCB設計製造メーカーが本物のSTのチップを利用しているようです。そのオリジナル製造元の<a href="https://weactstudio.aliexpress.com/store/910567080">WeActの正規ストアーが日本に近い中国本土出荷のAliexpress</a>で定価694円（送料348円）で売っています。</p>
+<p>STM32F411CEベースだとDFUはROMで入っているし、価格性能比ででも魅力です。AliexpressならPaypalなので支払いも安心です。</p>
+<p>WeActの正規ストアから送料節約でまとめて次のQMKプロジェクト用に２つポチリました。1月11日注文して、普通配送で1月25日到着なので悪くない早さです。到着した部品は最新のVersion 3.1のUSB-Cコネクター品です。ちょっと過剰性能の気もします。。。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/01/18/qmk-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/jp/2022/01/28/wire-1/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
