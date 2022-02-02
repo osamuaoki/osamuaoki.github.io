@@ -61,11 +61,12 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#配線材料">配線材料</a></li>
-    <li><a href="#配線方法他">配線方法他</a></li>
+    <li><a href="#典型的配線材料">典型的配線材料</a></li>
+    <li><a href="#配線方法諸説">配線方法諸説</a></li>
+    <li><a href="#配線材料状況">配線材料状況</a></li>
     <li><a href="#ハンダづけ">ハンダづけ</a>
       <ul>
-        <li><a href="#一般的なはんだ付け時の最適温度ハッコー社">一般的なはんだ付け時の最適温度（ハッコー社）</a></li>
+        <li><a href="#一般的なはんだ付け時の最適温度ハッコー社推奨">一般的なはんだ付け時の最適温度（ハッコー社推奨）</a></li>
         <li><a href="#uew線のハンダ付け">UEW線のハンダ付け</a></li>
         <li><a href="#はんだ付け時の最適温-中華サイト日本語修正">はんだ付け時の最適温 (中華サイト、日本語修正)</a></li>
         <li><a href="#はんだごて">はんだごて</a></li>
@@ -75,10 +76,77 @@
   </ul>
 </nav>
 
-<h2 id="配線材料">配線材料</h2>
+<h2 id="典型的配線材料">典型的配線材料</h2>
 <p>趣味の工作の基本配線材料を整理しました。</p>
-<p>今私はジュンフロンETFE電線を使っています。配線サイズは、AWG-30 0.26mm 0.05mm2 の錫メッキ導線単線, 絶縁体ETFEで150°C耐熱です。
-オヤイデで50m 1320 JPY、10m 550 JPYぐらいです。</p>
+<ul>
+<li>基板上低電圧信号用 UEW電線 AWG-32 (0.2mm)　単線、5V 以下</li>
+<li>基板上通常信号用 ジュンフロンETFE電線 AWG-30 単線 (0.26mm)  多色準備　Wirewrapにも使える</li>
+<li>基板上電源線 TA (錫メッキ線) 0.5mm　単線 (AWG 24(0.51mm) 単線 の LAN cable使用線の流用)</li>
+<li>基板間配線（コネクター使用圧着)はAWG 24(0.5mm)相当のヨリせん (多色準備?)</li>
+<li>基板間配線（pin header経由直付け)はAWG 30(0.5mm)単線のWIREWRAP</li>
+<li>基板間配線（PCB直付け)はAWG 30(0.5mm)単線のTHハンダ付け</li>
+<li>電源: 15A current -&gt; 0.8 mm2 -&gt; 1mm -&gt; AWG18のヨリせん</li>
+</ul>
+<h2 id="配線方法諸説">配線方法諸説</h2>
+<ul>
+<li>錫メッキ耐熱樹脂被覆導線をワイヤーストリッパー＋ハンダ付けで利用する配線方法
+<ul>
+<li><a href="https://www.ne.jp/asahi/shared/o-family/ElecRoom/ElecHint/ElecHint.html">電子工作のヒント</a> &ndash; ジュンフロンAWG30使用(2000以前のページ?)、実用性高い &ndash; 今の私の方法</li>
+<li><a href="http://www.chiaki.cc/Tools/index.htm">愛用の工具と材料 (2007年)</a> &ndash; OK industries AWG30銀メッキKynar使用 &ndash; <a href="http://www.chiaki.cc/Pyxis2010/index.htm">究極の実施例</a> &ndash; 真似できない</li>
+<li><a href="https://www.youtube.com/watch?v=J9Ig1Sxhe8Y">Circuit Board Prototyping Tips and Tricks</a> Vector board, Dead bug, &hellip; (2016)</li>
+<li><a href="https://www.youtube.com/watch?v=VxMV6wGS3NY">How to Solder properly || Through-hole (THT) &amp; Surface-mount (SMD)</a> Perfboard, solder wick (2017)</li>
+</ul>
+</li>
+<li>UEW線・錫メッキ線を使うELM-CHANの究極の配線方法 (1997-&gt;2014年)
+<ul>
+<li>信号線: ポリウレタン銅線(φ0.2～0.23, AWG32のUEW銅単線)利用
+<ul>
+<li><a href="http://www.elm-chan.org/docs/wire/wiring.html">プロト基板の配線テクニック</a></li>
+<li>スペックは耐熱温度130度、はんだ付けが可能温度は380度</li>
+<li>ELM-CHAN推奨: はんだごて設定　線の途中400度、線の端は350度</li>
+<li><a href="https://www.youtube.com/watch?v=i5MNLTc7YhY">https://www.youtube.com/watch?v=i5MNLTc7YhY</a> Extreme prototype board wiring techniquesのビデオ</li>
+</ul>
+</li>
+<li>電源線: 錫メッキ銅単線(φ0.5～0.6, TA)利用
+<ul>
+<li><a href="http://www.elm-chan.org/docs/pwrw.html">電源ラインの配線のコツ</a></li>
+</ul>
+</li>
+<li><a href="http://www.elm-chan.org/docs/case/sk5.html">便利なプラケース</a></li>
+<li>ELM-CHAN さんのページはおもしろいが、ちょっとレベルが高い</li>
+<li>最近の評判は、、、
+<ul>
+<li><a href="https://shinshu-makers.net/shinshu_makers/2017/09/06/">配線：ジュンフロン線やめてＵＥＷ線へ＜コテＷ必要＞</a> (2017)
+<ul>
+<li>結局 FX-600にして、はんだごては２本不要となる</li>
+</ul>
+</li>
+<li><a href="https://miraluna.hatenablog.com/entry/poly_dousen">https://miraluna.hatenablog.com/entry/poly_dousen</a> (2021)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Wire wrap法
+<ul>
+<li><a href="https://www.nutsvolts.com/magazine/article/wire_wrap_is_alive_and_well">WIRE WRAP法のまとめ</a></li>
+<li>動画 <a href="https://www.youtube.com/watch?v=qLt6a6_Rm20">https://www.youtube.com/watch?v=qLt6a6_Rm20</a> (本家Jonard Tools Wrap/Strip/Unwrap Tools - WSU series Tools) (2010)
+<ul>
+<li>Modified (some insurated part in wrapping) WSU-30M for AWG30</li>
+<li>Basic (no insulated part wrapping) WSU-30 for AWG30</li>
+</ul>
+</li>
+<li>動画 <a href="https://www.youtube.com/watch?v=IXvEDM-m9CE">https://www.youtube.com/watch?v=IXvEDM-m9CE</a> (おもしろい昔話)</li>
+<li>動画 <a href="https://www.youtube.com/watch?v=L-463vchW0o">https://www.youtube.com/watch?v=L-463vchW0o</a> (MCUプロジェクトへの応用)
+<ul>
+<li>プロトボードにPIN ヘッダーをハンダ付けし、ソケットではなくWire wrapで繋ぐのはおもしろい。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="配線材料状況">配線材料状況</h2>
+<p>今私はジュンフロンETFE電線を基本使ってきています。配線サイズは、AWG-30 0.26mm 0.05mm2 の錫メッキ銅線のEFTA樹脂被覆で150°C耐熱です。
+オヤイデで50m 1320 JPY、10m 550 JPYぐらいです。UEWもちょっと使ってみましたが、線の途中の被覆を溶かすには高温が必要です。要注意。</p>
 <p>海外製の安物配線材と何が違うのかが気になります。(Wire wrap本家のJonard toolsが売っているOKindustry品は銀メッキのフッ素系樹脂のPVDF被覆なので安物とは考えません。)海外サイトでは一見似た包装形態でもUL番号違いや中身がおかしい配線材あり要注意です。特に趣味用は見た目は似ているが中身が怪しい感じの配線材を散見します。PVCなのに105度耐熱は違和感があります。</p>
 <ul>
 <li>安物は、耐熱80度で、UL1007等と書かれています。PVC被覆と想定されます。難燃性は一定程度あるでしょう。~ 10 JPY/m以下</li>
@@ -88,53 +156,17 @@
 <li>$7.50@200m Adafruit　安すぎ???大丈夫かな？？</li>
 </ul>
 </li>
-<li>被覆素材としてはKynarより一ランク上品が、ジュンフロンのETFEで耐熱150度。約25 ~ 55 JPY/m　悪くはない値段</li>
-<li>実際には、UL番号表示と耐熱温度が矛盾したり10 JPY/m以下の商品は、耐熱80度で、UL1007のPVCでしょう。</li>
-<li>ラジコン用配線材は被覆が厚いシリコン樹脂で柔らかく200度耐熱が歌われています。 ~ 30 JPY/m</li>
+<li>フッ素樹脂系耐熱被覆素材としてはKynarよりジュンフロンのETFEは一ランク上。ジュンフロンは耐熱150度。価格も約25 ~ 55 JPY/m　悪くはない値段　（ともにPTFEテフロン線より柔らかい）</li>
+<li>ハンダ付けし易いのは、銀メッキ線、錫メッキ線、銅の裸線の順番</li>
+<li>実際には、UL番号表示と耐熱温度が矛盾したり10 JPY/m以下の安価な中華商品は、耐熱80度で、UL1007のPVC被覆でしょう。</li>
+<li>ラジコン用配線材は被覆が厚いシリコン樹脂で柔らかく200度耐熱が唱うれています。 ~ 30 JPY/m</li>
 <li>極端に安価な配線材は架橋PE被覆もあるでしょう。難燃じゃないので絶対避けましょう。</li>
 </ul>
-<h2 id="配線方法他">配線方法他</h2>
-<ul>
-<li>ワイヤーストリッパー＋ハンダ付け
-<ul>
-<li><a href="https://www.ne.jp/asahi/shared/o-family/ElecRoom/ElecHint/ElecHint.html">電子工作のヒント</a> &ndash; ジュンフロンAWG30使用、実用性高い &ndash; 今の私の方法</li>
-<li><a href="http://www.chiaki.cc/Tools/index.htm">愛用の工具と材料</a> &ndash; OK industries AWG30銀メッキ使用 &ndash; <a href="http://www.chiaki.cc/Pyxis2010/index.htm">究極の実施例</a> &ndash; 真似できない</li>
-<li><a href="https://www.youtube.com/watch?v=J9Ig1Sxhe8Y">Circuit Board Prototyping Tips and Tricks</a></li>
-<li><a href="https://www.youtube.com/watch?v=VxMV6wGS3NY">How to Solder properly || Through-hole (THT) &amp; Surface-mount (SMD)</a></li>
-</ul>
-</li>
-<li>ワイヤーストリッパー無しのポリウレタン銅線(UEW線)利用、 耐熱温度130度、380度ではんだ付けが可能
-<ul>
-<li>ELM-CHAN さんのページはおもしろいが、これもちょっとレベルが高い
-<ul>
-<li><a href="http://www.elm-chan.org/docs/wire/wiring.html">プロト基板の配線テクニック</a> &ndash; UEW φ0.2～0.23使用 (AWG32単線に被覆のイメージ)</li>
-<li><a href="http://www.elm-chan.org/docs/pwrw.html">電源ラインの配線のコツ</a></li>
-<li><a href="http://www.elm-chan.org/docs/case/sk5.html">便利なプラケース</a></li>
-<li><a href="https://www.youtube.com/watch?v=i5MNLTc7YhY">https://www.youtube.com/watch?v=i5MNLTc7YhY</a></li>
-</ul>
-</li>
-<li>最近の評判は、、、
-<ul>
-<li>賛成派: <a href="https://miraluna.hatenablog.com/entry/poly_dousen">https://miraluna.hatenablog.com/entry/poly_dousen</a></li>
-<li>まだ少し懐疑派: <a href="https://shinshu-makers.net/shinshu_makers/2017/09/06/">配線：ジュンフロン線やめてＵＥＷ線へ＜コテＷ必要＞</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>Wire wrap法
-<ul>
-<li><a href="https://www.nutsvolts.com/magazine/article/wire_wrap_is_alive_and_well">WIRE WRAP法のまとめ</a></li>
-<li>動画 <a href="https://www.youtube.com/watch?v=qLt6a6_Rm20">https://www.youtube.com/watch?v=qLt6a6_Rm20</a> (本家Jonard Tools Wrap/Strip/Unwrap Tools - WSU series Tools)</li>
-<li>動画 <a href="https://www.youtube.com/watch?v=IXvEDM-m9CE">https://www.youtube.com/watch?v=IXvEDM-m9CE</a> (おもしろい昔話)</li>
-<li>動画 <a href="https://www.youtube.com/watch?v=L-463vchW0o">https://www.youtube.com/watch?v=L-463vchW0o</a> (MCUプロジェクトへの応用) &ndash; プロトボードにPIN ヘッダーをハンダ付けし、ソケットではなくWire wrapで繋ぐのはおもしろい。</li>
-</ul>
-</li>
-</ul>
 <h2 id="ハンダづけ">ハンダづけ</h2>
-<p>こて先の酸化を遅らせるためには、はんだこての設定温度をできるだけ低くする（必要以上に温度を上げない）ことが重要です。</p>
-<p>設定340Cが、伝統的推奨温度。</p>
-<p>私が見るに、錫と銅の共晶温度は227度なので、それ以上でないと芋はんだとなる。</p>
-<h3 id="一般的なはんだ付け時の最適温度ハッコー社">一般的なはんだ付け時の最適温度（ハッコー社）</h3>
+<p>こて先の酸化を遅らせるためには、はんだこての設定温度をできるだけ低くする（必要以上に温度を上げない）ことが重要で、コテの設定温度340Cが、伝統的推奨温度。</p>
+<p>私が見るに、錫と銅の共晶温度は227度なので、それ以上の温度にしないと接合が弱く芋はんだとなる。</p>
+<p>鉛フリーでハンダ付け温度が上がり、より正確な温度制御や、待機時の温度を下げるのがトレンド。</p>
+<h3 id="一般的なはんだ付け時の最適温度ハッコー社推奨">一般的なはんだ付け時の最適温度（ハッコー社推奨）</h3>
 <ul>
 <li>はんだ付け部の最適温度
 <ul>
@@ -164,6 +196,7 @@
 <h3 id="uew線のハンダ付け">UEW線のハンダ付け</h3>
 <p>UEW線のハンダ付け必要温度は、380C　と高め！（マルツ、住友電線）</p>
 <p>ELM-CHANは、線の途中の作業性には400度必要だが、切断面は載りやすいので線端なら350で充分とのこと。</p>
+<p>UEW線とはいえ、先に切断、両端ハンダメッキして使用が安全。</p>
 <h3 id="はんだ付け時の最適温-中華サイト日本語修正">はんだ付け時の最適温 (中華サイト、日本語修正)</h3>
 <p>AliExpressのLAECHO Storeによると：</p>
 <ul>
@@ -187,11 +220,13 @@
 <li>低温時の低抵抗を利用し昇温時間短縮</li>
 <li>T34系コテ先（ヒーターは本体）</li>
 <li>２分以上待たないとUEWは無理か？</li>
+<li>所有品の後継機種</li>
 </ul>
 </li>
 <li>984-01 &ndash; 急速瞬間セラミックヒーター　温調無し 20W/130W、ストレートタイプ（キャップ付き） JPY 2,750
 <ul>
 <li>30秒までのオンディマンド高パワー加熱</li>
+<li>あまり最近電子工作で使われているのを見ない</li>
 </ul>
 </li>
 <li>FX-600 &ndash; セラミックヒーター　電子工作用 温調200C-500C, 50W、JPY 6380　（実勢4000　送料込み）
@@ -199,14 +234,15 @@
 <li>セラミックヒーターの抵抗の温度依存性を検知し、温調をかける方式</li>
 <li>T18系コテ先</li>
 <li>FX-601 &ndash; T19系太いコテ使用の大型部品用、JPY 7260 &ndash; 間違え無いように</li>
+<li>最近の電子工作の標準？</li>
 </ul>
 </li>
 <li>FX-950/Fx-951 &ndash; はんだこて/ステーションタイプ DC駆動　22000/36000 (Analog/Digital)
 <ul>
 <li>熱電対入りはんだコテ先一体型ヒーター(T12シリーズ)で、より正確・高速に温調 (商用業界標準？)</li>
+<li>対応はんだごて台に置くと自動待機モードになる？</li>
 </ul>
 </li>
-<li>対応はんだごて台に置くと自動待機モードになる？</li>
 </ul>
 </li>
 <li>海外有名メーカー：　米国Weller　スペインJBC(CNBシリーズ)?</li>
@@ -219,7 +255,8 @@
 </li>
 <li>LAECHO <a href="https://www.aliexpress.com/store/3681030">https://www.aliexpress.com/store/3681030</a>：アマチュア向けの販売サイト？(2018~)
 <ul>
-<li>QUICKO 固定利用　T12熱電対入りはんだコテ先一体型ヒーター+DCコントローラー電源一体型</li>
+<li>QUICKO 固定利用　T12熱電対入りはんだコテ先一体型ヒーター+DCコントローラー電源一体型
+<ul>
 <li>明らかにHAKKO FX-950/951を意識した設計だが、自社ブランドの独自設計・意匠・販売で贋物販売ではない。</li>
 <li>振動センサーによる保温スリープへの切り替えは、HAKKOとセンシング法が違う？</li>
 <li><code>951</code> -&gt;  <code>956</code> -&gt; <code>Q19</code> -&gt; 主流？<code>STM32 V3.1S</code>=<code>958</code>? (OLED) -&gt; <code>STM32 V5.1</code> = <code>959</code> (LCD)</li>
@@ -231,10 +268,12 @@
 <ul>
 <li><a href="https://www.aliexpress.com/store/1486111">https://www.aliexpress.com/store/1486111</a> (2014~)</li>
 <li>キット品、古い機種の部品販売多数</li>
-<li>安全改善改造: <a href="https://www.youtube.com/watch?v=9BnxiF-gQwQ">https://www.youtube.com/watch?v=9BnxiF-gQwQ</a> (感電・静電気対策グランド、PCB絶縁耐性改善)</li>
 </ul>
 </li>
 <li>TS-100 可搬利用　専用熱電対入りはんだコテ先一体型ヒーター+コントローラー入りコテ軸</li>
+<li>安全改善改造: <a href="https://www.youtube.com/watch?v=9BnxiF-gQwQ">感電・静電気対策グランド、PCB絶縁耐性改善 (VIDEO)</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
