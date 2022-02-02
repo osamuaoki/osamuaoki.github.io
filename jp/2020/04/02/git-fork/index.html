@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/04/02 (initial publish),
-2021/09/15 (last update)
+2022/02/02 (last update)
 </h3>
 </div>
 
@@ -334,13 +334,28 @@ $ git push -u origin master
 <p>非公開レポはUSBメモリーではなく、<code>ssh</code>と<code>git</code>が使えるサーバーに作って
 も良いでしょう。</p>
 <h3 id="debianのパッケージング操作の場合">Debianのパッケージング操作の場合</h3>
-<p>Debianのパッケージング操作等では、自分が管理するリモートのレポ上の
-「<code>upstream</code>」と「<code>master</code>」というブランチ名を普通特定用途に用いて
-います。だからアップストリームの「<code>master</code>」ブランチを追跡する
-ブランチの名前をこれら以外から選ぶ必要があります。</p>
-<p>例えばフォークされたレポの「<code>upstream-master</code>」を追跡に用いる
-ブランチの名前とします。「<code>upstream-master</code>」ブランチのコンテント
-をアップストリームのコンテントに同期させる操作は次のようになります。</p>
+<p>アップストリームのブランチ名とローカルのブランチ名を変えるのは、
+技術的にはできますが、我々の正気を保つため基本的に避けたい状況です。</p>
+<p>Debianのパッケージング操作等では、パッケージング操作用レポ上の「<code>upstream</code>」
+と「<code>master</code>」というブランチ名を普通デフォルトでパッケージング特定用途に
+用いています。実際、アップストリームのGITの<code>master</code>ブランチの
+リリースをベースによく自動生成されたファイルを追加して作成されたTARBALL
+をベースにパッケージング操作用レポ上の「<code>upstream</code>」中にコミット作成、
+パッケージングデーターを追加してパッケージング操作用レポ上の「<code>master</code>」
+中にコミット作成しするのがデフォルトです。両方のレポをトラッキングしよう
+とするとアップストリームとパッケージングのブランチ名「<code>master</code>」がかち合う
+のでこれを避ける工夫が必要です。<code>git-buildpackage</code>を使う場合には、
+<code>debian/gbp.conf</code>を用いて、パッケージング操作用レポ上にある
+パッケージングデーターを追加して結果がコミットされるブランチ名を「<code>debian</code>」
+等という別のブランチ名を用いるようにするのが良いようです。<code>dgit</code>を使う場合
+には、マニュアルでデモ<code>debian/gbp.conf</code>を用いるとともに、<code>git-config</code>を
+使い調整することに触れられています。</p>
+<p>上記の正攻法が、何らかの理由でうまくいかない際には、避けたいといったアプローチ
+ですが、アップストリームの「<code>master</code>」ブランチを追跡するローカルブランチの名前を
+「<code>master</code>」以外の別の名前から選ぶことで逃げる手があります。</p>
+<p>例えばフォークされたレポでは「<code>upstream-master</code>」を追跡に用いるブランチの名前
+とします。「<code>upstream-master</code>」ブランチのコンテントをアップストリームの
+「<code>master</code>」ブランチのコンテントに同期させる操作は次のようになります。</p>
 <pre tabindex="0"><code>$ git clone https://upstream_site/repo_name.git
 $ cd repo_name
 $ git branch upstream-master
