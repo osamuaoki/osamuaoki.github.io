@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/01/14 (initial publish),
-2022/01/19 (last update)
+2022/02/02 (last update)
 </h3>
 </div>
 
@@ -61,7 +61,13 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#qmkコマンドとビルド"><code>qmk</code>コマンドとビルド</a></li>
+    <li><a href="#qmkコマンドとビルド"><code>qmk</code>コマンドとビルド</a>
+      <ul>
+        <li><a href="#qmkレポの移動方法">qmkレポの移動方法</a></li>
+        <li><a href="#新規のクリーンなqmkレポを新規の場所に作成する方法">新規のクリーンなqmkレポを新規の場所に作成する方法</a></li>
+        <li><a href="#qmkレポのremote名変更">qmkレポのREMOTE名変更</a></li>
+      </ul>
+    </li>
     <li><a href="#makefileのターゲットの整理"><code>Makefile</code>のターゲットの整理</a></li>
     <li><a href="#参考文書">参考文書</a></li>
     <li><a href="#開発環境">開発環境</a></li>
@@ -79,7 +85,7 @@
 <p><code>qmk</code>コマンドは、作業環境設定や、firmwareのビルド、はたまた種々の処理プログラムの起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。</p>
 <p>まず、<a href="https://docs.qmk.fm/#/cli?id=install-using-easy_install-or-pip">Install Using pip</a>に従い環境をDebian 11 (Bullseye/testing)に導入しました。</p>
 <p><code>qmk setup</code>の自動設定でチェックアウトされるレポは、<code>git submodule</code>を使っていて、レボがうまくまとめられています。レポ内にグラフィクスなどを保存しなくなり、キーマッピングもキーボード間で共用可能なものをまとめたり、マッピングだけのユーザーカスタム化情報がメインの<code>keyboads/</code>以下のソースツリー外に置けるようです。ただソースを理解するのが少々手間となりました。</p>
-<p><code>qmk</code>は、導入時に<code>~/.bashrc</code>を変更し、shellの環境変数<code>QMK_HOME</code>にチェックアウトされるたレポの場所を保存しています。</p>
+<p><code>qmk</code>は、初期導入時に<code>~/.bashrc</code>を変更し、shellの環境変数<code>QMK_HOME</code>にチェックアウトしたレポの場所を保存したようです。（手動でしたのかどうか忘れました）</p>
 <p><code>qmk</code>のコマンドの説明は<a href="https://docs.qmk.fm/#/cli_commands?id=qmk-list-keyboards">QMK CLI Commands</a>にあります。</p>
 <p>どうもビルドは公式には<code>qmk</code>コマンドを使うようになっているそうですが、その背後で何がどうなっているのかが気になります。</p>
 <p>レポを見ると、<code>791b9cc652</code> (&ldquo;remove all makefiles from keyboard directories&rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立の<code>Makefile</code>が無くなっています。だから、ビルドの実体はrootにある<code>Makefile</code>がしているはずです。いかんせんrootの<code>Makefile</code>は複雑なので閉口でした。</p>
@@ -107,6 +113,18 @@ WARNING: Some git submodules are out of date or modified.
  Please consider running make git-submodule.
 </code></pre><p>これで、マニュアルどおりに<code>qmk</code>コマンドによりビルドする際に、バックエンドの<code>Makefile</code>がどう起動されているかが分かりました。</p>
 <p><code>Makefile</code>はかなり複雑ですが、<code>%</code>ターゲット中で呼ばれる<code>PARSE_RULE</code>がキーです。処理の実体は<code>PARSE_RULE</code>が呼ぶ<code>PARSE_KEYBOARD</code>です。<code>KEYMAPS := $$(sort $$(KEYMAPS) $$(LAYOUT_KEYMAPS))</code>となっているので、キーマップは旧来のスタイルの<code>keyboards/</code>以下の<code>.../keymaps/*/</code>に定義された専用の定義のみならず、<code>layouts/</code>以下に定義された汎用の定義も使えるようです。</p>
+<p><code>qmk</code>コマンドは、一見便利なんですが、背後で何をしているのかが最初分からずちょっと悩みました。まだ開発中なので変わるかもしれませんが、気になった関連作業を以下にメモしておきます</p>
+<h3 id="qmkレポの移動方法">qmkレポの移動方法</h3>
+<p>qmkレポの移動は、レポのディレクトリーを移動、それに併せて環境変数<code>$QMK_HOME</code>の設定を<code>~/.bashrc</code>中で対応して代え新規にシェルを立ち上げるとできます。</p>
+<h3 id="新規のクリーンなqmkレポを新規の場所に作成する方法">新規のクリーンなqmkレポを新規の場所に作成する方法</h3>
+<p>既存レポに手を加えず、新規にqmkレポを作成するには、何もない作成場所を確保し移動し以下を実行します。</p>
+<pre tabindex="0"><code> $ qmk clone
+</code></pre><p>すると、<strong>現行ディレクトリ下</strong>に<code>qmk/qmk_firmware</code>が作成されます。</p>
+<p>それに併せて環境変数<code>$QMK_HOME</code>の設定を<code>~/.bashrc</code>中で対応して代え新規にシェルを立ち上げます。</p>
+<p>この状態では既存だったレポには<code>qmk</code>からはアクセスできませんが、GITからのデーターアクセスはできます。環境変数<code>$QMK_HOME</code>の設定を戻せば<code>qmk</code>からのアクセスが回復できます。</p>
+<h3 id="qmkレポのremote名変更">qmkレポのREMOTE名変更</h3>
+<p>上記のように普通にsetup やcloneをすると、デフォルトで<code>origin</code>に<code>https://github.com/qmk/qmk_firmware</code>が指定されてます。</p>
+<p><a href="https://docs.qmk.fm/#/getting_started_github">How to Use GitHub with QMK</a>にあるように、自分のレポにフォークしてgithubにバックアップをとりながら作業したいので、<a href="jp/2020/04/02/git-fork/">GITを使うフォークの管理</a>に書いた方法でqmkレポのREMOTE名を<code>origin</code> から<code>upstream</code>に変更します。</p>
 <h2 id="makefileのターゲットの整理"><code>Makefile</code>のターゲットの整理</h2>
 <ul>
 <li><code>%</code> &ndash; ファームウエアーのビルド（<code>keyboard_folder:keymap_folder[:target]</code>で指定） &ndash; <code>qmk compile</code>  や <code>qmk flash</code></li>
