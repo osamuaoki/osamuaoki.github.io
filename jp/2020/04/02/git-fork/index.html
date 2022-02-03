@@ -71,6 +71,7 @@
         <li><a href="#作業中のブランチ履歴の非公開保存">作業中のブランチ履歴の非公開保存</a></li>
         <li><a href="#debianのパッケージング操作の場合">Debianのパッケージング操作の場合</a></li>
         <li><a href="#トラッキング">トラッキング</a></li>
+        <li><a href="#完全なリセットgitattributes設定とautocrlf関連">完全なリセット(<code>gitattributes</code>設定と<code>autocrlf</code>関連)</a></li>
         <li><a href="#githubgitlab">GITHUB/GITLAB</a></li>
         <li><a href="#自由なブランチ名の設定">自由なブランチ名の設定</a></li>
       </ul>
@@ -415,7 +416,18 @@ cherry-pickして使えるので便利です。そのためだけなら、ロー
 プッシュする際に<code>git push -u ...</code>とするのも手ですが、直接変更するのは
 <code>git branch -u ...</code>です。</p>
 <p><code>git remote</code>の際にLONGオプションを用いると話がややこしくなるので要注意です。</p>
-<h3 id="githubgitlab">GITHUB/GITLAB</h3>
+<h3 id="完全なリセットgitattributes設定とautocrlf関連">完全なリセット(<code>gitattributes</code>設定と<code>autocrlf</code>関連)</h3>
+<p>当方では改行関係に変な事が起こらないようにしています。</p>
+<pre tabindex="0"><code> $ git config --global core.autocrlf false
+</code></pre><p>他人のレポで、<code>.gitattributes</code>設定で<code>eol=lf</code>されていて、折角の上記設定が
+効かないときに、どいうわけがCR入りでファイルがコミットをされていて、その
+コミットに<code>gitk</code>でブランチをリセットしようとしたら勝手にCRを外した
+ローカルファイルに変更され困りました。</p>
+<p>以下で、問題解決しました。</p>
+<pre tabindex="0"><code> $ git rm --cached -r .
+ $ git reset --hard
+ $ git clean -d -f -x
+</code></pre><h3 id="githubgitlab">GITHUB/GITLAB</h3>
 <p>GITHUBとGITLABは、ともに類似の無償のGITレポのホスティングを提供している
 非常にポピュラーなWEBサービスです。ここではGITHUBとGITLABの
 <a href="https://about.gitlab.com/devops-tools/github-vs-gitlab.html">サービスの細かな違い</a>
