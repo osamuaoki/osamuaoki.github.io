@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/04/02 (initial publish),
-2022/02/02 (last update)
+2022/02/03 (last update)
 </h3>
 </div>
 
@@ -383,16 +383,30 @@ $ git checkout master
 <p>上記の後半の操作を繰り返すことで、ローカルの「<code>upstream-master</code>」が、
 常にアップストリームが更新するアップストリームのリモートの「<code>master</code>」
 ブランチ(<code>gitk</code>が「<code>remotes/upstream/master</code>」と表示)を追跡していけます。</p>
-<p>実はDebianの<code>upstream</code>はアップストリームがリリースしたtarballを
-展開した内容でパッケージ用のGitレポを作ることが原則です。リリース
-されるtarballは単純にアップストリームのGitレポそのままでないことが
-よくあります。この場合は上記で行ったようにはアップストリームのGitレポ
-のヒストリーとうまく繋がりません。その場合、<code>gbp import-descs ...</code>
-等をして過去パッケージ履歴を含むパッケージ用のGitレポを作成し、その中に
-<code>git checkout --orphan upstream</code>としてアップストリームのGitレポを
-<code>git fetch -p upstream</code>出来るようにし、<code>gitk</code>で<code>upstream/master</code>にある
-最新のアップストリーム変更からパッチをcherry-pickして使うのが有効な方策
-かもしれません。</p>
+<p>上記のようにDebianのパッケージングの際に用いるGitレポでは<code>upstream</code>
+ブランチはアップストリームがリリースしたtarballを展開した内容を
+コミットして作ることが原則です。一方リリースされるtarballは単純に
+アップストリームのGitレポそのままでないことがよくあります。こんな
+場合はアップストリームのGitレポのヒストリーとうまく繋がりません。</p>
+<p>こんな場合でも、 アップストリームとパッケージングのレポからの
+チェックアウトを共用ローカルディレクトリーにすると、<code>gitk</code>で
+<code>upstream/master</code>にある最新のアップストリーム変更からパッチを
+cherry-pickして使えるので便利です。そのためだけなら、まず
+過去のパッケージ履歴を含むパッケージ用のGitレポの作成を、
+<code>gbp import-descs ...</code>等で行い、更に
+<code>git remote add upstream upstream_url</code>(この<code>upstream</code>はremotes名)
+してリモート名を登録、ここで<code>git fetch -p upstream</code>すれば
+アップストリームのレポ中の<code>master</code>以外のブランチをfetchせず、また
+ローカルのレポのブランチ名との競合を気にせず<code>gitk --all</code>でアクセス
+できるアップストリームのレポ履歴がローカルに落とせます。履歴は
+繋がってませんがcherry-pickするだけならこれで充分です。</p>
+<p>こうしてできた履歴に、<code>gitk --all</code>でアクセスしてローカルブランチ名を
+適当にGUIで設定すれば、ローカルチェックアウトもできます。</p>
+<p>ちなみに、どこにも繋がらない履歴をブランチ名<code>orphan_branch_name</code>で
+フレッシュスタートするのは、<code>git checkout --orphan orphan_branch_name</code>
+です。(前記の<code>git fetch</code>の代わりに、<code>git pull</code>系コマンドを用いるには
+この準備が必要。その際ローカルのブランチ名との競合には対策が必要で
+面倒くさい。)</p>
 <h3 id="githubgitlab">GITHUB/GITLAB</h3>
 <p>GITHUBとGITLABは、ともに類似の無償のGITレポのホスティングを提供している
 非常にポピュラーなWEBサービスです。ここではGITHUBとGITLABの

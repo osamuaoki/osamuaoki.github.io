@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/01/14 (initial publish),
-2022/02/02 (last update)
+2022/02/03 (last update)
 </h3>
 </div>
 
@@ -123,9 +123,16 @@ WARNING: Some git submodules are out of date or modified.
 <p>それに併せて環境変数<code>$QMK_HOME</code>の設定を<code>~/.bashrc</code>中で対応して代え新規にシェルを立ち上げます。</p>
 <p>この状態では既存だったレポには<code>qmk</code>からはアクセスできませんが、GITからのデーターアクセスはできます。環境変数<code>$QMK_HOME</code>の設定を戻せば<code>qmk</code>からのアクセスが回復できます。</p>
 <h3 id="qmkレポのremote名変更">qmkレポのREMOTE名変更</h3>
-<p>上記のように普通にsetup やcloneをすると、デフォルトで<code>origin</code>に<code>https://github.com/qmk/qmk_firmware</code>が指定されてます。</p>
-<p><a href="https://docs.qmk.fm/#/getting_started_github">How to Use GitHub with QMK</a>にあるように、自分のレポにフォークしてgithubにバックアップをとりながら作業したいので、<a href="/jp/2020/04/02/git-fork/">GITを使うフォークの管理</a>に書いた方法でqmkレポのREMOTE名を<code>origin</code> から<code>upstream</code>に変更します。</p>
-<h2 id="makefileのターゲットの整理"><code>Makefile</code>のターゲットの整理</h2>
+<p>上記のように普通にsetup やcloneをすると、デフォルトで<code>origin</code>にも<code>upstream</code>にも、アップストリームの<code>https://github.com/qmk/qmk_firmware</code>が指定されてます。
+また、<code>master</code>branchは<code>origin</code>をトラックしています。</p>
+<p><a href="https://docs.qmk.fm/#/getting_started_github">How to Use GitHub with QMK</a>にあるように、自分のレポにフォークしてgithubにバックアップをとりながら作業したいので、<a href="/jp/2020/04/02/git-fork/">GITを使うフォークの管理</a>の時と同様にqmkレポのREMOTE名を<code>origin</code> から<code>upstream</code>に変更します。</p>
+<pre tabindex="0"><code> $ git remote set-url origin git@github.com:osamuaoki/qmk_firmware.git
+ $ git branch -u upstream/master master
+ $ git remote set-url --push upstream BOGUS
+</code></pre><pre tabindex="0"><code> $ git checkout master
+ $ git pull upstream master
+ $ git push origin master
+</code></pre><h2 id="makefileのターゲットの整理"><code>Makefile</code>のターゲットの整理</h2>
 <ul>
 <li><code>%</code> &ndash; ファームウエアーのビルド（<code>keyboard_folder:keymap_folder[:target]</code>で指定） &ndash; <code>qmk compile</code>  や <code>qmk flash</code></li>
 <li><code>clean</code> &ndash; ソースのクリーン（生成したファームウエアーは残す） &ndash; <code>qmk clean</code></li>
