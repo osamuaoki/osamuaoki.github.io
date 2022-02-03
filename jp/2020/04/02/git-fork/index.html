@@ -70,6 +70,7 @@
       <ul>
         <li><a href="#作業中のブランチ履歴の非公開保存">作業中のブランチ履歴の非公開保存</a></li>
         <li><a href="#debianのパッケージング操作の場合">Debianのパッケージング操作の場合</a></li>
+        <li><a href="#トラッキング">トラッキング</a></li>
         <li><a href="#githubgitlab">GITHUB/GITLAB</a></li>
         <li><a href="#自由なブランチ名の設定">自由なブランチ名の設定</a></li>
       </ul>
@@ -387,26 +388,33 @@ $ git checkout master
 ブランチはアップストリームがリリースしたtarballを展開した内容を
 コミットして作ることが原則です。一方リリースされるtarballは単純に
 アップストリームのGitレポそのままでないことがよくあります。こんな
-場合はアップストリームのGitレポのヒストリーとうまく繋がりません。</p>
-<p>こんな場合でも、 アップストリームとパッケージングのレポからの
+場合はアップストリームのGitレポのヒストリーとうまく繋がりません。
+そんな場合には、「<code>upstream-master</code>」をパッケージング用レポの
+「<code>master</code>」上に作ることはできません。</p>
+<p>こんな場合でもアップストリームとパッケージングのレポからの
 チェックアウトを共用ローカルディレクトリーにすると、<code>gitk</code>で
 <code>upstream/master</code>にある最新のアップストリーム変更からパッチを
-cherry-pickして使えるので便利です。そのためだけなら、まず
-過去のパッケージ履歴を含むパッケージ用のGitレポの作成を、
-<code>gbp import-descs ...</code>等で行い、更に
+cherry-pickして使えるので便利です。そのためだけなら、ローカルの
+<code>upstream-master</code>ブランチの作成や更新にあたる作業をスキップする
+のも手です。例えば、過去のパッケージ履歴を含むパッケージ用のGit
+レポを、<code>gbp import-descs ...</code>等で作成し、更に
 <code>git remote add upstream upstream_url</code>(この<code>upstream</code>はremotes名)
-してリモート名を登録、ここで<code>git fetch -p upstream</code>すれば
-アップストリームのレポ中の<code>master</code>以外のブランチをfetchせず、また
-ローカルのレポのブランチ名との競合を気にせず<code>gitk --all</code>でアクセス
-できるアップストリームのレポ履歴がローカルに落とせます。履歴は
-繋がってませんがcherry-pickするだけならこれで充分です。</p>
+してリモート名を登録、ここで単純に<code>git fetch -p upstream</code>すること
+までにし、アップストリームのレポ中の<code>master</code>ブランチのみをfetch
+すれば、ローカルのブランチ名との競合を気にせず<code>gitk --all</code>で
+アクセスできるアップストリームのレポ履歴がローカルに落とせます。
+履歴は繋がってませんがcherry-pickするだけならこれで充分です。</p>
 <p>こうしてできた履歴に、<code>gitk --all</code>でアクセスしてローカルブランチ名を
-適当にGUIで設定すれば、ローカルチェックアウトもできます。</p>
+後からに<code>upstream-master</code>等とGUIで設定すれば、ローカルチェックアウトも
+できます。まあ、ローカルとリモートでブランチ名が変わるのが嫌ですが。</p>
 <p>ちなみに、どこにも繋がらない履歴をブランチ名<code>orphan_branch_name</code>で
 フレッシュスタートするのは、<code>git checkout --orphan orphan_branch_name</code>
-です。(前記の<code>git fetch</code>の代わりに、<code>git pull</code>系コマンドを用いるには
-この準備が必要。その際ローカルのブランチ名との競合には対策が必要で
-面倒くさい。)</p>
+です。</p>
+<h3 id="トラッキング">トラッキング</h3>
+<p>ブランチがトラッキングするリモートレポの設定は、上記のように最初に
+プッシュする際に<code>git push -u ...</code>とするのも手ですが、直接変更するのは
+<code>git branch -u ...</code>です。</p>
+<p><code>git remote</code>の際にLONGオプションを用いると話がややこしくなるので要注意です。</p>
 <h3 id="githubgitlab">GITHUB/GITLAB</h3>
 <p>GITHUBとGITLABは、ともに類似の無償のGITレポのホスティングを提供している
 非常にポピュラーなWEBサービスです。ここではGITHUBとGITLABの
