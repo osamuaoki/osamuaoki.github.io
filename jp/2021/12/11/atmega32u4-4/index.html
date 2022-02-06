@@ -361,9 +361,9 @@ RST 5 WHITE  --------------------+
 <p><img src="/img/AVRISP2-teensy2.jpg" alt="TEENSY 2.0 ISPケーブル接続例"></p>
 <p>さらに、<code>./halfkey-update...</code>コマンドで、blink系のプログラムを導入しUSB経由でのブートローダーの動作検証をします。
 （うまくいかない場合は、ISP経由での導入でボードが壊れてないか確認します。）</p>
-<p>USB経由でのファームウエアの更新の際はプロンプトがあります。
-そこでRESETを押して<code>sudo dmesg --follow</code>でデバイス認識されてからという伝統的対応でも良いのですが、ブートローダーがここで作ったLED対応版だと、LEDがつくことでUSBデバイスが認識されたことが簡単に分かります。
-意外とコネクタの接触不良もあり、このLED機能良いです.</p>
+<p>USB経由でのファームウエアの更新の際はプロンプトがあり、RESETを押しブートローダーを起動するように要求がありますます。</p>
+<p>もちろん、PC側でターミナルを開き、<code>journalctl -f</code> か <code>sudo dmesg --follow</code> 等としてPCのカーネル挙動を観察しブートローダーとして立ち上がったデバイス認識の確認という対応でもできます。</p>
+<p>ブートローダーがここで作ったLED対応版だとLEDがつくことでUSBデバイスが認識されたことが簡単に分かります。意外とコネクタの接触不良もあり、このLED機能良いです.</p>
 <h3 id="teensy-20-の動作検証">TEENSY 2.0 の動作検証</h3>
 <p>過去書いた、ATmega328P 用に書いた、 <a href="https://github.com/osamuaoki/avrmon">https://github.com/osamuaoki/avrmon</a> を使って動作検証をしました。
 雑に書いたコードだったのでUSB AVRへの移植・デバグに少々手間どってしまいました。</p>
