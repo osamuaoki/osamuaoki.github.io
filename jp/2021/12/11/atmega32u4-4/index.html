@@ -67,6 +67,7 @@
       </ul>
     </li>
     <li><a href="#nanoboot改led-512b----hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</a></li>
+    <li><a href="#qmk-ブートローダー">QMK ブートローダー</a></li>
     <li><a href="#arduinoのブートローダー">Arduinoのブートローダー</a>
       <ul>
         <li><a href="#arduinoのcaterina-4kb----cdc-ブートローダー">ArduinoのCaterina (4KB) &ndash; CDC ブートローダー</a></li>
@@ -225,6 +226,10 @@ LUFA HIDブートローダーを徹底的にハンドオプティマイズした
 <p>私のレポの、<strong>led</strong> branchに私のソースの最新版を、<strong>led-hex</strong> branchに最新版の
 <a href="https://github.com/osamuaoki/nanoBoot/tree/led-hex">コンパイル結果のHEXファイル集</a>
 までコミットしています。</p>
+<h2 id="qmk-ブートローダー">QMK ブートローダー</h2>
+<p>メモリーがタイトなatmega32u4は上記のnanoBootが良いと思いますが、AT90USB1286は余裕があるので
+qmkにあるLUFA改のLEDブリンク付で充分ではないでしょうか?（メモリーが大きいのとPLLが違うのでnanoBootの移植に挫折しました。）</p>
+<p><a href="https://github.com/qmk/qmk_firmware/tree/master/util">https://github.com/qmk/qmk_firmware/tree/master/util</a></p>
 <h2 id="arduinoのブートローダー">Arduinoのブートローダー</h2>
 <p>ARDUINOは元々シリアル接続して書き換えます。USB-SERIAL変換接続が、ARDUINO　UNOボードではFT232のような専用変換チップではなくサブMCUとなるATmega32u2に使われています。</p>
 <p>そのサブMCUには、このこのチップにはUSB-SERIAL変換をするいわゆるファームウエアーが通常導入されていて、
