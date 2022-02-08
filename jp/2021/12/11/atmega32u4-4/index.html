@@ -96,7 +96,7 @@
 </ul>
 <h2 id="boot-mode-hwbeのこと">BOOT MODE (HWBE)のこと</h2>
 <p>USB系のAVRの起動の基本確認事項として、BOOTのモードの状況を確認します。</p>
-<p>ARDUINO LEONARDO やTEENSY系の基板のPE2 (ALE,/HWBE)は、TEENSY系基板では1Kで接地されています。だから、実際に出会うボードのリセットボタンが押された際のBOOT挙動は以下です。</p>
+<p>ARDUINO LEONARDO やTEENSY系の基板のPE2 (ALE,/HWBE)では、1K等で接地されています。だから、実際に出会うボードのリセットボタンが押された際のBOOT挙動は以下です。</p>
 <ul>
 <li>通常PE2は接地電位なので、リセットを押したらHWBEヒューズがON(0)にされてると、ブートローダーの起動となる。</li>
 <li>強引にPE2(ALE)をVCCに繋いだ状態で、リセットだとHWBEヒューズ設定によらず、アプリファームが起動する。(その間1Kに電気が5mAも流れますが。)</li>
@@ -206,9 +206,12 @@ RST 5 WHITE  --------------------+
 <li>DFU ブートローダー: DFUデバイス
 <ul>
 <li>Arduino UNOで、USB-SERIAL変換機能を提供するサブMCUに使用、Atmel出荷時のデフォルト。</li>
-<li><code>FLIP</code>というのは、このモードを利用するATMEL提供のWINDOWSホストのツール</li>
+<li><code>FLIP</code>というのは、このモードを利用するATMEL提供のWINDOWSホストのツール
+<ul>
 <li><a href="http://ww1.microchip.com/downloads/en/devicedoc/doc7618.pdf">FLIP USB DFU protocol version 1 (doc7618)</a>: Atmel mega AVR with USB series (Also 8051)</li>
 <li><a href="https://www.microchip.com/content/dam/mchp/documents/OTH/ApplicationNotes/ApplicationNotes/doc8457.pdf">FLIP USB DFU protocol version 2 (AVR4023)</a>: Atmel AVR XMEGA and UC3 series &ndash; 関係なし</li>
+</ul>
+</li>
 <li><code>dfu-programmer</code>が一番古くからあるLINUXホスト上のツール。DFU 1</li>
 <li><code>avrdude -c flip1</code>でも動くはず</li>
 </ul>
@@ -225,18 +228,21 @@ RST 5 WHITE  --------------------+
 <ul>
 <li><a href="https://github.com/osamuaoki/nanoBoot/tree/led-hex">atmega32u4: 512 B の nanoBoot w/ LED</a>の使用が推奨
 <ul>
-<li><code>hid_bootloader_cli</code></li>
+<li><code>hid_bootloader_cli</code>
+<ul>
+<li>HID経由のUSB経由でのファームウエアの更新の際はプロンプトがあり、RESETを押しブートローダーを起動するように要求がありますます。</li>
+<li>PC側でターミナルを開き、<code>journalctl -f</code> か <code>sudo dmesg --follow</code> 等としてPCのカーネル挙動を観察しブートローダーとして立ち上がったデバイス認識の確認という対応でもできます。</li>
+<li>ブートローダーがここで作ったLED対応のnanoBootだとLEDがつくことでUSBデバイスが認識されたことが簡単に分かります。意外とコネクタの接触不良もあり、このLED機能良いです.</li>
 </ul>
 </li>
-<li>[at90usb1286: 8 KB　の　QMKにあるbootloader_at90usb128_1.0.1.hex]の使用が推奨
+</ul>
+</li>
+<li><a href="https://github.com/qmk/qmk_firmware/tree/master/util">at90usb1286: 8 KB　の　QMKにあるbootloader_at90usb128_1.0.1.hex</a>の使用が推奨
 <ul>
 <li><code>dfu-programmer</code></li>
 </ul>
 </li>
 </ul>
-<p>HID経由のUSB経由でのファームウエアの更新の際はプロンプトがあり、RESETを押しブートローダーを起動するように要求がありますます。</p>
-<p>もちろん、PC側でターミナルを開き、<code>journalctl -f</code> か <code>sudo dmesg --follow</code> 等としてPCのカーネル挙動を観察しブートローダーとして立ち上がったデバイス認識の確認という対応でもできます。</p>
-<p>ブートローダーがここで作ったLED対応のnanoBootだとLEDがつくことでUSBデバイスが認識されたことが簡単に分かります。意外とコネクタの接触不良もあり、このLED機能良いです.</p>
 <h2 id="teensy-20-の動作検証">TEENSY 2.0 の動作検証</h2>
 <p>過去書いた、ATmega328P 用に書いた、 <a href="https://github.com/osamuaoki/avrmon">https://github.com/osamuaoki/avrmon</a> をファームウエアとして導入し動作検証をしました。
 雑に書いたコードだったのでUSB AVRへの移植・デバグに少々手間どってしまいました。</p>
