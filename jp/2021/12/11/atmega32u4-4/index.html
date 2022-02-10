@@ -240,7 +240,13 @@ RST 5 WHITE  --------------------+
 </ul>
 <p>結論から言うと、MCUに入れるブートローダーとホスト側のツールは以下です：</p>
 <ul>
-<li><a href="https://github.com/osamuaoki/nanoBoot/tree/led-hex">atmega32u4: 512 B の nanoBoot w/ LED</a>の使用が推奨
+<li>MCUに入れるブートローダー
+<ul>
+<li>atmega32u4: <strong>512 B</strong> に収まる <a href="https://github.com/osamuaoki/nanoBoot/tree/led-hex">nanoBoot w/ LED</a>の使用が推奨</li>
+<li>at90usb1286: <strong>4096 B</strong> に収まる、<a href="https://github.com/osamuaoki/lufa/tree/osamu/">私が手を加えたLUFA系HID ブートローダー</a>　（QMKのHID BOOTLOADERと似ているはず）</li>
+</ul>
+</li>
+<li>ホスト側のツール
 <ul>
 <li><code>hid_bootloader_cli</code>
 <ul>
@@ -251,7 +257,6 @@ RST 5 WHITE  --------------------+
 </li>
 </ul>
 </li>
-<li><a href="https://github.com/osamuaoki/lufa/tree/osamu/">私が手を加えたLUFA系HID ブートローダー</a>　（QMKのHID BOOTLOADERと似ているはず）</li>
 </ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
