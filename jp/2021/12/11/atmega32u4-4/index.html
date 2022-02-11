@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/12/11 (initial publish),
-2022/02/10 (last update)
+2022/02/12 (last update)
 </h3>
 </div>
 
@@ -73,7 +73,8 @@
     <li><a href="#ブートローダーによるmcuのプログラミング">ブートローダーによるMCUのプログラミング</a></li>
     <li><a href="#動作検証">動作検証</a>
       <ul>
-        <li><a href="#teensy-20-の動作検メモ">TEENSY 2.0 の動作検メモ</a></li>
+        <li><a href="#teensy-20-の動作検証メモ">TEENSY 2.0 の動作検証メモ</a></li>
+        <li><a href="#手動配線キーボードの配線確認メモ">手動配線キーボードの配線確認メモ</a></li>
       </ul>
     </li>
     <li><a href="#各種ブートローダの状況確認メモ">各種ブートローダの状況確認メモ</a>
@@ -268,14 +269,37 @@ RST 5 WHITE  --------------------+
 <li>BLINKのファームウエアー(&quot;./setup-teensy&quot;実行)</li>
 <li><a href="https://github.com/osamuaoki/avrmon">シリアル接続モニタープログラム</a></li>
 </ul>
-<h3 id="teensy-20-の動作検メモ">TEENSY 2.0 の動作検メモ</h3>
-<p>実験的にTEENSY2.0で確認したのは以下です。</p>
+<h3 id="teensy-20-の動作検証メモ">TEENSY 2.0 の動作検証メモ</h3>
+<p>実験的にTEENSY2.0で確認したのは以下です。電圧印加にはVR等をPIN二つないでます。</p>
 <ul>
 <li>デジタル入力は、1.4Vぐらいが閾値の様でした。</li>
 <li>内部プルアップをしないとPINの読みとり値は、当たり前ですが暴れます。</li>
 <li>内部プルアップに対して、外部プルダウンは、10KΩだと1VでLOW、100KΩだと3.7VでHIGHでした。</li>
 <li>アナログも入力がつながってないと暴れます。LEDにつながっているD6は、ほぼ0Vでした。</li>
 </ul>
+<h3 id="手動配線キーボードの配線確認メモ">手動配線キーボードの配線確認メモ</h3>
+<p>このあと触れるQMKを動かす用に準備した手動配線キーボードの配線確認をしました。</p>
+<p>まず、基板上のLEDの動作を確認します。(avrmon: <code>B D6 OH</code>)
+過電流にならないように、LEDを消します。(avrmon: <code>B D6 OL</code>)</p>
+<p>キーボードのハンド配線の場合、トラブルしがちです。実際１つ断線がありました。</p>
+<p>ダイオードの方向が<code>COL2ROW</code>の場合の待機状態は：</p>
+<ul>
+<li>ROW: OUTPUT with normally HIGH (avrmon: <code>B ?? OH</code>)</li>
+<li>COL: INPUT with PULL-UP (avrmon: <code>B ?? IH</code>)</li>
+</ul>
+<p>この状態では、スイッチを押しても入力変化(DC)はありません。</p>
+<p>次に、COLUMN配線のチェックをするために、ひとまず全ROWをHIGH選択します。</p>
+<ul>
+<li>ROW: OUTPUT with normally HIGH (avrmon: <code>B ?? OL</code> for all rows)</li>
+</ul>
+<p>この場合、同じCOLUMNのキーは区別できませんが、COLUMNに対応するBITがLOWになるので、スイッチ操作でスイッチの動作が確認できます。(DC)</p>
+<p>私の場合、題６COLUMNが変化しませんでした。MCUボード上の対応ピンはMCUのPULL-UPが有効なので５Vきっちり出ますが、その先の電圧が０付近でばたばたしています。</p>
+<p>問題ピンに繋がった配線をキーボードから切り離し電圧を測ってもまともに電圧が出ません。</p>
+<p>どうも、C3の芋はんだか途中断線です。</p>
+<p>次に、ROW配線のチェックをするために、ひとまず全ROWをLOW選択します。</p>
+<p>そして、1つのROWだけをHIGH選択し対応するROWにあるキースイッチを押すとCOLUMN側に変化があることを確認します。
+さらに、関係のないキースイッチを押してもCOLUMN側に変化がないことを確認します。</p>
+<p>最後に、LEDの動作と明るさの確認をします。</p>
 <h2 id="各種ブートローダの状況確認メモ">各種ブートローダの状況確認メモ</h2>
 <h3 id="arduino系のブートローダー">Arduino系のブートローダー</h3>
 <h4 id="arduinoのブートローダー">Arduinoのブートローダー</h4>
