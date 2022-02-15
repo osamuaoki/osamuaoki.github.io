@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QWFRTY配列 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">QWFRTY配列</span></h1>
+
+<h3 class="date">Date:
+2022/02/14 (initial publish),
+2022/02/15 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/02/07/blackpill-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#背景">背景</a></li>
+    <li><a href="#qwfrty配列">QWFRTY配列</a>
+      <ul>
+        <li><a href="#qwerty配列からの変更点覚え方">QWERTY配列からの変更点（覚え方）:</a></li>
+        <li><a href="#qwfrty設計の方針">QWFRTY設計の方針:</a></li>
+        <li><a href="#qwfrty設計の背景事実">QWFRTY設計の背景事実：</a></li>
+      </ul>
+    </li>
+    <li><a href="#他のキー配列">他のキー配列</a>
+      <ul>
+        <li><a href="#qwerty配列">QWERTY配列</a></li>
+        <li><a href="#eucalyn">Eucalyn</a></li>
+        <li><a href="#colemak-mod-dh">Colemak Mod-DH</a></li>
+        <li><a href="#workman">WORKMAN</a></li>
+        <li><a href="#colemak">Colemak</a></li>
+        <li><a href="#dvorak-mod-slash">Dvorak mod-slash</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="背景">背景</h2>
+<p>MCUを使ったIOTの初等プロジェクトとして、QMKを利用したキーボードを作りました。</p>
+<p>結局デフォルトのキー配列に採用したのは、QWERTY配列でした。</p>
+<p>ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。</p>
+<p>またVIエディターでのカーソール移動がデフォルト設定では難しくなってしまいます。</p>
+<p>ただ、それでは残念なので、「QWFRTY配列」を最適化配列実験用に設定しました。</p>
+<h2 id="qwfrty配列">QWFRTY配列</h2>
+<p>11個のキーを標準のQWERTYから移動した下記の「QWFRTY配列」をせっかく作ったQMKを利用したキーボードの非QWERTY配列候補としています。</p>
+<pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
+│ Q │ W │_F_│ R │ T │      │ Y │_D_│_K_│_G_│ P │
+│ A │_O_│_E_│_I_│_U_│      │_S_│_H_│_J_│ L │ ; │
+│ Z │ X │ C │ V │ B │      │ N │ M │ , │ . │ / │
+</code></pre><h3 id="qwerty配列からの変更点覚え方">QWERTY配列からの変更点（覚え方）:</h3>
+<p>キーの移動を以下の用にとらえると覚えられます。</p>
+<ul>
+<li>&ldquo;EOIU&rdquo; -&gt; DVRAK配列の位置に移動。 (&ldquo;E&quot;は下一段、子音文字&quot;SDFG&quot;を除去。外側文字は反対の手の外側に順番に移動)</li>
+<li>&ldquo;HJKL&quot;を逆Tのカーソールキー位置関係に移動。(&ldquo;L&quot;を軸に1つづつ移動、ホームを空ける)</li>
+<li>まず、&ldquo;F&rdquo; を左上の空きにななめ1つ移動。</li>
+<li>残りの&quot;SDG&rdquo; をこの順番・位置関係を維持しながらで右の空きスペースに順番に移動。</li>
+</ul>
+<p>まあ、所詮実験ですが、我ながら悪くない気もします。</p>
+<h3 id="qwfrty設計の方針">QWFRTY設計の方針:</h3>
+<ul>
+<li>eucalyn/dvrak配列の用に母音 (aoeiu) を片手に集める</li>
+<li>eucalyn配列の vimのカーソールキー (hjkl) をまとめるアイデアを拝借(但しキー移動は最小化)</li>
+<li>キー移動を必要最小限化する colemak/workman配列のコンセプトは継承。
+<ul>
+<li>11/30のキーが移動(下記の他の半分なので、覚えやすい)</li>
+<li>大移動は7/30キーのみ</li>
+</ul>
+</li>
+</ul>
+<h3 id="qwfrty設計の背景事実">QWFRTY設計の背景事実：</h3>
+<h4 id="文字数頻度指標">文字数頻度指標</h4>
+<p>(log圧縮済み、QMKのソース利用)は以下です。（大きいほどよく出てくるので、使いやすいところに置きたい文字）</p>
+<ul>
+<li><code>s=26.2 d=26.2 f=16.9 g=9.4</code> <code>*.c</code> <code>*.h</code></li>
+<li><code>s=20.1 d=14.4 f=8.2  g=6.7</code> <code>*.md</code></li>
+</ul>
+<h4 id="交互打鍵日本語入力">交互打鍵・日本語入力</h4>
+<p>&ldquo;f&rdquo; は日本ではあまり使わない子音なので、交互打鍵を考えた際に子音だが母音側にあっても悪影響が少ない</p>
+<h4 id="右配置の総合的優先順位">右配置の総合的優先順位</h4>
+<p><code>s &gt; d &gt; g</code></p>
+<h2 id="他のキー配列">他のキー配列</h2>
+<ul>
+<li><a href="https://yushakobo.jp/blog/pluis9/2017/12/thinkkeylayout/">https://yushakobo.jp/blog/pluis9/2017/12/thinkkeylayout/</a></li>
+</ul>
+<p>標準の「QWERTY配列」以外は、新しいキー配列提案が先に並んでいます。</p>
+<p>以下は重要30キーにのみフォーカスし、Ortholinear系の位置表示です。</p>
+<h3 id="qwerty配列">QWERTY配列</h3>
+<pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
+│ Q │ W │ E │ R │ T │      │ Y │ U │ I │ O │ P │
+│ A │ S │ D │ F │ G │      │ H │ J │ K │ L │ ; │
+│ Z │ X │ C │ V │ B │      │ N │ M │ , │ . │ / │
+</code></pre><ul>
+<li>0/30キーが移動(デフォルト)</li>
+</ul>
+<h3 id="eucalyn">Eucalyn</h3>
+<ul>
+<li><a href="https://eucalyn.hatenadiary.jp/entry/saikyo-interface">https://eucalyn.hatenadiary.jp/entry/saikyo-interface</a></li>
+</ul>
+<pre tabindex="0"><code>│ / │ , │ . │ F │ Q │      │ H │ R │ D │ Y │ P │
+│ A │ O │ E │ I │ U │      │ G │ T │ K │ S │ N │
+│ Z │ X │ C │ V │ W │      │ B │ H │ J │ K │ L │
+</code></pre><ul>
+<li>23/30キーが移動</li>
+</ul>
+<h3 id="colemak-mod-dh">Colemak Mod-DH</h3>
+<ul>
+<li><a href="https://colemakmods.github.io/mod-dh/">https://colemakmods.github.io/mod-dh/</a></li>
+</ul>
+<pre tabindex="0"><code>│ Q │ W │ F │ P │ B │      │ J │ L │ U │ Y │ ; │
+│ A │ R │ S │ T │ G │      │ M │ N │ E │ I │ O │
+│ Z │ X │ C │ D │ V │      │ K │ H │ , │ . │ / │
+</code></pre><ul>
+<li>17/30キーが移動</li>
+</ul>
+<h3 id="workman">WORKMAN</h3>
+<ul>
+<li><a href="https://workmanlayout.org/">https://workmanlayout.org/</a></li>
+</ul>
+<pre tabindex="0"><code>│ Q │ D │ R │ W │ B │      │ J │ F │ U │ P │ ; │
+│ A │ S │ H │ T │ G │      │ Y │ N │ E │ O │ I │
+│ Z │ X │ M │ C │ V │      │ K │ L │ , │ . │ / │
+</code></pre><ul>
+<li>21/30キーが移動</li>
+</ul>
+<h3 id="colemak">Colemak</h3>
+<ul>
+<li><a href="https://colemak.com/">https://colemak.com/</a></li>
+</ul>
+<pre tabindex="0"><code>│ Q │ W │ F │ P │ G │      │ J │ L │ U │ Y │ ; │
+│ A │ R │ S │ T │ D │      │ H │ N │ E │ I │ O │
+│ Z │ X │ C │ V │ B │      │ K │ M │ , │ . │ / │
+</code></pre><ul>
+<li>19/30キーが移動</li>
+</ul>
+<h3 id="dvorak-mod-slash">Dvorak mod-slash</h3>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Dvorak_keyboard_layout">https://en.wikipedia.org/wiki/Dvorak_keyboard_layout</a></li>
+</ul>
+<pre tabindex="0"><code>│ / │ , │ . │ P │ Y │      │ F │ G │ C │ R │ L │
+│ A │ O │ E │ U │ I │      │ D │ H │ T │ N │ S │
+│ ; │ Q │ J │ K │ X │      │ B │ M │ W │ V │ Z │
+</code></pre><ul>
+<li>28/30キーが移動</li>
+</ul>
+<p>適用対象がOrtholinear配列のため「<code>'</code>」が「<code>/</code>」となっている。（「<code>'</code>」は真ん中のどのキー配列でも上記枠外の隙間に配置済み）</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/02/07/blackpill-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

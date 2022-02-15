@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/12/11 (initial publish),
-2022/02/12 (last update)
+2022/02/15 (last update)
 </h3>
 </div>
 
@@ -316,8 +316,9 @@ RST 5 WHITE  --------------------+
 <p>LUFAは現在 <code>LUFA-170418-125-gd10535a4b</code>なので当時の11109と違い、LUFAの11109 以降を使うと、
 <a href="https://github.com/abcminiuser/lufa/issues/155">32u4 Caterina はCaterinaをパッチしないとうまく動作しない</a>
 などと言う記事もありますが、それからだいぶ経つので2022年の最新版なら大丈夫かな。</p>
-<p>ちなみに本物のUNOはサブMCU(Atmega8u2)としてUSB-SERIAL変換をするファームウエアーが通常導入されていています。
-このサブMCU自体の書き換えにもちいるブートローダーはシリアル変換ファームウエアーとともに<a href="https://github.com/arduino/ArduinoCore-avr/tree/master/firmwares/atmegaxxu2">Arduino Uno and Mega 2560 Firmwares for the ATmega8U2</a></p>
+<p>ちなみに本物のUNOには、USB-SERIAL変換をするファームウエアーが導入されていたサブMCU(Atmega8u2) が搭載されています。
+このサブMCU自体の書き換えにもちいるブートローダーはシリアル変換ファームウエアーとともに<a href="https://github.com/arduino/ArduinoCore-avr/tree/master/firmwares/atmegaxxu2">Arduino Uno and Mega 2560 Firmwares for the ATmega8U2</a>にあります。
+これは通常のARDUINOの書き換えで書き込まれないようにブートローダーはDFUです。</p>
 <h4 id="sparkfanの改造版caterina-4kb----cdc-ブートローダー">Sparkfanの改造版Caterina (4KB) &ndash; CDC ブートローダー</h4>
 <p><a href="https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/32U4Note.pdf">Sparkfanの改造版Caterinaの特徴</a></p>
 <ul>
