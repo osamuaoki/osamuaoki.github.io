@@ -16,10 +16,12 @@
 結局デフォルトのキー配列に採用したのは、QWERTY配列でした。
 ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。
 さらにこれらの有名配置だと、VIエディターでのカーソール移動がVIのデフォルト設定では難しくなってしまいます。
-ただ、これでは残念なので、「QWFRTY配列」を考え最適化配列実験用に設定しました。おもしろいのでここにメモしておきます。
-QWFRTY配列 私は、11個のキーだけを標準のQWERTYから移動した、下記の「QWFRTY配列」をせっかく作ったQMKを利用したキーボードの非QWERTY配列候補としています。
- LEFT HAND RIGHT HAND │ Q │ W │_F_│ R │ T │ │ Y │_D_│_K_│_G_│ P │ │ A │_O_│_E_│_I_│_U_│ │_S_│_H_│_J_│ L │ ; │ │ Z │ X │ C │ V │ B │ │ N │ M │ , │ . │ / │ QWERTY配列からの変更点（覚え方）: キーの移動を以下の様にとらえると覚えられます。
- &amp;ldquo;EOIU&amp;rdquo; -&amp;gt; DVRAK配列の位置に移動。 (&amp;ldquo;E&amp;quot;は下一段、子音文字&amp;quot;SDFG&amp;quot;を除去。外側文字は反対の手の外側に順番に移動) &amp;ldquo;HJKL&amp;quot;を逆Tのカーソールキー位置関係に移動。(&amp;ldquo;L&amp;quot;を軸に1つづつ移動、ホームを空ける) まず、&amp;ldquo;F&amp;rdquo; を左上の空きにななめ1つ移動。 残りの&amp;quot;SDG&amp;rdquo; をこの順番・位置関係を維持しながらで右の空きスペースに順番に移動。  まあ、所詮実験ですが、我ながら悪くない気もします。</description>
+ただ、これでは残念なので、「QWFRTY配列」を考え最適化配列実験用に設定しました。おもしろいのでここに要点をメモしておきます。
+最新の詳細状況は、私のQMKソースを見ないと分かりませんが。 小さなキーボードでカーソールやINSまで押し込んだので、実際には最右下のキーは、カーソルキーが割り込みもう一つ右に離れています。 ただ直交系キーボード配列なので、比較的に使わない&amp;quot;/&amp;ldquo;キーだし、元々下のキーQWERTYよりは左によっているので問題はないようです。。
+QWFRTY配列 私は、せっかく作ったQMKを利用した自作キーボードのいわゆる最適化キー配列として、11個のキーだけが標準のQWERTYから移動された非QWERTY配列としています。
+ LEFT HAND RIGHT HAND │ Q │ W │_F_│ R │ T │ │ Y │_D_│_K_│_G_│ P │ │ A │_O_│_E_│_I_│_U_│ │_S_│_H_│_J_│ L │ ; │ │ Z │ X │ C │ V │ B │ │ N │ M │ , │ . │ / │ まあ、所詮実験レベルのお遊びですが、我ながら悪くない気もします。
+QWERTY配列からの変更点（覚え方）: キーの移動を以下の様にとらえると覚えられます。
+ &amp;ldquo;EOIU&amp;rdquo; -&amp;gt; DVRAK配列の位置に移動。 (&amp;ldquo;E&amp;quot;は下一段、子音文字&amp;quot;SDFG&amp;quot;を除去。外側文字は反対の手の外側に順番に移動) &amp;ldquo;HJKL&amp;quot;を逆Tのカーソールキー位置関係に移動。(&amp;ldquo;L&amp;quot;を軸に1つづつ移動、ホームを空ける) まず、&amp;ldquo;F&amp;rdquo; を左上の空きにななめ1つ移動。 残りの&amp;quot;SDG&amp;rdquo; をこの順番・位置関係を維持しながらで右の空きスペースに順番に移動。  QWFRTY設計の方針と結果:  eucalyn/dvrak配列の様に母音 (aoeiu) を左手に集める。  交互打鍵をでき、特に日本語との相性も良い 特に頻出の&amp;quot;E&amp;quot;がホームに来るのは大きい それなりによく使う&amp;quot;S&amp;rdquo; &amp;ldquo;D&amp;quot;は動きの良い人差し指   キー移動を必要最小限化する colemak/workman配列のコンセプトは継承。  QWERTYからの移行のメンタルストレスが少ない。   eucalyn配列の vimのカーソールキー (hjkl) をまとめるアイデアを拝借  QWERTYよりむしろ使い安くなった（？）    QWFRTY配列のキー移動の統計:  11/30のキーが移動(下記の他の半分なので、覚えやすい) 大移動は7/30キーのみ  QWFRTY設計の背景事実： 文字数頻度指標 (log圧縮済み、QMKのソース利用)は以下です。（大きいほどよく出てくるので、使いやすいところに置きたい文字）</description>
     </item>
     
     <item>

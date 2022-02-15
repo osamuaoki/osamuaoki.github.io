@@ -65,8 +65,8 @@
     <li><a href="#qwfrty配列">QWFRTY配列</a>
       <ul>
         <li><a href="#qwerty配列からの変更点覚え方">QWERTY配列からの変更点（覚え方）:</a></li>
-        <li><a href="#qwfrty設計の方針">QWFRTY設計の方針:</a></li>
-        <li><a href="#qwfrty配列の結果">QWFRTY配列の結果:</a></li>
+        <li><a href="#qwfrty設計の方針と結果">QWFRTY設計の方針と結果:</a></li>
+        <li><a href="#qwfrty配列のキー移動の統計">QWFRTY配列のキー移動の統計:</a></li>
         <li><a href="#qwfrty設計の背景事実">QWFRTY設計の背景事実：</a></li>
       </ul>
     </li>
@@ -80,6 +80,7 @@
         <li><a href="#dvorak-mod-slash">Dvorak mod-slash</a></li>
       </ul>
     </li>
+    <li><a href="#文字頻度">文字頻度</a></li>
   </ul>
 </nav>
 
@@ -88,14 +89,18 @@
 <p>結局デフォルトのキー配列に採用したのは、QWERTY配列でした。</p>
 <p>ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。</p>
 <p>さらにこれらの有名配置だと、VIエディターでのカーソール移動がVIのデフォルト設定では難しくなってしまいます。</p>
-<p>ただ、これでは残念なので、「QWFRTY配列」を考え最適化配列実験用に設定しました。おもしろいのでここにメモしておきます。</p>
+<p>ただ、これでは残念なので、「QWFRTY配列」を考え最適化配列実験用に設定しました。おもしろいのでここに要点をメモしておきます。</p>
+<p>最新の詳細状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を見ないと分かりませんが。
+小さなキーボードでカーソールやINSまで押し込んだので、実際には最右下のキーは、カーソルキーが割り込みもう一つ右に離れています。
+ただ直交系キーボード配列なので、比較的に使わない&quot;/&ldquo;キーだし、元々下のキーQWERTYよりは左によっているので問題はないようです。。</p>
 <h2 id="qwfrty配列">QWFRTY配列</h2>
-<p>私は、11個のキーだけを標準のQWERTYから移動した、下記の「QWFRTY配列」をせっかく作ったQMKを利用したキーボードの非QWERTY配列候補としています。</p>
+<p>私は、せっかく作ったQMKを利用した自作キーボードのいわゆる最適化キー配列として、11個のキーだけが標準のQWERTYから移動された非QWERTY配列としています。</p>
 <pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
 │ Q │ W │_F_│ R │ T │      │ Y │_D_│_K_│_G_│ P │
 │ A │_O_│_E_│_I_│_U_│      │_S_│_H_│_J_│ L │ ; │
 │ Z │ X │ C │ V │ B │      │ N │ M │ , │ . │ / │
-</code></pre><h3 id="qwerty配列からの変更点覚え方">QWERTY配列からの変更点（覚え方）:</h3>
+</code></pre><p>まあ、所詮実験レベルのお遊びですが、我ながら悪くない気もします。</p>
+<h3 id="qwerty配列からの変更点覚え方">QWERTY配列からの変更点（覚え方）:</h3>
 <p>キーの移動を以下の様にとらえると覚えられます。</p>
 <ul>
 <li>&ldquo;EOIU&rdquo; -&gt; DVRAK配列の位置に移動。 (&ldquo;E&quot;は下一段、子音文字&quot;SDFG&quot;を除去。外側文字は反対の手の外側に順番に移動)</li>
@@ -103,14 +108,27 @@
 <li>まず、&ldquo;F&rdquo; を左上の空きにななめ1つ移動。</li>
 <li>残りの&quot;SDG&rdquo; をこの順番・位置関係を維持しながらで右の空きスペースに順番に移動。</li>
 </ul>
-<p>まあ、所詮実験ですが、我ながら悪くない気もします。</p>
-<h3 id="qwfrty設計の方針">QWFRTY設計の方針:</h3>
+<h3 id="qwfrty設計の方針と結果">QWFRTY設計の方針と結果:</h3>
 <ul>
-<li>eucalyn/dvrak配列の様に母音 (aoeiu) を左手に集める</li>
-<li>キー移動を必要最小限化する colemak/workman配列のコンセプトは継承。</li>
-<li>eucalyn配列の vimのカーソールキー (hjkl) をまとめるアイデアを拝借</li>
+<li>eucalyn/dvrak配列の様に母音 (aoeiu) を左手に集める。
+<ul>
+<li>交互打鍵をでき、特に日本語との相性も良い</li>
+<li>特に頻出の&quot;E&quot;がホームに来るのは大きい</li>
+<li>それなりによく使う&quot;S&rdquo; &ldquo;D&quot;は動きの良い人差し指</li>
 </ul>
-<h3 id="qwfrty配列の結果">QWFRTY配列の結果:</h3>
+</li>
+<li>キー移動を必要最小限化する colemak/workman配列のコンセプトは継承。
+<ul>
+<li>QWERTYからの移行のメンタルストレスが少ない。</li>
+</ul>
+</li>
+<li>eucalyn配列の vimのカーソールキー (hjkl) をまとめるアイデアを拝借
+<ul>
+<li>QWERTYよりむしろ使い安くなった（？）</li>
+</ul>
+</li>
+</ul>
+<h3 id="qwfrty配列のキー移動の統計">QWFRTY配列のキー移動の統計:</h3>
 <ul>
 <li>11/30のキーが移動(下記の他の半分なので、覚えやすい)</li>
 <li>大移動は7/30キーのみ</li>
@@ -142,13 +160,24 @@
 </ul>
 <h3 id="eucalyn">Eucalyn</h3>
 <ul>
-<li><a href="https://eucalyn.hatenadiary.jp/entry/saikyo-interface">https://eucalyn.hatenadiary.jp/entry/saikyo-interface</a></li>
+<li><a href="https://eucalyn.hatenadiary.jp/entry/saikyo-interface">https://eucalyn.hatenadiary.jp/entry/saikyo-interface</a> (2017-12-21 初期形)</li>
 </ul>
-<pre tabindex="0"><code>│ / │ , │ . │ F │ Q │      │ H │ R │ D │ Y │ P │
+<pre tabindex="0"><code>│ / │ , │ . │ F │ Q │      │ M │ R │ D │ Y │ P │
 │ A │ O │ E │ I │ U │      │ G │ T │ K │ S │ N │
 │ Z │ X │ C │ V │ W │      │ B │ H │ J │ L │ ; │
 </code></pre><ul>
-<li>23/30キーが移動</li>
+<li>
+<p>23/30キーが移動</p>
+</li>
+<li>
+<p><a href="https://eucalyn.hatenadiary.jp/entry/about-eucalyn-layout">https://eucalyn.hatenadiary.jp/entry/about-eucalyn-layout</a> (2018-08-31 完成形)</p>
+</li>
+</ul>
+<pre tabindex="0"><code>│ Q │ W │ , │ . │ ; │      │ M │ R │ D │ Y │ P │
+│ A │ O │ E │ I │ U │      │ G │ T │ K │ S │ N │
+│ Z │ X │ C │ V │ F │      │ B │ H │ J │ L │ / │
+</code></pre><ul>
+<li>20/30キーが移動</li>
 </ul>
 <h3 id="colemak-mod-dh">Colemak Mod-DH</h3>
 <ul>
@@ -191,7 +220,37 @@
 <li>28/30キーが移動</li>
 </ul>
 <p>適用対象がOrtholinear配列のため「<code>'</code>」が「<code>/</code>」となっている。（「<code>'</code>」は真ん中のどのキー配列でも上記枠外の隙間に配置済み）</p>
-<!-- raw HTML omitted -->
+<h2 id="文字頻度">文字頻度</h2>
+<p>QMK の<code>quantum/</code>中や<code>docs/</code>中を統計して、スペースの数を１００としている。&quot;<code>*</code>&ldquo;はログ圧縮して大局観が分かるよう担っている。</p>
+<pre tabindex="0"><code>Cソースコード                  ドキュメンテーション中
+&quot; &quot;  = 100.0 **********
+&quot;a&quot;  = 32.2 ********           &quot;a&quot;  = 22.2 *******
+&quot;b&quot;  =  9.5 *****              &quot;b&quot;  =  6.5 *****
+&quot;c&quot;  = 23.7 *******            &quot;c&quot;  = 13.3 ******
+&quot;d&quot;  = 26.2 *******            &quot;d&quot;  = 14.4 ******
+&quot;e&quot;  = 61.9 *********          &quot;e&quot;  = 37.7 ********
+&quot;f&quot;  = 16.9 ******             &quot;f&quot;  =  8.2 *****
+&quot;g&quot;  =  9.4 *****              &quot;g&quot;  =  6.7 *****
+&quot;h&quot;  = 10.3 ******             &quot;h&quot;  = 11.1 ******
+&quot;i&quot;  = 38.3 ********           &quot;i&quot;  = 22.1 *******
+&quot;j&quot;  =  0.5 *                  &quot;j&quot;  =  0.3 *
+&quot;k&quot;  = 10.6 ******             &quot;k&quot;  =  5.5 ****
+&quot;l&quot;  = 18.2 *******            &quot;l&quot;  = 13.5 ******
+&quot;m&quot;  = 14.3 ******             &quot;m&quot;  =  9.8 *****
+&quot;n&quot;  = 30.7 *******            &quot;n&quot;  = 19.4 *******
+&quot;o&quot;  = 31.4 *******            &quot;o&quot;  = 23.4 *******
+&quot;p&quot;  = 13.9 ******             &quot;p&quot;  =  8.3 *****
+&quot;q&quot;  =  0.9 *                  &quot;q&quot;  =  1.0 **
+&quot;r&quot;  = 30.3 *******            &quot;r&quot;  = 19.4 *******
+&quot;s&quot;  = 26.2 *******            &quot;s&quot;  = 20.1 *******
+&quot;t&quot;  = 41.0 ********           &quot;t&quot;  = 27.7 *******
+&quot;u&quot;  = 15.4 ******             &quot;u&quot;  = 10.9 ******
+&quot;v&quot;  =  5.9 *****              &quot;v&quot;  =  3.3 ****
+&quot;w&quot;  =  5.7 *****              &quot;w&quot;  =  4.4 ****
+&quot;x&quot;  =  5.5 ****               &quot;x&quot;  =  1.6 **
+&quot;y&quot;  =  9.3 *****              &quot;y&quot;  =  6.5 *****
+&quot;z&quot;  =  0.5 *                  &quot;z&quot;  =  0.2 *
+</code></pre><!-- raw HTML omitted -->
 
 
 <table width="100%">
