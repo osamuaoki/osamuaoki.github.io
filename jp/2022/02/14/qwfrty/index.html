@@ -66,6 +66,7 @@
       <ul>
         <li><a href="#qwerty配列からの変更点覚え方">QWERTY配列からの変更点（覚え方）:</a></li>
         <li><a href="#qwfrty設計の方針">QWFRTY設計の方針:</a></li>
+        <li><a href="#qwfrty配列の結果">QWFRTY配列の結果:</a></li>
         <li><a href="#qwfrty設計の背景事実">QWFRTY設計の背景事実：</a></li>
       </ul>
     </li>
@@ -86,16 +87,16 @@
 <p>MCUを使ったIOTの初等プロジェクトとして、QMKを利用したキーボードを作りました。</p>
 <p>結局デフォルトのキー配列に採用したのは、QWERTY配列でした。</p>
 <p>ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。</p>
-<p>またVIエディターでのカーソール移動がデフォルト設定では難しくなってしまいます。</p>
-<p>ただ、それでは残念なので、「QWFRTY配列」を最適化配列実験用に設定しました。</p>
+<p>さらにこれらの有名配置だと、VIエディターでのカーソール移動がVIのデフォルト設定では難しくなってしまいます。</p>
+<p>ただ、これでは残念なので、「QWFRTY配列」を考え最適化配列実験用に設定しました。おもしろいのでここにメモしておきます。</p>
 <h2 id="qwfrty配列">QWFRTY配列</h2>
-<p>11個のキーを標準のQWERTYから移動した下記の「QWFRTY配列」をせっかく作ったQMKを利用したキーボードの非QWERTY配列候補としています。</p>
+<p>私は、11個のキーだけを標準のQWERTYから移動した、下記の「QWFRTY配列」をせっかく作ったQMKを利用したキーボードの非QWERTY配列候補としています。</p>
 <pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
 │ Q │ W │_F_│ R │ T │      │ Y │_D_│_K_│_G_│ P │
 │ A │_O_│_E_│_I_│_U_│      │_S_│_H_│_J_│ L │ ; │
 │ Z │ X │ C │ V │ B │      │ N │ M │ , │ . │ / │
 </code></pre><h3 id="qwerty配列からの変更点覚え方">QWERTY配列からの変更点（覚え方）:</h3>
-<p>キーの移動を以下の用にとらえると覚えられます。</p>
+<p>キーの移動を以下の様にとらえると覚えられます。</p>
 <ul>
 <li>&ldquo;EOIU&rdquo; -&gt; DVRAK配列の位置に移動。 (&ldquo;E&quot;は下一段、子音文字&quot;SDFG&quot;を除去。外側文字は反対の手の外側に順番に移動)</li>
 <li>&ldquo;HJKL&quot;を逆Tのカーソールキー位置関係に移動。(&ldquo;L&quot;を軸に1つづつ移動、ホームを空ける)</li>
@@ -105,14 +106,14 @@
 <p>まあ、所詮実験ですが、我ながら悪くない気もします。</p>
 <h3 id="qwfrty設計の方針">QWFRTY設計の方針:</h3>
 <ul>
-<li>eucalyn/dvrak配列の用に母音 (aoeiu) を片手に集める</li>
-<li>eucalyn配列の vimのカーソールキー (hjkl) をまとめるアイデアを拝借(但しキー移動は最小化)</li>
-<li>キー移動を必要最小限化する colemak/workman配列のコンセプトは継承。
+<li>eucalyn/dvrak配列の様に母音 (aoeiu) を左手に集める</li>
+<li>キー移動を必要最小限化する colemak/workman配列のコンセプトは継承。</li>
+<li>eucalyn配列の vimのカーソールキー (hjkl) をまとめるアイデアを拝借</li>
+</ul>
+<h3 id="qwfrty配列の結果">QWFRTY配列の結果:</h3>
 <ul>
 <li>11/30のキーが移動(下記の他の半分なので、覚えやすい)</li>
 <li>大移動は7/30キーのみ</li>
-</ul>
-</li>
 </ul>
 <h3 id="qwfrty設計の背景事実">QWFRTY設計の背景事実：</h3>
 <h4 id="文字数頻度指標">文字数頻度指標</h4>
@@ -130,7 +131,7 @@
 <li><a href="https://yushakobo.jp/blog/pluis9/2017/12/thinkkeylayout/">https://yushakobo.jp/blog/pluis9/2017/12/thinkkeylayout/</a></li>
 </ul>
 <p>標準の「QWERTY配列」以外は、新しいキー配列提案が先に並んでいます。</p>
-<p>以下は重要30キーにのみフォーカスし、Ortholinear系の位置表示です。</p>
+<p>以下は重要30キーにのみフォーカスし、Ortholinear系・ERGODOX系を意識した位置表示です。</p>
 <h3 id="qwerty配列">QWERTY配列</h3>
 <pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
 │ Q │ W │ E │ R │ T │      │ Y │ U │ I │ O │ P │
