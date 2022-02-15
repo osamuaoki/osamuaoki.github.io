@@ -221,7 +221,7 @@
 </ul>
 <p>適用対象がOrtholinear配列のため「<code>'</code>」が「<code>/</code>」となっている。（「<code>'</code>」は真ん中のどのキー配列でも上記枠外の隙間に配置済み）</p>
 <h2 id="文字頻度">文字頻度</h2>
-<p>QMK の<code>quantum/</code>中や<code>docs/</code>中を統計して、スペースの数を１００としている。&quot;<code>*</code>&ldquo;はログ圧縮して大局観が分かるよう担っている。</p>
+<p>QMK の<code>quantum/</code>中や<code>docs/</code>中を統計して、スペースの数を１００としている。&quot;<code>*</code>&ldquo;はログ圧縮して大局観が分かるようになっています。</p>
 <pre tabindex="0"><code>Cソースコード                  ドキュメンテーション中
 &quot; &quot;  = 100.0 **********
 &quot;a&quot;  = 32.2 ********           &quot;a&quot;  = 22.2 *******
@@ -250,7 +250,22 @@
 &quot;x&quot;  =  5.5 ****               &quot;x&quot;  =  1.6 **
 &quot;y&quot;  =  9.3 *****              &quot;y&quot;  =  6.5 *****
 &quot;z&quot;  =  0.5 *                  &quot;z&quot;  =  0.2 *
-</code></pre><!-- raw HTML omitted -->
+</code></pre><p>ちなみにCの場合記号でスペース比較で約４％以上の頻度は以下だけでした。</p>
+<pre tabindex="0"><code>&quot; &quot;  = 100.0 **********
+&quot;&quot;&quot;  =  3.5 ****
+&quot;#&quot;  =  6.2 *****
+&quot;(&quot;  = 10.5 ******
+&quot;)&quot;  = 10.5 ******
+&quot;*&quot;  =  6.2 *****
+&quot;,&quot;  =  6.7 *****
+&quot;.&quot;  =  4.4 ****
+&quot;/&quot;  =  6.4 *****
+&quot;0&quot;  =  6.3 *****
+&quot;;&quot;  =  7.0 *****
+&quot;=&quot;  =  4.8 ****
+&quot;_&quot;  = 35.9 ********
+</code></pre><p>これもあって「<code>_</code> 」 はスプリット直交配置の真ん中に特別にシフト無しでアクセスできるようにしてます。</p>
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
