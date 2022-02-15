@@ -86,15 +86,19 @@
 
 <h2 id="背景">背景</h2>
 <p>MCUを使ったIOTの初等プロジェクトとして、QMKを利用したキーボードを作りました。</p>
+<p><img src="/img/cgc56.jpg" alt="4x14 ortholinear配列キーボード(cgc56)"></p>
 <p>結局デフォルトのキー配列に採用したのは、QWERTY配列でした。</p>
 <p>ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。</p>
 <p>さらにこれらの有名配置だと、VIエディターでのカーソール移動がVIのデフォルト設定では難しくなってしまいます。</p>
-<p>ただ、これでは残念なので、「QWFRTY配列」を考え最適化配列実験用に設定しました。おもしろいのでここに要点をメモしておきます。</p>
+<p>元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決がスタートで、それを<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、残念なので苦労しない範囲でDVRAKに近づくために「QWFRTY配列」を考え、最適化配列経験実験用に設定しました。</p>
+<p>意外とおもしろい物ができたのでので、ここに要点等をメモしておきます。</p>
 <p>最新の詳細状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を見ないと分かりませんが。
 小さなキーボードでカーソールやINSまで押し込んだので、実際には最右下のキーは、カーソルキーが割り込みもう一つ右に離れています。
-ただ直交系キーボード配列なので、比較的に使わない&quot;/&ldquo;キーだし、元々下のキーQWERTYよりは左によっているので問題はないようです。。</p>
+ただ直交系キーボード配列なので、比較的に使わない&quot;/&ldquo;キーだし、元々下のキーQWERTYよりは左によっているので問題はないようです。。
+ちなみに今回完成したキーボードは、PLANCKより4x14と幅があることを利用して、左右の手の間隔をとり、できた真ん中の余分の部分に頻出記号キーを押し込んでいます。</p>
 <h2 id="qwfrty配列">QWFRTY配列</h2>
-<p>私は、せっかく作ったQMKを利用した自作キーボードのいわゆる最適化キー配列として、11個のキーだけが標準のQWERTYから移動された非QWERTY配列としています。</p>
+<p>私は、せっかく作ったQMKを利用した自作キーボードのいわゆる最適化キー配列として、11個のキーだけが標準の「QWERTY配列」から移動された配列としています。</p>
+<p>名前は１文字違いでややこしいですが、「<strong>QWFRTY配列</strong>」としました。</p>
 <pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
 │ Q │ W │_F_│ R │ T │      │ Y │_D_│_K_│_G_│ P │
 │ A │_O_│_E_│_I_│_U_│      │_S_│_H_│_J_│ L │ ; │
@@ -224,46 +228,97 @@
 <p>QMK の<code>quantum/</code>中や<code>docs/</code>中を統計して、スペースの数を１００としている。&quot;<code>*</code>&ldquo;はログ圧縮して大局観が分かるようになっています。</p>
 <pre tabindex="0"><code>Cソースコード                  ドキュメンテーション中
 &quot; &quot;  = 100.0 **********
-&quot;a&quot;  = 32.2 ********           &quot;a&quot;  = 22.2 *******
-&quot;b&quot;  =  9.5 *****              &quot;b&quot;  =  6.5 *****
-&quot;c&quot;  = 23.7 *******            &quot;c&quot;  = 13.3 ******
-&quot;d&quot;  = 26.2 *******            &quot;d&quot;  = 14.4 ******
 &quot;e&quot;  = 61.9 *********          &quot;e&quot;  = 37.7 ********
-&quot;f&quot;  = 16.9 ******             &quot;f&quot;  =  8.2 *****
-&quot;g&quot;  =  9.4 *****              &quot;g&quot;  =  6.7 *****
-&quot;h&quot;  = 10.3 ******             &quot;h&quot;  = 11.1 ******
+&quot;t&quot;  = 41.0 ********           &quot;t&quot;  = 27.7 *******
+&quot;a&quot;  = 32.2 ********           &quot;a&quot;  = 22.2 *******
 &quot;i&quot;  = 38.3 ********           &quot;i&quot;  = 22.1 *******
-&quot;j&quot;  =  0.5 *                  &quot;j&quot;  =  0.3 *
-&quot;k&quot;  = 10.6 ******             &quot;k&quot;  =  5.5 ****
-&quot;l&quot;  = 18.2 *******            &quot;l&quot;  = 13.5 ******
-&quot;m&quot;  = 14.3 ******             &quot;m&quot;  =  9.8 *****
-&quot;n&quot;  = 30.7 *******            &quot;n&quot;  = 19.4 *******
 &quot;o&quot;  = 31.4 *******            &quot;o&quot;  = 23.4 *******
-&quot;p&quot;  = 13.9 ******             &quot;p&quot;  =  8.3 *****
-&quot;q&quot;  =  0.9 *                  &quot;q&quot;  =  1.0 **
+&quot;n&quot;  = 30.7 *******            &quot;n&quot;  = 19.4 *******
 &quot;r&quot;  = 30.3 *******            &quot;r&quot;  = 19.4 *******
 &quot;s&quot;  = 26.2 *******            &quot;s&quot;  = 20.1 *******
-&quot;t&quot;  = 41.0 ********           &quot;t&quot;  = 27.7 *******
+&quot;d&quot;  = 26.2 *******            &quot;d&quot;  = 14.4 ******
+&quot;c&quot;  = 23.7 *******            &quot;c&quot;  = 13.3 ******
+&quot;l&quot;  = 18.2 *******            &quot;l&quot;  = 13.5 ******
+&quot;f&quot;  = 16.9 ******             &quot;f&quot;  =  8.2 *****
 &quot;u&quot;  = 15.4 ******             &quot;u&quot;  = 10.9 ******
+&quot;m&quot;  = 14.3 ******             &quot;m&quot;  =  9.8 *****
+&quot;p&quot;  = 13.9 ******             &quot;p&quot;  =  8.3 *****
+&quot;k&quot;  = 10.6 ******             &quot;k&quot;  =  5.5 ****
+&quot;h&quot;  = 10.3 ******             &quot;h&quot;  = 11.1 ******
+&quot;b&quot;  =  9.5 *****              &quot;b&quot;  =  6.5 *****
+&quot;g&quot;  =  9.4 *****              &quot;g&quot;  =  6.7 *****
+&quot;y&quot;  =  9.3 *****              &quot;y&quot;  =  6.5 *****
 &quot;v&quot;  =  5.9 *****              &quot;v&quot;  =  3.3 ****
 &quot;w&quot;  =  5.7 *****              &quot;w&quot;  =  4.4 ****
 &quot;x&quot;  =  5.5 ****               &quot;x&quot;  =  1.6 **
-&quot;y&quot;  =  9.3 *****              &quot;y&quot;  =  6.5 *****
+&quot;q&quot;  =  0.9 *                  &quot;q&quot;  =  1.0 **
+&quot;j&quot;  =  0.5 *                  &quot;j&quot;  =  0.3 *
 &quot;z&quot;  =  0.5 *                  &quot;z&quot;  =  0.2 *
-</code></pre><p>ちなみにCの場合記号でスペース比較で約４％以上の頻度は以下だけでした。</p>
+</code></pre><p>ここで高頻度の子音文字「tnrsdcl」の非母音側への集中度と母音集中側の母音の数をみます：</p>
+<table>
+<thead>
+<tr>
+<th>キー配列</th>
+<th>頻出小文字集中:</th>
+<th>母音集中</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>QUFRTY</strong></td>
+<td>4/7</td>
+<td>5/5</td>
+</tr>
+<tr>
+<td>DVRAK</td>
+<td>7/7</td>
+<td>5/5</td>
+</tr>
+<tr>
+<td>Eucalyn</td>
+<td>6/7</td>
+<td>5/5</td>
+</tr>
+<tr>
+<td>Colemak</td>
+<td>5/7</td>
+<td>4/5</td>
+</tr>
+<tr>
+<td>WORKMAN</td>
+<td>5/7</td>
+<td>4/5</td>
+</tr>
+<tr>
+<td>Colemak dh</td>
+<td>5/7</td>
+<td>4/5</td>
+</tr>
+<tr>
+<td>QUERTY</td>
+<td>5/7</td>
+<td>3/5</td>
+</tr>
+</tbody>
+</table>
+<p><strong>QWFRTY</strong>
+はキー移動を避けたため、最頻出の「<code>T</code>」が母音側のままという問題が出ています。
+でも<code>TH</code>などの子音同士の連続の交互打鍵は確保できていますので、捨てたものではありません。
+とにかく変更が少なく、母音が集中するのがいい感じです。</p>
+<p>ちなみにCの場合記号でスペース比較で約４％以上の頻度は以下だけでした。</p>
 <pre tabindex="0"><code>&quot; &quot;  = 100.0 **********
-&quot;&quot;&quot;  =  3.5 ****
-&quot;#&quot;  =  6.2 *****
+&quot;_&quot;  = 35.9 ********
 &quot;(&quot;  = 10.5 ******
 &quot;)&quot;  = 10.5 ******
-&quot;*&quot;  =  6.2 *****
+&quot;;&quot;  =  7.0 *****
 &quot;,&quot;  =  6.7 *****
+&quot;#&quot;  =  6.2 *****
+&quot;*&quot;  =  6.2 *****
 &quot;.&quot;  =  4.4 ****
 &quot;/&quot;  =  6.4 *****
 &quot;0&quot;  =  6.3 *****
-&quot;;&quot;  =  7.0 *****
 &quot;=&quot;  =  4.8 ****
-&quot;_&quot;  = 35.9 ********
+&quot;&quot;&quot;  =  3.5 ****
 </code></pre><p>これもあって「<code>_</code> 」 はスプリット直交配置の真ん中に特別にシフト無しでアクセスできるようにしてます。</p>
 <!-- raw HTML omitted -->
 
