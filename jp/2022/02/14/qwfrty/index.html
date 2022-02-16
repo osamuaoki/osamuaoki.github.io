@@ -88,18 +88,15 @@
 <h2 id="背景">背景</h2>
 <p>MCUを使ったIOTの初等プロジェクトとして、QMKを利用したキーボードを作りました。</p>
 <p><img src="/img/cgc56.jpg" alt="4x14 ortholinear配列キーボード(cgc56)"></p>
-<p>結局デフォルトのキー配列に採用したのは、QWERTY配列でした。</p>
-<p>ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。</p>
-<p>さらにこれらの有名配置だと、VIエディターでのカーソール移動がVIのデフォルト設定では難しくなってしまいます。</p>
-<p>元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決がスタートで、それを<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、残念なので苦労しない範囲でDVRAKに近づくために「QWFRTY配列」を考え、最適化配列経験実験用に設定しました。</p>
-<p>意外とおもしろい物ができたのでので、ここに要点等をメモしておきます。</p>
-<p>最新の詳細状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を見ないと分かりませんが。
-小さなキーボードでカーソールやINSまで押し込んだので、実際には最右下のキーは、カーソルキーが割り込みもう一つ右に離れています。
+<p>デフォルトのキー配列に採用したのは、QWERTY配列でした。ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動がVIのデフォルト設定では難しくなってしまいます。)</p>
+<p>ただ、元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決目的のキーボードでした。これだけなら<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、残念なので苦労しない範囲でDVRAKに近づくために「QWFRTY配列」を考え、最適化配列を経験実験用として設定しました。</p>
+<p><img src="/img/QWFRTY-simple.png" alt="QWFRTY簡単"></p>
+<p>使ってみて意外とおもしろいので、ここに要点等をメモしておきます。</p>
+<p>小さなキーボードでカーソールやINSまで押し込んだので、実際には最右下のキーは、カーソルキーが割り込みもう一つ右に離れています。
 ただ直交系キーボード配列なので、比較的に使わない&quot;/&ldquo;キーだし、元々下のキーQWERTYよりは左によっているので問題はないようです。。
 ちなみに今回完成したキーボードは、PLANCKより4x14と幅があることを利用して、左右の手の間隔をとり、できた真ん中の余分の部分に頻出記号キーを押し込んでいます。</p>
 <h2 id="qwfrty配列">QWFRTY配列</h2>
 <p>私は、せっかく作ったQMKを利用した自作キーボードのいわゆる最適化キー配列として、11個のキーだけが標準の「QWERTY配列」から移動された配列としています。</p>
-<p><img src="/img/QWFRTY-simple.png" alt="QWFRTY簡単"></p>
 <p>名前は、１文字違いでややこしいですが、「<strong>QWFRTY配列</strong>」としました。キーは位置の要点を抜き出すと以下です。</p>
 <pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
 │ Q │ W │_F_│ R │ T │      │ Y │_D_│_K_│_G_│ P │
@@ -337,8 +334,10 @@
 <p>さらに、スペースキーは、実質6つあります。スペース連打用が１つ、あとは shift, control, Alt, FnUp, FnDnとタップを使って兼用です。</p>
 <p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-</code>`トグルではなく<code>shift-space</code> や<code>control-space</code>でローマ字かな入力と英字入力の間を往復してます。(これはGNOMEだけでなくWINDWS環境でも共通でできます。)
 この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。隣を叩いてもだいたいOKです。</p>
-<p><img src="/img/QWFRTY.png" alt="QWFRTY詳細">
-<a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a></p>
+<p>最新の詳細状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を見ないと分かりません。</p>
+<p><img src="/img/QWFRTY.png" alt="QWFRTY詳細"></p>
+<p>PLANCK他のキーボードより幅が有り、両手間隔がとれ猫背にならずに使えます。また小指の使用を抑えたので指にやさしいと思います。</p>
+<p><a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a></p>
 <!-- raw HTML omitted -->
 
 
