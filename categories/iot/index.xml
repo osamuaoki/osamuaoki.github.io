@@ -104,6 +104,7 @@ $ make help QMK Firmware 0.15.12 make: *** No rule to make target &#39;help&#39;
 USB系のAVRで、変数名等の細かなところにとにかく疑問が出れば、/usr/lib/avr/include/以下を見れば分かります。。
  /usr/lib/avr/include/avr/iom32u4.h &amp;ndash; teensy2.0 (ATmega32u4) /usr/lib/avr/include/avr/iousb1286.h &amp;ndash; teensy2.0++ (AT90USB1286)  FUSEビットのSET FUSEビットは、プログラム設定されると「0」で、プログラム解除されると「1」です。 不揮発メモリーのリセット状態が1なので、こうされている理屈は分かるのですが、通常のPIN信号電位等と逆で混乱します。
  プログラム設定(条件合致) = 対応ビット 0 プログラム設定(条件不合致) = 対応ビット 1  電源投入時ちゃんとファームウエアーが立ち上がるには、BOOTRSTは1にして application reset (address 0x0000)としないといけません。 (BOOTRSTは0だと Reset vector = boot loader resetとなり、メモリー末尾に行きます。)
+FUSEの設定変更(JTAG) FUSEの設定変更は当然ですが要注意です。　よく考えずにJTAGをENABLEしたら、一部GPIOピンが動作しなくなって驚きました。
 BOOT MODE (HWBE)のこと USB系のAVRの起動の基本確認事項として、BOOTのモードの状況を確認します。
 ARDUINO LEONARDO やTEENSY系の基板のPE2 (ALE,/HWBE)では、1K等で接地されています。だから、実際に出会うボードのリセットボタンが押された際のBOOT挙動は以下です。
  通常PE2は接地電位なので、リセットを押したらHWBEヒューズがON(0)にされてると、ブートローダーの起動となる。 強引にPE2(ALE)をVCCに繋いだ状態で、リセットだとHWBEヒューズ設定によらず、アプリファームが起動する。(その間1Kに電気が5mAも流れますが。) HWBEがOFF(1)の場合、PE2によらず常にアプリファームが起動する。  ISP接続によるMCUのプログラミング AVR-ISP II等を使うと、ブートローダーも何もない状態ででもISP接続でMCUに直接プログラム書き込みができます。

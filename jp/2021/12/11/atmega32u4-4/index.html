@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/12/11 (initial publish),
-2022/02/15 (last update)
+2022/02/16 (last update)
 </h3>
 </div>
 
@@ -63,6 +63,7 @@
   <ul>
     <li><a href="#開発環境">開発環境</a></li>
     <li><a href="#fuseビットのset">FUSEビットのSET</a></li>
+    <li><a href="#fuseの設定変更jtag">FUSEの設定変更(JTAG)</a></li>
     <li><a href="#boot-mode-hwbeのこと">BOOT MODE (HWBE)のこと</a></li>
     <li><a href="#isp接続によるmcuのプログラミング">ISP接続によるMCUのプログラミング</a>
       <ul>
@@ -108,6 +109,8 @@
 </ul>
 <p>電源投入時ちゃんとファームウエアーが立ち上がるには、BOOTRSTは1にして application reset (address 0x0000)としないといけません。
 (BOOTRSTは0だと Reset vector = boot loader resetとなり、メモリー末尾に行きます。)</p>
+<h2 id="fuseの設定変更jtag">FUSEの設定変更(JTAG)</h2>
+<p>FUSEの設定変更は当然ですが要注意です。　よく考えずにJTAGをENABLEしたら、一部GPIOピンが動作しなくなって驚きました。</p>
 <h2 id="boot-mode-hwbeのこと">BOOT MODE (HWBE)のこと</h2>
 <p>USB系のAVRの起動の基本確認事項として、BOOTのモードの状況を確認します。</p>
 <p>ARDUINO LEONARDO やTEENSY系の基板のPE2 (ALE,/HWBE)では、1K等で接地されています。だから、実際に出会うボードのリセットボタンが押された際のBOOT挙動は以下です。</p>
