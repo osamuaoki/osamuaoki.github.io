@@ -89,8 +89,9 @@
 <p>MCUを使ったIOTの初等プロジェクトとして、<a href="https://github.com/osamuaoki/cg56">cgc56というQMKを利用したキーボード</a>を作りました。</p>
 <p><img src="/img/cgc56.jpg" alt="4x14 ortholinear配列キーボード(cgc56)"></p>
 <p>デフォルトのキー配列に採用したのは、QWERTY配列でした。ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動がVIのデフォルト設定では難しくなってしまいます。)</p>
-<p>ただ、元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決目的のキーボードでした。これだけなら<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、残念なので苦労しない範囲でDVRAKに近づくために「QWFRTY配列」を考え、最適化配列を経験実験用として設定しました。</p>
+<p>ただ、元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決目的のキーボードでした。これだけなら<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、それだけでは残念なので、苦労しない範囲でDVRAKの交互打鍵に近づくために「QWFRTY配列」を考え、最適化配列を考えてみました。</p>
 <p><img src="/img/QWFRTY-simple.png" alt="QWFRTY簡単"></p>
+<p><a href="http://www.keyboard-layout-editor.com/#/gists/5d4ef725c32a4cbb8f4566a2de603527">cgc56 QWFRTY キーボードデータ 簡易版</a></p>
 <p>使ってみて意外とおもしろいので、ここに要点等をメモしておきます。</p>
 <p>小さなキーボードでカーソールやINSまで押し込んだので、実際には最右下のキーは、カーソルキーが割り込みもう一つ右に離れています。
 ただ直交系キーボード配列なので、比較的に使わない&quot;/&ldquo;キーだし、元々下のキーQWERTYよりは左によっているので問題はないようです。
@@ -98,27 +99,26 @@
 <h2 id="qwfrty配列">QWFRTY配列</h2>
 <p>私は、せっかく作ったQMKを利用した自作キーボードのいわゆる最適化キー配列として、11個のキーだけが標準の「QWERTY配列」から移動された配列としています。</p>
 <p>名前は、１文字違いでややこしいですが、「<strong>QWFRTY配列</strong>」としました。キーは位置の要点を抜き出すと以下です。</p>
+<p>左手のホームポジションは５０音順です。</p>
 <pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
 │ Q │ W │_F_│ R │ T │      │ Y │_D_│_K_│_G_│ P │
-│ A │_O_│_E_│_I_│_U_│      │_S_│_H_│_J_│ L │ ; │
+│ A │_I_│_U_│_E_│_O_│      │_S_│_H_│_J_│ L │ ; │
 │ Z │ X │ C │ V │ B │      │ N │ M │ , │ . │ / │
 </code></pre><p>まあ、所詮実験レベルのお遊びですが、我ながら悪くない気もします。</p>
-<p><a href="http://www.keyboard-layout-editor.com/#/gists/5d4ef725c32a4cbb8f4566a2de603527">cgc56 QWFRTY キーボードデータ 簡易版</a></p>
 <h3 id="qwerty配列からの変更点覚え方">QWERTY配列からの変更点（覚え方）:</h3>
 <p>キーの移動を以下の様にとらえると覚えられます。</p>
 <ul>
-<li>&ldquo;EOIU&rdquo; -&gt; DVRAK配列の位置に移動。 (&ldquo;E&quot;は下一段、子音文字&quot;SDFG&quot;を除去。外側文字は反対の手の外側に順番に移動)</li>
+<li>&ldquo;IUEO&quot;は５０音順に&quot;A&quot;に続けて配列。 (&ldquo;E&quot;は&quot;F&quot;と場所交換、&ldquo;SDG&quot;は外しておく)</li>
 <li>&ldquo;HJKL&quot;を逆Tのカーソールキー位置関係に移動。(&ldquo;L&quot;を軸に1つづつ移動、ホームを空ける)</li>
-<li>まず、&ldquo;F&rdquo; を左上の空きにななめ1つ移動。</li>
-<li>残りの&quot;SDG&rdquo; をこの順番・位置関係を維持しながらで右の空きスペースに順番に移動。</li>
+<li>&ldquo;SDG&rdquo; をこの順番・位置関係を維持しながらで右の空きスペースに順番に移動。</li>
 </ul>
 <h3 id="qwfrty設計の方針と結果">QWFRTY設計の方針と結果:</h3>
 <ul>
-<li>eucalyn/dvrak配列の様に母音 (aoeiu) を左手に集める。
+<li>eucalyn/dvrak配列の様に母音 (aoeiu) を左手に集めるコンセプトは継承。
 <ul>
-<li>交互打鍵をでき、特に日本語との相性も良い</li>
-<li>特に頻出の&quot;E&quot;がホームに来るのは大きい</li>
-<li>それなりによく使う&quot;S&rdquo; &ldquo;D&quot;は動きの良い人差し指</li>
+<li>交互打鍵をでき、特に日本語との相性も良い。</li>
+<li>特に頻出の&quot;E&quot;がホームの動きの良い人差し指の下。（順番もこの方が覚えやすい）</li>
+<li>それなりによく使う&quot;S&rdquo; &ldquo;D&quot;は動きの良い人差し指で操作。</li>
 </ul>
 </li>
 <li>キー移動を必要最小限化する colemak/workman配列のコンセプトは継承。
