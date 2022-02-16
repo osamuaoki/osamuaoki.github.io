@@ -99,12 +99,14 @@
 ちなみに今回完成したキーボードは、PLANCKより4x14と幅があることを利用して、左右の手の間隔をとり、できた真ん中の余分の部分に頻出記号キーを押し込んでいます。</p>
 <h2 id="qwfrty配列">QWFRTY配列</h2>
 <p>私は、せっかく作ったQMKを利用した自作キーボードのいわゆる最適化キー配列として、11個のキーだけが標準の「QWERTY配列」から移動された配列としています。</p>
-<p>名前は１文字違いでややこしいですが、「<strong>QWFRTY配列</strong>」としました。</p>
+<p><img src="/img/QWFRTY-simple.png" alt="QWFRTY簡単"></p>
+<p>名前は、１文字違いでややこしいですが、「<strong>QWFRTY配列</strong>」としました。キーは位置の要点を抜き出すと以下です。</p>
 <pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
 │ Q │ W │_F_│ R │ T │      │ Y │_D_│_K_│_G_│ P │
 │ A │_O_│_E_│_I_│_U_│      │_S_│_H_│_J_│ L │ ; │
 │ Z │ X │ C │ V │ B │      │ N │ M │ , │ . │ / │
 </code></pre><p>まあ、所詮実験レベルのお遊びですが、我ながら悪くない気もします。</p>
+<p><a href="http://www.keyboard-layout-editor.com/#/gists/5d4ef725c32a4cbb8f4566a2de603527">cgc56 QWFRTY キーボードデータ 簡易版</a></p>
 <h3 id="qwerty配列からの変更点覚え方">QWERTY配列からの変更点（覚え方）:</h3>
 <p>キーの移動を以下の様にとらえると覚えられます。</p>
 <ul>
@@ -146,8 +148,8 @@
 <li><code>s=20.1 d=14.4 f=8.2  g=6.7</code> <code>*.md</code></li>
 </ul>
 <h4 id="交互打鍵日本語入力">交互打鍵・日本語入力</h4>
-<p>&ldquo;f&rdquo; は日本ではあまり使わない子音なので、交互打鍵を考えた際に子音だが母音側にあっても悪影響が少ない</p>
-<h4 id="右配置の総合的優先順位">右配置の総合的優先順位</h4>
+<p>&ldquo;f&rdquo; は日本ではあまり使わない子音なので、交互打鍵を考えた際にも子音だが母音側にあっても&quot;g&quot;より悪影響が少ない。英語環境では、ともに中以下の頻度なので大差ない。</p>
+<h4 id="右配置の移動文字間の優先順位">右配置の移動文字間の優先順位</h4>
 <p><code>s &gt; d &gt; g</code></p>
 <h2 id="他のキー配列">他のキー配列</h2>
 <ul>
@@ -333,8 +335,10 @@
 <p>上記統計結果もあって、「<code>_</code> 」 はスプリット直交配置の真ん中に特別にシフト無しでアクセスできるようにしてます。
 また&rdquo;(&ldquo;と&rdquo;)&ldquo;は定位置のFn片押しの&rdquo;,&ldquo;と&rdquo;/&ldquo;以外に、Fn両押しですが押しやすい真ん中にも配置しました。</p>
 <p>さらに、スペースキーは、実質6つあります。スペース連打用が１つ、あとは shift, control, Alt, FnUp, FnDnとタップを使って兼用です。</p>
-<p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-\``トグルではなく</code>shift-space<code> や</code>control-space`でローマ字かな入力と英字入力の間を往復してます。(これはGNOMEだけでなくWINDWS環境でも共通でできます。)
+<p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-</code>`トグルではなく<code>shift-space</code> や<code>control-space</code>でローマ字かな入力と英字入力の間を往復してます。(これはGNOMEだけでなくWINDWS環境でも共通でできます。)
 この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。隣を叩いてもだいたいOKです。</p>
+<p><img src="/img/QWFRTY.png" alt="QWFRTY詳細">
+<a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a></p>
 <!-- raw HTML omitted -->
 
 
