@@ -90,8 +90,8 @@
 <p><img src="/img/cgc56.jpg" alt="4x14 ortholinear配列キーボード(cgc56)"></p>
 <p>デフォルトのキー配列に採用したのは、QWERTY配列でした。ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動がVIのデフォルト設定では難しくなってしまいます。)</p>
 <p>ただ、元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決目的のキーボードでした。これだけなら<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、それだけでは残念なので、苦労しない範囲でDVRAKの交互打鍵に近づくために「QWFRTY配列」を考え、最適化配列を考えてみました。</p>
-<p><img src="/img/QWFRTY-simple.png" alt="QWFRTY簡単"></p>
-<p><a href="http://www.keyboard-layout-editor.com/#/gists/5d4ef725c32a4cbb8f4566a2de603527">cgc56 QWFRTY キーボードデータ 簡易版</a></p>
+<p><img src="/img/QWFRTY-simple.png" alt="QWFRTY簡単">
+<a href="http://www.keyboard-layout-editor.com/#/gists/5d4ef725c32a4cbb8f4566a2de603527">cgc56 QWFRTY キーボードデータ 簡易版</a></p>
 <p>使ってみて意外とおもしろいので、ここに要点等をメモしておきます。</p>
 <p>小さなキーボードでカーソールやINSまで押し込んだので、実際には最右下のキーは、カーソルキーが割り込みもう一つ右に離れています。
 ただ直交系キーボード配列なので、比較的に使わない&quot;/&ldquo;キーだし、元々下のキーQWERTYよりは左によっているので問題はないようです。
@@ -333,12 +333,12 @@
 <p>上記統計結果もあって、「<code>_</code> 」 はスプリット直交配置の真ん中に特別にシフト無しでアクセスできるようにしてます。
 また&rdquo;(&ldquo;と&rdquo;)&ldquo;は定位置のFn片押しの&rdquo;,&ldquo;と&rdquo;/&ldquo;以外に、Fn両押しですが押しやすい真ん中にも配置しました。</p>
 <p>さらに、スペースキーは、実質6つあります。スペース連打用が１つ、あとは shift, control, Alt, FnUp, FnDnとタップを使って兼用です。</p>
-<p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-</code>`トグルではなく<code>shift-space</code> や<code>control-space</code>でローマ字かな入力と英字入力の間を往復してます。(これはGNOMEだけでなくWINDWS環境でも共通でできます。)
-この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。隣を叩いてもだいたいOKです。</p>
-<p>最新の詳細状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を見ないと分かりません。</p>
-<p><img src="/img/QWFRTY.png" alt="QWFRTY詳細"></p>
+<p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-</code>`トグルではなく<code>shift-space</code> や<code>control-space</code>でローマ字かな入力と英字入力の間を往復してます。(この設定はMac風の気がします。<a href="/jp/2019/03/23/gnome-uskb-im-select/">GNOME環境</a>や<a href="https://www.lifehacker.jp/article/235889windows10-typing-tips/">WINDWS環境</a>だとデフォルトではないですが簡単に設定実現できます。)
+この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。右を押してから左のタップか、はたまた左を押してから右のタップかでローマ字かな入力と英字入力の間を往復できます。この際に、狙った隣のFnが押されたりタップされてもOKです。</p>
+<p><img src="/img/QWFRTY.png" alt="QWFRTY詳細">
+<a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a>。
+最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を確認するのが一番確実ではあります。</p>
 <p>PLANCK他のキーボードより幅が有り、両手間隔がとれ猫背にならずに使えます。また小指の使用を抑えたので指にやさしいと思います。</p>
-<p><a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a></p>
 <p>ちなみに、母音文字を集める際に採用した&quot;AIUEO&quot;配列ですが、「なぜ&quot;E&quot;の使用指が変わらない配列や、はたまた他の配列でないのか？」といわれたら、「特段の理由はないが、中指使用を抑えたい個人的事情と覚えやすさ」というのが実感です。DVORAK配列の&quot;AOEUI&quot;や、頻度での優先順位を考えた&quot;AOIEU&quot;や&quot;AOEIU&quot;でも充分いい気がします。</p>
 <p>とにかく、ここまでの細かい個人的事情にも自由に対応できるのがQMKキーボードの良いところです。</p>
 <p>vimで<code>inoremap jk &lt;ESC&gt;</code>等としてたら、ホームのみの<code>inoremap jj &lt;ESC&gt;</code>や<code>inoremap jh &lt;ESC&gt;</code>等とでもする方が良いかもしれません。</p>
