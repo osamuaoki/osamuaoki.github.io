@@ -31,8 +31,8 @@ QWERTY配列からの変更点（覚え方）: キーの移動を以下の様に
       <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
       
       <guid>/jp/2022/02/07/blackpill-1/</guid>
-      <description>基本のSTM32F系の安価だけど、純正STMチップ(同等品でない)が載っている 小型のデモボードとして、WeActのblackpillをAliexpressの正規ショップ から購入しました。
-Blackpill (TOP VIEW) WIP: 以下、未完成 USB-C +---+-----+---+ GND |* | | *|Vcc PB7 |* | | *|PB6 PD0 |* | | *|PB5 PD1 |* +-----+ *|PB4 PD2 |* @|PB3 ---- RED 1 MISO PD3 |* @|PB2 ---- BLACK 4 MOSI PD4 |* @|PB1 ---- GREEN 3 SCLK PD5 |* *|PB0 (LED) PD6 |* *|PE7 PD7 |* *|PE6 PE0 |* *|GND PE1 |* *|AREF PC0 |* *|PF0 PC1 |* *|PF1 PC2 |* *|PF2 PC3 |* *|PF3 PC4 |* *|PF4 PC5 |* *|PF5 PC6 |* *|PF6 PC7 |* @ @ @ @ *|PF7 +-------------+ ^ ^ ^ ^ | | | | VCC 2 YELLOW ---------------+ | | | GND 6 BLUE -----------------+ | | RST 5 WHITE -------------------+ | RST 5 WHITE ---------------------+ </description>
+      <description>基本のSTM32F系の安価だけど、純正STMチップ(同等品でない)が載っていそうな 小型のデモボードとして、WeActのblackpillをAliexpressの正規ショップ から購入しました。STM32F411CEが載っています。
+ WeActのデバイス情報 https://github.com/WeActTC/MiniSTM32F4x1  PCB回路要点    IC PIN 機能 動作     7 NRST RESET SW, PUSH=0 , NORMAL=1   44 BOOT0 BOOT SW, PUSH=1, NORMAL=0   20 PB2 / BOOT1 NORMAL=0 (pull down res.)   10 PA0 / WKUP1 USER KEY, NORMAL=1, PUSH=0   2 PC13 / BLUE LED, LED_ON=0    STM32のメモリー  0x0000 0000 - 0x0007 FFFF (REMAPされる) &amp;ndash; The code area  通常 BOOT0は押されていないので: Flash memoryをさしている  つまりユーザー作成のFirmware実行   BOOT0 pushed: System memory (BOOT0 pushed)  CU内臓のBOOTLOADERの実行, STM32F411の場合はUSB経由のDFUもサポート     0x2000 0000 - 0x2002 0000 SRAM1 (128 KB) &amp;ndash; The data area 0x0800 0000 - 0x0807 FFFF Flash memory Flash memory (512KB) 0x1FFF 0000 - 0x1FFF 77FF System memory (32MB)  STM32F103等だと、NativeでDFUをサポートしていなかったので、シリアル接続などでFlash memory内に小さめのHIDのBOOTLOADERを入れることがよく行われていたようだが、 互換性を求めないならDFUで充分と見ました。</description>
     </item>
     
     <item>

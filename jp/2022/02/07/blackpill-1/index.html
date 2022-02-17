@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/07 (initial publish),
-2022/02/15 (last update)
+2022/02/17 (last update)
 </h3>
 </div>
 
@@ -59,44 +59,161 @@
 
 <h2>TOC</h2>
 
-<nav id="TableOfContents"></nav>
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#pcb回路要点">PCB回路要点</a></li>
+    <li><a href="#stm32のメモリー">STM32のメモリー</a>
+      <ul>
+        <li><a href="#起動">起動</a></li>
+        <li><a href="#リセットのモード">リセットのモード</a></li>
+        <li><a href="#standbyからの起動">Standbyからの起動</a></li>
+      </ul>
+    </li>
+    <li><a href="#pin-out">PIN OUT</a></li>
+    <li><a href="#factory-setting">FACTORY SETTING</a></li>
+  </ul>
+</nav>
 
-<p>基本のSTM32F系の安価だけど、純正STMチップ(同等品でない)が載っている
+<p>基本のSTM32F系の安価だけど、純正STMチップ(同等品でない)が載っていそうな
 小型のデモボードとして、WeActのblackpillをAliexpressの正規ショップ
-から購入しました。</p>
+から購入しました。STM32F411CEが載っています。</p>
+<ul>
+<li>WeActのデバイス情報 <a href="https://github.com/WeActTC/MiniSTM32F4x1">https://github.com/WeActTC/MiniSTM32F4x1</a></li>
+</ul>
+<h2 id="pcb回路要点">PCB回路要点</h2>
+<table>
+<thead>
+<tr>
+<th>IC PIN</th>
+<th>機能</th>
+<th>動作</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>7</td>
+<td>NRST</td>
+<td>RESET SW, PUSH=0 , NORMAL=1</td>
+</tr>
+<tr>
+<td>44</td>
+<td>BOOT0</td>
+<td>BOOT SW, PUSH=1, NORMAL=0</td>
+</tr>
+<tr>
+<td>20</td>
+<td>PB2 / BOOT1</td>
+<td>NORMAL=0 (pull down res.)</td>
+</tr>
+<tr>
+<td>10</td>
+<td>PA0 / WKUP1</td>
+<td>USER KEY, NORMAL=1, PUSH=0</td>
+</tr>
+<tr>
+<td>2</td>
+<td>PC13 /</td>
+<td>BLUE LED, LED_ON=0</td>
+</tr>
+</tbody>
+</table>
+<h2 id="stm32のメモリー">STM32のメモリー</h2>
+<ul>
+<li><code>0x0000 0000 - 0x0007 FFFF</code> (REMAPされる) &ndash; The code area
+<ul>
+<li>通常 BOOT0は押されていないので: Flash memoryをさしている
+<ul>
+<li>つまりユーザー作成のFirmware実行</li>
+</ul>
+</li>
+<li>BOOT0 pushed: System memory (BOOT0 pushed)
+<ul>
+<li>CU内臓のBOOTLOADERの実行, STM32F411の場合はUSB経由のDFUもサポート</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>0x2000 0000 - 0x2002 0000</code> SRAM1 (128 KB) &ndash; The data area</li>
+<li><code>0x0800 0000 - 0x0807 FFFF</code> Flash memory Flash memory (512KB)</li>
+<li><code>0x1FFF 0000 - 0x1FFF 77FF</code> System memory (32MB)</li>
+</ul>
+<p>STM32F103等だと、NativeでDFUをサポートしていなかったので、シリアル接続などでFlash
+memory内に小さめのHIDのBOOTLOADERを入れることがよく行われていたようだが、
+互換性を求めないならDFUで充分と見ました。</p>
+<h3 id="起動">起動</h3>
+<ul>
+<li>the CPU fetches the top-of-stack value from address 0x0000 0000,</li>
+<li>the CPU  starts code execution from the boot memory starting from 0x0000 0004.</li>
+</ul>
+<h3 id="リセットのモード">リセットのモード</h3>
+<p>STM32F411xx は のBOOTMODEはPattern1で起動する。つまり、BOOTMODE実行条件は：</p>
+<ul>
+<li><code>Boot0(pin) = 1</code> (BOOT SW, PUSHed)</li>
+<li><code>Boot1(pin) = 0</code> (Blackpillデフォルト</li>
+</ul>
+<p>つまり、REMAPを使い</p>
+<ul>
+<li>RESETだけを押すと、<code>Boot0(pin)=0</code>なので、Main Flash memory を実行。</li>
+<li>RESETとBOOT0 を押すと、<code>Boot0(pin)=1</code>なので、System memory を実行。</li>
+</ul>
+<h3 id="standbyからの起動">Standbyからの起動</h3>
+<p><code>PA0 / WKUP1</code> が <code>0-&gt;</code>1 でwakeup　（つまり、USERのSWを離した時点）</p>
+<h2 id="pin-out">PIN OUT</h2>
 <pre tabindex="0"><code>Blackpill (TOP VIEW)
 
-WIP: 以下、未完成
                               USB-C
                         +---+-----+---+
-                    GND |*  |     |  *|Vcc
-                    PB7 |*  |     |  *|PB6
-                    PD0 |*  |     |  *|PB5
-                    PD1 |*  +-----+  *|PB4
-                    PD2 |*           @|PB3 ---- RED   1 MISO
-                    PD3 |*           @|PB2 ---- BLACK 4 MOSI
-                    PD4 |*           @|PB1 ---- GREEN 3 SCLK
-                    PD5 |*           *|PB0
-              (LED) PD6 |*           *|PE7
-                    PD7 |*           *|PE6
-                    PE0 |*           *|GND
-                    PE1 |*           *|AREF
-                    PC0 |*           *|PF0
-                    PC1 |*           *|PF1
-                    PC2 |*           *|PF2
-                    PC3 |*           *|PF3
-                    PC4 |*           *|PF4
-                    PC5 |*           *|PF5
-                    PC6 |*           *|PF6
-                    PC7 |*  @ @ @ @  *|PF7
+        R0  ------- B12 |*  |     |  *|5V
+        R1  ------- B13 |*  |     |  *|GND ----- JS_GND
+        R2  ------- B14 |*  |     |  *|3V3 ----- JS_V
+        R3  ------- B15 |*  +-----+  *|B10
+        C6  ------- A8  |*  B     N  @|B2 --- BOOT1
+                XXX A9  |*  O     R  @|B1 XXX
+                XXX A10 |*  O     S  @|B0 XXX
+                XXX A11 |*  T     T  *|A7 XXX
+        C5  ------- A12 |*  0        *|A6 XXX
+        C4  ------- A15 |*           *|A5 ------ JS_R1
+        C3  ------- B3  |*           *|A4 ------ JS_R2
+        C2  ------- B4  |*           *|A3 ------ C7
+        C1  ------- B5  |*           *|A2 ------ C8
+        C0  ------- B6  |*           *|A1 ------ C9
+        C11 ------- B7  |*           *|A0 ------ C10
+                    B8  |*  K        *|R ---- NRST (/RST, ~RST)
+                    B9  |*  E        *|C15 ----- C12
+                    5V  |*  Y        *|C14 ----- C13
+                    GND |*           *|C13 -- BLUE LED
+                    3V3 |*  @ @ @ @  *|VB
                         +-------------+
                             ^ ^ ^ ^
                             | | | |
-VCC 2 YELLOW ---------------+ | | |
-GND 6 BLUE   -----------------+ | |
-RST 5 WHITE  -------------------+ |
-RST 5 WHITE  ---------------------+
-</code></pre><!-- raw HTML omitted -->
+      3V3    ---------------+ | | |
+    SWDIO    -----------PA13--+ | |
+    SWSCK    -----------PA14----+ |
+      GND    ---------------------+
+</code></pre><p>XXX PINs had mechanical interferences
+A0-B1 can be used for ADC (A4, B5 for joystick)
+Avoid pins used internally and for DIO
+/</p>
+<h2 id="factory-setting">FACTORY SETTING</h2>
+<p>とりあえず、PCに繋いでみました。</p>
+<pre tabindex="0"><code> $ journalctl -f
+...
+... usb 4-2: new full-speed USB device number 13 using xhci_hcd
+... usb 4-2: config 1 interface 0 altsetting 0 endpoint 0x81 has an invalid bInterval 0, changing to 10
+... usb 4-2: config 1 interface 0 altsetting 0 endpoint 0x1 has an invalid bInterval 0, changing to 10
+... usb 4-2: New USB device found, idVendor=0483, idProduct=572a, bcdDevice= 2.00
+... usb 4-2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+... usb 4-2: Product: WeAct Studio HID Bootloader
+... usb 4-2: Manufacturer: WeAct Studio
+... usb 4-2: SerialNumber: ************
+... hid-generic 0003:0483:572A.001A: hiddev1,hidraw1: USB HID v1.11 Device [WeAct Studio WeAct Studio HID Bootloader] on usb-0000:08:00.3-2/input0
+... checking bus 4, device 13: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&quot;
+... bus: 4, device: 13 was not an MTP device
+... checking bus 4, device 13: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&quot;
+... bus: 4, device: 13 was not an MTP device
+</code></pre><p>どうも、FLASHにはすでにHIDのBOOTLOADERがすでに入っている模様です。</p>
+<p>さて、FIRMWAREを書かないと。</p>
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
