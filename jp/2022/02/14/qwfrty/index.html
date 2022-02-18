@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/14 (initial publish),
-2022/02/17 (last update)
+2022/02/18 (last update)
 </h3>
 </div>
 
@@ -70,7 +70,7 @@
         <li><a href="#qwfrty設計の背景事実">QWFRTY設計の背景事実：</a></li>
       </ul>
     </li>
-    <li><a href="#他のキー配列">他のキー配列</a>
+    <li><a href="#世の中にある有名キー配列">世の中にある有名キー配列</a>
       <ul>
         <li><a href="#qwerty配列">QWERTY配列</a></li>
         <li><a href="#eucalyn">Eucalyn</a></li>
@@ -88,16 +88,20 @@
 <h2 id="背景">背景</h2>
 <p>MCUを使ったIOTの初等プロジェクトとして、<a href="https://github.com/osamuaoki/cg56">cgc56というQMKを利用したキーボード</a>を作りました。</p>
 <p><img src="/img/cgc56.jpg" alt="4x14 ortholinear配列キーボード(cgc56)"></p>
-<p>デフォルトのキー配列に採用したのは、QWERTY配列でした。ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動がVIのデフォルト設定では難しくなってしまいます。)</p>
-<p>ただ、元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決目的のキーボードでした。これだけなら<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、それだけでは残念なので、苦労しない範囲でDVRAKの交互打鍵に近づくために「QWFRTY配列」を考え、最適化配列を考えてみました。</p>
-<p><img src="/img/QWFRTY-simple.png" alt="QWFRTY簡単">
-<a href="http://www.keyboard-layout-editor.com/#/gists/5d4ef725c32a4cbb8f4566a2de603527">cgc56 QWFRTY キーボードデータ 簡易版</a></p>
+<p>今回完成したキーボードは、PLANCKより4x14と幅があることを利用して、左右の手の間隔をとり、できた真ん中の余分の部分に頻出記号キーを押し込んでいます。</p>
+<ul>
+<li>2つあるFnキーのうち１つ押しだと数字・記号・F1-F12キーです。PLANCKよりは普通のキーボードに近い配列になっています。</li>
+<li>Fnキー２つ同時押しでカーソールキーにアクセスできます。ちょうどこれがVIMの「<code>hjkl</code>」と同じ位置です。</li>
+<li>Fnキー無しのデフォルトのキー配列は、QWERTY配列とQWFRTY配列が切り替えられます。</li>
+</ul>
+<p>ここで、QWFRTY配列をデフォルトのキー配列した際の、Fnキーによるキー配列変化は以下です。</p>
+<p><img src="/img/QWFRTY-3.png" alt="QWFRTY　３段">
+<a href="http://www.keyboard-layout-editor.com/#/gists/b677dff2db907d27eb84b4d7ea741394">cgc56 QWFRTY キーボードデータ 3段</a></p>
 <p>使ってみて意外とおもしろいので、ここに要点等をメモしておきます。</p>
-<p>小さなキーボードでカーソールやINSまで押し込んだので、実際には最右下のキーは、カーソルキーが割り込みもう一つ右に離れています。
-ただ直交系キーボード配列なので、比較的に使わない&quot;/&ldquo;キーだし、元々下のキーQWERTYよりは左によっているので問題はないようです。
-ちなみに今回完成したキーボードは、PLANCKより4x14と幅があることを利用して、左右の手の間隔をとり、できた真ん中の余分の部分に頻出記号キーを押し込んでいます。</p>
+<p>ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動も難しくなってしまいます)。</p>
+<p>元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決目的のキーボードプロジェクトでした。これだけなら<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、それだけでは勿体ないので、苦労しない範囲でDVRAKの交互打鍵に近づけられないかと考えた妥協点案が「QWFRTY配列」です。これはあくまでQMKを利用した自作キーボードの最適化キー配列実験で、私の日常生活はQWERTY配列です。</p>
 <h2 id="qwfrty配列">QWFRTY配列</h2>
-<p>私は、せっかく作ったQMKを利用した自作キーボードのいわゆる最適化キー配列として、11個のキーだけが標準の「QWERTY配列」から移動された配列としています。</p>
+<p>「QWFRTY配列」は、11個のキーだけが標準の「QWERTY配列」から移動された配列です。</p>
 <p>名前は、１文字違いでややこしいですが、「<strong>QWFRTY配列</strong>」としました。キーは位置の要点を抜き出すと以下です。</p>
 <pre tabindex="0"><code>       LEFT HAND                 RIGHT HAND
 │ Q │ W │_F_│ R │ T │      │ Y │_D_│_K_│_G_│ P │
@@ -128,8 +132,10 @@
 </li>
 <li>EUCALYN配列の VIMのカーソールキー (HJKL) をまとめるアイデアを拝借
 <ul>
+<li>大きなキー移動を避けるため、&ldquo;L&quot;は動かさなかった。</li>
 <li>QWERTYよりむしろ使い安くなった（？）</li>
 <li>&ldquo;S&quot;と&quot;D&quot;がくるアクセスの良いスペースが空いたので一石二鳥。</li>
+<li>Fn-Fnでアクセスする、本当のカーソールキーと同じ位置となった。</li>
 </ul>
 </li>
 </ul>
@@ -149,7 +155,7 @@
 <p>&ldquo;f&rdquo; は日本ではあまり使わない子音なので、交互打鍵を考えた際にも子音だが母音側にあっても&quot;g&quot;より悪影響が少ない。英語環境では、ともに中以下の頻度なので大差ない。</p>
 <h4 id="右配置の移動文字間の優先順位">右配置の移動文字間の優先順位</h4>
 <p><code>s &gt; d &gt; g</code></p>
-<h2 id="他のキー配列">他のキー配列</h2>
+<h2 id="世の中にある有名キー配列">世の中にある有名キー配列</h2>
 <ul>
 <li><a href="https://yushakobo.jp/blog/pluis9/2017/12/thinkkeylayout/">https://yushakobo.jp/blog/pluis9/2017/12/thinkkeylayout/</a></li>
 </ul>
@@ -224,7 +230,7 @@
 </code></pre><ul>
 <li>28/30キーが移動</li>
 </ul>
-<p>適用対象がOrtholinear配列のため「<code>'</code>」が「<code>/</code>」となっている。（「<code>'</code>」は真ん中のどのキー配列でも上記枠外の隙間に配置済み）</p>
+<p>適用対象がOrtholinear配列のため「<code>'</code>」が「<code>/</code>」となっている。（どのキー配列でも、「<code>'</code>」は真ん中の上記枠外の隙間に配置済み）</p>
 <h2 id="文字頻度">文字頻度</h2>
 <p>QMK の<code>quantum/</code>中や<code>docs/</code>中を統計して、スペースの数を１００としている。&quot;<code>*</code>&ldquo;はログ圧縮して大局観が分かるようになっています。</p>
 <pre tabindex="0"><code>Cソースコード                  ドキュメンテーション中
@@ -334,11 +340,14 @@
 また&rdquo;(&ldquo;と&rdquo;)&ldquo;は定位置のFn片押しの&rdquo;,&ldquo;と&rdquo;/&ldquo;以外に、Fn両押しですが押しやすい真ん中にも配置しました。</p>
 <p>さらに、スペースキーは、実質6つあります。スペース連打用が１つ、あとは shift, control, Alt, FnUp, FnDnとタップを使って兼用です。</p>
 <p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-</code>`トグルではなく<code>shift-space</code> や<code>control-space</code>でローマ字かな入力と英字入力の間を往復してます。(この設定はMac風の気がします。<a href="/jp/2019/03/23/gnome-uskb-im-select/">GNOME環境</a>や<a href="https://www.lifehacker.jp/article/235889windows10-typing-tips/">WINDWS環境</a>だとデフォルトではないですが簡単に設定実現できます。)
-この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。右を押してから左のタップか、はたまた左を押してから右のタップかでローマ字かな入力と英字入力の間を往復できます。この際に、狙った隣のFnが押されたりタップされてもOKです。</p>
+この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。右の<code>control</code>をホールドから左のタップか、はたまた左の<code>shift</code>をホールドしてから右のタップかでローマ字かな入力と英字入力の間を往復できます。この際に既にホールドしていない中心付近の５つのどのキーをタップしてOKです。</p>
+<p>一時Fnキーの使用無しでカーソールアクセス出きるような配列も便利かと思い試しましたが、ホームポジションから大きく手を動かしのキーボードの端での操作となるのであまりよくなかったです。</p>
+<p>当面、１４”のノートパソコン(Thinkpad T14 Gen1)に無いキーはいらないと割り切っています。必要なら追加の１０キーパッドを用意するのでしょう。</p>
 <p><img src="/img/QWFRTY.png" alt="QWFRTY詳細">
 <a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a>。
-最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を確認するのが一番確実ではあります。</p>
-<p>PLANCK他のキーボードより幅が有り、両手間隔がとれ猫背にならずに使えます。また小指の使用を抑えたので指にやさしいと思います。</p>
+当分色々変更して遊びそうなので、最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を確認するのが一番確実ではあります。</p>
+<p>PLANCK他のキーボードより幅が有り、一体型ですが両手間隔がとれ猫背にならずに使えます。また小指の使用を抑えたので指にやさしいと思います。</p>
+<p>従来のキーボード両端の小指で操作するシフトキーの類も残していますが、基本親指でシフト・コントロール他の操作が出きるようにしています。<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、端のキー（特に下の角のキー）を基本使わないと手首へのストレスも下げられます。</p>
 <p>ちなみに、母音文字を集める際に採用した&quot;AIUEO&quot;配列ですが、「なぜ&quot;E&quot;の使用指が変わらない配列や、はたまた他の配列でないのか？」といわれたら、「特段の理由はないが、中指使用を抑えたい個人的事情と覚えやすさ」というのが実感です。DVORAK配列の&quot;AOEUI&quot;や、頻度での優先順位を考えた&quot;AOIEU&quot;や&quot;AOEIU&quot;でも充分いい気がします。</p>
 <p>とにかく、ここまでの細かい個人的事情にも自由に対応できるのがQMKキーボードの良いところです。</p>
 <p>vimで<code>inoremap jk &lt;ESC&gt;</code>等としてたら、ホームのみの<code>inoremap jj &lt;ESC&gt;</code>や<code>inoremap jh &lt;ESC&gt;</code>等とでもする方が良いかもしれません。</p>
