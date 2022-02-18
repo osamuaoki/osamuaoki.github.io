@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/07 (initial publish),
-2022/02/17 (last update)
+2022/02/18 (last update)
 </h3>
 </div>
 
@@ -190,10 +190,13 @@ memory内に小さめのHIDのBOOTLOADERを入れることがよく行われて�
     SWDIO    -----------PA13--+ | |
     SWSCK    -----------PA14----+ |
       GND    ---------------------+
-</code></pre><p>XXX PINs had mechanical interferences
-A0-B1 can be used for ADC (A4, B5 for joystick)
-Avoid pins used internally and for DIO
-/</p>
+</code></pre><ul>
+<li>XXX PINs had mechanical interferences</li>
+<li><code>A0-B1</code> can be used for ADC (<code>A4</code>, <code>B5</code> actually used for joystick)</li>
+<li>Avoid pins used internally and for DIO.</li>
+<li>blackpillにはピンヘッダーをハンダ付けし、キーボードSWにハンダ付けした AWG30のワイヤーをワイアラップで接続しています。</li>
+</ul>
+<p><img src="/img/cgg56.jpg" alt="CGG56"></p>
 <h2 id="factory-setting">FACTORY SETTING</h2>
 <p>とりあえず、PCに繋いでみました。</p>
 <pre tabindex="0"><code> $ journalctl -f
