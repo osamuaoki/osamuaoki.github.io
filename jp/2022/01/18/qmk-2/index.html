@@ -250,28 +250,13 @@ Booting
 QMK Firmware 0.15.15
 ...
 
-</code></pre><p>ただ、これでも<code>Makefile</code>の起動コマンドは分かりますが、<code>Makefile</code>から実行されたコマンドが何かが確認できません。実は以下が<code>Makefile</code>の先頭にかかれているのがこの現員です。</p>
+</code></pre><p>ただ、これでも<code>Makefile</code>の起動コマンドは分かりますが、<code>Makefile</code>から実行されたコマンドが何かが確認できません。実は以下が<code>Makefile</code>の先頭にかかれているのがこの原因です。</p>
 <pre tabindex="0"><code>ifndef VERBOSE
 .SILENT:
 endif
 ...
-</code></pre><p>シェルから以下を実行すると、<code>Makefile</code>から実行されるコマンドが分かります。</p>
+</code></pre><p>だからシェルから以下を実行すると、<code>Makefile</code>から実行されるコマンドが分かります。</p>
 <pre tabindex="0"><code>$ make VERBOSE=1 --jobs=1 one:default:flash
-...
-Bootloader not found. Make sure the board is in bootloader mode. See https://docs.qmk.fm/#/newbs_flashing
- Trying again every 0.5s (Ctrl+C to cancel)........
-dfu-util -d 0483:DF11 -a 0 -s 0x08000000:leave -D .build/cgg56_default.bin
-dfu-util 0.9
-
-Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
-Copyright 2010-2016 Tormod Volden and Stefan Schmidt
-This program is Free Software and has ABSOLUTELY NO WARRANTY
-Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
-
-Opening DFU capable USB device...
-ID 0483:df11
-Run-time device DFU version 011a
-...
 
 </code></pre><!-- raw HTML omitted -->
 
