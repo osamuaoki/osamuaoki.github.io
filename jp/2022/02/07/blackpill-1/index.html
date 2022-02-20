@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/07 (initial publish),
-2022/02/18 (last update)
+2022/02/20 (last update)
 </h3>
 </div>
 
@@ -71,6 +71,8 @@
     </li>
     <li><a href="#pin-out">PIN OUT</a></li>
     <li><a href="#factory-setting">FACTORY SETTING</a></li>
+    <li><a href="#firmware書き込み不調-qmk-dfu">FIRMWARE書き込み不調 (QMK DFU)</a></li>
+    <li><a href="#hid-bootloader-の調査">HID BOOTLOADER の調査</a></li>
   </ul>
 </nav>
 
@@ -140,6 +142,10 @@
 <p>STM32F103等だと、NativeでDFUをサポートしていなかったので、シリアル接続などでFlash
 memory内に小さめのHIDのBOOTLOADERを入れることがよく行われていたようだが、
 互換性を求めないならDFUで充分と見ました。</p>
+<p>元々入っていたHID Bootloaderは、<code>0x800 0400</code> から読み込んだファームウエアーを書き込む。どうも、
+全部で512KBある８つに分かれたフラッシュの最初のセクターの16KBにHID Bootloader自身がいる模様。</p>
+<p>DFUだと何も指定しないと<code>0x800 0000</code>から読み込んだファームウエアーを書き込むみたい。(QMKの現在の動作?)
+<code>-d vid:pid</code>で指定されるDFUの時の<code>HEXのVID:PID</code>ペアと、<code>-s</code>オプションのアドレス</p>
 <h3 id="起動">起動</h3>
 <ul>
 <li>the CPU fetches the top-of-stack value from address 0x0000 0000,</li>
@@ -215,7 +221,65 @@ memory内に小さめのHIDのBOOTLOADERを入れることがよく行われて�
 ... checking bus 4, device 13: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&quot;
 ... bus: 4, device: 13 was not an MTP device
 </code></pre><p>どうも、FLASHにはすでにHIDのBOOTLOADERがすでに入っている模様です。</p>
-<p>さて、FIRMWAREを書かないと。</p>
+<h2 id="firmware書き込み不調-qmk-dfu">FIRMWARE書き込み不調 (QMK DFU)</h2>
+<p>デバイスは、まだ動いていません。</p>
+<p>まず、FIRMWAREはAT90USB1286とほぼ同じコードなんで、何とかコンパイルして書き込むまではいきました。</p>
+<pre tabindex="0"><code>...
+Opening DFU capable USB device...
+ID 0483:df11
+Run-time device DFU version 011a
+Claiming USB DFU Interface...
+Setting Alternate Setting #0 ...
+Determining device status: state = dfuERROR, status = 10
+dfuERROR, clearing status
+Determining device status: state = dfuIDLE, status = 0
+dfuIDLE, continuing
+DFU mode device DFU version 011a
+Device returned transfer size 2048
+DfuSe interface name: &quot;Internal Flash  &quot;
+Downloading to address = 0x08000000, size = 65836
+Download	[=========================] 100%        65836 bytes
+Download done.
+File downloaded successfully
+</code></pre><p>ファームウエアーが書き込まれたはずなのに、USBコネクターを抜き差ししても、USBデバイス自身がHIDとして認識されません。</p>
+<pre tabindex="0"><code>$ journalctl -f
+...
+usb 6-1.4.3: new full-speed USB device number 23 using xhci_hcd
+usb 6-1.4.3: device descriptor read/64, error -32
+usb 6-1.4.3: device descriptor read/64, error -32
+usb 6-1.4.3: new full-speed USB device number 24 using xhci_hcd
+usb 6-1.4.3: device descriptor read/64, error -32
+usb 6-1.4.3: device descriptor read/64, error -32
+usb 6-1.4-port3: attempt power cycle
+usb 6-1.4.3: new full-speed USB device number 25 using xhci_hcd
+usb 6-1.4.3: Device not responding to setup address.
+usb 6-1.4.3: Device not responding to setup address.
+usb 6-1.4.3: device not accepting address 25, error -71
+usb 6-1.4.3: new full-speed USB device number 26 using xhci_hcd
+usb 6-1.4.3: Device not responding to setup address.
+usb 6-1.4.3: Device not responding to setup address.
+usb 6-1.4.3: device not accepting address 26, error -71
+usb 6-1.4-port3: unable to enumerate USB device
+
+</code></pre><p>RESETとBOOT0の両押しを話したDFUの時はちゃんとデバイスとして繋がるから、壊れてはいません。</p>
+<pre tabindex="0"><code>usb 6-1.4.3: new full-speed USB device number 35 using xhci_hcd
+usb 6-1.4.3: New USB device found, idVendor=0483, idProduct=df11, bcdDevice=22.00
+usb 6-1.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 6-1.4.3: Product: STM32  BOOTLOADER
+usb 6-1.4.3: Manufacturer: STMicroelectronics
+usb 6-1.4.3: SerialNumber: 339138593430
+checking bus 6, device 35: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.3&quot;
+bus: 6, device: 35 was not an MTP device
+checking bus 6, device 35: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.3&quot;
+bus: 6, device: 35 was not an MTP device
+</code></pre><h2 id="hid-bootloader-の調査">HID BOOTLOADER の調査</h2>
+<p>最初に入っていたHID Bootloaderを探して、https://github.com/WeActTCを覗きました。</p>
+<p>HEXファイルやバイナリーのホストプログラムとともに、元ネタサイト情報もありました。</p>
+<ul>
+<li><a href="https://github.com/Serasidis/STM32_HID_Bootloader">https://github.com/Serasidis/STM32_HID_Bootloader</a></li>
+</ul>
+<p>ARDUINO関連もSTM32F4にしかないDFU前提ではなく、STM32F1xxやSTM32F3xxでも対応できるHID_Bootloaderが前提みたい。</p>
+<p>この導入アドレス違いが気になる、、、今日はここまで。</p>
 <!-- raw HTML omitted -->
 
 
