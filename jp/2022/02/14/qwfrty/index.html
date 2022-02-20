@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/14 (initial publish),
-2022/02/19 (last update)
+2022/02/20 (last update)
 </h3>
 </div>
 
@@ -340,17 +340,19 @@
 <p>キーボードの全体感の再確認のため、主要キーの配置をFnキー状態違いも含めて重ね書きすると以下となります。</p>
 <p><img src="/img/QWFRTY.png" alt="QWFRTY詳細">
 <a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a>。
-当分色々変更して遊びそうなので、最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を確認するのが一番確実ではあります。( どうも親指を置くFn-キーの間隔を１つ外にずらした方が手首が楽です。やっぱりスプリットデザインにするべきかな、、、、)</p>
+当分色々変更して遊びそうなので、最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を確認するのが一番確実ではあります。( どうも親指を置くFn-キーの間隔を１つ外にずらした方が手首が楽かな、、、、でもそうでもない。やっぱりスプリットデザインにするべきかな、、、、)</p>
 <p>上記統計結果もあって、「<code>_</code> 」 はスプリット直交配置の真ん中に特別にシフト無しでアクセスできるようにしてます。
 また&rdquo;(&ldquo;と&rdquo;)&ldquo;は定位置のFn片押しの&rdquo;,&ldquo;と&rdquo;/&ldquo;以外に、Fn両押しですが押しやすい真ん中にも配置しました。</p>
-<p>さらに、スペースキーは、実質6つあります。スペース連打用が１つ、あとは shift, control, Alt, FnUp, FnDnとタップを使って兼用です。</p>
+<p>さらに、スペースキーは、実質4つあります。<code>shift</code>, <code>control</code>, <code>Fnl1</code>, <code>Fnl2</code>とをタップを使って兼用です。真ん中の<code>alt</code>は<code>Backspace</code>や<code>Enter</code>との兼用です。</p>
 <p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-</code>`トグルではなく<code>shift-space</code> や<code>control-space</code>でローマ字かな入力と英字入力の間を往復してます。(この設定はMac風の気がします。<a href="/jp/2019/03/23/gnome-uskb-im-select/">GNOME環境</a>や<a href="https://www.lifehacker.jp/article/235889windows10-typing-tips/">WINDWS環境</a>だとデフォルトではないですが簡単に設定実現できます。)
 この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。右の<code>control</code>をホールドから左のタップか、はたまた左の<code>shift</code>をホールドしてから右のタップかでローマ字かな入力と英字入力の間を往復できます。この際に既にホールドしていない中心付近の５つのどのキーをタップしてOKです。</p>
-<p>一時Fnキーの使用無しでカーソールアクセス出きるような配列も便利かと思い試しましたが、ホームポジションから大きく手を動かしのキーボードの端での操作となるのであまりよくなかったです。</p>
+<p>一時<code>Fn</code>キーの使用無しでカーソールアクセス出きるような配列も試しましたが、ホームポジションから大きく手を動かしのキーボードの端での操作となるのであまりよくなかったです。カーソルは、<code>Fn</code>キー両方押しの一時的裏モードと、ロックインされる別レーヤーで提供することにしました。キー位置は共通です。</p>
+<p>ちなみに、<code>Fn</code>キーは２つあり、片押しで２つのレーヤー対応が出きるようになっていますが、全く同じデーターが今入っているので、どっちをおしても変わりません。</p>
 <p>当面、１４”のノートパソコン(Thinkpad T14 Gen1)に無いキーはいらないと割り切っています。必要なら追加の１０キーパッドを用意するのでしょう。</p>
 <p>PLANCK他のキーボードより幅が有り、一体型ですが両手間隔がとれ猫背にならずに使えます。</p>
-<p>従来のキーボード両端の小指で操作するシフトキーの類も残していますが、基本親指でシフト・コントロール他の操作が出きるようにしています。<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、端のキー（特に下の角のキー）を基本使わないと、小指の使用を抑えられ指にやさしいし、手首へのストレスも下げられます。</p>
-<p>ちなみに、母音文字を集める際に採用した&quot;AIUEO&quot;配列ですが、「なぜ&quot;E&quot;の使用指が変わらない配列や、はたまた他の配列でないのか？」といわれたら、「特段の理由はないが、中指使用を抑えたい個人的事情と覚えやすさ」というのが実感です。DVORAK配列の&quot;AOEUI&quot;や、頻度での優先順位を考えた&quot;AOIEU&quot;や&quot;AOEIU&quot;でも充分いい気がします。</p>
+<p>従来のキーボード両端の小指で操作するシフトキーの類も残していますが、基本親指でシフト・コントロール他の操作が出きるようにしています。ERGODOX等で見るThumbクラスターの乗りです。
+<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、端のキー（特に下の角のキー）を基本使わないと、小指の使用を抑えられ指にやさしいし、手首へのストレスも下げられます。</p>
+<p>ちなみに、母音文字を集める際に採用した&quot;AIUEO&quot;配列ですが、「なぜ&quot;E&quot;の使用指が変わらない配列や、はたまた他の配列でないのか？」と問われたら、「特段の理由はないが、中指使用を抑えたい個人的事情と、キー位置の覚えやすさ」というのが実感です。DVORAK配列の&quot;AOEUI&quot;や、頻度での優先順位を考えた&quot;AOIEU&quot;や&quot;AOEIU&quot;でも充分いい気がします。</p>
 <p>とにかく、ここまでの細かい個人的事情にも自由に対応できるのがQMKキーボードの良いところです。</p>
 <p>vimで<code>inoremap jk &lt;ESC&gt;</code>等としてたら、ホームのみの<code>inoremap jj &lt;ESC&gt;</code>や<code>inoremap jh &lt;ESC&gt;</code>等とでもする方が良いかもしれません。</p>
 <!-- raw HTML omitted -->
