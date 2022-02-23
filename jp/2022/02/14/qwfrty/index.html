@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/14 (initial publish),
-2022/02/20 (last update)
+2022/02/23 (last update)
 </h3>
 </div>
 
@@ -91,16 +91,21 @@
 <p>今回完成したキーボードは、PLANCKより4x14と幅があることを利用して、左右の手の間隔をとり、真ん中の余裕の部分に頻出記号キーを押し込んでいます。</p>
 <ul>
 <li>PLANCKよりは普通のキーボードに近いキー配列になっています。</li>
-<li>2つあるFnキーのうち１つ押しだと数字・記号・F1-F12キーです。(現状、左右の差はありません)</li>
-<li>Fnキー２つ同時押しでカーソールキーにアクセスできます。ちょうどこれがVIMの「<code>hjkl</code>」と同じ位置です。</li>
+<li>2つあるFnキーのうち１つ押しだと数字・記号・F1-F12キーです。(現状、ほぼ左右の差はありません)</li>
+<li>Fnキー２つ同時押しでカーソールキーにアクセスできます。ちょうどこれがQWFRTY配列だとVIMの「<code>hjkl</code>」と同じ位置です。</li>
 <li>Fnキー無しのデフォルトのキー配列は、QWERTY配列とQWFRTY配列が切り替えられます。</li>
 </ul>
-<p>ここで、QWFRTY配列をデフォルトのキー配列した際の、Fnキーによるキー配列変化は以下です。</p>
-<p><img src="/img/QWFRTY-3.png" alt="QWFRTY　３段">
-<a href="http://www.keyboard-layout-editor.com/#/gists/b677dff2db907d27eb84b4d7ea741394">cgc56 QWFRTY キーボードデータ 3段</a></p>
+<p>デフォルトのキー配列は、QWERTY配列とQWFRTY配列があり、更にFnキーによるキー配列変化をします。</p>
+<p><img src="/img/cgc56-4.png" alt="cgc56 full"></p>
+<p>元データー: <a href="http://www.keyboard-layout-editor.com/#/gists/faf55be2e2240ece6e2a82f5aba8add2">cgc56 キーボードデータ 全体</a></p>
 <p>使ってみて意外とおもしろいので、ここに要点等をメモしておきます。</p>
 <p>ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動も難しくなってしまいます)。</p>
 <p>元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決目的のキーボードプロジェクトでした。これだけなら<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、それだけでは勿体ないので、苦労しない範囲でDVRAKの交互打鍵に近づけられないかと考えた妥協点案が「QWFRTY配列」です。これはあくまでQMKを利用した自作キーボードの最適化キー配列実験で、私の日常生活はQWERTY配列です。</p>
+<p>ちなみに、押されたキーのチェックやNKRO機能のチェックには、以下が便利でした。</p>
+<ul>
+<li><a href="https://www.microsoft.com/applied-sciences/projects/anti-ghosting-demo">Keyboard ghosting interactive demonstration</a></li>
+<li><a href="https://drakeirving.github.io/MultiKeyDisplay/">Keyboard Ghosting Demonstration</a></li>
+</ul>
 <h2 id="qwfrty配列">QWFRTY配列</h2>
 <p>「QWFRTY配列」は、11個のキーだけが標準の「QWERTY配列」から移動された配列です。</p>
 <p>名前は、１文字違いでややこしいですが、「<strong>QWFRTY配列</strong>」としました。キーは位置の要点を抜き出すと以下です。</p>
