@@ -261,7 +261,7 @@ usb 6-1.4.3: Device not responding to setup address.
 usb 6-1.4.3: device not accepting address 26, error -71
 usb 6-1.4-port3: unable to enumerate USB device
 
-</code></pre><p>RESETとBOOT0の両押しを話したDFUの時はちゃんとデバイスとして繋がるから、壊れてはいません。</p>
+</code></pre><p>RESETとBOOT0の両押しを離しDFUを起動した時には、ちゃんとデバイスとして繋がるから、壊れてはいません。</p>
 <pre tabindex="0"><code>usb 6-1.4.3: new full-speed USB device number 35 using xhci_hcd
 usb 6-1.4.3: New USB device found, idVendor=0483, idProduct=df11, bcdDevice=22.00
 usb 6-1.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
@@ -280,8 +280,8 @@ memory内に小さめのHIDのBOOTLOADERを入れることがよく行われて�
 <p>元々入っていたHID Bootloaderは、<code>0x800 0400</code> から読み込んだファームウエアーを書き込む。どうも、
 全部で512KBある８つに分かれたフラッシュの最初のセクターの16KBにHID Bootloader自身がいる模様。</p>
 <p>AVRのようにBootloaderをアドレス空間の後におくんじゃないみたい。</p>
-<p>QMKでDFUだと上記を見ると<code>0x800 0000</code>から読み込んだファームウエアーを書き込むみたい。
-<code>dfu-util</code> を使ってDFUする際に<code>HEXのVID:PID</code>ペアを <code>-d vid:pid</code>でちゃんと指定して
+<p>QMKでDFUだと上記を見ると<code>0x800 0000</code>から読み込んだファームウエアーを書き込むみたい。</p>
+<p><code>dfu-util</code> を使ってDFUする際に<code>HEXのVID:PID</code>ペアを <code>-d vid:pid</code>でちゃんと指定して
 <code>-s</code>オプションの導入アドレスを変えればこの辺は変えられるかな？
 それとも初期状態に戻してHID Bootloaderを使うのかな？悩ましい所です。</p>
 <p>最初に入っていたHID Bootloaderを探して、ベンダーの WeActTC の技術情報サイトを覗きました。</p>
