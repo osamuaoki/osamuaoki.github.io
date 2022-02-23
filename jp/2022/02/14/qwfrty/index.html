@@ -94,8 +94,8 @@
 <li>2つあるFnキーのうち１つ押しだと数字・記号・F1-F12キーです。(現状、ほぼ左右の差はありません)</li>
 <li>Fnキー２つ同時押しでカーソールキーにアクセスできます。ちょうどこれがQWFRTY配列だとVIMの「<code>hjkl</code>」と同じ位置です。</li>
 <li>Fnキー無しのデフォルトのキー配列は、QWERTY配列とQWFRTY配列が切り替えられます。</li>
+<li>更にFnキーにより、キー配列が変化します。</li>
 </ul>
-<p>デフォルトのキー配列は、QWERTY配列とQWFRTY配列があり、更にFnキーによるキー配列変化をします。</p>
 <p><img src="/img/cgc56-4.png" alt="cgc56 full"></p>
 <p>元データー: <a href="http://www.keyboard-layout-editor.com/#/gists/faf55be2e2240ece6e2a82f5aba8add2">cgc56 キーボードデータ 全体</a></p>
 <p>使ってみて意外とおもしろいので、ここに要点等をメモしておきます。</p>
@@ -343,23 +343,23 @@
 &quot;&quot;&quot;  =  3.5 ****
 </code></pre><h2 id="余談">余談</h2>
 <p>キーボードの全体感の再確認のため、主要キーの配置をFnキー状態違いも含めて重ね書きすると以下となります。</p>
-<p><img src="/img/QWFRTY.png" alt="QWFRTY詳細">
-<a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a>。
+<p><img src="/img/QWFRTY.png" alt="QWFRTY詳細"></p>
+<p><a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a>。
 当分色々変更して遊びそうなので、最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を確認するのが一番確実ではあります。( どうも親指を置くFn-キーの間隔を１つ外にずらした方が手首が楽かな、、、、でもそうでもない。やっぱりスプリットデザインにするべきかな、、、、)</p>
 <p>上記統計結果もあって、「<code>_</code> 」 はスプリット直交配置の真ん中に特別にシフト無しでアクセスできるようにしてます。
 また&rdquo;(&ldquo;と&rdquo;)&ldquo;は定位置のFn片押しの&rdquo;,&ldquo;と&rdquo;/&ldquo;以外に、Fn両押しですが押しやすい真ん中にも配置しました。</p>
-<p>さらに、スペースキーは、実質4つあります。<code>shift</code>, <code>control</code>, <code>Fnl1</code>, <code>Fnl2</code>とをタップを使って兼用です。真ん中の<code>shift</code>や<code>Control</code>は、<code>Enter</code>やFn押しての<code>Backspace``Backspace</code>との兼用です。</p>
+<p>さらに、スペースキーは、実質4つあります。<code>shift</code>, <code>control</code>, <code>Fnl1</code>, <code>Fnl2</code>とをタップ・ホールド区別を使って兼用です。真ん中の<code>shift</code>や<code>Control</code>は、<code>Enter</code>やFn押しての<code>Backspace``Backspace</code>との兼用です。</p>
 <p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-</code>`トグルではなく<code>shift-space</code> や<code>control-space</code>でローマ字かな入力と英字入力の間を往復してます。(この設定はMac風の気がします。<a href="/jp/2019/03/23/gnome-uskb-im-select/">GNOME環境</a>や<a href="https://www.lifehacker.jp/article/235889windows10-typing-tips/">WINDWS環境</a>だと必ずしもデフォルトではないですが簡単に設定実現できます。)
 この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。右の<code>control</code>をホールドから左のタップか、はたまた左の<code>shift</code>をホールドしてから右のタップかでローマ字かな入力と英字入力の間を往復できます。この際に既にホールドしていない中心付近の３つのどのキーをタップしてOKといった感じです。</p>
-<p><code>Fn</code>キーの両押しでの連続のカーソールアクセスは辛いので、<code>Fn</code>キーの使用無しで同じ位置でカーソールアクセス出きるような配列レイヤー準備しています。(一時、ラップトップPCの様に、キーボードの右下端での直接カーソールアクセスも試しましたが、ホームポジションから大きく手を動かしの操作となるのであまりよくなかったです。)</p>
+<p><code>Fn</code>キーの両押しでの連続のカーソール操作は辛いので、<code>Fn</code>キーの使用無しで同じ位置でカーソール操作出きるような配列レイヤー(LKL2)も準備しています。(一時、ラップトップPCの様に、キーボードの右下端での直接カーソールアクセスも試しましたが、ホームポジションから大きく手を動かしの操作となるのであまりよくなかったです。)</p>
 <p>ちなみに、<code>Fn</code>キーは２つあり、片押しで２つのレーヤー対応が出きるようになっています。ほぼ全く同じデーターが今入っているので、どっちを押してもほぼ変わりません。</p>
 <p>当面、１４”のノートパソコン(Thinkpad T14 Gen1)に無いキーはいらないと割り切っています。必要なら追加の１０キーパッドを用意するのでしょう。</p>
 <p>PLANCK他のキーボードより幅が有り、一体型ですが両手間隔がとれ猫背にならずに使えます。</p>
-<p>従来のキーボード両端の小指で操作する旧来のシフトキーの類も残していますが、ERGODOX等で見るThumbクラスター風のタイピングでのシフト・コントロール他の操作が出きます。両押しキーの押し方の自由度が増え、移行の学習も無理無くできるので助かります。
-<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、端のキー（特に下の角のキー）を基本使わないと、小指の使用を抑えられ指にやさしいし、手首へのストレスも下げられます。</p>
+<p>従来のキーボード両端の小指で操作する旧来のシフトキー類も残していますが、ERGODOX等で見るThumbクラスター風のタイピングでのシフトキー類の操作が出きます。シフトキー類と文字キーの両押しの押し方の自由度が増え、手にやさしい押し方への移行の際に学習障壁が減り助かります。
+<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、端のキー（特に下の角のキー）を基本使わないと、手首へのストレスも下げられます。</p>
 <p>ちなみに、母音文字を集める際に採用した&quot;AIUEO&quot;配列ですが、「なぜ&quot;E&quot;の使用指が変わらない配列や、はたまた他の配列でないのか？」と問われたら、「特段の理由はないが、中指使用を抑えたい個人的事情と、キー位置の覚えやすさ」というのが実感です。DVORAK配列の&quot;AOEUI&quot;や、頻度での優先順位を考えた&quot;AOIEU&quot;や&quot;AOEIU&quot;でも充分いい気がします。</p>
-<p>とにかく、ここまでの細かい個人的事情にも自由に対応できるのがQMKキーボードの良いところです。</p>
-<p>vimで<code>inoremap jk &lt;ESC&gt;</code>等としてたら、ホームのみの<code>inoremap jj &lt;ESC&gt;</code>や<code>inoremap jh &lt;ESC&gt;</code>等とでもする方が良いかもしれません。</p>
+<p>とにかく、ここまでの細かい個人的事情にも自由に対応できるのがQMKキーボードの良いところです。充分楽しめます。</p>
+<p>最後に、vimで<code>inoremap jk &lt;ESC&gt;</code>等としてたら、ホームのみの<code>inoremap jj &lt;ESC&gt;</code>や<code>inoremap jh &lt;ESC&gt;</code>等とでもする方が良いかもしれません。</p>
 <!-- raw HTML omitted -->
 
 
