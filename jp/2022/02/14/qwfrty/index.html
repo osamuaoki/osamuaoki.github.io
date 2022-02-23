@@ -346,9 +346,9 @@
 <p><img src="/img/QWFRTY.png" alt="QWFRTY詳細"></p>
 <p><a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a>。
 当分色々変更して遊びそうなので、最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を確認するのが一番確実ではあります。( どうも親指を置くFn-キーの間隔を１つ外にずらした方が手首が楽かな、、、、でもそうでもない。やっぱりスプリットデザインにするべきかな、、、、)</p>
-<p>上記統計結果もあって、「<code>_</code> 」 はスプリット直交配置の真ん中に特別にシフト無しでアクセスできるようにしてます。
-また&rdquo;(&ldquo;と&rdquo;)&ldquo;は定位置のFn片押しの&rdquo;,&ldquo;と&rdquo;/&ldquo;以外に、Fn両押しですが押しやすい真ん中にも配置しました。</p>
-<p>さらに、スペースキーは、実質4つあります。<code>shift</code>, <code>control</code>, <code>Fnl1</code>, <code>Fnl2</code>とをタップ・ホールド区別を使って兼用です。真ん中の<code>shift</code>や<code>Control</code>は、<code>Enter</code>やFn押しての<code>Backspace``Backspace</code>との兼用です。</p>
+<p>上記統計結果もあって、「<code>_</code> 」 はスプリット配置したアルファベットキーに挟まれた場所でシフト無しでアクセスできるようにしてます。
+また&rdquo;(&ldquo;と&rdquo;)&ldquo;は、&rdquo;,&ldquo;と&rdquo;/&ldquo;キーをFn片押しする定位置以外に、Fn両押しが必要ですが押しやすい真ん中にも配置しました。</p>
+<p>さらに、スペースキーは、実質4つあります。<code>shift</code>, <code>control</code>, <code>Fnl1</code>, <code>Fnl2</code>とをタップ・ホールド区別を使ってスペースキー兼用しています。真ん中の<code>shift</code>や<code>Control</code>は、タップ操作の<code>Enter</code>やFn片押しタップ操作の<code>Backspace</code>との兼用です。</p>
 <p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-</code>`トグルではなく<code>shift-space</code> や<code>control-space</code>でローマ字かな入力と英字入力の間を往復してます。(この設定はMac風の気がします。<a href="/jp/2019/03/23/gnome-uskb-im-select/">GNOME環境</a>や<a href="https://www.lifehacker.jp/article/235889windows10-typing-tips/">WINDWS環境</a>だと必ずしもデフォルトではないですが簡単に設定実現できます。)
 この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。右の<code>control</code>をホールドから左のタップか、はたまた左の<code>shift</code>をホールドしてから右のタップかでローマ字かな入力と英字入力の間を往復できます。この際に既にホールドしていない中心付近の３つのどのキーをタップしてOKといった感じです。</p>
 <p><code>Fn</code>キーの両押しでの連続のカーソール操作は辛いので、<code>Fn</code>キーの使用無しで同じ位置でカーソール操作出きるような配列レイヤー(LKL2)も準備しています。(一時、ラップトップPCの様に、キーボードの右下端での直接カーソールアクセスも試しましたが、ホームポジションから大きく手を動かしの操作となるのであまりよくなかったです。)</p>
@@ -359,6 +359,7 @@
 <a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、端のキー（特に下の角のキー）を基本使わないと、手首へのストレスも下げられます。</p>
 <p>ちなみに、母音文字を集める際に採用した&quot;AIUEO&quot;配列ですが、「なぜ&quot;E&quot;の使用指が変わらない配列や、はたまた他の配列でないのか？」と問われたら、「特段の理由はないが、中指使用を抑えたい個人的事情と、キー位置の覚えやすさ」というのが実感です。DVORAK配列の&quot;AOEUI&quot;や、頻度での優先順位を考えた&quot;AOIEU&quot;や&quot;AOEIU&quot;でも充分いい気がします。</p>
 <p>とにかく、ここまでの細かい個人的事情にも自由に対応できるのがQMKキーボードの良いところです。充分楽しめます。</p>
+<p>タップとホールドで出力キーが違う設定できますが、タップの入力文字の連続入力がカチカチ連打だと大変な気がしていました。実際には、一度タップ直後の再タップ時にホールドするとタップに対応する文字の長押しになるようで、OS側が連打処理してくれ使い勝手良好です。あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、上手に使えば悪くない感じです。</p>
 <p>最後に、vimで<code>inoremap jk &lt;ESC&gt;</code>等としてたら、ホームのみの<code>inoremap jj &lt;ESC&gt;</code>や<code>inoremap jh &lt;ESC&gt;</code>等とでもする方が良いかもしれません。</p>
 <!-- raw HTML omitted -->
 
