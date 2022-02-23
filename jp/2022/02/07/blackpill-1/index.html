@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/07 (initial publish),
-2022/02/20 (last update)
+2022/02/23 (last update)
 </h3>
 </div>
 
@@ -216,7 +216,14 @@
 </code></pre><p>どうも、FLASHにはすでにHIDのBOOTLOADERがすでに入っている模様です。</p>
 <h2 id="firmware書き込み不調-qmk-dfu">FIRMWARE書き込み不調 (QMK DFU)</h2>
 <p>デバイスは、まだ動いていません。</p>
-<p>まず、FIRMWAREはAT90USB1286とほぼ同じコードなんで、何とかコンパイルして書き込むまではいきました。</p>
+<p>まず、FIRMWAREはAT90USB1286とほぼ同じコードなんで、以下の<code>rules.mk</code>設定で、何とかコンパイルして一見書き込むまではいきました。</p>
+<pre tabindex="0"><code># MCU name
+MCU = STM32F411
+BOARD = BLACKPILL_STM32_F411
+# Bootloader selection
+BOOTLOADER = stm32-dfu
+...
+</code></pre><p>実行ログからは、DFUを使って、ファームウエアーが0x08000000から書き込まれています。</p>
 <pre tabindex="0"><code>...
 Opening DFU capable USB device...
 ID 0483:df11
@@ -234,7 +241,7 @@ Downloading to address = 0x08000000, size = 65836
 Download	[=========================] 100%        65836 bytes
 Download done.
 File downloaded successfully
-</code></pre><p>ファームウエアーが書き込まれたはずなのに、USBコネクターを抜き差ししても、USBデバイス自身がHIDとして認識されません。</p>
+</code></pre><p>でもファームウエアーが書き込まれたはずなのに、USBコネクターを抜き差ししても、USBデバイス自身がHIDとして認識されません。</p>
 <pre tabindex="0"><code>$ journalctl -f
 ...
 usb 6-1.4.3: new full-speed USB device number 23 using xhci_hcd
@@ -286,7 +293,7 @@ memory内に小さめのHIDのBOOTLOADERを入れることがよく行われて�
 <li><a href="https://github.com/Serasidis/STM32_HID_Bootloader">https://github.com/Serasidis/STM32_HID_Bootloader</a></li>
 </ul>
 <p>ARDUINO関連もSTM32F4にしかないDFU前提ではなく、STM32F1xxやSTM32F3xxでも対応できるHID_Bootloaderが前提みたい。</p>
-<p>導入アドレス違いが気になる、、、今日はここまで。</p>
+<p>続きは、後日。</p>
 <!-- raw HTML omitted -->
 
 

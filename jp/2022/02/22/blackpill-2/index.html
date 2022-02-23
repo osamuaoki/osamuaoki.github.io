@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>STM32F411CE (2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">STM32F411CE (2)</span></h1>
+
+<h3 class="date">Date:
+2022/02/22 (initial publish),
+2022/02/23 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/02/14/qwfrty/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#hid-bootloader">HID Bootloader</a>
+      <ul>
+        <li><a href="#アドレス">アドレス</a></li>
+        <li><a href="#hexファイル">HEXファイル</a></li>
+        <li><a href="#電源接続下でのdfuへのはいり方">電源接続下での、DFUへのはいり方</a></li>
+        <li><a href="#dfu接続の確認">DFU接続の確認</a></li>
+        <li><a href="#hid-bootloaderの導入">HID Bootloaderの導入</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>STM32F411CEが載っているblackpillの導入記録の続きです。</p>
+<h2 id="hid-bootloader">HID Bootloader</h2>
+<h3 id="アドレス">アドレス</h3>
+<p>ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の情報によると、
+HID Bootloaderの <code>APP forwarding address</code>は<code>0x8004000</code>だそうです。
+MIcropythonの導入もこのAPP用のアドレスのようです。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">ROM Addr</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">0x8000000 Bootloader</td>
+</tr>
+<tr>
+<td style="text-align:center">16KB</td>
+</tr>
+<tr>
+<td style="text-align:center">0x8004000 APP</td>
+</tr>
+<tr>
+<td style="text-align:center">&hellip;..</td>
+</tr>
+<tr>
+<td style="text-align:center">END</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hexファイル">HEXファイル</h3>
+<p>HEXファイルは以下:</p>
+<ul>
+<li>HID Bootloader: <code>MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/Bootloader/WeAct_HID_Bootloader_F4x1.hex</code></li>
+<li>TESTアプリ: <code>MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/APP/stm32f411_APP_test 0x8004000.hex</code></li>
+</ul>
+<h3 id="電源接続下でのdfuへのはいり方">電源接続下での、DFUへのはいり方</h3>
+<ul>
+<li><strong>BOOT0</strong> と <strong>reset</strong> キーの同時押し</li>
+<li>先に、<strong>reset</strong>キーのリリース</li>
+<li>0.5秒後、<strong>BOOT0</strong>キーのリリース</li>
+</ul>
+<h3 id="dfu接続の確認">DFU接続の確認</h3>
+<pre tabindex="0"><code> $ journalctl -f --no-hostname
+...
+usb 6-1.4.2: new full-speed USB device number 33 using xhci_hcd
+usb 6-1.4.2: New USB device found, idVendor=0483, idProduct=df11, bcdDevice=22.00
+usb 6-1.4.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 6-1.4.2: Product: STM32  BOOTLOADER
+usb 6-1.4.2: Manufacturer: STMicroelectronics
+usb 6-1.4.2: SerialNumber: ******************
+checking bus 6, device 33: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&quot;
+bus: 6, device: 33 was not an MTP device
+checking bus 6, device 33: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&quot;
+bus: 6, device: 33 was not an MTP device
+
+</code></pre><p>そこで、<code>dfu-util</code>実行:</p>
+<pre tabindex="0"><code>$ dfu-util -l
+dfu-util 0.9
+
+Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
+Copyright 2010-2016 Tormod Volden and Stefan Schmidt
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=3, name=&quot;@Device Feature/0xFFFF0000/01*004 e&quot;, serial=&quot;************&quot;
+Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=2, name=&quot;@OTP Memory /0x1FFF7800/01*512 e,01*016 e&quot;, serial=&quot;************&quot;
+Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=1, name=&quot;@Option Bytes  /0x1FFFC000/01*016 e&quot;, serial=&quot;************&quot;
+Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=0, name=&quot;@Internal Flash  /0x08000000/04*016Kg,01*064Kg,03*128Kg&quot;, serial=&quot;************&quot;
+
+</code></pre><p>ちゃんと、DFUモードに入って、<code>dfu-util</code>が使えそうです。</p>
+<h3 id="hid-bootloaderの導入">HID Bootloaderの導入</h3>
+<p>安直に、以下をしてこけて慌てました。</p>
+<pre tabindex="0"><code>$ dfu-util -d 0483:df11 -a 0 --dfuse-address 0x08000000:leave  -D  WeAct_HID_Bootloader_F4x1.hex
+dfu-util 0.9
+ ...
+dfu-util: Invalid DFU suffix signature
+dfu-util: A valid DFU suffix will be required in a future dfu-util release!!!
+ ...
+Downloading to address = 0x08000000, size = 42328
+Download	[=========================] 100%        42328 bytes
+Download done.
+File downloaded successfully
+</code></pre><p>でもデバイスが立ち上がらない。HIDブートローダーが導入できていない。Google すると、同じ事にであった人が解決法を書いてました。</p>
+<ul>
+<li><a href="https://hardwareliberopinerolo.github.io/site/blackpill/#how-to-upload-the-weact-hid-bootloader-on-black-pill">https://hardwareliberopinerolo.github.io/site/blackpill/#how-to-upload-the-weact-hid-bootloader-on-black-pill</a></li>
+</ul>
+<p>これをフォローしました。</p>
+<pre tabindex="0"><code>$ objcopy -Iihex -j .sec1 -Obinary WeAct_HID_Bootloader_F4x1.hex WeAct_HID_Bootloader_F4x1.bin
+
+$ dfu-suffix -a WeAct_HID_Bootloader_F4x1.bin
+dfu-suffix (dfu-util) 0.9
+
+Copyright 2011-2012 Stefan Schmidt, 2013-2014 Tormod Volden
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Suffix successfully added to file
+
+$ dfu-util -a 0 -s 0x08000000 -D WeAct_HID_Bootloader_F4x1.bin
+dfu-util 0.9
+
+Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
+Copyright 2010-2016 Tormod Volden and Stefan Schmidt
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Opening DFU capable USB device...
+ID 0483:df11
+Run-time device DFU version 011a
+Claiming USB DFU Interface...
+Setting Alternate Setting #0 ...
+Determining device status: state = dfuERROR, status = 10
+dfuERROR, clearing status
+Determining device status: state = dfuIDLE, status = 0
+dfuIDLE, continuing
+DFU mode device DFU version 011a
+Device returned transfer size 2048
+DfuSe interface name: &quot;Internal Flash  &quot;
+Downloading to address = 0x08000000, size = 14888
+Download	[=========================] 100%        14888 bytes
+Download done.
+File downloaded successfully
+</code></pre><p>今度は、文句行っていないのでHID bootloaderの導入は上手く行ったみたい。</p>
+<p>更にUSBケーブルを抜き差しすると、ホストPCの<code>journalctl</code>に以下が出ましたので、確かにHIDデバイスとして機能してます。</p>
+<pre tabindex="0"><code>usb 6-1.4.2: New USB device found, idVendor=0483, idProduct=572a, bcdDevice= 2.00
+usb 6-1.4.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+usb 6-1.4.2: Product: WeAct Studio HID Bootloader
+usb 6-1.4.2: Manufacturer: WeAct Studio
+usb 6-1.4.2: SerialNumber: 339138593430
+hid-generic 0003:0483:572A.001D: hiddev2,hidraw2: USB HID v1.11 Device [WeAct Studio WeAct Studio HID Bootloader] on usb-0000:08:00.4-1.4.2/input0
+checking bus 6, device 42: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&quot;
+bus: 6, device: 42 was not an MTP device
+checking bus 6, device 42: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&quot;
+bus: 6, device: 42 was not an MTP device
+
+</code></pre><p>次は、HIDのブートローダーでQMK導入のトライ。とにかく<code>*.bin</code>ファイルまで作成し、ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の&quot;Linux CLI command line flashing&quot;ツールの
+<code>WeAct_HID_Flash-CLI</code>を実行してみました。（DFUデバイスのudevでpermission調整しないと、実行に<code>sudo</code>必要）</p>
+<pre tabindex="0"><code>$ cd MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/
+$ chmod 755 WeAct_HID_Flash-CLI
+$ ./WeAct_HID_Flash-CLI
+
++-----------------------------------------------------------------------+
+|      WeAct HID-Flash Cli v1.0.0 - STM32 HID Bootloader Flash Tool     |
+|    Modified From HID-Flash v2.2.1 - STM32 HID Bootloader Flash Tool   |
+|              WeAct. Modified and Write by zhuyix 20191220             |
++-----------------------------------------------------------------------+
+
+&gt; Usage: WeAct_HID_Flash-CLI &lt;bin/hex firmware_file&gt; &lt;reboot (optional)&gt; : All CMD Used Except &lt;read&gt; &lt;erase&gt;
+&gt;        WeAct_HID_Flash-CLI read                    : Just Read MCU whether Online And Information
+&gt;        WeAct_HID_Flash-CLI &lt;bin/hex firmware_file&gt; : Just Download Firmware
+&gt;        WeAct_HID_Flash-CLI reboot                  : Just Reboot MCU
+&gt;        WeAct_HID_Flash-CLI erase                   : Just Erase MCU App
+</code></pre><p>こっちはアップストリームのHID-Flashをカスタム化したプログラム。メモリーの先頭に置くHIDブートローダーに確保できるメモリーがSTM32F4xx系では１６KBと充分大きいのを利用して機能を増やした模様。</p>
+<pre tabindex="0"><code>$ sudo ./WeAct_HIDi_Flash-CLI /path/to/cgg56_default.bin
+
++-----------------------------------------------------------------------+
+|      WeAct HID-Flash Cli v1.0.0 - STM32 HID Bootloader Flash Tool     |
+|    Modified From HID-Flash v2.2.1 - STM32 HID Bootloader Flash Tool   |
+|              WeAct. Modified and Write by zhuyix 20191220             |
++-----------------------------------------------------------------------+
+
+&gt; Searching for HID Device [0483:572A] ...
+&gt; **
+&gt; HID device [0483:572A] is found !
+&gt; Filename Extension: .bin
+&gt; Sending &lt;reset pages&gt; command ...
+&gt; Flashing Firmware ...
+. 1024 Bytes
+...
+. 65536 Bytes
+. 66560 Bytes
+&gt; Flash Done !
+&gt; Finish
+
+</code></pre><p>どうもここまでは動いたみたい。、、、HIDブートローダーが再導入でき動いた所までは成功です。</p>
+<p>まだキーボードは動かない…また後日。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/02/14/qwfrty/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

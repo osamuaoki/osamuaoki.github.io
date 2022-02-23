@@ -7,6 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>STM32F411CE (2)</title>
+      <link>/jp/2022/02/22/blackpill-2/</link>
+      <pubDate>Tue, 22 Feb 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2022/02/22/blackpill-2/</guid>
+      <description>STM32F411CEが載っているblackpillの導入記録の続きです。
+HID Bootloader アドレス ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の情報によると、 HID Bootloaderの APP forwarding addressは0x8004000だそうです。 MIcropythonの導入もこのAPP用のアドレスのようです。
+   ROM Addr     0x8000000 Bootloader   16KB   0x8004000 APP   &amp;hellip;..   END    HEXファイル HEXファイルは以下:
+ HID Bootloader: MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/Bootloader/WeAct_HID_Bootloader_F4x1.hex TESTアプリ: MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/APP/stm32f411_APP_test 0x8004000.hex  電源接続下での、DFUへのはいり方  BOOT0 と reset キーの同時押し 先に、resetキーのリリース 0.5秒後、BOOT0キーのリリース  DFU接続の確認  $ journalctl -f --no-hostname ... usb 6-1.4.2: new full-speed USB device number 33 using xhci_hcd usb 6-1.</description>
+    </item>
+    
+    <item>
       <title>QWFRTY配列</title>
       <link>/jp/2022/02/14/qwfrty/</link>
       <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
