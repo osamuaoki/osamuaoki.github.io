@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/04/02 (initial publish),
-2022/02/03 (last update)
+2022/02/24 (last update)
 </h3>
 </div>
 
@@ -70,6 +70,10 @@
       <ul>
         <li><a href="#作業中のブランチ履歴の非公開保存">作業中のブランチ履歴の非公開保存</a></li>
         <li><a href="#debianのパッケージング操作の場合">Debianのパッケージング操作の場合</a></li>
+      </ul>
+    </li>
+    <li><a href="#どこにも繋がらない履歴のブランチ作成">どこにも繋がらない履歴のブランチ作成</a>
+      <ul>
         <li><a href="#トラッキング">トラッキング</a></li>
         <li><a href="#完全なリセットgitattributes設定とautocrlf関連">完全なリセット(<code>gitattributes</code>設定と<code>autocrlf</code>関連)</a></li>
         <li><a href="#githubgitlab">GITHUB/GITLAB</a></li>
@@ -87,6 +91,7 @@
 混乱して悩まされます。</p>
 <p>備忘録を兼ねて、アップストリームがGITHUBを使っている
 場合を軸にメモを作成します。</p>
+<p>世の流れで、デフォルトブランチ名に「<code>master</code>」ではなく「<code>main</code>」等を使うことが最近増えています。その場合は適宜以下も読み替えてください。</p>
 <h2 id="gitを使うフォークの管理手順基本">GITを使うフォークの管理手順(基本)</h2>
 <p>簡単のために以下の前提を置きます。（追跡＝tracking）</p>
 <ul>
@@ -261,9 +266,10 @@ $ git branch new_branch_name HEAD@{6}
 <li><code>git config --global init.defaultBranch main</code></li>
 </ul>
 </li>
-<li>デフォールトブランチを<code>master</code>に設定。(salsaレポでの<code>dgit</code>のバグ対応)
+<li>デフォールトブランチを<code>master</code>に一時的に変更。
 <ul>
 <li><code>git config init.defaultBranch master</code></li>
+<li>過去(2021)は<code>dgit</code>のバグ回避で必要な操作だった。 v=9.14以降は不要。</li>
 </ul>
 </li>
 </ul>
@@ -350,7 +356,7 @@ $ git push -u origin master
 <code>debian/gbp.conf</code>を用いて、パッケージング操作用レポ上にある
 パッケージングデーターを追加して結果がコミットされるブランチ名を「<code>debian</code>」
 等という別のブランチ名を用いるようにするのが良いようです。<code>dgit</code>を使う場合
-には、マニュアルでデモ<code>debian/gbp.conf</code>を用いるとともに、<code>git-config</code>を
+には、マニュアルででも<code>debian/gbp.conf</code>を用いるとともに、<code>git-config</code>を
 使い調整することに触れられています。</p>
 <p>上記の正攻法が、何らかの理由でうまくいかない際には、避けたいといったアプローチ
 ですが、アップストリームの「<code>master</code>」ブランチを追跡するローカルブランチの名前を
@@ -408,10 +414,19 @@ cherry-pickして使えるので便利です。そのためだけなら、ロー
 <p>こうしてできた履歴に、<code>gitk --all</code>でアクセスしてローカルブランチ名を
 後からに<code>upstream-master</code>等とGUIで設定すれば、ローカルチェックアウトも
 できます。まあ、ローカルとリモートでブランチ名が変わるのが嫌ですが。</p>
-<p>ちなみに、どこにも繋がらない履歴をブランチ名<code>orphan_branch_name</code>で
-フレッシュスタートするのは、<code>git checkout --orphan orphan_branch_name</code>
-です。</p>
-<h3 id="トラッキング">トラッキング</h3>
+<h2 id="どこにも繋がらない履歴のブランチ作成">どこにも繋がらない履歴のブランチ作成</h2>
+<p><code>gbp</code>のような、どこにも繋がらない履歴のブランチ作成はちょっとトリッキーなので、ここに２ケースの例をメモしておきます。</p>
+<p>新規のREADME.mdがコミットされたどこにも繋がらない履歴を、ブランチ名<code>orphan_branch_name</code>で新規作成するのは以下です。</p>
+<pre tabindex="0"><code>$ git checkout --orphan orphan_branch_name
+$ git rm -rf .
+$ editor README.md
+ ....
+$ git add README.md
+$ git commit -m 'Initial commit'
+</code></pre><p>別のリモートのREPO(<code>another</code>)にあるブランチ(例えば<code>master</code>)の内容のどこにも繋がらない履歴を、既存のローカルREPO内にブランチ名<code>another-master</code>で作成するのは以下です。</p>
+<pre tabindex="0"><code>$ git remote add another http://another.example.org/another
+$ git fetch another master:another-master
+</code></pre><h3 id="トラッキング">トラッキング</h3>
 <p>ブランチがトラッキングするリモートレポの設定は、上記のように最初に
 プッシュする際に<code>git push -u ...</code>とするのも手ですが、直接変更するのは
 <code>git branch -u ...</code>です。</p>
