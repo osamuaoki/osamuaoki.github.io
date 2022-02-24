@@ -70,10 +70,7 @@
       <ul>
         <li><a href="#作業中のブランチ履歴の非公開保存">作業中のブランチ履歴の非公開保存</a></li>
         <li><a href="#debianのパッケージング操作の場合">Debianのパッケージング操作の場合</a></li>
-      </ul>
-    </li>
-    <li><a href="#どこにも繋がらない履歴のブランチ作成">どこにも繋がらない履歴のブランチ作成</a>
-      <ul>
+        <li><a href="#どこにも繋がらない履歴のブランチ作成">どこにも繋がらない履歴のブランチ作成</a></li>
         <li><a href="#トラッキング">トラッキング</a></li>
         <li><a href="#完全なリセットgitattributes設定とautocrlf関連">完全なリセット(<code>gitattributes</code>設定と<code>autocrlf</code>関連)</a></li>
         <li><a href="#githubgitlab">GITHUB/GITLAB</a></li>
@@ -414,7 +411,7 @@ cherry-pickして使えるので便利です。そのためだけなら、ロー
 <p>こうしてできた履歴に、<code>gitk --all</code>でアクセスしてローカルブランチ名を
 後からに<code>upstream-master</code>等とGUIで設定すれば、ローカルチェックアウトも
 できます。まあ、ローカルとリモートでブランチ名が変わるのが嫌ですが。</p>
-<h2 id="どこにも繋がらない履歴のブランチ作成">どこにも繋がらない履歴のブランチ作成</h2>
+<h3 id="どこにも繋がらない履歴のブランチ作成">どこにも繋がらない履歴のブランチ作成</h3>
 <p><code>gbp</code>のような、どこにも繋がらない履歴のブランチ作成はちょっとトリッキーなので、ここに２ケースの例をメモしておきます。</p>
 <p>新規のREADME.mdがコミットされたどこにも繋がらない履歴を、ブランチ名<code>orphan_branch_name</code>で新規作成するのは以下です。</p>
 <pre tabindex="0"><code>$ git checkout --orphan orphan_branch_name
