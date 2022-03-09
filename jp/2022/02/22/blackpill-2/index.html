@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/22 (initial publish),
-2022/03/05 (last update)
+2022/03/10 (last update)
 </h3>
 </div>
 
@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2022/03/06/blackpill-3/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -70,10 +70,18 @@
         <li><a href="#hid-bootloaderの導入">HID Bootloaderの導入</a></li>
       </ul>
     </li>
+    <li><a href="#stm32f411のプログラム方法">STM32F411のプログラム方法</a>
+      <ul>
+        <li><a href="#dfuの問題点の反省と展望">DFUの問題点の反省と展望</a></li>
+        <li><a href="#weact_hid_flash-cli-qmkが上手く動きません">WeAct_HID_Flash-CLI　+ QMKが上手く動きません</a></li>
+        <li><a href="#stm32cubeprogは動くけど">STM32CubeProgは動くけど…</a></li>
+        <li><a href="#何をする">何をする。。。</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
-<p>STM32F411CEが載っているblackpillの導入記録の続きです。</p>
+<p>STM32F411CEが載っているblackpillの導入記録の続きです。失敗も含めて書いてます。</p>
 <h2 id="hid-bootloader">HID Bootloader</h2>
 <h3 id="アドレス">アドレス</h3>
 <p>ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の情報によると、
@@ -250,6 +258,73 @@ $ ./WeAct_HID_Flash-CLI
 
 </code></pre><p>どうもここまでは動いたみたい。、、、HIDブートローダーが再導入でき動いた所までは成功です。</p>
 <p>まだキーボードは動かない…また後日。</p>
+<h2 id="stm32f411のプログラム方法">STM32F411のプログラム方法</h2>
+<p>Linux上でのSTM32F411チップのプログラム法を整理しました。</p>
+<table>
+<thead>
+<tr>
+<th>program</th>
+<th>機能</th>
+<th>タイプ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dfu-util</code></td>
+<td>USB-DFU 経由でのプログラム</td>
+<td>FLOSS</td>
+</tr>
+<tr>
+<td><code>pydfu</code></td>
+<td>USB-DFU 経由でのプログラム</td>
+<td>FLOSS</td>
+</tr>
+<tr>
+<td><code>stlink-tools</code>/<code>stlink-gui</code></td>
+<td>STLink (SWD) 経由でのプログラム</td>
+<td>FLOSS</td>
+</tr>
+<tr>
+<td><a href="https://www.st.com/en/development-tools/stm32cubeprog.html/">STM32CubeProg</a></td>
+<td>JTAG/SWD/? 経由でのプログラム</td>
+<td>Proprietary (ST)</td>
+</tr>
+<tr>
+<td><a href="https://github.com/WeActTC/WeAct_HID_Bootloader_F4x1">WeAct_HID_Flash-CLI</a></td>
+<td>USB-HID 経由でのプログラム</td>
+<td>Proprietary (WeAct)</td>
+</tr>
+</tbody>
+</table>
+<p><code>pydfu</code> は <a href="https://github.com/micropython/micropython">Micropython</a> に含まれてます。</p>
+<h3 id="dfuの問題点の反省と展望">DFUの問題点の反省と展望</h3>
+<p><code>dfu-util</code>は、上記コマンド実行ログ作成後、Debianででも最新の 0.11-1 が使えるようになりました。<code>dfu-suffix</code>等もちゃんとmanpageが付いてます。</p>
+<p><code>dfu-suffix</code>は単にファームウエアーがハードウエアーに対応することを確認するためだけ等の識別番号・CRC相当のバイナリーのサフィックスデータを、もとの拡張子<code>.bin</code>ファイルに付けて、このファイルには拡張子に<code>.dfu</code>を使うようです。この辺、<a href="https://jhalfmoon.com/dbc/2019/06/09/%e9%b3%a5%e3%81%aa%e3%81%8d%e9%87%8c%e3%81%ae%e3%83%9e%e3%82%a4%e3%82%b3%e3%83%b3%e5%b1%8b62-dfuse%e3%81%a8st-link-utility/">DfuSeとST-LINK Utility</a>を先に読んでたら、あまり悩まなかった気がします。</p>
+<p><code>dfu-util</code>がサフィックスデータが無いことに文句を言うのは、気にしなくても良いなどとNETにかかれています。</p>
+<p>今見返してみると、どうも上記で<code>WeAct_HID_Bootloader_F4x1</code>の導入が最初上手くいかなかったのは、<code>.bin</code>ファイルを使うべきところに<code>.hex</code>ファイルを使ったからでした。</p>
+<p>結論: <code>dfu-util</code>系は使える。</p>
+<h3 id="weact_hid_flash-cli-qmkが上手く動きません">WeAct_HID_Flash-CLI　+ QMKが上手く動きません</h3>
+<p>QMKでコンパイル時は<code>cgg56</code>は</p>
+<pre tabindex="0"><code>…
+Size after:
+   text	   data	    bss	    dec	    hex	filename
+      0	  33548	      0	  33548	   830c	cgg56_default.bin
+
+</code></pre><p>と33KBとの表示なのに、実際にできた<code>cgg56_default.bin</code>のファイルサイズは65852 bytesあり、WeAct_HID_Flash-CLIのログはは66560 bytesです。
+サフィックスをとっても65836なので、276bytesの差は不明ですが、いずれにせよコンパイル時に表示されたデーターの倍の65KBほどものデーターを生成し書き込んでいるのには少々違和感があります。
+プログラムサイズを計算し無かったのでTEXTが0でこの差が出たのかなという感じですが、今のところ意味不明です。</p>
+<p>HEXからBINを<code>objcopy</code>で生成しようとすると上記とはちょっと様子が違います。どんなメモリー使用前提(スタートが、0x8000000か0x8004000でHEXが作られているのかが不明)なのも気になります。</p>
+<p><a href="https://hardwareliberopinerolo.github.io/site/blackpill/">ARDUINO作成のスケッチのアップロード</a>は、WeAct_HID_Flash-CLIで単純にBINファイルを書いているので、WeAct_HID_Flash-CLIコマンドの使い方自体は間違っていない気もします。</p>
+<p>とりあえずは、QMKに問題があるかもしれないので、深追いせず、別の使い方を色々探したり試してみます。</p>
+<h3 id="stm32cubeprogは動くけど">STM32CubeProgは動くけど…</h3>
+<p><a href="https://www.st.com/ja/development-tools/stm32cubeprog.html">STM32CubeProg</a>をダウンロードすると、LINUX上でもJAVAベースのIDEがSWD/JTAGベースで接続して使えるようです。ただファイルの展開の際に、LINUX上なのにEXEファイルが必要だったのは意外でした。拡張子がEXEですが、大きなファイルだから中身は自己解凍のアーカイブなのかな?</p>
+<p>ちなみにSTM32CubeProgの前に使われた古いプログラムに、<a href="https://www.st.com/ja/development-tools/stsw-stm32080.html">DfuSe USB device firmware upgrade (UM0412)</a> がソース付きであるようです。
+このDFUでの使い方の例を、<a href="https://ja.visual-foxpro-programmer.com/stm32-download-firmware-dfu-via-usb">Stm32 Download Firmware Dfu Via Usb</a>にあります。どうもBINにSUFFIXを付けることをしています。サンプルプログラムなども付いていたようです。ただ、WINDOWS専用です。</p>
+<p>STM32CubeProgを実行した所、なぜか立ち上げてみた新しいSTM32CubeProgでは、GUI上ではSWDとかJTAGしか選択肢にDFUがつかえるように見えませんでした。不思議です。STM32CubeProgは、GUIのプログラム群でめまいがします。</p>
+<p>何かの折に、https://blog.st.com/stm32cubeide-free-ide/　でも読みますが、今日はSTのプロプライエタリーツールは降参。</p>
+<h3 id="何をする">何をする。。。</h3>
+<p>とにかく、プログラムの導入はDFUでできるめどが立ったので、DFUベースで動くシステムで遊んで、ちょっとメモリーの使われ方になれないといけないと感じました。STLINKは興味はあるけど後回しにします。</p>
+<p>続きは、この次のページにします。</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
@@ -263,7 +338,7 @@ $ ./WeAct_HID_Flash-CLI
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2022/03/06/blackpill-3/">Next Post</a></td>
   
   </tr>
   </tbody>

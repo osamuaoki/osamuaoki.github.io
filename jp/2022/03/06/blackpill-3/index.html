@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>STM32F411CE (3) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">STM32F411CE (3)</span></h1>
+
+<h3 class="date">Date:
+2022/03/06 (initial publish),
+2022/03/10 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/02/22/blackpill-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#dfuのこつ">DFUのこつ</a></li>
+    <li><a href="#circuitpythonでdfuの練習と正解">CircuitPythonでDFUの練習と正解</a></li>
+    <li><a href="#circuitpythonでdfuの失敗例">CircuitPythonでDFUの失敗例</a></li>
+    <li><a href="#サンプルcircuitpythonコードの導入と実行">サンプルCircuitPythonコードの導入と実行</a></li>
+  </ul>
+</nav>
+
+<h2 id="dfuのこつ">DFUのこつ</h2>
+<p>「DFUに入りにくい」などと言うことをNETで散見します。（チップを温めるなどという「おまじない」も日本語のどこかで見ました。）</p>
+<p>確かに、無頓着にBOOT0とNRSTのPUSHスイッチを同時押し・同時離しでDFUに入ろうとすると上手くいかないことがありました。</p>
+<p>でも、以下の手順をとれば、確実にDFUに入れます。</p>
+<ol>
+<li>まず、BOOT0を押す(1sこの状態を保つ)</li>
+<li>併せて、NRSTも押す(1sこの状態を保つ)</li>
+<li>NRSTを離す(この時もBOOT0は押したまま)</li>
+<li>3ステップの1s後、BOOT0を離す</li>
+</ol>
+<p>DFUデバイスのrealtimeの確認は、今風に<code>journalctl -f</code>コマンドです。(昔は<code>sudo dmsg -w</code>)。</p>
+<p>繋がったDFUデバイスの詳細状況は、<code>dfu-util -l</code>で確認します。</p>
+<p>電源投入後すぐだと、一度以下のようなエラーでDFUに入れないことがありました。</p>
+<pre tabindex="0"><code>usb 4-2: new full-speed USB device number 4 using xhci_hcd
+usb 4-2: device descriptor read/64, error -71
+usb 4-2: device descriptor read/64, error -71
+usb 4-2: new full-speed USB device number 5 using xhci_hcd
+usb 4-2: device descriptor read/64, error -71
+usb 4-2: device descriptor read/64, error -71
+usb usb4-port2: attempt power cycle
+usb 4-2: new full-speed USB device number 6 using xhci_hcd
+usb 4-2: Device not responding to setup address.
+usb 4-2: Device not responding to setup address.
+usb 4-2: device not accepting address 6, error -71
+usb 4-2: new full-speed USB device number 7 using xhci_hcd
+usb 4-2: Device not responding to setup address.
+usb 4-2: Device not responding to setup address.
+usb 4-2: device not accepting address 7, error -71
+...
+</code></pre><p>ただ２回目以降は、スイッチの手順さえ守れば確実にDFUには入れます。</p>
+<p>どうも電源投入後すぐという意味の「cold start」では上手くいかないので電源投入後安定化したという意味の「warm」後の時点という話が、チップを温めると温度の話になった感じもなきにしもあらずです。(この差が、本当に温度か、ハイインピーダンス回路での浮遊容量への電荷蓄積の差かはよくわかりません。)</p>
+<h2 id="circuitpythonでdfuの練習と正解">CircuitPythonでDFUの練習と正解</h2>
+<p><a href="https://www.micropython.org/">MicroPython</a>のForkに<a href="https://circuitpython.org/">CircuitPython</a>があり、<a href="https://circuitpython.org/board/stm32f411ce_blackpill/">STM32F411CE Black Pillを明示的にサポート</a>しています。</p>
+<p>WeActのVENDERのサイト: <a href="https://github.com/WeActTC">https://github.com/WeActTC</a>　には、<a href="https://github.com/WeActTC/WeAct_F411CE-MicroPython">https://github.com/WeActTC/WeAct_F411CE-MicroPython</a> レポがあり、そこには、ソースから下手にコンパイルせずコンパイル済みを使うようにとあります。確実に動くはずのこのファームウエアをDFUで導入し、DFUの使い方を確認します。さてここで使うコンパイル済みファイルですが、どうも以下のようです。</p>
+<ul>
+<li><a href="https://github.com/WeActTC/MiniSTM32F4x1/tree/master/SDK/STM32F411CEU6/MicroPython/firmwares-v1.14">https://github.com/WeActTC/MiniSTM32F4x1/tree/master/SDK/STM32F411CEU6/MicroPython/firmwares-v1.14</a></li>
+</ul>
+<p>まず如何にもDFUで導入しなさいという<code>.dfu</code>という拡張子が付いたファイルの中で私の持っている外部ROM無しボード用と見られる<code>firmware_internal_rom_stm32f411_v1.14-7.dfu</code>を導入を試みます。（本気でMicroPythonを使うなら、どうも外部ROM付きのボードとすべきようです。）</p>
+<p>実際にはちょと手間取りましたが、どうもDFUの使い方の正解は以下のようです。</p>
+<pre tabindex="0"><code> $ dfu-util -l
+dfu-util 0.11
+
+Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
+Copyright 2010-2021 Tormod Volden and Stefan Schmidt
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&quot;4-2&quot;, alt=3, name=&quot;@Device Feature/0xFFFF0000/01*004 e&quot;, serial=&quot;************&quot;
+Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&quot;4-2&quot;, alt=2, name=&quot;@OTP Memory /0x1FFF7800/01*512 e,01*016 e&quot;, serial=&quot;************&quot;
+Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&quot;4-2&quot;, alt=1, name=&quot;@Option Bytes  /0x1FFFC000/01*016 e&quot;, serial=&quot;************&quot;
+Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&quot;4-2&quot;, alt=0, name=&quot;@Internal Flash  /0x08000000/04*016Kg,01*064Kg,03*128Kg&quot;, serial=&quot;************&quot;
+
+ $ dfu-util -d 0483:df11 -a 0  -D firmware_internal_rom_stm32f401ce_v30+_v1.14-7.dfu
+dfu-util 0.11
+
+Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
+Copyright 2010-2021 Tormod Volden and Stefan Schmidt
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Multiple alternate interfaces for DfuSe file
+Opening DFU capable USB device...
+Device ID 0483:df11
+Device DFU version 011a
+Claiming USB DFU Interface...
+Setting Alternate Interface #0 ...
+Determining device status...
+DFU state(2) = dfuIDLE, status(0) = No error condition is present
+DFU mode device DFU version 011a
+Device returned transfer size 2048
+DfuSe interface name: &quot;Internal Flash  &quot;
+File contains 1 DFU images
+Parsing DFU image 1
+Target name: ST...
+Image for alternate setting 0, (2 elements, total size = 340216)
+Setting Alternate Interface #0 ...
+Parsing element 1, address = 0x08000000, size = 14800
+Erase   	[=========================] 100%        14800 bytes
+Erase    done.
+Download	[=========================] 100%        14800 bytes
+Download done.
+Parsing element 2, address = 0x08020000, size = 325400
+Erase   	[=========================] 100%       325400 bytes
+Erase    done.
+Download	[=========================] 100%       325400 bytes
+Download done.
+Done parsing DfuSe file
+</code></pre><p>この後、MASS STORAGE DEVICEが現れました。</p>
+<pre tabindex="0"><code>$ pwd
+/media/osamu/WEACTF401CE
+osamu@goofy:/media/osamu/WEACTF401CE
+$ ls -la
+total 21
+drwxr-xr-x  2 osamu osamu 16384 Jan  1  1970 .
+drwxr-x---+ 1 root  root     22 Mar  9 19:30 ..
+-rw-r--r--  1 osamu osamu   366 Jan  1  2015 boot.py
+-rw-r--r--  1 osamu osamu    34 Jan  1  2015 main.py
+-rw-r--r--  1 osamu osamu  2999 Jan  1  2015 pybcdc.inf
+-rw-r--r--  1 osamu osamu   528 Jan  1  2015 README.txt
+</code></pre><p>どうも上手く行ったようです。</p>
+<h2 id="circuitpythonでdfuの失敗例">CircuitPythonでDFUの失敗例</h2>
+<p>上記の正解に至までの失敗例は以下です。</p>
+<p>HID Bootloaderの時と同様に、<code>--dfuse-address 0x08000000:leave</code>をつけると、うまくいきません。</p>
+<pre tabindex="0"><code>$ dfu-util -d 0483:df11 -a 0 --dfuse-address 0x08000000:leave -D firmware_internal_rom_stm32f401ce_v30+_v1.14-7.dfu
+dfu-util 0.11
+
+Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
+Copyright 2010-2021 Tormod Volden and Stefan Schmidt
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
+Multiple alternate interfaces for DfuSe file
+Opening DFU capable USB device...
+Device ID 0483:df11
+Device DFU version 011a
+Claiming USB DFU Interface...
+Setting Alternate Interface #0 ...
+Determining device status...
+DFU state(10) = dfuERROR, status(10) = Device's firmware is corrupt. It cannot return to run-time (non-DFU) operations
+Clearing status
+Determining device status...
+DFU state(2) = dfuIDLE, status(0) = No error condition is present
+DFU mode device DFU version 011a
+Device returned transfer size 2048
+DfuSe interface name: &quot;Internal Flash  &quot;
+dfu-util: This is a DfuSe file, not meant for raw download
+</code></pre><p>以上の様に、「DFUファイルじゃない」といって拒否されていました。</p>
+<p>ただ、この警告は、<code>dfu-suffix --delete</code>をすると出なくなります。</p>
+<pre tabindex="0"><code>dfu-util: Warning: Invalid DFU suffix signature
+dfu-util: A valid DFU suffix will be required in a future dfu-util release
+...
+Device returned transfer size 2048
+DfuSe interface name: &quot;Internal Flash  &quot;
+Downloading element to address = 0x08000000, size = 340501
+Erase   	[=========================] 100%       340501 bytes
+Erase    done.
+Download	[=========================] 100%       340501 bytes
+Download done.
+File downloaded successfully
+Submitting leave request...
+</code></pre><p>でも、この状況で書き込まれたファイルは機能しませんでした。書き込みは１つの連続メモリー空間のように見受けます。</p>
+<p>ちゃんと<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFUの規格</a>を読むべきなんでしょうが、どうも占有メモリー空間が大きく、分割され飛び飛びの場合にはDFUでないといけないようです。</p>
+<p><code>--dfuse-address 0x08000000:leave</code>というオプションをつけると、そのアドレスからベタにバイナリーデーターを書き込む印象です。</p>
+<p>うまくinstallした後の接続後ですが、ストレージは以下でした。</p>
+<pre tabindex="0"><code> $ df
+Filesystem      1K-blocks      Used  Available Use% Mounted on
+ ...
+/dev/sda1              47         5         42  11% /media/osamu/WEACTF401CE
+</code></pre><p>意外とまだメモリーに余裕があるようにも見えます。512KからCircutPythonが占拠した分を引いているので小さくはなっていますが、遊ぶには充分ですね。</p>
+<h2 id="サンプルcircuitpythonコードの導入と実行">サンプルCircuitPythonコードの導入と実行</h2>
+<p>ストレージデバイス上にある<code>boot.py</code> を一部アンコメントしました。</p>
+<pre tabindex="0"><code># boot.py -- run on boot-up
+# can run arbitrary Python, but best to keep it minimal
+
+import machine
+import pyb
+pyb.country('US') # ISO 3166-1 Alpha-2 code, eg US, GB, DE, AU
+pyb.main('main.py') # main script to run after this one
+#pyb.usb_mode('VCP+MSC') # act as a serial and a storage device
+#pyb.usb_mode('VCP+HID') # act as a serial device and a mouse
+</code></pre><p>そして、WeActのサイトの<code>SDK/MicroPython_Example</code>にあった<code>Blink.py</code>を、<code>main.py</code>に上書きしました。</p>
+<p>USBを繋ぐと、青いLEDがピカピカしています。いい感じです。</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/02/22/blackpill-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
