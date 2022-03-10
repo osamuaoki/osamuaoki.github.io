@@ -233,7 +233,7 @@ pyb.main('main.py') # main script to run after this one
 <h2 id="dfuseとdfuse-pack">DfuSeとdfuse-pack</h2>
 <p>以上の経験からDFUファイルとBINファイルが単なるサフィックスの有無等ではないことや、<code>dfu-util</code>コマンドラインの違いによる動作の違いが見えてきました。</p>
 <p>実際どうしてDFUファイルを作るのかなとGOOGLE検索していたら、<code>dfu-util</code>のアップストリームのgit sourceに含まれる情報で、現在WEB上で読める<a href="http://dfu-util.sourceforge.net/dfuse.html">Using dfu-util with DfuSe devices</a>に情報があり、そこにSTM32F4のようなDfuSeデバイスの使い方の説明の中にありました。(残念ながら、Tarされたソースや、Debianのパッケージにはこの情報は現在(2022-03)含まれていません。)</p>
-<p>これによると、DfuSe デバイスは DFU バージョンを &ldquo;1.1a&quot;とレポートするそうです。正式の<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFU標準(バージョン &ldquo;1.1&rdquo;)</a>との互換性は無いそうです。「これを最初に読んでたら。。。」と思いました。</p>
+<p>これによると、DfuSeは&quot;DFU with ST Microsystems extensions&quot;ですので、STMが拡張したDFUです。STM32F411のようなDfuSe デバイスは DFU バージョンを &ldquo;1.1a&quot;とレポートするそうです。正式の<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFU標準(バージョン &ldquo;1.1&rdquo;)</a>との互換性は無いそうです。「これを最初に読んでたら。。。」と思いました。</p>
 <p>DfuSeデバイス用のファイルフォーマットが<code>.dfu</code>拡張子が付いたファイルで、<code>dfuse-pack.py</code>を用いて作成でき、いくつかのメモリーブロックが組み合わさったファイルだそうです。<code>dfuse-pack.py</code>はDebianでは<code>dfuse-pack</code>で、manpageはまだ無かったです。</p>
 <pre tabindex="0"><code>$ dfuse-pack
 Usage:
