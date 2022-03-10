@@ -64,7 +64,9 @@
     <li><a href="#dfuのこつ">DFUのこつ</a></li>
     <li><a href="#circuitpythonでdfuの練習と正解">CircuitPythonでDFUの練習と正解</a></li>
     <li><a href="#circuitpythonでdfuの失敗例">CircuitPythonでDFUの失敗例</a></li>
+    <li><a href="#circuitpythonプログラム起動">CircuitPythonプログラム起動</a></li>
     <li><a href="#サンプルcircuitpythonコードの導入と実行">サンプルCircuitPythonコードの導入と実行</a></li>
+    <li><a href="#dfuseとdfuse-pack">DfuSeとdfuse-pack</a></li>
   </ul>
 </nav>
 
@@ -211,7 +213,8 @@ Submitting leave request...
 </code></pre><p>でも、この状況で書き込まれたファイルは機能しませんでした。書き込みは１つの連続メモリー空間のように見受けます。</p>
 <p>ちゃんと<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFUの規格</a>を読むべきなんでしょうが、どうも占有メモリー空間が大きく、分割され飛び飛びの場合にはDFUでないといけないようです。</p>
 <p><code>--dfuse-address 0x08000000:leave</code>というオプションをつけると、そのアドレスからベタにバイナリーデーターを書き込む印象です。</p>
-<p>うまくinstallした後の接続後ですが、ストレージは以下でした。</p>
+<h2 id="circuitpythonプログラム起動">CircuitPythonプログラム起動</h2>
+<p>うまくCircuitPythonのファームウエアをinstallした後のUSB接続後ですが、現れたストレージは以下でした。</p>
 <pre tabindex="0"><code> $ df
 Filesystem      1K-blocks      Used  Available Use% Mounted on
  ...
@@ -230,6 +233,37 @@ pyb.main('main.py') # main script to run after this one
 #pyb.usb_mode('VCP+HID') # act as a serial device and a mouse
 </code></pre><p>そして、WeActのサイトの<code>SDK/MicroPython_Example</code>にあった<code>Blink.py</code>を、<code>main.py</code>に上書きしました。</p>
 <p>USBを繋ぐと、青いLEDがピカピカしています。いい感じです。</p>
+<h2 id="dfuseとdfuse-pack">DfuSeとdfuse-pack</h2>
+<p><code>dfu-util</code>のアップストリームのgit sourceに含まれる情報で、現在WEB上で読める<a href="http://dfu-util.sourceforge.net/dfuse.html">Using dfu-util with DfuSe devices</a>には　STM32F4のようなDfuSeデバイスの使い方の説明がありました。(残念ながら、Tarされたソースや、Debianのパッケージにはこの情報は現在(2022-03)含まれていません。)</p>
+<p>これによると、DfuSe デバイスは DFU バージョンを &ldquo;1.1a&quot;とレポートするそうです。正式の<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFU標準(バージョン &ldquo;1.1&rdquo;)</a>との互換性は無いそうです。「これを最初に読んでたら。。。」と思いました。</p>
+<p>DfuSeデバイス用のファイルフォーマットが<code>.dfu</code>拡張子が付いたファイルで、<code>dfuse-pack.py</code>を用いて作成できる、いくつかのメモリーブロックが組み合わさったファイルだそうです。<code>dfuse-pack.py</code>はDebianでは<code>dfuse-pack</code>で、manpageはまだ無かったです。</p>
+<pre tabindex="0"><code>$ dfuse-pack
+Usage:
+dfuse-pack [-d|--dump] infile.dfu
+dfuse-pack {-b|--build} address:file.bin [-b address:file.bin ...] [{-D|--device}=vendor:device] outfile.dfu
+dfuse-pack {-s|--build-s19} file.s19 [{-D|--device}=vendor:device] outfile.dfu
+dfuse-pack {-i|--build-ihex} file.hex [-i file.hex ...] [{-D|--device}=vendor:device] outfile.dfu
+
+Options:
+  -h, --help            show this help message and exit
+  -b BINFILES, --build=BINFILES
+                        Include a raw binary file, to be loaded at the
+                        specified address. The BINFILES argument is of the
+                        form address:path-to-file. The address can have @X
+                        appended where X is the alternate interface number for
+                        this binary file. Note that the binary files must not
+                        have any DFU suffix!
+  -i HEXFILES, --build-ihex=HEXFILES
+                        build a DFU file from given Intel HEX HEXFILES
+  -s S19FILE, --build-s19=S19FILE
+                        build a DFU file from given S19 S-record S19FILE
+  -D DEVICE, --device=DEVICE
+                        build for DEVICE, defaults to 0x0483:0xdf11
+  -a ALTINTF, --alt-intf=ALTINTF
+                        build for alternate interface number ALTINTF, defaults
+                        to 0
+  -d, --dump            dump contained images to current directory
+</code></pre><p>メモリーダンプのBINと違い、DFUファイルは飛び飛びのメモリーアドレスへの書き込みができるようです。</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
