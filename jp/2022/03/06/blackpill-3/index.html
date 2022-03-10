@@ -62,9 +62,8 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#dfuのこつ">DFUのこつ</a></li>
-    <li><a href="#circuitpythonでdfuの練習と正解">CircuitPythonでDFUの練習と正解</a></li>
-    <li><a href="#circuitpythonでdfuの失敗例">CircuitPythonでDFUの失敗例</a></li>
-    <li><a href="#circuitpythonプログラム起動">CircuitPythonプログラム起動</a></li>
+    <li><a href="#circuitpython導入によるdfuの練習と正解">CircuitPython導入によるDFUの練習と正解</a></li>
+    <li><a href="#circuitpython導入でのdfuの失敗例">CircuitPython導入でのDFUの失敗例</a></li>
     <li><a href="#サンプルcircuitpythonコードの導入と実行">サンプルCircuitPythonコードの導入と実行</a></li>
     <li><a href="#dfuseとdfuse-pack">DfuSeとdfuse-pack</a></li>
   </ul>
@@ -101,7 +100,7 @@ usb 4-2: device not accepting address 7, error -71
 ...
 </code></pre><p>ただ２回目以降は、スイッチの手順さえ守れば確実にDFUには入れます。</p>
 <p>どうも電源投入後すぐという意味の「cold start」では上手くいかないので電源投入後安定化したという意味の「warm」後の時点という話が、チップを温めると温度の話になった感じもなきにしもあらずです。(この差が、本当に温度か、ハイインピーダンス回路での浮遊容量への電荷蓄積の差かはよくわかりません。)</p>
-<h2 id="circuitpythonでdfuの練習と正解">CircuitPythonでDFUの練習と正解</h2>
+<h2 id="circuitpython導入によるdfuの練習と正解">CircuitPython導入によるDFUの練習と正解</h2>
 <p><a href="https://www.micropython.org/">MicroPython</a>のForkに<a href="https://circuitpython.org/">CircuitPython</a>があり、<a href="https://circuitpython.org/board/stm32f411ce_blackpill/">STM32F411CE Black Pillを明示的にサポート</a>しています。</p>
 <p>WeActのVENDERのサイト: <a href="https://github.com/WeActTC">https://github.com/WeActTC</a>　には、<a href="https://github.com/WeActTC/WeAct_F411CE-MicroPython">https://github.com/WeActTC/WeAct_F411CE-MicroPython</a> レポがあり、そこには、ソースから下手にコンパイルせずコンパイル済みを使うようにとあります。確実に動くはずのこのファームウエアをDFUで導入し、DFUの使い方を確認します。さてここで使うコンパイル済みファイルですが、どうも以下のようです。</p>
 <ul>
@@ -169,8 +168,13 @@ drwxr-x---+ 1 root  root     22 Mar  9 19:30 ..
 -rw-r--r--  1 osamu osamu    34 Jan  1  2015 main.py
 -rw-r--r--  1 osamu osamu  2999 Jan  1  2015 pybcdc.inf
 -rw-r--r--  1 osamu osamu   528 Jan  1  2015 README.txt
-</code></pre><p>どうも上手く行ったようです。</p>
-<h2 id="circuitpythonでdfuの失敗例">CircuitPythonでDFUの失敗例</h2>
+</code></pre><p>うまくCircuitPythonのファームウエアをinstallした後のUSB接続後ですが、現れたストレージは以下でした。</p>
+<pre tabindex="0"><code> $ df
+Filesystem      1K-blocks      Used  Available Use% Mounted on
+ ...
+/dev/sda1              47         5         42  11% /media/osamu/WEACTF401CE
+</code></pre><p>意外とまだメモリーに余裕があるようにも見えます。512KからCircutPythonが占拠した分を引いているので小さくはなっていますが、遊ぶには充分ですね。</p>
+<h2 id="circuitpython導入でのdfuの失敗例">CircuitPython導入でのDFUの失敗例</h2>
 <p>上記の正解に至までの失敗例は以下です。</p>
 <p>HID Bootloaderの時と同様に、<code>--dfuse-address 0x08000000:leave</code>をつけると、うまくいきません。</p>
 <pre tabindex="0"><code>$ dfu-util -d 0483:df11 -a 0 --dfuse-address 0x08000000:leave -D firmware_internal_rom_stm32f401ce_v30+_v1.14-7.dfu
@@ -213,13 +217,6 @@ Submitting leave request...
 </code></pre><p>でも、この状況で書き込まれたファイルは機能しませんでした。書き込みは１つの連続メモリー空間のように見受けます。</p>
 <p>ちゃんと<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFUの規格</a>を読むべきなんでしょうが、どうも占有メモリー空間が大きく、分割され飛び飛びの場合にはDFUでないといけないようです。</p>
 <p><code>--dfuse-address 0x08000000:leave</code>というオプションをつけると、そのアドレスからベタにバイナリーデーターを書き込む印象です。</p>
-<h2 id="circuitpythonプログラム起動">CircuitPythonプログラム起動</h2>
-<p>うまくCircuitPythonのファームウエアをinstallした後のUSB接続後ですが、現れたストレージは以下でした。</p>
-<pre tabindex="0"><code> $ df
-Filesystem      1K-blocks      Used  Available Use% Mounted on
- ...
-/dev/sda1              47         5         42  11% /media/osamu/WEACTF401CE
-</code></pre><p>意外とまだメモリーに余裕があるようにも見えます。512KからCircutPythonが占拠した分を引いているので小さくはなっていますが、遊ぶには充分ですね。</p>
 <h2 id="サンプルcircuitpythonコードの導入と実行">サンプルCircuitPythonコードの導入と実行</h2>
 <p>ストレージデバイス上にある<code>boot.py</code> を一部アンコメントしました。</p>
 <pre tabindex="0"><code># boot.py -- run on boot-up
@@ -234,9 +231,10 @@ pyb.main('main.py') # main script to run after this one
 </code></pre><p>そして、WeActのサイトの<code>SDK/MicroPython_Example</code>にあった<code>Blink.py</code>を、<code>main.py</code>に上書きしました。</p>
 <p>USBを繋ぐと、青いLEDがピカピカしています。いい感じです。</p>
 <h2 id="dfuseとdfuse-pack">DfuSeとdfuse-pack</h2>
-<p><code>dfu-util</code>のアップストリームのgit sourceに含まれる情報で、現在WEB上で読める<a href="http://dfu-util.sourceforge.net/dfuse.html">Using dfu-util with DfuSe devices</a>には　STM32F4のようなDfuSeデバイスの使い方の説明がありました。(残念ながら、Tarされたソースや、Debianのパッケージにはこの情報は現在(2022-03)含まれていません。)</p>
+<p>以上の経験からDFUファイルとBINファイルが単なるサフィックスの違いが、SUFFIXの有無等ではないことや、<code>dfu-util</code>コマンドラインの違いが見えてきました。</p>
+<p>実際どうしてDFUファイルを作るのかなとGOOGLE検索していたら、<code>dfu-util</code>のアップストリームのgit sourceに含まれる情報で、現在WEB上で読める<a href="http://dfu-util.sourceforge.net/dfuse.html">Using dfu-util with DfuSe devices</a>に情報があり、そこにSTM32F4のようなDfuSeデバイスの使い方の説明の中にありました。(残念ながら、Tarされたソースや、Debianのパッケージにはこの情報は現在(2022-03)含まれていません。)</p>
 <p>これによると、DfuSe デバイスは DFU バージョンを &ldquo;1.1a&quot;とレポートするそうです。正式の<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFU標準(バージョン &ldquo;1.1&rdquo;)</a>との互換性は無いそうです。「これを最初に読んでたら。。。」と思いました。</p>
-<p>DfuSeデバイス用のファイルフォーマットが<code>.dfu</code>拡張子が付いたファイルで、<code>dfuse-pack.py</code>を用いて作成できる、いくつかのメモリーブロックが組み合わさったファイルだそうです。<code>dfuse-pack.py</code>はDebianでは<code>dfuse-pack</code>で、manpageはまだ無かったです。</p>
+<p>DfuSeデバイス用のファイルフォーマットが<code>.dfu</code>拡張子が付いたファイルで、<code>dfuse-pack.py</code>を用いて作成でき、いくつかのメモリーブロックが組み合わさったファイルだそうです。<code>dfuse-pack.py</code>はDebianでは<code>dfuse-pack</code>で、manpageはまだ無かったです。</p>
 <pre tabindex="0"><code>$ dfuse-pack
 Usage:
 dfuse-pack [-d|--dump] infile.dfu
