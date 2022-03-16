@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QWFRTY配列 | Goofing Osamu</title>
+    <title>QMK (3) -- QWFRTY配列 | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,11 +32,11 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">QWFRTY配列</span></h1>
+<h1><span class="title">QMK (3) &ndash; QWFRTY配列</span></h1>
 
 <h3 class="date">Date:
 2022/02/14 (initial publish),
-2022/03/05 (last update)
+2022/03/17 (last update)
 </h3>
 </div>
 
@@ -80,34 +80,34 @@
         <li><a href="#dvorak-mod-slash">Dvorak mod-slash</a></li>
       </ul>
     </li>
-    <li><a href="#文字頻度">文字頻度</a></li>
+    <li><a href="#キーボードの動作確認方法">キーボードの動作確認方法</a></li>
+    <li><a href="#文字頻度-アルファベット">文字頻度 (アルファベット)</a></li>
+    <li><a href="#文字頻度-記号">文字頻度 (記号)</a></li>
     <li><a href="#余談">余談</a></li>
   </ul>
 </nav>
 
 <h2 id="背景">背景</h2>
-<p>MCUを使ったIOTの初等プロジェクトとして、<a href="https://github.com/osamuaoki/cg56">cgc56というQMKを利用したキーボード</a>を作りました。</p>
-<p><img src="/img/cgc56r1f.jpg" alt="4x14 ortholinear配列キーボード(cgc56 with DSA)"></p>
-<p>old: <a href="/img/cgc56.jpg">cgc56 with OEM key caps (top down)</a> -&gt; new: <a href="/img/cgc56r1.jpg">cgc56 with DSA key caps (top down)</a></p>
-<p>今回完成したキーボードは、PLANCKより4x14と幅があることを利用して、左右の手の間隔をとり、真ん中の余裕の部分に頻出記号キーを押し込んでいます。</p>
+<p>キーボードによるストレス低減のためのMCUを使ったIOTの初等プロジェクトとして、QMKを使う<a href="https://github.com/osamuaoki/cg56">cgc56というQMKを利用したキーボード</a>を作りました。</p>
+<p>ストレスのソースと削減指針は２つあり、そのバランスが重要です。</p>
 <ul>
-<li>PLANCKよりは普通のキーボードに近いキー配列になっています。</li>
-<li>2つあるFnキーの位置が親指で分かるように、Fnキーキャップの前面角が面取り加工されています。</li>
-<li>2つあるFnキーのうち１つ押しだと数字・記号・F1-F12キーです。(現状、ほぼ左右の差はありません)</li>
-<li>Fnキー２つ同時押しでカーソールキーにアクセスできます。ちょうどこれがQWFRTY配列だとVIMの「<code>hjkl</code>」と同じ位置です。</li>
-<li>Fnキー無しのデフォルトのキー配列は、QWERTY配列とQWFRTY配列が切り替えられます。</li>
-<li>更にFnキーにより、キー配列が変化します。</li>
+<li>フィジカルストレス削減には、できるだけ指の移動に無理が無いのが望ましいと考えます。</li>
+<li>メンタルストレス削減には、できるだけ標準キーボードと変わらないのが望ましいと考えます。</li>
 </ul>
-<p><img src="/img/cgc56-4.png" alt="cgc56 full"></p>
-<p>元データー: <a href="http://www.keyboard-layout-editor.com/#/gists/faf55be2e2240ece6e2a82f5aba8add2">cgc56 キーボードデータ 全体</a></p>
-<p>使ってみて意外とおもしろいので、ここに要点等をメモしておきます。</p>
-<p>ずぼらな性格上、DVORAK, COLMAK, WORKMAN, COLEMAK-DHのいずれも学習障壁が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動も難しくなってしまいます)。</p>
-<p>元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題解決目的のキーボードプロジェクトでした。これだけなら<code>E</code>と<code>F</code>のスワップで済ますのも良いのですが、それだけでは勿体ないので、苦労しない範囲でDVRAKの交互打鍵に近づけられないかと考えた妥協点案が「QWFRTY配列」です。これはあくまでQMKを利用した自作キーボードの最適化キー配列実験で、私の日常生活はQWERTY配列です。</p>
-<p>ちなみに、押されたキーのチェックやNKRO機能のチェックには、以下が便利でした。</p>
+<p>このcgc56は元々は中指を伸ばして「<code>E</code>」を叩きづらいという個人的課題のフィジカルストレス削減のキーボードプロジェクトでした。</p>
+<p>これだけなら「<code>E</code>」と「<code>F</code>」のスワップで済ますのも良いのですが、それだけでは勿体ないので、苦労しない範囲でDVRAKの交互打鍵に近づけられないかと考えた妥協点案が上記の写真の「QWFRTY配列」です。これはあくまでQMKを利用した自作キーボードの最適化キー配列実験で、私の日常生活はQWERTY配列です。</p>
+<p><img src="/img/qwfrty.jpg" alt="4x14 ortholinear配列キーボード(cgc56 with DSA in QWFRTY)"></p>
 <ul>
-<li><a href="https://www.microsoft.com/applied-sciences/projects/anti-ghosting-demo">Keyboard ghosting interactive demonstration</a></li>
-<li><a href="https://drakeirving.github.io/MultiKeyDisplay/">Keyboard Ghosting Demonstration</a></li>
+<li>cgc56 (4x14) は planck (4x12) よりはキーの数が多い。
+<ul>
+<li>普通のLaptop PCのキーボードに近いキー配列が加能です。</li>
+<li>一体型ですが両手間隔がとれ猫背にならずに使えます。</li>
 </ul>
+</li>
+<li>2つあるメインのFnキーキャップの前面角が面取り加工されてい、親指の触覚で手の位置が確認できます。</li>
+</ul>
+<p>実は、DVORAK・COLMAK・WORKMAN・COLEMAK-DH等の既存の「エルゴノミックキーマップ」でフィジカルストレス削減する方策は、私にとっていずれも学習障壁（メンタルストレス）が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動も難しくなってしまいます)。</p>
+<p>この状況下で思いついた「QWFRTY配列」は使ってみてフィジカルストレス削減手法として意外とおもしろいので、ここに要点等をメモしておきます。</p>
 <h2 id="qwfrty配列">QWFRTY配列</h2>
 <p>「QWFRTY配列」は、11個のキーだけが標準の「QWERTY配列」から移動された配列です。</p>
 <p>名前は、１文字違いでややこしいですが、「<strong>QWFRTY配列</strong>」としました。キーは位置の要点を抜き出すと以下です。</p>
@@ -143,7 +143,7 @@
 <li>大きなキー移動を避けるため、&ldquo;L&quot;は動かさなかった。</li>
 <li>QWERTYよりむしろ使い安くなった（？）</li>
 <li>&ldquo;S&quot;と&quot;D&quot;がくるアクセスの良いスペースが空いたので一石二鳥。</li>
-<li>Fn-Fnでアクセスする、本当のカーソールキーと同じ位置となった。</li>
+<li>本当のカーソールキーと相似形の配置で、VIMのカーソールキー (HJKL)が使える。</li>
 </ul>
 </li>
 </ul>
@@ -239,7 +239,13 @@
 <li>28/30キーが移動</li>
 </ul>
 <p>適用対象がOrtholinear配列のため「<code>'</code>」が「<code>/</code>」となっている。（どのキー配列でも、「<code>'</code>」は真ん中の上記枠外の隙間に配置済み）</p>
-<h2 id="文字頻度">文字頻度</h2>
+<h2 id="キーボードの動作確認方法">キーボードの動作確認方法</h2>
+<p>ちなみに、押されたキーのチェックやNKRO機能のチェックには、以下が便利でした。（キープレスが短いと拾えないことがあることには要注意）</p>
+<ul>
+<li><a href="https://www.microsoft.com/applied-sciences/projects/anti-ghosting-demo">Keyboard ghosting interactive demonstration</a></li>
+<li><a href="https://drakeirving.github.io/MultiKeyDisplay/">Keyboard Ghosting Demonstration</a></li>
+</ul>
+<h2 id="文字頻度-アルファベット">文字頻度 (アルファベット)</h2>
 <p>QMK の<code>quantum/</code>中や<code>docs/</code>中を統計して、スペースの数を１００としている。&quot;<code>*</code>&ldquo;はログ圧縮して大局観が分かるようになっています。</p>
 <pre tabindex="0"><code>Cソースコード                  ドキュメンテーション中
 &quot; &quot;  = 100.0 **********
@@ -337,6 +343,7 @@
 でも<code>TH</code>などの子音同士の連続の交互打鍵は確保できていますので、捨てたものではありません。
 とにかく変更が少なく、母音が集中するのがいい感じです。
 （確かに<code>T</code>と<code>Y</code>の交換で改善しますが、キー移動数が増えるのと<code>TH</code>が隣接等のマイナスもあります。過ぎたるは及ばざるが如しです。）</p>
+<h2 id="文字頻度-記号">文字頻度 (記号)</h2>
 <p>ちなみにC言語のソースの場合、記号でスペース比較で約４％以上の頻度は以下だけでした。</p>
 <pre tabindex="0"><code>&quot; &quot;  = 100.0 **********
 &quot;_&quot;  = 35.9 ********
@@ -352,25 +359,11 @@
 &quot;=&quot;  =  4.8 ****
 &quot;&quot;&quot;  =  3.5 ****
 </code></pre><h2 id="余談">余談</h2>
-<p>キーボードの全体感の再確認のため、主要キーの配置をFnキー状態違いも含めて重ね書きすると以下となります。</p>
-<p><img src="/img/QWFRTY.png" alt="QWFRTY詳細"></p>
-<p><a href="http://www.keyboard-layout-editor.com/#/gists/bb66579d5945aafb78ffca0227cb87f0">cgc56 QWFRTY キーボードデータ 詳細版</a>。
-当分色々変更して遊びそうなので、最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/default/keymap.c">私のQMKソース</a>を確認するのが一番確実ではあります。( どうも親指を置くFn-キーの間隔を１つ外にずらした方が手首が楽かな、、、、でもそうでもない。やっぱりスプリットデザインにするべきかな、、、、)</p>
-<p>上記統計結果もあって、「<code>_</code> 」 はスプリット配置したアルファベットキーに挟まれた場所でシフト無しでアクセスできるようにしてます。
-また&rdquo;(&ldquo;と&rdquo;)&ldquo;は、&rdquo;,&ldquo;と&rdquo;/&ldquo;キーをFn片押しする定位置以外に、Fn両押しが必要ですが押しやすい真ん中にも配置しました。</p>
-<p>さらに、スペースキーは、実質4つあります。<code>shift</code>, <code>control</code>, <code>Fnl1</code>, <code>Fnl2</code>とをタップ・ホールド区別を使ってスペースキー兼用しています。真ん中の<code>shift</code>や<code>Control</code>は、タップ操作の<code>Enter</code>やFn片押しタップ操作の<code>Backspace</code>との兼用です。</p>
-<p>日本語入力切り替えは、確定論的挙動としたいので<code>alt-</code>`トグルではなく<code>shift-space</code> や<code>control-space</code>でローマ字かな入力と英字入力の間を往復してます。(この設定はMac風の気がします。<a href="/jp/2019/03/23/gnome-uskb-im-select/">GNOME環境</a>や<a href="https://www.lifehacker.jp/article/235889windows10-typing-tips/">WINDWS環境</a>だと必ずしもデフォルトではないですが簡単に設定実現できます。)
-この変換関連でのスペース多用の際の使い勝手は実際のキーボードでは細かい配慮がされています。右の<code>control</code>をホールドから左のタップか、はたまた左の<code>shift</code>をホールドしてから右のタップかでローマ字かな入力と英字入力の間を往復できます。この際に既にホールドしていない中心付近の３つのどのキーをタップしてOKといった感じです。</p>
-<p><code>Fn</code>キーの両押しでの連続のカーソール操作は辛いので、<code>Fn</code>キーの使用無しで同じ位置でカーソール操作出きるような配列レイヤー(LKL2)も準備しています。(一時、ラップトップPCの様に、キーボードの右下端での直接カーソールアクセスも試しましたが、ホームポジションから大きく手を動かしの操作となるのであまりよくなかったです。)</p>
-<p>ちなみに、<code>Fn</code>キーは２つあり、片押しで２つのレーヤー対応が出きるようになっています。ほぼ全く同じデーターが今入っているので、どっちを押してもほぼ変わりません。</p>
-<p>当面、１４”のノートパソコン(Thinkpad T14 Gen1)に無いキーはいらないと割り切っています。必要なら追加の１０キーパッドを用意するのでしょう。</p>
-<p>PLANCK他のキーボードより幅が有り、一体型ですが両手間隔がとれ猫背にならずに使えます。</p>
-<p>従来のキーボード両端の小指で操作する旧来のシフトキー類も残していますが、ERGODOX等で見るThumbクラスター風のタイピングでのシフトキー類の操作が出きます。シフトキー類と文字キーの両押しの押し方の自由度が増え、手にやさしい押し方への移行の際に学習障壁が減り助かります。
-<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、端のキー（特に下の角のキー）を基本使わないと、手首へのストレスも下げられます。</p>
-<p>ちなみに、母音文字を集める際に採用した&quot;AIUEO&quot;配列ですが、「なぜ&quot;E&quot;の使用指が変わらない配列や、はたまた他の配列でないのか？」と問われたら、「特段の理由はないが、中指使用を抑えたい個人的事情と、キー位置の覚えやすさ」というのが実感です。DVORAK配列の&quot;AOEUI&quot;や、頻度での優先順位を考えた&quot;AOIEU&quot;や&quot;AOEIU&quot;でも充分いい気がします。</p>
-<p>とにかく、ここまでの細かい個人的事情にも自由に対応できるのがQMKキーボードの良いところです。充分楽しめます。</p>
-<p>タップとホールドで出力キーが違う設定できますが、タップの入力文字の連続入力がカチカチ連打だと大変な気がしていました。実際には、一度タップ直後の再タップ時にホールドするとタップに対応する文字の長押しになるようで、OS側が連打処理してくれ使い勝手良好です。あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、上手に使えば悪くない感じです。</p>
-<p>最後に、vimで<code>inoremap jk &lt;ESC&gt;</code>等としてたら、ホームのみの<code>inoremap jj &lt;ESC&gt;</code>や<code>inoremap jh &lt;ESC&gt;</code>等とでもする方が良いかもしれません。</p>
+<p>ちなみに、母音文字を集める際に採用した&quot;AIUEO&quot;配列ですが、「なぜ&quot;E&quot;の使用指が変わらない配列や、はたまた他の配列でないのか？」と問われたら、「特段の理由はないが、（左手）中指使用を抑えたい個人的事情と、キー位置の覚えやすさ」というのが実感です。DVORAK配列の&quot;AOEUI&quot;や、頻度での優先順位を考えた&quot;AOIEU&quot;や&quot;AOEIU&quot;でも充分いい気がします。</p>
+<p>とにかく、ここまでの細かい個人的事情にも自由に対応できるのがQMKキーボードの良いところです。</p>
+<p>最初にハードウエアー設計した地点では、メンタルストレスに配慮して従来のキーボード両端の小指で操作する旧来のシフトキー類も残せる様に考えていました。ただ小指でのこれらの操作はフィジカルなストレスです。</p>
+<p>一方、ERGODOX等で見るThumbクラスター風のタイピングでのシフトキー類の操作は小指への負担が少ないので魅力的です。ただ親指で操作できるキーの数は限られてますし、あまり多くするとキーボードが大きくなり実用性が無くなります。交互打鍵解消よりこの辺をどう着地させるのかが、使いやすい「カスタムキーボード」遊びの最重要課題のようです。</p>
+<p>この辺を色々試すと、当分楽しめそうです。</p>
 <!-- raw HTML omitted -->
 
 
