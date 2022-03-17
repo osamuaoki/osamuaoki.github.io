@@ -72,7 +72,7 @@
 <ul>
 <li>メンタルストレス無く、フィジカルストレスの小さい指の動きが少ないキーマップが欲しい。
 <ul>
-<li>親指がカバーするのは、横に並ぶ２キーが望ましい (英語専用なら１つでも可能。動きとしては３つでは可能)</li>
+<li>親指がカバーするのは、横に並ぶ２キーが望ましい (英語専用なら１つでも可能は可能。動きとしては３つまでは可能だが、PCBが大きくなる)</li>
 <li>人差し指は縦の動きで２列カバーする。</li>
 <li>他の指は縦１列の動き以外はしない。</li>
 <li>「QWERTY」は当分メインのキーマップのベース。</li>
@@ -104,30 +104,57 @@
  │***│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│***│
  │***│ Z │ X │ C │ V │ B │***│***│ N │ M │ , │ . │ / │***│
  │***│***│***│***│Es3│Sp1│***│***│Sp2│En4│***│***│***│***│
-</code></pre><p>ここのポイントは、指のホームポジションのA行のキーに関して、通常の文字キー入力とモードキー(LSFT, LCTL, LALT, LGUI, RALT)入力を、<code>MT()</code>機能を使い両方ができるようにしています。このおかげで、アクセスのよい自然なポジションでタイプできます。</p>
-<p>端のキー（特に下の角のキー）を基本使わ無くてもよくなるので、<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、手首へのストレスが下げられています。</p>
+</code></pre><p>ここのポイントは、人差し指〜小指のホームポジションのA行のキーに関して、通常の文字キー入力とモードキー(LSFT, LCTL, LALT, LGUI, RALT)入力を、<code>MT()</code>機能を使い両方ができるようにしています。このおかげで、アクセスのよい自然なポジションでタイプできます。</p>
+<ul>
+<li>人差し指内側1つ隣: RALT (AltGr)</li>
+<li>人差し指: LGUI</li>
+<li>中指: LALT</li>
+<li>薬指: LCTL</li>
+<li>小指: LSFT</li>
+</ul>
+<p>これで端のキー（特に下の角のキー）を基本使わ無くてもよくなるので、<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、手首へのストレスが下げられています。</p>
 <p>一番下の４つの親指キーは、<code>LT()</code>機能を使って、４つあるTEMPORARY LAYER選択操作に加え、１２までのよくアクセスする非アルファベットキーの入力ができるようにしています。</p>
 <p><a href="https://docs.qmk.fm/#/feature_auto_shift?id=retro-shift">Retro Shift</a>を有効にしています。</p>
-<p>上記では分かり易い様に、cgc56上の「基本的に使う部分」以外のキーを省略しました。もちろんこれらも使えるようになっています。具体的には、従来のキーボード両端の小指で操作するキー類や最下行のキー類は、旧来のキーボードと同様の機能を与え、学習障壁を下げるようにします。ただ小指の操作は嫌です。</p>
-<p>１時的に有効化するレイヤーは実質２つで、横3列の３０物理キーで９０のキーがカバーできます。<code>MT()</code>機能を上手につかえばThumbキーは２つでもレイヤー実現に充分です。ただ、押しやすさと、<code>LT()</code>に加え<code>MT()</code>まで使うのを避けるために、各レイヤーを左右別にして４レイヤーとして打ちやすくレスポンスよくしています。</p>
+<p>Thumb（親指）キーで押している際に１時的に有効化する一時レイヤーは実質２つで、横3列の３０物理キーで９０のキーがカバーできます。<code>MT()</code>機能を上手につかえばThumbキーは２つでもレイヤー実現に充分です。ただ、押しやすさと、<code>LT()</code>に加え<code>MT()</code>まで使うのを避けるために、各レイヤーを左右別にして４レイヤーとして打ちやすくレスポンスよくしています。</p>
+<ul>
+<li>Thumbキーのホームポジションを押すと、ファンクションキー・記号・数字のレイヤーです。</li>
+<li>Thumbキーの隣のポジションを押すと、横10個のキーでカバーしきれなかったキーボード端の記号と、固定レーヤー2~4への移動キーのレイヤーです。</li>
+<li>Thumbキーを押している側は、ホームポジションのA行のキーはモードキーとなります。</li>
+</ul>
+<p>上記１時レイヤー以外に、レイヤー移動後固定されるレイヤーが４つあり、カーソル・テンキー・マウスキー・キーボード自体の設定レイヤーとなります。</p>
+<p>上記では分かり易い様に、cgc56上の「基本的に使う部分」以外のキーを省略しました。もちろんこれらも使えるようになっています。</p>
+<ul>
+<li>従来のキーボード両端の小指で操作するキー類や最下行のキー類には、旧来のキーボードと同様の機能を与え、学習障壁を下げるようにします。(小指の操作は嫌ですので、慣れたらなるべく使いません。)</li>
+<li>中心部のキー類には、狭いので一時レイヤーに押し込んだキーボード端の記号とか<code>F11</code>や<code>F12</code>、ダイナミックマクロ関連キー、カーソール関連キーのアクセスを改善するために重複配置します。</li>
+</ul>
 <p>キーマップの詳細の最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/osamu/keymap.c">私のQMKソース</a>を参照。</p>
 <p>ちなみに「基本的に使う部分」だけからなる片側<code>3x5_2</code>キー構成なら、ドーターボードも含めてすべてが片側10cm角に収まりそうです。</p>
+<p><img src="/img/split34.jpg" alt="片側3x5_2キーの３４キーのスプリットキーボードのイメージ"></p>
 <h2 id="pcb参考情報">PCB参考情報</h2>
+<p>当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
 <ul>
-<li><a href="https://github.com/MakotoKurauchi/helix">Helix</a> &ndash; 5x7+2 ortholinear &ndash; RGB-LED, LP or MX</li>
+<li>類似設計例のPCB Data のソース
+<ul>
+<li><a href="https://github.com/MakotoKurauchi/helix">Helix</a> &ndash; 5x7+2 ortholinear &ndash; RGB-LED, LP or MX (ソケット対応)</li>
 <li><a href="https://github.com/climbalima/let-s-Split-v2">let&rsquo;s split v2</a> &ndash; 4x6 ortholinear &ndash; MX (ドーターボード裏付け)</li>
 <li><a href="https://github.com/e3w2q/su120-keyboard">SU120</a> &ndash; Expandable keyboard &ndash; RGB-LED, LP or MX （モジュラー）</li>
-<li><a href="https://github.com/foostan/crkbd">Corne keyboard and more</a> &ndash; 3x6 +2 column staggered (helix based)</li>
+<li><a href="https://github.com/foostan/crkbd">Corne keyboard and more</a> &ndash; 3x6 +2 column staggered (helix based) (ソケット対応)</li>
 <li><a href="https://github.com/raychengy/fifi_split_keeb">Fifi</a> &ndash; 3x5+3 column staggered</li>
 <li><a href="https://github.com/pierrechevalier83/ferris">ferris</a> &ndash; 3x5+2 column staggered (on board MCU)</li>
 <li><a href="https://github.com/davidphilipbarr/Sweep">Sweep</a> &ndash; 3x5+2 column staggered</li>
+</ul>
+</li>
+<li>参考基礎情報源
+<ul>
+<li><a href="https://keebfolio.netlify.app/">Keebfol.io PCBs</a> まとめサイト、PCB dataへのリンクあり</li>
 <li><a href="https://github.com/mtl/keyboard-pcbs">Keebio Amoeba and more PCBs</a></li>
 <li><a href="https://github.com/kiibohd/pcb">PCB design from kiibohd</a> &ndash; input club</li>
 <li><a href="https://github.com/colemarkham/keyboard_parts.pretty">Cad data: keyboard_parts.pretty</a></li>
 <li><a href="https://www.kailhswitch.com/pcb-socket/">Kailh PCB socket info</a></li>
 <li><a href="https://en.gateron.cn">Gateron company</a></li>
 <li><a href="https://www.gateron.co/">Gateron switch</a> &ndash; ??? sales ???</li>
-<li><a href="https://keebfolio.netlify.app/">Keebfol.io PCBs</a> links to PCB data</li>
+</ul>
+</li>
 </ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
