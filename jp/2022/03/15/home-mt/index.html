@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/03/15 (initial publish),
-2022/03/19 (last update)
+2022/03/20 (last update)
 </h3>
 </div>
 
@@ -68,7 +68,7 @@
 </nav>
 
 <h2 id="状況">状況</h2>
-<p>QMKを使う<a href="https://github.com/osamuaoki/cg56">cgc56というQMKを利用したキーボード</a>等を使って、色々試して気づいたり考えたことを以下に記します。</p>
+<p>QMKを使う<a href="https://github.com/osamuaoki/cg56">cgc56やcgg56というQMKを利用したキーボード</a>等を使って、色々試して気づいたり考えたことを以下に記します。</p>
 <ul>
 <li>メンタルストレス無く、フィジカルストレスの小さい指の動きが少ないキーマップが欲しい。
 <ul>
@@ -127,11 +127,15 @@
 <li>従来のキーボード両端の小指で操作するキー類や最下行のキー類には、旧来のキーボードと同様の機能を与え、学習障壁を下げるようにします。(小指の操作は嫌ですので、慣れたらなるべく使いません。)</li>
 <li>中心部のキー類には、狭いので一時レイヤーに押し込んだキーボード端の記号とか<code>F11</code>や<code>F12</code>、ダイナミックマクロ関連キー、カーソール関連キーのアクセスを改善するために重複配置します。</li>
 </ul>
-<p>キーマップの詳細の最新の状況は、<a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/osamu/keymap.c">私のQMKソース</a>を参照。</p>
-<p>ちなみに「基本的に使う部分」だけからなる片側<code>3x5_2</code>キー構成なら、ドーターボードも含めてすべてが片側10cm角に収まりそうです。</p>
+<p>キーマップの詳細の最新の状況は、私の以下のQMKソースを参照:</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/osamu/keymap.c">cgc56</a></li>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/osamu/keymap.c">cgg56</a></li>
+</ul>
+<p>ちなみに上記の既に作ったキーボードは大きめの40%ともいえる、4 x 14 ortholinearキーボードですが、キーマップのベースが30％系なので、それに相当する「基本的に使う部分」だけからなる片側<code>3x5_2</code>キー構成なら、ドーターボードも含めてすべてが片側10cm角に収まりそうです。</p>
 <p><img src="/img/split34.png" alt="片側３４キーのスプリットキーボードのイメージ"></p>
 <h2 id="pcb参考情報">PCB参考情報</h2>
-<p>当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
+<p>片側<code>3x5_2</code>キー構成のスプリットの小さな携帯タイプが面白そうなので、当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
 <ul>
 <li>類似設計例のPCB Data のソース
 <ul>
@@ -139,6 +143,8 @@
 <li><a href="https://github.com/climbalima/let-s-Split-v2">let&rsquo;s split v2</a> &ndash; 4x6 ortholinear &ndash; MX (ドーターボード裏付け)</li>
 <li><a href="https://github.com/e3w2q/su120-keyboard">SU120</a> &ndash; Expandable keyboard &ndash; RGB-LED, LP or MX （モジュラー）</li>
 <li><a href="https://github.com/foostan/crkbd">Corne keyboard and more</a> &ndash; 3x6 +2 column staggered (helix based) (ソケット対応)</li>
+<li><a href="https://github.com/HellSingCoder/LimeKeyboard">Lime</a> &ndash; 4x6 +6 column staggered (helix based) (ソケット対応), joystick, RE</li>
+<li><a href="https://github.com/Envious-Data/Env-KB">ENV-KB</a> &ndash; many JLCPCB examples　(ソケット対応例あり)</li>
 <li><a href="https://github.com/raychengy/fifi_split_keeb">Fifi</a> &ndash; 3x5+3 column staggered</li>
 <li><a href="https://github.com/pierrechevalier83/ferris">ferris</a> &ndash; 3x5+2 column staggered (on board MCU)</li>
 <li><a href="https://github.com/davidphilipbarr/Sweep">Sweep</a> &ndash; 3x5+2 column staggered</li>
@@ -146,6 +152,7 @@
 </li>
 <li>参考基礎情報源
 <ul>
+<li><a href="https://josef-adamcik.cz/electronics/let-me-introduce-you-sofle-keyboard-split-keyboard-based-on-lily58.html">Blog: PCB techniques &ndash; sofle-keyboard</a></li>
 <li><a href="https://keebfolio.netlify.app/">Keebfol.io PCBs</a> まとめサイト、PCB dataへのリンクあり</li>
 <li><a href="https://github.com/mtl/keyboard-pcbs">Keebio Amoeba and more PCBs</a></li>
 <li><a href="https://github.com/kiibohd/pcb">PCB design from kiibohd</a> &ndash; input club</li>
