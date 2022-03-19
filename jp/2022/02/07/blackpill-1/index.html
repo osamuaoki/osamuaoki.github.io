@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/07 (initial publish),
-2022/02/23 (last update)
+2022/03/19 (last update)
 </h3>
 </div>
 
@@ -69,10 +69,10 @@
         <li><a href="#standbyからの起動">Standbyからの起動</a></li>
       </ul>
     </li>
-    <li><a href="#pin-out">PIN OUT</a></li>
+    <li><a href="#使用上の注意">使用上の注意</a></li>
+    <li><a href="#pin接続-cgg56">PIN接続 (cgg56)</a></li>
     <li><a href="#factory-setting">FACTORY SETTING</a></li>
-    <li><a href="#firmware書き込み不調-qmk-dfu">FIRMWARE書き込み不調 (QMK DFU)</a></li>
-    <li><a href="#hid-bootloader-の調査">HID BOOTLOADER の調査</a></li>
+    <li><a href="#firmware書き込み-qmk-dfu">FIRMWARE書き込み (QMK DFU)</a></li>
   </ul>
 </nav>
 
@@ -157,7 +157,10 @@
 </ul>
 <h3 id="standbyからの起動">Standbyからの起動</h3>
 <p><code>PA0 / WKUP1</code> が <code>0-&gt;</code>1 でwakeup　（つまり、USERのSWを離した時点）</p>
-<h2 id="pin-out">PIN OUT</h2>
+<h2 id="使用上の注意">使用上の注意</h2>
+<p><code>A9-A12</code>USBと共用ピンなので、使うとUSB接続ができなくなります。</p>
+<p>これに気づくのにかなりの時間のロスをしました。結局、<a href="https://www.reddit.com/r/olkb/comments/mx5pkx/stm32f411_black_pill_with_qmk_not_recognized/">REDDITの記事</a>で原因に気づきました。</p>
+<h2 id="pin接続-cgg56">PIN接続 (cgg56)</h2>
 <pre tabindex="0"><code>Blackpill (TOP VIEW)
 
                               USB-C
@@ -167,17 +170,17 @@
         R2  ------- B14 |*  |     |  *|3V3 ----- JS_V
         R3  ------- B15 |*  +-----+  *|B10
         C6  ------- A8  |*  B     N  @|B2 --- BOOT1
-                XXX A9  |*  O     R  @|B1 XXX
-                XXX A10 |*  O     S  @|B0 XXX
-                XXX A11 |*  T     T  *|A7 XXX
-        C5  ------- A12 |*  0        *|A6 XXX
+          [USB] XXX A9  |*  O     R  @|B1 XXX
+          [USB] XXX A10 |*  O     S  @|B0 XXX
+          [USB] XXX A11 |*  T     T  *|A7 XXX
+          [USB] XXX A12 |*  0        *|A6 XXX
         C4  ------- A15 |*           *|A5 ------ JS_R1
         C3  ------- B3  |*           *|A4 ------ JS_R2
         C2  ------- B4  |*           *|A3 ------ C7
         C1  ------- B5  |*           *|A2 ------ C8
         C0  ------- B6  |*           *|A1 ------ C9
         C11 ------- B7  |*           *|A0 ------ C10
-                    B8  |*  K        *|R ---- NRST (/RST, ~RST)
+        C5  ------- B8  |*  K        *|R ---- NRST (/RST, ~RST)
                     B9  |*  E        *|C15 ----- C12
                     5V  |*  Y        *|C14 ----- C13
                     GND |*           *|C13 -- BLUE LED
@@ -192,8 +195,8 @@
 </code></pre><ul>
 <li>XXX PINs had mechanical interferences</li>
 <li><code>A0-B1</code> can be used for ADC (<code>A4</code>, <code>B5</code> actually used for joystick)</li>
-<li>Avoid pins used internally and for DIO.</li>
-<li>blackpillにはピンヘッダーをハンダ付けし、キーボードSWにハンダ付けした AWG30のワイヤーをワイアラップで接続しています。</li>
+<li>Avoid pins used internally (USB I/O, &hellip;) and for DIO.</li>
+<li>blackpillにはピンヘッダーをハンダ付けし、キーボードSWにハンダ付けした AWG30のワイヤーをワイアラップで接続しています。(おかげで、間違って<code>A12</code>に繋いでいた線を<code>B8</code>に移動するのが簡単でした。</li>
 </ul>
 <p><img src="/img/cgg56.jpg" alt="CGG56"></p>
 <h2 id="factory-setting">FACTORY SETTING</h2>
@@ -213,87 +216,68 @@
 ... bus: 4, device: 13 was not an MTP device
 ... checking bus 4, device 13: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&quot;
 ... bus: 4, device: 13 was not an MTP device
-</code></pre><p>どうも、FLASHにはすでにHIDのBOOTLOADERがすでに入っている模様です。</p>
-<h2 id="firmware書き込み不調-qmk-dfu">FIRMWARE書き込み不調 (QMK DFU)</h2>
-<p>デバイスは、まだ動いていません。</p>
-<p>まず、FIRMWAREはAT90USB1286とほぼ同じコードなんで、以下の<code>rules.mk</code>設定で、何とかコンパイルして一見書き込むまではいきました。</p>
+</code></pre><p>どうも、FLASHにはすでにHIDのBOOTLOADERがすでに入っていて、電源投入で普通に起動する模様です。</p>
+<h2 id="firmware書き込み-qmk-dfu">FIRMWARE書き込み (QMK DFU)</h2>
+<p>FIRMWAREはAT90USB1286とほぼ同じコードなんで、以下の<code>rules.mk</code>設定で、(<code>A12</code>ピン問題を解決したら)コンパイルして書き込みました。</p>
 <pre tabindex="0"><code># MCU name
 MCU = STM32F411
 BOARD = BLACKPILL_STM32_F411
 # Bootloader selection
 BOOTLOADER = stm32-dfu
 ...
-</code></pre><p>実行ログからは、DFUを使って、ファームウエアーが0x08000000から書き込まれています。</p>
-<pre tabindex="0"><code>...
+</code></pre><p>そして。。。</p>
+<pre tabindex="0"><code>$ make cgg56:default:flash
+QMK Firmware 0.16.5
+⚠ cgg56: DEVICE_VER in config.h is overwriting usb.device_ver in info.json
+⚠ cgg56: DIODE_DIRECTION in config.h is overwriting diode_direction in info.json
+⚠ cgg56: MANUFACTURER in config.h is overwriting manufacturer in info.json
+⚠ cgg56: PRODUCT_ID in config.h is overwriting usb.pid in info.json
+⚠ cgg56: VENDOR_ID in config.h is overwriting usb.vid in info.json
+⚠ cgg56: Matrix pins are specified in both info.json and config.h, the config.h values win.
+Making cgg56 with keymap default and target flash
+...
+Linking: .build/cgg56_default.elf                                                                   [OK]
+Creating binary load file for flashing: .build/cgg56_default.bin                                    [OK]
+Creating load file for flashing: .build/cgg56_default.hex                                           [OK]
+
+Size after:
+   text	   data	    bss	    dec	    hex	filename
+      0	  24088	      0	  24088	   5e18	cgg56_default.bin
+
+Copying cgg56_default.bin to qmk_firmware folder                                                    [OK]
+Bootloader not found. Make sure the board is in bootloader mode. See https://docs.qmk.fm/#/newbs_flashing
+ Trying again every 0.5s (Ctrl+C to cancel).....................................................
+dfu-util 0.11
+
+Copyright 2005-2009 Weston Schmidt, Harald Welte and OpenMoko Inc.
+Copyright 2010-2021 Tormod Volden and Stefan Schmidt
+This program is Free Software and has ABSOLUTELY NO WARRANTY
+Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
+
 Opening DFU capable USB device...
-ID 0483:df11
-Run-time device DFU version 011a
+Device ID 0483:df11
+Device DFU version 011a
 Claiming USB DFU Interface...
-Setting Alternate Setting #0 ...
-Determining device status: state = dfuERROR, status = 10
-dfuERROR, clearing status
-Determining device status: state = dfuIDLE, status = 0
-dfuIDLE, continuing
+Setting Alternate Interface #0 ...
+Determining device status...
+DFU state(10) = dfuERROR, status(10) = Device's firmware is corrupt. It cannot return to run-time (non-DFU) operations
+Clearing status
+Determining device status...
+DFU state(2) = dfuIDLE, status(0) = No error condition is present
 DFU mode device DFU version 011a
 Device returned transfer size 2048
 DfuSe interface name: &quot;Internal Flash  &quot;
-Downloading to address = 0x08000000, size = 65836
-Download	[=========================] 100%        65836 bytes
+Downloading element to address = 0x08000000, size = 56376
+Erase   	[=========================] 100%        56376 bytes
+Erase    done.
+Download	[=========================] 100%        56376 bytes
 Download done.
 File downloaded successfully
-</code></pre><p>でもファームウエアーが書き込まれたはずなのに、USBコネクターを抜き差ししても、USBデバイス自身がHIDとして認識されません。</p>
-<pre tabindex="0"><code>$ journalctl -f
-...
-usb 6-1.4.3: new full-speed USB device number 23 using xhci_hcd
-usb 6-1.4.3: device descriptor read/64, error -32
-usb 6-1.4.3: device descriptor read/64, error -32
-usb 6-1.4.3: new full-speed USB device number 24 using xhci_hcd
-usb 6-1.4.3: device descriptor read/64, error -32
-usb 6-1.4.3: device descriptor read/64, error -32
-usb 6-1.4-port3: attempt power cycle
-usb 6-1.4.3: new full-speed USB device number 25 using xhci_hcd
-usb 6-1.4.3: Device not responding to setup address.
-usb 6-1.4.3: Device not responding to setup address.
-usb 6-1.4.3: device not accepting address 25, error -71
-usb 6-1.4.3: new full-speed USB device number 26 using xhci_hcd
-usb 6-1.4.3: Device not responding to setup address.
-usb 6-1.4.3: Device not responding to setup address.
-usb 6-1.4.3: device not accepting address 26, error -71
-usb 6-1.4-port3: unable to enumerate USB device
-
-</code></pre><p>RESETとBOOT0の両押しを離しDFUを起動した時には、ちゃんとデバイスとして繋がるから、壊れてはいません。</p>
-<pre tabindex="0"><code>usb 6-1.4.3: new full-speed USB device number 35 using xhci_hcd
-usb 6-1.4.3: New USB device found, idVendor=0483, idProduct=df11, bcdDevice=22.00
-usb 6-1.4.3: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 6-1.4.3: Product: STM32  BOOTLOADER
-usb 6-1.4.3: Manufacturer: STMicroelectronics
-usb 6-1.4.3: SerialNumber: 339138593430
-checking bus 6, device 35: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.3&quot;
-bus: 6, device: 35 was not an MTP device
-checking bus 6, device 35: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.3&quot;
-bus: 6, device: 35 was not an MTP device
-</code></pre><p>USBデバイスとしてさえ認識されないというのは、デバイスの初期化ができていないとのでかなり重傷です。</p>
-<p>STM32F103等だと、NativeでDFUをサポートしていなかったので、シリアル接続などでFlash
-memory内に小さめのHIDのBOOTLOADERを入れることがよく行われていたようだが、
-互換性を求めないならDFUで導入で充分と見ましたが、どうもそうでもないみたいです。</p>
-<h2 id="hid-bootloader-の調査">HID BOOTLOADER の調査</h2>
-<p>元々入っていたHID Bootloaderは、<code>0x800 0400</code> から読み込んだファームウエアーを書き込む。どうも、
-全部で512KBある８つに分かれたフラッシュの最初のセクターの16KBにHID Bootloader自身がいる模様。</p>
-<p>AVRのようにBootloaderをアドレス空間の後におくんじゃないみたい。</p>
-<p>QMKでDFUだと上記を見ると<code>0x800 0000</code>から読み込んだファームウエアーを書き込むみたい。</p>
-<p><code>dfu-util</code> を使ってDFUする際に<code>HEXのVID:PID</code>ペアを <code>-d vid:pid</code>でちゃんと指定して
-<code>-s</code>オプションの導入アドレスを変えればこの辺は変えられるかな？
-それとも初期状態に戻してHID Bootloaderを使うのかな？悩ましい所です。</p>
-<p>最初に入っていたHID Bootloaderを探して、ベンダーの WeActTC の技術情報サイトを覗きました。</p>
-<ul>
-<li><a href="https://github.com/WeActTC">https://github.com/WeActTC</a></li>
-</ul>
-<p>HEXファイルやバイナリーのホストプログラムとともに、元ネタサイト情報もありました。</p>
-<ul>
-<li><a href="https://github.com/Serasidis/STM32_HID_Bootloader">https://github.com/Serasidis/STM32_HID_Bootloader</a></li>
-</ul>
-<p>ARDUINO関連もSTM32F4にしかないDFU前提ではなく、STM32F1xxやSTM32F3xxでも対応できるHID_Bootloaderが前提みたい。</p>
-<p>続きは、後日。</p>
+Submitting leave request...
+Transitioning to dfuMANIFEST state
+</code></pre><p>キーボードで動いています。とりあえず、一見落着です。</p>
+<p>ちなみに、<code>A12</code>ピン問題を解決する前は、ファームウエアーを書き込みはできるのに、USBデバイスの初期化すらができずホスト側からUSBデバイスとしてさえ認識されないひどい状況でした。</p>
+<p>思い返すと、AVRのARDUINOで不用意にJTAG機能をONにするFUSE設定をして、一部のI/OのPINが使えなくなって悩んだのとある意味似た状況でした。</p>
 <!-- raw HTML omitted -->
 
 

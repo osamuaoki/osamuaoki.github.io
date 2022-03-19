@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/22 (initial publish),
-2022/03/10 (last update)
+2022/03/19 (last update)
 </h3>
 </div>
 
@@ -61,32 +61,37 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#hid-bootloader">HID Bootloader</a>
+    <li><a href="#hid-bootloader-の復元準備">HID BOOTLOADER の復元準備</a>
       <ul>
         <li><a href="#アドレス">アドレス</a></li>
         <li><a href="#hexファイル">HEXファイル</a></li>
         <li><a href="#電源接続下でのdfuへのはいり方">電源接続下での、DFUへのはいり方</a></li>
-        <li><a href="#dfu接続の確認">DFU接続の確認</a></li>
-        <li><a href="#hid-bootloaderの導入">HID Bootloaderの導入</a></li>
+        <li><a href="#dfu接続の確認法">DFU接続の確認法</a></li>
       </ul>
     </li>
-    <li><a href="#stm32f411のプログラム方法">STM32F411のプログラム方法</a>
-      <ul>
-        <li><a href="#dfuの問題点の反省と展望">DFUの問題点の反省と展望</a></li>
-        <li><a href="#weact_hid_flash-cli-qmkが上手く動きません">WeAct_HID_Flash-CLI　+ QMKが上手く動きません</a></li>
-        <li><a href="#stm32cubeprogは動くけど">STM32CubeProgは動くけど…</a></li>
-        <li><a href="#何をする">何をする。。。</a></li>
-      </ul>
-    </li>
+    <li><a href="#stm32f411の各種プログラム方法">STM32F411の各種プログラム方法</a></li>
+    <li><a href="#binファイル経由でのdfu実行">BINファイル経由でのDFU実行</a></li>
+    <li><a href="#hid-bootloaderの導入の失敗例">HID Bootloaderの導入の失敗例</a></li>
+    <li><a href="#stm32cubeprogも動くけど">STM32CubeProgも動くけど…</a></li>
   </ul>
 </nav>
 
-<p>STM32F411CEが載っているblackpillの導入記録の続きです。失敗も含めて書いてます。</p>
-<h2 id="hid-bootloader">HID Bootloader</h2>
+<p>STM32F411CEが載っているblackpillの導入記録の続きです。</p>
+<h2 id="hid-bootloader-の復元準備">HID BOOTLOADER の復元準備</h2>
+<p><a href="/jp/2022/02/07/blackpill-1/">前記の方法でQMKをDFUで内蔵フラッシュメモリーの<code>0x800 0000</code>から導入する</a>と上書きされてしまいます。書き換えできるメモリーの最後にbootloaderを置くAVRと異なり、ARM系のSTM32Fはフラッシュの最初の<code>0x800 0000</code>にBootloader等を置かれているからです。</p>
+<p>STM32F103のような、ROM化されたUSB対応bootloaderが無いMCUの場合にはHID BOOTLOADERが必要ですが、STM32F411等はROMがDFUをサポートしてUSB経由のファームウエアー書き換えに対応しているので、HID BOOTLOADERは必須要素技術ではありません。ここは、後学のため元のHID BOOTLOADERの復元法を記します。(元々は<code>A12</code>ピン問題で悩んでいた際の学習ノートです。)</p>
+<p>最初に入っていたHID Bootloaderは、ベンダーの WeActTC の技術情報サイトを覗き入手します。</p>
+<ul>
+<li><a href="https://github.com/WeActTC">https://github.com/WeActTC</a></li>
+</ul>
+<p>HEXファイルやバイナリーのホストプログラムとともに、元ネタサイト情報もありました。</p>
+<ul>
+<li><a href="https://github.com/Serasidis/STM32_HID_Bootloader">https://github.com/Serasidis/STM32_HID_Bootloader</a></li>
+</ul>
+<p><a href="https://hardwareliberopinerolo.github.io/site/blackpill/">ARDUINO作成のスケッチのアップロード</a>は、WeAct_HID_Flash-CLIで単純にBINファイルを書いているので、ARDUINO系のシステムでSTM32F103と共通のファームウエアーを作成し使用するには、HID_Bootloaderも良いかもしれません。</p>
 <h3 id="アドレス">アドレス</h3>
-<p>ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の情報によると、
-HID Bootloaderの <code>APP forwarding address</code>は<code>0x8004000</code>だそうです。
-MIcropythonの導入もこのAPP用のアドレスのようです。</p>
+<p>ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の情報によると、HID Bootloaderの <code>APP forwarding address</code>は<code>0x8004000</code>だそうです。
+STM32F103と違いSTM32F411はフラッシュの書き換え単位が16KBあるので、これだけのスペース空けています。</p>
 <table>
 <thead>
 <tr>
@@ -111,8 +116,10 @@ MIcropythonの導入もこのAPP用のアドレスのようです。</p>
 </tr>
 </tbody>
 </table>
+<p>つまり元々ボード上のMCUに書き込まれていたのHID Bootloaderには<code>0x800 0400</code> に読み込まれて実行されるように作成したファームウエアーが必要です。</p>
+<p>QMKは通常<code>0x800 0000</code> に書き込み実行するファームウエアーを作成するので、QMKファームウエアーの導入にHID Bootloaderは使えません。</p>
 <h3 id="hexファイル">HEXファイル</h3>
-<p>HEXファイルは以下:</p>
+<p>WeActが提供するプロプライエタリーのHEXファイルは以下:</p>
 <ul>
 <li>HID Bootloader: <code>MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/Bootloader/WeAct_HID_Bootloader_F4x1.hex</code></li>
 <li>TESTアプリ: <code>MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/APP/stm32f411_APP_test 0x8004000.hex</code></li>
@@ -123,7 +130,7 @@ MIcropythonの導入もこのAPP用のアドレスのようです。</p>
 <li>先に、<strong>reset</strong>キーのリリース</li>
 <li>0.5秒後、<strong>BOOT0</strong>キーのリリース</li>
 </ul>
-<h3 id="dfu接続の確認">DFU接続の確認</h3>
+<h3 id="dfu接続の確認法">DFU接続の確認法</h3>
 <pre tabindex="0"><code> $ journalctl -f --no-hostname
 ...
 usb 6-1.4.2: new full-speed USB device number 33 using xhci_hcd
@@ -151,20 +158,48 @@ Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&qu
 Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=1, name=&quot;@Option Bytes  /0x1FFFC000/01*016 e&quot;, serial=&quot;************&quot;
 Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=0, name=&quot;@Internal Flash  /0x08000000/04*016Kg,01*064Kg,03*128Kg&quot;, serial=&quot;************&quot;
 
-</code></pre><p>ちゃんと、DFUモードに入って、<code>dfu-util</code>が使えそうです。</p>
-<h3 id="hid-bootloaderの導入">HID Bootloaderの導入</h3>
-<p>安直に、以下をしてこけて慌てました。</p>
-<pre tabindex="0"><code>$ dfu-util -d 0483:df11 -a 0 --dfuse-address 0x08000000:leave  -D  WeAct_HID_Bootloader_F4x1.hex
-dfu-util 0.9
- ...
-dfu-util: Invalid DFU suffix signature
-dfu-util: A valid DFU suffix will be required in a future dfu-util release!!!
- ...
-Downloading to address = 0x08000000, size = 42328
-Download	[=========================] 100%        42328 bytes
-Download done.
-File downloaded successfully
-</code></pre><p>でもデバイスが立ち上がらない。HIDブートローダーが導入できていない。Google すると、詳しい手順を書いている人がいました。</p>
+</code></pre><p>ちゃんと、DFUモードに入って、<code>dfu-util</code>が使えています。</p>
+<h2 id="stm32f411の各種プログラム方法">STM32F411の各種プログラム方法</h2>
+<p>Linux上でのSTM32F411チップのプログラム法を整理しました。</p>
+<table>
+<thead>
+<tr>
+<th>program</th>
+<th>機能</th>
+<th>タイプ</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>dfu-util</code></td>
+<td>USB-DFU 経由でのプログラム</td>
+<td>FLOSS</td>
+</tr>
+<tr>
+<td><code>pydfu</code></td>
+<td>USB-DFU 経由でのプログラム</td>
+<td>FLOSS</td>
+</tr>
+<tr>
+<td><code>stlink-tools</code>/<code>stlink-gui</code></td>
+<td>STLink (SWD) 経由でのプログラム</td>
+<td>FLOSS</td>
+</tr>
+<tr>
+<td><a href="https://www.st.com/en/development-tools/stm32cubeprog.html/">STM32CubeProg</a></td>
+<td>JTAG/SWD/? 経由でのプログラム</td>
+<td>Proprietary (ST)</td>
+</tr>
+<tr>
+<td><a href="https://github.com/WeActTC/WeAct_HID_Bootloader_F4x1">WeAct_HID_Flash-CLI</a></td>
+<td>USB-HID 経由でのプログラム</td>
+<td>Proprietary (WeAct)</td>
+</tr>
+</tbody>
+</table>
+<p><code>pydfu</code> は <a href="https://github.com/micropython/micropython">Micropython</a> に含まれてます。</p>
+<h2 id="binファイル経由でのdfu実行">BINファイル経由でのDFU実行</h2>
+<p>Google すると、詳しい原状復帰をBINファイル経由でのDFUで実現している人がいました。</p>
 <ul>
 <li><a href="https://hardwareliberopinerolo.github.io/site/blackpill/#how-to-upload-the-weact-hid-bootloader-on-black-pill">https://hardwareliberopinerolo.github.io/site/blackpill/#how-to-upload-the-weact-hid-bootloader-on-black-pill</a></li>
 </ul>
@@ -204,8 +239,7 @@ Downloading to address = 0x08000000, size = 14888
 Download	[=========================] 100%        14888 bytes
 Download done.
 File downloaded successfully
-</code></pre><p>今度は、文句行っていないのでHID bootloaderの導入は上手く行ったみたい。</p>
-<p>更にUSBケーブルを抜き差しすると、ホストPCの<code>journalctl</code>に以下が出ましたので、確かにHIDデバイスとして機能してます。</p>
+</code></pre><p>更にUSBケーブルを抜き差しすると、ホストPCの<code>journalctl</code>に以下が出ましたので、また元のHIDデバイスとして機能します。</p>
 <pre tabindex="0"><code>usb 6-1.4.2: New USB device found, idVendor=0483, idProduct=572a, bcdDevice= 2.00
 usb 6-1.4.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
 usb 6-1.4.2: Product: WeAct Studio HID Bootloader
@@ -217,114 +251,17 @@ bus: 6, device: 42 was not an MTP device
 checking bus 6, device 42: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&quot;
 bus: 6, device: 42 was not an MTP device
 
-</code></pre><p>次は、HIDのブートローダーでQMK導入のトライ。とにかく<code>*.bin</code>ファイルまで作成し、ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の&quot;Linux CLI command line flashing&quot;ツールの
-<code>WeAct_HID_Flash-CLI</code>を実行してみました。（DFUデバイスのudevでpermission調整しないと、実行に<code>sudo</code>必要）</p>
-<pre tabindex="0"><code>$ cd MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/
-$ chmod 755 WeAct_HID_Flash-CLI
-$ ./WeAct_HID_Flash-CLI
-
-+-----------------------------------------------------------------------+
-|      WeAct HID-Flash Cli v1.0.0 - STM32 HID Bootloader Flash Tool     |
-|    Modified From HID-Flash v2.2.1 - STM32 HID Bootloader Flash Tool   |
-|              WeAct. Modified and Write by zhuyix 20191220             |
-+-----------------------------------------------------------------------+
-
-&gt; Usage: WeAct_HID_Flash-CLI &lt;bin/hex firmware_file&gt; &lt;reboot (optional)&gt; : All CMD Used Except &lt;read&gt; &lt;erase&gt;
-&gt;        WeAct_HID_Flash-CLI read                    : Just Read MCU whether Online And Information
-&gt;        WeAct_HID_Flash-CLI &lt;bin/hex firmware_file&gt; : Just Download Firmware
-&gt;        WeAct_HID_Flash-CLI reboot                  : Just Reboot MCU
-&gt;        WeAct_HID_Flash-CLI erase                   : Just Erase MCU App
-</code></pre><p>こっちはアップストリームのHID-Flashをカスタム化したプログラム。メモリーの先頭に置くHIDブートローダーに確保できるメモリーがSTM32F4xx系では１６KBと充分大きいのを利用して機能を増やした模様。</p>
-<pre tabindex="0"><code>$ sudo ./WeAct_HIDi_Flash-CLI /path/to/cgg56_default.bin
-
-+-----------------------------------------------------------------------+
-|      WeAct HID-Flash Cli v1.0.0 - STM32 HID Bootloader Flash Tool     |
-|    Modified From HID-Flash v2.2.1 - STM32 HID Bootloader Flash Tool   |
-|              WeAct. Modified and Write by zhuyix 20191220             |
-+-----------------------------------------------------------------------+
-
-&gt; Searching for HID Device [0483:572A] ...
-&gt; **
-&gt; HID device [0483:572A] is found !
-&gt; Filename Extension: .bin
-&gt; Sending &lt;reset pages&gt; command ...
-&gt; Flashing Firmware ...
-. 1024 Bytes
-...
-. 65536 Bytes
-. 66560 Bytes
-&gt; Flash Done !
-&gt; Finish
-
-</code></pre><p>どうもここまでは動いたみたい。、、、HIDブートローダーが再導入でき動いた所までは成功です。</p>
-<p>まだキーボードは動かない…また後日。</p>
-<h2 id="stm32f411のプログラム方法">STM32F411のプログラム方法</h2>
-<p>Linux上でのSTM32F411チップのプログラム法を整理しました。</p>
-<table>
-<thead>
-<tr>
-<th>program</th>
-<th>機能</th>
-<th>タイプ</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>dfu-util</code></td>
-<td>USB-DFU 経由でのプログラム</td>
-<td>FLOSS</td>
-</tr>
-<tr>
-<td><code>pydfu</code></td>
-<td>USB-DFU 経由でのプログラム</td>
-<td>FLOSS</td>
-</tr>
-<tr>
-<td><code>stlink-tools</code>/<code>stlink-gui</code></td>
-<td>STLink (SWD) 経由でのプログラム</td>
-<td>FLOSS</td>
-</tr>
-<tr>
-<td><a href="https://www.st.com/en/development-tools/stm32cubeprog.html/">STM32CubeProg</a></td>
-<td>JTAG/SWD/? 経由でのプログラム</td>
-<td>Proprietary (ST)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/WeActTC/WeAct_HID_Bootloader_F4x1">WeAct_HID_Flash-CLI</a></td>
-<td>USB-HID 経由でのプログラム</td>
-<td>Proprietary (WeAct)</td>
-</tr>
-</tbody>
-</table>
-<p><code>pydfu</code> は <a href="https://github.com/micropython/micropython">Micropython</a> に含まれてます。</p>
-<h3 id="dfuの問題点の反省と展望">DFUの問題点の反省と展望</h3>
-<p><code>dfu-util</code>は、上記コマンド実行ログ作成後、Debianででも最新の 0.11-1 が使えるようになりました。<code>dfu-suffix</code>等もちゃんとmanpageが付いてます。</p>
-<p><code>dfu-suffix</code>は単にファームウエアーがハードウエアーに対応することを確認するためだけ等の識別番号・CRC相当のバイナリーのサフィックスデータを、もとの拡張子<code>.bin</code>ファイルに付けて、このファイルには拡張子に<code>.dfu</code>を使うようです。この辺、<a href="https://jhalfmoon.com/dbc/2019/06/09/%e9%b3%a5%e3%81%aa%e3%81%8d%e9%87%8c%e3%81%ae%e3%83%9e%e3%82%a4%e3%82%b3%e3%83%b3%e5%b1%8b62-dfuse%e3%81%a8st-link-utility/">DfuSeとST-LINK Utility</a>を先に読んでたら、あまり悩まなかった気がします。</p>
-<p><code>dfu-util</code>がサフィックスデータが無いことに文句を言うのは、気にしなくても良いなどとNETにかかれています。</p>
-<p>今見返してみると、どうも上記で<code>WeAct_HID_Bootloader_F4x1</code>の導入が最初上手くいかなかったのは、<code>.bin</code>ファイルを使うべきところに<code>.hex</code>ファイルを使ったからでした。</p>
-<p>結論: <code>dfu-util</code>系は使える。</p>
-<h3 id="weact_hid_flash-cli-qmkが上手く動きません">WeAct_HID_Flash-CLI　+ QMKが上手く動きません</h3>
-<p>QMKでコンパイル時は<code>cgg56</code>は</p>
-<pre tabindex="0"><code>…
-Size after:
-   text	   data	    bss	    dec	    hex	filename
-      0	  33548	      0	  33548	   830c	cgg56_default.bin
-
-</code></pre><p>と33KBとの表示なのに、実際にできた<code>cgg56_default.bin</code>のファイルサイズは65852 bytesあり、WeAct_HID_Flash-CLIのログはは66560 bytesです。
-サフィックスをとっても65836なので、276bytesの差は不明ですが、いずれにせよコンパイル時に表示されたデーターの倍の65KBほどものデーターを生成し書き込んでいるのには少々違和感があります。
-プログラムサイズを計算し無かったのでTEXTが0でこの差が出たのかなという感じですが、今のところ意味不明です。</p>
-<p>HEXからBINを<code>objcopy</code>で生成しようとすると上記とはちょっと様子が違います。どんなメモリー使用前提(スタートが、0x8000000か0x8004000でHEXが作られているのかが不明)なのも気になります。</p>
-<p><a href="https://hardwareliberopinerolo.github.io/site/blackpill/">ARDUINO作成のスケッチのアップロード</a>は、WeAct_HID_Flash-CLIで単純にBINファイルを書いているので、WeAct_HID_Flash-CLIコマンドの使い方自体は間違っていない気もします。</p>
-<p>とりあえずは、QMKに問題があるかもしれないので、深追いせず、別の使い方を色々探したり試してみます。</p>
-<h3 id="stm32cubeprogは動くけど">STM32CubeProgは動くけど…</h3>
+</code></pre><p>上記での<code>dfu-suffix</code>を使って、単にファームウエアーがハードウエアーに対応することを確認するためだけ等の識別番号・CRC相当のバイナリーのサフィックスデータを追加はどうも必須要件では無く、ただこれをするとうるさい警告が出なくなります。</p>
+<p>必須要件は、BINファイル使用時には、書き込み開始アドレスを明示的に<code>-s 0x08000000</code>等と指定することです。</p>
+<p>DFUファイルの場合はちょっと違います。これは次回触れます。</p>
+<h2 id="hid-bootloaderの導入の失敗例">HID Bootloaderの導入の失敗例</h2>
+<p>最初、安直に、HEXファイルを直接<code>dfu-util</code>に渡して動かずに慌てました。dfu-util`には、BINファイルかDFUファイルが必要です。</p>
+<h2 id="stm32cubeprogも動くけど">STM32CubeProgも動くけど…</h2>
 <p><a href="https://www.st.com/ja/development-tools/stm32cubeprog.html">STM32CubeProg</a>をダウンロードすると、LINUX上でもJAVAベースのIDEがSWD/JTAGベースで接続して使えるようです。ただファイルの展開の際に、LINUX上なのにEXEファイルが必要だったのは意外でした。拡張子がEXEですが、大きなファイルだから中身は自己解凍のアーカイブなのかな?</p>
 <p>ちなみにSTM32CubeProgの前に使われた古いプログラムに、<a href="https://www.st.com/ja/development-tools/stsw-stm32080.html">DfuSe USB device firmware upgrade (UM0412)</a> がソース付きであるようです。
 このDFUでの使い方の例を、<a href="https://ja.visual-foxpro-programmer.com/stm32-download-firmware-dfu-via-usb">Stm32 Download Firmware Dfu Via Usb</a>にあります。どうもBINにSUFFIXを付けることをしています。サンプルプログラムなども付いていたようです。ただ、WINDOWS専用です。</p>
 <p>STM32CubeProgを実行した所、なぜか立ち上げてみた新しいSTM32CubeProgでは、GUI上ではSWDとかJTAGしか選択肢にDFUがつかえるように見えませんでした。不思議です。STM32CubeProgは、GUIのプログラム群でめまいがします。</p>
 <p>何かの折に、https://blog.st.com/stm32cubeide-free-ide/　でも読みますが、今日はSTのプロプライエタリーツールは降参。</p>
-<h3 id="何をする">何をする。。。</h3>
-<p>とにかく、プログラムの導入はDFUでできるめどが立ったので、DFUベースで動くシステムで遊んで、ちょっとメモリーの使われ方になれないといけないと感じました。STLINKは興味はあるけど後回しにします。</p>
-<p>続きは、この次のページにします。</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->

@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/03/06 (initial publish),
-2022/03/17 (last update)
+2022/03/19 (last update)
 </h3>
 </div>
 
@@ -62,13 +62,15 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#dfuのこつ">DFUのこつ</a></li>
-    <li><a href="#circuitpython導入によるdfuの練習と正解">CircuitPython導入によるDFUの練習と正解</a></li>
+    <li><a href="#dfuファイル経由での導入例-circuitpython導入によるdfuの練習">DFUファイル経由での導入例 (CircuitPython導入によるDFUの練習)</a></li>
     <li><a href="#circuitpython導入でのdfuの失敗例">CircuitPython導入でのDFUの失敗例</a></li>
     <li><a href="#サンプルcircuitpythonコードの導入と実行">サンプルCircuitPythonコードの導入と実行</a></li>
     <li><a href="#dfuseとdfuse-pack">DfuSeとdfuse-pack</a></li>
   </ul>
 </nav>
 
+<p><code>dfu-util</code>は、最近、Debianででも最新の 0.11-1 が使えるようになりました。<code>dfu-suffix</code>等もちゃんとmanpageが付いてます。</p>
+<p>プログラムの導入はDFUでできるめどが立ったのですが、DFUベースで動くシステムもう少しで遊んでみます。（STLINKは興味はあるけど後回しにします。）</p>
 <h2 id="dfuのこつ">DFUのこつ</h2>
 <p>「DFUに入りにくい」などと言うことをNETで散見します。（チップを温めるなどという「おまじない」も日本語のどこかで見ました。）</p>
 <p>確かに、無頓着にBOOT0とNRSTのPUSHスイッチを同時押し・同時離しでDFUに入ろうとすると上手くいかないことがありました。</p>
@@ -99,10 +101,11 @@ usb 4-2: Device not responding to setup address.
 usb 4-2: device not accepting address 7, error -71
 ...
 </code></pre><p>ただ２回目以降は、スイッチの手順さえ守れば確実にDFUには入れます。</p>
+<p>今見直すと、<code>A12</code>ピン問題が在ったボードで、同時押しで時際にはRESETだけを押したので上記エラーが出た気もしないでも在りません。</p>
 <p>どうも電源投入後すぐという意味の「cold start」では上手くいかないので電源投入後安定化したという意味の「warm」後の時点という話が、チップを温めると温度の話になった感じもなきにしもあらずです。(この差が、本当に温度か、ハイインピーダンス回路での浮遊容量への電荷蓄積の差かはよくわかりません。)</p>
-<h2 id="circuitpython導入によるdfuの練習と正解">CircuitPython導入によるDFUの練習と正解</h2>
+<h2 id="dfuファイル経由での導入例-circuitpython導入によるdfuの練習">DFUファイル経由での導入例 (CircuitPython導入によるDFUの練習)</h2>
 <p><a href="https://www.micropython.org/">MicroPython</a>のForkに<a href="https://circuitpython.org/">CircuitPython</a>があり、<a href="https://circuitpython.org/board/stm32f411ce_blackpill/">STM32F411CE Black Pillを明示的にサポート</a>しています。</p>
-<p>WeActのVENDERのサイト: <a href="https://github.com/WeActTC">https://github.com/WeActTC</a>　には、<a href="https://github.com/WeActTC/WeAct_F411CE-MicroPython">https://github.com/WeActTC/WeAct_F411CE-MicroPython</a> レポがあり、そこには、ソースから下手にコンパイルせずコンパイル済みを使うようにとあります。確実に動くはずのこのファームウエアをDFUで導入し、DFUの使い方を確認します。さてここで使うコンパイル済みファイルですが、どうも以下のようです。</p>
+<p>WeActのVENDERのサイト: <a href="https://github.com/WeActTC">https://github.com/WeActTC</a>　には、<a href="https://github.com/WeActTC/WeAct_F411CE-MicroPython">https://github.com/WeActTC/WeAct_F411CE-MicroPython</a> レポがあり、そこには、ソースから下手にコンパイルせずコンパイル済みを使うようにとあります。確実に動くはずのこのファームウエアをDFUファイルから導入する、DFUの使い方を確認します。さてここで使うコンパイル済みDFUファイルですが、どうも以下のようです。</p>
 <ul>
 <li><a href="https://github.com/WeActTC/MiniSTM32F4x1/tree/master/SDK/STM32F411CEU6/MicroPython/firmwares-v1.14">https://github.com/WeActTC/MiniSTM32F4x1/tree/master/SDK/STM32F411CEU6/MicroPython/firmwares-v1.14</a></li>
 </ul>
@@ -176,7 +179,7 @@ Filesystem      1K-blocks      Used  Available Use% Mounted on
 </code></pre><p>意外とまだメモリーに余裕があるようにも見えます。512KからCircutPythonが占拠した分を引いているので小さくはなっていますが、遊ぶには充分ですね。</p>
 <h2 id="circuitpython導入でのdfuの失敗例">CircuitPython導入でのDFUの失敗例</h2>
 <p>上記の正解に至までの失敗例は以下です。</p>
-<p>HID Bootloaderの時と同様に、<code>--dfuse-address 0x08000000:leave</code>をつけると、うまくいきません。</p>
+<p>BINファイルを使ったHID Bootloaderの時と同様に、<code>--dfuse-address 0x08000000:leave</code>をDFUファイルに対してつけると、うまくいきません。</p>
 <pre tabindex="0"><code>$ dfu-util -d 0483:df11 -a 0 --dfuse-address 0x08000000:leave -D firmware_internal_rom_stm32f401ce_v30+_v1.14-7.dfu
 dfu-util 0.11
 
@@ -201,22 +204,8 @@ Device returned transfer size 2048
 DfuSe interface name: &quot;Internal Flash  &quot;
 dfu-util: This is a DfuSe file, not meant for raw download
 </code></pre><p>以上の様に、「DFUファイルじゃない」といって拒否されていました。</p>
-<p>ただ、この警告は、<code>dfu-suffix --delete</code>をすると出なくなります。</p>
-<pre tabindex="0"><code>dfu-util: Warning: Invalid DFU suffix signature
-dfu-util: A valid DFU suffix will be required in a future dfu-util release
-...
-Device returned transfer size 2048
-DfuSe interface name: &quot;Internal Flash  &quot;
-Downloading element to address = 0x08000000, size = 340501
-Erase   	[=========================] 100%       340501 bytes
-Erase    done.
-Download	[=========================] 100%       340501 bytes
-Download done.
-File downloaded successfully
-Submitting leave request...
-</code></pre><p>でも、この状況で書き込まれたファイルは機能しませんでした。書き込みは１つの連続メモリー空間のように見受けます。</p>
-<p>ちゃんと<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFUの規格</a>を読むべきなんでしょうが、どうも占有メモリー空間が大きく、分割され飛び飛びの場合にはDFUでないといけないようです。</p>
-<p><code>--dfuse-address 0x08000000:leave</code>というオプションをつけると、そのアドレスからベタにバイナリーデーターを書き込む印象です。</p>
+<p>ちゃんと<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFUの規格</a>を読むべきなんでしょうが、どうも分割され飛び飛びといったデーター記述ができる書き込み先アドレスを内包するバイナリーファイルがDFUファイルでのようです。一方、BINファイルは特定アドレスからベタに書き込むためのバイナリーデーターの印象です。ある意味、形式は違うがHEXと同じような機能があるようです。</p>
+<p>また、<code>dfu-util</code>は、<code>--dfuse-address 0x08000000:leave</code>というオプションをつけると、バイナリーのサフィックスをつけてデーター内容見栄えを整えると、ファイル拡張子の如何によらずBINファイルとしてバイナリーデーターを解釈する印象です。</p>
 <h2 id="サンプルcircuitpythonコードの導入と実行">サンプルCircuitPythonコードの導入と実行</h2>
 <p>ストレージデバイス上にある<code>boot.py</code> を一部アンコメントしました。</p>
 <pre tabindex="0"><code># boot.py -- run on boot-up
