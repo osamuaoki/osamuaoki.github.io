@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/01/19 (initial publish),
-2022/01/30 (last update)
+2022/03/23 (last update)
 </h3>
 </div>
 
@@ -63,6 +63,7 @@
   <ul>
     <li><a href="#mcuとそのプロトボード状況">MCUとそのプロトボード状況</a></li>
     <li><a href="#mcu-avrとarm-の比較">MCU (AVRとARM) の比較</a></li>
+    <li><a href="#プロトボードのio-カウントの比較">プロトボードのI/O カウントの比較</a></li>
   </ul>
 </nav>
 
@@ -139,6 +140,15 @@ ARM STM32F411CEU6  512KB  128  KB   100 MHz  Blackpill     -- 694 （送料348�
 </code></pre><p>有名なIOTパーツ販売サイトの<a href="https://www.adafruit.com/product/4877">Adafruit(USA)</a>が米国東海岸のNYCから売っているWeActの「Blackpill」は、<a href="https://stm32-base.org/boards/">STM32-base のboard紹介</a>他の上記情報を聞くに、しっかりしたPCB設計製造メーカーが本物のSTのチップを利用しているようです。そのオリジナル製造元の<a href="https://weactstudio.aliexpress.com/store/910567080">WeActの正規ストアーが日本に近い中国本土出荷のAliexpress</a>で定価694円（送料348円）で売っています。</p>
 <p>STM32F411CEベースだとDFUはROMで入っているし、価格性能比ででも魅力です。AliexpressならPaypalなので支払いも安心です。</p>
 <p>WeActの正規ストアから送料節約でまとめて次のQMKプロジェクト用に２つポチリました。1月11日注文して、普通配送で1月25日到着なので悪くない早さです。到着した部品は最新のVersion 3.1のUSB-Cコネクター品です。ちょっと過剰性能の気もします。。。</p>
+<h2 id="プロトボードのio-カウントの比較">プロトボードのI/O カウントの比較</h2>
+<pre tabindex="0"><code>ボード            pin    ips/gnd/vcc/led/usb    DIO(free)
+teensy 2.0        24+5   9                      20
+teensy 2.0++      40+3   11                     32
+pro micro         24     9                      15 (SPI共用で3ピン増やせる。更にボード上LED共用で 2ピン増やせる。)
+blackpill         40     14                     26 (内部LED共用で1ピン増やせる。)
+raserry pi pico   40     14                     26
+</code></pre><p><code>3x5+2</code>のスプリットKBなら、無理すればpro microででもダイオード無しででも組めます。
+一方、blackpillやPiPicoなら、<code>4x6</code>のスプリットKBまでがNKRO ONでダイオード無しで組めます。　</p>
 <!-- raw HTML omitted -->
 
 

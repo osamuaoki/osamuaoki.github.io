@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/03/29 (initial publish),
-2021/12/12 (last update)
+2022/03/23 (last update)
 </h3>
 </div>
 
@@ -345,7 +345,7 @@ avrdude: safemode: Fuses OK (E:F5, H:DD, L:4F)
 </ul>
 </li>
 </ul>
-<p>HFUSEはJTAGは使わないので外す(これはTeensyもLeonardo等のArduino系
+<p>HFUSEは <strong>JTAGは使わないので外す</strong> (これはTeensyもLeonardo等のArduino系
 も同じ設定)ことにして、後はブートローダーのサイズとリセット挙動の
 関係で決めます。</p>
 <p>リセットボタンは押し際には現在実行中のプログラムが止まり、さらに
@@ -462,7 +462,7 @@ BOD電圧です。(EFUSEは上位４ビットは何を書いても0xF-&gt;0xCに
 <li>LFUSE: 0x5F  5V 16 MHz Crystal使用でBOD</li>
 <li>HFUSE: 0xDF (BOOTRST非設定 - teensy系 1KB)</li>
 <li>HFUSE: 0xDD (BOOTRST非設定 - teensy系 2KB)</li>
-<li>HFUSE: 0xDB (BOOTRST非設定 - teensy系 4KB) &laquo;&lt;</li>
+<li>HFUSE: 0xDB (BOOTRST非設定 - teensy系 4KB) &laquo; とりあえず、これ！</li>
 <li>HFUSE: 0xD9 (BOOTRST非設定 - teensy系 8KB)</li>
 <li>EFUSE: 0xF4 BOD=2.4V teensy HWBE設定(=0)</li>
 <li>LOCK:  0x3F=0xFF ロック不要(基本)</li>
