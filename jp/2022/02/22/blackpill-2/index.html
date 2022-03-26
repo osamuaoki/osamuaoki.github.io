@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/22 (initial publish),
-2022/03/19 (last update)
+2022/03/26 (last update)
 </h3>
 </div>
 
@@ -258,10 +258,8 @@ bus: 6, device: 42 was not an MTP device
 <p>最初、安直に、HEXファイルを直接<code>dfu-util</code>に渡して動かずに慌てました。dfu-util`には、BINファイルかDFUファイルが必要です。</p>
 <h2 id="stm32cubeprogも動くけど">STM32CubeProgも動くけど…</h2>
 <p><a href="https://www.st.com/ja/development-tools/stm32cubeprog.html">STM32CubeProg</a>をダウンロードすると、LINUX上でもJAVAベースのIDEがSWD/JTAGベースで接続して使えるようです。ただファイルの展開の際に、LINUX上なのにEXEファイルが必要だったのは意外でした。拡張子がEXEですが、大きなファイルだから中身は自己解凍のアーカイブなのかな?</p>
-<p>ちなみにSTM32CubeProgの前に使われた古いプログラムに、<a href="https://www.st.com/ja/development-tools/stsw-stm32080.html">DfuSe USB device firmware upgrade (UM0412)</a> がソース付きであるようです。
-このDFUでの使い方の例を、<a href="https://ja.visual-foxpro-programmer.com/stm32-download-firmware-dfu-via-usb">Stm32 Download Firmware Dfu Via Usb</a>にあります。どうもBINにSUFFIXを付けることをしています。サンプルプログラムなども付いていたようです。ただ、WINDOWS専用です。</p>
-<p>STM32CubeProgを実行した所、なぜか立ち上げてみた新しいSTM32CubeProgでは、GUI上ではSWDとかJTAGしか選択肢にDFUがつかえるように見えませんでした。不思議です。STM32CubeProgは、GUIのプログラム群でめまいがします。</p>
-<p>何かの折に、https://blog.st.com/stm32cubeide-free-ide/　でも読みますが、今日はSTのプロプライエタリーツールは降参。</p>
+<p>ちなみにSTM32CubeProgの前に使われた古いプログラムに、<a href="https://www.st.com/ja/development-tools/stsw-stm32080.html">DfuSe USB device firmware upgrade (UM0412)</a> がソース付きであるようです。ただ、WINDOWS専用です。</p>
+<p>STM32CubeProgを実行した所、なぜか立ち上げてみた新しいSTM32CubeProgでは、LinuxのGUI上ではSWDとかJTAGしか選択肢にDFUがつかえるように見えませんでした。STM32CubeProgは、GUIのプログラム群でめまいがします。とにかく、<code>dfu-util</code>が動いているのでSTのプロプライエタリーツールは降参しておきます。</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
