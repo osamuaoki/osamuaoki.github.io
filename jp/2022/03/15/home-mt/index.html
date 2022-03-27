@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/03/15 (initial publish),
-2022/03/26 (last update)
+2022/03/27 (last update)
 </h3>
 </div>
 
@@ -63,7 +63,13 @@
   <ul>
     <li><a href="#状況">状況</a></li>
     <li><a href="#キーマップ">キーマップ</a></li>
-    <li><a href="#気づいたこと">気づいたこと</a></li>
+    <li><a href="#気づいたこと">気づいたこと</a>
+      <ul>
+        <li><a href="#縦スタガート">縦スタガート</a></li>
+        <li><a href="#ソケットとled配置">ソケットとLED配置</a></li>
+        <li><a href="#ダイオード">ダイオード</a></li>
+      </ul>
+    </li>
     <li><a href="#pcb参考情報">PCB参考情報</a></li>
   </ul>
 </nav>
@@ -100,7 +106,7 @@
 <p>あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、この辺を上手に使えば悪くない感じです。</p>
 <h2 id="キーマップ">キーマップ</h2>
 <p>最初にトライしたレイヤー移動とモード変更機能のすべてを親指のキーに任せるアプローチには無理がありました。</p>
-<p>そこで30%キーボード系の<a href="https://github.com/qmk/qmk_firmware/tree/master/keyboards/ferris">ferris</a>のキーマップをヒントにし、「基本的に使う部分」を、左<code>3x5_2</code>キーと右<code>3x5_2</code>キーと限定し、親指はレイヤー移動のみにしたキーマップを組むのがフィジカルストレス低減によさそうです。</p>
+<p>そこで30%キーボード系の<a href="https://github.com/qmk/qmk_firmware/tree/master/keyboards/ferris">ferris</a>のキーマップをヒントにし、「基本的に使う部分」を、左<code>5x3_2</code>キーと右<code>5x3_2</code>キーと限定し、親指はレイヤー移動のみにしたキーマップを組むのがフィジカルストレス低減によさそうです。</p>
 <pre tabindex="0"><code> │***│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │***│
  │***│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│***│
  │***│ Z │ X │ C │ V │ B │***│***│ N │ M │ , │ . │ / │***│
@@ -142,24 +148,36 @@
 <p><img src="/img/cgc56-wide.png" alt="cgc56:wide BL1, FL2FL/3 in QWERTY)"></p>
 <p>キーマップ中の左上文字がFn1~F4の何れも押さない場合、右下文字がFn1かF2のいずれかがが押された場合に入力されます。30%系のキーマップはとにかくホームからほとんど手が動かないので悪くないです。</p>
 <h2 id="気づいたこと">気づいたこと</h2>
+<h3 id="縦スタガート">縦スタガート</h3>
 <p>確かに指は長さが違うので、縦スタガートに興味がありました。</p>
-<p>胸の前に自然に手を持ってきて手首に一番ストレスが無いようにキーボード上に置くと,意外とキーボードを押す際のホームポジションは意外と一直線の位置でした。</p>
+<p>胸の前に自然に手を持ってきて手首に一番ストレスが無いようにキーボード上に置くと、実際にはキーボードを押す際の自然なホームポジションは一直線の位置でした。</p>
 <p>実際小指を置くキーの位置を１つ下げて試すと、すべての手の指はまっすぐ前に向くのですが手首が内側になり無理がかかり不快でした。</p>
+<p>左右の手の間隔が30cm以下となる一体型キーボードだと手首が外側にくるので、むしろ縦スタガートは使いにくそうです。</p>
+<p>スプリットキーボードではキーボードの置く位置や角度が自由なので、敢えて縦スタガートにするメリットが見えません。</p>
+<h3 id="ソケットとled配置">ソケットとLED配置</h3>
+<p>LEDの光が通る穴は、基本的にスイッチの端子ピンと反対側にある。</p>
+<p>普通のCherryタイプ用とLPタイプ用の両方のソケットを装着可能にする共用PCBは、スイッチの端子ピンのソケットを反転して配置することで設計可能です。</p>
+<p>ただしPCBの穴に埋め込まれたSK6812MINI-EのRGB光を使うPCBだと、いすれかのタイプを選ぶ必要がある。</p>
+<h3 id="ダイオード">ダイオード</h3>
+<p>片側<code>3x6_3</code>キー構成のスプリットキーボードだと、ダイオード無しNKROのPCB設計も加能ですが、OLEDや他の拡張がしにくくなります。</p>
 <h2 id="pcb参考情報">PCB参考情報</h2>
-<p>片側<code>3x6_3</code>キー構成のスプリットの小さな携帯タイプが面白そうなので、当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
+<p>片側<code>6X3_3</code>キー構成のスプリットの小さな携帯タイプが面白そうなので、当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
 <ul>
 <li>類似設計例のPCB Data のソース
 <ul>
-<li><a href="https://github.com/MakotoKurauchi/helix">Helix</a> &ndash; 5x7+2 ortholinear &ndash; RGB-LED, LP or MX (ソケット対応)</li>
-<li><a href="https://github.com/climbalima/let-s-Split-v2">let&rsquo;s split v2</a> &ndash; 4x6 ortholinear &ndash; MX (ドーターボード裏付け)</li>
+<li><a href="https://github.com/pierrechevalier83/ferris">ferris</a> &ndash; 5x3+2 column staggered (on board MCU)</li>
+<li><a href="https://github.com/davidphilipbarr/Sweep">Sweep</a> &ndash; 5x3+2 column staggered</li>
+<li><a href="https://github.com/waffle87/waffle_microdox">microdox</a> &ndash; 5x3+3 LP or MX  (ソケット対応例あり)</li>
+<li><a href="https://github.com/raychengy/fifi_split_keeb">Fifi</a> &ndash; 5x3+3 column staggered</li>
+<li><a href="https://github.com/foostan/crkbd">Corne keyboard (crkbd)</a> &ndash; 6x3 +3 column staggered (helix based) (ソケット対応)</li>
+<li><a href="https://github.com/HellSingCoder/LimeKeyboard">Lime</a> &ndash; 6x3 +6 column staggered (helix based) (ソケット対応), joystick, RE</li>
+<li><a href="https://github.com/climbalima/let-s-Split-v2">let&rsquo;s split v2</a> &ndash; 6x4 ortholinear &ndash; MX (ドーターボード裏付け)</li>
+<li><a href="https://github.com/kata0510/Lily58">Lily58</a> &ndash; 6x4 +5 column staggered</li>
+<li><a href="https://github.com/josefadamcik/SofleKeyboard">SofleKeyboard</a> &ndash; 6x4 +5 column staggered(ドーターボード横ズラシ)</li>
+<li><a href="https://github.com/Biacco42/Ergo42">Ergo42</a> &ndash; 7x4 ortholinear</li>
+<li><a href="https://github.com/MakotoKurauchi/helix">Helix</a> &ndash; 7x5+2 ortholinear &ndash; RGB-LED, LP or MX (ソケット対応)</li>
 <li><a href="https://github.com/e3w2q/su120-keyboard">SU120</a> &ndash; Expandable keyboard &ndash; RGB-LED, LP or MX （モジュラー）</li>
-<li><a href="https://github.com/foostan/crkbd">Corne keyboard and more</a> &ndash; 3x6 +2 column staggered (helix based) (ソケット対応)</li>
-<li><a href="https://github.com/HellSingCoder/LimeKeyboard">Lime</a> &ndash; 4x6 +6 column staggered (helix based) (ソケット対応), joystick, RE</li>
-<li><a href="https://github.com/Envious-Data/Env-KB">ENV-KB</a> &ndash; many JLCPCB examples　(ソケット対応例あり)</li>
-<li><a href="https://github.com/waffle87/waffle_microdox">microdox</a> &ndash; 3x5+3 LP or MX  (ソケット対応例あり)</li>
-<li><a href="https://github.com/raychengy/fifi_split_keeb">Fifi</a> &ndash; 3x5+3 column staggered</li>
-<li><a href="https://github.com/pierrechevalier83/ferris">ferris</a> &ndash; 3x5+2 column staggered (on board MCU)</li>
-<li><a href="https://github.com/davidphilipbarr/Sweep">Sweep</a> &ndash; 3x5+2 column staggered</li>
+<li><a href="https://github.com/Envious-Data/Env-KB">ENV-KB</a> &ndash; Full size KBD, JLCPCB examples　(ソケット対応例あり)</li>
 </ul>
 </li>
 <li>参考基礎情報源
