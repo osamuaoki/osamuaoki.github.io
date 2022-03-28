@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/03/15 (initial publish),
-2022/03/27 (last update)
+2022/03/28 (last update)
 </h3>
 </div>
 
@@ -69,6 +69,7 @@
         <li><a href="#ソケットとled配置">ソケットとLED配置</a></li>
         <li><a href="#ダイオード">ダイオード</a></li>
         <li><a href="#choc-v1">choc v1</a></li>
+        <li><a href="#キー入力とtapping_term">キー入力と<code>TAPPING_TERM</code></a></li>
       </ul>
     </li>
     <li><a href="#pcb参考情報">PCB参考情報</a></li>
@@ -163,10 +164,10 @@
 <p>片側<code>6x3_3</code>キー構成のスプリットキーボードだと、ダイオード無しNKROのPCB設計も加能ですが、OLEDや他の拡張がしにくくなります。</p>
 <h3 id="choc-v1">choc v1</h3>
 <p>Kailhの正規店以外では見かけなくなってきている。<a href="https://shop.yushakobo.jp/">遊舎工房</a>が、意外とリーゾナブル。</p>
-<p>###　<code>TAPPING_TERM</code></p>
-<p><code>TAPPING_TERM</code>は遅め250に設定しています。</p>
-<p>機敏な応答がいらないMODE関連は基本50%増し、小指などの動きが悪いキーは100%増しの<code>TAPPING_TERM</code>に設定してます。</p>
-<p>意識的にタップするように慣れる必要があります。最初はなぜキーが入力されていないのか悩ましかったです。</p>
+<h3 id="キー入力とtapping_term">キー入力と<code>TAPPING_TERM</code></h3>
+<p>普通にキー入力する際には意識的にキー入力は短くタップするように慣れる必要があります。最初は一生懸命押しているキーが入力されていないのか悩ましかったです。力を入れるとキーを離すのが遅くなり、結果的にホールドと判定されてました。</p>
+<p>親指によるレイヤーの切り替えは、<code>TAPPING_TERM</code>を<code>config.h</code>で少し遅めの250に設定していています。</p>
+<p>親指以外によるモードの切り替えは全く機敏な応答がいらないので、<code>TAPPING_TERM</code>を基本は50%増し、小指などの動きが悪いキーは100%増しにプログラムで調整してます。</p>
 <h2 id="pcb参考情報">PCB参考情報</h2>
 <p>片側<code>6X3_3</code>キー構成のスプリットの小さな携帯タイプが面白そうなので、当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
 <ul>
