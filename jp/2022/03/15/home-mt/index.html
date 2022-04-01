@@ -62,7 +62,13 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#状況">状況</a></li>
-    <li><a href="#キーマップ">キーマップ</a></li>
+    <li><a href="#キーマップ">キーマップ</a>
+      <ul>
+        <li><a href="#キーマップ-osamu">キーマップ osamu</a></li>
+        <li><a href="#キーマップ-wide">キーマップ wide</a></li>
+        <li><a href="#キーマップ-mini">キーマップ mini</a></li>
+      </ul>
+    </li>
     <li><a href="#気づいたこと">気づいたこと</a>
       <ul>
         <li><a href="#キーキャップ">キーキャップ</a></li>
@@ -109,6 +115,7 @@
 <p>あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、この辺を上手に使えば悪くない感じです。</p>
 <h2 id="キーマップ">キーマップ</h2>
 <p>最初にトライしたレイヤー移動とモード変更機能のすべてを親指のキーに任せるアプローチには無理がありました。</p>
+<h3 id="キーマップ-osamu">キーマップ osamu</h3>
 <p>そこで30%キーボード系の<a href="https://github.com/qmk/qmk_firmware/tree/master/keyboards/ferris">ferris</a>のキーマップをヒントにし、「基本的に使う部分」を、左<code>5x3_2</code>キーと右<code>5x3_2</code>キーと限定し、親指はレイヤー移動のみにしたキーマップを組むのがフィジカルストレス低減によさそうです。</p>
 <pre tabindex="0"><code> │***│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │***│
  │***│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│***│
@@ -143,6 +150,7 @@
 <li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/osamu/keymap.c">cgg56:osamu</a></li>
 </ul>
 <p>これらは通常キーボードからの移行によく配慮されていてなかなか良い感じです。ただほとんど使わないキーがある一方で、特に片手マウスでのカーソール関連への少々アクセスが面倒でした。</p>
+<h3 id="キーマップ-wide">キーマップ wide</h3>
 <p>そこで、上記のデーターはそのままで別に左右のアルファベットの間隔を更に広げ、カーソールキーに真ん中で直接アクセスできるようにしつつ簡素化したキーマップも用意しました。</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/wide/keymap.c">cgc56:wide</a></li>
@@ -150,6 +158,7 @@
 </ul>
 <p><img src="/img/cgc56-wide.png" alt="cgc56:wide BL1, FL2FL/3 in QWERTY)"></p>
 <p>キーマップ中の左上文字がFn1~F4の何れも押さない場合、右下文字がFn1かF2のいずれかがが押された場合に入力されます。</p>
+<h3 id="キーマップ-mini">キーマップ mini</h3>
 <p>その後使ってみて、ちょっと真ん中のキーにアクセスしにくいのが気になったのと、レイヤー数を減らしたかったので、更に簡素化したキーマップも用意しました。</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/mini/keymap.c">cgc56:mini</a></li>
