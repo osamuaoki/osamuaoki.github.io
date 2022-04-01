@@ -87,7 +87,6 @@
 してビルドする必要がある。</p>
 <pre tabindex="0"><code>override_dh_auto_configure:
         dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode
-
 </code></pre><p>だが、上手くいかない。ソース壊れている?</p>
 <h2 id="utf-8-での処理のデフォルト化">UTF-8 での処理のデフォルト化</h2>
 <p>まず、テスト環境で変な文字が出るので気になっていた、UTF-8廻りを
@@ -118,9 +117,9 @@
 きっと連接の統計がまともにできていないので、連文節変換をすると変な
 結果が出るようになったのだろう。とりあえず、修正。</p>
 <p>さらによく見ると、<code>calctrans/proccorpus.c</code>が以下になっている。</p>
-<pre tabindex="0"><code>  anthy_conf_override(&quot;CONFFILE&quot;, &quot;../anthy-conf&quot;);
+<pre tabindex="0"><code>  anthy_conf_override(&#34;CONFFILE&#34;, &#34;../anthy-conf&#34;);
 </code></pre><p>これは、ビルド中のソース内のファイルを見てほしいので以下にする。</p>
-<pre tabindex="0"><code>  anthy_conf_override(&quot;CONFFILE&quot;, &quot;../anthy-test-conf&quot;);
+<pre tabindex="0"><code>  anthy_conf_override(&#34;CONFFILE&#34;, &#34;../anthy-test-conf&#34;);
 </code></pre><h2 id="無限ループ">無限ループ</h2>
 <p>上記を対策しても上手くビルドしない。</p>
 <p><code>proccorpus</code>は、たしかに読める<code>parsed_data0</code>を生成するが処理が止まってしまう。

@@ -139,12 +139,12 @@ great editor which allows the minimum usage of the ALT-key and CTRL-key.</p>
 around NORMAL MODE with emphasis on motion keys:</p>
 <pre tabindex="0"><code> NORMAL MODE &lt;ESC&gt;:  Goto BOF → gg      r +--- Next Char
  screen                   n N # ?ααα   e / +-- End of Word (non-alnum)
- scroll        ai+wW({[&lt;sp&quot;'`↓  ^B    t / / +- Word Next (non-alnum)
+ scroll        ai+wW({[&lt;sp&#34;&#39;`↓  ^B    t / / +- Word Next (non-alnum)
  ↓     Change c{motion} cc  c↑  ^U   n / / / + End of Word (space)
  ↓     Delete d{motion} dd  d↑  H   e / / / / +Word Next (space)
  +--+  Copy   y{motion} yy  y↑  {  C / / / / / +Till α, x  Delete char
  |zt|  Put After/Before p / P   ( / / / / / / / Find α, r  Replace char
- |^e|  &quot;α  Use α as register    k/ / / / / / /  / EOL,  ~  Change case
+ |^e|  &#34;α  Use α as register    k/ / / / / / /  / EOL,  ~  Change case
  |zz|     0 ^ Fα Tα gE B ge b h M l e w E W tα fα $    gd  Goto definiton
  |^y| ↓↓↓ Split Window ↓↓↓      j ←--- Line (J for Join line)   ^]  Tag jump
  |zb| ^W + ncsvhjkl=+-_&lt;&gt;|      ) ←--- Sentence        ^T  Tag jump-back
@@ -155,7 +155,7 @@ around NORMAL MODE with emphasis on motion keys:</p>
       , ; tα   Tα ←-- Till α    /ααα ← Find ααα * n N  {visual}gq Format Text
       , ; fα   Fα ←-- Find α    G ←--- Goto EOF        J          Join line
    Next Prev   %  ←-- Match     [{ ]} [[ ]] [] ][ Look for {}
- Record: qα, End-Record: q, Play-Record: @α, Mark as α: mα, Jump to α: `α/'α
+ Record: qα, End-Record: q, Play-Record: @α, Mark as α: mα, Jump to α: `α/&#39;α
  Undo: u, Redo: ^R, Repeat: . , Fold: Open zo/zO/zr/zR, Close zc/zC/zm/zM
  Insert Mode: i/a Before/After Char, I/A Before/After Line, O/o above/below
  Visual Mode: v Char V Line ^V Block, Replace Mode: R, Ex Mode: : or q:
@@ -188,22 +188,21 @@ confusing.  Here are my hints for memorizing such key strokes.</p>
 <ul>
 <li><code>ga</code>: Get Unicode point (HEX etc.)</li>
 <li><code>g8</code>: Get Binary data HEX sequence</li>
-<li><code>^G</code>: Get filename and cursor position (see &ldquo;<code>:h 'ruler'</code>&quot;)</li>
+<li><code>^G</code>: Get filename and cursor position (see &ldquo;<code>:h 'ruler'</code>&rdquo;)</li>
 <li><code>g^G</code>: Get cursor position in column, line, word, character and byte</li>
 <li><code>{visual}g?</code>: ROT13 (Super insecure encryption)</li>
 </ul>
 <h3 id="map-leader-key">Map leader key</h3>
 <p>I map SPACE-key as leader-key in NORMAL MODE since it has no practical use and
 easier access than default <code>\</code>-key.</p>
-<pre tabindex="0"><code>let mapleader = ' '
+<pre tabindex="0"><code>let mapleader = &#39; &#39;
 </code></pre><h3 id="some-options">Some options</h3>
 <p>I tend to set as follows in the vim startup file (<code>~/.vimrc</code> or its equivalent):</p>
-<pre tabindex="0"><code>&quot; make vim copy buffer bigger (default 50 lines: viminfo='100,&lt;50,s10,h)
-set viminfo='100,&lt;5000,s100,h
+<pre tabindex="0"><code>&#34; make vim copy buffer bigger (default 50 lines: viminfo=&#39;100,&lt;50,s10,h)
+set viminfo=&#39;100,&lt;5000,s100,h
 
-&quot; Allow to move cursor beyond for block
+&#34; Allow to move cursor beyond for block
 set virtualedit=block
-
 </code></pre><h2 id="insert-mode">INSERT MODE</h2>
 <p>INSERT MODE is started from NORMAL MODE by pressing <code>i</code>, <code>I</code>,<code>a</code>,<code>A</code>,<code>o</code>, <code>O</code>,
 etc.</p>
@@ -289,7 +288,7 @@ more envying EMACS terminal mode.</p>
 <p>From TERMINAL-NORMAL MODE, typing <code>i</code> gets you back to TERMINAL MODE.</p>
 <h3 id="terminal-job-mode">TERMINAL-JOB MODE</h3>
 <p>Don&rsquo;t run Vim inside TERMINAL-JOB MODE.  I ended with &lsquo;buftype&rsquo; error.  It
-becomes &lsquo;terminal&rsquo; type.</p>
+becomes &rsquo;terminal&rsquo; type.</p>
 <!-- raw HTML omitted -->
 
 

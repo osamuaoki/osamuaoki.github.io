@@ -200,8 +200,8 @@ static void uart_init(void) {
 }
 
 int uart_putchar(char c, FILE *stream) {
-  if (c == '\n') {
-    uart_putchar('\r', stream);
+  if (c == &#39;\n&#39;) {
+    uart_putchar(&#39;\r&#39;, stream);
   }
   loop_until_bit_is_set(UCSR0A, UDRE0);
   UDR0 = c;
@@ -245,12 +245,12 @@ int main(void) {
   PORTB = ~BIT5HI;
   PORTC = 0xff;
   PORTD = 0xff;
-  printf_P(PSTR(&quot;Hello world!\n&quot;));
+  printf_P(PSTR(&#34;Hello world!\n&#34;));
   while (1) {
     if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
       // LED ON
       PORTB |= BIT5HI;
-      printf_P(PSTR(&quot;PINB=%02X PINC=%02X PIND=%02X\n&quot;), PINB, PINC, PIND);
+      printf_P(PSTR(&#34;PINB=%02X PINC=%02X PIND=%02X\n&#34;), PINB, PINC, PIND);
       _delay_ms(3000);  // 3000 ms delay
       // LED OFF
       PORTB &amp;= ~BIT5HI;
@@ -334,8 +334,8 @@ static void uart_init(void) {
 }
 
 int uart_putchar(char c) {
-  if (c == '\n') {
-    uart_putchar('\r');
+  if (c == &#39;\n&#39;) {
+    uart_putchar(&#39;\r&#39;);
   }
   loop_until_bit_is_set(UCSR0A, UDRE0);
   UDR0 = c;
@@ -346,7 +346,7 @@ int uart_puts_P(PGM_P s) {
   char c;
   while (1) {
     c = pgm_read_byte(s++);
-    if (c == '\0') break;
+    if (c == &#39;\0&#39;) break;
     uart_putchar(c);
   }
   return 0;
@@ -360,11 +360,11 @@ int uart_put_byte(char c, char x0, char x1) {
   return 0;
 }
 
-int uart_put_byte_10(char c) { return uart_put_byte(c, '1', '0'); }
+int uart_put_byte_10(char c) { return uart_put_byte(c, &#39;1&#39;, &#39;0&#39;); }
 
-int uart_put_byte_OI(char c) { return uart_put_byte(c, 'O', 'I'); }
+int uart_put_byte_OI(char c) { return uart_put_byte(c, &#39;O&#39;, &#39;I&#39;); }
 
-int uart_put_byte_MK(char c) { return uart_put_byte(c, '*', '_'); }
+int uart_put_byte_MK(char c) { return uart_put_byte(c, &#39;*&#39;, &#39;_&#39;); }
 
 #define SURE_LO 0
 #define UNSURE 1
@@ -400,32 +400,32 @@ int main(void) {
   PORTB = ~BIT5HI;
   PORTC = 0xff;
   PORTD = 0xff;
-  uart_puts_P(PSTR(&quot;Hello world!\n&quot;));
+  uart_puts_P(PSTR(&#34;Hello world!\n&#34;));
   while (1) {
     if ((previous == SURE_HI) &amp; (check() == SURE_LO)) {
       // LED ON
       PORTB |= BIT5HI;
-      uart_puts_P(PSTR(&quot;DDRB =&quot;));
+      uart_puts_P(PSTR(&#34;DDRB =&#34;));
       uart_put_byte_OI(DDRB);
-      uart_puts_P(PSTR(&quot; DDRC =&quot;));
+      uart_puts_P(PSTR(&#34; DDRC =&#34;));
       uart_put_byte_OI(DDRC);
-      uart_puts_P(PSTR(&quot; DDRD =&quot;));
+      uart_puts_P(PSTR(&#34; DDRD =&#34;));
       uart_put_byte_OI(DDRD);
-      uart_puts_P(PSTR(&quot;\n&quot;));
-      uart_puts_P(PSTR(&quot;PORTB=&quot;));
+      uart_puts_P(PSTR(&#34;\n&#34;));
+      uart_puts_P(PSTR(&#34;PORTB=&#34;));
       uart_put_byte_MK(PORTB);
-      uart_puts_P(PSTR(&quot; PORTC=&quot;));
+      uart_puts_P(PSTR(&#34; PORTC=&#34;));
       uart_put_byte_MK(PORTC);
-      uart_puts_P(PSTR(&quot; PORTD=&quot;));
+      uart_puts_P(PSTR(&#34; PORTD=&#34;));
       uart_put_byte_MK(PORTD);
-      uart_puts_P(PSTR(&quot;\n&quot;));
-      uart_puts_P(PSTR(&quot;PINB =&quot;));
+      uart_puts_P(PSTR(&#34;\n&#34;));
+      uart_puts_P(PSTR(&#34;PINB =&#34;));
       uart_put_byte_10(PINB);
-      uart_puts_P(PSTR(&quot; PINC =&quot;));
+      uart_puts_P(PSTR(&#34; PINC =&#34;));
       uart_put_byte_10(PINC);
-      uart_puts_P(PSTR(&quot; PIND =&quot;));
+      uart_puts_P(PSTR(&#34; PIND =&#34;));
       uart_put_byte_10(PIND);
-      uart_puts_P(PSTR(&quot;\n.....................\n&quot;));
+      uart_puts_P(PSTR(&#34;\n.....................\n&#34;));
       _delay_ms(3000);  // 3000 ms delay
       // LED OFF
       PORTB &amp;= ~BIT5HI;

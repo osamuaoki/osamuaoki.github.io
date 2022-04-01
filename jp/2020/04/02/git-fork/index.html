@@ -328,7 +328,7 @@ $ git push --all
 さらに念のため公開レポの<code>master</code>の最新内容に<code>git rebase</code>して同期して
 いきます。作業結果が満足となった時点で、安全錠を外して公開レポに綺麗な
 形で<code>git push</code>します。</p>
-<pre tabindex="0"><code>$ git remote set-url --delete --push origin &quot;&quot;
+<pre tabindex="0"><code>$ git remote set-url --delete --push origin &#34;&#34;
 $ git push -u origin master
 ...
 </code></pre><p>ここで、合計２回行った<code>git remote set-url ...</code>操作は間違ってリモートの
@@ -419,7 +419,7 @@ $ git rm -rf .
 $ editor README.md
  ....
 $ git add README.md
-$ git commit -m 'Initial commit'
+$ git commit -m &#39;Initial commit&#39;
 </code></pre><p>別のリモートのREPO(<code>another</code>)にあるブランチ(例えば<code>master</code>)の内容のどこにも繋がらない履歴を、既存のローカルREPO内にブランチ名<code>another-master</code>で作成するのは以下です。</p>
 <pre tabindex="0"><code>$ git remote add another http://another.example.org/another
 $ git fetch another master:another-master

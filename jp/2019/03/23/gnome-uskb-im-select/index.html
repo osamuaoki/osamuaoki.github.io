@@ -132,7 +132,7 @@ ibusしかサポートしていないので、ここに書いてあることは�
 ではそのまま使えません。ここで、使用するINPUT METHODが２つしか無いとします。
 英語とANTHYとしましょう。</p>
 <p>設定リストの一番下のプラスをたたき、新規定義を追加します。</p>
-<p>キーとして使えそうなのはSUPER-,、SUPER-.、SUPER-/、SUPER-'、SUPER-\、
+<p>キーとして使えそうなのはSUPER-,、SUPER-.、SUPER-/、SUPER-&rsquo;、SUPER-\、
 SUPER-RETURNあたりです。SUPER-jもあいてますね。
 SUPER-lで画面ロックなので、このまわりのSUPER-k、SUPER-;、は避けたいですね。
 SUPER-a、SUPER-s、SUPER-n、SUPER-m、SUPER-TAB、SUPER-vも先約があるので
@@ -141,7 +141,7 @@ SUPER-a、SUPER-s、SUPER-n、SUPER-m、SUPER-TAB、SUPER-vも先約があるの
 がANTHYとすると、変換キーはないのでSUPER-j (Japanese)
 をあてがいましょう。Commandは長いけど１行で入れてください。</p>
 <pre tabindex="0"><code>Name     InputMethod_0
-Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&quot;
+Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;
 Shortcut SUPER-j
 </code></pre><p>もし、これが嫌ならSUPER-,、SUPER-.、SUPER-/などの右下のキーとSUPERの
 組み合わせが使いやすい気がします。
@@ -150,7 +150,7 @@ Shortcut SUPER-j
 SUPER-RETURNをあてがいましょう。(SUPER-Eも考えたのですが
 アクセスが私にとって良くないので…)</p>
 <pre tabindex="0"><code>Name     InputMethod_1
-Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &quot;imports.ui.status.keyboard.getInputSourceManager().inputSources[1].activate()&quot;
+Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[1].activate()&#34;
 Shortcut SUPER-RETURN
 </code></pre><p>そしてANTHYは常にHiraganaとしておけばよしです。</p>
 <p>ちょっとこれで使ってみましょう。</p>

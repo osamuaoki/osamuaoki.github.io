@@ -142,11 +142,11 @@ cgck ()
 {
     for pid in 1 $(ps --no-headers -o pid);
     do
-        if [ -e &quot;/proc/$pid/cgroup&quot; ]; then
-            ps --no-headers o pid,cmd --pid &quot;$pid&quot;;
-            cat &quot;/proc/$pid/cgroup&quot;;
-            grep cgroup2 &quot;/proc/$pid/mountinfo&quot;;
-            echo &quot; ---&quot;;
+        if [ -e &#34;/proc/$pid/cgroup&#34; ]; then
+            ps --no-headers o pid,cmd --pid &#34;$pid&#34;;
+            cat &#34;/proc/$pid/cgroup&#34;;
+            grep cgroup2 &#34;/proc/$pid/mountinfo&#34;;
+            echo &#34; ---&#34;;
         fi;
     done
 }
@@ -154,7 +154,7 @@ cgck ()
 の意味は、<code>proc</code>(5)に説明されています。</p>
 <p>まずroot権限のBash shellを環境設定抜きで立ち上げ、バックグラウンド
 プロセスも立ち上げます。</p>
-<pre tabindex="0"><code>$ PS1='sh1\$ ' sudo bash --norc
+<pre tabindex="0"><code>$ PS1=&#39;sh1\$ &#39; sudo bash --norc
 sh1# sleep 1000000 &amp;
 [1] 397732
 </code></pre><p>この状況を上記の<code>cgck</code>関数を定義して確認します。</p>
@@ -259,7 +259,7 @@ sh1# cgck
 </table>
 <p>さて、<code>unshare</code>を用いて新規のcgroupやmountのnamespaces内に新規のshellを
 立ち上げましょう。</p>
-<pre tabindex="0"><code>sh1# PS1='sh2\$ ' unshare --cgroup --mount bash --norc
+<pre tabindex="0"><code>sh1# PS1=&#39;sh2\$ &#39; unshare --cgroup --mount bash --norc
 </code></pre><p>さてこの状況を<code>cgck</code>関数を定義してそれを使って確認します。</p>
 <pre tabindex="0"><code>sh2# cgck
       1 /sbin/init

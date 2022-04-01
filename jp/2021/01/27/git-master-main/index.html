@@ -113,7 +113,7 @@ $ git branch -a
 $ git status -sb
 ## main...origin/master
 $ git branch -u origin/main main
-Branch 'main' set up to track remote branch 'main' from 'origin'.
+Branch &#39;main&#39; set up to track remote branch &#39;main&#39; from &#39;origin&#39;.
 $ git branch -a
 * main
   remotes/origin/HEAD -&gt; origin/master
@@ -137,7 +137,6 @@ $ git branch -a
 * main
   remotes/origin/HEAD -&gt; origin/main
   remotes/origin/main
-
 </code></pre><p>上記の最初の操作のHEADの関連付け先変更処理は、<code>git remote</code>を使っても
 できます。この方が見通し良いかもしれません。</p>
 <pre tabindex="0"><code>$ git remote set-head origin main
@@ -157,11 +156,11 @@ WEBインターフェースとの整合性がとれ無駄なデーターアッ�
 ブランチ名<code>master</code>を消すという荒技を使うのも手です。</p>
 <pre tabindex="0"><code>$ git checkout -b main
 $ git branch -D master
-$ echo &quot;renamed master to main&quot;
+$ echo &#34;renamed master to main&#34;
 $ git push origin :master
 </code></pre><p>以下でも同じです。</p>
 <pre tabindex="0"><code>$ git branch -m master main
-$ echo &quot;renamed master to main&quot;
+$ echo &#34;renamed master to main&#34;
 $ git push --delete origin master
 </code></pre><h2 id="参考cookbookサイト">参考Cookbookサイト</h2>
 <ul>

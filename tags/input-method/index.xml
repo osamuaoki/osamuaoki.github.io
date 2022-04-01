@@ -42,7 +42,7 @@ anthy/anthy.hに以下と定義されているので、encoding関係が 初期�
  anthy_putxchar() anthy_putxstr() anthy_putxstrln()  これらは、以下で使われている。
  mkworddic/mkdic.c src-main/context.c src-splitter/metaword.c src-splitter/wordlist.c src-worddic/record.c src-util/convdb.c test/check.c  まあ、道理でparsed_data0がUTF-8環境で読めない。どうもEUCJPで文字列 をはき出しているわけです。これじゃ、まともに動かないのも納得です。 きっと連接の統計がまともにできていないので、連文節変換をすると変な 結果が出るようになったのだろう。とりあえず、修正。
 さらによく見ると、calctrans/proccorpus.cが以下になっている。
- anthy_conf_override(&amp;quot;CONFFILE&amp;quot;, &amp;quot;../anthy-conf&amp;quot;); これは、ビルド中のソース内のファイルを見てほしいので以下にする。</description>
+ anthy_conf_override(&amp;#34;CONFFILE&amp;#34;, &amp;#34;../anthy-conf&amp;#34;); これは、ビルド中のソース内のファイルを見てほしいので以下にする。</description>
     </item>
     
     <item>
@@ -59,7 +59,7 @@ Anthyの文法係り受け定義 単文節内の、単語結合の遷移ルー�
 付属語グラフ 付属語ノードの結合ルールは、活用語尾や助詞や助動詞等のノードが一定の規則 にしたがって並んで、次のノードに遷移していくグラフ構造モデルです。
 この付属語グラフを規程するために読み込まれるall.depwordは、 活用語尾を定義したconjugate.tableと助詞や助動詞等のノードを定義した*.depwordを、 sedでコメント行を除き結合して生成します。
 このall.depwordは、基本的に
-@ノード名 &amp;quot;そこに続く単語1&amp;quot; &amp;quot;そこに続く単語2&amp;quot; .. &amp;quot;..n&amp;quot; \ @遷移するノード名1 @遷移するノード名2 .. @遷移するノード名m という形式の行の繰り返しです。(読みやすいように折り返しましたが、 通常１行で記載します)
+@ノード名 &amp;#34;そこに続く単語1&amp;#34; &amp;#34;そこに続く単語2&amp;#34; .. &amp;#34;..n&amp;#34; \ @遷移するノード名1 @遷移するノード名2 .. @遷移するノード名m という形式の行の繰り返しです。(読みやすいように折り返しましたが、 通常１行で記載します)
 終端で次のノード名がない場合には、そこに@のみを遷移するノード名 として記します。
 上記では、@遷移するノード名と典型的な場合をイメージした形式で記しま したが、実際にはもう少し多くの情報を盛り込めます。具体的には {遷移の属性}{接続の強さ}@ノードの名前という形式です。
 遷移の属性は、depgraph/parse_transition()にあるtokenでswitchするcase分岐 構造のコードで扱われ、DOC/SPLITTERに説明されたアルファベット２文字の ニモニックです。ここにそれを内容をコードに揃えてアップデートし再録説明すると、

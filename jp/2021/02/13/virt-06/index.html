@@ -90,7 +90,7 @@ kernel.unprivileged_userns_clone = 1
 しています。</p>
 <p>ネットワーク設定は以下を実行：</p>
 <pre tabindex="0"><code>$ NAME=$(id -un)
-$ sudo sh -c &quot;echo $NAME veth lxcbr0 10 &gt;&gt; /etc/lxc/lxc-usernet
+$ sudo sh -c &#34;echo $NAME veth lxcbr0 10 &gt;&gt; /etc/lxc/lxc-usernet
 </code></pre><p>さらに、<code>~/.config/lxc/default.conf</code>のユーザー設定を<code>/etc/subuid</code>と
 <code>/etc/subgid</code>に合わせて以下でします。</p>
 <pre tabindex="0"><code>$ mkdir -p ~/.config/lxc
@@ -161,7 +161,7 @@ root@bullseye-user:/#
 操作同様に動きました。</p>
 <p>ちなみにこれをキーボードで毎回叩くのは大変なので、Bashの初期化ファイルで
 以下を定義して使うことにしました。</p>
-<pre tabindex="0"><code>alias cgdo=&quot;systemd-run --scope --quiet --user --property=Delegate=yes&quot;
+<pre tabindex="0"><code>alias cgdo=&#34;systemd-run --scope --quiet --user --property=Delegate=yes&#34;
 </code></pre><p>また、非特権LXC仮想環境でも、仮想環境の設定ファイル<code>config</code>を前記の特権LXC
 仮想環境と同様に<code>lxc.mount.entry</code>の設定を追加設定することでデーター共有がで
 きました。</p>

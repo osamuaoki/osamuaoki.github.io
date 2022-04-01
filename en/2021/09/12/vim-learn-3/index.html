@@ -211,7 +211,7 @@ autopairs &ndash; thank you but &hellip; I don&rsquo;t need this &quot;&quot; fo
 <p>For example, <code>init.lua</code> has:</p>
 <pre tabindex="0"><code>-- Load keybindings module at the end because the keybindings module cost is high
 vim.defer_fn(function()
-load_modules(&quot;doom.extras&quot;, { &quot;keybindings&quot; })
+load_modules(&#34;doom.extras&#34;, { &#34;keybindings&#34; })
 vim.cmd([[
   PackerLoad which-key.nvim
   silent! bufdo e
@@ -229,7 +229,7 @@ end, 20)
 <p><code>map(mode, keys, cmd, options, category, unique_identifier, description)</code> is
 used for usual <code>map(mode, keys, cmd, options)</code>.</p>
 <p>Actual code looks like:</p>
-<pre tabindex="0"><code>map(&quot;n&quot;, &quot;&lt;leader&gt;v&quot;, &quot;&lt;cmd&gt;w&lt;cr&gt;&quot;, opts, &quot;Save&quot;, &quot;save_left&quot;, &quot;Save v&quot;)
+<pre tabindex="0"><code>map(&#34;n&#34;, &#34;&lt;leader&gt;v&#34;, &#34;&lt;cmd&gt;w&lt;cr&gt;&#34;, opts, &#34;Save&#34;, &#34;save_left&#34;, &#34;Save v&#34;)
 </code></pre><ul>
 <li>Packer load nvim-mapper&rsquo;s setup() and search keybindings at path <code>~/.config/nvim/lua</code></li>
 <li><code>lua/init.lua</code> &ndash;&gt; delayed &ndash;&gt; <code>lua/doom/extras/keybindings/init.lua</code></li>

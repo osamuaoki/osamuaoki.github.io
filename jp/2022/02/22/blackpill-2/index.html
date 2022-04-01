@@ -139,11 +139,10 @@ usb 6-1.4.2: New USB device strings: Mfr=1, Product=2, SerialNumber=3
 usb 6-1.4.2: Product: STM32  BOOTLOADER
 usb 6-1.4.2: Manufacturer: STMicroelectronics
 usb 6-1.4.2: SerialNumber: ******************
-checking bus 6, device 33: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&quot;
+checking bus 6, device 33: &#34;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&#34;
 bus: 6, device: 33 was not an MTP device
-checking bus 6, device 33: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&quot;
+checking bus 6, device 33: &#34;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&#34;
 bus: 6, device: 33 was not an MTP device
-
 </code></pre><p>そこで、<code>dfu-util</code>実行:</p>
 <pre tabindex="0"><code>$ dfu-util -l
 dfu-util 0.9
@@ -153,11 +152,10 @@ Copyright 2010-2016 Tormod Volden and Stefan Schmidt
 This program is Free Software and has ABSOLUTELY NO WARRANTY
 Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
 
-Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=3, name=&quot;@Device Feature/0xFFFF0000/01*004 e&quot;, serial=&quot;************&quot;
-Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=2, name=&quot;@OTP Memory /0x1FFF7800/01*512 e,01*016 e&quot;, serial=&quot;************&quot;
-Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=1, name=&quot;@Option Bytes  /0x1FFFC000/01*016 e&quot;, serial=&quot;************&quot;
-Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&quot;6-1.4.3&quot;, alt=0, name=&quot;@Internal Flash  /0x08000000/04*016Kg,01*064Kg,03*128Kg&quot;, serial=&quot;************&quot;
-
+Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&#34;6-1.4.3&#34;, alt=3, name=&#34;@Device Feature/0xFFFF0000/01*004 e&#34;, serial=&#34;************&#34;
+Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&#34;6-1.4.3&#34;, alt=2, name=&#34;@OTP Memory /0x1FFF7800/01*512 e,01*016 e&#34;, serial=&#34;************&#34;
+Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&#34;6-1.4.3&#34;, alt=1, name=&#34;@Option Bytes  /0x1FFFC000/01*016 e&#34;, serial=&#34;************&#34;
+Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&#34;6-1.4.3&#34;, alt=0, name=&#34;@Internal Flash  /0x08000000/04*016Kg,01*064Kg,03*128Kg&#34;, serial=&#34;************&#34;
 </code></pre><p>ちゃんと、DFUモードに入って、<code>dfu-util</code>が使えています。</p>
 <h2 id="stm32f411の各種プログラム方法">STM32F411の各種プログラム方法</h2>
 <p>Linux上でのSTM32F411チップのプログラム法を整理しました。</p>
@@ -234,7 +232,7 @@ Determining device status: state = dfuIDLE, status = 0
 dfuIDLE, continuing
 DFU mode device DFU version 011a
 Device returned transfer size 2048
-DfuSe interface name: &quot;Internal Flash  &quot;
+DfuSe interface name: &#34;Internal Flash  &#34;
 Downloading to address = 0x08000000, size = 14888
 Download	[=========================] 100%        14888 bytes
 Download done.
@@ -246,11 +244,10 @@ usb 6-1.4.2: Product: WeAct Studio HID Bootloader
 usb 6-1.4.2: Manufacturer: WeAct Studio
 usb 6-1.4.2: SerialNumber: ************
 hid-generic 0003:0483:572A.001D: hiddev2,hidraw2: USB HID v1.11 Device [WeAct Studio WeAct Studio HID Bootloader] on usb-0000:08:00.4-1.4.2/input0
-checking bus 6, device 42: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&quot;
+checking bus 6, device 42: &#34;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&#34;
 bus: 6, device: 42 was not an MTP device
-checking bus 6, device 42: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&quot;
+checking bus 6, device 42: &#34;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.4/usb6/6-1/6-1.4/6-1.4.2&#34;
 bus: 6, device: 42 was not an MTP device
-
 </code></pre><p>上記での<code>dfu-suffix</code>を使って、単にファームウエアーがハードウエアーに対応することを確認するためだけ等の識別番号・CRC相当のバイナリーのサフィックスデータを追加はどうも必須要件では無く、ただこれをするとうるさい警告が出なくなります。</p>
 <p>必須要件は、BINファイル使用時には、書き込み開始アドレスを明示的に<code>-s 0x08000000</code>等と指定することです。</p>
 <p>DFUファイルの場合はちょっと違います。これは次回触れます。</p>

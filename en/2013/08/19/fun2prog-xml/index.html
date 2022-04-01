@@ -230,7 +230,7 @@ if __name__ == &#39;__main__&#39;:
 <pre tabindex="0"><code>{http://www.w3.org/1999/xhtml}tag
 </code></pre><p>For example, let&rsquo;s consider that a copy of this web page fun2prog.html in this current directory.  The first thing to do is to change above example code to the following.</p>
 <pre tabindex="0"><code>..
-    tree = ET.parse('jouyou.xml')
+    tree = ET.parse(&#39;jouyou.xml&#39;)
     root = tree.getroot()
 ..
 </code></pre><p>Running this will produce very noisy output (folded to fit to the screen).</p>
@@ -239,10 +239,10 @@ if __name__ == &#39;__main__&#39;:
 {[2](http://www.w3.org/1999/xhtml}div)/ ...
 </code></pre><p>The following should let you supress these curly brakets.</p>
 <pre tabindex="0"><code>..
-    f = open('fun2prog.html', 'r')
+    f = open(&#39;fun2prog.html&#39;, &#39;r&#39;)
     xhtmlstring = f.read()
     f.close()
-    xhtmlstring = re.sub(' xmlns=&quot;[^&quot;]+&quot;', '', xhtmlstring, count=1)
+    xhtmlstring = re.sub(&#39; xmlns=&#34;[^&#34;]+&#34;&#39;, &#39;&#39;, xhtmlstring, count=1)
     root = ET.fromstring(xhtmlstring)
 ..
 </code></pre><!-- raw HTML omitted -->

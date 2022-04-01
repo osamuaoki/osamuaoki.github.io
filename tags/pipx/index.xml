@@ -25,7 +25,7 @@ wheel形式でのモジュールパッケージはpipで 扱えます。
 ちなみに、distributeは、 setuptoolsにマージされたとか、 setuptoolsが以前使っていた easy_install は非推薦ツールとなり、wheel形式でモジュールパッケージを作成し pipでモジュールパッケージを導入するようになったという、 過去の経緯を理解しないといろんな手法の立ち位置がわかりにくいです。
 wheel形式とは、その実体はクロスプラットフォームで一番使われる アーカイブ形式のZIPファイルです。
 さらに最近のPEP517に準拠させるには、 別のパッケージ作成インフラを使おうとしないなら、単に PEP518準拠の、 以下のpyproject.tomlを加えれば充分です。
-[build-system] requires = [ &amp;quot;setuptools&amp;gt;=42&amp;quot;, &amp;quot;wheel&amp;quot; ] build-backend = &amp;quot;setuptools.</description>
+[build-system] requires = [ &amp;#34;setuptools&amp;gt;=42&amp;#34;, &amp;#34;wheel&amp;#34; ] build-backend = &amp;#34;setuptools.</description>
     </item>
     
   </channel>

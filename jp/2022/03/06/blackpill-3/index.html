@@ -119,10 +119,10 @@ Copyright 2010-2021 Tormod Volden and Stefan Schmidt
 This program is Free Software and has ABSOLUTELY NO WARRANTY
 Please report bugs to http://sourceforge.net/p/dfu-util/tickets/
 
-Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&quot;4-2&quot;, alt=3, name=&quot;@Device Feature/0xFFFF0000/01*004 e&quot;, serial=&quot;************&quot;
-Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&quot;4-2&quot;, alt=2, name=&quot;@OTP Memory /0x1FFF7800/01*512 e,01*016 e&quot;, serial=&quot;************&quot;
-Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&quot;4-2&quot;, alt=1, name=&quot;@Option Bytes  /0x1FFFC000/01*016 e&quot;, serial=&quot;************&quot;
-Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&quot;4-2&quot;, alt=0, name=&quot;@Internal Flash  /0x08000000/04*016Kg,01*064Kg,03*128Kg&quot;, serial=&quot;************&quot;
+Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&#34;4-2&#34;, alt=3, name=&#34;@Device Feature/0xFFFF0000/01*004 e&#34;, serial=&#34;************&#34;
+Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&#34;4-2&#34;, alt=2, name=&#34;@OTP Memory /0x1FFF7800/01*512 e,01*016 e&#34;, serial=&#34;************&#34;
+Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&#34;4-2&#34;, alt=1, name=&#34;@Option Bytes  /0x1FFFC000/01*016 e&#34;, serial=&#34;************&#34;
+Found DFU: [0483:df11] ver=2200, devnum=10, cfg=1, intf=0, path=&#34;4-2&#34;, alt=0, name=&#34;@Internal Flash  /0x08000000/04*016Kg,01*064Kg,03*128Kg&#34;, serial=&#34;************&#34;
 
  $ dfu-util -d 0483:df11 -a 0  -D firmware_internal_rom_stm32f401ce_v30+_v1.14-7.dfu
 dfu-util 0.11
@@ -142,7 +142,7 @@ Determining device status...
 DFU state(2) = dfuIDLE, status(0) = No error condition is present
 DFU mode device DFU version 011a
 Device returned transfer size 2048
-DfuSe interface name: &quot;Internal Flash  &quot;
+DfuSe interface name: &#34;Internal Flash  &#34;
 File contains 1 DFU images
 Parsing DFU image 1
 Target name: ST...
@@ -195,13 +195,13 @@ Device DFU version 011a
 Claiming USB DFU Interface...
 Setting Alternate Interface #0 ...
 Determining device status...
-DFU state(10) = dfuERROR, status(10) = Device's firmware is corrupt. It cannot return to run-time (non-DFU) operations
+DFU state(10) = dfuERROR, status(10) = Device&#39;s firmware is corrupt. It cannot return to run-time (non-DFU) operations
 Clearing status
 Determining device status...
 DFU state(2) = dfuIDLE, status(0) = No error condition is present
 DFU mode device DFU version 011a
 Device returned transfer size 2048
-DfuSe interface name: &quot;Internal Flash  &quot;
+DfuSe interface name: &#34;Internal Flash  &#34;
 dfu-util: This is a DfuSe file, not meant for raw download
 </code></pre><p>以上の様に、「DFUファイルじゃない」といって拒否されていました。</p>
 <p>ちゃんと<a href="https://www.usb.org/sites/default/files/DFU_1.1.pdf">DFUの規格</a>を読むべきなんでしょうが、どうも分割され飛び飛びといったデーター記述ができる書き込み先アドレスを内包するバイナリーファイルがDFUファイルでのようです。一方、BINファイルは特定アドレスからベタに書き込むためのバイナリーデーターの印象です。ある意味、形式は違うがHEXと同じような機能があるようです。</p>
@@ -213,10 +213,10 @@ dfu-util: This is a DfuSe file, not meant for raw download
 
 import machine
 import pyb
-pyb.country('US') # ISO 3166-1 Alpha-2 code, eg US, GB, DE, AU
-pyb.main('main.py') # main script to run after this one
-#pyb.usb_mode('VCP+MSC') # act as a serial and a storage device
-#pyb.usb_mode('VCP+HID') # act as a serial device and a mouse
+pyb.country(&#39;US&#39;) # ISO 3166-1 Alpha-2 code, eg US, GB, DE, AU
+pyb.main(&#39;main.py&#39;) # main script to run after this one
+#pyb.usb_mode(&#39;VCP+MSC&#39;) # act as a serial and a storage device
+#pyb.usb_mode(&#39;VCP+HID&#39;) # act as a serial device and a mouse
 </code></pre><p>そして、WeActのサイトの<code>SDK/MicroPython_Example</code>にあった<code>Blink.py</code>を、<code>main.py</code>に上書きしました。</p>
 <p>USBを繋ぐと、青いLEDがピカピカしています。いい感じです。</p>
 <h2 id="dfuseとdfuse-pack">DfuSeとdfuse-pack</h2>

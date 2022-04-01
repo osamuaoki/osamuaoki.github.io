@@ -57,7 +57,7 @@ wheel形式でのモジュールパッケージはpipで 扱えます。
 ちなみに、distributeは、 setuptoolsにマージされたとか、 setuptoolsが以前使っていた easy_install は非推薦ツールとなり、wheel形式でモジュールパッケージを作成し pipでモジュールパッケージを導入するようになったという、 過去の経緯を理解しないといろんな手法の立ち位置がわかりにくいです。
 wheel形式とは、その実体はクロスプラットフォームで一番使われる アーカイブ形式のZIPファイルです。
 さらに最近のPEP517に準拠させるには、 別のパッケージ作成インフラを使おうとしないなら、単に PEP518準拠の、 以下のpyproject.tomlを加えれば充分です。
-[build-system] requires = [ &amp;quot;setuptools&amp;gt;=42&amp;quot;, &amp;quot;wheel&amp;quot; ] build-backend = &amp;quot;setuptools.</description>
+[build-system] requires = [ &amp;#34;setuptools&amp;gt;=42&amp;#34;, &amp;#34;wheel&amp;#34; ] build-backend = &amp;#34;setuptools.</description>
     </item>
     
     <item>
@@ -153,7 +153,7 @@ btrfs化の全体手順 btrfs化を確実にするために、練習を兼ねて
 まずKERNELがunprivileged user namespacesを有効にしていることを確認します。
 $ sudo uname -a Linux **** 5.10.0-3-amd64 #1 SMP Debian 5.10.13-1 (2021-02-06) x86_64 GNU/Linux $ sudo sysctl kernel.unprivileged_userns_clone kernel.unprivileged_userns_clone = 1 ユーザーアカウント設定の/etc/subuidと/etc/subgidはすでに設定されていました。 これらは親システムのUIDやGIDからLXCコンテナ内から見えるUIDやGIDへの対応関係定義 しています。
 ネットワーク設定は以下を実行：
-$ NAME=$(id -un) $ sudo sh -c &amp;quot;echo $NAME veth lxcbr0 10 &amp;gt;&amp;gt; /etc/lxc/lxc-usernet さらに、~/.config/lxc/default.confのユーザー設定を/etc/subuidと /etc/subgidに合わせて以下でします。
+$ NAME=$(id -un) $ sudo sh -c &amp;#34;echo $NAME veth lxcbr0 10 &amp;gt;&amp;gt; /etc/lxc/lxc-usernet さらに、~/.config/lxc/default.confのユーザー設定を/etc/subuidと /etc/subgidに合わせて以下でします。
 $ mkdir -p ~/.config/lxc $ cat &amp;gt;~/.config/lxc/default.conf &amp;lt;&amp;lt; EOF lxc.include = /etc/lxc/default.conf lxc.idmap = u 0 100000 65536 lxc.</description>
     </item>
     
@@ -210,7 +210,7 @@ Linux Namespaces どうもLXCも含めた各種コンテナ環境は2002年以�
       <description>引き続きchrootの強化版のようなLXCを使っての仮想環境作成を特権ユーザーが 作成する簡単なケースを深堀りします。
 LXC仮想環境の停止 仮想環境のカスタマイズした起動をするためには、作成し起動した仮想環境のSTATEを STOPPED(停止)に確実にします。
 $ sudo lxc-stop -n sid $ sudo lxc-ls -f NAME STATE AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED buster STOPPED 0 - - - false sid STOPPED 0 - - - false LXC仮想環境とのデーター共有起動 仮想環境のカスタマイズした起動時に、設定変数を指定することで、ホスト側の /home/fish/srcを仮想環境内の/home/fishとしてアクセスできるように共有化 された仮想環境として起動できます。この仮想環境環境にユーザーアカウントに ログインするまでの手順は以下です。
-$ sudo lxc-start -n sid \ -s &amp;quot;lxc.mount.entry=/home/fish/src home/fish none bind 0 0&amp;quot; $ sudo lxc-attach -n sid root@sid:/# login sid login: fish Password: ... fish@sid:~$ ここで仮想環境内のホームディレクトリーで見えるのは/home/fish/srcと同一デバイス上の ファイルだけです。(再帰的マウントはされません。)
+$ sudo lxc-start -n sid \ -s &amp;#34;lxc.mount.entry=/home/fish/src home/fish none bind 0 0&amp;#34; $ sudo lxc-attach -n sid root@sid:/# login sid login: fish Password: ... fish@sid:~$ ここで仮想環境内のホームディレクトリーで見えるのは/home/fish/srcと同一デバイス上の ファイルだけです。(再帰的マウントはされません。)
 このLXC仮想環境内でパッケージビルドなどをすれば綺麗な環境ででき、さらにその結果に ホスト側から直接アクセスできます。</description>
     </item>
     
@@ -319,7 +319,7 @@ Debianでは特にどうするって言う慣習が無いようです。
       
       <guid>/en/2020/04/29/dmesg-sata/</guid>
       <description>dmesg from SATA After having a loose SATA cable problem and fixed it, I happen to see dmesg as:
-$ sudo dmesg ... [ 2.373152] sd 0:0:0:0: [sda] 937703088 512-byte logical blocks: (480 GB/447 GiB) [ 2.373156] sd 0:0:0:0: [sda] Write Protect is off [ 2.373158] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00 [ 2.373165] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn&#39;t support DPO or FUA [ 2.</description>
+$ sudo dmesg ... [ 2.373152] sd 0:0:0:0: [sda] 937703088 512-byte logical blocks: (480 GB/447 GiB) [ 2.373156] sd 0:0:0:0: [sda] Write Protect is off [ 2.373158] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00 [ 2.373165] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn&amp;#39;t support DPO or FUA [ 2.</description>
     </item>
     
     <item>

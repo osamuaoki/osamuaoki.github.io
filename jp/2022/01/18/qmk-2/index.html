@@ -180,13 +180,13 @@ kernel: input: osamuaoki one Mouse as /devices/pci0000:00/0000:00:08.1/0000:08:0
 kernel: input: osamuaoki one System Control as /devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2/4-2:1.1/0003:FEED:0000.0014/input/input47
 kernel: input: osamuaoki one Consumer Control as /devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2/4-2:1.1/0003:FEED:0000.0014/input/input48
 kernel: hid-generic 0003:FEED:0000.0014: input,hidraw5: USB HID v1.11 Mouse [osamuaoki one] on usb-0000:08:00.3-2/input1
-mtp-probe[160213]: checking bus 4, device 14: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&quot;
+mtp-probe[160213]: checking bus 4, device 14: &#34;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&#34;
 mtp-probe[160213]: bus: 4, device: 14 was not an MTP device
 upowerd[1468]: treating change event as add on /sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2
 systemd-logind[939]: Watching system buttons on /dev/input/event23 (osamuaoki one System Control)
 systemd-logind[939]: Watching system buttons on /dev/input/event24 (osamuaoki one Consumer Control)
 systemd-logind[939]: Watching system buttons on /dev/input/event21 (osamuaoki one)
-mtp-probe[160236]: checking bus 4, device 14: &quot;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&quot;
+mtp-probe[160236]: checking bus 4, device 14: &#34;/sys/devices/pci0000:00/0000:00:08.1/0000:08:00.3/usb4/4-2&#34;
 mtp-probe[160236]: bus: 4, device: 14 was not an MTP device
 </code></pre><p>qmkでコンパイルしたファームウエアーが、qmk導入以前から使っているMCU側HIDブートローダーのnanoBootとLUFAのPCホスト側ブートローダー<code>hid_bootloader_cli</code> @ <code>~/.local/bin</code>で導入できました。</p>
 <p>ちゃんと、ミュートボタンが機能しています。</p>
@@ -212,15 +212,14 @@ Size before:
 Copying one_default.hex to qmk_firmware folder                                                      [OK]
 Checking file size of one_default.hex                                                               [OK]
  * The firmware size is fine - 12512/28672 (43%, 16160 bytes free)
-Drashna's HID Bootloader, Command Line, Version 2.2
-Read &quot;.build/one_default.hex&quot;: 12512 bytes, 38.8% usage
+Drashna&#39;s HID Bootloader, Command Line, Version 2.2
+Read &#34;.build/one_default.hex&#34;: 12512 bytes, 38.8% usage
 Waiting for HID Bootloader device...
  (hint: press the reset button)
 Found HID Bootloader
-Read &quot;.build/one_default.hex&quot;: 12512 bytes, 38.8% usage
+Read &#34;.build/one_default.hex&#34;: 12512 bytes, 38.8% usage
 Programming..................................................................................................
 Booting
-
 </code></pre><p>確かにこの方が見やすい。いい感じです。</p>
 <p>このあと、4つのスイッチを繋いだ別の<code>four</code>というデバイスを作成、これもFLASHしました。</p>
 <ul>
@@ -246,10 +245,9 @@ Booting
 Ψ Compiling keymap with gmake --jobs=1 one:default:flash
 
 
-☐ Running command: ['gmake', '--jobs=1', 'one:default:flash']
+☐ Running command: [&#39;gmake&#39;, &#39;--jobs=1&#39;, &#39;one:default:flash&#39;]
 QMK Firmware 0.15.15
 ...
-
 </code></pre><p>ただ、これでも<code>Makefile</code>の起動コマンドは分かりますが、<code>Makefile</code>から実行されたコマンドが何かが確認できません。実は以下が<code>Makefile</code>の先頭にかかれているのがこの原因です。</p>
 <pre tabindex="0"><code>ifndef VERBOSE
 .SILENT:
@@ -257,7 +255,6 @@ endif
 ...
 </code></pre><p>だからシェルから以下を実行すると、<code>Makefile</code>から実行されるコマンドが分かります。</p>
 <pre tabindex="0"><code>$ make VERBOSE=1 --jobs=1 one:default:flash
-
 </code></pre><!-- raw HTML omitted -->
 
 

@@ -139,7 +139,7 @@ qmkのコマンドの説明はQMK CLI Commandsにあります。
 どうもビルドは公式にはqmkコマンドを使うようになっているそうですが、その背後で何がどうなっているのかが気になります。
 レポを見ると、791b9cc652 (&amp;ldquo;remove all makefiles from keyboard directories&amp;rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立のMakefileが無くなっています。だから、ビルドの実体はrootにあるMakefileがしているはずです。いかんせんrootのMakefileは複雑なので閉口でした。
 今残っているrootにあるMakefileにからむのかがwebにあるエンドユーザー向けの説明ではよく分からないので、試しにrootにあるMakefileを無効なターゲットで動かすと以下のメッセージが出ます。
-$ make help QMK Firmware 0.15.12 make: *** No rule to make target &#39;help&#39;. Stop. | | QMK&#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&#39;s `keymaps/` directory.</description>
+$ make help QMK Firmware 0.15.12 make: *** No rule to make target &amp;#39;help&amp;#39;. Stop. | | QMK&amp;#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&amp;#39;s `keymaps/` directory.</description>
     </item>
     
     <item>
@@ -204,7 +204,7 @@ Secure backup In order to securely backup private data using non-secure remote s
 If I want to move submodule, I don&amp;rsquo;t need delete and clone again. I can simply move it with &amp;ldquo;git mv &amp;lt;oldpath&amp;gt; &amp;lt;newpath&amp;gt;&amp;rdquo; while we keep using the same local copy of repo.
 Let&amp;rsquo;s see how this is done.
 &amp;lt;modulename&amp;gt;/.gitmodules This file is checked in to the parent Git repository and contains:
-[submodule &amp;quot;pack/github/opt/ale&amp;quot;] path = pack/ale url = https://github.</description>
+[submodule &amp;#34;pack/github/opt/ale&amp;#34;] path = pack/ale url = https://github.</description>
     </item>
     
     <item>
@@ -363,7 +363,7 @@ wheel形式でのモジュールパッケージはpipで 扱えます。
 ちなみに、distributeは、 setuptoolsにマージされたとか、 setuptoolsが以前使っていた easy_install は非推薦ツールとなり、wheel形式でモジュールパッケージを作成し pipでモジュールパッケージを導入するようになったという、 過去の経緯を理解しないといろんな手法の立ち位置がわかりにくいです。
 wheel形式とは、その実体はクロスプラットフォームで一番使われる アーカイブ形式のZIPファイルです。
 さらに最近のPEP517に準拠させるには、 別のパッケージ作成インフラを使おうとしないなら、単に PEP518準拠の、 以下のpyproject.tomlを加えれば充分です。
-[build-system] requires = [ &amp;quot;setuptools&amp;gt;=42&amp;quot;, &amp;quot;wheel&amp;quot; ] build-backend = &amp;quot;setuptools.</description>
+[build-system] requires = [ &amp;#34;setuptools&amp;gt;=42&amp;#34;, &amp;#34;wheel&amp;#34; ] build-backend = &amp;#34;setuptools.</description>
     </item>
     
     <item>
@@ -459,7 +459,7 @@ btrfs化の全体手順 btrfs化を確実にするために、練習を兼ねて
 まずKERNELがunprivileged user namespacesを有効にしていることを確認します。
 $ sudo uname -a Linux **** 5.10.0-3-amd64 #1 SMP Debian 5.10.13-1 (2021-02-06) x86_64 GNU/Linux $ sudo sysctl kernel.unprivileged_userns_clone kernel.unprivileged_userns_clone = 1 ユーザーアカウント設定の/etc/subuidと/etc/subgidはすでに設定されていました。 これらは親システムのUIDやGIDからLXCコンテナ内から見えるUIDやGIDへの対応関係定義 しています。
 ネットワーク設定は以下を実行：
-$ NAME=$(id -un) $ sudo sh -c &amp;quot;echo $NAME veth lxcbr0 10 &amp;gt;&amp;gt; /etc/lxc/lxc-usernet さらに、~/.config/lxc/default.confのユーザー設定を/etc/subuidと /etc/subgidに合わせて以下でします。
+$ NAME=$(id -un) $ sudo sh -c &amp;#34;echo $NAME veth lxcbr0 10 &amp;gt;&amp;gt; /etc/lxc/lxc-usernet さらに、~/.config/lxc/default.confのユーザー設定を/etc/subuidと /etc/subgidに合わせて以下でします。
 $ mkdir -p ~/.config/lxc $ cat &amp;gt;~/.config/lxc/default.conf &amp;lt;&amp;lt; EOF lxc.include = /etc/lxc/default.conf lxc.idmap = u 0 100000 65536 lxc.</description>
     </item>
     
@@ -516,7 +516,7 @@ Linux Namespaces どうもLXCも含めた各種コンテナ環境は2002年以�
       <description>引き続きchrootの強化版のようなLXCを使っての仮想環境作成を特権ユーザーが 作成する簡単なケースを深堀りします。
 LXC仮想環境の停止 仮想環境のカスタマイズした起動をするためには、作成し起動した仮想環境のSTATEを STOPPED(停止)に確実にします。
 $ sudo lxc-stop -n sid $ sudo lxc-ls -f NAME STATE AUTOSTART GROUPS IPV4 IPV6 UNPRIVILEGED buster STOPPED 0 - - - false sid STOPPED 0 - - - false LXC仮想環境とのデーター共有起動 仮想環境のカスタマイズした起動時に、設定変数を指定することで、ホスト側の /home/fish/srcを仮想環境内の/home/fishとしてアクセスできるように共有化 された仮想環境として起動できます。この仮想環境環境にユーザーアカウントに ログインするまでの手順は以下です。
-$ sudo lxc-start -n sid \ -s &amp;quot;lxc.mount.entry=/home/fish/src home/fish none bind 0 0&amp;quot; $ sudo lxc-attach -n sid root@sid:/# login sid login: fish Password: ... fish@sid:~$ ここで仮想環境内のホームディレクトリーで見えるのは/home/fish/srcと同一デバイス上の ファイルだけです。(再帰的マウントはされません。)
+$ sudo lxc-start -n sid \ -s &amp;#34;lxc.mount.entry=/home/fish/src home/fish none bind 0 0&amp;#34; $ sudo lxc-attach -n sid root@sid:/# login sid login: fish Password: ... fish@sid:~$ ここで仮想環境内のホームディレクトリーで見えるのは/home/fish/srcと同一デバイス上の ファイルだけです。(再帰的マウントはされません。)
 このLXC仮想環境内でパッケージビルドなどをすれば綺麗な環境ででき、さらにその結果に ホスト側から直接アクセスできます。</description>
     </item>
     
@@ -639,7 +639,7 @@ Debianでは特にどうするって言う慣習が無いようです。
       
       <guid>/en/2020/04/29/dmesg-sata/</guid>
       <description>dmesg from SATA After having a loose SATA cable problem and fixed it, I happen to see dmesg as:
-$ sudo dmesg ... [ 2.373152] sd 0:0:0:0: [sda] 937703088 512-byte logical blocks: (480 GB/447 GiB) [ 2.373156] sd 0:0:0:0: [sda] Write Protect is off [ 2.373158] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00 [ 2.373165] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn&#39;t support DPO or FUA [ 2.</description>
+$ sudo dmesg ... [ 2.373152] sd 0:0:0:0: [sda] 937703088 512-byte logical blocks: (480 GB/447 GiB) [ 2.373156] sd 0:0:0:0: [sda] Write Protect is off [ 2.373158] sd 0:0:0:0: [sda] Mode Sense: 00 3a 00 00 [ 2.373165] sd 0:0:0:0: [sda] Write cache: enabled, read cache: enabled, doesn&amp;#39;t support DPO or FUA [ 2.</description>
     </item>
     
     <item>
@@ -935,7 +935,7 @@ anthy/anthy.hに以下と定義されているので、encoding関係が 初期�
  anthy_putxchar() anthy_putxstr() anthy_putxstrln()  これらは、以下で使われている。
  mkworddic/mkdic.c src-main/context.c src-splitter/metaword.c src-splitter/wordlist.c src-worddic/record.c src-util/convdb.c test/check.c  まあ、道理でparsed_data0がUTF-8環境で読めない。どうもEUCJPで文字列 をはき出しているわけです。これじゃ、まともに動かないのも納得です。 きっと連接の統計がまともにできていないので、連文節変換をすると変な 結果が出るようになったのだろう。とりあえず、修正。
 さらによく見ると、calctrans/proccorpus.cが以下になっている。
- anthy_conf_override(&amp;quot;CONFFILE&amp;quot;, &amp;quot;../anthy-conf&amp;quot;); これは、ビルド中のソース内のファイルを見てほしいので以下にする。</description>
+ anthy_conf_override(&amp;#34;CONFFILE&amp;#34;, &amp;#34;../anthy-conf&amp;#34;); これは、ビルド中のソース内のファイルを見てほしいので以下にする。</description>
     </item>
     
     <item>
@@ -952,7 +952,7 @@ Anthyの文法係り受け定義 単文節内の、単語結合の遷移ルー�
 付属語グラフ 付属語ノードの結合ルールは、活用語尾や助詞や助動詞等のノードが一定の規則 にしたがって並んで、次のノードに遷移していくグラフ構造モデルです。
 この付属語グラフを規程するために読み込まれるall.depwordは、 活用語尾を定義したconjugate.tableと助詞や助動詞等のノードを定義した*.depwordを、 sedでコメント行を除き結合して生成します。
 このall.depwordは、基本的に
-@ノード名 &amp;quot;そこに続く単語1&amp;quot; &amp;quot;そこに続く単語2&amp;quot; .. &amp;quot;..n&amp;quot; \ @遷移するノード名1 @遷移するノード名2 .. @遷移するノード名m という形式の行の繰り返しです。(読みやすいように折り返しましたが、 通常１行で記載します)
+@ノード名 &amp;#34;そこに続く単語1&amp;#34; &amp;#34;そこに続く単語2&amp;#34; .. &amp;#34;..n&amp;#34; \ @遷移するノード名1 @遷移するノード名2 .. @遷移するノード名m という形式の行の繰り返しです。(読みやすいように折り返しましたが、 通常１行で記載します)
 終端で次のノード名がない場合には、そこに@のみを遷移するノード名 として記します。
 上記では、@遷移するノード名と典型的な場合をイメージした形式で記しま したが、実際にはもう少し多くの情報を盛り込めます。具体的には {遷移の属性}{接続の強さ}@ノードの名前という形式です。
 遷移の属性は、depgraph/parse_transition()にあるtokenでswitchするcase分岐 構造のコードで扱われ、DOC/SPLITTERに説明されたアルファベット２文字の ニモニックです。ここにそれを内容をコードに揃えてアップデートし再録説明すると、
@@ -1106,7 +1106,7 @@ Windows10でもトグル動作が嫌いで、OS側から プロパティ → 詳
       
       <guid>/en/2019/02/09/initial-setup01/</guid>
       <description>Initial hugo setups Let&amp;rsquo;s set up a local git repository for a simple personal web pages with blog support using hugo on Debian.
- $ sudo apt-get install hugo $ cd /path/to # where you can write $ hugo new site &amp;lt;webbuildtree&amp;gt; Congratulations! Your new Hugo site is created in /path/to/osamuaoki. Just a few more steps and you&#39;re ready to go: 1. Download a theme into the same-named folder. Choose a theme from https://themes.</description>
+ $ sudo apt-get install hugo $ cd /path/to # where you can write $ hugo new site &amp;lt;webbuildtree&amp;gt; Congratulations! Your new Hugo site is created in /path/to/osamuaoki. Just a few more steps and you&amp;#39;re ready to go: 1. Download a theme into the same-named folder. Choose a theme from https://themes.</description>
     </item>
     
     <item>
@@ -1459,7 +1459,7 @@ Shell Shell script (short option only) Shell program with short command line opt
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
  &amp;ldquo;Hello World!&amp;rdquo; Here are example code snippets to print &amp;ldquo;Hello World!&amp;rdquo; and somethings we should be aware of for each language.
 Shell The most basic programing language: Shell.
- Interpreter (slow) Easy to write a small program. Not easy to write a big program. Test code snippet under the normal console (or by &amp;ldquo;sh -i&amp;quot;).</description>
+ Interpreter (slow) Easy to write a small program. Not easy to write a big program. Test code snippet under the normal console (or by &amp;ldquo;sh -i&amp;rdquo;).</description>
     </item>
     
     <item>

@@ -136,7 +136,6 @@ ext4にしていたルートファイルシステムも含めてbtrfs化をめ�
 -UUID=491a357c-822f-4f38-b56e-b998baea81a5      /       ext4  errors=remount-ro 0       1
 +UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e      /       btrfs subvol=/,defaults 0       1
  # /boot/efi was on /dev/nvme0n1p1 during installation
-
 </code></pre><p>他のパーティションのシステムが設定するgrub2を使っていても、自分のシステムの
 <code>/boot/grub/grub.cfg</code>もキチッと以下のdiffに相当する変更をします。</p>
 <p>これができていなくて発生した起動不良にかなり悩みました。(update-grubは他の
@@ -156,7 +155,7 @@ ext4にしていたルートファイルシステムも含めてbtrfs化をめ�
 -  search --no-floppy --fs-uuid --set=root 491a357c-822f-4f38-b56e-b998baea81a5
 +  search --no-floppy --fs-uuid --set=root 9be0d928-5892-4cdd-a647-1e8cce937b2e
  fi
-     font=&quot;/usr/share/grub/unicode.pf2&quot;
+     font=&#34;/usr/share/grub/unicode.pf2&#34;
  fi
 @@ -93,11 +93,11 @@
 
@@ -177,8 +176,8 @@ ext4にしていたルートファイルシステムも含めてbtrfs化をめ�
  }
  set linux_gfx_mode=
  export linux_gfx_mode
--menuentry 'Debian GNU/Linux' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-491a357c-822f-4f38-b56e-b998baea81a5' {
-+menuentry 'Debian GNU/Linux' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-simple-9be0d928-5892-4cdd-a647-1e8cce937b2e' {
+-menuentry &#39;Debian GNU/Linux&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-simple-491a357c-822f-4f38-b56e-b998baea81a5&#39; {
++menuentry &#39;Debian GNU/Linux&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-simple-9be0d928-5892-4cdd-a647-1e8cce937b2e&#39; {
  	load_video
  	insmod gzio
  	if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
@@ -192,16 +191,16 @@ ext4にしていたルートファイルシステムも含めてbtrfs化をめ�
 -	  search --no-floppy --fs-uuid --set=root 491a357c-822f-4f38-b56e-b998baea81a5
 +	  search --no-floppy --fs-uuid --set=root 9be0d928-5892-4cdd-a647-1e8cce937b2e
  	fi
- 	echo	'Loading Linux 5.10.0-3-amd64 ...'
+ 	echo	&#39;Loading Linux 5.10.0-3-amd64 ...&#39;
 -	linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=491a357c-822f-4f38-b56e-b998baea81a5 ro  quiet
 +	linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e ro  quiet
- 	echo	'Loading initial ramdisk ...'
+ 	echo	&#39;Loading initial ramdisk ...&#39;
  	initrd	/boot/initrd.img-5.10.0-3-amd64
  }
--submenu 'Advanced options for Debian GNU/Linux' $menuentry_id_option 'gnulinux-advanced-491a357c-822f-4f38-b56e-b998baea81a5' {
--	menuentry 'Debian GNU/Linux, with Linux 5.10.0-3-amd64' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-5.10.0-3-amd64-advanced-491a357c-822f-4f38-b56e-b998baea81a5' {
-+submenu 'Advanced options for Debian GNU/Linux' $menuentry_id_option 'gnulinux-advanced-9be0d928-5892-4cdd-a647-1e8cce937b2e' {
-+	menuentry 'Debian GNU/Linux, with Linux 5.10.0-3-amd64' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-5.10.0-3-amd64-advanced-9be0d928-5892-4cdd-a647-1e8cce937b2e' {
+-submenu &#39;Advanced options for Debian GNU/Linux&#39; $menuentry_id_option &#39;gnulinux-advanced-491a357c-822f-4f38-b56e-b998baea81a5&#39; {
+-	menuentry &#39;Debian GNU/Linux, with Linux 5.10.0-3-amd64&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-5.10.0-3-amd64-advanced-491a357c-822f-4f38-b56e-b998baea81a5&#39; {
++submenu &#39;Advanced options for Debian GNU/Linux&#39; $menuentry_id_option &#39;gnulinux-advanced-9be0d928-5892-4cdd-a647-1e8cce937b2e&#39; {
++	menuentry &#39;Debian GNU/Linux, with Linux 5.10.0-3-amd64&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-5.10.0-3-amd64-advanced-9be0d928-5892-4cdd-a647-1e8cce937b2e&#39; {
  		load_video
  		insmod gzio
  		if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
@@ -215,14 +214,14 @@ ext4にしていたルートファイルシステムも含めてbtrfs化をめ�
 -		  search --no-floppy --fs-uuid --set=root 491a357c-822f-4f38-b56e-b998baea81a5
 +		  search --no-floppy --fs-uuid --set=root 9be0d928-5892-4cdd-a647-1e8cce937b2e
  		fi
- 		echo	'Loading Linux 5.10.0-3-amd64 ...'
+ 		echo	&#39;Loading Linux 5.10.0-3-amd64 ...&#39;
 -		linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=491a357c-822f-4f38-b56e-b998baea81a5 ro  quiet
 +		linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e ro  quiet
- 		echo	'Loading initial ramdisk ...'
+ 		echo	&#39;Loading initial ramdisk ...&#39;
  		initrd	/boot/initrd.img-5.10.0-3-amd64
  	}
--	menuentry 'Debian GNU/Linux, with Linux 5.10.0-3-amd64 (recovery mode)' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-5.10.0-3-amd64-recovery-491a357c-822f-4f38-b56e-b998baea81a5' {
-+	menuentry 'Debian GNU/Linux, with Linux 5.10.0-3-amd64 (recovery mode)' --class debian --class gnu-linux --class gnu --class os $menuentry_id_option 'gnulinux-5.10.0-3-amd64-recovery-9be0d928-5892-4cdd-a647-1e8cce937b2e' {
+-	menuentry &#39;Debian GNU/Linux, with Linux 5.10.0-3-amd64 (recovery mode)&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-5.10.0-3-amd64-recovery-491a357c-822f-4f38-b56e-b998baea81a5&#39; {
++	menuentry &#39;Debian GNU/Linux, with Linux 5.10.0-3-amd64 (recovery mode)&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-5.10.0-3-amd64-recovery-9be0d928-5892-4cdd-a647-1e8cce937b2e&#39; {
  		load_video
  		insmod gzio
  		if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
@@ -236,10 +235,10 @@ ext4にしていたルートファイルシステムも含めてbtrfs化をめ�
 -		  search --no-floppy --fs-uuid --set=root 491a357c-822f-4f38-b56e-b998baea81a5
 +		  search --no-floppy --fs-uuid --set=root 9be0d928-5892-4cdd-a647-1e8cce937b2e
  		fi
- 		echo	'Loading Linux 5.10.0-3-amd64 ...'
+ 		echo	&#39;Loading Linux 5.10.0-3-amd64 ...&#39;
 -		linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=491a357c-822f-4f38-b56e-b998baea81a5 ro single
 +		linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e ro single
- 		echo	'Loading initial ramdisk ...'
+ 		echo	&#39;Loading initial ramdisk ...&#39;
  		initrd	/boot/initrd.img-5.10.0-3-amd64
  	}
 </code></pre><h3 id="linux環境のsubvolへの移動">Linux環境のsubvol=@への移動</h3>

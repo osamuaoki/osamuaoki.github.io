@@ -179,7 +179,7 @@ set -x DEBFULLNAME Osamu\ Aoki
 # set CDPATH
 set -x CDPATH . /usr/share/doc ~ ~/pub/salsa ~/pub/github ~/pub/tmp
 
-# set PATH of normal users to include &quot;sbin&quot;
+# set PATH of normal users to include &#34;sbin&#34;
 set -x PATH $PATH /usr/sbin /sbin
 
 # python distutils
@@ -187,7 +187,7 @@ if test -d ~/.local/bin
   set -x PATH ~/.local/bin $PATH
 end
 
-# user's private bin
+# user&#39;s private bin
 if test -d ~/bin
   set -x PATH ~/bin $PATH
 end
@@ -209,9 +209,9 @@ function mc --description Midnight\ Commander\ which\ changes\ directory\ upon\ 
   set -l MC_USER (id -un)
   set -l MC_PWD_FILE
   if set -q TMPDIR
-    set MC_PWD_FILE &quot;$TMPDIR/mc-$MC_USER/mc.pwd.$SHELL_PID&quot;
+    set MC_PWD_FILE &#34;$TMPDIR/mc-$MC_USER/mc.pwd.$SHELL_PID&#34;
   else
-    set MC_PWD_FILE &quot;/tmp/mc-$MC_USER/mc.pwd.$SHELL_PID&quot;
+    set MC_PWD_FILE &#34;/tmp/mc-$MC_USER/mc.pwd.$SHELL_PID&#34;
   end
   /usr/bin/mc -P $MC_PWD_FILE $argv
   set -l MC_PWD (cat $MC_PWD_FILE)
@@ -222,7 +222,6 @@ function mc --description Midnight\ Commander\ which\ changes\ directory\ upon\ 
     rm -f $MC_PWD_FILE
   end
 end
-
 </code></pre><p>Please note:</p>
 <ul>
 <li><code>${TMPDIR-/tmp}</code> is changed to <code>if set -q TMPDIR ...</code>.</li>
@@ -244,8 +243,7 @@ solution which uses auto-loading:</p>
 <h3 id="configuring-less">Configuring <code>less</code></h3>
 <p><strong>TODO</strong></p>
 <pre tabindex="0"><code># make less more friendly for non-text input files, see lesspipe(1)
-#[ -x /usr/bin/lesspipe ] &amp;&amp; eval &quot;$(SHELL=/bin/sh lesspipe)&quot;
-
+#[ -x /usr/bin/lesspipe ] &amp;&amp; eval &#34;$(SHELL=/bin/sh lesspipe)&#34;
 </code></pre><!-- raw HTML omitted -->
 
 

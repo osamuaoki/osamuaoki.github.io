@@ -130,7 +130,7 @@ $ sudo umount /dev/mapper/disk
 $ sudo cryptsetup close disk
 </code></pre><p>In order to skip passphrase hussle, let&rsquo;s use Gnome keyring.</p>
 <p>Let me store <code>my_pass_phrase_value</code> in Gnome keyring.</p>
-<pre tabindex="0"><code>$ secret-tool store --Label='LUKS passowrd for disk.img' LUKS disk_img
+<pre tabindex="0"><code>$ secret-tool store --Label=&#39;LUKS passowrd for disk.img&#39; LUKS disk_img
 </code></pre><p>Then, use Gnome keyring to unencrypt luks device.</p>
 <pre tabindex="0"><code>$ secret-tool lookup LUKS disk_img | \
   cryptsetup open disk.img disk --type luks --key-file -

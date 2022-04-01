@@ -107,8 +107,8 @@ avrdude: Version 6.3-20171130
          Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/
          Copyright (c) 2007-2014 Joerg Wunsch
 
-         System wide configuration file is &quot;/etc/avrdude.conf&quot;
-         User configuration file is &quot;/root/.avrduderc&quot;
+         System wide configuration file is &#34;/etc/avrdude.conf&#34;
+         User configuration file is &#34;/root/.avrduderc&#34;
          User configuration file does not exist or is not a regular file, skipping
 
          Using Port                    : usb
@@ -178,19 +178,19 @@ avrdude: reading lfuse memory:
 
 Reading | ################################################## | 100% 0.00s
 
-avrdude: writing output file &quot;&lt;stdout&gt;&quot;
+avrdude: writing output file &#34;&lt;stdout&gt;&#34;
 0xff
 avrdude: reading hfuse memory:
 
 Reading | ################################################## | 100% 0.00s
 
-avrdude: writing output file &quot;&lt;stdout&gt;&quot;
+avrdude: writing output file &#34;&lt;stdout&gt;&#34;
 0xde
 avrdude: reading efuse memory:
 
 Reading | ################################################## | 100% 0.00s
 
-avrdude: writing output file &quot;&lt;stdout&gt;&quot;
+avrdude: writing output file &#34;&lt;stdout&gt;&#34;
 
 avrdude: safemode: Fuses OK (E:FD, H:DE, L:FF)
 
@@ -203,8 +203,8 @@ avrdude: Version 6.3-20171130
          Copyright (c) 2000-2005 Brian Dean, http://www.bdmicro.com/
          Copyright (c) 2007-2014 Joerg Wunsch
 
-         System wide configuration file is &quot;/etc/avrdude.conf&quot;
-         User configuration file is &quot;/root/.avrduderc&quot;
+         System wide configuration file is &#34;/etc/avrdude.conf&#34;
+         User configuration file is &#34;/root/.avrduderc&#34;
          User configuration file does not exist or is not a regular file, skipping
 
          Using Port                    : usb
@@ -274,24 +274,23 @@ avrdude: reading lfuse memory:
 
 Reading | ################################################## | 100% 0.00s
 
-avrdude: writing output file &quot;&lt;stdout&gt;&quot;
+avrdude: writing output file &#34;&lt;stdout&gt;&#34;
 0xff
 avrdude: reading hfuse memory:
 
 Reading | ################################################## | 100% 0.00s
 
-avrdude: writing output file &quot;&lt;stdout&gt;&quot;
+avrdude: writing output file &#34;&lt;stdout&gt;&#34;
 0xda
 avrdude: reading efuse memory:
 
 Reading | ################################################## | 100% 0.00s
 
-avrdude: writing output file &quot;&lt;stdout&gt;&quot;
+avrdude: writing output file &#34;&lt;stdout&gt;&#34;
 
 avrdude: safemode: Fuses OK (E:FD, H:DA, L:FF)
 
 avrdude done.  Thank you.
-
 </code></pre><h3 id="fuse">Fuse</h3>
 <p>なぜかFuseが違います:</p>
 <ul>
@@ -342,7 +341,6 @@ Optiboot プログラムのインストールができます。</p>
 <pre tabindex="0"><code> $ sudo avrdude -p m328p -c avrisp2 -e -F -U lock:w:0xFF:m \
                 -U efuse:w:0xfd:m -U hfuse:w:0xde:m -U lfuse:w:0xff:m
  $ sudo avrdude -p m328p -c avrisp2 -U flash:w:/path/to/optiboot_atmega328.hex
-
 </code></pre><p>FUSE設定は　<a href="https://eleccelerator.com/fusecalc/fusecalc.php">fusecalc</a>
 を見て下さい。以下の記事も参考にして下さい。</p>
 <ul>

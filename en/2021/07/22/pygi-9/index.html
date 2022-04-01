@@ -423,27 +423,27 @@ XML, <code>@Gtk.Template.Callback</code> takes argument such as <code>@Gtk.Templ
 <blockquote>
 <p>The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.</p>
 </blockquote>
-<pre tabindex="0"><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<pre tabindex="0"><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
 &lt;!-- Generated with glade 3.38.2 --&gt;
 &lt;interface&gt;
   ...
-  &lt;template class=&quot;window&quot; parent=&quot;GtkWindow&quot;&gt;
-    &lt;property name=&quot;can-focus&quot;&gt;False&lt;/property&gt;
+  &lt;template class=&#34;window&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
     &lt;child&gt;
       ...
         &lt;child&gt;
-          &lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;
+          &lt;object class=&#34;GtkHeaderBar&#34; id=&#34;header&#34;&gt;
             ... (snipped)
           &lt;/object&gt;
           &lt;packing&gt;
-            &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-            &lt;property name=&quot;fill&quot;&gt;True&lt;/property&gt;
-            &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+            &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+            &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+            &lt;property name=&#34;position&#34;&gt;4&lt;/property&gt;
           &lt;/packing&gt;
         &lt;/child&gt;
       &lt;/object&gt;
     &lt;/child&gt;
-    &lt;child type=&quot;titlebar&quot;&gt;
+    &lt;child type=&#34;titlebar&#34;&gt;
       &lt;placeholder/&gt;
     &lt;/child&gt;
   &lt;/template&gt;
@@ -456,22 +456,22 @@ remove <code>&lt;placeholder/&gt;</code>.</p>
 <p>Then remove now redundant <code>&lt;child&gt;</code> and <code>&lt;/child&gt;</code> tags from newly moved
 section.  Indentation is non-significant.  Glade also functions as a pretty
 printing tool.</p>
-<pre tabindex="0"><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+<pre tabindex="0"><code>&lt;?xml version=&#34;1.0&#34; encoding=&#34;UTF-8&#34;?&gt;
 &lt;!-- Generated with glade 3.38.2 --&gt;
 &lt;interface&gt;
   ...
-  &lt;template class=&quot;window&quot; parent=&quot;GtkWindow&quot;&gt;
-    &lt;property name=&quot;can-focus&quot;&gt;False&lt;/property&gt;
+  &lt;template class=&#34;window&#34; parent=&#34;GtkWindow&#34;&gt;
+    &lt;property name=&#34;can-focus&#34;&gt;False&lt;/property&gt;
     &lt;child&gt;
       ...
-    &lt;child type=&quot;titlebar&quot;&gt;
-      &lt;object class=&quot;GtkHeaderBar&quot; id=&quot;header&quot;&gt;
+    &lt;child type=&#34;titlebar&#34;&gt;
+      &lt;object class=&#34;GtkHeaderBar&#34; id=&#34;header&#34;&gt;
         ... (snipped)
       &lt;/object&gt;
       &lt;packing&gt;
-        &lt;property name=&quot;expand&quot;&gt;False&lt;/property&gt;
-        &lt;property name=&quot;fill&quot;&gt;True&lt;/property&gt;
-        &lt;property name=&quot;position&quot;&gt;4&lt;/property&gt;
+        &lt;property name=&#34;expand&#34;&gt;False&lt;/property&gt;
+        &lt;property name=&#34;fill&#34;&gt;True&lt;/property&gt;
+        &lt;property name=&#34;position&#34;&gt;4&lt;/property&gt;
       &lt;/packing&gt;
     &lt;/child&gt;
   &lt;/template&gt;

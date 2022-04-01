@@ -81,7 +81,7 @@ using browser.</p>
 <p>Let&rsquo;s create a simple directory tree for single distribution case.</p>
 <pre tabindex="0"><code> $ sudo bash -i
  # mkdir -p /var/www/html/repo
- # cat &gt; /etc/apache2/conf-available/repos.conf &lt;&lt;'EOF'
+ # cat &gt; /etc/apache2/conf-available/repos.conf &lt;&lt;&#39;EOF&#39;
 &lt;Directory /var/www/html/repo/ &gt;
     # We want the user to be able to browse the directory manually
     Options Indexes FollowSymLinks Multiviews
@@ -90,15 +90,15 @@ using browser.</p>
 
 # This syntax supports several repositories, e.g. one for Debian, one for Ubuntu.
 # Replace * with debian, if you intend to support one distribution only.
-&lt;Directory &quot;/var/www/html/repo/db/&quot;&gt;
+&lt;Directory &#34;/var/www/html/repo/db/&#34;&gt;
     Require all denied
 &lt;/Directory&gt;
 
-&lt;Directory &quot;/var/www/html/repo/conf/&quot;&gt;
+&lt;Directory &#34;/var/www/html/repo/conf/&#34;&gt;
     Require all denied
 &lt;/Directory&gt;
 
-&lt;Directory &quot;/var/www/html/repo/incoming/&quot;&gt;
+&lt;Directory &#34;/var/www/html/repo/incoming/&#34;&gt;
     Require all denied
 &lt;/Directory&gt;
 EOF
@@ -125,7 +125,7 @@ Label: Osamu
 Codename: sid
 Architectures: amd64
 Components: main
-Description: APT repository for Osamu's local infrastructure
+Description: APT repository for Osamu&#39;s local infrastructure
 SignWith: FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
 </code></pre><p>Also, in there <code>options</code>:</p>
 <pre tabindex="0"><code>verbose

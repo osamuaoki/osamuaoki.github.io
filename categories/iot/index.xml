@@ -140,7 +140,7 @@ qmkのコマンドの説明はQMK CLI Commandsにあります。
 どうもビルドは公式にはqmkコマンドを使うようになっているそうですが、その背後で何がどうなっているのかが気になります。
 レポを見ると、791b9cc652 (&amp;ldquo;remove all makefiles from keyboard directories&amp;rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立のMakefileが無くなっています。だから、ビルドの実体はrootにあるMakefileがしているはずです。いかんせんrootのMakefileは複雑なので閉口でした。
 今残っているrootにあるMakefileにからむのかがwebにあるエンドユーザー向けの説明ではよく分からないので、試しにrootにあるMakefileを無効なターゲットで動かすと以下のメッセージが出ます。
-$ make help QMK Firmware 0.15.12 make: *** No rule to make target &#39;help&#39;. Stop. | | QMK&#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&#39;s `keymaps/` directory.</description>
+$ make help QMK Firmware 0.15.12 make: *** No rule to make target &amp;#39;help&amp;#39;. Stop. | | QMK&amp;#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&amp;#39;s `keymaps/` directory.</description>
     </item>
     
     <item>
