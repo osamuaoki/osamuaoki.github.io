@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QMK (5) -- JOYSTICKサポート | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">QMK (5) &ndash; JOYSTICKサポート</span></h1>
+
+<h3 class="date">Date:
+2022/04/02 (initial publish),
+2022/04/02 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/03/15/home-mt/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#状況">状況</a></li>
+    <li><a href="#joystickデバイスの追加とmcuの機能設定">JOYSTICKデバイスの追加とMCUの機能設定</a></li>
+    <li><a href="#joystickのハードによるマウス機能の提供">JOYSTICKのハードによるマウス機能の提供</a></li>
+    <li><a href="#気づいたこと">気づいたこと</a></li>
+  </ul>
+</nav>
+
+<h2 id="状況">状況</h2>
+<p>AVRで作ったQMKキーボードでは、<a href="/jp/2022/03/15/home-mt/">タップとホールドを上手く利用した使いやすいキーマップ</a>ができました。</p>
+<p><a href="/jp/2022/02/07/blackpill-1/">ARMで作ったQMKキーボード</a>にこれを移植するとともに、追加ハードのアナログJOYSTICKのマウスの機能を提供するデバイスとしての有効利用を試みました。</p>
+<h2 id="joystickデバイスの追加とmcuの機能設定">JOYSTICKデバイスの追加とMCUの機能設定</h2>
+<p>「JOYSTICK」という言葉に引かれて、よく分からないままマニュアルの<a href="https://docs.qmk.fm/#/feature_joystick">「Hardware Features」の「Joystick」</a>をフォローして、ゲーム用のコントローラーとしての「JOYSTICK」デバイスを導入しました。</p>
+<p>ARMではOS立ち上げコードがチップ機能の初期化をしているようです。マクロを定義することで、コンパイル時に設定が導入されます。ある意味AVRのfuseの感じです。</p>
+<p>CHIBIOSはデフォルトの<code>halconf.h</code>や<code>mcuconf.h</code>を提供しているので、デフォルトでは無効化されたADCを使う等の場合には、設定をオーバーライド変更する必要がありました。
+これは<code>platforms/chibios/boards/keyboard-config-templates/</code>内のファイルを、プロジェクトフォルダー内にコピーしたファイルをベースに編集して作成します。
+その際<code>#include_next &lt;... .h&gt;</code>でデフォルト値を読み込みます。(この辺が分かる前には、コンパイラーエラーに苦しみました。)</p>
+<p>ゲーム用のコントローラーとしての「JOYSTICK」デバイスの動作検証は、<a href="https://gamepad-tester.com/">Gamepad Tester</a>
+でしました。この環境での安定動作には、<code>config.h</code>に以下の追加が必要でした。(<a href="https://www.reddit.com/r/ErgoMechKeyboards/comments/r6btqm/qmk_joystick_with_stm32f411_blackpill/">参考情報源</a>)</p>
+<pre tabindex="0"><code>#define JOYSTICK_AXES_RESOLUTION 8
+#define USB_POLLING_INTERVAL_MS 4
+</code></pre><p>確かにOSの環境設定でゲーム用のコントローラーはマウスの機能を持たせられるようですが、本末転倒です。マウスの機能を提供が目的なので、これはここまでにします。</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/minijoy/keymap.c">cgg56:minijoy</a></li>
+</ul>
+<h2 id="joystickのハードによるマウス機能の提供">JOYSTICKのハードによるマウス機能の提供</h2>
+<p>JOYSTICKのハードによるマウス機能の提供には、マニュアルの<a href="https://docs.qmk.fm/#/feature_pointing_device">「Hardware Features」の「Pointing Device」</a>をフォローします。</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/mini/keymap.c">cgg56:minijoy</a></li>
+</ul>
+<h2 id="気づいたこと">気づいたこと</h2>
+<p>QMKでは意外と多くのハードを利用してマウス機能の提供ができるようです。また、マウスの中身はほぼ似たデバイスのようです。
+キーボードだけでなく、ポテンシオメーター、ロータリーエンコーダー、オプティカルセンサー等で作るポインティングデバイスででも遊べそうです。色んな事をみんなしていますね。</p>
+<ul>
+<li><a href="https://note.com/tomorrow56/n/n48285316a3ae">ダイソーの300円ワイヤレスマウスを分解して回路図と部品表を書いてみた話 (2019-03-14)</a>
+<ul>
+<li><a href="https://persol-tech-s.co.jp/i-engineer/technology/gadgetdisassembly">「どうせ100均だろ？」って軽い気持ちで分解したら、 ガジェットの進化に驚いた！</a></li>
+</ul>
+</li>
+<li><a href="https://qiita.com/qzi00173/items/a59cd74d9c6aa33c3e3f">トラックボールを作ってみた【試作編】</a></li>
+<li><a href="https://note.com/mariotto1001/n/n5bfaf9b144bf">アナログスティックを使ってcrkbdをマウスとしても使えるようにした話 2</a></li>
+<li><a href="https://qiita.com/kirin123kirin/items/04a6d4d9657489538e1a#%E3%83%88%E3%83%A9%E3%83%83%E3%82%AF%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88%E3%82%92%E5%88%86%E5%89%B2%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AE%E5%8F%B3%E5%81%B4%E3%81%AB%E5%8F%96%E3%82%8A%E4%BB%98%E3%81%91%E3%81%9F%E3%81%84">自作トラックポイント1</a></li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/03/15/home-mt/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

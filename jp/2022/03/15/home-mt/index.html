@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QMK (4) -- ホームポジションMT配列 | Goofing Osamu</title>
+    <title>QMK (4) -- キーマップ改善 (タップとホールドの有効利用) | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,11 +32,11 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">QMK (4) &ndash; ホームポジションMT配列</span></h1>
+<h1><span class="title">QMK (4) &ndash; キーマップ改善 (タップとホールドの有効利用)</span></h1>
 
 <h3 class="date">Date:
 2022/03/15 (initial publish),
-2022/04/01 (last update)
+2022/04/02 (last update)
 </h3>
 </div>
 
@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2022/04/02/joystick/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -112,7 +112,7 @@
 </ul>
 <p>QMKではタップとホールドで出力キーが違う設定できますが、タップの入力文字の連続入力がカチカチ連打だと大変な気がしていました。</p>
 <p>実際には、一度タップ直後の再タップ時にホールドするとタップに対応する文字の長押しになるようで、OS側が連打処理してくれ使い勝手良好です。</p>
-<p>あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、この辺を上手に使えば悪くない感じです。</p>
+<p>あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、タップとホールドを上手に使えば悪くない感じです。</p>
 <h2 id="キーマップ">キーマップ</h2>
 <p>最初にトライしたレイヤー移動とモード変更機能のすべてを親指のキーに任せるアプローチには無理がありました。</p>
 <h3 id="キーマップ-osamu">キーマップ osamu</h3>
@@ -121,7 +121,7 @@
  │***│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│***│
  │***│ Z │ X │ C │ V │ B │***│***│ N │ M │ , │ . │ / │***│
  │***│***│***│***│Es3│Sp1│***│***│Sp2│En4│***│***│***│***│
-</code></pre><p>ここのポイントは、人差し指〜小指のホームポジションのA行のキーに関して、通常の文字キー入力とモードキー(LSFT, LCTL, LALT, LGUI, RALT)入力を、<code>MT()</code>機能を使い両方ができるようにしています。このおかげで、アクセスのよい自然なポジションでタイプできます。</p>
+</code></pre><p>ここのポイントは、人差し指〜小指のホームポジションのA行のキーに関して、通常の文字キー入力とモードキー(LSFT, LCTL, LALT, LGUI, RALT)入力を、<code>MT()</code>機能をタップとホールドで使い分け、両方ができるようにしています。このおかげで、アクセスのよい自然なポジションでタイプできます。</p>
 <ul>
 <li>人差し指内側1つ隣: RALT (AltGr)</li>
 <li>人差し指: LGUI</li>
@@ -212,6 +212,7 @@
 <ul>
 <li><a href="https://geekhack.org/">geekhack</a></li>
 <li><a href="https://deskthority.net/">deskthority</a></li>
+<li><a href="https://kbd.news/">Keyboard builder&rsquo;s digest</a></li>
 <li><a href="http://www.keyboard-layout-editor.com/">Keyboard Layout Editor (KLE)</a></li>
 <li><a href="https://github.com/jeroen94704/klepcbgen">KLE PCB Generator</a></li>
 <li><a href="https://josef-adamcik.cz/electronics/let-me-introduce-you-sofle-keyboard-split-keyboard-based-on-lily58.html">Blog: PCB techniques &ndash; sofle-keyboard</a></li>
@@ -231,6 +232,7 @@
 <li><a href="https://www.gateron.co/">Gateron switch</a> &ndash; sales trap site ??? with undisclosed dns reg</li>
 </ul>
 </li>
+<li><a href="https://hikalium.hatenablog.jp/entry/2021/12/31/150738">Keyball46組み立て日記 〜間違えてRP2040を買ったそこのあなたに〜</a> &ndash; RP2040 の PRO MICRO</li>
 </ul>
 </li>
 </ul>
@@ -247,7 +249,7 @@
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2022/04/02/joystick/">Next Post</a></td>
   
   </tr>
   </tbody>
