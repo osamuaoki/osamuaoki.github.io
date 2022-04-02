@@ -70,26 +70,29 @@
 
 <h2 id="状況">状況</h2>
 <p>AVRで作ったQMKキーボードでは、<a href="/jp/2022/03/15/home-mt/">タップとホールドを上手く利用した使いやすいキーマップ</a>ができました。</p>
-<p><a href="/jp/2022/02/07/blackpill-1/">ARMで作ったQMKキーボード</a>にこれを移植するとともに、追加ハードのアナログJOYSTICKのマウスの機能を提供するデバイスとしての有効利用を試みました。</p>
+<p><a href="/jp/2022/02/07/blackpill-1/">ARMで作ったQMKキーボード</a>にこれを移植するとともに、追加ハードのアナログJOYSTICKをマウスの機能を提供するデバイスとして有効利用しました。</p>
 <h2 id="joystickデバイスの追加とmcuの機能設定">JOYSTICKデバイスの追加とMCUの機能設定</h2>
 <p>「JOYSTICK」という言葉に引かれて、よく分からないままマニュアルの<a href="https://docs.qmk.fm/#/feature_joystick">「Hardware Features」の「Joystick」</a>をフォローして、ゲーム用のコントローラーとしての「JOYSTICK」デバイスを導入しました。</p>
-<p>ARMではOS立ち上げコードがチップ機能の初期化をしているようです。マクロを定義することで、コンパイル時に設定が導入されます。ある意味AVRのfuseの感じです。</p>
-<p>CHIBIOSはデフォルトの<code>halconf.h</code>や<code>mcuconf.h</code>を提供しているので、デフォルトでは無効化されたADCを使う等の場合には、設定をオーバーライド変更する必要がありました。
-これは<code>platforms/chibios/boards/keyboard-config-templates/</code>内のファイルを、プロジェクトフォルダー内にコピーしたファイルをベースに編集して作成します。
-その際<code>#include_next &lt;... .h&gt;</code>でデフォルト値を読み込みます。(この辺が分かる前には、コンパイラーエラーに苦しみました。)</p>
+<p>ここで、ARM系のハードの初期化のカスタマイズ法を学びました。ARMではOS立ち上げコードがチップ機能の初期化をしているようです。マクロを定義することで、コンパイル時に設定が導入されます。ある意味AVRのfuseの感じです。</p>
+<p>ChibiOSは、デフォルトの<code>halconf.h</code>や<code>mcuconf.h</code>を提供しているので、デフォルトでは無効化されたADCを使う等の場合には、設定をオーバーライド変更する必要がありました。
+最初に、<code>platforms/chibios/boards/keyboard-config-templates/</code>内のファイルを、プロジェクトフォルダー内にコピーしたファイルをベースに、オーバーライド変更のみを設定します。
+デフォルト値は<code>#include_next &quot;... .h&quot;</code>で読み込みます。(この辺の仕組みがが分かる前には、コンパイラーエラーに苦しみました。)</p>
 <p>ゲーム用のコントローラーとしての「JOYSTICK」デバイスの動作検証は、<a href="https://gamepad-tester.com/">Gamepad Tester</a>
 でしました。この環境での安定動作には、<code>config.h</code>に以下の追加が必要でした。(<a href="https://www.reddit.com/r/ErgoMechKeyboards/comments/r6btqm/qmk_joystick_with_stm32f411_blackpill/">参考情報源</a>)</p>
 <pre tabindex="0"><code>#define JOYSTICK_AXES_RESOLUTION 8
 #define USB_POLLING_INTERVAL_MS 4
-</code></pre><p>確かにOSの環境設定でゲーム用のコントローラーはマウスの機能を持たせられるようですが、本末転倒です。マウスの機能を提供が目的なので、これはここまでにします。</p>
+</code></pre><p>ゲーム用のコントローラーとしてのJOYSTICKデバイスを提供するソース</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/minijoy/keymap.c">cgg56:minijoy</a></li>
 </ul>
+<p>ゲーム用のコントローラーにマウスの機能を提供する設定は、OSの環境設定でできなくはないです。ただこれでは本末転倒です。
+ストレートにマウスの機能自体を直接提供すること目的なので、これはここまでにします。</p>
 <h2 id="joystickのハードによるマウス機能の提供">JOYSTICKのハードによるマウス機能の提供</h2>
 <p>JOYSTICKのハードによるマウス機能の提供には、マニュアルの<a href="https://docs.qmk.fm/#/feature_pointing_device">「Hardware Features」の「Pointing Device」</a>をフォローします。</p>
 <ul>
-<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/mini/keymap.c">cgg56:minijoy</a></li>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/mini/keymap.c">cgg56:mini</a></li>
 </ul>
+<p>Mouse keyよりは快適に動いていますが、ThnkpadのTrackpointが得意でない私には決して使いやすいとは言えない状態でした。本物のMouseは使いやすい。</p>
 <h2 id="気づいたこと">気づいたこと</h2>
 <p>QMKでは意外と多くのハードを利用してマウス機能の提供ができるようです。また、マウスの中身はほぼ似たデバイスのようです。
 キーボードだけでなく、ポテンシオメーター、ロータリーエンコーダー、オプティカルセンサー等で作るポインティングデバイスででも遊べそうです。色んな事をみんなしていますね。</p>
