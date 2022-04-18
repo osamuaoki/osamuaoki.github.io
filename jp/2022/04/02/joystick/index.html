@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/04/02 (initial publish),
-2022/04/02 (last update)
+2022/04/18 (last update)
 </h3>
 </div>
 
@@ -64,6 +64,7 @@
     <li><a href="#状況">状況</a></li>
     <li><a href="#joystickデバイスの追加とmcuの機能設定">JOYSTICKデバイスの追加とMCUの機能設定</a></li>
     <li><a href="#joystickのハードによるマウス機能の提供">JOYSTICKのハードによるマウス機能の提供</a></li>
+    <li><a href="#反省点">反省点</a></li>
     <li><a href="#気づいたこと">気づいたこと</a></li>
   </ul>
 </nav>
@@ -93,6 +94,13 @@
 <li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/mini/keymap.c">cgg56:mini</a></li>
 </ul>
 <p>Mouse keyよりは快適に動いていますが、ThnkpadのTrackpointが得意でない私には決して使いやすいとは言えない状態でした。本物のMouseは使いやすい。</p>
+<h2 id="反省点">反省点</h2>
+<p>キー入力できない原因を調べたところ、UEW線の被覆熱削除不足による不良が２点、ダイオードの極性方向間違い１点が見つかった。</p>
+<ul>
+<li>UEW線は事前両端カットしてプリ半田して使う (巻付法は使わない)</li>
+<li>ダイオードの極性の視認チェックは大事</li>
+<li>MCU付きのボードをつなぎ込む前にテスターでチェックすべき。</li>
+</ul>
 <h2 id="気づいたこと">気づいたこと</h2>
 <p>QMKでは意外と多くのハードを利用してマウス機能の提供ができるようです。また、マウスの中身はほぼ似たデバイスのようです。
 キーボードだけでなく、ポテンシオメーター、ロータリーエンコーダー、オプティカルセンサー等で作るポインティングデバイスででも遊べそうです。色んな事をみんなしていますね。</p>
