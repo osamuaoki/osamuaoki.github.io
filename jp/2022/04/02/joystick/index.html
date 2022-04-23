@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/04/02 (initial publish),
-2022/04/18 (last update)
+2022/04/23 (last update)
 </h3>
 </div>
 
@@ -66,6 +66,7 @@
     <li><a href="#joystickのハードによるマウス機能の提供">JOYSTICKのハードによるマウス機能の提供</a></li>
     <li><a href="#反省点">反省点</a></li>
     <li><a href="#気づいたこと">気づいたこと</a></li>
+    <li><a href="#ポインティングデバイスのソース">ポインティングデバイスのソース</a></li>
   </ul>
 </nav>
 
@@ -92,18 +93,23 @@
 <p>JOYSTICKのハードによるマウス機能の提供には、マニュアルの<a href="https://docs.qmk.fm/#/feature_pointing_device">「Hardware Features」の「Pointing Device」</a>をフォローします。</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/mini/keymap.c">cgg56:mini</a></li>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/micro/keymap.c">cgg56:micro</a></li>
 </ul>
-<p>Mouse keyよりは快適に動いていますが、ThnkpadのTrackpointが得意でない私には決して使いやすいとは言えない状態でした。本物のMouseは使いやすい。</p>
+<p>Mouse keyよりは快適に動いていますが、ThnkpadのTrackpointが得意でない私には決して使いやすいとは言えない状態でした。</p>
+<p>本物のMouseは使いやすい。</p>
 <h2 id="反省点">反省点</h2>
 <p>キー入力できない原因を調べたところ、UEW線の被覆熱削除不足による不良が２点、ダイオードの極性方向間違い１点が見つかった。</p>
 <ul>
-<li>UEW線は事前両端カットしてプリ半田して使う (巻付法は使わない)</li>
+<li>UEW線は事前両端カットしてプリ半田して使う (結線不良となりやすい巻付法は使わない)</li>
 <li>ダイオードの極性の視認チェックは大事</li>
-<li>MCU付きのボードをつなぎ込む前にテスターでチェックすべき。</li>
+<li>MCU付きのボードをスイッチマトリクスにつなぎ込む前に、結線・ダイオード極性をテスターで電気的にもチェックすべき。</li>
 </ul>
 <h2 id="気づいたこと">気づいたこと</h2>
 <p>QMKでは意外と多くのハードを利用してマウス機能の提供ができるようです。また、マウスの中身はほぼ似たデバイスのようです。
 キーボードだけでなく、ポテンシオメーター、ロータリーエンコーダー、オプティカルセンサー等で作るポインティングデバイスででも遊べそうです。色んな事をみんなしていますね。</p>
+<p>ただMCU内臓でI2C等で出力が出てないと、KBへの組み込みには向かない気がする。</p>
+<h2 id="ポインティングデバイスのソース">ポインティングデバイスのソース</h2>
+<p>既存の組み込み製品・ジャンクから外すのも一案:</p>
 <ul>
 <li><a href="https://note.com/tomorrow56/n/n48285316a3ae">ダイソーの300円ワイヤレスマウスを分解して回路図と部品表を書いてみた話 (2019-03-14)</a>
 <ul>
@@ -113,6 +119,36 @@
 <li><a href="https://qiita.com/qzi00173/items/a59cd74d9c6aa33c3e3f">トラックボールを作ってみた【試作編】</a></li>
 <li><a href="https://note.com/mariotto1001/n/n5bfaf9b144bf">アナログスティックを使ってcrkbdをマウスとしても使えるようにした話 2</a></li>
 <li><a href="https://qiita.com/kirin123kirin/items/04a6d4d9657489538e1a#%E3%83%88%E3%83%A9%E3%83%83%E3%82%AF%E3%83%9D%E3%82%A4%E3%83%B3%E3%83%88%E3%82%92%E5%88%86%E5%89%B2%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AE%E5%8F%B3%E5%81%B4%E3%81%AB%E5%8F%96%E3%82%8A%E4%BB%98%E3%81%91%E3%81%9F%E3%81%84">自作トラックポイント1</a></li>
+</ul>
+<p>部品ソース例と価格:</p>
+<ul>
+<li>通常トラックポイント新品製品 ~$50 (工業用はもっと高い)
+<ul>
+<li><a href="https://www.adafruit.com/product/5063">Mini Panel Mount USB Trackball with Three Buttons by adafruit.com</a> ~$50</li>
+</ul>
+</li>
+<li><a href="https://www.aliexpress.com/item/32516634820.html">ADNS-9800 optical sensor parts</a> ~$12 光学センサーAssy</li>
+<li>BlackBerry Trackball 系?部品やモジュール
+<ul>
+<li><a href="https://shop.pimoroni.com/products/trackball-breakout?variant=27672765038675">Trackball Breakout by Pimoroni</a> ~$22 (w/MCU, I2C)
+<ul>
+<li><a href="https://github.com/carcinization/qmk_firmware/tree/devbranch/keyboards/reviung41/keymaps/sevanteri_tb_via">QMK for Trackball</a></li>
+</ul>
+</li>
+<li><a href="https://store-usa.arduino.cc/products/grove-mini-track-ball">Grove - Mini Track Ball</a> ~$20 (w/MCU, I2C)</li>
+<li><a href="https://www.aliexpress.com/item/4001224583015.html">BlackBerry Trackball Hall Effect Sensor board</a> (w/o MCU) ~$5</li>
+<li><a href="https://www.aliexpress.com/item/32809078191.html">Bare parts: Trackball Hall Effect Sensor</a> ~$1</li>
+</ul>
+</li>
+<li><a href="https://www.aliexpress.com/item/1005003698566931.html">Roller dial wheel parts</a> ~$7</li>
+<li><a href="https://www.aliexpress.com/item/32990950196.html">Roller dial wheel parts</a> ~$7</li>
+<li><a href="https://ja.aliexpress.com/wholesale?SearchText=trackball">Aliexpress &ndash; trackball</a>
+<ul>
+<li>アーケードゲーム修理部品(?) $10~$20</li>
+<li><a href="https://www.aliexpress.com/item/1005002618988517.html">Logitech 交換部品</a> ~$3</li>
+</ul>
+</li>
+<li><a href="https://shirogane-lab.com/">白銀ラボ</a> &ndash; Trackball custom KB</li>
 </ul>
 <!-- raw HTML omitted -->
 
