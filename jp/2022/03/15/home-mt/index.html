@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/03/15 (initial publish),
-2022/04/25 (last update)
+2022/04/29 (last update)
 </h3>
 </div>
 
@@ -73,7 +73,7 @@
     <li><a href="#気づいたこと">気づいたこと</a>
       <ul>
         <li><a href="#キーキャップ">キーキャップ</a></li>
-        <li><a href="#shiftctrlaltguiキーのホームポジションキーによる兼用化">「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションキーによる兼用化</a></li>
+        <li><a href="#shiftctrlaltguiキーのホームポジションキー等による兼用化">「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションキー等による兼用化</a></li>
         <li><a href="#キー入力とtapping_term">キー入力と<code>TAPPING_TERM</code></a></li>
         <li><a href="#縦スタガート">縦スタガート</a></li>
         <li><a href="#ソケットとled配置">ソケットとLED配置</a></li>
@@ -184,31 +184,31 @@
 <p>小指は使いますが、普通のキーボードとの親和性も良い感じのキーマップになりました。</p>
 <p>CORNEタイプやHELIXタイプの分割キーボードとの親和性も良い感じのキーマップです。</p>
 <p>「QWFRTY」配列は、普通のキーボードに戻った際の違和感がありメリットを感じなかったので、「QWFRTY」配列レイヤーは削除しました。</p>
-<p>さらに、右手にマウスだと「Ctrl-X」「Ctrl-C」「Ctrl-V」「ZZ」は左手操作だけでは難しかったので、Mod-Tapによる「SHIFT」「CONTROL」へのアクセスをホームポジション以外にキーボードの両端にも追加しています。</p>
 <p>これで、メンタルストレスは総合的に一番なく、また指への物理負担もないレイアウトができたかなと思います。</p>
 <h2 id="気づいたこと">気づいたこと</h2>
 <h3 id="キーキャップ">キーキャップ</h3>
 <p>ortholinear系はシンプルなDSAのキーキャップの方がISOのキーキャップより似合う気がします。</p>
 <p>親指のホームポジションはキーキャップの角を丸めるといい感じになっています。</p>
-<h3 id="shiftctrlaltguiキーのホームポジションキーによる兼用化">「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションキーによる兼用化</h3>
+<h3 id="shiftctrlaltguiキーのホームポジションキー等による兼用化">「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションキー等による兼用化</h3>
 <p><a href="https://docs.qmk.fm/#/mod_tap">Mod-Tap</a>を使うことで、「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションによる兼用化がされ、無理に指を開ける指の動きがなくなりとても快適です。</p>
-<p>専用のMODEキーがなくなり余裕ができたキーを、カーソールなどに使うことができるというメリットもあります。</p>
+<p>さらに、右手にマウスだと「Ctrl-X」「Ctrl-C」「Ctrl-V」「ZZ」は左手操作だけでは難しかったので、Mod-Tapによる「SHIFT」「CONTROL」へのアクセスをホームポジション以外にキーボードの両端にも追加しています。（右端は、追加のレイヤー切り替えに使うのも考えられますが…）</p>
+<p>設定されるキーに専用のMODEキーがなくなるので、その余裕をカーソールなどに使えるメリットもあります。LapTop PCのキーボードで使えるキー(TKLキーボード上のキーから、PauseとScrlLockを除く)だと、２レイヤー構成の42キーだけでアクセスを構成できます。</p>
 <h3 id="キー入力とtapping_term">キー入力と<code>TAPPING_TERM</code></h3>
 <p>普通にキー入力する際には、キー入力を意識的に短くタップするように慣れる必要があります。最初は一生懸命押しているキーが入力されていないのか悩ましかったです。力を入れるとキーを離すのが遅くなり、結果的にホールドと判定されてました。</p>
-<p>親指によるレイヤーの切り替えは、<code>TAPPING_TERM</code>を<code>config.h</code>で少し遅めの250に設定していています。</p>
-<p>親指以外によるモードの切り替えは全く機敏な応答がいらないので、<code>TAPPING_TERM</code>を基本は50%増し、小指などの動きが悪いキーは100%増しにプログラムで調整してます。</p>
+<p><code>TAPPING_TERM_PER_KEY</code>を有効にし、親指によるLAYER切り替えキーは基本<code>TAPPING_TERM</code>の75%の早めに、小指などの動きが悪い一部キーは基本<code>TAPPING_TERM</code>の200%の遅めになるように設定しました。</p>
+<p>全体のタイミング調整は<code>config.h</code>の<code>TAPPING_TERM</code>だけでできます。<code>config.h</code>中の<code>TAPPING_TERM</code>は標準と同じ200と設定しています。</p>
 <h3 id="縦スタガート">縦スタガート</h3>
 <p>確かに指は長さが違うので、縦スタガート設計に興味がありました。</p>
 <p>胸の前に自然に手を持ってきて手首に一番ストレスが無いようにキーボード上に置くと、実際にキーボードを押す際の自然なホームポジションは一直線でした。</p>
 <p>実際小指を置くキーの位置を１つ下げて試すと、すべての手の指はまっすぐ前に向くのですが手首が内側になり無理がかかり不快でした。</p>
-<p>左右の手の間隔が30cm以下となる一体型キーボードだと手首が外側にくるので、一体型のrtholinear系では縦スタガートは使いにくそうです。(「ハ」の字にすれば良いのかもしれませんが)</p>
+<p>左右の手の間隔が30cm以下となる一体型キーボードだと手首が外側にくるので、一体型のortholinear系では縦スタガートは使いにくそうです。(「ハ」の字にすれば良いのかもしれませんが)</p>
 <p>スプリットキーボードではキーボードの置く位置や角度が自由なので、縦スタガートでも良いのでしょうが、必須要件ではありません。</p>
 <h3 id="ソケットとled配置">ソケットとLED配置</h3>
 <p>LEDの光が通る穴は、基本的にスイッチの端子ピンと反対側にある。</p>
 <p>普通のCherryタイプ用とLPタイプ用の両方のソケットを装着可能にする共用PCBは、スイッチの端子ピンのソケットを反転して配置することで設計可能です。</p>
-<p>ただしPCBの穴に埋め込まれたSK6812MINI-EのRGB光を使うPCBだと、いすれかのタイプを選ぶ必要がある。</p>
+<p>ただしPCBの穴に埋め込まれたSK6812MINI-EのRGB光を使うPCBだと、いすれかのタイプを選ぶ必要があります。</p>
 <h3 id="ダイオード">ダイオード</h3>
-<p>片側<code>6x3_3</code>キー構成のスプリットキーボードまでは、ダイオード無しNKROのPCB設計も可能ですが、OLEDや他の拡張がしにくくなります。</p>
+<p>black pill等だと片側<code>6x3_3</code>キー構成のスプリットキーボードまではNKROのPCB設計がダイオード無しで可能ですが、ダイオード無しだとOLEDや他の拡張しようと思っても対応できなくなります。</p>
 <h3 id="choc-v1">choc v1</h3>
 <p>Kailhの正規店以外では見かけなくなってきている。<a href="https://shop.yushakobo.jp/">遊舎工房</a>が、意外とリーゾナブル。</p>
 <h3 id="メモリー使用量">メモリー使用量</h3>
@@ -238,6 +238,7 @@
 <li><a href="https://github.com/waffle87/waffle_microdox">microdox</a> &ndash; 5x3+3 LP or MX  (ソケット対応例あり)</li>
 <li><a href="https://github.com/raychengy/fifi_split_keeb">Fifi</a> &ndash; 5x3+3 column staggered</li>
 <li><a href="https://github.com/foostan/crkbd">Corne keyboard (crkbd)</a> &ndash; 6x3 +3 column staggered (helix based) (ソケット対応)</li>
+<li><a href="https://github.com/diepala/cantor">Cantor Keyboard</a> &ndash; 6x3 +3 column staggered (diodeless, black pill)</li>
 <li><a href="https://github.com/HellSingCoder/LimeKeyboard">Lime</a> &ndash; 6x3 +6 column staggered (helix based) (ソケット対応), joystick, RE</li>
 <li><a href="https://github.com/climbalima/let-s-Split-v2">let&rsquo;s split v2</a> &ndash; 6x4 ortholinear &ndash; MX (ドーターボード裏付け)</li>
 <li><a href="https://github.com/kata0510/Lily58">Lily58</a> &ndash; 6x4 +5 column staggered</li>
@@ -253,7 +254,6 @@
 <li><a href="https://geekhack.org/">geekhack</a></li>
 <li><a href="https://deskthority.net/">deskthority</a></li>
 <li><a href="https://kbd.news/">Keyboard builder&rsquo;s digest</a></li>
-<li><a href="https://www.kbdnews.jp/">ほぼ週刊キーボードニュース</a></li>
 <li><a href="http://www.keyboard-layout-editor.com/">Keyboard Layout Editor (KLE)</a></li>
 <li><a href="https://github.com/jeroen94704/klepcbgen">KLE PCB Generator</a></li>
 <li><a href="https://josef-adamcik.cz/electronics/let-me-introduce-you-sofle-keyboard-split-keyboard-based-on-lily58.html">Blog: PCB techniques &ndash; sofle-keyboard</a></li>
