@@ -81,6 +81,7 @@
         <li><a href="#choc-v1">choc v1</a></li>
         <li><a href="#メモリー使用量">メモリー使用量</a></li>
         <li><a href="#今後のプラットフォーム候補">今後のプラットフォーム候補</a></li>
+        <li><a href="#ボードサイズ">ボードサイズ</a></li>
       </ul>
     </li>
     <li><a href="#キーボード参考情報">キーボード参考情報</a></li>
@@ -161,7 +162,7 @@
 <li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/wide/keymap.c">cgc56:wide</a></li>
 <li><a href="http://www.keyboard-layout-editor.com/#/gists/9d8227f51f5da1dcf325c8d2e4275bba">KLE &ndash; wide keymap</a></li>
 </ul>
-<p><img src="/img/cgc56-wide.png" alt="cgc56:wide BL1, FL2FL/3 in QWERTY)"></p>
+<p><img src="/img/cgc56-wide.png" alt="cgc56:wide BL1, FL2/FL3 in QWERTY)"></p>
 <p>キーマップ中の左上文字がFn1~F4の何れも押さない場合、右下文字がFn1かF2のいずれかが押された場合に入力されます。</p>
 <h3 id="キーマップ-mini">キーマップ mini</h3>
 <p>その後wideを使ってみて、ちょっと真ん中のキーにアクセスしにくいのが気になりました。</p>
@@ -170,7 +171,7 @@
 <li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/mini/keymap.c">cgc56:mini</a></li>
 <li><a href="http://www.keyboard-layout-editor.com/#/gists/a4cbabebb886c175ff4c99419e462205">KLE - mini keymap</a></li>
 </ul>
-<p><img src="/img/cgc56-mini.png" alt="cgc56:mini BL1, FL2FL/3 in QWERTY)"></p>
+<p><img src="/img/cgc56-mini.png" alt="cgc56:mini BL1, FL2/FL3 in QWERTY)"></p>
 <p>30%系のキーマップはとにかくホームからほとんど手が動かないので悪くないです。ただ、タップをする際にはキーを意識的に離す必要があります。</p>
 <p>(FnレイヤーでのMODEキーが交差打鍵必須の時には、片手打ち不可の問題がありましたが、FnレイヤーもMOD-TAP化したので、その問題はほぼ解消しました。)</p>
 <h3 id="キーマップ-micro">キーマップ micro</h3>
@@ -180,7 +181,7 @@
 <li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/micro/keymap.c">cgc56:micro</a></li>
 <li><a href="http://www.keyboard-layout-editor.com/#/gists/62d9362ce84fa578c4617f9501bba1cf">KLE - micro keymap</a></li>
 </ul>
-<p><img src="/img/cgc56-micro.png" alt="cgc56:micro BL1, FL2FL/3)"></p>
+<p><img src="/img/cgc56-micro.png" alt="cgc56:micro BL1, FL2/FL3)"></p>
 <p>小指は使いますが、普通のキーボードとの親和性も良い感じのキーマップになりました。</p>
 <p>CORNEタイプやHELIXタイプの分割キーボードとの親和性も良い感じのキーマップです。</p>
 <p>「QWFRTY」配列は、普通のキーボードに戻った際の違和感がありメリットを感じなかったので、「QWFRTY」配列レイヤーは削除しました。</p>
@@ -202,7 +203,8 @@
 <p>胸の前に自然に手を持ってきて手首に一番ストレスが無いようにキーボード上に置くと、実際にキーボードを押す際の自然なホームポジションは一直線でした。</p>
 <p>実際小指を置くキーの位置を１つ下げて試すと、すべての手の指はまっすぐ前に向くのですが手首が内側になり無理がかかり不快でした。</p>
 <p>左右の手の間隔が30cm以下となる一体型キーボードだと手首が外側にくるので、一体型のortholinear系では縦スタガートは使いにくそうです。(「ハ」の字にすれば良いのかもしれませんが)</p>
-<p>スプリットキーボードではキーボードの置く位置や角度が自由なので、縦スタガートでも良いのでしょうが、必須要件ではありません。</p>
+<p>スプリットキーボードではキーボードの置く位置や角度が自由なので、縦スタガートでも良いのでしょうが、その導入は必須要件では無い気がします。</p>
+<p>実際、ポピュラーな縦スタガートデザインの縦ズレ量を隣の列との差で見ると意外と少なく、最近のCorne等が隣との差がキーボードピッチの19mm単位(?)で<code>1/8U-1/8U-CTR-1/8U-1/4U-0</code>、少し古いErgodoxは1.27ピッチ(?)で<code>0-1-1-CTR-1-2-0</code>なので更に少ない感じでした。どうも<code>1/4U-1/2U</code>等という大きな縦ズレ量は少数派のようです。</p>
 <h3 id="ソケットとled配置">ソケットとLED配置</h3>
 <p>LEDの光が通る穴は、基本的にスイッチの端子ピンと反対側にある。</p>
 <p>普通のCherryタイプ用とLPタイプ用の両方のソケットを装着可能にする共用PCBは、スイッチの端子ピンのソケットを反転して配置することで設計可能です。</p>
@@ -211,6 +213,8 @@
 <p>black pill等だと片側<code>6x3_3</code>キー構成のスプリットキーボードまではNKROのPCB設計がダイオード無しで可能ですが、ダイオード無しだとOLEDや他の拡張しようと思っても対応できなくなります。</p>
 <h3 id="choc-v1">choc v1</h3>
 <p>Kailhの正規店以外では見かけなくなってきている。<a href="https://shop.yushakobo.jp/">遊舎工房</a>が、意外とリーゾナブル。</p>
+<p>LowProfileのキースイッチは、<a href="https://deskthority.net/wiki/Kailh_PG1350_series">1350</a> タイプが標準で、使うならこれが好ましそう。</p>
+<p>最近のより薄いという<a href="https://deskthority.net/wiki/Kailh_PG1232_series">1232</a> タイプは、<a href="https://deskthority.net/viewtopic.php?t=17340">PCBに角型の大きい穴が必要で既存のPCBと互換性が無い</a>ので要注意。</p>
 <h3 id="メモリー使用量">メモリー使用量</h3>
 <p>私のキーボードは、128KBのメモリー量のAT90USB1286で余裕があるので、メモリー使用量に配慮せず各種機能を有効にしても、使用量40%程度なので特に問題ありません。</p>
 <p>ただ、32KBしかメモリー量のないATmega32u4を使う普通のPromicroだと、メモリー使用量の制約に配慮が必要ですね。</p>
@@ -228,6 +232,27 @@
 </li>
 </ul>
 <p>Proton-C以外のARM系ボードでは、USB経由のDFUでファームウエアーを書き換えるには、「BOOT1-push」「RESET-push」「RESET-release」「BOOT1-releas」と操作するので、ボード上の２つのPUSHボタンへのアクセスが必要。代替策は、SWD経由アクセス。</p>
+<h3 id="ボードサイズ">ボードサイズ</h3>
+<ul>
+<li>promicro
+<ul>
+<li>12 pins/side</li>
+<li>17.5 x 32.5 mm (pin-gap 15.2, 2.54)</li>
+<li>7U x 12.8U (6U, 1U)</li>
+</ul>
+</li>
+<li>blackpill
+<ul>
+<li>20 pins/side</li>
+<li>20.78 x 52.81 mm (pin-gap 15.22, 2.54)</li>
+<li>8.18U x 20.79U (pin-gap 6U, 1U)</li>
+</ul>
+</li>
+<li>0.91 Inch I2C 128 x 32 white OLED Display $10/5pcs</li>
+<li>1.57 x 0.38 x 0.12 inches</li>
+<li>38 x 12 mm</li>
+<li>Address: 0x3C</li>
+</ul>
 <h2 id="キーボード参考情報">キーボード参考情報</h2>
 <p>片側<code>6X3_3</code>キー構成のスプリットの小さな携帯タイプが面白そうなので、当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
 <ul>
