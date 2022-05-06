@@ -6,7 +6,18 @@
     <description>Recent content in qmk on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Sat, 02 Apr 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/qmk/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 06 May 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/qmk/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>QMK (6) -- カスタムキーボード参考情報</title>
+      <link>/jp/2022/05/06/kbd-pcb/</link>
+      <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2022/05/06/kbd-pcb/</guid>
+      <description>Mod-Tapを使う、片側6X3_3キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーボードが面白そうでした。
+当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。
+カスタムキーボードまとめサイト  geekhack deskthority Mechanical Keyboard and where to find them Awesome Split Keyboards  カスタムキーボードFirmware  QMK Firmware &amp;ndash; QMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) &amp;ndash; based on TMK firmware  TMK Firmware &amp;ndash; TMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based)   ZMK Firmware &amp;ndash; ZMK Firmware Repository (MIT License, Arm, Zephyr™ based) KMK Firmware &amp;ndash; Pythonic Mechanical Keyboard Firmware (Arm) Keyberon Firmware &amp;ndash; A rust crate to create a pure rust keyboard firmware.</description>
+    </item>
+    
     <item>
       <title>QMK (5) -- JOYSTICKサポート</title>
       <link>/jp/2022/04/02/joystick/</link>
@@ -111,17 +122,6 @@ qmkのコマンドの説明はQMK CLI Commandsにあります。
 レポを見ると、791b9cc652 (&amp;ldquo;remove all makefiles from keyboard directories&amp;rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立のMakefileが無くなっています。だから、ビルドの実体はrootにあるMakefileがしているはずです。いかんせんrootのMakefileは複雑なので閉口でした。
 今残っているrootにあるMakefileにからむのかがwebにあるエンドユーザー向けの説明ではよく分からないので、試しにrootにあるMakefileを無効なターゲットで動かすと以下のメッセージが出ます。
 $ make help QMK Firmware 0.15.12 make: *** No rule to make target &amp;#39;help&amp;#39;. Stop. | | QMK&amp;#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&amp;#39;s `keymaps/` directory.</description>
-    </item>
-    
-    <item>
-      <title>QMK (6) -- カスタムキーボード参考情報</title>
-      <link>/jp/1/01/01/kbd-pcb/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      
-      <guid>/jp/1/01/01/kbd-pcb/</guid>
-      <description>Mod-Tapを使う、片側6X3_3キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーボードが面白そうでした。
-当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。
-カスタムキーボードまとめサイト  geekhack deskthority Mechanical Keyboard and where to find them Awesome Split Keyboards  カスタムキーボードFirmware  QMK Firmware &amp;ndash; QMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) &amp;ndash; based on TMK firmware  TMK Firmware &amp;ndash; TMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based)   ZMK Firmware &amp;ndash; ZMK Firmware Repository (MIT License, Arm, Zephyr™ based) KMK Firmware &amp;ndash; Pythonic Mechanical Keyboard Firmware (Arm) Keyberon Firmware &amp;ndash; A rust crate to create a pure rust keyboard firmware.</description>
     </item>
     
   </channel>
