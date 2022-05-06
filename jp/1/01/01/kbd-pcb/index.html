@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QMK (5) -- カスタムキーボード参考情報 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">QMK (5) &ndash; カスタムキーボード参考情報</span></h1>
+
+<h3 class="date">Date:
+0001/01/01 (initial publish),
+2022/05/06 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="#">***</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/jp/2019/02/09/word-freq/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#カスタムキーボードまとめサイト">カスタムキーボードまとめサイト</a></li>
+    <li><a href="#カスタムキーボードfirmware">カスタムキーボードFirmware</a></li>
+    <li><a href="#カスタムキーボードhw設計">カスタムキーボードHW設計</a>
+      <ul>
+        <li><a href="#カスタムキーボードhw設計ツール">カスタムキーボードHW設計ツール</a></li>
+        <li><a href="#カスタムキーボードpcb設計例">カスタムキーボードPCB設計例</a></li>
+        <li><a href="#カスタムキーボードhw組み立てヒントとガイド">カスタムキーボードHW組み立てヒントとガイド</a></li>
+      </ul>
+    </li>
+    <li><a href="#カスタムキーボード関連情報">カスタムキーボード関連情報</a>
+      <ul>
+        <li><a href="#カスタムキーボード関連ニュースサイト">カスタムキーボード関連ニュースサイト</a></li>
+        <li><a href="#カスタムキーボード関連ブログ記事">カスタムキーボード関連ブログ記事</a></li>
+        <li><a href="#カスタムキーボード関連参考基礎情報源">カスタムキーボード関連参考基礎情報源</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p><a href="https://github.com/osamuaoki/home-mt">Mod-Tapを使う、片側<code>6X3_3</code>キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーボード</a>が面白そうでした。</p>
+<p>当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
+<h2 id="カスタムキーボードまとめサイト">カスタムキーボードまとめサイト</h2>
+<ul>
+<li><a href="https://geekhack.org/">geekhack</a></li>
+<li><a href="https://deskthority.net/">deskthority</a></li>
+<li><a href="https://github.com/help-14/mechanical-keyboard">Mechanical Keyboard and where to find them</a></li>
+<li><a href="https://github.com/diimdeep/awesome-split-keyboards">Awesome Split Keyboards</a></li>
+</ul>
+<h2 id="カスタムキーボードfirmware">カスタムキーボードFirmware</h2>
+<ul>
+<li><a href="https://github.com/qmk">QMK Firmware</a> &ndash; QMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) &ndash;  based on TMK firmware
+<ul>
+<li><a href="https://github.com/tmk">TMK Firmware</a> &ndash; TMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based)</li>
+</ul>
+</li>
+<li><a href="https://github.com/zmkfirmware">ZMK Firmware</a> &ndash; ZMK Firmware Repository (MIT License, Arm, Zephyr™ based)</li>
+<li><a href="https://github.com/KMKfw">KMK Firmware</a> &ndash; Pythonic Mechanical Keyboard Firmware (Arm)</li>
+<li><a href="https://github.com/TeXitoi/keyberon">Keyberon Firmware</a> &ndash; A rust crate to create a pure rust keyboard firmware.</li>
+</ul>
+<h2 id="カスタムキーボードhw設計">カスタムキーボードHW設計</h2>
+<h3 id="カスタムキーボードhw設計ツール">カスタムキーボードHW設計ツール</h3>
+<ul>
+<li>PCB CAD tool
+<ul>
+<li><a href="https://www.kicad.org">KiCad</a> &ndash; EDA (Qt) (de-facto stabdard)
+<ul>
+<li><a href="http://keyboard-tools.xyz/">KiCad Project Generator</a></li>
+<li><a href="https://github.com/adamws/kicad-kbplacer">kicad-kbplacer</a> &ndash; KiCad plugin for mechanical keyboard design.</li>
+<li><a href="https://deskthority.net/viewtopic.php?t=23797">deskthority: KiCad keyboard PCB generator</a></li>
+<li>Extra parts data
+<ul>
+<li><a href="https://github.com/keebio/Keebio-Parts.pretty">Keebio-Parts.pretty</a> 333 star
+<ul>
+<li><a href="https://github.com/tmk/keyboard_parts.pretty">tmk: keyboard_parts.pretty</a> 135 star</li>
+</ul>
+</li>
+<li><a href="https://github.com/keebio/keebio-components">keebio-components</a> 41 star</li>
+<li><a href="https://github.com/colemarkham/keyboard_parts.pretty">colemarkham: keyboard_parts.pretty</a> 42 star</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://lepton-eda.github.io">lepton-eda</a> &ndash; GPL EDA tool (fork of gEDA-gaf)</li>
+<li><a href="">horizon-eda</a><a href="https://horizon-eda.readthedocs.io">https://horizon-eda.readthedocs.io</a>) &ndash; EDA with the sane library</li>
+<li><a href="https://fritzing.org/">fritzing</a> &ndash; EDA with &ldquo;breadboard&rdquo; view</li>
+</ul>
+</li>
+<li><a href="http://www.keyboard-layout-editor.com/">Keyboard Layout Editor (KLE)</a>
+<ul>
+<li><a href="https://github.com/jeroen94704/klepcbgen">KLE PCB Generator</a></li>
+</ul>
+</li>
+<li><a href="http://builder-docs.swillkb.com/">Documentation for builder.swillkb.com: Plate &amp; Case Builder</a>
+<ul>
+<li><a href="http://builder.swillkb.com/">Plate &amp; Case Builder (new web-based)</a></li>
+<li><a href="https://github.com/swill/kb_builder">A stand alone keyboard CAD generation tool (old)</a></li>
+</ul>
+</li>
+<li>SVG editor
+<ul>
+<li><a href="https://inkscape.org/">inkscape</a> &ndash;  vector graphics editor</li>
+</ul>
+</li>
+</ul>
+<h3 id="カスタムキーボードpcb設計例">カスタムキーボードPCB設計例</h3>
+<ul>
+<li><a href="https://github.com/pierrechevalier83/ferris">ferris</a> &ndash; 5x3+2 column staggered (on board MCU)</li>
+<li><a href="https://github.com/davidphilipbarr/Sweep">Sweep</a> &ndash; 5x3+2 column staggered</li>
+<li><a href="https://github.com/waffle87/waffle_microdox">microdox</a> &ndash; 5x3+3 LP or MX  (ソケット対応例あり)</li>
+<li><a href="https://github.com/raychengy/fifi_split_keeb">Fifi</a> &ndash; 5x3+3 column staggered</li>
+<li><a href="https://github.com/foostan/crkbd">Corne keyboard (crkbd)</a> &ndash; 6x3 +3 column staggered (helix based) (ソケット対応)</li>
+<li><a href="https://github.com/diepala/cantor">Cantor Keyboard</a> &ndash; 6x3 +3 column staggered (diodeless, black pill)</li>
+<li><a href="https://github.com/TeXitoi/keyseebee">KeySeeBee</a> &ndash; 6x3 +4 column staggered (on board STM32F72)</li>
+<li><a href="https://github.com/HellSingCoder/LimeKeyboard">Lime</a> &ndash; 6x3 +6 column staggered (helix based) (ソケット対応), joystick, RE</li>
+<li><a href="https://github.com/climbalima/let-s-Split-v2">let&rsquo;s split v2</a> &ndash; 6x4 ortholinear &ndash; MX (ドーターボード裏付け)</li>
+<li><a href="https://github.com/kata0510/Lily58">Lily58</a> &ndash; 6x4 +5 column staggered</li>
+<li><a href="https://github.com/josefadamcik/SofleKeyboard">SofleKeyboard</a> &ndash; 6x4 +5 column staggered(ドーターボード横ズラシ)</li>
+<li><a href="https://github.com/Biacco42/Ergo42">Ergo42</a> &ndash; 7x4 ortholinear</li>
+<li><a href="https://github.com/MakotoKurauchi/helix">Helix</a> &ndash; 7x5+2 ortholinear &ndash; RGB-LED, LP or MX (ソケット対応)</li>
+<li><a href="https://github.com/e3w2q/su120-keyboard">SU120</a> &ndash; Expandable keyboard &ndash; RGB-LED, LP or MX （モジュラー）</li>
+<li><a href="https://github.com/Envious-Data/Env-KB">ENV-KB</a> &ndash; Full size KBD, JLCPCB examples　(ソケット対応例あり)</li>
+</ul>
+<h3 id="カスタムキーボードhw組み立てヒントとガイド">カスタムキーボードHW組み立てヒントとガイド</h3>
+<ul>
+<li><a href="https://josefadamcik.github.io/SofleKeyboard/build_guide_rgb.html">Sofle Keyboard - build guide (RGB)</a></li>
+<li><a href="https://josefadamcik.github.io/SofleKeyboard/build_guide_choc.html">Sofle Keyboard - build guide (Choc)</a></li>
+<li><a href="https://josef-adamcik.cz/electronics/let-me-introduce-you-sofle-keyboard-split-keyboard-based-on-lily58.html">Josef Adamčík: PCB techniques &ndash; sofle-keyboard</a></li>
+<li><a href="https://josef-adamcik.cz/electronics/corne-keyboard-build-log.html">Josef Adamčík: Corne keyboard</a></li>
+<li><a href="https://github.com/keyhive/build_guides/blob/master/docs/keyboards/sofle-rgb.md">keyhive version of Sofle RGB Keyboard - build guide</a></li>
+<li><a href="https://docs.keeb.io/main">Keebio Build Guide</a></li>
+<li><a href="https://docs.splitkb.com/hc/en-us/articles/360011263059-How-do-I-socket-a-microcontroller-">How do I socket a microcontroller?</a></li>
+<li><a href="https://e3w2q.github.io/">e3w2q.github.io by SU120 upstream</a></li>
+</ul>
+<h2 id="カスタムキーボード関連情報">カスタムキーボード関連情報</h2>
+<h3 id="カスタムキーボード関連ニュースサイト">カスタムキーボード関連ニュースサイト</h3>
+<ul>
+<li><a href="https://kbd.news/">Keyboard builder&rsquo;s digest</a></li>
+<li><a href="https://keebnews.com/">KeebNews</a></li>
+<li><a href="https://salicylic-weekly.hatenablog.jp/">自作キーボード温泉街週報</a> &ndash; blog (ja)</li>
+</ul>
+<h3 id="カスタムキーボード関連ブログ記事">カスタムキーボード関連ブログ記事</h3>
+<ul>
+<li><a href="https://kou014.hateblo.jp/entry/2018/12/08/000000">カーボンでErgo42を作った話</a></li>
+<li><a href="https://switchandclick.com/pe-foam-mod/">PE foam mod</a></li>
+<li><a href="https://scrapbox.io/self-made-kbds-ja/">Self-Made Keyboards in Japan - Scrapbox</a></li>
+<li><a href="https://adventar.org/calendars/6246">キーボード #1 Advent Calendar 2021</a> <a href="https://adventar.org/calendars/5279">,, 2020</a> <a href="https://scrapbox.io/self-made-kbds-ja/%E3%82%A2%E3%83%89%E3%83%99%E3%83%B3%E3%83%88%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC">List</a></li>
+<li><a href="https://medium.com/@keebio">Keebio blog</a></li>
+<li><a href="https://github.com/joric/jorne/wiki/Free-PCBs">Free PCBs</a> &ndash; purchase experiences</li>
+<li><a href="https://keebfolio.netlify.app/">Keebfol.io PCBs</a> まとめサイト、PCB dataへのリンクあり</li>
+<li><a href="https://biacco42.hatenablog.com/entry/2020/05/08/093000">自作キーボード入門用語集 2020</a></li>
+</ul>
+<h3 id="カスタムキーボード関連参考基礎情報源">カスタムキーボード関連参考基礎情報源</h3>
+<ul>
+<li><a href="https://github.com/mtl/keyboard-pcbs">Keebio Amoeba and more PCBs</a></li>
+<li><a href="https://github.com/kiibohd/pcb">PCB design from kiibohd</a> &ndash; input club</li>
+<li><a href="https://www.kailhswitch.com/pcb-socket/">Kailh PCB socket info</a></li>
+<li><a href="https://en.gateron.cn">Gateron company</a> &ndash; real site with real dns
+<ul>
+<li><a href="https://www.gateron.co/">Gateron switch</a> &ndash; sales trap site ??? with undisclosed dns reg</li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="#">***</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/jp/2019/02/09/word-freq/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

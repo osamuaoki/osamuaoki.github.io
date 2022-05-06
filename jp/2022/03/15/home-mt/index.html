@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/03/15 (initial publish),
-2022/05/05 (last update)
+2022/05/06 (last update)
 </h3>
 </div>
 
@@ -80,20 +80,7 @@
         <li><a href="#ダイオード">ダイオード</a></li>
         <li><a href="#choc-v1">choc v1</a></li>
         <li><a href="#メモリー使用量">メモリー使用量</a></li>
-        <li><a href="#今後のプラットフォーム候補">今後のプラットフォーム候補</a></li>
-        <li><a href="#ボードサイズ">ボードサイズ</a></li>
-      </ul>
-    </li>
-    <li><a href="#カスタムキーボード参考情報">カスタムキーボード参考情報</a>
-      <ul>
-        <li><a href="#カスタムキーボードまとめサイト">カスタムキーボードまとめサイト</a></li>
-        <li><a href="#カスタムキーボードpcb設計例">カスタムキーボードPCB設計例</a></li>
-        <li><a href="#カスタムキーボードhw設計ツール">カスタムキーボードHW設計ツール</a></li>
-        <li><a href="#カスタムキーボードhw組み立てヒントとガイド">カスタムキーボードHW組み立てヒントとガイド</a></li>
-        <li><a href="#カスタムキーボード関連ニュースサイト">カスタムキーボード関連ニュースサイト</a></li>
-        <li><a href="#カスタムキーボード関連ブログ記事">カスタムキーボード関連ブログ記事</a></li>
-        <li><a href="#kicad-data">KiCad data</a></li>
-        <li><a href="#参考基礎情報源">参考基礎情報源</a></li>
+        <li><a href="#今後のmcuプラットフォーム候補">今後のMCUプラットフォーム候補</a></li>
       </ul>
     </li>
   </ul>
@@ -229,7 +216,7 @@
 <h3 id="メモリー使用量">メモリー使用量</h3>
 <p>私のキーボードは、128KBのメモリー量のAT90USB1286で余裕があるので、メモリー使用量に配慮せず各種機能を有効にしても、使用量40%程度なので特に問題ありません。</p>
 <p>ただ、32KBしかメモリー量のないATmega32u4を使う普通のPromicroだと、メモリー使用量の制約に配慮が必要ですね。</p>
-<h3 id="今後のプラットフォーム候補">今後のプラットフォーム候補</h3>
+<h3 id="今後のmcuプラットフォーム候補">今後のMCUプラットフォーム候補</h3>
 <p>今後遊ぶには、メモリー量に余裕があるARM系のボードがよさそうです。</p>
 <ul>
 <li><a href="https://qmk.fm/proton-c/">Proton-C</a> &ndash; オフィシャルQMKが対応(STM32F303CCT6) &ndash; ピンコンパチが可能(?) &ndash; 一部カットした場合</li>
@@ -242,8 +229,10 @@
 </ul>
 </li>
 </ul>
-<p>Proton-C以外のARM系ボードでは、USB経由のDFUでファームウエアーを書き換えるには、「BOOT1-push」「RESET-push」「RESET-release」「BOOT1-releas」と操作するので、ボード上の２つのPUSHボタンへのアクセスが必要。代替策は、SWD経由アクセス。</p>
-<h3 id="ボードサイズ">ボードサイズ</h3>
+<p>Proton-C以外のARM系ボードでは、USB経由のDFUでファームウエアーを書き換えるには、「BOOT1-push」「RESET-push」「RESET-release」「BOOT1-releas」と操作するので、ボード上の２つのPUSHボタンへのアクセスが必要。
+代替策は、SWD経由アクセス。</p>
+<!-- raw HTML omitted -->
+<h4 id="mcuボードサイズ比較">MCUボードサイズ比較</h4>
 <ul>
 <li><a href="https://www.sparkfun.com/products/12640">promicro</a>
 <ul>
@@ -264,7 +253,7 @@
 <li>8.18U x 20.79U (pin-gap 6U, 1U)</li>
 </ul>
 </li>
-<li>0.91 Inch I2C 128 x 32 white OLED Display $10/5pcs
+<li>OLED display &ndash; 0.91 inch I2C 128 x 32 ~ $10/5pcs
 <ul>
 <li>1.57 x 0.38 x 0.12 inches</li>
 <li>38 x 12 mm</li>
@@ -272,97 +261,6 @@
 </ul>
 </li>
 </ul>
-<h2 id="カスタムキーボード参考情報">カスタムキーボード参考情報</h2>
-<p>片側<code>6X3_3</code>キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーボードが面白そうなので、当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
-<h3 id="カスタムキーボードまとめサイト">カスタムキーボードまとめサイト</h3>
-<ul>
-<li><a href="https://geekhack.org/">geekhack</a></li>
-<li><a href="https://deskthority.net/">deskthority</a></li>
-<li><a href="https://github.com/help-14/mechanical-keyboard">Mechanical Keyboard and where to find them</a></li>
-<li><a href="https://github.com/diimdeep/awesome-split-keyboards">Awesome Split Keyboards</a></li>
-</ul>
-<h3 id="カスタムキーボードpcb設計例">カスタムキーボードPCB設計例</h3>
-<ul>
-<li><a href="https://github.com/pierrechevalier83/ferris">ferris</a> &ndash; 5x3+2 column staggered (on board MCU)</li>
-<li><a href="https://github.com/davidphilipbarr/Sweep">Sweep</a> &ndash; 5x3+2 column staggered</li>
-<li><a href="https://github.com/waffle87/waffle_microdox">microdox</a> &ndash; 5x3+3 LP or MX  (ソケット対応例あり)</li>
-<li><a href="https://github.com/raychengy/fifi_split_keeb">Fifi</a> &ndash; 5x3+3 column staggered</li>
-<li><a href="https://github.com/foostan/crkbd">Corne keyboard (crkbd)</a> &ndash; 6x3 +3 column staggered (helix based) (ソケット対応)</li>
-<li><a href="https://github.com/diepala/cantor">Cantor Keyboard</a> &ndash; 6x3 +3 column staggered (diodeless, black pill)</li>
-<li><a href="https://github.com/HellSingCoder/LimeKeyboard">Lime</a> &ndash; 6x3 +6 column staggered (helix based) (ソケット対応), joystick, RE</li>
-<li><a href="https://github.com/climbalima/let-s-Split-v2">let&rsquo;s split v2</a> &ndash; 6x4 ortholinear &ndash; MX (ドーターボード裏付け)</li>
-<li><a href="https://github.com/kata0510/Lily58">Lily58</a> &ndash; 6x4 +5 column staggered</li>
-<li><a href="https://github.com/josefadamcik/SofleKeyboard">SofleKeyboard</a> &ndash; 6x4 +5 column staggered(ドーターボード横ズラシ)</li>
-<li><a href="https://github.com/Biacco42/Ergo42">Ergo42</a> &ndash; 7x4 ortholinear</li>
-<li><a href="https://github.com/MakotoKurauchi/helix">Helix</a> &ndash; 7x5+2 ortholinear &ndash; RGB-LED, LP or MX (ソケット対応)</li>
-<li><a href="https://github.com/e3w2q/su120-keyboard">SU120</a> &ndash; Expandable keyboard &ndash; RGB-LED, LP or MX （モジュラー）</li>
-<li><a href="https://github.com/Envious-Data/Env-KB">ENV-KB</a> &ndash; Full size KBD, JLCPCB examples　(ソケット対応例あり)</li>
-</ul>
-<h3 id="カスタムキーボードhw設計ツール">カスタムキーボードHW設計ツール</h3>
-<ul>
-<li><a href="http://www.keyboard-layout-editor.com/">Keyboard Layout Editor (KLE)</a></li>
-<li><a href="https://github.com/jeroen94704/klepcbgen">KLE PCB Generator</a></li>
-<li><a href="http://builder-docs.swillkb.com/">Documentation for builder.swillkb.com: Plate &amp; Case Builder</a>
-<ul>
-<li><a href="http://builder.swillkb.com/">Plate &amp; Case Builder (new web-based)</a></li>
-<li><a href="https://github.com/swill/kb_builder">A stand alone keyboard CAD generation tool (old)</a></li>
-</ul>
-</li>
-<li><a href="https://github.com/adamws/kicad-kbplacer">kicad-kbplacer</a> &ndash; KiCad plugin for mechanical keyboard design.</li>
-<li><a href="http://keyboard-tools.xyz/">KiCad Project Generator</a></li>
-<li><a href="https://deskthority.net/viewtopic.php?t=23797">deskthority: KiCad keyboard PCB generator</a></li>
-</ul>
-<h3 id="カスタムキーボードhw組み立てヒントとガイド">カスタムキーボードHW組み立てヒントとガイド</h3>
-<ul>
-<li><a href="https://josefadamcik.github.io/SofleKeyboard/build_guide_rgb.html">Sofle Keyboard - build guide (RGB)</a></li>
-<li><a href="https://josefadamcik.github.io/SofleKeyboard/build_guide_choc.html">Sofle Keyboard - build guide (Choc)</a></li>
-<li><a href="https://josef-adamcik.cz/electronics/let-me-introduce-you-sofle-keyboard-split-keyboard-based-on-lily58.html">Josef Adamčík: PCB techniques &ndash; sofle-keyboard</a></li>
-<li><a href="https://josef-adamcik.cz/electronics/corne-keyboard-build-log.html">Josef Adamčík: Corne keyboard</a></li>
-<li><a href="https://github.com/keyhive/build_guides/blob/master/docs/keyboards/sofle-rgb.md">keyhive version of Sofle RGB Keyboard - build guide</a></li>
-<li><a href="https://docs.keeb.io/main">Keebio Build Guide</a></li>
-<li><a href="https://docs.splitkb.com/hc/en-us/articles/360011263059-How-do-I-socket-a-microcontroller-">How do I socket a microcontroller?</a></li>
-<li><a href="https://e3w2q.github.io/">e3w2q.github.io by SU120 upstream</a></li>
-</ul>
-<h3 id="カスタムキーボード関連ニュースサイト">カスタムキーボード関連ニュースサイト</h3>
-<ul>
-<li><a href="https://kbd.news/">Keyboard builder&rsquo;s digest</a></li>
-<li><a href="https://keebnews.com/">KeebNews</a></li>
-<li><a href="https://salicylic-weekly.hatenablog.jp/">自作キーボード温泉街週報</a> &ndash; blog (ja)</li>
-</ul>
-<h3 id="カスタムキーボード関連ブログ記事">カスタムキーボード関連ブログ記事</h3>
-<ul>
-<li><a href="https://kou014.hateblo.jp/entry/2018/12/08/000000">カーボンでErgo42を作った話</a></li>
-<li><a href="https://switchandclick.com/pe-foam-mod/">PE foam mod</a></li>
-<li><a href="https://scrapbox.io/self-made-kbds-ja/">Self-Made Keyboards in Japan - Scrapbox</a></li>
-<li><a href="https://adventar.org/calendars/6246">キーボード #1 Advent Calendar 2021</a> <a href="https://adventar.org/calendars/5279">,, 2020</a> <a href="https://scrapbox.io/self-made-kbds-ja/%E3%82%A2%E3%83%89%E3%83%99%E3%83%B3%E3%83%88%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC">List</a></li>
-<li><a href="https://medium.com/@keebio">Keebio blog</a></li>
-<li><a href="https://github.com/joric/jorne/wiki/Free-PCBs">Free PCBs</a> &ndash; purchase experiences</li>
-<li><a href="https://keebfolio.netlify.app/">Keebfol.io PCBs</a> まとめサイト、PCB dataへのリンクあり</li>
-<li><a href="https://biacco42.hatenablog.com/entry/2020/05/08/093000">自作キーボード入門用語集 2020</a></li>
-</ul>
-<h3 id="kicad-data">KiCad data</h3>
-<ul>
-<li><a href="https://github.com/keebio/Keebio-Parts.pretty">Keebio-Parts.pretty</a> 333</li>
-<li><a href="https://github.com/keebio/keebio-components">keebio-components</a> 41</li>
-<li><a href="https://github.com/tmk/keyboard_parts.pretty">tmk: keyboard_parts.pretty</a> 135
-<ul>
-<li><a href="https://github.com/colemarkham/keyboard_parts.pretty">colemarkham: keyboard_parts.pretty</a> 42</li>
-</ul>
-</li>
-</ul>
-<h3 id="参考基礎情報源">参考基礎情報源</h3>
-<ul>
-<li><a href="https://github.com/mtl/keyboard-pcbs">Keebio Amoeba and more PCBs</a></li>
-<li><a href="https://github.com/kiibohd/pcb">PCB design from kiibohd</a> &ndash; input club</li>
-<li><a href="https://www.kailhswitch.com/pcb-socket/">Kailh PCB socket info</a></li>
-<li><a href="https://en.gateron.cn">Gateron company</a> &ndash; real site with real dns
-<ul>
-<li><a href="https://www.gateron.co/">Gateron switch</a> &ndash; sales trap site ??? with undisclosed dns reg</li>
-</ul>
-</li>
-</ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
