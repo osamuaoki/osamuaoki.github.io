@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/05/06 (initial publish),
-2022/05/08 (last update)
+2022/05/09 (last update)
 </h3>
 </div>
 
@@ -72,16 +72,18 @@
     </li>
     <li><a href="#カスタムキーボード関連情報">カスタムキーボード関連情報</a>
       <ul>
-        <li><a href="#カスタムキーボード関連ニュースサイト">カスタムキーボード関連ニュースサイト</a></li>
+        <li><a href="#カスタムキーボード関連連載ニュースサイト">カスタムキーボード関連連載ニュースサイト</a></li>
         <li><a href="#カスタムキーボード関連参考基礎情報源">カスタムキーボード関連参考基礎情報源</a></li>
-        <li><a href="#カスタムキーボード関連ブログ記事">カスタムキーボード関連ブログ記事</a></li>
+        <li><a href="#カスタムキーボード関連特定ブログ記事">カスタムキーボード関連特定ブログ記事</a></li>
       </ul>
     </li>
   </ul>
 </nav>
 
-<p><a href="/jp/2022/03/15/home-mt/">Mod-Tapを使う、片側<code>6X3_3</code>キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーボード</a>が面白そうでした。</p>
-<p>当分は取り組まないけどPCBを作る際に参考となる情報をまとめました。</p>
+<p>汎用設計の14x4のOrtholinearキーボードで試してみて、<a href="/jp/2022/03/15/home-mt/">Mod-Tapを使う、片側<code>6X3_3</code>キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーマップ</a>が小指への負担もなく普通のNotePCのキーボードとの相互移行での違和感もなくいい感じでした。</p>
+<p>こうなると、使わないキーをなくした専用のスプリットデザインのキーボードが欲しくなります。</p>
+<p>CORNEがほぼ図星のデザインですが、折角なのでPromicroではなくARMの汎用ボード(40PINあるblackpillかPiPico)を使う一から設計製作をしたカスタムキーボードを作りたいと思いました。</p>
+<p>当分は取り組まないかもしれないけど、カスタムキーボードをPCBから設計製作する際に参考となる情報をまとめました。</p>
 <h2 id="カスタムキーボードまとめサイト">カスタムキーボードまとめサイト</h2>
 <ul>
 <li><a href="https://geekhack.org/">geekhack</a></li>
@@ -89,6 +91,14 @@
 <li><a href="https://github.com/help-14/mechanical-keyboard">Mechanical Keyboard and where to find them</a></li>
 <li><a href="https://github.com/diimdeep/awesome-split-keyboards">Awesome Split Keyboards</a></li>
 <li><a href="https://scrapbox.io/self-made-kbds-ja/">Self-Made Keyboards in Japan - Scrapbox</a></li>
+<li><a href="https://www.reddit.com/r/MechanicalKeyboards/wiki/customkeyboards">r/MechanicalKeyboards: wiki</a></li>
+<li><a href="https://ai03.com/">ai03 Design Studio</a>
+<ul>
+<li><a href="https://wiki.ai03.com/">ai03.com! wiki</a></li>
+<li><a href="https://info.ai03.com/">ai03 Infobase</a></li>
+</ul>
+</li>
+<li><a href="https://keebfolio.netlify.app/">Keebfol.io</a></li>
 </ul>
 <h2 id="カスタムキーボードfirmware">カスタムキーボードFirmware</h2>
 <ul>
@@ -99,7 +109,7 @@
 </li>
 <li><a href="https://github.com/zmkfirmware">ZMK Firmware</a> &ndash; ZMK Firmware Repository (MIT License, Arm, Zephyr™ based)</li>
 <li><a href="https://github.com/KMKfw">KMK Firmware</a> &ndash; Pythonic Mechanical Keyboard Firmware (Arm)</li>
-<li><a href="https://github.com/TeXitoi/keyberon">Keyberon Firmware</a> &ndash; A rust crate to create a pure rust keyboard firmware.</li>
+<li><a href="https://github.com/TeXitoi/keyberon">Keyberon Firmware</a> &ndash; A rust crate to create a pure rust keyboard firmware (Arm)</li>
 </ul>
 <h2 id="カスタムキーボードhw設計製作">カスタムキーボードHW設計・製作</h2>
 <h3 id="カスタムキーボードhw設計ツール">カスタムキーボードHW設計ツール</h3>
@@ -115,13 +125,15 @@
 <ul>
 <li>Extra parts data
 <ul>
-<li><a href="https://github.com/keebio/Keebio-Parts.pretty">Keebio-Parts.pretty</a> 333 star
+<li><a href="https://github.com/keebio/Keebio-Parts.pretty">Keebio-Parts.pretty</a> 333 stars (2022/3 active)
 <ul>
-<li><a href="https://github.com/tmk/keyboard_parts.pretty">tmk: keyboard_parts.pretty</a> 135 star</li>
+<li><a href="https://github.com/tmk/keyboard_parts.pretty">tmk: keyboard_parts.pretty</a> 135 stars (2018)</li>
+<li><a href="https://github.com/stormbard/Keyboard.pretty">stormbard: Keyboard.pretty</a> 97 stars (2015)</li>
 </ul>
 </li>
 <li><a href="https://github.com/keebio/keebio-components">keebio-components</a> 41 star</li>
-<li><a href="https://github.com/colemarkham/keyboard_parts.pretty">colemarkham: keyboard_parts.pretty</a> 42 star</li>
+<li><a href="https://github.com/colemarkham/keyboard_parts.pretty">colemarkham: keyboard_parts.pretty</a> 42 stars (2018)</li>
+<li><a href="https://wiki.ai03.com/books/pcb-design/page/list-of-kicad-keyboard-parts-libraries">ai03: List of KiCad Keyboard Parts Libraries</a></li>
 </ul>
 </li>
 </ul>
@@ -141,15 +153,24 @@
 </li>
 </ul>
 </li>
+<li><a href="https://github.com/yskoht/keyboard-layouter">Keyboard Layouter Plugin</a> &ndash; KiCad plugin
+<ul>
+<li><a href="https://zenn.dev/0x0c/articles/4e4e428d79287d4556b2">1行もコードを書かずに自作キーボードを作る</a></li>
+</ul>
+</li>
 <li><a href="http://builder.swillkb.com/">Plate &amp; Case Builder (new web-based)</a> &ndash; Web tool for case
 <ul>
 <li><a href="http://builder-docs.swillkb.com/">Documentation for builder.swillkb.com: Plate &amp; Case Builder</a> &ndash; docs</li>
 <li><a href="https://github.com/swill/kb_builder">Keyboard CAD generation tool (old)</a> &ndash; source for the old stand alone tool</li>
 </ul>
 </li>
+<li><a href="https://github.com/50an6xy06r6n/hotswap_pcb_generator">hotswap_pcb_generator: OpenSCAD script for generating 3D-printable hotswap keyboard PCBs</a></li>
 <li><a href="https://inkscape.org/">inkscape</a> &ndash;  vector graphics (SVG) editor</li>
 <li><a href="https://github.com/mtl/svg2mod">svg2mod: Convert Inkscape SVG drawings to KiCad footprint modules</a></li>
+<li><a href="https://form--keebfolio.netlify.app/tools">Keebio Tools</a> &ndash; リンク集</li>
 </ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h3 id="カスタムキーボードpcb設計例">カスタムキーボードPCB設計例</h3>
 <ul>
 <li><a href="https://github.com/pierrechevalier83/ferris">ferris</a> &ndash; 5x3+2 column staggered (on board MCU)</li>
@@ -172,25 +193,47 @@
 </ul>
 <h3 id="カスタムキーボードhw製作ガイド">カスタムキーボードHW製作ガイド</h3>
 <ul>
+<li>Josef Adamčík
+<ul>
 <li><a href="https://josefadamcik.github.io/SofleKeyboard/build_guide_rgb.html">Sofle Keyboard - build guide (RGB)</a></li>
 <li><a href="https://josefadamcik.github.io/SofleKeyboard/build_guide_choc.html">Sofle Keyboard - build guide (Choc)</a></li>
 <li><a href="https://josef-adamcik.cz/electronics/let-me-introduce-you-sofle-keyboard-split-keyboard-based-on-lily58.html">Josef Adamčík: PCB techniques &ndash; sofle-keyboard</a></li>
 <li><a href="https://josef-adamcik.cz/electronics/corne-keyboard-build-log.html">Josef Adamčík: Corne keyboard</a></li>
+</ul>
+</li>
 <li><a href="https://github.com/keyhive/build_guides/blob/master/docs/keyboards/sofle-rgb.md">keyhive version of Sofle RGB Keyboard - build guide</a></li>
-<li><a href="https://docs.keeb.io/main">Keebio Build Guide</a></li>
-<li><a href="https://docs.splitkb.com/hc/en-us/articles/360011263059-How-do-I-socket-a-microcontroller-">How do I socket a microcontroller?</a></li>
 <li><a href="https://e3w2q.github.io/">e3w2q.github.io by SU120 upstream</a></li>
+<li><a href="https://docs.splitkb.com/hc/en-us">splitkb.com: All about split keyboards</a>
+<ul>
+<li><a href="https://docs.splitkb.com/hc/en-us/articles/360011263059-How-do-I-socket-a-microcontroller-">How do I socket a microcontroller?</a></li>
+</ul>
+</li>
+<li><a href="https://deskthority.net/wiki/KiCAD_keyboard_PCB_design_guide">deskthority: KiCAD keyboard PCB design guide</a></li>
+<li><a href="https://wiki.ai03.com/books/pcb-design">ai03.com: PCB Design</a> &ndash;  based on <a href="https://github.com/ruiqimao/keyboard-pcb-guide">Keyboard PCB Guide</a></li>
+<li><a href="https://docs.keeb.io/main">Keebio Build Guide</a>
+<ul>
+<li><a href="https://form--keebfolio.netlify.app/tutorials/">Keebio: Tutorials</a></li>
+</ul>
+</li>
+<li><a href="https://hackaday.com/2016/09/21/creating-a-pcb-in-everything-introduction/#series-of-posts-box">hackeaday.com: CREATING A PCB IN EVERYTHING</a>
+<ul>
+<li><a href="https://hackaday.com/2016/11/17/creating-a-pcb-in-everything-kicad-part-1/">CREATING A PCB IN EVERYTHING: KICAD, PART 1</a></li>
+<li><a href="https://hackaday.com/2016/12/09/creating-a-pcb-in-everything-kicad-part-2/">CREATING A PCB IN EVERYTHING: KICAD, PART 2</a></li>
+<li><a href="https://hackaday.com/2016/12/23/creating-a-pcb-in-everything-kicad-part-3/">CREATING A PCB IN EVERYTHING: KICAD, PART 3</a></li>
+</ul>
+</li>
 </ul>
 <h2 id="カスタムキーボード関連情報">カスタムキーボード関連情報</h2>
-<h3 id="カスタムキーボード関連ニュースサイト">カスタムキーボード関連ニュースサイト</h3>
+<h3 id="カスタムキーボード関連連載ニュースサイト">カスタムキーボード関連連載ニュースサイト</h3>
 <ul>
 <li><a href="https://kbd.news/">Keyboard builder&rsquo;s digest</a></li>
 <li><a href="https://keebnews.com/">KeebNews</a></li>
-<li><a href="https://salicylic-weekly.hatenablog.jp/">自作キーボード温泉街週報</a> &ndash; blog (ja)</li>
+<li><a href="https://salicylic-weekly.hatenablog.jp/">自作キーボード温泉街週報</a> &ndash; 連載blog (ja)</li>
+<li><a href="https://medium.com/@keebio">Keebio: blog</a> &ndash; 連載blog (en)</li>
 </ul>
 <h3 id="カスタムキーボード関連参考基礎情報源">カスタムキーボード関連参考基礎情報源</h3>
 <ul>
-<li>サブボード・パーツサイズ (MCU: 15 DIO pins needed to support OLED, Split, RGB-LED)
+<li>サブボードサイズ (MCU: 15 DIO pins needed to support OLED, Split, RGB-LED)
 <ul>
 <li><a href="https://www.sparkfun.com/products/12640">SparkFun: Pro Micro - 5V/16MHz</a>
 <ul>
@@ -225,6 +268,10 @@
 <li><a href="https://github.com/WeActTC/MiniSTM32F4x1">MiniSTM32F4x1 Blackpill docs</a></li>
 </ul>
 </li>
+</ul>
+</li>
+<li>パーツ情報
+<ul>
 <li><a href="https://www.kailhswitch.com/pcb-socket/">Kailh PCB socket info</a></li>
 <li><a href="https://en.gateron.cn">Gateron company</a> &ndash; real site with real dns
 <ul>
@@ -256,10 +303,17 @@
 <li><a href="https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf">WS2812B</a> &ndash; 0.26W, 5 x 5 mm</li>
 </ul>
 </li>
+<li><a href="https://pcbshopper.com/">PCB vendors</a> &ndash; PCB service の価格比較
+<ul>
+<li><a href="https://github.com/joric/jorne/wiki/Free-PCBs">Free PCBs</a> &ndash; purchase experiences</li>
 </ul>
 </li>
 </ul>
-<h3 id="カスタムキーボード関連ブログ記事">カスタムキーボード関連ブログ記事</h3>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="カスタムキーボード関連特定ブログ記事">カスタムキーボード関連特定ブログ記事</h3>
 <ul>
 <li><a href="https://kou014.hateblo.jp/entry/2018/12/08/000000">カーボンでErgo42を作った話</a>
 <ul>
@@ -267,16 +321,13 @@
 </ul>
 </li>
 <li><a href="https://switchandclick.com/pe-foam-mod/">PE foam mod</a></li>
-<li><a href="https://adventar.org/calendars/6246">キーボード #1 Advent Calendar 2021</a> <a href="https://adventar.org/calendars/5279">,, 2020</a> <a href="https://scrapbox.io/self-made-kbds-ja/%E3%82%A2%E3%83%89%E3%83%99%E3%83%B3%E3%83%88%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC">List</a></li>
-<li><a href="https://medium.com/@keebio">Keebio blog</a></li>
-<li><a href="https://github.com/joric/jorne/wiki/Free-PCBs">Free PCBs</a> &ndash; purchase experiences</li>
-<li><a href="https://keebfolio.netlify.app/">Keebfol.io PCBs</a> まとめサイト、PCB dataへのリンクあり</li>
-<li><a href="https://biacco42.hatenablog.com/entry/2020/05/08/093000">自作キーボード入門用語集 2020</a></li>
 <li><a href="https://hackaday.com/2017/01/20/cheating-at-5v-ws2812-control-to-use-a-3-3v-data-line/">CHEATING AT 5V WS2812 CONTROL TO USE 3.3V DATA</a>
 <ul>
 <li><a href="https://www.maximintegrated.com/en/design/technical-documents/app-notes/7/7106.html">HOW TO LEVEL SHIFT 1-WIRE SYSTEMS</a></li>
 </ul>
 </li>
+<li><a href="https://adventar.org/calendars/6246">キーボード #1 Advent Calendar 2021</a> <a href="https://adventar.org/calendars/5279">,, 2020</a> <a href="https://scrapbox.io/self-made-kbds-ja/%E3%82%A2%E3%83%89%E3%83%99%E3%83%B3%E3%83%88%E3%82%AB%E3%83%AC%E3%83%B3%E3%83%80%E3%83%BC">List</a></li>
+<li><a href="https://biacco42.hatenablog.com/entry/2020/05/08/093000">自作キーボード入門用語集 2020</a></li>
 </ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
