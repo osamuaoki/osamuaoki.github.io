@@ -65,9 +65,9 @@
     <li><a href="#カスタムキーボードfirmware">カスタムキーボードFirmware</a></li>
     <li><a href="#カスタムキーボードhw設計製作">カスタムキーボードHW設計・製作</a>
       <ul>
-        <li><a href="#pcbの設計">PCBの設計</a></li>
-        <li><a href="#カスタムキーボードhw設計ツール">カスタムキーボードHW設計ツール</a></li>
+        <li><a href="#カスタムキーボードpcbの設計">カスタムキーボードPCBの設計</a></li>
         <li><a href="#カスタムキーボードpcb設計例">カスタムキーボードPCB設計例</a></li>
+        <li><a href="#その他カスタムキーボードhw設計ツール">その他カスタムキーボードHW設計ツール</a></li>
         <li><a href="#カスタムキーボードhw製作ガイド">カスタムキーボードHW製作ガイド</a></li>
       </ul>
     </li>
@@ -118,7 +118,7 @@
 <li><a href="https://github.com/TeXitoi/keyberon">Keyberon Firmware</a> &ndash; A rust crate to create a pure rust keyboard firmware (Arm)</li>
 </ul>
 <h2 id="カスタムキーボードhw設計製作">カスタムキーボードHW設計・製作</h2>
-<h3 id="pcbの設計">PCBの設計</h3>
+<h3 id="カスタムキーボードpcbの設計">カスタムキーボードPCBの設計</h3>
 <p>PCBの設計は基本<a href="https://www.kicad.org">KiCad</a>が使われます。</p>
 <p>2022年1月以前のKiCad情報はV5以前を使っているので、現行のV6のDocumentation/Tutorialから読むのが良さそうです。</p>
 <ul>
@@ -131,19 +131,7 @@
 </ul>
 </li>
 <li><a href="https://hackaday.com/2022/01/08/advanced-pcb-graphics-with-kicad-6-and-inkscape/">ADVANCED PCB GRAPHICS WITH KICAD 6 AND INKSCAPE</a> ビデオ</li>
-</ul>
-<h3 id="カスタムキーボードhw設計ツール">カスタムキーボードHW設計ツール</h3>
-<ul>
-<li><a href="http://www.keyboard-layout-editor.com/">Keyboard Layout Editor (KLE)</a>
-<ul>
-<li><a href="https://github.com/jeroen94704/klepcbgen">KLE PCB Generator</a></li>
-</ul>
-</li>
-<li>PCB CAD tool
-<ul>
-<li><a href="https://www.kicad.org">KiCad</a> &ndash; EDA (Qt) (de-facto stabdard)
-<ul>
-<li>Extra parts data
+<li>KiCad extra parts data (format: <code>pretty</code> = new, <code>legacy</code> = old)
 <ul>
 <li><a href="https://github.com/keebio/Keebio-Parts.pretty">Keebio-Parts.pretty</a> 333 stars (2022/3 active)
 <ul>
@@ -156,13 +144,6 @@
 <li><a href="https://wiki.ai03.com/books/pcb-design/page/list-of-kicad-keyboard-parts-libraries">ai03: List of KiCad Keyboard Parts Libraries</a></li>
 </ul>
 </li>
-</ul>
-</li>
-<li><a href="https://lepton-eda.github.io">lepton-eda</a> &ndash; GPL EDA tool (fork of gEDA-gaf)</li>
-<li><a href="https://horizon-eda.readthedocs.io">horizon-eda</a> &ndash; EDA with the sane library</li>
-<li><a href="https://fritzing.org/">fritzing</a> &ndash; EDA with &ldquo;breadboard&rdquo; view</li>
-</ul>
-</li>
 <li><a href="https://deskthority.net/viewtopic.php?t=23797">deskthority: KiCad keyboard PCB generator</a> &ndash; article
 <ul>
 <li><a href="https://github.com/adamws/kicad-kbplacer">kicad-kbplacer</a> &ndash; KiCad plugin for mechanical keyboard design</li>
@@ -173,24 +154,12 @@
 </li>
 </ul>
 </li>
-<li><a href="https://github.com/yskoht/keyboard-layouter">Keyboard Layouter Plugin</a> &ndash; KiCad plugin
+<li><a href="https://github.com/yskoht/keyboard-layouter">Keyboard Layouter Plugin</a> &ndash; KiCad plugin　ツール
 <ul>
-<li><a href="https://zenn.dev/0x0c/articles/4e4e428d79287d4556b2">1行もコードを書かずに自作キーボードを作る</a></li>
+<li><a href="https://zenn.dev/0x0c/articles/4e4e428d79287d4556b2">1行もコードを書かずに自作キーボードを作る</a> &ndash; 記事</li>
 </ul>
 </li>
-<li><a href="http://builder.swillkb.com/">Plate &amp; Case Builder (new web-based)</a> &ndash; Web tool for case
-<ul>
-<li><a href="http://builder-docs.swillkb.com/">Documentation for builder.swillkb.com: Plate &amp; Case Builder</a> &ndash; docs</li>
-<li><a href="https://github.com/swill/kb_builder">Keyboard CAD generation tool (old)</a> &ndash; source for the old stand alone tool</li>
 </ul>
-</li>
-<li><a href="https://github.com/50an6xy06r6n/hotswap_pcb_generator">hotswap_pcb_generator: OpenSCAD script for generating 3D-printable hotswap keyboard PCBs</a></li>
-<li><a href="https://inkscape.org/">inkscape</a> &ndash;  vector graphics (SVG) editor</li>
-<li><a href="https://github.com/mtl/svg2mod">svg2mod: Convert Inkscape SVG drawings to KiCad footprint modules</a></li>
-<li><a href="https://form--keebfolio.netlify.app/tools">Keebio Tools</a> &ndash; リンク集</li>
-</ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h3 id="カスタムキーボードpcb設計例">カスタムキーボードPCB設計例</h3>
 <ul>
 <li><a href="https://github.com/pierrechevalier83/ferris">ferris</a> &ndash; 5x3+2 column staggered (on board MCU)</li>
@@ -211,6 +180,34 @@
 <li><a href="https://github.com/mtl/keyboard-pcbs">Keebio Amoeba and more PCBs</a></li>
 <li><a href="https://github.com/kiibohd/pcb">PCB design from kiibohd</a> &ndash; input club</li>
 </ul>
+<h3 id="その他カスタムキーボードhw設計ツール">その他カスタムキーボードHW設計ツール</h3>
+<ul>
+<li><a href="http://www.keyboard-layout-editor.com/">Keyboard Layout Editor (KLE)</a>
+<ul>
+<li><a href="https://github.com/jeroen94704/klepcbgen">KLE PCB Generator</a></li>
+</ul>
+</li>
+<li>PCB CAD tool options
+<ul>
+<li><a href="https://www.kicad.org">KiCad</a> &ndash; EDA (Qt) (de-facto stabdard)</li>
+<li><a href="https://lepton-eda.github.io">lepton-eda</a> &ndash; GPL EDA tool (fork of gEDA-gaf)</li>
+<li><a href="https://horizon-eda.readthedocs.io">horizon-eda</a> &ndash; EDA with the sane library</li>
+<li><a href="https://fritzing.org/">fritzing</a> &ndash; EDA with &ldquo;breadboard&rdquo; view</li>
+</ul>
+</li>
+<li><a href="http://builder.swillkb.com/">Plate &amp; Case Builder (new web-based)</a> &ndash; Web tool for case
+<ul>
+<li><a href="http://builder-docs.swillkb.com/">Documentation for builder.swillkb.com: Plate &amp; Case Builder</a> &ndash; docs</li>
+<li><a href="https://github.com/swill/kb_builder">Keyboard CAD generation tool (old)</a> &ndash; source for the old stand alone tool</li>
+</ul>
+</li>
+<li><a href="https://github.com/50an6xy06r6n/hotswap_pcb_generator">hotswap_pcb_generator: OpenSCAD script for generating 3D-printable hotswap keyboard PCBs</a></li>
+<li><a href="https://inkscape.org/">inkscape</a> &ndash;  vector graphics (SVG) editor</li>
+<li><a href="https://github.com/mtl/svg2mod">svg2mod: Convert Inkscape SVG drawings to KiCad footprint modules</a></li>
+<li><a href="https://form--keebfolio.netlify.app/tools">Keebio Tools</a> &ndash; リンク集</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h3 id="カスタムキーボードhw製作ガイド">カスタムキーボードHW製作ガイド</h3>
 <ul>
 <li>Josef Adamčíkさんのガイド
