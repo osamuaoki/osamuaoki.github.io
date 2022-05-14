@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2021/08/22 (last update)
+2022/05/15 (last update)
 </h3>
 </div>
 
@@ -430,43 +430,82 @@ NAME
     schroot-shell - start a shell in chroot with current home data.
 
 SYNOPSIS
-    schroot-shell [|--init|--prep|--upgrade] [DIST]
+    schroot-shell [DIST [CONFIG]]
+    schroot-shell --config [CONFIG]
+    schroot-shell [--init|--prep|--upgrade] [DIST [CONFIG]]
 
 DESCRIPTION
-    This helps you to work with persistent pre-loaded (source) chroot
-    environment and is modeled after *sbuild-shell* and *sbuild-update*
-    but uses an independent chroot which is not used by sbuild.
 
-    This uses schroot profile &#39;desktop&#39;.  You must customize this
-    profile at &#39;/etc/schroot/desktop/fstab&#39; to list all mounted
-    devices in your home directory.  The actual profile used can be
-    changed by setting the &#39;${SCHROOT_PROFILE}&#39; environment variable.
+This wrapper command of *schroot* offers a set of helper commands to work in
+the persistent pre-loaded (source) chroot system environment while sharing the
+user data from the user&#39;s home directory of the host system.
 
-    This normally starts persistent (source) chroot environment for the
-    DIST distribution and provides a shell prompt in the current console
-    terminal with access to the data in your home directory.
-    This is modeled after *sbuild-shell*.
+Here, if &#39;CONFIG&#39; and &#39;DIST&#39; are missing in the command line, &#39;desktop&#39; for
+&#39;CONFIG&#39; and &#39;unstable&#39; for &#39;DIST&#39; are used as the default values.  Normally,
+you skip specifying &#39;CONFIG&#39; to use its default value.  This command
+automatically becomes root when needed.
 
-    If DIST is unset, &#39;${DIST}&#39; environment variable is used instead.
-    If &#39;${DIST}&#39; environment variable is also unset, &#39;unstable&#39; is used.
+The *schroot-shell* command is normally invoked as:
 
-    DIST can be &#39;unstable&#39;, &#39;testing&#39;, &#39;stable&#39;, &#39;oldstable&#39;, or
-    &#39;oldoldstable&#39;; and can be shortened as &#39;u&#39;, &#39;t&#39;, &#39;s&#39;, &#39;o&#39;, or &#39;oo&#39;.
+   schroot-shell [DIST [CONFIG]]
 
-    If &#39;--init&#39; or &#39;-i&#39; is given as an option, this initializes schroot
-    environment for this command and optionally for sbuild.
-      * &#39;/srv/chroot/${DIST}-amd64-sbuild&#39; used by sbuild as a minimum system.
-      * &#39;/srv/chroot/${DIST}-amd64-desktop&#39; used by this program to
-        start the terminal shell prompt as a source chroot of a loaded system.
-    This is a wrapper around *sbuild-createchroot*.
+This starts an interactive shell in the &#39;DIST-amd64-CONFIG&#39; source chroot
+managed by the *schroot* command while bind mounting the user data from the
+user&#39;s home directory of the host system.  This is somewhat modeled after
+*sbuild-shell*.  While *sbuild-shell* is designed to work with the session
+chroot and the changes made from *sbuild-shell* to the chroot is discarded,
+the changes made from *schroot-shell* to the chroot is persistent.
 
-    If &#39;--prep&#39; or &#39;-p&#39; is given as an option, this updates schroot
-    environment with basic extra packages normally needed for the console
-    terminal operations to &#39;/srv/chroot/${DIST}-amd64-desktop&#39;
+In order for the *schroot-shell* command to function, you need to set up the
+&#39;DIST-amd64-CONFIG&#39; source chroot properly.
 
-    If &#39;--upgrade&#39; or &#39;-u&#39; is given as an option, this updates schroot
-    environment of &#39;/srv/chroot/${DIST}-amd64-desktop&#39;
-    This is modeled after *sbuild-update*.
+The &#39;DIST-amd64-CONFIG&#39; source chroot can be initialized in 3
+steps.
+
+  1. Create the setup script configuration files for *schroot* under
+     &#39;/etc/schroot/CONFIG/&#39; as explained in the &#39;FILES&#39; section under &#39;Setup
+     script configuration&#39; in schroot.conf(5) for &#39;/etc/schroot/default&#39;.
+
+       schroot-shell --config [CONFIG]
+
+  2. Customize the setup script configuration files for *schroot* at
+     &#39;/etc/schroot/CONFIG/fstab&#39; to list all mounted devices in your home
+     directory.
+
+  3. Create a chroot file system for &#39;DIST&#39; at
+     &#39;/srv/chroot/DIST-amd64-CONFIG&#39; using the setup script configuration
+     files in &#39;/etc/schroot/CONFIG&#39;.
+
+       schroot-shell --init [DIST [CONFIG]]
+
+    Here, &#39;DIST&#39; specifies base distribution of the chroot system.  &#39;DIST&#39;
+    can be &#39;unstable&#39; (default), &#39;testing&#39;, &#39;stable&#39;, &#39;oldstable&#39;, or
+    &#39;oldoldstable&#39;.  These can be shortened as &#39;u&#39;, &#39;t&#39;, &#39;s&#39;, &#39;o&#39;, or &#39;oo&#39;
+    in the command line.
+
+The &#39;DIST-amd64-CONFIG&#39; source chroot can be updated to the latest
+state by:
+
+   schroot-shell --update [DIST [CONFIG]]
+
+The &#39;DIST-amd64-CONFIG&#39; source chroot can be prepped up with a few
+pre-defined extra packages desirable for the shell activities by:
+
+   schroot-shell --prep [DIST [CONFIG]]
+
+For &#39;CONFIG&#39;, values &#39;default&#39;, &#39;minimal&#39;, &#39;buildd&#39;, and &#39;sbuild&#39;
+should be avoided unless you know what exactly happens since these setup
+scripts are already used by *sbuild* and *schroot*.
+
+The *schroot-shell* command offers a generarized and similar functionality of
+combined *sbuild-createchroot*, *sbuild-update*, and *sbuild-shell* for the
+persistent chroot shell environment instead of the session one.
+
+Parametrs:
+  TYPE    = &#39;source&#39;
+  DIST    = &#39;unstable&#39;
+  ARCH    = &#39;amd64&#39;
+  CONFIG  = &#39;desktop&#39;
 </code></pre><p>I customized my desktop profile at <code>/etc/schroot/desktop/fstab</code> as follows:</p>
 <ul>
 <li>Explicitly bind mount subdirectories under my home directory which are on
