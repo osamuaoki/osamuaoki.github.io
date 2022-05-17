@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>測定関係(1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">測定関係(1)</span></h1>
+
+<h3 class="date">Date:
+2022/05/08 (initial publish),
+2022/05/17 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/05/06/kbd-pcb/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#テスター">テスター</a>
+      <ul>
+        <li><a href="#抵抗測定ダイオード検査導通テスト">抵抗測定・ダイオード検査・導通テスト</a></li>
+        <li><a href="#mastech-ms8221c不調対応">MASTECH MS8221C不調対応</a></li>
+      </ul>
+    </li>
+    <li><a href="#デジタルミニオシロ">デジタルミニオシロ</a></li>
+  </ul>
+</nav>
+
+<p>以下は基本的に備忘録です。</p>
+<h2 id="テスター">テスター</h2>
+<h3 id="抵抗測定ダイオード検査導通テスト">抵抗測定・ダイオード検査・導通テスト</h3>
+<p>古いカード型で簡便なSANWAのSD-420C (LR44 or SR44
+２個使用)と、最近の多機能のMASTECHのMS8221C (AAA or 単3　３個使用)を用いて、デジタルテスターの抵抗測定・ダイオード検査・導通テスト等の実状を確認しました。(以下の表中の括弧内は、端子印加電圧です。)</p>
+<table>
+<thead>
+<tr>
+<th>機器名</th>
+<th>SANWA</th>
+<th>MASTECH</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>テスター端子サイズ</td>
+<td>L=13mm, φ=2.0mm</td>
+<td>L=15mm, φ=2.0mm</td>
+</tr>
+<tr>
+<td>抵抗 (Open負荷)</td>
+<td>11MΩ (0.216V)</td>
+<td>12MΩ (0.239V)</td>
+</tr>
+<tr>
+<td>導通ブザー (Open負荷)</td>
+<td>1484 and NO BEEP (1.443V)</td>
+<td>OL and NO BEEP (0.437V)</td>
+</tr>
+<tr>
+<td>ダイオード (Open負荷)</td>
+<td>導通ブザー兼用</td>
+<td>OL (1.296V)</td>
+</tr>
+<tr>
+<td>抵抗 (1KΩ負荷)</td>
+<td>1KΩ (0.113V)</td>
+<td>1KΩ (0.166V)</td>
+</tr>
+<tr>
+<td>導通ブザー (1KΩ負荷)</td>
+<td>345 and BEEP (0.345V)</td>
+<td>NO BEEP (0.166V)</td>
+</tr>
+<tr>
+<td>ダイオード (1KΩ負荷)</td>
+<td>導通ブザー兼用</td>
+<td>0.437V (0.437V)</td>
+</tr>
+<tr>
+<td>導通ブザー出力抵抗</td>
+<td>3KΩ</td>
+<td>1.6KΩ</td>
+</tr>
+<tr>
+<td>ダイオード出力抵抗</td>
+<td>導通ブザー兼用</td>
+<td>2KΩ</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>何れの測定条件でも、赤線側にプラス電位の出力となる。</li>
+<li>測定端子間電圧は、MASTECHの方がSAMWAより低い (デバイスを壊す心配は低い)</li>
+<li>測定端子間電圧は、測定法で異なり、ダイオード (1.0+V) <code>&gt;/=</code> 導通ブザー <code>&gt;</code> 抵抗 (~0.2V)の順番。</li>
+<li>導通ブザーは、印加電圧も、導通判断基準も機器差が大きいので要注意。
+<ul>
+<li>端子間に順方向Siダイオードだと、SAMWAは導通と判定しブザーが鳴るが、MASTECHは非導通と判定しブザーが鳴らない</li>
+<li>ダイオードの順方向検査にMASTECHの導通ブザーは使えない</li>
+<li>端子間抵抗が1KΩだと、SAMWAは導通と判定しブザーが鳴るが、MASTECHは非導通と判定しブザーが鳴らない。</li>
+</ul>
+</li>
+</ul>
+<h3 id="mastech-ms8221c不調対応">MASTECH MS8221C不調対応</h3>
+<p>MASTECH MS8221CのLCDが付きが悪く起動しない不調がありました。電池ボックスの端子から回路基板への導通を確保する基板側のバネとの接触が悪かったのが、原因でした。バネを引っ張って、ごまかしました。</p>
+<h2 id="デジタルミニオシロ">デジタルミニオシロ</h2>
+<p>昔買った、1入力の安価なデジタルミニオシロです。</p>
+<ul>
+<li>
+<p><a href="http://goofing-with-computer.blogspot.com/2015/07/dso201.html">購入時のメモ</a></p>
+</li>
+<li>
+<p>購入品 banggood.com (購買日2015年7月 UPDATED IN 2015) &ndash; SeeedのVersion 1. DS201/DSO Nano v1相当</p>
+</li>
+<li>
+<p>MODEL: DSO201</p>
+</li>
+<li>
+<p>Hardware: Version 1.7B &ndash; POWER ON  with &ldquo;M&rdquo;</p>
+</li>
+<li>
+<p>MCU Type: STM32F103VB</p>
+</li>
+<li>
+<p>LCM Ctrl: ILI_9341</p>
+</li>
+<li>
+<p>USB Disk: Ext MSD Card</p>
+</li>
+<li>
+<p>Firmware: V3.29D  &ndash; POWER ON with &ldquo;-&rdquo;</p>
+</li>
+<li>
+<p>Oscilloscope: Ver. 4.28 &ndash;&gt; 4.32 &ndash; POWER ON (normal) どうも更新済み</p>
+</li>
+<li>
+<p><a href="https://www.minidso.com/">https://www.minidso.com/</a></p>
+</li>
+<li>
+<p><a href="https://www.minidso.com/forum.php?mod=forumdisplay&amp;fid=6">袖珍示波器 Pocket Oscilloscope-DS201</a></p>
+</li>
+<li>
+<p><a href="https://www.minidso.com/forum.php?mod=forumdisplay&amp;fid=53">Pocket Oscilloscope-DS201 (En)</a></p>
+</li>
+<li>
+<p><a href="https://www.minidso.com/forum.php?mod=viewthread&amp;tid=213">Manual Official</a></p>
+</li>
+<li>
+<p><a href="https://www.minidso.com/forum.php?mod=viewthread&amp;tid=408">Firmware Official</a></p>
+</li>
+<li>
+<p><a href="http://www.minidso.com/forum.php?mod=viewthread&amp;tid=634">Firmware Pall</a></p>
+</li>
+<li>
+<p><a href="http://www.minidso.com/forum.php?mod=viewthread&amp;tid=638">Firmware BenF</a></p>
+</li>
+<li>
+<p><a href="https://wiki.seeedstudio.com/DSO_Nano/">Seeedが売った過去のHW</a></p>
+</li>
+<li>
+<p><a href="https://wiki.seeedstudio.com/DSO_Nano_v3/#resources">Seeedのダウンロード</a></p>
+<ul>
+<li><a href="https://www.estudioelectronica.com/wp-content/uploads/2018/09/DS201MANUAL.pdf">V1のハードのマニュアル 良い？</a></li>
+<li><a href="https://www.sparkfun.com/datasheets/Tools/dsomanual.pdf">V1のハードのマニュアル 古い？</a></li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/05/06/kbd-pcb/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
