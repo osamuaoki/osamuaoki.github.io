@@ -67,7 +67,7 @@
   </ul>
 </nav>
 
-<p>電子工作の基本の光り物の駆動が、単純なカラーLEDを直接電圧駆動するタイプから、MCUが組み込まれてデジタルコントロールの調色機能付のDigital RGB LEDとかNEOPIXEL LED等と呼ばれるものをデジタル信号ドライブするように変わってきました。その状況を調べました。</p>
+<p>電子工作の基本の光り物の駆動が、単純なカラーLEDを直接電流駆動するタイプから、MCUが組み込まれてデジタルコントロールの調色機能付のDigital RGB LEDとかNEOPIXEL LED等と呼ばれるLEDをデジタル信号ドライブするように変わってきました。その状況を調べました。</p>
 <h2 id="よく使うdigital-rgb-ledチップ">よく使うDigital RGB LEDチップ</h2>
 <table>
 <thead>
@@ -121,11 +121,11 @@
 <li><a href="https://cpldcpu.wordpress.com/2014/01/19/light_ws2812-library-v2-0/">https://cpldcpu.wordpress.com/2014/01/19/light_ws2812-library-v2-0/</a></li>
 <li><a href="https://cpldcpu.wordpress.com/2014/02/18/new-member-of-the-ws2812-family/">https://cpldcpu.wordpress.com/2014/02/18/new-member-of-the-ws2812-family/</a></li>
 </ul>
-<p>よりエレガントなDigital RGB LED駆動パルス生成法は、SPIインターフェースを使いMISO出力を引き出し接続します。<a href="https://github.com/FastLED/FastLED">FastLED</a> (5.3K stars) がこの代表例です。</p>
+<p>よりエレガントなDigital RGB LED駆動パルス生成法は、SPIインターフェースを使いMISO出力を引き出し接続します。<a href="https://github.com/FastLED/FastLED">FastLED</a> (5.3K stars) がこの代表例です。クロック信号は取り出さずに、SPIのデーター数ビットで１ビットとするので、信号線は１本です。</p>
 <p>このSPIアプローチは、DMAや<a href="https://developer.arm.com/documentation/ddi0439/b/Programmers-Model/Bit-banding">bit banding</a>組み合わせると更に最適化できます。
 <a href="https://sites.google.com/site/hubmartin/arm/improved-stm32-ws2812b-library">Improved STM32 WS2812B DMA library</a> の記事にある、<a href="https://github.com/hubmartin/WS2812B_STM32F4">LowMEM ws2812b libraryシリーズ</a> (77 stars) 等がどうもこれに当たります。</p>
-<p>LEDをSPIを使ってCPU負荷時間を短くする高速ドライブの実験情報が<a href="https://www.newinnovations.nl/post/controlling-ws2812-and-ws2812b-using-only-stm32-spi/">Controlling WS2812(B) leds using STM32 HAL SPI</a> にあります。</p>
-<p>興味深いライブラリー間の比較情報が、<a href="https://blog.ja-ke.tech/2019/06/02/neopixel-performance.html">ESP32: FastLED vs. NeoPixelBus vs. NeoPixel Library</a>にあります。</p>
+<p>SPIインターフェースを使う際の詳細な実験情報が<a href="https://www.newinnovations.nl/post/controlling-ws2812-and-ws2812b-using-only-stm32-spi/">Controlling WS2812(B) leds using STM32 HAL SPI</a> にあります。</p>
+<p>興味深いライブラリー間の優劣比較情報が、<a href="https://blog.ja-ke.tech/2019/06/02/neopixel-performance.html">ESP32: FastLED vs. NeoPixelBus vs. NeoPixel Library</a>にあります。</p>
 <p>とりあえず人気あるFastLEDにフォーカスします。</p>
 <h2 id="digital-rgb-led駆動パルス電圧問題">Digital RGB LED駆動パルス電圧問題</h2>
 <p><a href="https://forums.adafruit.com/viewtopic.php?f=47&amp;t=173010">RGB LED (WS2812B)のドライブの電圧レベルは、本来5V CMOSロジック向け(Hi=3.5V, Lo=1.5V)なので、3.3VロジックでHigh条件側で確実にドライブするのは本来だと厳しい</a>。</p>
