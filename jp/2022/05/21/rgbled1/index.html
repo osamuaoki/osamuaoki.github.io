@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Digital RGB LED (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Digital RGB LED (1)</span></h1>
+
+<h3 class="date">Date:
+2022/05/21 (initial publish),
+2022/05/21 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/05/08/measure-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#よく使うdigital-rgb-ledチップ">よく使うDigital RGB LEDチップ</a></li>
+    <li><a href="#digital-rgb-led駆動パルス生成ソフト">Digital RGB LED駆動パルス生成ソフト</a></li>
+    <li><a href="#digital-rgb-led駆動パルス電圧問題">Digital RGB LED駆動パルス電圧問題</a></li>
+  </ul>
+</nav>
+
+<p>電子工作の基本の光り物の駆動が、単純なカラーLEDを直接電圧駆動するタイプから、MCUが組み込まれてデジタルコントロールの調色機能付のDigital RGB LEDとかNEOPIXEL LED等と呼ばれるものをデジタル信号ドライブするように変わってきました。その状況を調べました。</p>
+<h2 id="よく使うdigital-rgb-ledチップ">よく使うDigital RGB LEDチップ</h2>
+<table>
+<thead>
+<tr>
+<th>LED</th>
+<th>size</th>
+<th>VDD</th>
+<th>data rate</th>
+<th>signal wire</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WS2812B</td>
+<td>5mm x 5mm</td>
+<td>5V</td>
+<td>800 Kbps</td>
+<td>1</td>
+</tr>
+<tr>
+<td>WS2813</td>
+<td>5mm x 5mm</td>
+<td>5V</td>
+<td>800 Kbps</td>
+<td>2</td>
+</tr>
+<tr>
+<td>WS2815B</td>
+<td>5mm x 5mm</td>
+<td>12V</td>
+<td>800 Kbps</td>
+<td>1</td>
+</tr>
+<tr>
+<td>SK6812MINI-E</td>
+<td>3.2mm x 2.8mm</td>
+<td>5V</td>
+<td>800 Kbps</td>
+<td>1</td>
+</tr>
+</tbody>
+</table>
+<p>すべて800 Kbps で、1.2 us毎に１ビットのクロックです。</p>
+<p>WS2812B と WS2813の違いは、<a href="https://www.seeedstudio.com/blog/2019/02/14/ws2812b-vs-ws2813-addressable-rgb-led-strips-how-are-they-different/">WS2812B vs WS2813 Addressable RGB LED Strips – How are they different?</a> に詳しいです。</p>
+<p>以下では、WS2812B と SK6812MINI-Eにフォーカスします。</p>
+<h2 id="digital-rgb-led駆動パルス生成ソフト">Digital RGB LED駆動パルス生成ソフト</h2>
+<p>Digital RGB LED駆動パルス生成は、単純なMCUのループによるタイミング生成とDigital PIN のBit Bang操作という力技アプローチできます。<a href="https://github.com/adafruit/Adafruit_NeoPixel">Adafruit NeoPixel Library</a> (2.6K starts) がBit bangを使う代表例です。
+この他以下の連載記事に基づく、メモリー負荷の小さいという<a href="https://github.com/cpldcpu/light_ws2812/">light_ws2812</a> (871 stars) もどうもこのアプローチです。</p>
+<ul>
+<li><a href="https://cpldcpu.wordpress.com/2014/01/14/light_ws2812-library-v2-0-part-i-understanding-the-ws2812/">https://cpldcpu.wordpress.com/2014/01/14/light_ws2812-library-v2-0-part-i-understanding-the-ws2812/</a></li>
+<li><a href="https://cpldcpu.wordpress.com/2014/01/19/light_ws2812-library-v2-0/">https://cpldcpu.wordpress.com/2014/01/19/light_ws2812-library-v2-0/</a></li>
+<li><a href="https://cpldcpu.wordpress.com/2014/02/18/new-member-of-the-ws2812-family/">https://cpldcpu.wordpress.com/2014/02/18/new-member-of-the-ws2812-family/</a></li>
+</ul>
+<p>よりエレガントなDigital RGB LED駆動パルス生成法は、SPIインターフェースを使いMISO出力を引き出し接続します。<a href="https://github.com/FastLED/FastLED">FastLED</a> (5.3K stars) がこの代表例です。</p>
+<p>このSPIアプローチは、DMAや<a href="https://developer.arm.com/documentation/ddi0439/b/Programmers-Model/Bit-banding">bit banding</a>組み合わせると更に最適化できます。
+<a href="https://sites.google.com/site/hubmartin/arm/improved-stm32-ws2812b-library">Improved STM32 WS2812B DMA library</a> の記事にある、<a href="https://github.com/hubmartin/WS2812B_STM32F4">LowMEM ws2812b libraryシリーズ</a> (77 stars) 等がどうもこれに当たります。</p>
+<p>LEDをSPIを使ってCPU負荷時間を短くする高速ドライブの実験情報が<a href="https://www.newinnovations.nl/post/controlling-ws2812-and-ws2812b-using-only-stm32-spi/">Controlling WS2812(B) leds using STM32 HAL SPI</a> にあります。</p>
+<p>興味深いライブラリー間の比較情報が、<a href="https://blog.ja-ke.tech/2019/06/02/neopixel-performance.html">ESP32: FastLED vs. NeoPixelBus vs. NeoPixel Library</a>にあります。</p>
+<p>とりあえず人気あるFastLEDにフォーカスします。</p>
+<h2 id="digital-rgb-led駆動パルス電圧問題">Digital RGB LED駆動パルス電圧問題</h2>
+<p><a href="https://forums.adafruit.com/viewtopic.php?f=47&amp;t=173010">RGB LED (WS2812B)のドライブの電圧レベルは、本来5V CMOSロジック向け(Hi=3.5V, Lo=1.5V)なので、3.3VロジックでHigh条件側で確実にドライブするのは本来だと厳しい</a>。</p>
+<p>ただ、<a href="https://www.reddit.com/r/arduino/comments/cue3e8/ws2812b_on_33v_data_level_shifter_or_not/">新しいLEDだと3.3Vでの直接駆動でも動くらしい。</a>
+詳しい実状は、<a href="https://www.reddit.com/r/FastLED/comments/gku4j7/ws2812b_dataline_33v_or_5v/">WS2812b Data-line 3.3v or 5v??</a>を読んでもはっきりしていない。</p>
+<p>一度、「実際のRGB LED デバイスの駆動パルス電圧の許容範囲はどのくらいなのか？」は、手持ちの古いWS2812Bや、キーボード用に入手するSK6812のSMDデバイスで実験で確認しておきたい。さらに、電源ノイズの影響を押さえるパスコンの効果や、LEDの明るさも実際に確認したい。</p>
+<p>この駆動パルス電圧問題の回避策は以下が考えられる。</p>
+<ul>
+<li>正攻法：レベルシフト回路追加（1MOSFET+2R） &ndash; <a href="https://www.maximintegrated.com/en/design/technical-documents/app-notes/7/7106.html">HOW TO LEVEL SHIFT 1-WIRE SYSTEMS</a></li>
+<li>簡便法：１段目LEDにダイオード追加 &ndash; <a href="https://hackaday.com/2017/01/20/cheating-at-5v-ws2812-control-to-use-a-3-3v-data-line/">CHEATING AT 5V WS2812 CONTROL TO USE 3.3V DATA</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/05/08/measure-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
