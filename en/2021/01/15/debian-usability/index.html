@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/15 (initial publish),
-2021/08/28 (last update)
+2022/05/22 (last update)
 </h3>
 </div>
 
@@ -113,7 +113,12 @@ javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <li>SUPER-J: Anthy</li>
 <li>SUPER-K: Mozc</li>
 </ul>
-<p>See <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a></p>
+<p>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is ANTHY and if you want to use SUPER-j to switch to ANTHY, you need to set as:</p>
+<pre tabindex="0"><code>Name     InputMethod_0
+Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;
+Shortcut SUPER-j
+</code></pre><p>Please make sure to enter the above command in a single line.</p>
+<p>See <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a></p>
 <h3 id="keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</h3>
 <p>For Vim use:</p>
 <ul>
