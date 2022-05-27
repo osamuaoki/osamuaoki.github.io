@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>dgit cheatsheet | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">dgit cheatsheet</span></h1>
+
+<h3 class="date">Date:
+2022/05/27 (initial publish),
+2022/05/27 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/11/12/avrisp-alt/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#dgit-cheatsheet">dgit Cheatsheet</a></li>
+    <li><a href="#useful-links">Useful links</a></li>
+  </ul>
+</nav>
+
+<h2 id="dgit-cheatsheet">dgit Cheatsheet</h2>
+<p>Create new Debian packaging repository for salsa.debian.org as follows:</p>
+<pre tabindex="0"><code> $ git clone -o upstream $HTTPS_UPSTREAM_URL $REPO_NAME
+ $ git remote set-url --push upstream DONT_PUSH
+ $ git checkout -b debian/latest
+  ... debianize as dgit-maint-merge(7) workflow
+      Patch applied source tree (single-debian-patch, auto-commit)
+      Ensure to have d/changelog matching the latest upstream tag
+      Use &#34;git deborig&#34; to make upstream tarball
+ $ git deborig
+ $ sbuild # test build
+ $ git remote add origin $GIT_MY_URL
+ $ git push --set-upstream origin debian/latest
+  ... hack
+ $ sbuild # test build
+  ...
+ $ dgit sbuild
+ $ dgit push-source --deliberately-not-fast-forward
+ $ git push
+</code></pre><p>This repository can be obtained later and updated as:</p>
+<pre tabindex="0"><code> $ git clone $GIT_MY_URL
+ $ git remote add upstream $HTTPS_UPSTREAM_URL
+ $ git remote set-url --push upstream DONT_PUSH
+ $ git pull --no-rebase upstream $main
+  ... hack
+ $ git deborig
+ $ sbuild # test build
+  ...
+ $ dgit sbuild
+ $ dgit push-source
+ $ git push
+</code></pre><p>Here</p>
+<pre tabindex="0"><code> $HTTPS_UPSTREAM_URL   upstream repo (remote=upstream) URL for readonly access
+ $REPO_NAME            repo directory name
+ $GIT_MY_URL           my repo (remote=origin) URL for write access via SSH
+ $main = master|main   tracking branch name at remote=upstream
+ debian/latest         branch name used for Debian package (DEP-14)
+                       https://dep-team.pages.debian.net/deps/dep14/
+ sbuild                set up as debmake-doc suggests with piuparts/lintian
+</code></pre><p>To prevent accidental push to upstream, there are 2 strategies</p>
+<pre tabindex="0"><code> $ git remote set-url --push upstream DONT_PUSH
+</code></pre><pre tabindex="0"><code> $ git branch --unset-upstream [$main]
+</code></pre><p>To set origin without pushing with <code>--set-upstream</code></p>
+<pre tabindex="0"><code> $ git branch -u $new_origin $branch_name
+</code></pre><p>For upload trouble resolution, do one of the following</p>
+<pre tabindex="0"><code> $ dgit push --deliberately-not-fast-forward # first time ever
+ $ dgit push --overwrite                     # not descendant
+ $ dgit push --new                           # new in this suite
+</code></pre><p>The difference of PUSH operation</p>
+<p>Normally:</p>
+<pre tabindex="0"><code> $ dgit push-source # source only upload
+</code></pre><p>In some rare cases (security archive/newly added package)</p>
+<pre tabindex="0"><code> $ dgit push        # source + binary upload
+</code></pre><h2 id="useful-links">Useful links</h2>
+<ul>
+<li><a href="https://www.debian.org/doc/manuals/debmake-doc/ch03.en.html#sbuild-setup">debmake-doc: sbuild</a></li>
+<li><a href="/en/2019/02/11/dgit-workfow01/">dgit workflow</a></li>
+<li><a href="/en/2021/04/03/dev-01/">Development system (1)</a> &ndash; apt proxy, sbuild, schroot</li>
+<li><a href="/en/2021/04/09/dev-02/">Development system (2)</a> &ndash; local repo, gpg</li>
+<li><a href="/en/2021/08/27/dev-03/">Development system (3)</a> &ndash; shell python syntax checks</li>
+<li><a href="/jp/2020/04/02/git-fork/">GITを使うフォークの管理</a></li>
+<li><a href="/jp/2021/01/27/git-master-main/">GITデフォルトブランチの<code>main</code>への移行</a></li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2021/11/12/avrisp-alt/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
