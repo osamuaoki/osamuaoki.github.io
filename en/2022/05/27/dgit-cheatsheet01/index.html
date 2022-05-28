@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/05/27 (initial publish),
-2022/05/27 (last update)
+2022/05/28 (last update)
 </h3>
 </div>
 
@@ -111,9 +111,9 @@
 </code></pre><p>To set origin without pushing with <code>--set-upstream</code></p>
 <pre tabindex="0"><code> $ git branch -u $new_origin $branch_name
 </code></pre><p>For upload trouble resolution, do one of the following</p>
-<pre tabindex="0"><code> $ dgit push --deliberately-not-fast-forward # first time ever
+<pre tabindex="0"><code> $ dgit push --new                           # new in this suite
+ $ dgit push --deliberately-not-fast-forward # first time ever
  $ dgit push --overwrite                     # not descendant
- $ dgit push --new                           # new in this suite
 </code></pre><p>The difference of PUSH operation</p>
 <p>Normally:</p>
 <pre tabindex="0"><code> $ dgit push-source # source only upload
