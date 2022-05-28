@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/05/21 (initial publish),
-2022/05/21 (last update)
+2022/05/28 (last update)
 </h3>
 </div>
 
@@ -114,19 +114,20 @@
 <p>WS2812B と その改良型のWS2813の違いは、<a href="https://www.seeedstudio.com/blog/2019/02/14/ws2812b-vs-ws2813-addressable-rgb-led-strips-how-are-they-different/">WS2812B vs WS2813 Addressable RGB LED Strips – How are they different?</a> に詳しいです。</p>
 <p>以下では、WS2812B と SK6812MINI-Eにフォーカスします。</p>
 <h2 id="digital-rgb-led駆動パルス生成ソフト">Digital RGB LED駆動パルス生成ソフト</h2>
-<p>Digital RGB LED駆動パルス生成は、単純なMCUのループによるタイミング生成とDigital PIN のBit Bang操作という力技アプローチできます。<a href="https://github.com/adafruit/Adafruit_NeoPixel">Adafruit NeoPixel Library</a> (2.6K starts) がBit bangを使う代表例です。
+<p>Digital RGB LED駆動パルス生成は、単純なMCUのループによるタイミング生成とDigital PIN のBit Bang操作という力技アプローチできます。クロックの遅いAVR系では、<a href="https://github.com/adafruit/Adafruit_NeoPixel">Adafruit NeoPixel Library</a> (2.6K starts) がBit bangを使う代表例です。
 この他以下の連載記事に基づく、メモリー負荷の小さいという<a href="https://github.com/cpldcpu/light_ws2812/">light_ws2812</a> (871 stars) もどうもこのアプローチです。</p>
 <ul>
 <li><a href="https://cpldcpu.wordpress.com/2014/01/14/light_ws2812-library-v2-0-part-i-understanding-the-ws2812/">https://cpldcpu.wordpress.com/2014/01/14/light_ws2812-library-v2-0-part-i-understanding-the-ws2812/</a></li>
 <li><a href="https://cpldcpu.wordpress.com/2014/01/19/light_ws2812-library-v2-0/">https://cpldcpu.wordpress.com/2014/01/19/light_ws2812-library-v2-0/</a></li>
 <li><a href="https://cpldcpu.wordpress.com/2014/02/18/new-member-of-the-ws2812-family/">https://cpldcpu.wordpress.com/2014/02/18/new-member-of-the-ws2812-family/</a></li>
 </ul>
-<p>よりエレガントなDigital RGB LED駆動パルス生成法は、SPIインターフェースを使いMISO出力を引き出し接続します。<a href="https://github.com/FastLED/FastLED">FastLED</a> (5.3K stars) がこの代表例です。クロック信号は取り出さずに、SPIのデーター数ビットで１ビットとするので、信号線は１本です。</p>
+<p>クロックの早いARM系でのよりエレガントなDigital RGB LED駆動パルス生成法は、SPIインターフェースを使いMISO出力を引き出し接続します。<a href="https://github.com/FastLED/FastLED">FastLED</a> (5.3K stars) がこの代表例です。クロック信号は取り出さずに、SPIのデーター数ビットで１ビットとするので、信号線は１本です。
+一見ARDUINO対応のようですが、AVR系では無理なようで、ソース中にあるコードはコメントによると動かないようです。</p>
 <p>このSPIアプローチは、DMAや<a href="https://developer.arm.com/documentation/ddi0439/b/Programmers-Model/Bit-banding">bit banding</a>組み合わせると更に最適化できます。
 <a href="https://sites.google.com/site/hubmartin/arm/improved-stm32-ws2812b-library">Improved STM32 WS2812B DMA library</a> の記事にある、<a href="https://github.com/hubmartin/WS2812B_STM32F4">LowMEM ws2812b libraryシリーズ</a> (77 stars) 等がどうもこれに当たります。</p>
 <p>SPIインターフェースを使う際の詳細な実験情報が<a href="https://www.newinnovations.nl/post/controlling-ws2812-and-ws2812b-using-only-stm32-spi/">Controlling WS2812(B) leds using STM32 HAL SPI</a> にあります。</p>
 <p>興味深いライブラリー間の優劣比較情報が、<a href="https://blog.ja-ke.tech/2019/06/02/neopixel-performance.html">ESP32: FastLED vs. NeoPixelBus vs. NeoPixel Library</a>にあります。</p>
-<p>とりあえず人気あるFastLEDにフォーカスします。</p>
+<p>とりあえず、AVRではAdafruit、ARMではFastLEDにフォーカスします。</p>
 <h2 id="digital-rgb-led駆動パルス電圧問題">Digital RGB LED駆動パルス電圧問題</h2>
 <p><a href="https://forums.adafruit.com/viewtopic.php?f=47&amp;t=173010">RGB LED (WS2812B)のドライブの電圧レベルは、本来5V CMOSロジック向け(Hi=3.5V, Lo=1.5V)なので、3.3VロジックでHigh条件側で確実にドライブするのは本来だと厳しい</a>。</p>
 <p>ただ、<a href="https://www.reddit.com/r/arduino/comments/cue3e8/ws2812b_on_33v_data_level_shifter_or_not/">新しいLEDだと3.3Vでの直接駆動でも動くらしい。</a>
