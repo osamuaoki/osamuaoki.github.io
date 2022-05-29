@@ -102,7 +102,10 @@ organization = Acme Widgets Inc.
 server = 192.0.2.62
 port = 143
 file = &#34;payroll.dat&#34;
-</code></pre><h3 id="toml">TOML</h3>
+</code></pre><ul>
+<li><a href="https://www.boost.org/doc/libs/1_79_0/doc/html/program_options.html">Boost program option</a> (準基本ライブラリー)</li>
+</ul>
+<h3 id="toml">TOML</h3>
 <p>TOMLは、INIに似ている。String, Integer, Float, Boolean, Datetime, Array, Table等の書式のスペシフィケーションが明示規定されている。
 普通のINIより少し冗長。</p>
 <pre tabindex="0"><code># This is a TOML document.
@@ -138,7 +141,19 @@ hosts = [
   &#34;alpha&#34;,
   &#34;omega&#34;
 ]
-</code></pre><h3 id="json">JSON</h3>
+</code></pre><ul>
+<li><a href="https://github.com/marzer/tomlplusplus">https://github.com/marzer/tomlplusplus</a> (783 stars)
+<ul>
+<li>Header-only TOML config file parser and serializer for C++17.</li>
+</ul>
+</li>
+<li><a href="https://github.com/ToruNiina/toml11">https://github.com/ToruNiina/toml11</a> (588 stars)
+<ul>
+<li>toml11 is a C++11 (or later) header-only toml parser/encoder depending only on C++ standard library.</li>
+</ul>
+</li>
+</ul>
+<h3 id="json">JSON</h3>
 <p>ウエッブ関連でよく使われる書式。XMLやLispのS式(Symbolic expressions, S-expressions)ほどコンピューター側にに寄せていないが、冗長で人間がタイプし読むには少々難がある。
 コンピューターが解釈するオーバヘッドは少ない。</p>
 <pre tabindex="0"><code>{
@@ -165,7 +180,14 @@ hosts = [
   &#34;children&#34;: [],
   &#34;spouse&#34;: null
 }
-</code></pre><h3 id="yaml">YAML</h3>
+</code></pre><ul>
+<li><a href="https://github.com/nlohmann/json">https://github.com/nlohmann/json</a> (30.3k stars)
+<ul>
+<li>JSON for Modern C++</li>
+</ul>
+</li>
+</ul>
+<h3 id="yaml">YAML</h3>
 <p>YAML version 1.2 は、JSONに対して、上位互換。かなり読みやすい。</p>
 <pre tabindex="0"><code>receipt:     Oz-Ware Purchase Invoice
 date:        2012-08-06
@@ -201,6 +223,13 @@ specialDelivery:  &gt;
     man behind the curtain.
 </code></pre><p>分かりにくいのは、ブロックスカラーの開始が「|」だと改行保持、「&gt;」だと改行は1スペースに変換。</p>
 <p>また、繰り返されるノードは、「<code>&amp;</code>」を使いマークし、「<code>*</code>」を使い参照再利用できる。</p>
+<ul>
+<li><a href="https://github.com/jbeder/yaml-cpp">https://github.com/jbeder/yaml-cpp</a> (3.3k stars)
+<ul>
+<li>A YAML parser and emitter in C++</li>
+</ul>
+</li>
+</ul>
 <!-- raw HTML omitted -->
 
 
