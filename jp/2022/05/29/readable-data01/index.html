@@ -91,7 +91,8 @@
 <p>これらは、人間がエディターで触るのに比較的ハードルが低く、さらに多くのコンピューター言語で読み込み書き出しをするライブラリー化されサポートされているので、非常に使いやすいです。</p>
 <h2 id="可読データー表現例">可読データー表現例</h2>
 <h3 id="ini">INI</h3>
-<p>昔のWindowsの設定ファイルのデファクトスタンダード。２レベルまでのサポートという問題や、方言が多い問題がある。</p>
+<p>昔のWindowsの設定ファイルのデファクトスタンダード。２レベルまでのサポートという問題や、方言が多い問題がある。
+Python標準ライブラリーでサポートれる。</p>
 <pre tabindex="0"><code>; last modified 1 April 2001 by John Doe
 [owner]
 name = John Doe
@@ -104,10 +105,11 @@ port = 143
 file = &#34;payroll.dat&#34;
 </code></pre><ul>
 <li><a href="https://github.com/brofield/simpleini">About Cross-platform C++ library providing a simple API to read and write INI-style configuration files</a> (687 stars)</li>
+<li><a href="https://docs.python.org/3/library/configparser.html">Python3 standard lib: configparser — Configuration file parser</a></li>
 </ul>
 <h3 id="toml">TOML</h3>
 <p>TOMLは、INIに似ている。String, Integer, Float, Boolean, Datetime, Array, Table等の書式のスペシフィケーションが明示規定されている。
-普通のINIより少し冗長。</p>
+普通のINIより少し冗長。まもなく(Python 3.11~)Python標準ライブラリーでサポートれる。</p>
 <pre tabindex="0"><code># This is a TOML document.
 
 title = &#34;TOML Example&#34;
@@ -142,20 +144,27 @@ hosts = [
   &#34;omega&#34;
 ]
 </code></pre><ul>
-<li><a href="https://github.com/marzer/tomlplusplus">https://github.com/marzer/tomlplusplus</a> (783 stars)
+<li>
+<p><a href="https://github.com/marzer/tomlplusplus">https://github.com/marzer/tomlplusplus</a> (783 stars)</p>
 <ul>
 <li>Header-only TOML config file parser and serializer for C++17.</li>
 </ul>
 </li>
-<li><a href="https://github.com/ToruNiina/toml11">https://github.com/ToruNiina/toml11</a> (588 stars)
+<li>
+<p><a href="https://github.com/ToruNiina/toml11">https://github.com/ToruNiina/toml11</a> (588 stars)</p>
 <ul>
 <li>toml11 is a C++11 (or later) header-only toml parser/encoder depending only on C++ standard library.</li>
 </ul>
 </li>
+<li>
+<p><a href="https://docs.python.org/3.11/library/tomllib.html">Python 3.11 Standard lib. (new): tomllib — Parse TOML files</a></p>
+</li>
 </ul>
 <h3 id="json">JSON</h3>
-<p>ウエッブ関連でよく使われる書式。XMLやLispのS式(Symbolic expressions, S-expressions)ほどコンピューター側にに寄せていないが、冗長で人間がタイプし読むには少々難がある。
-コンピューターが解釈するオーバヘッドは少ない。</p>
+<p>ウエッブ関連でよく使われる書式。
+冗長で人間がタイプし読むには少々難がある。(XMLやLispのS式(Symbolic expressions, S-expressions)ほどコンピューター側にに寄せていない)
+コンピューターが解釈するオーバヘッドは少ない。
+Python標準ライブラリーでサポートれる。</p>
 <pre tabindex="0"><code>{
   &#34;firstName&#34;: &#34;John&#34;,
   &#34;lastName&#34;: &#34;Smith&#34;,
@@ -186,9 +195,11 @@ hosts = [
 <li>JSON for Modern C++</li>
 </ul>
 </li>
+<li><a href="https://docs.python.org/3/library/json.html">Python Stadard Lib.: json - JSON encoder and decoder</a></li>
 </ul>
 <h3 id="yaml">YAML</h3>
-<p>YAML version 1.2 は、JSONに対して、上位互換。かなり読みやすい。</p>
+<p>YAML version 1.2 は、JSONに対して、上位互換。かなり読みやすい。
+Python標準ライブラリーにはないが、PYPIにPyYAML(YAML 1.1 parser)やruamel.yaml(YAML 1.2 parser)がある。</p>
 <pre tabindex="0"><code>receipt:     Oz-Ware Purchase Invoice
 date:        2012-08-06
 customer:
@@ -221,12 +232,27 @@ specialDelivery:  &gt;
     Road to the Emerald City.
     Pay no attention to the
     man behind the curtain.
-</code></pre><p>分かりにくいのは、ブロックスカラーの開始が「|」だと改行保持、「&gt;」だと改行は1スペースに変換。</p>
+</code></pre><!-- raw HTML omitted -->
+<p>分かりにくいのは、ブロックスカラーの開始が「|」だと改行保持、「&gt;」だと改行は1スペースに変換。</p>
 <p>また、繰り返されるノードは、「<code>&amp;</code>」を使いマークし、「<code>*</code>」を使い参照再利用できる。</p>
 <ul>
 <li><a href="https://github.com/jbeder/yaml-cpp">https://github.com/jbeder/yaml-cpp</a> (3.3k stars)
 <ul>
 <li>A YAML parser and emitter in C++</li>
+</ul>
+</li>
+<li><a href="https://pypi.org/project/PyYAML/">PYPI: PyYAML 6.0</a>
+<ul>
+<li><a href="https://github.com/yaml/pyyaml">github: PyYAML</a> (1.8k stars)</li>
+<li><a href="https://github.com/yaml/pyyaml/issues/486">YAML 1.2 Core Schema support #486</a></li>
+</ul>
+</li>
+<li><a href="https://pypi.org/project/ruamel.yaml/">PYPI: ruamel.yaml</a></li>
+<li>Tutorials/Reviews
+<ul>
+<li><a href="https://dev.classmethod.jp/articles/getting-started-with-pyyaml-and-ruamel-yaml/">【PyYAML VS ruamel.yaml】PythonからYAMLファイルを触ってみた</a></li>
+<li><a href="https://python.land/data-processing/python-yaml">Python YAML: How to Load, Read, and Write YAML</a></li>
+<li><a href="https://realpython.com/python-yaml/">YAML: The Missing Battery in Python</a></li>
 </ul>
 </li>
 </ul>
