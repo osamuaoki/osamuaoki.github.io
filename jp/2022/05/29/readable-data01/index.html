@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>可読データー表現 (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">可読データー表現 (1)</span></h1>
+
+<h3 class="date">Date:
+2022/05/29 (initial publish),
+2022/05/29 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/05/21/rgbled1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#可読データー表現法のリスト">可読データー表現法のリスト</a></li>
+    <li><a href="#可読データー表現例">可読データー表現例</a>
+      <ul>
+        <li><a href="#ini">INI</a></li>
+        <li><a href="#toml">TOML</a></li>
+        <li><a href="#json">JSON</a></li>
+        <li><a href="#yaml">YAML</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>設定データーや設定に使うデーターベース等は、規則的な構造で可読化(エディターで閲覧編集)すると、既存ツールが使えて便利です。</p>
+<h2 id="可読データー表現法のリスト">可読データー表現法のリスト</h2>
+<p>振り返って見たら、 可読化されたデーターは結構色々使ってます。</p>
+<ul>
+<li>表データーの表現には<a href="https://ja.wikipedia.org/wiki/Comma-Separated_Values">CSV</a>や<a href="https://ja.wikipedia.org/wiki/Tab-Separated_Values">TSV (JA)</a> <a href="https://en.wikipedia.org/wiki/Tab-separated_values">TSV (EN)</a></li>
+<li>UNIXパスワードファイル(<code>/etc/passwd</code>)等には「:」を使う<a href="https://en.wikipedia.org/wiki/Delimiter-separated_values">DSV</a></li>
+<li>E-メールデーターで用いる<a href="https://datatracker.ietf.org/doc/html/rfc2822">RFC 822</a></li>
+<li>Debianのパッケージ設定で用いる<a href="https://manpages.debian.org/testing/dpkg-dev/deb822.5.en.html">DEB 822</a></li>
+<li>文書やデーターベース等の複雑な構造のデーターの記述には<a href="https://ja.wikipedia.org/wiki/Extensible_Markup_Language">XML (JA)</a> <a href="https://en.wikipedia.org/wiki/XML">XML (EN)</a></li>
+<li>Gitの設定ファイルは<a href="https://ja.wikipedia.org/wiki/INI%E3%83%95%E3%82%A1%E3%82%A4%E3%83%AB">INI (JA)</a> <a href="https://en.wikipedia.org/wiki/INI_file">INI (EN)</a></li>
+<li>Pythonのパッケージ設定の<code>pyproject.toml</code>には<a href="https://ja.wikipedia.org/wiki/TOML">TOML (JA)</a> <a href="https://en.wikipedia.org/wiki/TOML">TOML (EN)</a></li>
+<li>QMKのファームウエアーのビルド条件記述では<a href="https://ja.wikipedia.org/wiki/JavaScript_Object_Notation">JSON (JA)</a> <a href="https://en.wikipedia.org/wiki/JavaScript_Object_Notation">JSON (EN)</a></li>
+<li><a href="https://github.com/intercept/intercept">intercept</a> (キーボード入力の差替えツール)では<a href="https://ja.wikipedia.org/wiki/YAML">YAML (JA)</a> <a href="https://en.wikipedia.org/wiki/YAML">YAML (EN)</a></li>
+</ul>
+<p>ちょっと混乱してしまいそうです。XMLよりは読みやすく複雑なデーター記述ができながらコンピューター処理にも向いたフォーマットということで、「INI」, 「JSON」, 「TOML」, 「YAML」の４つの<a href="https://en.wikipedia.org/wiki/Serialization">データーシリアル化 (EN)</a> (<a href="https://ja.wikipedia.org/wiki/%E3%82%B7%E3%83%AA%E3%82%A2%E3%83%A9%E3%82%A4%E3%82%BA">データーシリアル化 (JA)</a>) 手法を見ていきます。</p>
+<p>これらは、人間がエディターで触るのに比較的ハードルが低く、さらに多くのコンピューター言語で読み込み書き出しをするライブラリー化されサポートされているので、非常に使いやすいです。</p>
+<h2 id="可読データー表現例">可読データー表現例</h2>
+<h3 id="ini">INI</h3>
+<p>昔のWindowsの設定ファイルのデファクトスタンダード。２レベルまでのサポートという問題や、方言が多い問題がある。</p>
+<pre tabindex="0"><code>; last modified 1 April 2001 by John Doe
+[owner]
+name = John Doe
+organization = Acme Widgets Inc.
+
+[database]
+; use IP address in case network name resolution is not working
+server = 192.0.2.62
+port = 143
+file = &#34;payroll.dat&#34;
+</code></pre><h3 id="toml">TOML</h3>
+<p>TOMLは、INIに似ている。String, Integer, Float, Boolean, Datetime, Array, Table等の書式のスペシフィケーションが明示規定されている。
+普通のINIより少し冗長。</p>
+<pre tabindex="0"><code># This is a TOML document.
+
+title = &#34;TOML Example&#34;
+
+[owner]
+name = &#34;Tom Preston-Werner&#34;
+dob = 1979-05-27T07:32:00-08:00 # First class dates
+
+[database]
+server = &#34;192.168.1.1&#34;
+ports = [ 8000, 8001, 8002 ]
+connection_max = 5000
+enabled = true
+
+[servers]
+
+  # Indentation (tabs and/or spaces) is allowed but not required
+  [servers.alpha]
+  ip = &#34;10.0.0.1&#34;
+  dc = &#34;eqdc10&#34;
+
+  [servers.beta]
+  ip = &#34;10.0.0.2&#34;
+  dc = &#34;eqdc10&#34;
+
+[clients]
+data = [ [&#34;gamma&#34;, &#34;delta&#34;], [1, 2] ]
+
+# Line breaks are OK when inside arrays
+hosts = [
+  &#34;alpha&#34;,
+  &#34;omega&#34;
+]
+</code></pre><h3 id="json">JSON</h3>
+<p>ウエッブ関連でよく使われる書式。XMLやLispのS式(Symbolic expressions, S-expressions)ほどコンピューター側にに寄せていないが、冗長で人間がタイプし読むには少々難がある。
+コンピューターが解釈するオーバヘッドは少ない。</p>
+<pre tabindex="0"><code>{
+  &#34;firstName&#34;: &#34;John&#34;,
+  &#34;lastName&#34;: &#34;Smith&#34;,
+  &#34;isAlive&#34;: true,
+  &#34;age&#34;: 27,
+  &#34;address&#34;: {
+    &#34;streetAddress&#34;: &#34;21 2nd Street&#34;,
+    &#34;city&#34;: &#34;New York&#34;,
+    &#34;state&#34;: &#34;NY&#34;,
+    &#34;postalCode&#34;: &#34;10021-3100&#34;
+  },
+  &#34;phoneNumbers&#34;: [
+    {
+      &#34;type&#34;: &#34;home&#34;,
+      &#34;number&#34;: &#34;212 555-1234&#34;
+    },
+    {
+      &#34;type&#34;: &#34;office&#34;,
+      &#34;number&#34;: &#34;646 555-4567&#34;
+    }
+  ],
+  &#34;children&#34;: [],
+  &#34;spouse&#34;: null
+}
+</code></pre><h3 id="yaml">YAML</h3>
+<p>YAML version 1.2 は、JSONに対して、上位互換。かなり読みやすい。</p>
+<pre tabindex="0"><code>receipt:     Oz-Ware Purchase Invoice
+date:        2012-08-06
+customer:
+    first_name:   Dorothy
+    family_name:  Gale
+
+items:
+    - part_no:   A4786
+      descrip:   Water Bucket (Filled)
+      price:     1.47
+      quantity:  4
+
+    - part_no:   E1628
+      descrip:   High Heeled &#34;Ruby&#34; Slippers
+      size:      8
+      price:     133.7
+      quantity:  1
+
+bill-to:  &amp;id001
+    street: |
+            123 Tornado Alley
+            Suite 16
+    city:   East Centerville
+    state:  KS
+
+ship-to:  *id001
+
+specialDelivery:  &gt;
+    Follow the Yellow Brick
+    Road to the Emerald City.
+    Pay no attention to the
+    man behind the curtain.
+</code></pre><p>分かりにくいのは、ブロックスカラーの開始が「|」だと改行保持、「&gt;」だと改行は1スペースに変換。</p>
+<p>また、繰り返されるノードは、「<code>&amp;</code>」を使いマークし、「<code>*</code>」を使い参照再利用できる。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/05/21/rgbled1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
