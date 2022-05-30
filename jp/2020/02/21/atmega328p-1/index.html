@@ -356,27 +356,31 @@ avrdude done.  Thank you.
 使うGCCを古い4.6のから、普通の最新版5.4.0にしたのが<a href="https://github.com/thseiler/embedded/issues/9">関係しているよう</a>ですね。
 道理で、Arduinoをアップグレードしたらbootloader書き込みが動かないのも無理ありません。小さなoptiboot_atmega8.hexを使うと書き込むことは書き込めましたが、これがうごくのかな？</p>
 <p><a href="https://github.com/Optiboot/optiboot">optiboot の github</a>から、<a href="https://github.com/MCUdude/MiniCore">MCUdude/MiniCore</a>を見つけました。
-19200bps、16MHzがあるので、それを使います。</p>
+115200bps、16MHzがあるので、それを使います。(19200bpsだと、何ちゃってARDUINO NANOとの接続が良くなかった)</p>
 <pre tabindex="0"><code> $ git clone https://github.com/MCUdude/MiniCore.git
  $ cd MiniCore
  $ cd avr/bootloaders/optiboot_flash/bootloaders/atmega328p/16000000L
- $ sudo avrdude -p m328p -c avrisp2 -D -U flash:w:optiboot_flash_atmega328p_UART0_19200_16000000L_B5.hex
+ $ avrdude -p m328p -c avrisp2  -U flash:w:optiboot_flash_atmega328p_UART0_115200_16000000L_B5.hex
+
 avrdude: AVR device initialized and ready to accept instructions
 
 Reading | ################################################## | 100% 0.00s
 
 avrdude: Device signature = 0x1e950f (probably m328p)
-avrdude: reading input file &#34;optiboot_flash_atmega328p_UART0_19200_16000000L_B5.hex&#34;
-avrdude: input file optiboot_flash_atmega328p_UART0_19200_16000000L_B5.hex auto detected as Intel Hex
+avrdude: NOTE: &#34;flash&#34; memory has been specified, an erase cycle will be performed
+         To disable this feature, specify the -D option.
+avrdude: erasing chip
+avrdude: reading input file &#34;optiboot_flash_atmega328p_UART0_115200_16000000L_B5.hex&#34;
+avrdude: input file optiboot_flash_atmega328p_UART0_115200_16000000L_B5.hex auto detected as Intel Hex
 avrdude: writing flash (32768 bytes):
 
 Writing | ################################################## | 100% 0.00s
 
 avrdude: 32768 bytes of flash written
-avrdude: verifying flash memory against optiboot_flash_atmega328p_UART0_19200_16000000L_B5.hex:
-avrdude: load data flash data from input file optiboot_flash_atmega328p_UART0_19200_16000000L_B5.hex:
-avrdude: input file optiboot_flash_atmega328p_UART0_19200_16000000L_B5.hex auto detected as Intel Hex
-avrdude: input file optiboot_flash_atmega328p_UART0_19200_16000000L_B5.hex contains 32768 bytes
+avrdude: verifying flash memory against optiboot_flash_atmega328p_UART0_115200_16000000L_B5.hex:
+avrdude: load data flash data from input file optiboot_flash_atmega328p_UART0_115200_16000000L_B5.hex:
+avrdude: input file optiboot_flash_atmega328p_UART0_115200_16000000L_B5.hex auto detected as Intel Hex
+avrdude: input file optiboot_flash_atmega328p_UART0_115200_16000000L_B5.hex contains 32768 bytes
 avrdude: reading on-chip flash data:
 
 Reading | ################################################## | 100% 0.00s
@@ -385,6 +389,8 @@ avrdude: verifying ...
 avrdude: 32768 bytes of flash verified
 
 avrdude: safemode: Fuses OK (E:FD, H:DE, L:FF)
+
+avrdude done.  Thank you.
 </code></pre><p>まあこれで原状回復です。</p>
 <p>FUSE設定は　<a href="https://eleccelerator.com/fusecalc/fusecalc.php">fusecalc</a>
 を見て下さい。以下の記事も参考にして下さい。</p>

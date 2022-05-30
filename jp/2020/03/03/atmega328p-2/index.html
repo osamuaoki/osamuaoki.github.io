@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/03/03 (initial publish),
-2021/07/19 (last update)
+2022/05/30 (last update)
 </h3>
 </div>
 
@@ -349,12 +349,26 @@ USBコネクター側の端子)のどれかを接地(ground)するとLEDが3秒�
 <p>ホストPCから開発ボードのUSBポートにUSBケーブルをつなぎ、
 USB-Serial変換器（Arduino UnoはFT232Rが、Arduino Nano互換機では
 CH340がその役割）経由でATmega328PのD0/D1ピンにシリアルにデーター
-を流し込みプログラムするには、上記のISP経由の書き込みに換え、
-以下をホストPCから実行します。</p>
-<pre tabindex="0"><code> $ sudo avrdude -p m328p -c arduino -P /dev/ttyUSB0 -U flash:w:blink.hex
+を流し込みプログラムするには、上記のISP経由の書き込み後、以下の手順でホストPCから操作します。</p>
+<p>まず、USBを差し込む前に以下を実行（これは、何ちゃってArduinoのCH340タイプ）</p>
+<pre tabindex="0"><code> $ journalctl -f
+</code></pre><p>そして、USBを差し込む。すると以下が表示される。</p>
+<pre tabindex="0"><code>...
+... : usb 4-2: new full-speed USB device number 30 using xhci_hcd
+... : usb 4-2: New USB device found, idVendor=2341, idProduct=0043, bcdDevice= 0.01
+... : usb 4-2: New USB device strings: Mfr=1, Product=2, SerialNumber=xxx
+... : usb 4-2: Manufacturer: Arduino (www.arduino.cc)
+... : usb 4-2: SerialNumber: xxxxxxxxxxxxxxxxxxxx
+... : cdc_acm 4-2:1.0: ttyACM0: USB ACM device
+...
+</code></pre><ul>
+<li>本物のArduino Uno (ATmega16u4でUSB接続)は、<code>ttyACM0</code>が作成されるデバイス名です。</li>
+<li>何ちゃってArduino Nano (CH341でUSB接続)は、<code>ttyUSB0</code>が作成されるデバイス名です。</li>
+</ul>
+<p>デバイス名を合わせてシリアル接続でのプログラム注入を実行します。</p>
+<pre tabindex="0"><code> $ sudo avrdude -p m328p -c arduino -P /dev/ttyACM0 -U flash:w:blink.hex
 </code></pre><p>この方がプログラム更新にはISPよりはるかに手軽です。</p>
-<p>もちろんFUSE操作などにはISPは不可欠です。</p>
-<p>TIP: 上記で使用したシリアルデバイス名「ttyUSB0」は<code>sudo dmesg</code>などとして探します。</p>
+<p>もちろんFUSE変更操作などにはISPは不可欠です。</p>
 <h2 id="makefile">Makefile</h2>
 <p>毎回シェルにコマンドを打ち込むのも面倒です。</p>
 <p>こういった基本的な開発環境では、<code>Makefile</code>を使いたいですよね。
