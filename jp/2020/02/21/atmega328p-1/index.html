@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2020/02/21 (initial publish),
-2021/12/12 (last update)
+2022/05/30 (last update)
 </h3>
 </div>
 
@@ -88,14 +88,14 @@ Uno等を使ってます。</p>
 <p>Debian GNU/Linux buster=stable 環境です。</p>
 <pre tabindex="0"><code>$ sudo apt install avrdude
 </code></pre><h2 id="接続">接続</h2>
-<p>AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、
+<p>純正のAVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、
 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。</p>
 <p>ちなみに、
 <a href="/en/2021/11/12/avrisp-alt/">昔TTL-232R-5V を使った自作プロクラマー</a>
-は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と
-PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、
-これはあとで考えましょう。</p>
-<p>ISPケーブルの赤線は１ピン側です。</p>
+は電源電圧供給していたので便利な面がありました。</p>
+<p>実は当方所有のAVRISP mkIIは、USB 電源 とPIN#1 をつないで電源供給ソースとする改造済みです。
+この<a href="/jp/2020/02/27/avrisp-mod-j/">AVRISP mkIIの改造</a>は、この次の記事です。　改造済みだと外部電源供給は不要ですが、電圧設定を間違いなくする必要があります。</p>
+<p>さて、ISPケーブルの赤線は１ピン側です。</p>
 <p>Uno <img src="/img/UNO-AVRISP2.jpg" alt="Uno ISPケーブル接続">
 Nano <img src="/img/NANO-AVRISP2.jpg" alt="Nano ISPケーブル接続"></p>
 <p>AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。</p>

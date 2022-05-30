@@ -633,9 +633,10 @@ ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoの
 プロクラマー これには、 昔TTL-232R-5V を使った自作プロクラマー を使うのも良いのですが、最近Atmel AVR ISP mkIIをただで人からもらったので それを使います。
 詳細な使用説明書（英文）： AVR ISP mkII User Guide
 ソフト環境 Debian GNU/Linux buster=stable 環境です。
-$ sudo apt install avrdude 接続 AVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
-ちなみに、 昔TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。 不便なのでAVRISP mkIIのUSB 電源 と PIN#1 をつなぎ、電源供給ソースとする等の改造をしたい気もしますが 、 これはあとで考えましょう。
-ISPケーブルの赤線は１ピン側です。
+$ sudo apt install avrdude 接続 純正のAVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
+ちなみに、 昔TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。
+実は当方所有のAVRISP mkIIは、USB 電源 とPIN#1 をつないで電源供給ソースとする改造済みです。 このAVRISP mkIIの改造は、この次の記事です。　改造済みだと外部電源供給は不要ですが、電圧設定を間違いなくする必要があります。
+さて、ISPケーブルの赤線は１ピン側です。
 Uno Nano AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。
 AVRISP mkII に赤いLEDが点滅は、ISPコネクター「逆差し」です。
 Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.</description>
