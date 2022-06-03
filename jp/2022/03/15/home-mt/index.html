@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/03/15 (initial publish),
-2022/05/07 (last update)
+2022/06/03 (last update)
 </h3>
 </div>
 
@@ -68,6 +68,7 @@
         <li><a href="#キーマップ-wide">キーマップ wide</a></li>
         <li><a href="#キーマップ-mini">キーマップ mini</a></li>
         <li><a href="#キーマップ-micro">キーマップ micro</a></li>
+        <li><a href="#キーマップ-pico">キーマップ pico</a></li>
       </ul>
     </li>
     <li><a href="#気づいたこと">気づいたこと</a>
@@ -75,6 +76,7 @@
         <li><a href="#キーキャップ">キーキャップ</a></li>
         <li><a href="#shiftctrlaltguiキーのホームポジションキー等による兼用化">「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションキー等による兼用化</a></li>
         <li><a href="#キー入力とtapping_term">キー入力と<code>TAPPING_TERM</code></a></li>
+        <li><a href="#ホームポジションmod用のパラメーター">ホームポジションMOD用のパラメーター</a></li>
         <li><a href="#縦スタガート">縦スタガート</a></li>
         <li><a href="#ソケットとled配置">ソケットとLED配置</a></li>
         <li><a href="#ダイオード">ダイオード</a></li>
@@ -183,7 +185,21 @@
 <p>小指は使いますが、普通のキーボードとの親和性も良い感じのキーマップになりました。</p>
 <p>CORNEタイプやHELIXタイプの分割キーボードとの親和性も良い感じのキーマップです。</p>
 <p>「QWFRTY」配列は、普通のキーボードに戻った際の違和感がありメリットを感じなかったので、「QWFRTY」配列レイヤーは削除しました。</p>
-<p>これで、メンタルストレスは総合的に一番なく、また指への物理負担もないレイアウトができたかなと思います。</p>
+<p>これで、メンタルストレスは総合的に一番なく、また指への物理負担もないレイアウトができたかなと思いました。</p>
+<h3 id="キーマップ-pico">キーマップ pico</h3>
+<p>後述の方法で普通のノートパソコンでほぼ一緒のキー配置を考えるのにはスペース付近のキー使用がいまいちです。</p>
+<p>そこで全ての指のポジション移動量を1U以下に押さえて、親指は左右にも動かさないスペースのみのキーマップpicoを用意しました。</p>
+<p>ポイントは、「V」キーをLTに使って、カーソールレイヤーにアクセスするようにしたことです。</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/pico/keymap.c">cgc56:pico</a></li>
+<li><a href="http://www.keyboard-layout-editor.com/#/gists/3d25936c9cb647a3ac70fa27179bf38e">KLE - pico keymap</a></li>
+</ul>
+<p><img src="/img/cgc56-pico.png" alt="cgc56:pico BL1, FL1/FL2)"></p>
+<ul>
+<li>左右どちらのスペースHOLDで、FL1レイヤー</li>
+<li>「V」HOLDで、FL2レイヤー</li>
+</ul>
+<p>かなりすっきりしました。</p>
 <h2 id="気づいたこと">気づいたこと</h2>
 <h3 id="キーキャップ">キーキャップ</h3>
 <p>ortholinear系はシンプルなDSAのキーキャップの方がISOのキーキャップより似合う気がします。</p>
@@ -192,11 +208,22 @@
 <p><a href="https://docs.qmk.fm/#/mod_tap">Mod-Tap</a>を使うことで、「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションによる兼用化がされ、無理に指を開ける指の動きがなくなりとても快適です。</p>
 <p>さらに、右手にマウスだと「Ctrl-X」「Ctrl-C」「Ctrl-V」「ZZ」は左手操作だけでは難しかったので、Mod-Tapによる「SHIFT」「CONTROL」へのアクセスをホームポジション以外にキーボードの両端にも追加しています。（右端は、追加のレイヤー切り替えに使うのも考えられますが…）</p>
 <p>設定されるキーに専用のMODEキーがなくなるので、その余裕をカーソールなどに使えるメリットもあります。LapTop PCのキーボードで使えるキー(TKLキーボード上のキーから、PauseとScrlLockを除く)だと、２レイヤー構成の42キーだけでアクセスを構成できます。</p>
+<p>ちなみに、「Ctrl-X」「Ctrl-C」「Ctrl-V」を「x」「c」「v」の長押しで入力する手もあるようですが、これは導入しませんでした。</p>
 <h3 id="キー入力とtapping_term">キー入力と<code>TAPPING_TERM</code></h3>
 <p>普通にキー入力する際には、キー入力を意識的に短くタップするように慣れる必要があります。最初は一生懸命押しているキーが入力されていないのか悩ましかったです。力を入れるとキーを離すのが遅くなり、結果的にホールドと判定されてました。</p>
 <p><code>TAPPING_TERM_PER_KEY</code>を有効にし、親指によるLAYER切り替えキーは基本<code>TAPPING_TERM</code>の75%の早めに、小指などの動きが悪い一部キーは基本<code>TAPPING_TERM</code>の200%の遅めになるように設定しました。</p>
 <p>全体のタイミング調整は<code>config.h</code>の<code>TAPPING_TERM</code>だけでできます。<code>config.h</code>中の<code>TAPPING_TERM</code>は標準と同じ200と設定しています。</p>
-<h3 id="縦スタガート">縦スタガート</h3>
+<h3 id="ホームポジションmod用のパラメーター">ホームポジションMOD用のパラメーター</h3>
+<p>デフォルトのMOD-TAP設定ではHOLD優先が有り、「as」等の隣のキーを早く舐めるように連続して打つと「S」となったりして違和感があります。
+<code>config.h</code>を以下の設定にして解決しました。</p>
+<pre tabindex="0"><code>/* Select MOD TAP to behave like default LAYER TAP (non-default) */
+/* This is needed for home position mod keymaps */
+#define IGNORE_MOD_TAP_INTERRUPT
+/* Both LAYER TAP and MOD TAP can be rolling-pressed within TAPPING_TERM */
+/* This is optional to accommodate the fast typer */
+/* This is enabled by default if TAPPING_TERM &gt;= 500 */
+#define PERMISSIVE_HOLD
+</code></pre><h3 id="縦スタガート">縦スタガート</h3>
 <p>確かに指は長さが違うので、縦スタガート設計に興味がありました。</p>
 <p>胸の前に自然に手を持ってきて手首に一番ストレスが無いようにキーボード上に置くと、実際にキーボードを押す際の自然なホームポジションは一直線でした。</p>
 <p>実際小指を置くキーの位置を１つ下げて試すと、すべての手の指はまっすぐ前に向くのですが手首が内側になり無理がかかり不快でした。</p>
@@ -209,6 +236,7 @@
 <p>ただしPCBの穴に埋め込まれたSK6812MINI-EのRGB光を使うPCBだと、いすれかのタイプを選ぶ必要があります。</p>
 <h3 id="ダイオード">ダイオード</h3>
 <p>black pill等だと片側<code>6x3_3</code>キー構成のスプリットキーボードまではNKROのPCB設計がダイオード無しで可能ですが、ダイオード無しだとOLEDや他の拡張しようと思っても対応できなくなります。</p>
+<p>でもnanoの片側<code>6x3_1</code>キー構成とするとかなり現実味が出ます。</p>
 <h3 id="choc-v1">choc v1</h3>
 <p>Kailhの正規店以外では見かけなくなってきている。<a href="https://shop.yushakobo.jp/">遊舎工房</a>が、意外とリーゾナブル。</p>
 <p>LowProfileのキースイッチは、<a href="https://deskthority.net/wiki/Kailh_PG1350_series">1350</a> タイプが標準で、使うならこれが好ましそう。</p>
