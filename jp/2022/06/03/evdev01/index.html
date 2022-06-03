@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>QMK (4) -- キーマップ改善 (タップとホールドの有効利用) | Goofing Osamu</title>
+    <title>PC付属キーマップ改善 | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,10 +32,10 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">QMK (4) &ndash; キーマップ改善 (タップとホールドの有効利用)</span></h1>
+<h1><span class="title">PC付属キーマップ改善</span></h1>
 
 <h3 class="date">Date:
-2022/03/15 (initial publish),
+2022/06/03 (initial publish),
 2022/06/03 (last update)
 </h3>
 </div>
@@ -47,11 +47,11 @@
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/jp/2022/03/06/blackpill-3/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/jp/2022/05/29/readable-data01/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/jp/2022/04/02/joystick/">Next Post</a></td>
+  <td align="right" width="33%"><a href="#">***</a></td>
   
   </tr>
   </tbody>
@@ -61,7 +61,7 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#状況">状況</a></li>
+    <li><a href="#キーボード状況">キーボード状況</a></li>
     <li><a href="#キーマップ">キーマップ</a>
       <ul>
         <li><a href="#キーマップ-osamu">キーマップ osamu</a></li>
@@ -88,16 +88,17 @@
   </ul>
 </nav>
 
-<h2 id="状況">状況</h2>
+<h2 id="キーボード状況">キーボード状況</h2>
+<p>確かにQMKを使うと自由にキーマップが構成でき</p>
 <p>QMKを使う<a href="https://github.com/osamuaoki/cg56">cgc56やcgg56というQMKを利用したキーボード</a>等を使って、色々試して気づいたり考えたことを以下に記します。</p>
 <ul>
 <li>メンタルストレス無く、フィジカルストレスの小さい指の動きが少ないキーマップが欲しい。
 <ul>
-<li>親指がカバーするのは、横に並ぶキーが少ないのが望ましい</li>
+<li>親指がカバーするのは、横に並ぶ２キーが望ましい (英語専用なら１つでも可能は可能。動きとしては３つまでは可能だが、PCBが大きくなる)</li>
 <li>人差し指は縦の動きで２列カバーする。</li>
 <li>他の指は縦１列の動き以外はしない。</li>
 <li>「QWERTY」は当分メインのキーマップのベース。</li>
-<li>「QWFRTY」はローマ字入力用オプションの検討中キーマップ　（→　結局やめた）。</li>
+<li>「QWFRTY」はローマ字入力用オプションの検討中キーマップ。</li>
 </ul>
 </li>
 <li>高速打鍵性自体は私の目指す所では無い。</li>
@@ -136,9 +137,7 @@
 </ul>
 <p>これで端のキー（特に下の角のキー）を基本使わ無くてもよくなるので、<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、手首へのストレスが下げられています。</p>
 <p>一番下の４つの親指キーは、<code>LT()</code>機能を使って、４つあるTEMPORARY LAYER選択操作に加え、１２までのよくアクセスする非アルファベットキーの入力ができるようにしています。</p>
-<p><a href="https://docs.qmk.fm/#/feature_auto_shift?id=retro-shift">Retro Shift</a>や<a href="https://docs.qmk.fm/#/feature_auto_shift?id=configuring-auto-shift">Auto Shift</a>を有効にしていません。</p>
-<p><a href="https://docs.qmk.fm/#/tap_hold?id=retro-tapping">Retro Tapping</a>も有効にしていません。これは副作用がきつい。</p>
-<p>あとで気づいたのですが、<a href="https://precondition.github.io/home-row-mods">A guide to home row mods</a>はこの手の設定が上手く説明されていました。</p>
+<p><a href="https://docs.qmk.fm/#/feature_auto_shift?id=retro-shift">Retro Shift</a>を有効にしていません。</p>
 <p>Thumb（親指）キーで押している際に１時的に有効化する一時レイヤーは実質２つで、横3列の３０物理キーで９０のキーがカバーできます。<code>MT()</code>機能を上手につかえばThumbキーは２つでもレイヤー実現に充分です。ただ、押しやすさと、<code>LT()</code>に加え<code>MT()</code>まで使うのを避けるために、各レイヤーを左右別にして４レイヤーとして打ちやすくレスポンスよくしています。</p>
 <ul>
 <li>Thumbキーを押している側か最初に長押ししたホームポジションのA行のキーはモードキーとなります。</li>
@@ -198,7 +197,7 @@
 </ul>
 <p><img src="/img/cgc56-pico.png" alt="cgc56:pico BL1, FL1/FL2)"></p>
 <ul>
-<li>左右どちらのスペースHOLDで、FL1レイヤー(2レイヤー化は敢えてしないことにしました)</li>
+<li>左右どちらのスペースHOLDで、FL1レイヤー</li>
 <li>「V」HOLDで、FL2レイヤー</li>
 </ul>
 <p>かなりすっきりしました。</p>
@@ -225,8 +224,7 @@
 /* This is optional to accommodate the fast typer */
 /* This is enabled by default if TAPPING_TERM &gt;= 500 */
 #define PERMISSIVE_HOLD
-</code></pre><p>タッピング関係は、<a href="https://docs.qmk.fm/#/tap_hold?id=retro-tapping">Tap-Hold Configuration Options</a>の時間図をよく読む必要があります。</p>
-<h3 id="縦スタガート">縦スタガート</h3>
+</code></pre><h3 id="縦スタガート">縦スタガート</h3>
 <p>確かに指は長さが違うので、縦スタガート設計に興味がありました。</p>
 <p>胸の前に自然に手を持ってきて手首に一番ストレスが無いようにキーボード上に置くと、実際にキーボードを押す際の自然なホームポジションは一直線でした。</p>
 <p>実際小指を置くキーの位置を１つ下げて試すと、すべての手の指はまっすぐ前に向くのですが手首が内側になり無理がかかり不快でした。</p>
@@ -270,11 +268,11 @@
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/jp/2022/03/06/blackpill-3/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/jp/2022/05/29/readable-data01/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/jp/2022/04/02/joystick/">Next Post</a></td>
+  <td align="right" width="33%"><a href="#">***</a></td>
   
   </tr>
   </tbody>
