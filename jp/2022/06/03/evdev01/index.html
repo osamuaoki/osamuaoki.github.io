@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PC付属キーマップ改善 | Goofing Osamu</title>
+    <title>PC付属キーマップ改善準備 | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,7 +32,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">PC付属キーマップ改善</span></h1>
+<h1><span class="title">PC付属キーマップ改善準備</span></h1>
 
 <h3 class="date">Date:
 2022/06/03 (initial publish),
@@ -62,205 +62,75 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#キーボード状況">キーボード状況</a></li>
-    <li><a href="#キーマップ">キーマップ</a>
-      <ul>
-        <li><a href="#キーマップ-osamu">キーマップ osamu</a></li>
-        <li><a href="#キーマップ-wide">キーマップ wide</a></li>
-        <li><a href="#キーマップ-mini">キーマップ mini</a></li>
-        <li><a href="#キーマップ-micro">キーマップ micro</a></li>
-        <li><a href="#キーマップ-pico">キーマップ pico</a></li>
-      </ul>
-    </li>
-    <li><a href="#気づいたこと">気づいたこと</a>
-      <ul>
-        <li><a href="#キーキャップ">キーキャップ</a></li>
-        <li><a href="#shiftctrlaltguiキーのホームポジションキー等による兼用化">「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションキー等による兼用化</a></li>
-        <li><a href="#キー入力とtapping_term">キー入力と<code>TAPPING_TERM</code></a></li>
-        <li><a href="#ホームポジションmod用のパラメーター">ホームポジションMOD用のパラメーター</a></li>
-        <li><a href="#縦スタガート">縦スタガート</a></li>
-        <li><a href="#ソケットとled配置">ソケットとLED配置</a></li>
-        <li><a href="#ダイオード">ダイオード</a></li>
-        <li><a href="#choc-v1">choc v1</a></li>
-        <li><a href="#メモリー使用量">メモリー使用量</a></li>
-        <li><a href="#今後のmcuプラットフォーム候補">今後のMCUプラットフォーム候補</a></li>
-      </ul>
-    </li>
   </ul>
 </nav>
 
 <h2 id="キーボード状況">キーボード状況</h2>
-<p>確かにQMKを使うと自由にキーマップが構成でき</p>
-<p>QMKを使う<a href="https://github.com/osamuaoki/cg56">cgc56やcgg56というQMKを利用したキーボード</a>等を使って、色々試して気づいたり考えたことを以下に記します。</p>
+<p>確かにQMKを使うと<a href="/jp/2022/03/15/home-mt/">自由にキーマップ</a>が構成でき、動きの少ない手や指にやさしいタイピングができます。</p>
+<p>ただ、PC付属キーキーボードででも、同じように<a href="https://precondition.github.io/home-row-mods">HOME ROW MOD</a>等ができないかと言う気になります。</p>
+<p><a href="https://gitlab.com/interception/linux/tools">interception-tools</a>を利用し構成する可能性としてはありますが、まだ例が見当たりません。確かに<code>evdev</code>デバイスを通るデーターをフィルター変換で実現するという発想はありです。</p>
+<p>ただ、正直分かりにくいので、まず読みやすいPythonの<a href="https://gitlab.com/wsha/chorded_keymap">chorded_keymap</a>を見ました。実際にevdevを通るデーターの実態がよく分からなかったので、この中のプログラムをベースに<a href="https://github.com/osamuaoki/osamu-utils/blob/main/print_kbd_event">データーダンプするユーティリティー</a>を作りました。</p>
+<p>確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで実態がよく分かりました。</p>
+<p>この出力は以下です。</p>
+<pre tabindex="0"><code> 12577.98: MSC SCAN 0xcb / KEY LEFT → / SYN REPORT 0
+ 12577.996: MSC SCAN 0xcb / KEY LEFT ↑ / SYN REPORT 0
+ 12578.431: MSC SCAN 0xcd / KEY RIGHT ↓ / SYN REPORT 0
+ 12578.508: MSC SCAN 0xcd / KEY RIGHT ↑ / SYN REPORT 0
+ 12578.811: MSC SCAN 0xe / KEY BACKSPACE ↓ / SYN REPORT 0
+ 12578.878: MSC SCAN 0xe / KEY BACKSPACE ↑ / SYN REPORT 0
+ 12579.346: MSC SCAN 0x11 / KEY W ↓ / SYN REPORT 0
+ 12579.439: MSC SCAN 0x11 / KEY W ↑ / SYN REPORT 0
+ 12579.616: MSC SCAN 0x18 / KEY O ↓ / SYN REPORT 0
+ 12579.69: MSC SCAN 0x18 / KEY O ↑ / SYN REPORT 0
+ 12579.898: MSC SCAN 0x1c / KEY ENTER ↓ / SYN REPORT 0
+ 12579.976: MSC SCAN 0x1c / KEY ENTER ↑ / SYN REPORT 0
+ 12580.125: MSC SCAN 0x1f / KEY S ↓ / SYN REPORT 0
+ 12580.226: MSC SCAN 0x1f / KEY S ↑ / SYN REPORT 0
+ 12580.423: MSC SCAN 0x23 / KEY H ↓ / SYN REPORT 0
+ 12580.494: MSC SCAN 0x23 / KEY H ↑ / SYN REPORT 0
+ 12580.678: MSC SCAN 0x17 / KEY I ↓ / SYN REPORT 0
+ 12580.752: MSC SCAN 0x17 / KEY I ↑ / SYN REPORT 0
+ 12581.067: MSC SCAN 0x14 / KEY T ↓ / SYN REPORT 0
+ 12581.152: MSC SCAN 0x14 / KEY T ↑ / SYN REPORT 0
+ 12581.216: MSC SCAN 0x1e / KEY A ↓ / SYN REPORT 0
+ 12581.316: MSC SCAN 0x1e / KEY A ↑ / SYN REPORT 0
+ 12581.892: MSC SCAN 0x25 / KEY K ↓ / SYN REPORT 0
+ 12581.974: MSC SCAN 0x25 / KEY K ↑ / SYN REPORT 0
+ 12582.155: MSC SCAN 0x18 / KEY O ↓ / SYN REPORT 0
+ 12582.221: MSC SCAN 0x18 / KEY O ↑ / SYN REPORT 0
+ 12582.454: MSC SCAN 0x14 / KEY T ↓ / SYN REPORT 0
+ 12582.525: MSC SCAN 0x14 / KEY T ↑ / SYN REPORT 0
+ 12582.645: MSC SCAN 0x18 / KEY O ↓ / SYN REPORT 0
+ 12582.722: MSC SCAN 0x18 / KEY O ↑ / SYN REPORT 0
+ 12582.854: MSC SCAN 0x20 / KEY D ↓ / SYN REPORT 0
+ 12582.94: MSC SCAN 0x20 / KEY D ↑ / SYN REPORT 0
+ 12583.037: MSC SCAN 0x12 / KEY E ↓ / SYN REPORT 0
+ 12583.121: MSC SCAN 0x12 / KEY E ↑ / SYN REPORT 0
+ 12583.89: MSC SCAN 0x1c / KEY ENTER ↓ / SYN REPORT 0
+ 12584.01: MSC SCAN 0x1c / KEY ENTER ↑ / SYN REPORT 0
+ 12585.08: MSC SCAN 0xcd / KEY RIGHT ↓ / SYN REPORT 0
+ 12585.345: MSC SCAN 0xcd / KEY RIGHT → / SYN REPORT 0
+ 12585.378: MSC SCAN 0xcd / KEY RIGHT → / SYN REPORT 0
+ 12585.404: MSC SCAN 0xcd / KEY RIGHT → / SYN REPORT 0
+ 12585.436: MSC SCAN 0xcd / KEY RIGHT → / SYN REPORT 0
+ 12585.466: MSC SCAN 0xcd / KEY RIGHT → / SYN REPORT 0
+ 12585.497: MSC SCAN 0xcd / KEY RIGHT → / SYN REPORT 0
+ 12585.525: MSC SCAN 0xcd / KEY RIGHT → / SYN REPORT 0
+ 12585.555: MSC SCAN 0xcd / KEY RIGHT → / SYN REPORT 0
+</code></pre><p>気づいたことは:</p>
 <ul>
-<li>メンタルストレス無く、フィジカルストレスの小さい指の動きが少ないキーマップが欲しい。
-<ul>
-<li>親指がカバーするのは、横に並ぶ２キーが望ましい (英語専用なら１つでも可能は可能。動きとしては３つまでは可能だが、PCBが大きくなる)</li>
-<li>人差し指は縦の動きで２列カバーする。</li>
-<li>他の指は縦１列の動き以外はしない。</li>
-<li>「QWERTY」は当分メインのキーマップのベース。</li>
-<li>「QWFRTY」はローマ字入力用オプションの検討中キーマップ。</li>
+<li>キーを押すと、プレス(↓)となる。</li>
+<li>キーを長押しすると、250msぐらいで、リピート(→)となる。リピートは25ms毎ぐらい。</li>
+<li>キーを離すと、リリース(↑)となる。</li>
+<li>スキャンコードは普通使われない。</li>
+<li><code>SYN REPORT 0</code>のおまじないが必ずある。</li>
 </ul>
-</li>
-<li>高速打鍵性自体は私の目指す所では無い。</li>
-<li>キーのピッチをきっちり確保するにはNC工具での工作が不可欠。
-<ul>
-<li>NCとしてはPCBが安いし、PCBを注文する際に10cm角に収めると更に安い。</li>
-</ul>
-</li>
-<li>統計結果から、記号では「<code>_</code> 」へのアクセスには要配慮。</li>
-<li>14&quot; のノートパソコン(Thinkpad T14 Gen1)に無いキーの優先度は低いと割り切る。
-<ul>
-<li>CURSORキーは重要なので、アクセス性は重要で、片手での操作性も重要。</li>
-<li>TENキーはそれほど使用上重要では無いが、組み込むなら片手での操作性に配慮重要。</li>
-<li>QMKのMOUSEキーはそれほど便利では無いので、組み込む際のアクセス性は重要で無い。</li>
-</ul>
-</li>
-</ul>
-<p>QMKではタップとホールドで出力キーが違う設定できますが、タップの入力文字の連続入力がカチカチ連打だと大変な気がしていました。</p>
-<p>実際には、一度タップ直後の再タップ時にホールドするとタップに対応する文字の長押しになるようで、OS側が連打処理してくれ使い勝手良好です。</p>
-<p>あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、タップとホールドを上手に使えば悪くない感じです。</p>
-<h2 id="キーマップ">キーマップ</h2>
-<p>最初にトライしたレイヤー移動とモード変更機能のすべてを親指のキーに任せるアプローチには無理がありました。</p>
-<h3 id="キーマップ-osamu">キーマップ osamu</h3>
-<p>そこで30%キーボード系の<a href="https://github.com/qmk/qmk_firmware/tree/master/keyboards/ferris">ferris</a>のキーマップをヒントにし、「基本的に使う部分」を、左<code>5x3_2</code>キーと右<code>5x3_2</code>キーと限定し、親指はレイヤー移動のみにしたキーマップを組むのがフィジカルストレス低減によさそうです。</p>
-<pre tabindex="0"><code> │***│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │***│
- │***│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│***│
- │***│ Z │ X │ C │ V │ B │***│***│ N │ M │ , │ . │ / │***│
- │***│***│***│***│Es3│Sp1│***│***│Sp2│En4│***│***│***│***│
-</code></pre><p>ここのポイントは、人差し指〜小指のホームポジションのA行のキーに関して、通常の文字キー入力とモードキー(LSFT, LCTL, LALT, LGUI, RALT)入力を、<code>MT()</code>機能をタップとホールドで使い分け、両方ができるようにしています。このおかげで、アクセスのよい自然なポジションでタイプできます。</p>
-<ul>
-<li>人差し指内側1つ隣: RALT (AltGr)</li>
-<li>人差し指: LGUI</li>
-<li>中指: LALT</li>
-<li>薬指: LCTL</li>
-<li>小指: LSFT</li>
-</ul>
-<p>これで端のキー（特に下の角のキー）を基本使わ無くてもよくなるので、<a href="https://salicylic-acid3.hatenablog.com/entry/key-layout">Alice配列</a>にしなくとも、手首へのストレスが下げられています。</p>
-<p>一番下の４つの親指キーは、<code>LT()</code>機能を使って、４つあるTEMPORARY LAYER選択操作に加え、１２までのよくアクセスする非アルファベットキーの入力ができるようにしています。</p>
-<p><a href="https://docs.qmk.fm/#/feature_auto_shift?id=retro-shift">Retro Shift</a>を有効にしていません。</p>
-<p>Thumb（親指）キーで押している際に１時的に有効化する一時レイヤーは実質２つで、横3列の３０物理キーで９０のキーがカバーできます。<code>MT()</code>機能を上手につかえばThumbキーは２つでもレイヤー実現に充分です。ただ、押しやすさと、<code>LT()</code>に加え<code>MT()</code>まで使うのを避けるために、各レイヤーを左右別にして４レイヤーとして打ちやすくレスポンスよくしています。</p>
-<ul>
-<li>Thumbキーを押している側か最初に長押ししたホームポジションのA行のキーはモードキーとなります。</li>
-<li>Thumbキーのホームポジションを押すと、ファンクションキー・数字・キーボード端の記号のレイヤー(FL1, FL2)です。</li>
-<li>Thumbキーの隣のポジションを押すと、カソールキー・固定レイヤー移動キーのレイヤー(FL3, FL4)です。</li>
-</ul>
-<p>上記で触れた１時レイヤー以外に、レイヤー移動後固定される固定レイヤーが4つあり、カーソル・テンキー・マウスキー・キーボード自体の設定レイヤーとなります。</p>
-<p>上記では分かり易い様に、cgc56上の「基本的に使う部分」以外のキーの説明を省略しました。もちろんこれらも使えるようになっています。</p>
-<ul>
-<li>従来のキーボード両端の小指で操作するキー類や最下行のキー類には、旧来のキーボードと同様の機能を与え、学習障壁を下げるようにします。(小指の操作は嫌ですので、慣れたらなるべく使いません。)</li>
-<li>中心部のキー類には、狭いので一時レイヤーに押し込んだキーボード端の記号とか<code>F11</code>や<code>F12</code>、ダイナミックマクロ関連キー、カーソール関連キーのアクセスを改善するために重複配置します。</li>
-</ul>
-<p>こうしてできたキーマップの詳細の最新の状況は、私の以下のQMKソースを参照:</p>
-<ul>
-<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/osamu/keymap.c">cgc56:osamu</a></li>
-<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgg56/keymaps/osamu/keymap.c">cgg56:osamu</a></li>
-</ul>
-<p>これらは通常キーボードからの移行によく配慮されていてなかなか良い感じです。ただほとんど使わないキーがある一方で、特に片手マウスでのカーソール関連への少々アクセスが面倒でした。</p>
-<h3 id="キーマップ-wide">キーマップ wide</h3>
-<p>そこで、上記のデーターはそのままで、別に左右のアルファベットの間隔を更に広げ、カーソールキーに真ん中で直接アクセスできるようにし簡素化を考えました。</p>
-<p>キーマップwideを用意しました。</p>
-<ul>
-<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/wide/keymap.c">cgc56:wide</a></li>
-<li><a href="http://www.keyboard-layout-editor.com/#/gists/9d8227f51f5da1dcf325c8d2e4275bba">KLE &ndash; wide keymap</a></li>
-</ul>
-<p><img src="/img/cgc56-wide.png" alt="cgc56:wide BL1, FL2/FL3 in QWERTY)"></p>
-<p>キーマップ中の左上文字がFn1~F4の何れも押さない場合、右下文字がFn1かF2のいずれかが押された場合に入力されます。</p>
-<h3 id="キーマップ-mini">キーマップ mini</h3>
-<p>その後wideを使ってみて、ちょっと真ん中のキーにアクセスしにくいのが気になりました。</p>
-<p>レイヤー数を減らしたかったので、更に簡素化したキーマップminiを用意しました。</p>
-<ul>
-<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/mini/keymap.c">cgc56:mini</a></li>
-<li><a href="http://www.keyboard-layout-editor.com/#/gists/a4cbabebb886c175ff4c99419e462205">KLE - mini keymap</a></li>
-</ul>
-<p><img src="/img/cgc56-mini.png" alt="cgc56:mini BL1, FL2/FL3 in QWERTY)"></p>
-<p>30%系のキーマップはとにかくホームからほとんど手が動かないので悪くないです。ただ、タップをする際にはキーを意識的に離す必要があります。</p>
-<p>(FnレイヤーでのMODEキーが交差打鍵必須の時には、片手打ち不可の問題がありましたが、FnレイヤーもMOD-TAP化したので、その問題はほぼ解消しました。)</p>
-<h3 id="キーマップ-micro">キーマップ micro</h3>
-<p>その後miniを使ってみて、普通のキーボードに戻った際にリターン等で違和感がありました。</p>
-<p>全ての指のポジション移動量を1U以下に押さえて、普通のキーボードに近いキーマップmicroを用意しました。</p>
-<ul>
-<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/micro/keymap.c">cgc56:micro</a></li>
-<li><a href="http://www.keyboard-layout-editor.com/#/gists/62d9362ce84fa578c4617f9501bba1cf">KLE - micro keymap</a></li>
-</ul>
-<p><img src="/img/cgc56-micro.png" alt="cgc56:micro BL1, FL2/FL3)"></p>
-<p>小指は使いますが、普通のキーボードとの親和性も良い感じのキーマップになりました。</p>
-<p>CORNEタイプやHELIXタイプの分割キーボードとの親和性も良い感じのキーマップです。</p>
-<p>「QWFRTY」配列は、普通のキーボードに戻った際の違和感がありメリットを感じなかったので、「QWFRTY」配列レイヤーは削除しました。</p>
-<p>これで、メンタルストレスは総合的に一番なく、また指への物理負担もないレイアウトができたかなと思いました。</p>
-<h3 id="キーマップ-pico">キーマップ pico</h3>
-<p>後述の方法で普通のノートパソコンでほぼ一緒のキー配置を考えるのにはスペース付近のキー使用がいまいちです。</p>
-<p>そこで全ての指のポジション移動量を1U以下に押さえて、親指は左右にも動かさないスペースのみのキーマップpicoを用意しました。</p>
-<p>ポイントは、「V」キーをLTに使って、カーソールレイヤーにアクセスするようにしたことです。</p>
-<ul>
-<li><a href="https://github.com/osamuaoki/qmk_firmware/blob/osamu1/keyboards/cgc56/keymaps/pico/keymap.c">cgc56:pico</a></li>
-<li><a href="http://www.keyboard-layout-editor.com/#/gists/3d25936c9cb647a3ac70fa27179bf38e">KLE - pico keymap</a></li>
-</ul>
-<p><img src="/img/cgc56-pico.png" alt="cgc56:pico BL1, FL1/FL2)"></p>
-<ul>
-<li>左右どちらのスペースHOLDで、FL1レイヤー</li>
-<li>「V」HOLDで、FL2レイヤー</li>
-</ul>
-<p>かなりすっきりしました。</p>
-<h2 id="気づいたこと">気づいたこと</h2>
-<h3 id="キーキャップ">キーキャップ</h3>
-<p>ortholinear系はシンプルなDSAのキーキャップの方がISOのキーキャップより似合う気がします。</p>
-<p>親指のホームポジションはキーキャップの角を丸めるといい感じになっています。</p>
-<h3 id="shiftctrlaltguiキーのホームポジションキー等による兼用化">「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションキー等による兼用化</h3>
-<p><a href="https://docs.qmk.fm/#/mod_tap">Mod-Tap</a>を使うことで、「Shift」「Ctrl」「Alt」「Gui」キーのホームポジションによる兼用化がされ、無理に指を開ける指の動きがなくなりとても快適です。</p>
-<p>さらに、右手にマウスだと「Ctrl-X」「Ctrl-C」「Ctrl-V」「ZZ」は左手操作だけでは難しかったので、Mod-Tapによる「SHIFT」「CONTROL」へのアクセスをホームポジション以外にキーボードの両端にも追加しています。（右端は、追加のレイヤー切り替えに使うのも考えられますが…）</p>
-<p>設定されるキーに専用のMODEキーがなくなるので、その余裕をカーソールなどに使えるメリットもあります。LapTop PCのキーボードで使えるキー(TKLキーボード上のキーから、PauseとScrlLockを除く)だと、２レイヤー構成の42キーだけでアクセスを構成できます。</p>
-<p>ちなみに、「Ctrl-X」「Ctrl-C」「Ctrl-V」を「x」「c」「v」の長押しで入力する手もあるようですが、これは導入しませんでした。</p>
-<h3 id="キー入力とtapping_term">キー入力と<code>TAPPING_TERM</code></h3>
-<p>普通にキー入力する際には、キー入力を意識的に短くタップするように慣れる必要があります。最初は一生懸命押しているキーが入力されていないのか悩ましかったです。力を入れるとキーを離すのが遅くなり、結果的にホールドと判定されてました。</p>
-<p><code>TAPPING_TERM_PER_KEY</code>を有効にし、親指によるLAYER切り替えキーは基本<code>TAPPING_TERM</code>の75%の早めに、小指などの動きが悪い一部キーは基本<code>TAPPING_TERM</code>の200%の遅めになるように設定しました。</p>
-<p>全体のタイミング調整は<code>config.h</code>の<code>TAPPING_TERM</code>だけでできます。<code>config.h</code>中の<code>TAPPING_TERM</code>は標準と同じ200と設定しています。</p>
-<h3 id="ホームポジションmod用のパラメーター">ホームポジションMOD用のパラメーター</h3>
-<p>デフォルトのMOD-TAP設定ではHOLD優先が有り、「as」等の隣のキーを早く舐めるように連続して打つと「S」となったりして違和感があります。
-<code>config.h</code>を以下の設定にして解決しました。</p>
-<pre tabindex="0"><code>/* Select MOD TAP to behave like default LAYER TAP (non-default) */
-/* This is needed for home position mod keymaps */
-#define IGNORE_MOD_TAP_INTERRUPT
-/* Both LAYER TAP and MOD TAP can be rolling-pressed within TAPPING_TERM */
-/* This is optional to accommodate the fast typer */
-/* This is enabled by default if TAPPING_TERM &gt;= 500 */
-#define PERMISSIVE_HOLD
-</code></pre><h3 id="縦スタガート">縦スタガート</h3>
-<p>確かに指は長さが違うので、縦スタガート設計に興味がありました。</p>
-<p>胸の前に自然に手を持ってきて手首に一番ストレスが無いようにキーボード上に置くと、実際にキーボードを押す際の自然なホームポジションは一直線でした。</p>
-<p>実際小指を置くキーの位置を１つ下げて試すと、すべての手の指はまっすぐ前に向くのですが手首が内側になり無理がかかり不快でした。</p>
-<p>左右の手の間隔が30cm以下となる一体型キーボードだと手首が外側にくるので、一体型のortholinear系では縦スタガートは使いにくそうです。(「ハ」の字にすれば良いのかもしれませんが)</p>
-<p>スプリットキーボードではキーボードの置く位置や角度が自由なので、縦スタガートでも良いのでしょうが、その導入は必須要件では無い気がします。</p>
-<p>実際、ポピュラーな縦スタガートデザインの縦ズレ量を隣の列との差で見ると意外と少なく、最近のCorne等が隣との差がキーボードピッチの19mm単位(?)で<code>1/8U-1/8U-CTR-1/8U-1/4U-0</code>、少し古いErgodoxは1.27ピッチ(?)で<code>0-1-1-CTR-1-2-0</code>なので更に少ない感じでした。どうも<code>1/4U-1/2U</code>等という大きな縦ズレ量は少数派のようです。</p>
-<h3 id="ソケットとled配置">ソケットとLED配置</h3>
-<p>LEDの光が通る穴は、基本的にスイッチの端子ピンと反対側にある。</p>
-<p>普通のCherryタイプ用とLPタイプ用の両方のソケットを装着可能にする共用PCBは、スイッチの端子ピンのソケットを反転して配置することで設計可能です。</p>
-<p>ただしPCBの穴に埋め込まれたSK6812MINI-EのRGB光を使うPCBだと、いすれかのタイプを選ぶ必要があります。</p>
-<h3 id="ダイオード">ダイオード</h3>
-<p>black pill等だと片側<code>6x3_3</code>キー構成のスプリットキーボードまではNKROのPCB設計がダイオード無しで可能ですが、ダイオード無しだとOLEDや他の拡張しようと思っても対応できなくなります。</p>
-<p>でもnanoの片側<code>6x3_1</code>キー構成とするとかなり現実味が出ます。</p>
-<h3 id="choc-v1">choc v1</h3>
-<p>Kailhの正規店以外では見かけなくなってきている。<a href="https://shop.yushakobo.jp/">遊舎工房</a>が、意外とリーゾナブル。</p>
-<p>LowProfileのキースイッチは、<a href="https://deskthority.net/wiki/Kailh_PG1350_series">1350</a> タイプが標準で、使うならこれが好ましそう。</p>
-<p>最近のより薄いという<a href="https://deskthority.net/wiki/Kailh_PG1232_series">1232</a> タイプは、<a href="https://deskthority.net/viewtopic.php?t=17340">PCBに角型の大きい穴が必要で既存のPCBと互換性が無い</a>ので要注意。</p>
-<h3 id="メモリー使用量">メモリー使用量</h3>
-<p>私のキーボードは、128KBのメモリー量のAT90USB1286で余裕があるので、メモリー使用量に配慮せず各種機能を有効にしても、使用量40%程度なので特に問題ありません。</p>
-<p>ただ、32KBしかメモリー量のないATmega32u4を使う普通のPromicroだと、メモリー使用量の制約に配慮が必要ですね。</p>
-<h3 id="今後のmcuプラットフォーム候補">今後のMCUプラットフォーム候補</h3>
-<p>今後遊ぶには、メモリー量に余裕があるARM系のボードがよさそうです。</p>
-<ul>
-<li><a href="https://qmk.fm/proton-c/">Proton-C</a> &ndash; オフィシャルQMKが対応(STM32F303CCT6) &ndash; ピンコンパチが可能(?) &ndash; 一部カットした場合</li>
-<li><a href="https://github.com/WeActTC/MiniSTM32F4x1">Blackpill</a> &ndash; オフィシャルQMKが対応(STM32F411CEU6) &ndash; ボードサイズが大きい (既存PCBに載せるのに無理がある)</li>
-<li><a href="https://www.sparkfun.com/products/18288">SparkFun Pro Micro - RP2040</a> &ndash; オフィシャルQMKが未対応 (RP2040) &ndash; ピンコンパチが可能(?)
-<ul>
-<li><a href="https://github.com/sekigon-gonnoc/qmk_firmware/tree/rp2040">RP2040対応のQMK(非公式)</a></li>
-<li><a href="https://scrapbox.io/self-made-kbds-ja/RP2040%E5%AF%BE%E5%BF%9C%E3%81%AEQMK(%E9%9D%9E%E5%85%AC%E5%BC%8F)%E3%82%92%E5%8B%95%E3%81%8B%E3%81%99">RP2040対応のQMK(非公式)を動かす</a> &ndash; blog</li>
-<li><a href="https://hikalium.hatenablog.jp/entry/2021/12/31/150738">Keyball46組み立て日記 〜間違えてRP2040を買ったそこのあなたに〜</a> &ndash; RP2040 の PRO MICRO</li>
-</ul>
-</li>
-</ul>
-<p>Proton-C以外のARM系ボードでは、USB経由のDFUでファームウエアーを書き換えるには、「BOOT1-push」「RESET-push」「RESET-release」「BOOT1-releas」と操作するので、ボード上の２つのPUSHボタンへのアクセスが必要。
-代替策は、SWD経由アクセス。</p>
-<!-- raw HTML omitted -->
+<p>これを頭に、現在で回っている、フィルターを見てみました。</p>
+<p>HOME-ROW-MODを考えるなら、CHORDED(併せ押し)ではなく、TAP-HOLD（押しの短長）アプローチです。ただ、それも<a href="https://gitlab.com/interception/linux/plugins/caps2esc">caps2esc</a>等は、press=HOLDで、RELEASEでタイミングが200ms以下ならTAPを出す感じです。CAPSのような端のキーならまだしも、HOME-ROW-MODでこれをするとまともにタイプできません。</p>
+<p>TAP-HOLD時間判断はプログラム内で管理が必要かと思っていましたが、あまりフィルターで使われていないリピート(→)を上手く利用すると複雑なEVENT処理無にできそうな気がします。</p>
+<p><a href="https://github.com/maricn/interception-vimproved">Interception plugin for vimproved input</a> には、汎用性は無い形ですがレイヤー処理があります。(SPACE-fn)</p>
+<p><a href="https://gitlab.com/interception/linux/plugins/dual-function-keys">Dual Function Keys</a>は、TAP-HOLDのスタートや他キーが早くPUSH・RELEASEされた際の対応はいい感じです。他にキー打鍵無い際のHOLD移行にタイマーかREPEATを使わないのは良くない気がします。タイミングチャートは参考になります。</p>
+<p>[interception-k2k](<a href="https://github.com/zsugabubus/interception-k2k%5D">https://github.com/zsugabubus/interception-k2k]</a>は、汎用マッパーです。レイヤー機能はありません。設定ファイルがCですが、見通しがいいスタイルですね。REPEATにも対応してそうです。</p>
 <!-- raw HTML omitted -->
 
 
