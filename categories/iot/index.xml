@@ -17,10 +17,9 @@
 PC内蔵のキーボードででも、同じようにできないかと言う気になり色々調査しました。
 interception-toolsを利用し構成する可能性としてはあるようですが、まだ良い例が見当たりません。確かにevdevデバイスを通るデーターをフィルター変換で実現するという発想はありです。
 公式のプラグインのDual Function Keysには、HOME ROW MODが上手く動作しないともかかれています。状況は簡単ではないようです。
-ただ、正直状況や解決策が分かりにくいので、まず読みやすいPythonのchorded_keymapを見ました。実際にevdevを通るデーターの実態がよく分からなかったので、この中のプログラムをベースにデーターダンプするユーティリティーを作りました。
-確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。
+ただ、正直状況や解決策が分かりにくいので、まず読みやすいPythonのchorded_keymapを見ました。実際にevdevを通るデーターの実態がよく分からなかったので、この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直してmanglekbdを作りました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。
 この出力は以下です。
- 12577.98: MSC SCAN 0xcb / KEY LEFT → / SYN REPORT 0 12577.996: MSC SCAN 0xcb / KEY LEFT ↑ / SYN REPORT 0 12578.431: MSC SCAN 0xcd / KEY RIGHT ↓ / SYN REPORT 0 12578.508: MSC SCAN 0xcd / KEY RIGHT ↑ / SYN REPORT 0 12578.811: MSC SCAN 0xe / KEY BACKSPACE ↓ / SYN REPORT 0 12578.</description>
+$ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 manglekbd -s u 0.908776327	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	10.192124000	MSC,SCAN,0x1c	KEY,ENTER,↓	SYN,REPORT,0	0.089146000	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	11.603746000	MSC,SCAN,0x39	KEY,SPACE,↓	SYN,REPORT,0	0.262023000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.029101000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.033056000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.029728000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.030239000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.030332000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.028457000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.031279000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.</description>
     </item>
     
     <item>
