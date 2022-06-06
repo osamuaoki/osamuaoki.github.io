@@ -15,11 +15,11 @@
       <guid>/jp/2022/06/03/evdev01/</guid>
       <description>キーボード状況 USB接続の自作外付けキーボードでは、キーマップがQMKを使うとキーマップ改変が自由に構成でき、HOME ROW MOD等を使うと動きの少ない手や指にやさしいタイピングができます。
 PC内蔵のキーボードででも、同じようにキーマップ改変ができないかと言う気になり色々調査しました。
-interception-toolsを利用し構成する可能性としてはあるようですが、まだ良い例が見当たりません。確かにevdevデバイスを通るデーターをフィルター変換で実現するという発想はありです。
-公式のプラグインのDual Function Keysには、HOME ROW MODが上手く動作しないともかかれています。状況は簡単ではないようです。
-ただ、正直状況や解決策が分かりにくいので、まず読みやすいPythonのchorded_keymapを見ました。実際にevdevを通るデーターの実態がよく分からなかったので、この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直してmanglekbdを作りました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。
-この出力は以下です。
-$ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 manglekbd -s u 0.908776327	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	10.192124000	MSC,SCAN,0x1c	KEY,ENTER,↓	SYN,REPORT,0	0.089146000	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	11.603746000	MSC,SCAN,0x39	KEY,SPACE,↓	SYN,REPORT,0	0.262023000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.029101000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.033056000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.029728000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.030239000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.030332000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.028457000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.031279000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	0.</description>
+interception-toolsを利用すれば、evdevのデーターをフィルター処理しキーマップを改変できそうです。 ただevdevのデーターの実際に使用されている慣習や制約、また異常時の対応法など不明点もあります。 単なるキーの置き換え以上の適当な先行例が見当たりません。
+公式のプラグインのDual Function Keysには、HOME ROW MODが上手く動作しないともかかれています。どうも状況は簡単ではないようです。
+正直状況や解決策が分かりにくいので、まず読みやすいPythonのchorded_keymapを見ました。この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直してmanglekbdを作り実状調査をしました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。
+たとえば、このプログラムの出力(時間は差分表示)は以下です。
+$ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 ~/bin/manglekbd -s u 0.024794	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	0.486209	MSC,SCAN,0x2a	KEY,LEFTSHIFT,↓	SYN,REPORT,0	0.161347	MSC,SCAN,0x1e	KEY,A,↓	SYN,REPORT,0	A 0.082717	MSC,SCAN,0x1e	KEY,A,↑	SYN,REPORT,0	0.147690	MSC,SCAN,0x1f	KEY,S,↓	SYN,REPORT,0	S 0.070924	MSC,SCAN,0x1f	KEY,S,↑	SYN,REPORT,0	0.216163	MSC,SCAN,0x20	KEY,D,↓	SYN,REPORT,0	D 0.085756	MSC,SCAN,0x20	KEY,D,↑	SYN,REPORT,0	0.212290	MSC,SCAN,0x21	KEY,F,↓	SYN,REPORT,0	F 0.103219	MSC,SCAN,0x21	KEY,F,↑	SYN,REPORT,0	0.220644	MSC,SCAN,0x22	KEY,G,↓	SYN,REPORT,0	G 0.</description>
     </item>
     
   </channel>

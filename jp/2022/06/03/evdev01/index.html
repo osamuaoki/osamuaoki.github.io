@@ -77,44 +77,57 @@
 <h2 id="キーボード状況">キーボード状況</h2>
 <p>USB接続の自作外付けキーボードでは、<a href="/jp/2022/03/15/home-mt/">キーマップ</a>がQMKを使うとキーマップ改変が自由に構成でき、<a href="https://precondition.github.io/home-row-mods">HOME ROW MOD</a>等を使うと動きの少ない手や指にやさしいタイピングができます。</p>
 <p>PC内蔵のキーボードででも、同じようにキーマップ改変ができないかと言う気になり色々調査しました。</p>
-<p><a href="https://gitlab.com/interception/linux/tools">interception-tools</a>を利用し構成する可能性としてはあるようですが、まだ良い例が見当たりません。確かに<code>evdev</code>デバイスを通るデーターをフィルター変換で実現するという発想はありです。</p>
-<p>公式のプラグインの<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys">Dual Function Keys</a>には、<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys/-/issues/6">HOME ROW MODが上手く動作しない</a>ともかかれています。状況は簡単ではないようです。</p>
-<p>ただ、正直状況や解決策が分かりにくいので、まず読みやすいPythonの<a href="https://gitlab.com/wsha/chorded_keymap">chorded_keymap</a>を見ました。実際にevdevを通るデーターの実態がよく分からなかったので、この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直して<a href="https://github.com/osamuaoki/osamu-utils/blob/main/manglekbd">manglekbd</a>を作りました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。</p>
-<p>この出力は以下です。</p>
-<pre tabindex="0"><code>$ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 manglekbd -s u
-0.908776327	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	
-10.192124000	MSC,SCAN,0x1c	KEY,ENTER,↓	SYN,REPORT,0	
-
-0.089146000	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	
-11.603746000	MSC,SCAN,0x39	KEY,SPACE,↓	SYN,REPORT,0	 
-0.262023000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	
-0.029101000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	
-0.033056000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	
-0.029728000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	
-0.030239000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	
-0.030332000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	
-0.028457000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	
-0.031279000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	 
-0.029795000	MSC,SCAN,0x39	KEY,SPACE,→	SYN,REPORT,0	
-0.010177000	MSC,SCAN,0x39	KEY,SPACE,↑	SYN,REPORT,0	
-2.797907000	MSC,SCAN,0x23	KEY,H,↓	SYN,REPORT,0	h
-0.071473000	MSC,SCAN,0x23	KEY,H,↑	SYN,REPORT,0	
-0.090236000	MSC,SCAN,0x12	KEY,E,↓	SYN,REPORT,0	e
-0.089604000	MSC,SCAN,0x12	KEY,E,↑	SYN,REPORT,0	
-0.205702000	MSC,SCAN,0x26	KEY,L,↓	SYN,REPORT,0	l
-0.065889000	MSC,SCAN,0x26	KEY,L,↑	SYN,REPORT,0	
-0.093182000	MSC,SCAN,0x26	KEY,L,↓	SYN,REPORT,0	l
-0.192301000	MSC,SCAN,0x26	KEY,L,↑	SYN,REPORT,0	
-0.397202000	MSC,SCAN,0x18	KEY,O,↓	SYN,REPORT,0	o
-0.194982000	MSC,SCAN,0x18	KEY,O,↑	SYN,REPORT,0	
-2.839868000	MSC,SCAN,0x11	KEY,W,↓	SYN,REPORT,0	w
-0.252236000	MSC,SCAN,0x11	KEY,W,→	SYN,REPORT,0	
-0.012211000	MSC,SCAN,0x11	KEY,W,↑	SYN,REPORT,0	
-10.691589000	MSC,SCAN,0x33	KEY,COMMA,↓	SYN,REPORT,0	,
-0.035153000	MSC,SCAN,0x33	KEY,COMMA,↑	SYN,REPORT,0	
+<p><a href="https://gitlab.com/interception/linux/tools">interception-tools</a>を利用すれば、<code>evdev</code>のデーターをフィルター処理しキーマップを改変できそうです。
+ただevdevのデーターの実際に使用されている慣習や制約、また異常時の対応法など不明点もあります。
+単なるキーの置き換え以上の適当な先行例が見当たりません。</p>
+<p>公式のプラグインの<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys">Dual Function Keys</a>には、<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys/-/issues/6">HOME ROW MODが上手く動作しない</a>ともかかれています。どうも状況は簡単ではないようです。</p>
+<p>正直状況や解決策が分かりにくいので、まず読みやすいPythonの<a href="https://gitlab.com/wsha/chorded_keymap">chorded_keymap</a>を見ました。この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直して<a href="https://github.com/osamuaoki/osamu-utils/blob/main/manglekbd">manglekbd</a>を作り実状調査をしました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。</p>
+<p>たとえば、このプログラムの出力(時間は差分表示)は以下です。</p>
+<pre tabindex="0"><code>$ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 ~/bin/manglekbd -s u
+0.024794	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	
+0.486209	MSC,SCAN,0x2a	KEY,LEFTSHIFT,↓	SYN,REPORT,0	
+0.161347	MSC,SCAN,0x1e	KEY,A,↓	SYN,REPORT,0	A
+0.082717	MSC,SCAN,0x1e	KEY,A,↑	SYN,REPORT,0	
+0.147690	MSC,SCAN,0x1f	KEY,S,↓	SYN,REPORT,0	S
+0.070924	MSC,SCAN,0x1f	KEY,S,↑	SYN,REPORT,0	
+0.216163	MSC,SCAN,0x20	KEY,D,↓	SYN,REPORT,0	D
+0.085756	MSC,SCAN,0x20	KEY,D,↑	SYN,REPORT,0	
+0.212290	MSC,SCAN,0x21	KEY,F,↓	SYN,REPORT,0	F
+0.103219	MSC,SCAN,0x21	KEY,F,↑	SYN,REPORT,0	
+0.220644	MSC,SCAN,0x22	KEY,G,↓	SYN,REPORT,0	G
+0.096932	MSC,SCAN,0x22	KEY,G,↑	SYN,REPORT,0	
+0.205199	MSC,SCAN,0x2a	KEY,LEFTSHIFT,↑	SYN,REPORT,0	
+0.687972	MSC,SCAN,0x34	KEY,DOT,↓	SYN,REPORT,0	.
+0.251521	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	
+0.029991	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	
+0.030303	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	
+0.032326	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	
+0.030289	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	
+0.029097	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	
+0.029683	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	
+0.032301	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	
+0.030361	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	.
+0.030282	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	.
+0.028590	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	.
+0.029813	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	.
+0.030434	MSC,SCAN,0x34	KEY,DOT,→	SYN,REPORT,0	.
+0.014303	MSC,SCAN,0x34	KEY,DOT,↑	SYN,REPORT,0	
+1.000906	MSC,SCAN,0x39	KEY,SPACE,↓	SYN,REPORT,0	 
+0.077423	MSC,SCAN,0x39	KEY,SPACE,↑	SYN,REPORT,0	
+0.367762	MSC,SCAN,0x39	KEY,SPACE,↓	SYN,REPORT,0	 
+0.077315	MSC,SCAN,0x39	KEY,SPACE,↑	SYN,REPORT,0	
+1.240154	MSC,SCAN,0x2a	KEY,LEFTSHIFT,↓	SYN,REPORT,0	
+0.082025	MSC,SCAN,0x2a	KEY,LEFTSHIFT,↑	SYN,REPORT,0	
+0.149037	MSC,SCAN,0x1e	KEY,A,↓	SYN,REPORT,0	a
+0.091403	MSC,SCAN,0x1e	KEY,A,↑	SYN,REPORT,0	
+0.083278	MSC,SCAN,0x1f	KEY,S,↓	SYN,REPORT,0	s
+0.113698	MSC,SCAN,0x1f	KEY,S,↑	SYN,REPORT,0	
+0.231215	MSC,SCAN,0x20	KEY,D,↓	SYN,REPORT,0	d
+...
 </code></pre><p>気づいたことは:</p>
 <ul>
 <li>キーを押すと、プレス(↓)となる。</li>
+<li>プレス(↓)の後「SYN,REPORT,0」を受けとると、すぐ文字が処理され表示される。(リリースは待っていない)</li>
 <li>キーを長押しすると、250msぐらいで、リピート(→)となる。リピートは30ms毎ぐらい。</li>
 <li>リピート(→)が必ずしも有効追加打鍵にはならない。（最初8回は無視？、合計500ms後から実際の連続打鍵状態）</li>
 <li>キーを離すと、リリース(↑)となる。</li>
