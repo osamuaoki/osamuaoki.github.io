@@ -199,10 +199,11 @@
 <p><a href="https://github.com/zsugabubus/interception-k2k">interception-k2k</a>は、基本イベント処理ループは<code>C</code>で書かれていて、設定ファイルはincludeファイルを使う汎用マッパーです。レイヤー機能はありません。設定ファイルがCですが、見通しがいいスタイルですね。REPEATにも対応してそうです。
 (Makefileのターゲットの前提要件中に<code>|</code>を使ってORDER-ONLY-PREREQUISITESを規定するのははじめてみたので、ちょっとと惑いました。)</p>
 <h2 id="キーボードのtap-holdタイミング考察">キーボードのTAP-HOLDタイミング考察</h2>
-<p>TAP-HOLDの無いキーをそのまま通過させるとすると、キーボードのTAP-HOLDタイミングは、HOME-ROW-MODでは、端のキーでは望ましそうなimmediateタイプではなく、delayedタイプが必要な気がします。</p>
+<p>QMKで採用した<a href="/jp/2022/03/15/home-mt//#%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9D%E3%82%B8%E3%82%B7%E3%83%A7%E3%83%B3mod%E7%94%A8%E3%81%AE%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC">ホームポジションMOD用のパラメーター</a>で確立されているのと同様の遅延処理アプローチが望ましい。</p>
+<p>つまり、キーボードのTAP-HOLDの処理は、HOME-ROW-MODでは、端のキーでは望ましそうな即時処理(immediate)タイプではなく、遅延処理(delayed)タイプが必要な気がします。</p>
 <ul>
-<li>immediate: immediate hold (capslock用)</li>
-<li>delayed:   immediate pending state for the key (wait for B↑ or A→) (HOME-ROW-MOD用)</li>
+<li>即時処理(immediate): immediate hold (capslock用)</li>
+<li>遅延処理(delayed):   immediate pending state for the key (wait for B↑ or A→) (HOME-ROW-MOD用)</li>
 </ul>
 <p>以下キータイミング図で、それぞれのあるべき動作を確認しました。</p>
 <p>どうも、遅延処理の全面導入と、リピートの利用、シフト等の(早期)確定後のシフト解除時にタップが出なくする、等々が必要な感じです。</p>
