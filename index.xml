@@ -16,7 +16,7 @@
 PC内蔵のキーボードででも、同じようにキーマップ改変ができないかと言う気になり色々調査しました。
 interception-toolsを利用すれば、evdevのデーターをフィルター処理しキーマップを改変できそうです。 ただevdevのデーターの実際に使用されている慣習や制約、また異常時の対応法など不明点もあります。 単なるキーの置き換え以上の適当な先行例が見当たりません。
 公式のプラグインのDual Function Keysには、HOME ROW MODが上手く動作しないともかかれています。どうも状況は簡単ではないようです。
-正直状況や解決策が分かりにくいので、まず読みやすいPythonのchorded_keymapを見ました。この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直してmanglekbdを作り実状調査をしました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。
+実際の状況や解決策が分かりにくいので、まず読みやすいPythonのchorded_keymapを見ました。この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直してmanglekbdを作り実状調査をしました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。
 本体付属キーボード(i8042) manglekbdプログラムの出力(時間は差分表示)は、本体付属キーボードだと以下です。
 $ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 ~/bin/manglekbd -s u 0.024794	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	0.486209	MSC,SCAN,0x2a	KEY,LEFTSHIFT,↓	SYN,REPORT,0	0.161347	MSC,SCAN,0x1e	KEY,A,↓	SYN,REPORT,0	A 0.082717	MSC,SCAN,0x1e	KEY,A,↑	SYN,REPORT,0	0.147690	MSC,SCAN,0x1f	KEY,S,↓	SYN,REPORT,0	S 0.070924	MSC,SCAN,0x1f	KEY,S,↑	SYN,REPORT,0	0.216163	MSC,SCAN,0x20	KEY,D,↓	SYN,REPORT,0	D 0.085756	MSC,SCAN,0x20	KEY,D,↑	SYN,REPORT,0	0.212290	MSC,SCAN,0x21	KEY,F,↓	SYN,REPORT,0	F 0.103219	MSC,SCAN,0x21	KEY,F,↑	SYN,REPORT,0	0.220644	MSC,SCAN,0x22	KEY,G,↓	SYN,REPORT,0	G 0.</description>
     </item>

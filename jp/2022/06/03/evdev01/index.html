@@ -86,7 +86,7 @@
 ただevdevのデーターの実際に使用されている慣習や制約、また異常時の対応法など不明点もあります。
 単なるキーの置き換え以上の適当な先行例が見当たりません。</p>
 <p>公式のプラグインの<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys">Dual Function Keys</a>には、<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys/-/issues/6">HOME ROW MODが上手く動作しない</a>ともかかれています。どうも状況は簡単ではないようです。</p>
-<p>正直状況や解決策が分かりにくいので、まず読みやすいPythonの<a href="https://gitlab.com/wsha/chorded_keymap">chorded_keymap</a>を見ました。この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直して<a href="https://github.com/osamuaoki/osamu-utils/blob/main/manglekbd">manglekbd</a>を作り実状調査をしました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。</p>
+<p>実際の状況や解決策が分かりにくいので、まず読みやすいPythonの<a href="https://gitlab.com/wsha/chorded_keymap">chorded_keymap</a>を見ました。この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直して<a href="https://github.com/osamuaoki/osamu-utils/blob/main/manglekbd">manglekbd</a>を作り実状調査をしました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。</p>
 <h3 id="本体付属キーボードi8042">本体付属キーボード(i8042)</h3>
 <p><a href="https://github.com/osamuaoki/osamu-utils/blob/main/manglekbd">manglekbd</a>プログラムの出力(時間は差分表示)は、本体付属キーボードだと以下です。</p>
 <pre tabindex="0"><code>$ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 ~/bin/manglekbd -s u
@@ -199,15 +199,15 @@
 <p><a href="https://github.com/zsugabubus/interception-k2k">interception-k2k</a>は、基本イベント処理ループは<code>C</code>で書かれていて、設定ファイルはincludeファイルを使う汎用マッパーです。レイヤー機能はありません。設定ファイルがCですが、見通しがいいスタイルですね。REPEATにも対応してそうです。
 (Makefileのターゲットの前提要件中に<code>|</code>を使ってORDER-ONLY-PREREQUISITESを規定するのははじめてみたので、ちょっとと惑いました。)</p>
 <h2 id="キーボードのtap-holdタイミング考察">キーボードのTAP-HOLDタイミング考察</h2>
-<p>QMKで採用した<a href="/jp/2022/03/15/home-mt//#%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9D%E3%82%B8%E3%82%B7%E3%83%A7%E3%83%B3mod%E7%94%A8%E3%81%AE%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC">ホームポジションMOD用のパラメーター</a>で確立されているのと同様の遅延処理アプローチが望ましい。</p>
-<p>つまり、キーボードのTAP-HOLDの処理は、HOME-ROW-MODでは、端のキーでは望ましそうな即時処理(immediate)タイプではなく、遅延処理(delayed)タイプが必要な気がします。</p>
+<p>QMKで採用した<a href="/jp/2022/03/15/home-mt//#%E3%83%9B%E3%83%BC%E3%83%A0%E3%83%9D%E3%82%B8%E3%82%B7%E3%83%A7%E3%83%B3mod%E7%94%A8%E3%81%AE%E3%83%91%E3%83%A9%E3%83%A1%E3%83%BC%E3%82%BF%E3%83%BC">ホームポジションMOD用のパラメーター</a>で確立されているのと同様の遅延処理アプローチが望ましい気がします。そう考えると、キーボードのTAP-HOLDの処理は、HOME-ROW-MODを考えるなら、端のキーの処理では充分な即時処理(immediate)タイプではなく、一見手の込んだ遅延処理(delayed)タイプが必要な気がします。</p>
 <ul>
 <li>即時処理(immediate): immediate hold (capslock用)</li>
 <li>遅延処理(delayed):   immediate pending state for the key (wait for B↑ or A→) (HOME-ROW-MOD用)</li>
 </ul>
-<p>以下キータイミング図で、それぞれのあるべき動作を確認しました。</p>
+<p>以下キータイミング図で、あるべき動作を思考実験で確認してみました。</p>
 <p>どうも、遅延処理の全面導入と、リピートの利用、シフト等の(早期)確定後のシフト解除時にタップが出なくする、等々が必要な感じです。</p>
 <h3 id="単一mt-キーを使用時の遅延処理有無のタイミング図">単一MT キーを使用時の遅延処理有無のタイミング図</h3>
+<p>これへの対応は必要だが、リピートを使えば意外と簡単。</p>
 <pre tabindex="0"><code>A: as MT(KC_SHFT, KC_A)
   S: KC_SHFT
   A: KC_A
@@ -227,7 +227,7 @@ immediate:      S↓                                  S↑
 delayed:        ??                        S↓        S↑
 ----------------------------------------------------------------------------------
 </code></pre><h3 id="mtキーと普通キーを両方使用時に普通キーに遅延処理しない際のベストケースのタイミング図">MTキーと普通キーを両方使用時に、普通キーに遅延処理しない際のベストケースのタイミング図</h3>
-<p>こうすると後から打ったキーが先に処理されるので問題山積。やはり次のセクションのように全てのキーを遅延処理するべきみたい。</p>
+<p>こういうことができるか考えてみたが、こうすると後から打ったキーが先に処理されるので問題山積でした。やはり次のセクションのように全てのキーを遅延処理するべきみたいですね。</p>
 <pre tabindex="0"><code>A: as MT(KC_SHFT, KC_A)
   S: KC_SHFT  (後から打った他キーのリリースでもHOLDにする)
   A: KC_A
@@ -282,7 +282,7 @@ immediate:      S↓                           B↓     S↑   B↑
 delayed:        ??                      S↓   B↓     S↑   B↑
 ----------------------------------------------------------------------------------
 </code></pre><h3 id="mtキー同士の組み合わせ使用時のタイミング図遅延処理有りのmtと普通キーとの組み合わせも含む">MTキー同士の組み合わせ使用時のタイミング図（遅延処理有りのMTと普通キーとの組み合わせも含む）</h3>
-<p>遅延処理の待ちリストが必要。</p>
+<p>どうもこれが望ましい処理ですね。これには遅延処理の待ちリストが必要かな。</p>
 <pre tabindex="0"><code>A: as MT(KC_SHFT, KC_A)
   S: KC_SHFT
   A: KC_A
@@ -377,6 +377,7 @@ delayed:        ??                  **  S↓                   C↓        C↑ 
 </ul>
 </li>
 <li>実際の出力は１セット打鍵分ごとにI/O FLUSH</li>
+<li>QMKで言う<a href="https://docs.qmk.fm/#/mod_tap">MT</a>や<a href="https://docs.qmk.fm/#/feature_layers?id=switching-and-toggling-layers">LT(含むTO, MO)</a>に相当する操作で発生するFAKEのキーイベントには、無理に適当な「スキャンコード」をつけずに「<code>SYN,REPORT,1</code>」で対応するのも一策かも。事件検証はする必要有り。</li>
 </ul>
 <h2 id="フィルター機能の設定法の考察">フィルター機能の設定法の考察</h2>
 <p>evdevデーターのフィルター機能の設定法を考えました。</p>
@@ -385,7 +386,7 @@ delayed:        ??                  **  S↓                   C↓        C↑ 
 <li>evdevデーターのフィルターの設定ファイルは、ベタで書き下すと、ほとんど無変換なのでかなり冗長（128~256キー＊4レイヤーで512~1024行）。手動で書くのは辛い。
 <ul>
 <li>前処理プログラムで短いデーターから設定ファイルを生成するようにし、手動で冗長な記述をしなくてもいいようにしたい。</li>
-<li>前処理プログラムでつくる設定ファイルなので、内容は人間に分かりにくくてもプログラムが読み込みしやすい事を優先する。HEXADECIMALの数字のCSV羅列等でもいい。</li>
+<li>前処理プログラムでつくる設定ファイルなので、内容は人間に分かりにくくてもプログラムが読み込みしやすい事を優先する。HEXADECIMALの数字のCSV羅列等でもいい。(最初にデーター数、最終データー後のマーカーぐらいつけますか)</li>
 <li>各キー毎にTAP時/HOLD時のアクションを決める。設定ファイルではTAP時とHOLD時のアクションが同じ時は簡便記述できるようにする。</li>
 <li>汎用性を持たすには、キーシーケンスのマクロ処理機能があると、ロックキー・一時シフトキーなども扱いやすそう。</li>
 </ul>
