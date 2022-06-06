@@ -8,13 +8,13 @@
     <language>en-us</language>
     <lastBuildDate>Fri, 03 Jun 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/iot/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>PC内蔵キーボードのキーマップ操作準備</title>
+      <title>内蔵キーボードのキーマップ改変準備</title>
       <link>/jp/2022/06/03/evdev01/</link>
       <pubDate>Fri, 03 Jun 2022 00:00:00 +0000</pubDate>
       
       <guid>/jp/2022/06/03/evdev01/</guid>
-      <description>キーボード状況 USB接続の自作外付けキーボードでは、キーマップがQMKを使うと自由に構成でき、HOME ROW MOD等を使うと動きの少ない手や指にやさしいタイピングができます。
-PC内蔵のキーボードででも、同じようにできないかと言う気になり色々調査しました。
+      <description>キーボード状況 USB接続の自作外付けキーボードでは、キーマップがQMKを使うとキーマップ改変が自由に構成でき、HOME ROW MOD等を使うと動きの少ない手や指にやさしいタイピングができます。
+PC内蔵のキーボードででも、同じようにキーマップ改変ができないかと言う気になり色々調査しました。
 interception-toolsを利用し構成する可能性としてはあるようですが、まだ良い例が見当たりません。確かにevdevデバイスを通るデーターをフィルター変換で実現するという発想はありです。
 公式のプラグインのDual Function Keysには、HOME ROW MODが上手く動作しないともかかれています。状況は簡単ではないようです。
 ただ、正直状況や解決策が分かりにくいので、まず読みやすいPythonのchorded_keymapを見ました。実際にevdevを通るデーターの実態がよく分からなかったので、この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直してmanglekbdを作りました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。

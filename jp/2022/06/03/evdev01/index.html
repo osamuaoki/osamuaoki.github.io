@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>PC内蔵キーボードのキーマップ操作準備 | Goofing Osamu</title>
+    <title>内蔵キーボードのキーマップ改変準備 | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,7 +32,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">PC内蔵キーボードのキーマップ操作準備</span></h1>
+<h1><span class="title">内蔵キーボードのキーマップ改変準備</span></h1>
 
 <h3 class="date">Date:
 2022/06/03 (initial publish),
@@ -67,16 +67,16 @@
         <li><a href="#単一mt-キーを使用時の遅延処理有無のタイミング図">単一MT キーを使用時の遅延処理有無のタイミング図</a></li>
         <li><a href="#mtキーと普通キーを両方使用時に普通キーに遅延処理しない際のベストケースのタイミング図">MTキーと普通キーを両方使用時に、普通キーに遅延処理しない際のベストケースのタイミング図</a></li>
         <li><a href="#mtキー同士の組み合わせ使用時のタイミング図遅延処理有りのmtと普通キーとの組み合わせも含む">MTキー同士の組み合わせ使用時のタイミング図（遅延処理有りのMTと普通キーとの組み合わせも含む）</a></li>
-        <li><a href="#フィルター作成のアプローチ考察">フィルター作成のアプローチ考察</a></li>
-        <li><a href="#フィルターフィルター機能設定のアプローチ考察">フィルターフィルター機能設定のアプローチ考察</a></li>
       </ul>
     </li>
+    <li><a href="#フィルタープログラムの考察">フィルタープログラムの考察</a></li>
+    <li><a href="#フィルター機能の設定法の考察">フィルター機能の設定法の考察</a></li>
   </ul>
 </nav>
 
 <h2 id="キーボード状況">キーボード状況</h2>
-<p>USB接続の自作外付けキーボードでは、<a href="/jp/2022/03/15/home-mt/">キーマップ</a>がQMKを使うと自由に構成でき、<a href="https://precondition.github.io/home-row-mods">HOME ROW MOD</a>等を使うと動きの少ない手や指にやさしいタイピングができます。</p>
-<p>PC内蔵のキーボードででも、同じようにできないかと言う気になり色々調査しました。</p>
+<p>USB接続の自作外付けキーボードでは、<a href="/jp/2022/03/15/home-mt/">キーマップ</a>がQMKを使うとキーマップ改変が自由に構成でき、<a href="https://precondition.github.io/home-row-mods">HOME ROW MOD</a>等を使うと動きの少ない手や指にやさしいタイピングができます。</p>
+<p>PC内蔵のキーボードででも、同じようにキーマップ改変ができないかと言う気になり色々調査しました。</p>
 <p><a href="https://gitlab.com/interception/linux/tools">interception-tools</a>を利用し構成する可能性としてはあるようですが、まだ良い例が見当たりません。確かに<code>evdev</code>デバイスを通るデーターをフィルター変換で実現するという発想はありです。</p>
 <p>公式のプラグインの<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys">Dual Function Keys</a>には、<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys/-/issues/6">HOME ROW MODが上手く動作しない</a>ともかかれています。状況は簡単ではないようです。</p>
 <p>ただ、正直状況や解決策が分かりにくいので、まず読みやすいPythonの<a href="https://gitlab.com/wsha/chorded_keymap">chorded_keymap</a>を見ました。実際にevdevを通るデーターの実態がよく分からなかったので、この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直して<a href="https://github.com/osamuaoki/osamu-utils/blob/main/manglekbd">manglekbd</a>を作りました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。</p>
@@ -285,8 +285,8 @@ keyboard2:                          B↓                       B→        B↑
 immediate:      S↓                  ??                       C↓        C↑     S↑
 delayed:        ??                  **  S↓                   C↓        C↑     S↑
 ----------------------------------------------------------------------------------
-</code></pre><h3 id="フィルター作成のアプローチ考察">フィルター作成のアプローチ考察</h3>
-<p>今後フィルタープログラム作成時に必要な配慮点をを列記します。</p>
+</code></pre><h2 id="フィルタープログラムの考察">フィルタープログラムの考察</h2>
+<p>フィルタープログラム作成時に必要な配慮点をを列記します。</p>
 <ul>
 <li>文字差替えの際には同一タイムスタンプのイベントのペア構造や時間順を壊さないようにしたい。</li>
 <li>フィルターによる処理は、論理的にまとまった比較的論理構造が簡単な処理の組み合わせの切り分けデバグできる多段階リレー処理としたい。</li>
@@ -303,8 +303,8 @@ delayed:        ??                  **  S↓                   C↓        C↑ 
 </li>
 <li>実際の出力は１セット打鍵分ごとにI/O FLUSH</li>
 </ul>
-<h3 id="フィルターフィルター機能設定のアプローチ考察">フィルターフィルター機能設定のアプローチ考察</h3>
-<p>evdevデーターのフィルター機能の設定ファイルをどうすべきかを考えました。</p>
+<h2 id="フィルター機能の設定法の考察">フィルター機能の設定法の考察</h2>
+<p>evdevデーターのフィルター機能の設定法を考えました。</p>
 <ul>
 <li>実行時に複雑なロジックを組みたくないので、できるだけ簡単なアクション指定のSTRUCTのMATRIXとして、簡単な構造としたい。</li>
 <li>evdevデーターのフィルターの設定ファイルは、ベタで書き下すと、ほとんど無変換なのでかなり冗長（128~256キー＊4レイヤーで512~1024行）。手動で書くのは辛い。
