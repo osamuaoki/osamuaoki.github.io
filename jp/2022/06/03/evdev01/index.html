@@ -82,7 +82,7 @@
 単なるキーの置き換え以上の適当な先行例が見当たりません。</p>
 <p>公式のプラグインの<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys">Dual Function Keys</a>には、<a href="https://gitlab.com/interception/linux/plugins/dual-function-keys/-/issues/6">HOME ROW MODが上手く動作しない</a>ともかかれています。どうも状況は簡単ではないようです。</p>
 <p>正直状況や解決策が分かりにくいので、まず読みやすいPythonの<a href="https://gitlab.com/wsha/chorded_keymap">chorded_keymap</a>を見ました。この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直して<a href="https://github.com/osamuaoki/osamu-utils/blob/main/manglekbd">manglekbd</a>を作り実状調査をしました。確かにほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。</p>
-<p>たとえば、このプログラムの出力(時間は差分表示)は以下です。</p>
+<p>たとえば、このプログラムの出力(時間は差分表示)は、本体付属キーボードだと以下です。</p>
 <pre tabindex="0"><code>$ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 ~/bin/manglekbd -s u
 0.024794	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	
 0.486209	MSC,SCAN,0x2a	KEY,LEFTSHIFT,↓	SYN,REPORT,0	
@@ -124,16 +124,65 @@
 0.113698	MSC,SCAN,0x1f	KEY,S,↑	SYN,REPORT,0	
 0.231215	MSC,SCAN,0x20	KEY,D,↓	SYN,REPORT,0	d
 ...
+</code></pre><p>一方、QMKのUSB外付けKBDだと:</p>
+<pre tabindex="0"><code>$ sudo intercept /dev/input/by-id/usb-osamuaoki_cgc56-if01-event-kbd | python3 ~/bin/manglekbd -s u
+0.751624	MSC,SCAN,0x700e1	KEY,LEFTSHIFT,↓	SYN,REPORT,0
+0.277636	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039919	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039829	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040182	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.043845	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040168	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040073	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039748	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040206	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040087	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039937	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039980	KEY,LEFTSHIFT,→	SYN,REPORT,1	MSC,SCAN,0x700e1	KEY,LEFTSHIFT,↑	SYN,REPORT,0
+0.336394	MSC,SCAN,0x700e0	KEY,LEFTCTRL,↓	SYN,REPORT,0
+0.087998	MSC,SCAN,0x700e0	KEY,LEFTCTRL,↑	SYN,REPORT,0
+0.245960	MSC,SCAN,0x70016	KEY,S,↓	SYN,REPORT,0
+0.000777	MSC,SCAN,0x70016	KEY,S,↑	SYN,REPORT,0	s
+0.462331	MSC,SCAN,0x70007	KEY,D,↓	SYN,REPORT,0
+0.000686	MSC,SCAN,0x70007	KEY,D,↑	SYN,REPORT,0	d
+0.316044	MSC,SCAN,0x700e1	KEY,LEFTSHIFT,↓	SYN,REPORT,0
+0.281818	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039781	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040190	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040032	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039996	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039994	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039794	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040185	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040004	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039971	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.040058	KEY,LEFTSHIFT,→	SYN,REPORT,1
+0.039995	KEY,LEFTSHIFT,→	SYN,REPORT,1	MSC,SCAN,0x700e1	KEY,LEFTSHIFT,↑	SYN,REPORT,0
+0.699406	MSC,SCAN,0x7000e	KEY,K,↓	SYN,REPORT,0
+0.000751	MSC,SCAN,0x7000e	KEY,K,↑	SYN,REPORT,0	k
+0.099252	MSC,SCAN,0x7000e	KEY,K,↓	SYN,REPORT,0	k
+0.064789	MSC,SCAN,0x7000e	KEY,K,↑	SYN,REPORT,0
+0.070250	MSC,SCAN,0x7000e	KEY,K,↓	SYN,REPORT,0	k
+0.257558	KEY,K,→	SYN,REPORT,1
+0.043806	KEY,K,→	SYN,REPORT,1
+0.040184	KEY,K,→	SYN,REPORT,1
+0.039998	KEY,K,→	SYN,REPORT,1
+0.040042	KEY,K,→	SYN,REPORT,1
+0.039727	KEY,K,→	SYN,REPORT,1
+0.040037	KEY,K,→	SYN,REPORT,1	kk
+0.040171	KEY,K,→	SYN,REPORT,1	MSC,SCAN,0x7000e	KEY,K,↑	SYN,REPORT,0
 </code></pre><p>気づいたことは:</p>
 <ul>
+<li>タイムスタンプはms単位。(CPUはnsなのでゆっくり)</li>
+<li>「<code>SYN REPORT 0</code>」か「<code>SYN,REPORT,1</code>」のおまじないが必ずある。時間が同じでもこれがキーイベントの区切り。</li>
 <li>キーを押すと、プレス(↓)となる。</li>
-<li>プレス(↓)の後「SYN,REPORT,0」を受けとると、すぐ文字が処理され表示される。(リリースは待っていない)</li>
+<li>プレス(↓)の後「<code>SYN,REPORT,0</code>」を受けとると、すぐ文字が処理され表示される。(内臓の場合リリースは待っていないぐらい早い)</li>
+<li>プレス(↓)の後「<code>SYN,REPORT,1</code>」を受けとるときはスキャンコードがない。（外付けキーボードのみ）</li>
 <li>キーを長押しすると、250msぐらいで、リピート(→)となる。リピートは30ms毎ぐらい。</li>
 <li>リピート(→)が必ずしも有効追加打鍵にはならない。（最初8回は無視？、合計500ms後から実際の連続打鍵状態）</li>
+<li>リピート(→)の後に同時のキーイベントが発生しやすい。（QMK独特現象）</li>
 <li>キーを離すと、リリース(↑)となる。</li>
-<li>スキャンコードは普通使われないし、外付けキーボードではかなり違う。</li>
-<li><code>SYN REPORT 0</code>のおまじないが必ずある。</li>
-<li>タイムスタンプはmsで、ほぼ必ずキーコードとSYNレポートがペアで同じタイムスタンプで時間順。</li>
+<li>スキャンコードは普通使われないし、外付けキーボードでは標準のATのスキャンコードとはかなり違う。</li>
 </ul>
 <p>これを頭に、現在出回っている、フィルターを見てみました。</p>
 <p>HOME-ROW-MODを考えるなら、CHORDED(併せ押し)ではなく、TAP-HOLD（押しの短長）アプローチです。ただ、それも<a href="https://gitlab.com/interception/linux/plugins/caps2esc">caps2esc</a>等は、press=HOLDで、RELEASEでタイミングが200ms以下ならTAPを出す感じです。CAPSのような端のキーならまだしも、HOME-ROW-MODでこれをするとまともにタイプできません。</p>
@@ -303,7 +352,7 @@ delayed:        ??                  **  S↓                   C↓        C↑ 
 <ul>
 <li>文字差替えの際には同一タイムスタンプのイベントのペア構造や時間順を壊さないようにしたい。</li>
 <li>フィルターによる処理は、論理的にまとまった比較的論理構造が簡単な処理の組み合わせの切り分けデバグできる多段階リレー処理としたい。</li>
-<li>「スキャンコード」、「通常キーコード＋キーステート(D/U/R)」、「SYNレポート」の３つを１セットの1打鍵としまとめたうえで、処理したい。
+<li>「スキャンコード」、「通常キーコード＋キーステート(D/U/R)」、「SYNレポート」の２～３つを１セットの1打鍵としまとめたうえで、処理したい。
 <ul>
 <li>この条件に合わないキーの例外処理は、ログ書き出ししあとで考える。</li>
 </ul>
@@ -323,6 +372,7 @@ delayed:        ??                  **  S↓                   C↓        C↑ 
 <li>evdevデーターのフィルターの設定ファイルは、ベタで書き下すと、ほとんど無変換なのでかなり冗長（128~256キー＊4レイヤーで512~1024行）。手動で書くのは辛い。
 <ul>
 <li>前処理プログラムで短いデーターから設定ファイルを生成するようにし、手動で冗長な記述をしなくてもいいようにしたい。</li>
+<li>前処理プログラムでつくる設定ファイルなので、内容は人間に分かりにくくてもプログラムが読み込みしやすい事を優先する。HEXADECIMALの数字のCSV羅列等でもいい。</li>
 <li>各キー毎にTAP時/HOLD時のアクションを決める。設定ファイルではTAP時とHOLD時のアクションが同じ時は簡便記述できるようにする。</li>
 <li>汎用性を持たすには、キーシーケンスのマクロ処理機能があると、ロックキー・一時シフトキーなども扱いやすそう。</li>
 </ul>
