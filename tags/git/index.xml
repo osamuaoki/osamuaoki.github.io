@@ -28,7 +28,7 @@ $ git fetch origin From github.com:&amp;lt;user_name&amp;gt;/&amp;lt;project_nam
       
       <guid>/jp/2020/04/22/git-annex-01/</guid>
       <description>正直なところ、今は Git Annexを 使っていません。rsync と btrfs の 組み合わせでバックアップしています。(2021/07/07)
- Git関連ツールで、写真等の大きなデーターの分散保存・世代管理をする Git Annexというツールを walkthrough を読みながら学びました。間違っているかもしれませんが、 自分なりに簡単に以下にまとめて見ます。
+Git関連ツールで、写真等の大きなデーターの分散保存・世代管理をする Git Annexというツールを walkthrough を読みながら学びました。間違っているかもしれませんが、 自分なりに簡単に以下にまとめて見ます。
 Git Annexの基本コンセプト Gitはデーターの分散管理では非常に便利ですが、 大きなデーターを直接扱うのが不得意 です。そこで、このGitが不得意な部分のデーターの分散管理を協調的に補完す るのがGit Annexです。
 写真等の大きなファイルを含むデーターは、ソースコードなどのテキスト ファイルを含むデーターと違い、ファイル自体がすでに圧縮されていて 保存の際のさらなるデーター圧縮のメリットが少ないことや、世代間の 詳細なデーター差分の検出には大きな労力が必要な割に、詳細な差分は サイズも大きくなりがちでメリットが少ないという特徴があります。
 そこで大きなファイルは、Gitの本体で直接扱かわずに、労力とのバランス を考えGitの上に構築したGit Annexで扱うのが望ましいです。Git Annexでは データー保存の効率化対象を単純なファイルの重複保存や世代間のファイル の位置移動に絞ります。この制約の下では、ファイル実体によって決まる 「ユニークな特定パスに保存する」ことで、ファイル実体の効率的な保存 が実現できます。「ユニーク」ということはファイル内容のハッシュ値 等を用いた文字列(Key)で実現します。Git Annexではファイル実体データー (Value)をGit本来のデーター保存インフラとは別の.git/annex/objects/ 以下に書き込み禁止のファイルパーミッションで保存します。
@@ -49,14 +49,17 @@ Git Annexによるリモートサイトへのアクセスは抽象化されて�
 備忘録を兼ねて、アップストリームがGITHUBを使っている 場合を軸にメモを作成します。
 世の流れで、デフォルトブランチ名に「master」ではなく「main」等を使うことが最近増えています。その場合は適宜以下も読み替えてください。
 GITを使うフォークの管理手順(基本) 簡単のために以下の前提を置きます。（追跡＝tracking）
- 他人が管理する、アップストリームのリモートのレポ名を、「upstream」(任意名ですが慣習名)とします。 他人が管理する、アップストリームのリモートのレポ上の「master」ブランチを追跡します。（コピー元） 自分が管理する、フォークしたリモートのレポ名を、「origin」とします。 自分が管理する、フォークしたリモートのレポ上の「master」ブランチに追跡コピーを保管します。（コピー先） アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を、フォークしたレポに勝手に作らないようにします。  この際の、GITを使うフォークの管理手順は以下です。
-  アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、 自分のアカウントにフォークされたリモートのレポを作成
-  フォークされたレポをローカルに「git clone」して、ローカルのレポを作成
- $ git clone git@github.com:my_name/project_name.git ; cd project_name    自分が書き換える開発ブランチ(ここでは「devel」)を作成
- $ git checkout -b devel    ファイルを編集し、開発ブランチにコミット
-  アップストリームのリモートのレポをローカルにリモート「upstream」として追加。
- $ git remote add upstream https://github.com/upstream_name/project_name.git    フォークされたレポの「master」ブランチをアップストリームのレポの「master」ブランチに同期
-  $ git checkout master ; git fetch -p upstream ; git pull upstream master ; git push origin master  -pは--pruneのショートハンドで、不要なリモート追跡ブランチを削除してくれます。</description>
+他人が管理する、アップストリームのリモートのレポ名を、「upstream」(任意名ですが慣習名)とします。 他人が管理する、アップストリームのリモートのレポ上の「master」ブランチを追跡します。（コピー元） 自分が管理する、フォークしたリモートのレポ名を、「origin」とします。 自分が管理する、フォークしたリモートのレポ上の「master」ブランチに追跡コピーを保管します。（コピー先） アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を、フォークしたレポに勝手に作らないようにします。 この際の、GITを使うフォークの管理手順は以下です。
+アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、 自分のアカウントにフォークされたリモートのレポを作成
+フォークされたレポをローカルに「git clone」して、ローカルのレポを作成
+$ git clone git@github.com:my_name/project_name.git ; cd project_name 自分が書き換える開発ブランチ(ここでは「devel」)を作成
+$ git checkout -b devel ファイルを編集し、開発ブランチにコミット
+アップストリームのリモートのレポをローカルにリモート「upstream」として追加。
+$ git remote add upstream https://github.com/upstream_name/project_name.git フォークされたレポの「master」ブランチをアップストリームのレポの「master」ブランチに同期
+$ git checkout master ; git fetch -p upstream ; git pull upstream master ; git push origin master -pは--pruneのショートハンドで、不要なリモート追跡ブランチを削除してくれます。
+開発ブランチに戻り、開発再開
+$ git checkout devel 状況に合わせて、merge/rebase等をする。(rebaseしたブランチのpushは要注意)
+$ git merge master $ git rebase -i master これは QMKプロジェクト 等で推奨されるフォーク手順です。</description>
     </item>
     
   </channel>

@@ -19,10 +19,10 @@ subvolumeの使い方 使用法のガイド のリストのリンク先には興
 この際、Ubuntu風の@home等の 慣習Subvolume命名法 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。
 Root-fsのbtrfs化 RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。
 btrfs化の全体手順 btrfs化を確実にするために、練習を兼ねてサブ環境で移行を確認した上でメイン環境を移行します。
- EFIパーティションを共有した2つ以上別のパーティションを使う2つ以上のLinuxが立ち上げられるマルチブート環境を作成します。（EFIパーティションはWindowsとも共有） サブのLinux環境のbtrfs化  メインのLinux環境を立ち上げ、サブのLinux環境をbtrfs化します。（btrfs-convertで処理） サブのLinux環境の/etc/fstabや/boot/grub/grub.cfg内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。 メインのLinux環境の/boot/grub/grub.cfg内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。(sudo dpkg-reconfigure grub-efi-amd64とするのでもいいはず) サブのLinux環境を立ち上げ、正常動作を確認します。 サブのLinux環境を立ち上げ、メインのLinux環境をbtrfs化します。（この時点では、subvol=/にメインのシステムあり）   サブのLinux環境のsubvol=@への移動  サブのLinux環境のスナップショットを subvol=@に作成します。 メインのLinux環境を立ち上げ、サブのLinux環境のsubvol=/を/mntにマウントし、後述のバグ回避策の処理を行います。 subvol=@に移動したサブのLinux環境を立ち上げ、動作を確認します。 念のためsudo dpkg-reconfigure grub-efi-amd64とし、起動確認を確認します。   メインのLinux環境に関して、上記同様の、Linux環境のbtrfs化＋Linux環境のsubvol=@への移動を行います。 メインのLinux環境に関して、timeshiftを使えるようにsubvol=@homeを追加します。  Linux環境のbtrfs化 btrfs-convertによるファイルシステムの変換自体は、 Conversion from Ext3/4 and ReiserFS をトレースしました。
+EFIパーティションを共有した2つ以上別のパーティションを使う2つ以上のLinuxが立ち上げられるマルチブート環境を作成します。（EFIパーティションはWindowsとも共有） サブのLinux環境のbtrfs化 メインのLinux環境を立ち上げ、サブのLinux環境をbtrfs化します。（btrfs-convertで処理） サブのLinux環境の/etc/fstabや/boot/grub/grub.cfg内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。 メインのLinux環境の/boot/grub/grub.cfg内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。(sudo dpkg-reconfigure grub-efi-amd64とするのでもいいはず) サブのLinux環境を立ち上げ、正常動作を確認します。 サブのLinux環境を立ち上げ、メインのLinux環境をbtrfs化します。（この時点では、subvol=/にメインのシステムあり） サブのLinux環境のsubvol=@への移動 サブのLinux環境のスナップショットを subvol=@に作成します。 メインのLinux環境を立ち上げ、サブのLinux環境のsubvol=/を/mntにマウントし、後述のバグ回避策の処理を行います。 subvol=@に移動したサブのLinux環境を立ち上げ、動作を確認します。 念のためsudo dpkg-reconfigure grub-efi-amd64とし、起動確認を確認します。 メインのLinux環境に関して、上記同様の、Linux環境のbtrfs化＋Linux環境のsubvol=@への移動を行います。 メインのLinux環境に関して、timeshiftを使えるようにsubvol=@homeを追加します。 Linux環境のbtrfs化 btrfs-convertによるファイルシステムの変換自体は、 Conversion from Ext3/4 and ReiserFS をトレースしました。
 ファイルシステムの変換だけでは、ブート可能なシステムにはなっていません。 ファイルシステムがext4からbtrfsに変更されると同時にデバイスのblkidも 変更されます。例えば、491a357c-822f-4f38-b56e-b998baea81a5 から 9be0d928-5892-4cdd-a647-1e8cce937b2e に変わったとします。
 当然ですがこの変更に合わせ当然/etc/fstabに以下のdiffに相当する変更をします。
---- fstab.orig 2021-02-19 14:49:32.768895933 +0900 +++ fstab 2021-02-19 14:49:19.</description>
+--- fstab.orig 2021-02-19 14:49:32.768895933 +0900 +++ fstab 2021-02-19 14:49:19.860921576 +0900 @@ -6,6 +6,6 @@ # # &amp;lt;file system&amp;gt; &amp;lt;mount point&amp;gt; &amp;lt;type&amp;gt; &amp;lt;options&amp;gt; &amp;lt;dump&amp;gt; &amp;lt;pass&amp;gt; # / was on /dev/nvme1n1p1 during installation -UUID=491a357c-822f-4f38-b56e-b998baea81a5 / ext4 errors=remount-ro 0 1 +UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e / btrfs subvol=/,defaults 0 1 # /boot/efi was on /dev/nvme0n1p1 during installation 他のパーティションのシステムが設定するgrub2を使っていても、自分のシステムの /boot/grub/grub.</description>
     </item>
     
     <item>
@@ -34,14 +34,14 @@ btrfs化の全体手順 btrfs化を確実にするために、練習を兼ねて
       <description>先日トライしたGit Annexは不完全燃焼でしたが、これをきっかけに 世代管理・dedup・ファイル圧縮に対応できるというファイルシステムの Btrfs をもう一度見直しました。以下は自分なりの備忘録メモです。
 Btrfsをどう使うのか まずBtrfsがどこまで使えて、どういう注意が要るのかを Debianのwiki で確認しました。
 2020年5月のLinux goofy 5.4.0-0.bpo.4-amd64でも初心者が 安心して気楽に使うにはまだ制約が多いですね。
- LVMに重ねるのは不安 RAID関連も使うのは不安 quotas/qgroupsは使わないこと Subvolume毎にbtrfs特有オプションでマウントできない制約がある 多くのbtrfs特有オプションは使わないのが無難: nodatacow, 圧縮関連, autodefrag, discard, space_cache=v2 &amp;ldquo;btrfs filesystem defrag&amp;ldquo;はソースSubvolumeにのみ実施。snapshotには実施禁止 スナップショットは12個まで(これでもLVMより状況は良い) ディスクは使用9割を越えないようにする  ここまで調べて、システムファイル/usrやログ記録/var のbtrfs移行は面倒なので、当面は無理せず以下を移行対象に 考えます。
- データーのアーカイブ・バックアップ用の専用ドライブ /homeの専用パーティション  世代管理にはスナップショット機能を濫用しないように程々で 使い、バックアップソフトがバックアップする際にバックアップ メディア上の記録をdedupする配慮をし、ファイル圧縮は当面使 わないのはいい気がしました。
+LVMに重ねるのは不安 RAID関連も使うのは不安 quotas/qgroupsは使わないこと Subvolume毎にbtrfs特有オプションでマウントできない制約がある 多くのbtrfs特有オプションは使わないのが無難: nodatacow, 圧縮関連, autodefrag, discard, space_cache=v2 &amp;ldquo;btrfs filesystem defrag&amp;ldquo;はソースSubvolumeにのみ実施。snapshotには実施禁止 スナップショットは12個まで(これでもLVMより状況は良い) ディスクは使用9割を越えないようにする ここまで調べて、システムファイル/usrやログ記録/var のbtrfs移行は面倒なので、当面は無理せず以下を移行対象に 考えます。
+データーのアーカイブ・バックアップ用の専用ドライブ /homeの専用パーティション 世代管理にはスナップショット機能を濫用しないように程々で 使い、バックアップソフトがバックアップする際にバックアップ メディア上の記録をdedupする配慮をし、ファイル圧縮は当面使 わないのはいい気がしました。
 推奨バックアップソフトはborgbackupがDebianのwikiには書か かれています。 確かに人気がある ようです。この他timeshiftやbtrbkやsnapperや btrfsmaintenanceパッケージも使えそうです。
 Btrfsを意識したdedupeという視点では jdupesがよく使われている ようです。単純なcp -r ...やrsync ...を、dedupをする jdupes --dedupe ...と組み合わせて使うのに対する、上記 専用ソフトのメリットは気になります&amp;hellip;ただ、jdupesはあまりファイル数が 多くとファイルのオープン数のせいかうまく動かないことがありました。 このへんは後日の課題かな。
 Subvolume命名法 Btrfs自体は 特定のSubvolume命名法の慣習を定めていません。
 Debianでは特にどうするって言う慣習が無いようです。
 ただ、Btrfsを積極的に使うディストリビューションが Subvolume命名法に関して特定の慣習をとっているため そこで開発されているGUIツールがそれに依存してる印象 があります。
- Ubuntu  慣習Subvolume命名法  @ @home   スナップショット: timeshift   OpenSuse  慣習Subvolume命名法 慣習Subvolume命名法(tutorial)  @/ @/home   スナップショット: snapper    最近のDebianでは、borgbackup以外だと timeshiftの人気が出ています。 でもシステムのロールバックにフォーカスしていてユーザーデーターの スナップショットをしたいだけだと意外と使いにくくて止めました。</description>
+Ubuntu 慣習Subvolume命名法 @ @home スナップショット: timeshift OpenSuse 慣習Subvolume命名法 慣習Subvolume命名法(tutorial) @/ @/home スナップショット: snapper 最近のDebianでは、borgbackup以外だと timeshiftの人気が出ています。 でもシステムのロールバックにフォーカスしていてユーザーデーターの スナップショットをしたいだけだと意外と使いにくくて止めました。</description>
     </item>
     
   </channel>

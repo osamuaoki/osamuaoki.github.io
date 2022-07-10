@@ -13,7 +13,7 @@
       
       <guid>/en/2022/05/27/dgit-cheatsheet01/</guid>
       <description>dgit Cheatsheet Create new Debian packaging repository for salsa.debian.org as follows:
- $ git clone -o upstream $HTTPS_UPSTREAM_URL $REPO_NAME $ git remote set-url --push upstream DONT_PUSH $ git checkout -b debian/latest ... debianize as dgit-maint-merge(7) workflow Patch applied source tree (single-debian-patch, auto-commit) Ensure to have d/changelog matching the latest upstream tag Use &amp;#34;git deborig&amp;#34; to make upstream tarball $ git deborig $ sbuild # test build $ git remote add origin $GIT_MY_URL $ git push --set-upstream origin debian/latest .</description>
+$ git clone -o upstream $HTTPS_UPSTREAM_URL $REPO_NAME $ git remote set-url --push upstream DONT_PUSH $ git checkout -b debian/latest ... debianize as dgit-maint-merge(7) workflow Patch applied source tree (single-debian-patch, auto-commit) Ensure to have d/changelog matching the latest upstream tag Use &amp;#34;git deborig&amp;#34; to make upstream tarball $ git deborig $ sbuild # test build $ git remote add origin $GIT_MY_URL $ git push --set-upstream origin debian/latest .</description>
     </item>
     
     <item>
@@ -69,7 +69,7 @@ Let&amp;rsquo;s see how this is done.
       <guid>/en/2021/08/27/dev-03/</guid>
       <description>Pointers to linting tools.
 See Re-learning Vim (2) to understand how linters are used from Vim frontend.
-Shell shellcheck  deb package: shellcheck site: https://github.com/koalaman/shellcheck use in vim via ALE ignore warning:  line: &amp;ldquo;# shellcheck disable=SC2059&amp;rdquo; just above code line file: &amp;ldquo;# shellcheck disable=SC2059&amp;rdquo; just below #!/bin/sh user: &amp;ldquo;disable=SC2059&amp;rdquo; in ~/.shellcheckrc   list of warnings  vim as formtter  NORMAL MODE: gg=G  Python In case of doubt, chose one lint in ~/.</description>
+Shell shellcheck deb package: shellcheck site: https://github.com/koalaman/shellcheck use in vim via ALE ignore warning: line: &amp;ldquo;# shellcheck disable=SC2059&amp;rdquo; just above code line file: &amp;ldquo;# shellcheck disable=SC2059&amp;rdquo; just below #!/bin/sh user: &amp;ldquo;disable=SC2059&amp;rdquo; in ~/.shellcheckrc list of warnings vim as formtter NORMAL MODE: gg=G Python In case of doubt, chose one lint in ~/.vim/vimrc for ALE by UN-commenting out (instead of running 3 linters, use fast flake8-only):</description>
     </item>
     
     <item>
@@ -136,7 +136,7 @@ icon-view.py: import gi gi.require_version(&amp;#34;Gtk&amp;#34;, &amp;#34;3.0&a
       <pubDate>Mon, 19 Jul 2021 00:00:00 +0900</pubDate>
       
       <guid>/en/2021/07/19/pygi-6/</guid>
-      <description>GtkComboBox and GtkComboBoxText  GtkComboBox under the &amp;ldquo;Control&amp;rdquo; button GtkComboBoxText under the &amp;ldquo;Cotrol&amp;rdquo; button  A GtkComboBox is a widget that allows the user to choose from a list of valid choices offered in Gtk.TreeModel.
+      <description>GtkComboBox and GtkComboBoxText GtkComboBox under the &amp;ldquo;Control&amp;rdquo; button GtkComboBoxText under the &amp;ldquo;Cotrol&amp;rdquo; button A GtkComboBox is a widget that allows the user to choose from a list of valid choices offered in Gtk.TreeModel.
 GtkComboBoxText is for the simpler text-only case of GtkComboBox.
 For these let&amp;rsquo;s create combo-box.py/combo-box.ui and combo-box-text.py/combo-box-text.ui examples and compare them. It took me a while to make these working since existing examples usually don&amp;rsquo;t use Glade nor Gtk.</description>
     </item>
@@ -147,7 +147,7 @@ For these let&amp;rsquo;s create combo-box.py/combo-box.ui and combo-box-text.py
       <pubDate>Sun, 18 Jul 2021 00:00:00 +0000</pubDate>
       
       <guid>/en/2021/07/18/pygi-5/</guid>
-      <description>GtkListBox and GtkFlowBox  GtkListBox under the &amp;ldquo;Containers&amp;rdquo; button GtkFlowBox under the &amp;ldquo;Containers&amp;rdquo; button  These are like Gtk.Box and Gtk.Grid but its contents can by dynamically sorted and filtered.
+      <description>GtkListBox and GtkFlowBox GtkListBox under the &amp;ldquo;Containers&amp;rdquo; button GtkFlowBox under the &amp;ldquo;Containers&amp;rdquo; button These are like Gtk.Box and Gtk.Grid but its contents can by dynamically sorted and filtered.
 The children of these are Gtk.ListBoxRow and Gtk.FlowBoxChild respectively and these can be fairly complex. If the content of these are simple enough, use of Gtk.TreeView and Gtk.IconView may save your efforts.
 GtkTreeView Although Gtk.TreeView was mentioned as a simpler tool to use than Gtk.</description>
     </item>
@@ -158,10 +158,10 @@ GtkTreeView Although Gtk.TreeView was mentioned as a simpler tool to use than Gt
       <pubDate>Sat, 17 Jul 2021 00:00:00 +0000</pubDate>
       
       <guid>/en/2021/07/17/pygi-4/</guid>
-      <description>GtkNotebook and GtkStack  GtkNotebook under the &amp;ldquo;Containers&amp;rdquo; button GtkStack under the &amp;ldquo;Containers&amp;rdquo; button  These are very similar displaying a selected page out of stacked pages.
+      <description>GtkNotebook and GtkStack GtkNotebook under the &amp;ldquo;Containers&amp;rdquo; button GtkStack under the &amp;ldquo;Containers&amp;rdquo; button These are very similar displaying a selected page out of stacked pages.
 For GtkNotebook, functionality to select page is automatically provided.
 For GtkStack, functionality to select page needs external &amp;ldquo;control&amp;rdquo; widget and it needs to be specified in the property of the GtkStack widget. Such external &amp;ldquo;control&amp;rdquo; widget can be:
- GtkStackSwitcher under the &amp;ldquo;Control&amp;rdquo; button (horizontal/vertical list) GtkStackSidebar under the &amp;ldquo;Control&amp;rdquo; button (vertical list)  </description>
+GtkStackSwitcher under the &amp;ldquo;Control&amp;rdquo; button (horizontal/vertical list) GtkStackSidebar under the &amp;ldquo;Control&amp;rdquo; button (vertical list) </description>
     </item>
     
     <item>
@@ -172,7 +172,7 @@ For GtkStack, functionality to select page needs external &amp;ldquo;control&amp
       <guid>/en/2021/07/16/pygi-3/</guid>
       <description>Example: Special button widgets into GUI To put more widgets,&amp;ldquo;Number of items&amp;rdquo; on the left panel of GtkBox was incremented. Some box are further subdivided again with GtkBox with their &amp;ldquo;Orientation&amp;rdquo; settings set to &amp;ldquo;Horizontal&amp;rdquo; instead.
 Then I placed several additional simple &amp;ldquo;Control&amp;rdquo; widgets:
- GtkSpinButton under the &amp;ldquo;Control&amp;rdquo; button GtkToggleButton under the &amp;ldquo;Control&amp;rdquo; button GtkCheckButton under the &amp;ldquo;Control&amp;rdquo; button GtkRadioButton under the &amp;ldquo;Control&amp;rdquo; button GtkFileChooserButton under the &amp;ldquo;Control&amp;rdquo; button  Please note I created multiple widgets to learn how they work together with the object.</description>
+GtkSpinButton under the &amp;ldquo;Control&amp;rdquo; button GtkToggleButton under the &amp;ldquo;Control&amp;rdquo; button GtkCheckButton under the &amp;ldquo;Control&amp;rdquo; button GtkRadioButton under the &amp;ldquo;Control&amp;rdquo; button GtkFileChooserButton under the &amp;ldquo;Control&amp;rdquo; button Please note I created multiple widgets to learn how they work together with the object.</description>
     </item>
     
     <item>
@@ -184,7 +184,7 @@ Then I placed several additional simple &amp;ldquo;Control&amp;rdquo; widgets:
       <description>Example: Static simple widgets into GUI Dividing area into smaller subdivided areas are mostly done by GtkBox or GtkGrid under the &amp;ldquo;Containers&amp;rdquo; button.
 As a starter, I put GtkBox.
 Then I placed 2 simple &amp;ldquo;Control&amp;rdquo; widgets and a simple GtkLabel &amp;ldquo;Display&amp;rdquo; widget as an easy starter:
- GtkButton under the &amp;ldquo;Control&amp;rdquo; button GtkEntry under the &amp;ldquo;Control&amp;rdquo; button GtkLabel under the &amp;ldquo;Display&amp;rdquo; button  I set IDs for these widgets basically by dropping &amp;ldquo;Gtk&amp;rdquo; from the GTk class names.</description>
+GtkButton under the &amp;ldquo;Control&amp;rdquo; button GtkEntry under the &amp;ldquo;Control&amp;rdquo; button GtkLabel under the &amp;ldquo;Display&amp;rdquo; button I set IDs for these widgets basically by dropping &amp;ldquo;Gtk&amp;rdquo; from the GTk class names.</description>
     </item>
     
     <item>
@@ -207,9 +207,9 @@ The Python GTK+ 3 Tutorial (as of 2021-07) goes as:</description>
       <guid>/en/2021/04/09/dev-02/</guid>
       <description>Local repo After reading https://wiki.debian.org/DebianRepository/Setup checking their popularity, I decided to go with reprepro package.
 Here, I follow https://wiki.debian.org/DebianRepository/SetupWithReprepro (It was slightly outdated. I update it.)
-Setting up an web server  $ sudo apt install apache2 Now you can see a nice &amp;ldquo;Default Page&amp;rdquo; at &amp;ldquo;[::1]&amp;rdquo; (or &amp;ldquo;127.0.0.1&amp;rdquo; for IPV4) using browser.
+Setting up an web server $ sudo apt install apache2 Now you can see a nice &amp;ldquo;Default Page&amp;rdquo; at &amp;ldquo;[::1]&amp;rdquo; (or &amp;ldquo;127.0.0.1&amp;rdquo; for IPV4) using browser.
 Let&amp;rsquo;s create a simple directory tree for single distribution case.
- $ sudo bash -i # mkdir -p /var/www/html/repo # cat &amp;gt; /etc/apache2/conf-available/repos.</description>
+$ sudo bash -i # mkdir -p /var/www/html/repo # cat &amp;gt; /etc/apache2/conf-available/repos.</description>
     </item>
     
     <item>
@@ -219,9 +219,9 @@ Let&amp;rsquo;s create a simple directory tree for single distribution case.
       
       <guid>/en/2021/04/03/dev-01/</guid>
       <description>Development infrastructure In order to keep development setups to be simple and robust, I changed development infrastructure.
- For package test build, I decided to move to schroot. For package build, I decided to move to sbuild (a schroot wrapper). For package test for each GUI setups, I decided to set up KVM.  (I was suffering sudden cowbuilder failures. That was another motivation.)
+For package test build, I decided to move to schroot. For package build, I decided to move to sbuild (a schroot wrapper). For package test for each GUI setups, I decided to set up KVM. (I was suffering sudden cowbuilder failures. That was another motivation.)
 Planned infrastructure includes:
- APT proxy on the host WS.</description>
+APT proxy on the host WS.</description>
     </item>
     
     <item>
@@ -245,7 +245,7 @@ GUI Desktop customization Install gnome-tweak package to the system and tweaked 
       <guid>/en/2021/01/07/thinkpad-t14-gen-1-amd/</guid>
       <description>Let me keep up note on configuring and administrating my ThinkPad T14 Gen 1 (AMD) under Debian GNU/Linux. This is hardware specific tips.
 My system has 2 NVMe SSDs:
- AMD Ryzen™ 5 PRO 4650U &amp;ndash; 6 cores, 12 threads 32GB (PC4-25600 DDR4 SDRAM) &amp;ndash; after adding aftermarket Transcend 16GB SDRAM (JM3200HSE-16G [SODIMM DDR4 PC4-25600 16GB]) WDC PC SN520 SDAPMUW-128G-1001 (20370001) &amp;ndash; Original Western Digital 128GB SSD TS2TMTE220S (42B8T4EA) &amp;ndash; Aftermarket Transcend 2TB SSD  Official Information Sources  T14 Gen 1 (type 20UD, 20UE) Laptop (ThinkPad) Product Home Removal and Replacement Videos - ThinkPad T14 Gen 1 Forum  Adding 2TB SSD (2280 both side) The original Western Digital 128GB PCIe SSD (2242, IC on top side only) is removed and moved with thermal pad to the unused PCIe slot intended for WAN card.</description>
+AMD Ryzen™ 5 PRO 4650U &amp;ndash; 6 cores, 12 threads 32GB (PC4-25600 DDR4 SDRAM) &amp;ndash; after adding aftermarket Transcend 16GB SDRAM (JM3200HSE-16G [SODIMM DDR4 PC4-25600 16GB]) WDC PC SN520 SDAPMUW-128G-1001 (20370001) &amp;ndash; Original Western Digital 128GB SSD TS2TMTE220S (42B8T4EA) &amp;ndash; Aftermarket Transcend 2TB SSD Official Information Sources T14 Gen 1 (type 20UD, 20UE) Laptop (ThinkPad) Product Home Removal and Replacement Videos - ThinkPad T14 Gen 1 Forum Adding 2TB SSD (2280 both side) The original Western Digital 128GB PCIe SSD (2242, IC on top side only) is removed and moved with thermal pad to the unused PCIe slot intended for WAN card.</description>
     </item>
     
     <item>
@@ -266,9 +266,9 @@ $ sudo dmesg ... [ 2.373152] sd 0:0:0:0: [sda] 937703088 512-byte logical blocks
       <guid>/en/2019/10/21/fish-shell-1/</guid>
       <description>NOTE (2021-01-07):
 I gave up using fish early in 2000. I now stick to:
- Bash for interactive shell activity. Dash for simple scripting. Python3 for non-trivial scripting.  Original note:
+Bash for interactive shell activity. Dash for simple scripting. Python3 for non-trivial scripting. Original note:
 Fish shell looks interesting to me since it makes handling of space in the filename a lot simpler and have simple but powerful string manipulation with PCRE2.
- Fish shell  Fish Documentation Fish Tutorial Fish Command reference   Fisher  Awesome fish   Other resources  differences from bash fish shellを使う fish shellで文字列操作 Debimate &amp;hellip; fishへ移行 fish shellのconfig.</description>
+Fish shell Fish Documentation Fish Tutorial Fish Command reference Fisher Awesome fish Other resources differences from bash fish shellを使う fish shellで文字列操作 Debimate &amp;hellip; fishへ移行 fish shellのconfig.</description>
     </item>
     
     <item>
@@ -280,7 +280,8 @@ Fish shell looks interesting to me since it makes handling of space in the filen
       <description>Let&amp;rsquo;s review how I initialize Vim and use a few interesting packages.
 Please note that I now manage package directly via the Vim 8&amp;rsquo;s native package management framework with packadd! without using so-called package managers.
 Vim general settings (packages) As of 2021-09-02, I mostly use the latest version from github for some fancy fast developing packages but also use older mature packages from Debian vim-scripts package.
-  vim-sensible &amp;ndash; basics</description>
+vim-sensible &amp;ndash; basics
+matchit &amp;ndash; provided by vim securemodelines &amp;ndash; vim-scripts</description>
     </item>
     
     <item>
@@ -291,7 +292,7 @@ Vim general settings (packages) As of 2021-09-02, I mostly use the latest versio
       <guid>/en/2019/09/21/wayland/</guid>
       <description>Standard GNOME desktop under Debian Buster 10 has moved to use Wayland.
 Although the migration from X to Wayland is mostly transparent to the end-user like me, there are some exceptions.
-How to check if an application uses Wayland or X  Execute &amp;ldquo;xeyes &amp;amp;&amp;rdquo; from a terminal console . Move mouse pointer over to an application in question. If eyes are responsive, it&amp;rsquo;s an X application. If eyes aren&amp;rsquo;t responsive, it&amp;rsquo;s a Wayland application.</description>
+How to check if an application uses Wayland or X Execute &amp;ldquo;xeyes &amp;amp;&amp;rdquo; from a terminal console . Move mouse pointer over to an application in question. If eyes are responsive, it&amp;rsquo;s an X application. If eyes aren&amp;rsquo;t responsive, it&amp;rsquo;s a Wayland application.</description>
     </item>
     
     <item>
@@ -303,7 +304,7 @@ How to check if an application uses Wayland or X  Execute &amp;ldquo;xeyes &amp;
       <description>I could use Vim as a basic editor with TKL-keyboard while tapping some keys multiple times. This was functional but not so elegant!
 I decided to re-learn Vim to use it properly. Here is my learning memo.
 For simplicity, I may use ^F to mean CTRL-F.
-Concept  Use default vim (minimum configuration, if possible).  Use as much native functionalities. Don&amp;rsquo;t force Vim to behave like another program.   50%/60%-keyboard ready.</description>
+Concept Use default vim (minimum configuration, if possible). Use as much native functionalities. Don&amp;rsquo;t force Vim to behave like another program. 50%/60%-keyboard ready. Use no cursor keys, if possible.</description>
     </item>
     
     <item>
@@ -315,8 +316,8 @@ Concept  Use default vim (minimum configuration, if possible).  Use as much nati
       <description>I see formatting consistency provided by the black command helps me.
 The black is available as Debian package and its upstream is at https://github.com/psf/black
 Lint tools before black These are basic lint tools before black.
- pycodestyle (formerly called pep8) flake8 (bundle of: pycodestyle + pyflakes).  Install black  $ sudo apt install python3-black Use black  $ black a-python-code-directory/ or
- $ black a-python-code-file.py Skip Lint prigram Line with #NOQA at the end are skipped by pycodestyle for PEP-8 lint.</description>
+pycodestyle (formerly called pep8) flake8 (bundle of: pycodestyle + pyflakes). Install black $ sudo apt install python3-black Use black $ black a-python-code-directory/ or
+$ black a-python-code-file.py Skip Lint prigram Line with #NOQA at the end are skipped by pycodestyle for PEP-8 lint.</description>
     </item>
     
     <item>
@@ -326,7 +327,7 @@ Lint tools before black These are basic lint tools before black.
       
       <guid>/en/2019/02/11/dgit-workfow01/</guid>
       <description>For Debian maintainer, there can be 4 approaches for maintaining git repository with dgit. Let me get all key points of manpages.
-   tutorials model tool history patch quilt maintainer     dgit-maint-native(7) native git(1) upstream git (same) N/A upstream   dgit-maint-merge(7) merge git merge(1) upstream git applied merged upstream involved   dgit-maint-debrebase(7) rebasish git-debrebase(1) upstream git applied series pure downstream   dgit-maint-gbp(7) gbp git-buildpackage(1) upstream tar unapplied series pure downstream    Here, the maintainer column indicates relationship of the maintainer to the upstream development.</description>
+tutorials model tool history patch quilt maintainer dgit-maint-native(7) native git(1) upstream git (same) N/A upstream dgit-maint-merge(7) merge git merge(1) upstream git applied merged upstream involved dgit-maint-debrebase(7) rebasish git-debrebase(1) upstream git applied series pure downstream dgit-maint-gbp(7) gbp git-buildpackage(1) upstream tar unapplied series pure downstream Here, the maintainer column indicates relationship of the maintainer to the upstream development.</description>
     </item>
     
     <item>
@@ -336,9 +337,9 @@ Lint tools before black These are basic lint tools before black.
       
       <guid>/en/2019/02/09/initial-setup02/</guid>
       <description>Costomization wishlist Let&amp;rsquo;s customize web site contents.
- I want to have 2 separate directories for English and Japanese contents. Main menu should have link to the list of contents dedicated for English and Japanese contents The list of contents needs to be customized.  The following pages gave me good starting points.
- https://www.jakewiesler.com/blog/hugo-directory-structure/ https://sourceforge.net/p/hugo-generator/wiki/markdown_syntax/  Customization example Here are what I did:
- Since I don&amp;rsquo;t use content/_index.Rmarkdown, I erased it.</description>
+I want to have 2 separate directories for English and Japanese contents. Main menu should have link to the list of contents dedicated for English and Japanese contents The list of contents needs to be customized. The following pages gave me good starting points.
+https://www.jakewiesler.com/blog/hugo-directory-structure/ https://sourceforge.net/p/hugo-generator/wiki/markdown_syntax/ Customization example Here are what I did:
+Since I don&amp;rsquo;t use content/_index.Rmarkdown, I erased it. In order to save typing, I renamed content/_index.</description>
     </item>
     
     <item>
@@ -348,7 +349,7 @@ Lint tools before black These are basic lint tools before black.
       
       <guid>/en/2019/02/09/initial-setup01/</guid>
       <description>Initial hugo setups Let&amp;rsquo;s set up a local git repository for a simple personal web pages with blog support using hugo on Debian.
- $ sudo apt-get install hugo $ cd /path/to # where you can write $ hugo new site &amp;lt;webbuildtree&amp;gt; Congratulations! Your new Hugo site is created in /path/to/osamuaoki. Just a few more steps and you&amp;#39;re ready to go: 1. Download a theme into the same-named folder. Choose a theme from https://themes.</description>
+$ sudo apt-get install hugo $ cd /path/to # where you can write $ hugo new site &amp;lt;webbuildtree&amp;gt; Congratulations! Your new Hugo site is created in /path/to/osamuaoki. Just a few more steps and you&amp;#39;re ready to go: 1. Download a theme into the same-named folder. Choose a theme from https://themes.</description>
     </item>
     
     <item>
@@ -358,9 +359,9 @@ Lint tools before black These are basic lint tools before black.
       
       <guid>/en/2013/08/28/fun2prog-clang/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- C Language Except for some functional languages such as Scheme, many procedual languages share quite a bit of similarities. C language is a good start in terms of its gramatical simplicity.
+C Language Except for some functional languages such as Scheme, many procedual languages share quite a bit of similarities. C language is a good start in terms of its gramatical simplicity.
 Program control sequence keywords
-   C syntax meaning     expression; simple expression statement   {statement...} block statement   if (expression) statement conditional execution   if (expression) statement else statement conditional executions   switch (expression) {case const-express: {statement.</description>
+C syntax meaning expression; simple expression statement {statement...} block statement if (expression) statement conditional execution if (expression) statement else statement conditional executions switch (expression) {case const-express: {statement.</description>
     </item>
     
     <item>
@@ -370,9 +371,9 @@ Program control sequence keywords
       
       <guid>/en/2013/08/27/fun2prog-languages/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Language basics See Wikipedia article on programing language.
+Language basics See Wikipedia article on programing language.
 Please note this may be inaccurate.
- statement  ; as statement terminator: C, C++, Java, Vala, &amp;hellip; ; as statement separator: Perl, Pascal, PL/I, SQL, &amp;hellip; EOL as statement terminator: Python ; or EOL as statement terminator: Shell ; as NOP statement: Lua   block statement  { statement.</description>
+statement ; as statement terminator: C, C++, Java, Vala, &amp;hellip; ; as statement separator: Perl, Pascal, PL/I, SQL, &amp;hellip; EOL as statement terminator: Python ; or EOL as statement terminator: Shell ; as NOP statement: Lua block statement { statement... } : C, C++, Java, Vala, Perl, Shell, Lua, &amp;hellip; BEGIN statement.</description>
     </item>
     
     <item>
@@ -382,9 +383,9 @@ Please note this may be inaccurate.
       
       <guid>/en/2013/08/26/fun2prog-vim/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Vim basics Learning and practice!
- vimtutor vim +help +only  ~/.vimrc as:
-set nocompatible set nopaste set pastetoggle=&amp;lt;f2&amp;gt; set syntax=ON &amp;#34; Use secure modeline plug-in set nomodeline if $USER == &amp;#34;root&amp;#34; set noswapfile else set swapfile endif &amp;#34; filler to avoid the line above being recognized as a modeline &amp;#34; filler &amp;#34; filler  Learn additional basics:</description>
+Vim basics Learning and practice!
+vimtutor vim +help +only ~/.vimrc as:
+set nocompatible set nopaste set pastetoggle=&amp;lt;f2&amp;gt; set syntax=ON &amp;#34; Use secure modeline plug-in set nomodeline if $USER == &amp;#34;root&amp;#34; set noswapfile else set swapfile endif &amp;#34; filler to avoid the line above being recognized as a modeline &amp;#34; filler &amp;#34; filler Learn additional basics:</description>
     </item>
     
     <item>
@@ -394,9 +395,9 @@ set nocompatible set nopaste set pastetoggle=&amp;lt;f2&amp;gt; set syntax=ON &a
       
       <guid>/en/2013/08/25/fun2prog-utilities/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Utilities Here is a list of basic utilities used for the programming.
+Utilities Here is a list of basic utilities used for the programming.
 You can find usage examples for the commands in this document if their lines are ending with *.
- POSIX shell (dash package) See Debain Reference GNU make (make package) See Debain Reference GNU C compiler (gcc package) *  See the gccintro package containing &amp;ldquo;Introduction to GCC by Brian J.</description>
+POSIX shell (dash package) See Debain Reference GNU make (make package) See Debain Reference GNU C compiler (gcc package) * See the gccintro package containing &amp;ldquo;Introduction to GCC by Brian J.</description>
     </item>
     
     <item>
@@ -406,9 +407,9 @@ You can find usage examples for the commands in this document if their lines are
       
       <guid>/en/2013/08/24/fun2prog-coding-style/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Coding style Follow the existing practice for the source.
+Coding style Follow the existing practice for the source.
 Osamu&amp;rsquo;s preference at this moment is as follows:
- For this document, 4 spaces as much as possible for any codes &amp;hellip; C and alike: normally Linux-style hardtab. (ts=8 noet) Python: 4 spaces (The official indentation rule for Python, ts=4 sts=4 et) Other scripts: also 4 spaces or hardtab.</description>
+For this document, 4 spaces as much as possible for any codes &amp;hellip; C and alike: normally Linux-style hardtab. (ts=8 noet) Python: 4 spaces (The official indentation rule for Python, ts=4 sts=4 et) Other scripts: also 4 spaces or hardtab.</description>
     </item>
     
     <item>
@@ -418,9 +419,9 @@ Osamu&amp;rsquo;s preference at this moment is as follows:
       
       <guid>/en/2013/08/23/fun2prog-sys-stat/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- System Statistics Executables Let&amp;rsquo;s check roughly what kind of executables are used on my typical GNOME desktop Debian system building this document.
+System Statistics Executables Let&amp;rsquo;s check roughly what kind of executables are used on my typical GNOME desktop Debian system building this document.
 Statistics over installed executable programs
-   Executable type Number of programs     ELF executable (all) 2442   ELF executable (set*id) 37   ELF executable (linked to libc) 2350   ELF executable (linked to libstdc++ = C++) 361   ELF executable (linked to libX11 = X) 413   ELF executable (linked to gobject = GNOME) 329   ELF executable (linked to libQtCore = KDE) 101   ELF executable (linked to libncurses) 53   POSIX shell script 560   Perl script 508   Python script 240   Bash shell script 149   Ruby script 25   Lua script 1    ELF executable can be generated from any compiled languages such as C, C++, , Objective C, Objective C++, Vala, Common Lisp, Scheme, Haskel, Pascal, Fortran, Ada, &amp;hellip; but most likely they are from C or C++.</description>
+Executable type Number of programs ELF executable (all) 2442 ELF executable (set*id) 37 ELF executable (linked to libc) 2350 ELF executable (linked to libstdc++ = C++) 361 ELF executable (linked to libX11 = X) 413 ELF executable (linked to gobject = GNOME) 329 ELF executable (linked to libQtCore = KDE) 101 ELF executable (linked to libncurses) 53 POSIX shell script 560 Perl script 508 Python script 240 Bash shell script 149 Ruby script 25 Lua script 1 ELF executable can be generated from any compiled languages such as C, C++, , Objective C, Objective C++, Vala, Common Lisp, Scheme, Haskel, Pascal, Fortran, Ada, &amp;hellip; but most likely they are from C or C++.</description>
     </item>
     
     <item>
@@ -430,8 +431,8 @@ Statistics over installed executable programs
       
       <guid>/en/2013/08/22/fun2prog-readings/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Further readings Here are some documentation I found on the web which may be interesting to read. (I have not yet examined all their contents yet.)
-IBM developerWorks  IBM developerWorks Linux New to Linux programming and Linux system administration AIX and UNIX Technical library  Speaking UNIX This tutorial series by Martin Streicher (martin.</description>
+Further readings Here are some documentation I found on the web which may be interesting to read. (I have not yet examined all their contents yet.)
+IBM developerWorks IBM developerWorks Linux New to Linux programming and Linux system administration AIX and UNIX Technical library Speaking UNIX This tutorial series by Martin Streicher (martin.streicher@gmail.com) provide many examples of basic UNIX operations.</description>
     </item>
     
     <item>
@@ -441,7 +442,7 @@ IBM developerWorks  IBM developerWorks Linux New to Linux programming and Linux 
       
       <guid>/en/2013/08/21/fun2prog-gnupg/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Shell code with GnuPG Here are code examples which I thought interesting.
+Shell code with GnuPG Here are code examples which I thought interesting.
 Encrypted code Let&amp;rsquo;s make an obfuscated shell code by encrypting its real code contents. The following creates an encrypted ASCII file hello.asc (passphrase used was &amp;ldquo;secret&amp;rdquo;) from hello.
 Encrypting hello shell script into hello.asc
 $ cat ./hello #!/bin/sh # my first shell program echo &amp;#34;Hello, world!</description>
@@ -454,8 +455,8 @@ $ cat ./hello #!/bin/sh # my first shell program echo &amp;#34;Hello, world!</de
       
       <guid>/en/2013/08/20/fun2prog-lua/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Embedded Lua The Lua interpreter embedded into a small C program offers an ideal configuration system. It can execute any functions of the hosting C program under specified conditions and sequences with arbitrary parameter values.
- Lua is small. Lua has simple procedural syntax. Lua has powerful data constructs based on associative arrays. Lua has extensible semantics.</description>
+Embedded Lua The Lua interpreter embedded into a small C program offers an ideal configuration system. It can execute any functions of the hosting C program under specified conditions and sequences with arbitrary parameter values.
+Lua is small. Lua has simple procedural syntax. Lua has powerful data constructs based on associative arrays. Lua has extensible semantics.</description>
     </item>
     
     <item>
@@ -465,7 +466,7 @@ $ cat ./hello #!/bin/sh # my first shell program echo &amp;#34;Hello, world!</de
       
       <guid>/en/2013/08/19/fun2prog-xml/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- XML XML is a representation of the textual data structure. For example, it is used for web pages (XHTML) and DocBook source files (DocBook).
+XML XML is a representation of the textual data structure. For example, it is used for web pages (XHTML) and DocBook source files (DocBook).
 The tag pair &amp;ldquo;&amp;lt;tag&amp;gt; ... &amp;lt;/tag&amp;gt;&amp;rdquo; or selfclosing tag &amp;ldquo;&amp;lt;tag /&amp;gt;&amp;rdquo; are used to markup the text data. This simple XML data structure allows to create its generic data processing tools such as XSLT, DOM, SAX, &amp;hellip; .</description>
     </item>
     
@@ -476,9 +477,9 @@ The tag pair &amp;ldquo;&amp;lt;tag&amp;gt; ... &amp;lt;/tag&amp;gt;&amp;rdquo; 
       
       <guid>/en/2013/08/18/fun2prog-sqlite/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- SQLite SQLite is a lightweight relational database management system suitable for embedding into the application program by linking the SQLite library. Structured Query Language (SQL) can be used to manage the content of the database.
+SQLite SQLite is a lightweight relational database management system suitable for embedding into the application program by linking the SQLite library. Structured Query Language (SQL) can be used to manage the content of the database.
 SQL basics You can interactively input SQL commands to the command line after starting sqlite3 as:
-$ sqlite3 test.</description>
+$ sqlite3 test.db SQLite version 3.</description>
     </item>
     
     <item>
@@ -488,9 +489,10 @@ $ sqlite3 test.</description>
       
       <guid>/en/2013/08/17/fun2prog-gtkgui/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- GTK+ GUI programs Here are some pointers to example codes for GNOME GUI:
- Beginner Gtk+ Course (August 20, 2012) GNOME Developer Platform Demos (These are mostly empty templates as of 2012.)  Let me record my practice codes which create executables with the following same behaviour.
-First it displays a small window as:</description>
+GTK+ GUI programs Here are some pointers to example codes for GNOME GUI:
+Beginner Gtk+ Course (August 20, 2012) GNOME Developer Platform Demos (These are mostly empty templates as of 2012.) Let me record my practice codes which create executables with the following same behaviour.
+First it displays a small window as:
++----------------X | Click me!</description>
     </item>
     
     <item>
@@ -500,7 +502,7 @@ First it displays a small window as:</description>
       
       <guid>/en/2013/08/16/fun2prog-gnome/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- GNOME The choice of the best GUI program practice is not simple since there are many choices for GUI platforms, many outdated documentations, new features without updated tutorials, and future uncertainties.
+GNOME The choice of the best GUI program practice is not simple since there are many choices for GUI platforms, many outdated documentations, new features without updated tutorials, and future uncertainties.
 Despite people had very negative reaction to the GNOME3 due to its new default user experience, I chose it as my GUI example platform for its fundamental internal technical merits.</description>
     </item>
     
@@ -511,8 +513,8 @@ Despite people had very negative reaction to the GNOME3 due to its new default u
       
       <guid>/en/2013/08/15/fun2prog-build/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Build system There are many cross-platform build systems:
- Autotools for GNU, GNOME, generic C/C++/Vala/&amp;hellip; programs CMake for KDE programs, etc. Python distutils for some Python programs  Install Python source distribution (as a user) Generate Python source distribution (as an upstream)    Please note there are many programs which come with the plain GNU Make as the build system .</description>
+Build system There are many cross-platform build systems:
+Autotools for GNU, GNOME, generic C/C++/Vala/&amp;hellip; programs CMake for KDE programs, etc. Python distutils for some Python programs Install Python source distribution (as a user) Generate Python source distribution (as an upstream) Please note there are many programs which come with the plain GNU Make as the build system .</description>
     </item>
     
     <item>
@@ -522,7 +524,7 @@ Despite people had very negative reaction to the GNOME3 due to its new default u
       
       <guid>/en/2013/08/14/fun2prog-python/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Python program Python is a vary http://en.wikipedia.org/wiki/High-level_programming_language[high-level programming language] which offers features to support OOP. It is very well documented in the Python documentation web site.
+Python program Python is a vary http://en.wikipedia.org/wiki/High-level_programming_language[high-level programming language] which offers features to support OOP. It is very well documented in the Python documentation web site.
 Python frees us from chores of the memory management required by C and allows us to focus on the problem solving. Python module system allows us to organize codes in multiple files nicely and let us divide and conqueror bugs efficiently.</description>
     </item>
     
@@ -533,7 +535,7 @@ Python frees us from chores of the memory management required by C and allows us
       
       <guid>/en/2013/08/13/fun2prog-debug-4/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Debug: level 4 Dynamically tracing program execution to understand the general behavior of the program is the major part of debugging.
+Debug: level 4 Dynamically tracing program execution to understand the general behavior of the program is the major part of debugging.
 There are several ways to trace programs interactively. The perf tool facilitate this without any modifications to the source.
 perf The linux-tools-* package matching your running kernel provides the perf command on your system.</description>
     </item>
@@ -545,7 +547,7 @@ perf The linux-tools-* package matching your running kernel provides the perf co
       
       <guid>/en/2013/08/12/fun2prog-debug-3/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Debug: level 3 The GNU debugger (GDB) make you look into binary programs.
+Debug: level 3 The GNU debugger (GDB) make you look into binary programs.
 If you do not mind reading the code in the assembler, no source code is required.
 The GDB works even better if the program is compiled with the -g option and the source code is kept in place on the same machine after the compilation with the -g option.</description>
     </item>
@@ -557,7 +559,7 @@ The GDB works even better if the program is compiled with the -g option and the 
       
       <guid>/en/2013/08/11/fun2prog-debug-2/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Debug: level 2 Tracing program execution to understand the general behavior of the program is the major part of debugging.
+Debug: level 2 Tracing program execution to understand the general behavior of the program is the major part of debugging.
 There are several ways to trace programs non-interactively without any modifications to the source.
 strace This is very effective tools to investigate what a program does without reading its full source at the system calll level.</description>
     </item>
@@ -569,7 +571,7 @@ strace This is very effective tools to investigate what a program does without r
       
       <guid>/en/2013/08/10/fun2prog-debug-1/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Debug: level 1 Debugging is the major part of programing.
+Debug: level 1 Debugging is the major part of programing.
 If your code fails by an unknown cause, it is primitive but is often used technique to embed logging codes for key internal parameters. This logging must be disabled for the normal program execution.
 TIP: Use the script(1) command to obtain a file copy of the console output.</description>
     </item>
@@ -581,9 +583,9 @@ TIP: Use the script(1) command to obtain a file copy of the console output.</des
       
       <guid>/en/2013/08/09/fun2prog-elf/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- ELF In this chapter, I will play with ELF files generated from the same hello.c program file as the one in the Hello World: C with the debug information to learn how it works.
+ELF In this chapter, I will play with ELF files generated from the same hello.c program file as the one in the Hello World: C with the debug information to learn how it works.
 See the following for the he ELF:
- The wikipedia: ELF The man page elf(5). Linkers and Loaders (draft) for their mechanism.</description>
+The wikipedia: ELF The man page elf(5). Linkers and Loaders (draft) for their mechanism.</description>
     </item>
     
     <item>
@@ -593,8 +595,8 @@ See the following for the he ELF:
       
       <guid>/en/2013/08/08/fun2prog-library/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Library Static and dynamic libraries Compiling source while stopping at object file can be done with the -c option. You can bunch such object files into a single archive/object. This is called library.
- static library: libfoo.a  simple archive of object files (*.o) as &amp;ldquo;ar rcs libfoo.a *.o&amp;rdquo; *.a may be used just like bunch of *.</description>
+Library Static and dynamic libraries Compiling source while stopping at object file can be done with the -c option. You can bunch such object files into a single archive/object. This is called library.
+static library: libfoo.a simple archive of object files (*.o) as &amp;ldquo;ar rcs libfoo.a *.o&amp;rdquo; *.a may be used just like bunch of *.</description>
     </item>
     
     <item>
@@ -604,7 +606,7 @@ See the following for the he ELF:
       
       <guid>/en/2013/08/07/fun2prog-gcc/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- GCC The gccintro package provides a good tutorial &amp;ldquo;Introduction to GCC by Brian J. Gough&amp;rdquo; for the GCC basics to compile C programs.
+GCC The gccintro package provides a good tutorial &amp;ldquo;Introduction to GCC by Brian J. Gough&amp;rdquo; for the GCC basics to compile C programs.
 GCC version Check gcc version and defaults:
 $ gcc -v Using built-in specs. COLLECT_GCC=gcc COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/4.8/lto-wrapper Target: x86_64-linux-gnu Configured with: ../src/configure -v --with-pkgversion=&amp;#39;Debian 4.8.1-9&amp;#39; --with-bu... Thread model: posix gcc version 4.8.1 (Debian 4.</description>
     </item>
@@ -616,10 +618,10 @@ $ gcc -v Using built-in specs. COLLECT_GCC=gcc COLLECT_LTO_WRAPPER=/usr/lib/gcc/
       
       <guid>/en/2013/08/06/fun2prog-process/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Process Here are some practice results to play with process and inter process communication (IPC) (signal and network socket) on Debian wheezy.
+Process Here are some practice results to play with process and inter process communication (IPC) (signal and network socket) on Debian wheezy.
 Signal Signal is explained in signal(7).
 Here are default actions for notable signals.
- Default action is to terminate the process.  SIGHUP = 1 : Death of controlling process SIGINT = 2 : Interrupt from keyboard (Ctrl-C) SIGKILL = 9 : Kill signal (non-trappable) SIGALRM = 14 : Timer signal from alarm(2) SIGTERM = 15 : Termination signal (default for kill) SIGUSR1 = 10 : User-defined signal 1 SIGUSR2 = 12 : User-defined signal 2   Default action is to terminate the process and dump core.</description>
+Default action is to terminate the process. SIGHUP = 1 : Death of controlling process SIGINT = 2 : Interrupt from keyboard (Ctrl-C) SIGKILL = 9 : Kill signal (non-trappable) SIGALRM = 14 : Timer signal from alarm(2) SIGTERM = 15 : Termination signal (default for kill) SIGUSR1 = 10 : User-defined signal 1 SIGUSR2 = 12 : User-defined signal 2 Default action is to terminate the process and dump core.</description>
     </item>
     
     <item>
@@ -629,9 +631,9 @@ Here are default actions for notable signals.
       
       <guid>/en/2013/08/05/fun2prog-prime/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Prime numbers A prime number (or a prime) is a natural number greater than 1 that has no positive divisors other than 1 and itself.
+Prime numbers A prime number (or a prime) is a natural number greater than 1 that has no positive divisors other than 1 and itself.
 Let&amp;rsquo;s check simple code snippets to obtain prime numbers via the same trial division algorithm implemented in different languages to study the following:
- basic for-loop syntax relative execution speed  Please note this algorithm to obtain prime numbers is not the best one.</description>
+basic for-loop syntax relative execution speed Please note this algorithm to obtain prime numbers is not the best one.</description>
     </item>
     
     <item>
@@ -641,9 +643,9 @@ Let&amp;rsquo;s check simple code snippets to obtain prime numbers via the same 
       
       <guid>/en/2013/08/04/fun2prog-fibo/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- Fibonacci numbers The Fibonacci numbers are a sequence of integers, starting with 0, 1 and continuing 1, 2, 3, 5, 8, 13, &amp;hellip;, each new number being the sum of the previous two.
+Fibonacci numbers The Fibonacci numbers are a sequence of integers, starting with 0, 1 and continuing 1, 2, 3, 5, 8, 13, &amp;hellip;, each new number being the sum of the previous two.
 Let&amp;rsquo;s check simple code snippets to obtain Fibonacci numbers implemented in different languages to study the following:
- basic while-loop syntax integer overflow behavior  Shell Before we start, let&amp;rsquo;s check the integer overflow behavior of the shell on the 64-bit GNU/Linux platform.</description>
+basic while-loop syntax integer overflow behavior Shell Before we start, let&amp;rsquo;s check the integer overflow behavior of the shell on the 64-bit GNU/Linux platform.</description>
     </item>
     
     <item>
@@ -653,7 +655,7 @@ Let&amp;rsquo;s check simple code snippets to obtain Fibonacci numbers implement
       
       <guid>/en/2013/08/03/fun2prog-cli/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- CLI programs The command line interface (CLI) program requires to parse its command line arguments. Here are simple example code snippets.
+CLI programs The command line interface (CLI) program requires to parse its command line arguments. Here are simple example code snippets.
 Please note I chose the coding style which is the most legible for each language. I know there are other ways &amp;hellip;
 Shell Shell script (short option only) Shell program with short command line options.</description>
     </item>
@@ -665,9 +667,9 @@ Shell Shell script (short option only) Shell program with short command line opt
       
       <guid>/en/2013/08/02/fun2prog-hello/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- &amp;ldquo;Hello World!&amp;rdquo; Here are example code snippets to print &amp;ldquo;Hello World!&amp;rdquo; and somethings we should be aware of for each language.
+&amp;ldquo;Hello World!&amp;rdquo; Here are example code snippets to print &amp;ldquo;Hello World!&amp;rdquo; and somethings we should be aware of for each language.
 Shell The most basic programing language: Shell.
- Interpreter (slow) Easy to write a small program. Not easy to write a big program. Test code snippet under the normal console (or by &amp;ldquo;sh -i&amp;rdquo;).</description>
+Interpreter (slow) Easy to write a small program. Not easy to write a big program. Test code snippet under the normal console (or by &amp;ldquo;sh -i&amp;rdquo;). Source code for the hello shell script</description>
     </item>
     
     <item>
@@ -677,8 +679,9 @@ Shell The most basic programing language: Shell.
       
       <guid>/en/2013/08/01/fun2prog-open/</guid>
       <description>This was originally written and created around 2013 and may require to be updated. (2021)
- This &amp;ldquo;Fun to Program&amp;rdquo; was originally created around 2013 when I was learning programming on Debian system and was published to http://people.debian.org/~osamu/fun2prog.html .
-Since this has been neglected and I thought it is good idea to go through this content again. I moved this content to the currently maintained site https://osamuaoki.github.io/ in 2021.</description>
+This &amp;ldquo;Fun to Program&amp;rdquo; was originally created around 2013 when I was learning programming on Debian system and was published to http://people.debian.org/~osamu/fun2prog.html .
+Since this has been neglected and I thought it is good idea to go through this content again. I moved this content to the currently maintained site https://osamuaoki.github.io/ in 2021.
+Script examples were created in 2013.</description>
     </item>
     
   </channel>

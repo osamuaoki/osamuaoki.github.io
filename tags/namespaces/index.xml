@@ -37,7 +37,7 @@ shadow-utils Linux Namespaces関連のnewuidmap(1)等のコマンドは、 Shado
 この次に非特権ユーザー権限から立ち上げられたLXC仮想環境を実現するための 技術背景を学ぶために、ここはひとまずLXCのコマンドを離れ Linux Namespaces 周辺に着目します。Linux Namespaces は伝統的なUNIXの範疇を越えているので、 Linuxがカーネルレベルでどこがどう拡張されているのかを2021年2月の時点の Debian Bulleseye/testing pre-11 release環境で確認していきます。
 Linux Namespaces どうもLXCも含めた各種コンテナ環境は2002年以降拡充されてきた LinuxのNamespaces というカーネルの機能を使っていることがキーだと分かりました。
 とりあえず、以下の関連マンページに目を通しました。
- namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name  Cgroup Namespaces Linux Namespacesの中でcgroup_namespaces(7)は、/proc/[pid]/cgroup と /proc/[pid]/mountinfo から見えるプロセスのcgroups (コントロールグループ) の見え方を仮想化します。各種コンテナ環境を可能にする仮想化技術の中心的な要素 としておもしろそうだったので、自分なりに追加の状況確認をしながらtraceしたの ですがマンページの通りには行きませんでした。</description>
+namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name Cgroup Namespaces Linux Namespacesの中でcgroup_namespaces(7)は、/proc/[pid]/cgroup と /proc/[pid]/mountinfo から見えるプロセスのcgroups (コントロールグループ) の見え方を仮想化します。各種コンテナ環境を可能にする仮想化技術の中心的な要素 としておもしろそうだったので、自分なりに追加の状況確認をしながらtraceしたの ですがマンページの通りには行きませんでした。</description>
     </item>
     
   </channel>

@@ -18,7 +18,7 @@
 DFUのこつ 「DFUに入りにくい」などと言うことをNETで散見します。（チップを温めるなどという「おまじない」も日本語のどこかで見ました。）
 確かに、無頓着にBOOT0とNRSTのPUSHスイッチを同時押し・同時離しでDFUに入ろうとすると上手くいかないことがありました。
 でも、以下の手順をとれば、確実にDFUに入れます。
- まず、BOOT0を押す(1sこの状態を保つ) 併せて、NRSTも押す(1sこの状態を保つ) NRSTを離す(この時もBOOT0は押したまま) 3ステップの1s後、BOOT0を離す  DFUデバイスのrealtimeの確認は、今風にjournalctl -fコマンドです。(昔はsudo dmsg -w)。
+まず、BOOT0を押す(1sこの状態を保つ) 併せて、NRSTも押す(1sこの状態を保つ) NRSTを離す(この時もBOOT0は押したまま) 3ステップの1s後、BOOT0を離す DFUデバイスのrealtimeの確認は、今風にjournalctl -fコマンドです。(昔はsudo dmsg -w)。
 繋がったDFUデバイスの詳細状況は、dfu-util -lで確認します。
 電源投入後すぐだと、一度以下のようなエラーでDFUに入れないことがありました。
 usb 4-2: new full-speed USB device number 4 using xhci_hcd usb 4-2: device descriptor read/64, error -71 usb 4-2: device descriptor read/64, error -71 usb 4-2: new full-speed USB device number 5 using xhci_hcd usb 4-2: device descriptor read/64, error -71 usb 4-2: device descriptor read/64, error -71 usb usb4-port2: attempt power cycle usb 4-2: new full-speed USB device number 6 using xhci_hcd usb 4-2: Device not responding to setup address.</description>
@@ -34,13 +34,13 @@ usb 4-2: new full-speed USB device number 4 using xhci_hcd usb 4-2: device descr
 HID BOOTLOADER の復元準備 前記の方法でQMKをDFUで内蔵フラッシュメモリーの0x800 0000から導入すると上書きされてしまいます。書き換えできるメモリーの最後にbootloaderを置くAVRと異なり、ARM系のSTM32Fはフラッシュの最初の0x800 0000にBootloader等を置かれているからです。
 STM32F103のような、ROM化されたUSB対応bootloaderが無いMCUの場合にはHID BOOTLOADERが必要ですが、STM32F411等はROMがDFUをサポートしてUSB経由のファームウエアー書き換えに対応しているので、HID BOOTLOADERは必須要素技術ではありません。ここは、後学のため元のHID BOOTLOADERの復元法を記します。(元々はA12ピン問題で悩んでいた際の学習ノートです。)
 最初に入っていたHID Bootloaderは、ベンダーの WeActTC の技術情報サイトを覗き入手します。
- https://github.com/WeActTC  HEXファイルやバイナリーのホストプログラムとともに、元ネタサイト情報もありました。
- https://github.com/Serasidis/STM32_HID_Bootloader  ARDUINO作成のスケッチのアップロードは、WeAct_HID_Flash-CLIで単純にBINファイルを書いているので、ARDUINO系のシステムでSTM32F103と共通のファームウエアーを作成し使用するには、HID_Bootloaderも良いかもしれません。
+https://github.com/WeActTC HEXファイルやバイナリーのホストプログラムとともに、元ネタサイト情報もありました。
+https://github.com/Serasidis/STM32_HID_Bootloader ARDUINO作成のスケッチのアップロードは、WeAct_HID_Flash-CLIで単純にBINファイルを書いているので、ARDUINO系のシステムでSTM32F103と共通のファームウエアーを作成し使用するには、HID_Bootloaderも良いかもしれません。
 アドレス ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の情報によると、HID Bootloaderの APP forwarding addressは0x8004000だそうです。 STM32F103と違いSTM32F411はフラッシュの書き換え単位が16KBあるので、これだけのスペース空けています。
-   ROM Addr     0x8000000 Bootloader   16KB   0x8004000 APP   &amp;hellip;..   END    つまり元々ボード上のMCUに書き込まれていたのHID Bootloaderには0x800 0400 に読み込まれて実行されるように作成したファームウエアーが必要です。
+ROM Addr 0x8000000 Bootloader 16KB 0x8004000 APP &amp;hellip;.. END つまり元々ボード上のMCUに書き込まれていたのHID Bootloaderには0x800 0400 に読み込まれて実行されるように作成したファームウエアーが必要です。
 QMKは通常0x800 0000 に書き込み実行するファームウエアーを作成するので、QMKファームウエアーの導入にHID Bootloaderは使えません。
 HEXファイル WeActが提供するプロプライエタリーのHEXファイルは以下:
- HID Bootloader: MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/Bootloader/WeAct_HID_Bootloader_F4x1.</description>
+HID Bootloader: MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/Bootloader/WeAct_HID_Bootloader_F4x1.hex TESTアプリ: MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/APP/stm32f411_APP_test 0x8004000.hex 電源接続下での、DFUへのはいり方 BOOT0 と reset キーの同時押し 先に、resetキーのリリース 0.5秒後、BOOT0キーのリリース DFU接続の確認法 $ journalctl -f --no-hostname ... usb 6-1.4.2: new full-speed USB device number 33 using xhci_hcd usb 6-1.</description>
     </item>
     
     <item>
@@ -50,7 +50,7 @@ HEXファイル WeActが提供するプロプライエタリーのHEXファイ�
       
       <guid>/jp/2022/02/07/blackpill-1/</guid>
       <description>基本のSTM32F系の安価だけど、純正STMチップ(同等品でない)が載っていそうな 小型のデモボードとして、WeActのblackpillをAliexpressの正規ショップ から購入しました。STM32F411CEが載っています。
- WeActのデバイス情報 https://github.com/WeActTC/MiniSTM32F4x1  PCB回路要点    IC PIN 機能 動作     7 NRST RESET SW, PUSH=0 , NORMAL=1   44 BOOT0 BOOT SW, PUSH=1, NORMAL=0   20 PB2 / BOOT1 NORMAL=0 (pull down res.)   10 PA0 / WKUP1 USER KEY, NORMAL=1, PUSH=0   2 PC13 / BLUE LED, LED_ON=0    STM32のメモリー  0x0000 0000 - 0x0007 FFFF (REMAPされる) &amp;ndash; The code area  通常 BOOT0は押されていないので: Flash memoryをさしている  つまりユーザー作成のFirmware実行   BOOT0 pushed: System memory (BOOT0 pushed)  CU内臓のBOOTLOADERの実行, STM32F411の場合はUSB経由のDFUもサポート     0x2000 0000 - 0x2002 0000 SRAM1 (128 KB) &amp;ndash; The data area 0x0800 0000 - 0x0807 FFFF Flash memory Flash memory (512KB) 0x1FFF 0000 - 0x1FFF 77FF System memory (32MB)  起動  the CPU fetches the top-of-stack value from address 0x0000 0000, the CPU starts code execution from the boot memory starting from 0x0000 0004.</description>
+WeActのデバイス情報 https://github.com/WeActTC/MiniSTM32F4x1 PCB回路要点 IC PIN 機能 動作 7 NRST RESET SW, PUSH=0 , NORMAL=1 44 BOOT0 BOOT SW, PUSH=1, NORMAL=0 20 PB2 / BOOT1 NORMAL=0 (pull down res.) 10 PA0 / WKUP1 USER KEY, NORMAL=1, PUSH=0 2 PC13 / BLUE LED, LED_ON=0 STM32のメモリー 0x0000 0000 - 0x0007 FFFF (REMAPされる) &amp;ndash; The code area 通常 BOOT0は押されていないので: Flash memoryをさしている つまりユーザー作成のFirmware実行 BOOT0 pushed: System memory (BOOT0 pushed) CU内臓のBOOTLOADERの実行, STM32F411の場合はUSB経由のDFUもサポート 0x2000 0000 - 0x2002 0000 SRAM1 (128 KB) &amp;ndash; The data area 0x0800 0000 - 0x0807 FFFF Flash memory Flash memory (512KB) 0x1FFF 0000 - 0x1FFF 77FF System memory (32MB) 起動 the CPU fetches the top-of-stack value from address 0x0000 0000, the CPU starts code execution from the boot memory starting from 0x0000 0004.</description>
     </item>
     
   </channel>

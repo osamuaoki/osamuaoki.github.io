@@ -14,7 +14,7 @@
       
       <guid>/jp/2021/06/17/virt-07/</guid>
       <description>コンテナ技術を用いる仮想環境利用の考察 コンテナ技術を用いる仮想環境は、外部から導入するバイナリーを実行する 際のリスク低減とメインのシステムの環境コンタミを防ぐのには悪くないので しょう。そういった意味でtesting環境では安定しないオフィス関係のデスク トップアプリの安定版最新バージョンの導入や、Debianがまだ提供していない アップストリームの最新バージョンのアプリ導入に使うのはありがも知れません。
- AppImage Flatpack Snapcraft  ただ、単にパッケージ開発やビルド環境のためだけならLXC仮想環境をLXCの CLIから用いるのは面倒です。
+AppImage Flatpack Snapcraft ただ、単にパッケージ開発やビルド環境のためだけならLXC仮想環境をLXCの CLIから用いるのは面倒です。
 最初の、仮想環境(1) の内容を見直してsbuild/schrootを経由した単純なchroot環境を使うようになり 益々そう感じます。
 chrootにせよLXCにせよKernel以外のシステム全体のコピーを各環境毎に確保する ので重いことは否めません。
 Python: venv + pip (manual) Debianが提供しなくなったgripを、 PyPIからのPythonのモジュールとしてpipで導入すると、 すでにシステムに導入済みのPythonのモジュールまで、sudoしなかったので システムレベルでの/usr/local/の中への変更は無く、ユーザー環境の ~/.local/の中への変更のみとはいえ、そこに最新版を依存関係で導入したり するのが気になっていました。さすがにこれだけのためにchrootやコンテナ環境 を作るのは重いのでPython環境だけを仮想化しました。
@@ -68,7 +68,7 @@ shadow-utils Linux Namespaces関連のnewuidmap(1)等のコマンドは、 Shado
 この次に非特権ユーザー権限から立ち上げられたLXC仮想環境を実現するための 技術背景を学ぶために、ここはひとまずLXCのコマンドを離れ Linux Namespaces 周辺に着目します。Linux Namespaces は伝統的なUNIXの範疇を越えているので、 Linuxがカーネルレベルでどこがどう拡張されているのかを2021年2月の時点の Debian Bulleseye/testing pre-11 release環境で確認していきます。
 Linux Namespaces どうもLXCも含めた各種コンテナ環境は2002年以降拡充されてきた LinuxのNamespaces というカーネルの機能を使っていることがキーだと分かりました。
 とりあえず、以下の関連マンページに目を通しました。
- namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name  Cgroup Namespaces Linux Namespacesの中でcgroup_namespaces(7)は、/proc/[pid]/cgroup と /proc/[pid]/mountinfo から見えるプロセスのcgroups (コントロールグループ) の見え方を仮想化します。各種コンテナ環境を可能にする仮想化技術の中心的な要素 としておもしろそうだったので、自分なりに追加の状況確認をしながらtraceしたの ですがマンページの通りには行きませんでした。</description>
+namespaces(7): LinuxのNamespaces全体の説明 cgroup_namespaces(7): Cgroup root directory ipc_namespaces(7): System V IPC, POSIX message queues network_namespaces(7): Network devices, stacks, ports, etc. mount_namespaces(7): Mount points pid_namespaces(7): Process IDs time_namespaces(7): Boot and monotonic clocks user_namespaces(7): User and group IDs uts_namespaces(7): Hostname and NIS domain name Cgroup Namespaces Linux Namespacesの中でcgroup_namespaces(7)は、/proc/[pid]/cgroup と /proc/[pid]/mountinfo から見えるプロセスのcgroups (コントロールグループ) の見え方を仮想化します。各種コンテナ環境を可能にする仮想化技術の中心的な要素 としておもしろそうだったので、自分なりに追加の状況確認をしながらtraceしたの ですがマンページの通りには行きませんでした。</description>
     </item>
     
     <item>
@@ -97,10 +97,10 @@ WEB上のLXCの情報は古い1.0や2.0の情報とか、新規のUIを提供す
 Debianの最新のLXC環境を確認するには、まず/usr/share/doc/lxc/README.Debianを しっかり読む必要があります。ここに書かれたユーザー権限で実行されるコンテナ (unprivileged containers) 関連の手動設定は重要です。
 まずは、簡単なROOT権限で実行されるコンテナ中心に始めます。
 LXC仮想環境作成 LXCを使ってのパッケージ作成やデバグ用等に使うsid環境の仮想環境作成を試みます。
- $ sudo lxc-create -n sid -t debian -- -r sid もし、ミラーが不調なら、安定そうなUSミラーを使います。
- $ sudo lxc-create -n sid -t debian -- -r sid --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/sid/が作成されます。この中に、sidコンテナ 環境のファイルシステムがrootfsディレクトリー以下に、またそのコンテナ環境の設定 ファイルconfig が作成されています。
+$ sudo lxc-create -n sid -t debian -- -r sid もし、ミラーが不調なら、安定そうなUSミラーを使います。
+$ sudo lxc-create -n sid -t debian -- -r sid --mirror=http://ftp.us.debian.org 意外と簡単です。これで、/var/lib/lxc/sid/が作成されます。この中に、sidコンテナ 環境のファイルシステムがrootfsディレクトリー以下に、またそのコンテナ環境の設定 ファイルconfig が作成されています。
 コンテナ環境のファイルシステム:
- # root@goofy:/var/lib/lxc/sid# tree -L 2 -F . ├── config └── rootfs/ ├── bin -&amp;gt; usr/bin/ ├── boot/ ├── dev/ ├── etc/ ├── home/ ├── lib -&amp;gt; usr/lib/ ├── lib32 -&amp;gt; usr/lib32/ ├── lib64 -&amp;gt; usr/lib64/ ├── libx32 -&amp;gt; usr/libx32/ ├── media/ ├── mnt/ ├── opt/ ├── proc/ ├── root/ ├── run/ ├── sbin -&amp;gt; usr/sbin/ ├── selinux/ ├── srv/ ├── sys/ ├── tmp/ ├── usr/ └── var/ コンテナ環境の設定ファイルconfig:</description>
+# root@goofy:/var/lib/lxc/sid# tree -L 2 -F . ├── config └── rootfs/ ├── bin -&amp;gt; usr/bin/ ├── boot/ ├── dev/ ├── etc/ ├── home/ ├── lib -&amp;gt; usr/lib/ ├── lib32 -&amp;gt; usr/lib32/ ├── lib64 -&amp;gt; usr/lib64/ ├── libx32 -&amp;gt; usr/libx32/ ├── media/ ├── mnt/ ├── opt/ ├── proc/ ├── root/ ├── run/ ├── sbin -&amp;gt; usr/sbin/ ├── selinux/ ├── srv/ ├── sys/ ├── tmp/ ├── usr/ └── var/ コンテナ環境の設定ファイルconfig:</description>
     </item>
     
     <item>
@@ -113,9 +113,9 @@ LXC仮想環境作成 LXCを使ってのパッケージ作成やデバグ用等�
 開発環境の基本 開発環境は、できるだけ安定しているほうがストレスが少ないです。editorを 使いメールやウエッブページを読むだけならstable環境が使えればそれでも いいのですが、新しいハードウエアー (Thinkpad T14, AMD Ryzen 5 PRO 4650U with Radeon Graphics)だとグラフィクスドライバーの問題があるので testing ぐらいは必要です。でも歳々アップデートすると不安定になったりして面倒です。
 パッケージ作成環境 以前は、pbuilder/cowbuilder を使って仮想化されたchroot環境を使っていましたが、 最近はschroot/sbuildででも確実に sid/unstable 環境を確保でき、色々便利なので 乗り換えました。
 開発環境をsidにしなくても確実にパッケージが正しいsid環境で作成できます。
- 英語：Sbuildインフラ参照.  これで、sbuild コマンド実行で、 sid/unstable 環境で確実にパッケージが作成できます。
+英語：Sbuildインフラ参照. これで、sbuild コマンド実行で、 sid/unstable 環境で確実にパッケージが作成できます。
 デバグ用の仮想環境作成 (chroot) デバグ操作用のsid/unstable 環境の作業用のシェル環境が、現在のHOME環境のままで快適に使えるので便利です。
- 英語：Schrootインフラ参照.  devsコマンドで、作業用の chroot 環境のベースとなるソースchroot 環境 にパッケージの 追加や削除や更新ができるシェルプロンプトへ、現在のHOME環境のままで移動できます。
+英語：Schrootインフラ参照. devsコマンドで、作業用の chroot 環境のベースとなるソースchroot 環境 にパッケージの 追加や削除や更新ができるシェルプロンプトへ、現在のHOME環境のままで移動できます。
 devxコマンドで、gitkが使えるX環境へのアクセスできる作業用の使い捨てできる作業用の chroot 環境に、現在のHOME環境のままで移動できます。</description>
     </item>
     

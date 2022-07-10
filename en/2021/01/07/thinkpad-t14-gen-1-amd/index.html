@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/07 (initial publish),
-2021/11/15 (last update)
+2022/07/10 (last update)
 </h3>
 </div>
 
@@ -66,6 +66,7 @@
     <li><a href="#distribution-selection">Distribution selection</a></li>
     <li><a href="#non-free-firmwares">Non-free firmwares</a></li>
     <li><a href="#network-configuration">Network configuration</a></li>
+    <li><a href="#pc-speaker-configuration">PC speaker configuration</a></li>
     <li><a href="#audio-configuration">Audio configuration</a>
       <ul>
         <li><a href="#adjusting-sound-level-with-alsamixer">Adjusting sound level with <code>alsamixer</code></a></li>
@@ -152,7 +153,14 @@ allow-hotplug enp2s0f0
 iface enp2s0f0 inet dhcp
 # This is an autoconfigured IPv6 interface
 iface enp2s0f0 inet6 auto
-</code></pre><h2 id="audio-configuration">Audio configuration</h2>
+</code></pre><h2 id="pc-speaker-configuration">PC speaker configuration</h2>
+<p>Beep sound of PC speaker is annoying.  Let&rsquo;s disable it by creating
+<code>/etc/modprobe.d/nobeep.conf</code> as:</p>
+<pre tabindex="0"><code>blacklist pcspkr
+</code></pre><p>This disables beep sound for the power down event and Linux virtual console.
+Sound out put of browser is alive and usable even with this setup.  For beep
+sound in the GNOME terminal, it needs to be disabled from its preference menu.</p>
+<h2 id="audio-configuration">Audio configuration</h2>
 <p>GUI setting tools provide nice and easy control of the sound system under the
 normal situation.  But it doesn&rsquo;t provide access to detailed system system
 settings nor control on them.</p>

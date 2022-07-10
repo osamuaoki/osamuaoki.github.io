@@ -21,7 +21,7 @@
 波ダッシュ問題 どうも、世間の常識のようですが、「波ダッシュ問題」に気づきました。 Buildトライ時に気づいたことをメモしておきます。
 0.3のコーパス中で問題となっていたのは 「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。 ibus-anthyでチルダで入力できるのは 「～」(UTF-8: EF BD 9E, U+FF5E)全角チルダです。 ibus-mozcでチルダで入力できるのは 「〜」(UTF-8: E3 80 9C, U+301C)波ダッシュです。
 これで気になって、波ダッシュ WAVE_DASH (Shift_JIS:0x8160, Unicode:U+301C)と 全角チルダ FULLWIDTH_TILDE(Shift_JIS:0xFF5E, Unicode:U+FF5E)の違いや状況を 調べてみました。結論は、日本語の文中に書く「波ダッシュ」は本来の「波ダッシュ」 U+301Cが正しいようだ。Windows XP以前のデーターは「波ダッシュ」が見た目で文字化 けするので、これを避けるために「全角チルダ」を本来の「波ダッシュ」の代用に使っ ているようです。
- 波ダッシュ・全角チルダ問題 波ダッシュ チルダ Wikipedia:表記ガイド: 波ダッシュ https://xhtml.</description>
+波ダッシュ・全角チルダ問題 波ダッシュ チルダ Wikipedia:表記ガイド: 波ダッシュ https://xhtml.</description>
     </item>
     
     <item>
@@ -34,15 +34,17 @@
 一方、mozcの最新コードや辞書を見たら、昔よりかなり整理され 変なデーターで無理やり特定コーパスのみの最適化というか過学習 の結果のような辞書データーもない。使ってみると正直悪くない。
 いまさらanthyを触るのもという感もあるが、せめて以前程度に 動くようにはしたい。特にDebianのパッケージは完全メンテナー モードで、salsaでバグ修正優先での対応を考えます。 （githubは、いろいろ遊ぶかもしれません）
 すぐ気づいた明らかなバグ２つは解決法が見えた。
- Use UTF-8 for zipcode bug fix. Closes: #927074 Convert depgraph/master.depword to UTF-8. Closes: #923948  後者は文法係り受け定義関連を再構築必要がある。簡単にするには debian/rulesを以下としてDebianのビルドシステムでdebuildと してビルドする必要がある。
+Use UTF-8 for zipcode bug fix. Closes: #927074 Convert depgraph/master.depword to UTF-8. Closes: #923948 後者は文法係り受け定義関連を再構築必要がある。簡単にするには debian/rulesを以下としてDebianのビルドシステムでdebuildと してビルドする必要がある。
 override_dh_auto_configure: dh_auto_configure -- --sysconfdir=/etc/anthy --enable-maintainer-mode だが、上手くいかない。ソース壊れている?
 UTF-8 での処理のデフォルト化 まず、テスト環境で変な文字が出るので気になっていた、UTF-8廻りを 確認した。
 anthy/anthy.hに以下と定義されているので、encoding関係が 初期値の0だと、どうも出力がEUCJPになってしまうようだ。
 #define ANTHY_UTF8_ENCODING 2 これは、0にしておかないとdefault_encodingやencodingやprint_encoding などがUTF-8にならない懸念がある。2としている意味を感じなかったので これを変えた。特に以下への影響が気になる。
- anthy_putxchar() anthy_putxstr() anthy_putxstrln()  これらは、以下で使われている。
- mkworddic/mkdic.c src-main/context.c src-splitter/metaword.c src-splitter/wordlist.c src-worddic/record.c src-util/convdb.c test/check.c  まあ、道理でparsed_data0がUTF-8環境で読めない。どうもEUCJPで文字列 をはき出しているわけです。これじゃ、まともに動かないのも納得です。 きっと連接の統計がまともにできていないので、連文節変換をすると変な 結果が出るようになったのだろう。とりあえず、修正。
+anthy_putxchar() anthy_putxstr() anthy_putxstrln() これらは、以下で使われている。
+mkworddic/mkdic.c src-main/context.c src-splitter/metaword.c src-splitter/wordlist.c src-worddic/record.c src-util/convdb.c test/check.c まあ、道理でparsed_data0がUTF-8環境で読めない。どうもEUCJPで文字列 をはき出しているわけです。これじゃ、まともに動かないのも納得です。 きっと連接の統計がまともにできていないので、連文節変換をすると変な 結果が出るようになったのだろう。とりあえず、修正。
 さらによく見ると、calctrans/proccorpus.cが以下になっている。
- anthy_conf_override(&amp;#34;CONFFILE&amp;#34;, &amp;#34;../anthy-conf&amp;#34;); これは、ビルド中のソース内のファイルを見てほしいので以下にする。</description>
+anthy_conf_override(&amp;#34;CONFFILE&amp;#34;, &amp;#34;../anthy-conf&amp;#34;); これは、ビルド中のソース内のファイルを見てほしいので以下にする。
+anthy_conf_override(&amp;#34;CONFFILE&amp;#34;, &amp;#34;../anthy-test-conf&amp;#34;); 無限ループ 上記を対策しても上手くビルドしない。
+proccorpusは、たしかに読めるparsed_data0を生成するが処理が止まってしまう。 何か無限ループに落ち込んでいる感じ。</description>
     </item>
     
     <item>
@@ -55,7 +57,7 @@ anthy/anthy.hに以下と定義されているので、encoding関係が 初期�
 使ったanthyのソースはDebian BusterのベースとなるgniibeさんがUTF-8化パッチ を掛けかなり変更した0.3です。
 anthy.depは、基本的にdepgraph/内のファイルから生成されます。
 Anthyの文法係り受け定義 単文節内の、単語結合の遷移ルールが「接頭辞 自立語 接尾辞 付属語」 という順の結合で定義されるとして、以下の２段階ででデーターファイルを 読み込みanthy.depの中に書き出し文法係り受けルールを定義します。
- 付属語グラフを、init_depword_tab()が、付属語に関する日本語表現を使った結合ルールをall.depword から読み込みメモリー中に作成します。 自立語からの遷移表を、init_indep_word_seq_tab()が、indepword-wt.txtから自立語のソースの辞書内で用いる品詞ニモニック文字列と対応する日本語表現を読み込み作成します。  ここで、Anthyで言う付属語とは、活用語尾を含みます。
+付属語グラフを、init_depword_tab()が、付属語に関する日本語表現を使った結合ルールをall.depword から読み込みメモリー中に作成します。 自立語からの遷移表を、init_indep_word_seq_tab()が、indepword-wt.txtから自立語のソースの辞書内で用いる品詞ニモニック文字列と対応する日本語表現を読み込み作成します。 ここで、Anthyで言う付属語とは、活用語尾を含みます。
 付属語グラフ 付属語ノードの結合ルールは、活用語尾や助詞や助動詞等のノードが一定の規則 にしたがって並んで、次のノードに遷移していくグラフ構造モデルです。
 この付属語グラフを規程するために読み込まれるall.depwordは、 活用語尾を定義したconjugate.tableと助詞や助動詞等のノードを定義した*.depwordを、 sedでコメント行を除き結合して生成します。
 このall.depwordは、基本的に
@@ -63,7 +65,7 @@ Anthyの文法係り受け定義 単文節内の、単語結合の遷移ルー�
 終端で次のノード名がない場合には、そこに@のみを遷移するノード名 として記します。
 上記では、@遷移するノード名と典型的な場合をイメージした形式で記しま したが、実際にはもう少し多くの情報を盛り込めます。具体的には {遷移の属性}{接続の強さ}@ノードの名前という形式です。
 遷移の属性は、depgraph/parse_transition()にあるtokenでswitchするcase分岐 構造のコードで扱われ、DOC/SPLITTERに説明されたアルファベット２文字の ニモニックです。ここにそれを内容をコードに揃えてアップデートし再録説明すると、
- 活用形  未然形 Cz (ct = CT_MIZEN) 連用形 Cy (ct = CT_RENYOU) 終止形 Cs (ct = CT_SYUSI) 連体形 Ct (ct = CT_RENTAI) 仮定形 Ck (ct = CT_KATEI) 命令形 Cm (ct = CT_MEIREI) 語幹形 Cg (ct = CT_HEAD)   自立語部の品詞  動詞 Hv (pos = POS_V) 名詞 Hn (pos = POS_NOUN) 形容詞 Hj (pos = POS_AJV)   文節の属性  名詞句?</description>
+活用形 未然形 Cz (ct = CT_MIZEN) 連用形 Cy (ct = CT_RENYOU) 終止形 Cs (ct = CT_SYUSI) 連体形 Ct (ct = CT_RENTAI) 仮定形 Ck (ct = CT_KATEI) 命令形 Cm (ct = CT_MEIREI) 語幹形 Cg (ct = CT_HEAD) 自立語部の品詞 動詞 Hv (pos = POS_V) 名詞 Hn (pos = POS_NOUN) 形容詞 Hj (pos = POS_AJV) 文節の属性 名詞句?</description>
     </item>
     
     <item>
@@ -93,16 +95,16 @@ SJ3 は BSDライセンスのようです。
       
       <guid>/jp/2019/05/05/jpn-ime-resource-02/</guid>
       <description>フリー（無償）で入手し、研究用なら制約無く使用ができる各種辞書の情報です。
-Unidic  語彙数: 87万語 (2018-03版) GPL/LGPL/BSD License 新　UniDic 2.2GB 旧　UniDic MeCab で UniDic 辞書を使ってみる  $ wc -l lex.csv 872831 lex.csv 活用形はすべて展開して、それぞれ１行のデーターとなっている。
+Unidic 語彙数: 87万語 (2018-03版) GPL/LGPL/BSD License 新　UniDic 2.2GB 旧　UniDic MeCab で UniDic 辞書を使ってみる $ wc -l lex.csv 872831 lex.csv 活用形はすべて展開して、それぞれ１行のデーターとなっている。
 もし頻度表が全辞書形と考えると、表層形900K/辞書形180Kと大きいとも言えるが、 スマホ写真１枚分のデーターより小さいともいえる。
-canna辞書(Anthy)  語彙数: 13万の読みの異なる言葉 GPL  $ wc -l gcanna.t 137488 gcanna.t このファイルは現代的な感覚では、4.6MBと非常に小さい。
+canna辞書(Anthy) 語彙数: 13万の読みの異なる言葉 GPL $ wc -l gcanna.t 137488 gcanna.t このファイルは現代的な感覚では、4.6MBと非常に小さい。
 各種情報も織り込んだBinary辞書のanthy.dicでも23MB程度。
 Mozc /usr/lib/mozc/mozc_serverは、約18MBという巨大なサイズがある。
 これは、辞書をプログラムないのメモリーイメージで静的内蔵しているためと 推察される。でも写真数枚程度で、現代的な感覚ではメモリー常駐させるのが 十分可能なサイズともいえる。
 $ du -Sh . 59M $ wc -l id.def 2652 id.def ソース中の辞書ファイルサイズ概算59MBと６０MB近くありAnthyより１桁大ききい。 品詞分類数は2652ときめ細かい。
 ソース中の辞書ファイルは100K行のデーターが定義されたファイルで １０個ほどあるので、展開済み登録語彙数は約１００万語程度と見受ける。 こうみてもanthy等の１０倍の単語登録がある。(ただし、Anthyは１行に複数語 登録するので実際の差は小さいかもしれない。)
 まあデーターが巨大なので変換精度は上がるが、リソース消費が大きく動作が重く なる懸念がある。
-Jumann++  基本語彙辞書 3万語 WEB等含む合計 90万語 Apache License, Version 2.</description>
+Jumann++ 基本語彙辞書 3万語 WEB等含む合計 90万語 Apache License, Version 2.0 mecab-ipadic-neologd 語彙数: 55万語 https://github.</description>
     </item>
     
     <item>
@@ -111,7 +113,8 @@ Jumann++  基本語彙辞書 3万語 WEB等含む合計 90万語 Apache License,
       <pubDate>Sun, 05 May 2019 01:29:00 +0900</pubDate>
       
       <guid>/jp/2019/05/05/jpn-ime-resource-01/</guid>
-      <description>anthy 関連のリソース（日本語中心）  Original upstream  https://ja.osdn.net/projects/anthy/   Easy to read mail archive  https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd1.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd2.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd3.html   Debian (*****)  wiki: http://wiki.debian.org/Teams/DebianAnthy salsa: https://salsa.debian.org/debian/anthy/tree/debian (current) salsa: https://salsa.debian.org/input-method-team/anthy (old)  BTS: https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=anthy   G-HAL (engine patch)  2019-04-06: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/im.html#anthy 2018-05-31: http://www.fenix.ne.jp/~G-HAL/whatsnew/20182nd.html#whatsnew2018530 2011-10-08: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/anthy.html   vagus (dictionary patch)  2012-03-10: http://vagus.seesaa.net/ https://osdn.net/projects/alt-cannadic/wiki/FrontPage   ootnegx  2011-12-03: http://ootnegx.blogspot.com/2011/12/g-hal-anthy.html   archlinux wiki  2018-08-30: https://wiki.archlinux.jp/index.php/Uim_%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B#Anthy   kakurasan  2010-11-20: https://kakurasan.</description>
+      <description>anthy 関連のリソース（日本語中心） Original upstream https://ja.osdn.net/projects/anthy/ Easy to read mail archive https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd1.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd2.html https://www.mail-archive.com/anthy-dev@lists.sourceforge.jp/thrd3.html Debian (*****) wiki: http://wiki.debian.org/Teams/DebianAnthy salsa: https://salsa.debian.org/debian/anthy/tree/debian (current) salsa: https://salsa.debian.org/input-method-team/anthy (old) BTS: https://bugs.debian.org/cgi-bin/pkgreport.cgi?src=anthy G-HAL (engine patch) 2019-04-06: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/im.html#anthy 2018-05-31: http://www.fenix.ne.jp/~G-HAL/whatsnew/20182nd.html#whatsnew2018530 2011-10-08: http://www.fenix.ne.jp/~G-HAL/soft/nosettle/anthy.html vagus (dictionary patch) 2012-03-10: http://vagus.seesaa.net/ https://osdn.net/projects/alt-cannadic/wiki/FrontPage ootnegx 2011-12-03: http://ootnegx.blogspot.com/2011/12/g-hal-anthy.html archlinux wiki 2018-08-30: https://wiki.archlinux.jp/index.php/Uim_%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%92%E5%85%A5%E5%8A%9B#Anthy kakurasan 2010-11-20: https://kakurasan.hatenadiary.jp/entry/20101120/p1 2010-12-14: https://kakurasan.hatenadiary.jp/entry/20101214/p1 arekorebibouroku 2017-09-24 http://arekorebibouroku.hateblo.jp/entry/2017/09/24/171025 rikuku 2013-07-12: https://rikukuu.blog.fc2.com/blog-entry-199.html 2019-01-13: https://rikukuu.blog.fc2.com/blog-entry-640.html data: https://drive.google.com/file/d/1RW1mcYzbfp0dPfzFmnSme-duiGqYtzRb/view?usp=sharing Updated: 2019-05-22
+日本語基礎知識 現代仮名遣い </description>
     </item>
     
     <item>
@@ -125,13 +128,14 @@ SUPER-SPACEとSHIFT-SUPER-SPACEがGnomeの側でのキーボード入力ソー�
 input method内での切り替えは、昔のWindowsと同じ&amp;quot;zenkaku-hankaku&amp;quot;とか、 Unix系では良く使う&amp;quot;Shift-space&amp;quot;が良くバインドされています。
 切り替えが、状態が分からなくとも一発でできるのが望ましいので、 その設定方法を以下に記します。
 日本語キーボードのIM側の設定方法 日本語キーボードだと、変換と無変換キーを、Anthyの入力モード HiraganaとLatinへの切り替えにAnthyの中のキーバインディングで 設定して常にibus-anthyで使うことで何とかなります。これは特に 問題ありません。
- 変換キー: 全角かな入力 (hiragana mode) 無変換キー: 英数半角入力 (latin mode)  ALT-漢字、漢字、ALT-`等でのトグル動作が嫌いで、Macの真似でこんな キーバインディングしています。
+変換キー: 全角かな入力 (hiragana mode) 無変換キー: 英数半角入力 (latin mode) ALT-漢字、漢字、ALT-`等でのトグル動作が嫌いで、Macの真似でこんな キーバインディングしています。
 Windows10でもトグル動作が嫌いで、OS側から プロパティ → 詳細設定 → キー設定　変更 として以下の設定で同様の操作感にそろえています。
- 変換キー: IME-ON (IMEは全角かな入力モードにしておく) 無変換キー: IME-OFF  英語キーボードでのIM側の設定方法 (ibus+Anthy) ただ、英語キーボードの場合は変換と無変換キーはありません。
- SHIFTと普通の文字との組み合わせは論外。 CTRLと普通の文字との組み合わせも、VIM使うので全部先約有り。 ALTと普通の文字との組み合わせも、メニューへのショートカットで全部先約有り。  こういったことも有り、私はAnthyの中のキーバインディングで CTRL-SPACE, SHIFT-SPACEを一時使っていました。
+変換キー: IME-ON (IMEは全角かな入力モードにしておく) 無変換キー: IME-OFF 英語キーボードでのIM側の設定方法 (ibus+Anthy) ただ、英語キーボードの場合は変換と無変換キーはありません。
+SHIFTと普通の文字との組み合わせは論外。 CTRLと普通の文字との組み合わせも、VIM使うので全部先約有り。 ALTと普通の文字との組み合わせも、メニューへのショートカットで全部先約有り。 こういったことも有り、私はAnthyの中のキーバインディングで CTRL-SPACE, SHIFT-SPACEを一時使っていました。
 ところが、SHIFT-SPACEやCTRL-SPACEのどちらかをLokalizeなどのアプリ が使っていました。（ALT-SPACEは既にGNOMEが使っている）こうなると、 お手上げです。
 結局今は、Anthyの中のキーバインディングは以下にしています。
- SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キーも CTRL-SPACE: 英数半角入力 (latin mode) 無変換キーも  Windows10でも英語キーボードの場合にはOS側から プロパティ → 詳細設定 → キー設定　変更 として以下の設定で同様の操作感にそろえています。</description>
+SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キーも CTRL-SPACE: 英数半角入力 (latin mode) 無変換キーも Windows10でも英語キーボードの場合にはOS側から プロパティ → 詳細設定 → キー設定　変更 として以下の設定で同様の操作感にそろえています。
+SHIFT-SPACE: IME-ON (IMEは全角かな入力モードにしておく) 変換キーも CTRL-SPACE: IME-OFF 無変換キーも 英語キーボードでのOS側の設定方法 (Gnome+ibus+Anthy) アプリとの喧嘩を避けるにはGUI用にリザーブされている、GUIキー（SUPERと かWindowsキーともいう)やMENUキー等をGNOME側からのコントロールでibusの 各入力エンジン選択に使うのが良いわけです。（GUIキーはAnthyなどのアプリ のパネルからは使えません。）</description>
     </item>
     
   </channel>

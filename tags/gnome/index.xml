@@ -15,7 +15,7 @@
       <guid>/jp/2021/02/04/pulseaudio/</guid>
       <description>GNOME Desktop環境周辺の最近のサウンド環境関連の状況を確認してみました。
 サウンド環境 サウンド環境が色々あって住み分けが分かりにくいのでまとめてみました。
- Open Sound System (OSS): UNIX用のサウンドカードドライバー  デバイス名: /dev/dsp, /dev/mixer (本来のOSSは古い。実際はALSA環境がOSSエミュレーションとして提供するデバイスを利用)   Advanced Linux Sound Architecture (ALSA): 現在のLinuxカーネル中のサウンドカードドライバーとユーティリティー  デバイス名: /dev/snd/* asoundrc 中のデバイス名: hw:0,0, hw1,0   PulseAudio: 多機能の汎用のネットワーク機能付きのサウンドサーバー  ALSAシステム上で稼働 systemdとの相性良好 (同一アップストリーム)   JACK Audio Connection Kit (JACK): 低レイテンシーのプロ仕様ネットワーク機能付きのサウンドサーバー  (サウンドはJACK無しでも使用可)   PipeWire is a server and user space API to deal with multimedia pipeline  (今後注目)    PulseAudioとJACKの住み分けは、PulseAudio や systemd のアップストリームの Lennart Poettering による Pid Eins: PulseAudio and Jack の比較記事を読むと状況がよく分かります。PulseAudio自体は、2008年ごろは色々問題があったのは LPC: Linux audio: it&amp;rsquo;s a messから分かるし、また最近も 2017, 2018, 2019 には音量のデフォルト設定問題があった様ですが、 ユーザー設定で回避 する様です。</description>
+Open Sound System (OSS): UNIX用のサウンドカードドライバー デバイス名: /dev/dsp, /dev/mixer (本来のOSSは古い。実際はALSA環境がOSSエミュレーションとして提供するデバイスを利用) Advanced Linux Sound Architecture (ALSA): 現在のLinuxカーネル中のサウンドカードドライバーとユーティリティー デバイス名: /dev/snd/* asoundrc 中のデバイス名: hw:0,0, hw1,0 PulseAudio: 多機能の汎用のネットワーク機能付きのサウンドサーバー ALSAシステム上で稼働 systemdとの相性良好 (同一アップストリーム) JACK Audio Connection Kit (JACK): 低レイテンシーのプロ仕様ネットワーク機能付きのサウンドサーバー (サウンドはJACK無しでも使用可) PipeWire is a server and user space API to deal with multimedia pipeline (今後注目) PulseAudioとJACKの住み分けは、PulseAudio や systemd のアップストリームの Lennart Poettering による Pid Eins: PulseAudio and Jack の比較記事を読むと状況がよく分かります。PulseAudio自体は、2008年ごろは色々問題があったのは LPC: Linux audio: it&amp;rsquo;s a messから分かるし、また最近も 2017, 2018, 2019 には音量のデフォルト設定問題があった様ですが、 ユーザー設定で回避 する様です。</description>
     </item>
     
     <item>
@@ -29,13 +29,14 @@ SUPER-SPACEとSHIFT-SUPER-SPACEがGnomeの側でのキーボード入力ソー�
 input method内での切り替えは、昔のWindowsと同じ&amp;quot;zenkaku-hankaku&amp;quot;とか、 Unix系では良く使う&amp;quot;Shift-space&amp;quot;が良くバインドされています。
 切り替えが、状態が分からなくとも一発でできるのが望ましいので、 その設定方法を以下に記します。
 日本語キーボードのIM側の設定方法 日本語キーボードだと、変換と無変換キーを、Anthyの入力モード HiraganaとLatinへの切り替えにAnthyの中のキーバインディングで 設定して常にibus-anthyで使うことで何とかなります。これは特に 問題ありません。
- 変換キー: 全角かな入力 (hiragana mode) 無変換キー: 英数半角入力 (latin mode)  ALT-漢字、漢字、ALT-`等でのトグル動作が嫌いで、Macの真似でこんな キーバインディングしています。
+変換キー: 全角かな入力 (hiragana mode) 無変換キー: 英数半角入力 (latin mode) ALT-漢字、漢字、ALT-`等でのトグル動作が嫌いで、Macの真似でこんな キーバインディングしています。
 Windows10でもトグル動作が嫌いで、OS側から プロパティ → 詳細設定 → キー設定　変更 として以下の設定で同様の操作感にそろえています。
- 変換キー: IME-ON (IMEは全角かな入力モードにしておく) 無変換キー: IME-OFF  英語キーボードでのIM側の設定方法 (ibus+Anthy) ただ、英語キーボードの場合は変換と無変換キーはありません。
- SHIFTと普通の文字との組み合わせは論外。 CTRLと普通の文字との組み合わせも、VIM使うので全部先約有り。 ALTと普通の文字との組み合わせも、メニューへのショートカットで全部先約有り。  こういったことも有り、私はAnthyの中のキーバインディングで CTRL-SPACE, SHIFT-SPACEを一時使っていました。
+変換キー: IME-ON (IMEは全角かな入力モードにしておく) 無変換キー: IME-OFF 英語キーボードでのIM側の設定方法 (ibus+Anthy) ただ、英語キーボードの場合は変換と無変換キーはありません。
+SHIFTと普通の文字との組み合わせは論外。 CTRLと普通の文字との組み合わせも、VIM使うので全部先約有り。 ALTと普通の文字との組み合わせも、メニューへのショートカットで全部先約有り。 こういったことも有り、私はAnthyの中のキーバインディングで CTRL-SPACE, SHIFT-SPACEを一時使っていました。
 ところが、SHIFT-SPACEやCTRL-SPACEのどちらかをLokalizeなどのアプリ が使っていました。（ALT-SPACEは既にGNOMEが使っている）こうなると、 お手上げです。
 結局今は、Anthyの中のキーバインディングは以下にしています。
- SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キーも CTRL-SPACE: 英数半角入力 (latin mode) 無変換キーも  Windows10でも英語キーボードの場合にはOS側から プロパティ → 詳細設定 → キー設定　変更 として以下の設定で同様の操作感にそろえています。</description>
+SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キーも CTRL-SPACE: 英数半角入力 (latin mode) 無変換キーも Windows10でも英語キーボードの場合にはOS側から プロパティ → 詳細設定 → キー設定　変更 として以下の設定で同様の操作感にそろえています。
+SHIFT-SPACE: IME-ON (IMEは全角かな入力モードにしておく) 変換キーも CTRL-SPACE: IME-OFF 無変換キーも 英語キーボードでのOS側の設定方法 (Gnome+ibus+Anthy) アプリとの喧嘩を避けるにはGUI用にリザーブされている、GUIキー（SUPERと かWindowsキーともいう)やMENUキー等をGNOME側からのコントロールでibusの 各入力エンジン選択に使うのが良いわけです。（GUIキーはAnthyなどのアプリ のパネルからは使えません。）</description>
     </item>
     
   </channel>
