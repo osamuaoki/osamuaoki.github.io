@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/15 (initial publish),
-2022/05/22 (last update)
+2022/07/12 (last update)
 </h3>
 </div>
 
@@ -93,7 +93,20 @@ post-Debian Bullseye (11) GNU/Linux in testing.</p>
 <h3 id="efi-based-firmware-updates">EFI-based firmware updates</h3>
 <p>Install <code>gnome-firmware</code> package and invoke GUI to update firmware on devices
 supported by <code>fwupd</code> using <a href="https://fwupd.org/">Linux Vendor Firmware Service</a>.</p>
-<p>Thinkpad EFI firmware and SSD firmware were updated.</p>
+<p>Many firmware data can be updated using <code>gnome-firmware</code>.</p>
+<h4 id="workaround-for-some-firmware">Workaround for some firmware</h4>
+<p>Some firmware devices may experience some problem to be updated by
+<code>gnome-firmware</code>.</p>
+<p>Most notable one on my system was &ldquo;Lenovo System Firmware&rdquo;.  (I don&rsquo;t know if
+this was version dependent or not.) I used vendor&rsquo;s BIOS update offered as
+bootable CD and made USB key containing it image data:</p>
+<ul>
+<li><a href="https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue/downloads/driver-list/component?name=BIOS%2FUEFI">https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue/downloads/driver-list/component?name=BIOS%2FUEFI</a></li>
+</ul>
+<p>If the BIOS options <code>Security &gt; Secure Boot</code> is enabled, it may restrict booting
+up from the BIOS Update bootable CD image, you may need to disabled the Secure Boot option to use it.</p>
+<p>If Windows 10 or 11 is installed, you may need to reenable Secure Boot after
+this operation.</p>
 <h3 id="gui-desktop-customization">GUI Desktop customization</h3>
 <p>Install <code>gnome-tweak</code> package to the system and tweaked to add &ldquo;Applications&rdquo;
 to top bar etc.</p>

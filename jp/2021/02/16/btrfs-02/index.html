@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/16 (initial publish),
-2022/04/23 (last update)
+2022/07/12 (last update)
 </h3>
 </div>
 
@@ -62,7 +62,8 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#subvolumeの使い方">subvolumeの使い方</a></li>
-    <li><a href="#root-fsのbtrfs化">Root-fsのbtrfs化</a>
+    <li><a href="#busterリリース後の-d-i-で-btrfs-への-システム導入">Busterリリース後の d-i で btrfs への システム導入</a></li>
+    <li><a href="#過去のroot-fsのbtrfs化トリック今は無効">過去のRoot-fsのbtrfs化トリック(今は無効)</a>
       <ul>
         <li><a href="#btrfs化の全体手順">btrfs化の全体手順</a></li>
         <li><a href="#linux環境のbtrfs化">Linux環境のbtrfs化</a></li>
@@ -91,9 +92,17 @@ Nestedなsubvolumeレイアウトをうまく使い<code>/etc/fstab</code>を簡
 <p>この際、Ubuntu風の<code>@home</code>等の
 <a href="https://help.ubuntu.com/community/btrfs#Ubuntu-specific_subvolume_layout_in_11.04_and_later">慣習Subvolume命名法</a>
 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。</p>
-<h2 id="root-fsのbtrfs化">Root-fsのbtrfs化</h2>
+<h2 id="busterリリース後の-d-i-で-btrfs-への-システム導入">Busterリリース後の d-i で btrfs への システム導入</h2>
+<p>busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem
+に指定すると、<code>@rootfs</code>というsubvolumeが作成され、その中にシステムが導入されます。</p>
+<p>ホームディレクトリーにあるユーザーデーターを保護する上でも、ホームディレクトリー
+は別のsubvolumeに保存するのが良いようです。</p>
+<h2 id="過去のroot-fsのbtrfs化トリック今は無効">過去のRoot-fsのbtrfs化トリック(今は無効)</h2>
 <p>RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので
 ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。</p>
+<p>以下に示すように事をしてroot
+filesystemを<code>@</code>に置くと、2022年７月以降はトラブルが発生しました。素直に上記の様にd-i
+で btrfs への root filesystem導入刷るのが良いようです。</p>
 <h3 id="btrfs化の全体手順">btrfs化の全体手順</h3>
 <p>btrfs化を確実にするために、練習を兼ねてサブ環境で移行を確認した上でメイン環境を移行します。</p>
 <ul>
