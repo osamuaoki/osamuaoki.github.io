@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/15 (initial publish),
-2022/07/12 (last update)
+2022/07/13 (last update)
 </h3>
 </div>
 
@@ -61,11 +61,24 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#workstation-usability">Workstation usability</a>
+    <li><a href="#workstation-usability">Workstation usability</a></li>
+    <li><a href="#installer-installed-extra-packages">Installer installed extra packages</a></li>
+    <li><a href="#initial-setup">Initial setup</a>
       <ul>
-        <li><a href="#almost-standard-packages">Almost standard packages</a></li>
-        <li><a href="#efi-based-firmware-updates">EFI-based firmware updates</a></li>
-        <li><a href="#gui-desktop-customization">GUI Desktop customization</a></li>
+        <li><a href="#initial-setup-1">Initial setup</a></li>
+        <li><a href="#set-up-sudo">Set-up <code>sudo</code></a></li>
+        <li><a href="#set-up-user-group-for-uid1000-user">Set-up user group for UID=1000 user</a></li>
+        <li><a href="#add-extra-packages">Add extra packages</a></li>
+      </ul>
+    </li>
+    <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
+    <li><a href="#efi-based-firmware-updates">EFI-based firmware updates</a>
+      <ul>
+        <li><a href="#workaround-for-some-firmware">Workaround for some firmware</a></li>
+      </ul>
+    </li>
+    <li><a href="#gui-desktop-customization">GUI Desktop customization</a>
+      <ul>
         <li><a href="#keyboard-shortcut-customization-gnome-settings">Keyboard shortcut customization (GNOME Settings)</a></li>
         <li><a href="#keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</a></li>
         <li><a href="#keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</a></li>
@@ -80,7 +93,7 @@
     </li>
     <li><a href="#mail">Mail</a>
       <ul>
-        <li><a href="#evolution-workaround-font">Evolution workaround (font)</a></li>
+        <li><a href="#evolution-workaround-font----not-needed">Evolution workaround (font) &ndash; not needed</a></li>
       </ul>
     </li>
     <li><a href="#command-line">Command line</a></li>
@@ -91,23 +104,114 @@
 <p>Let me keep up note on configuring and administrating my workstation under
 post-Debian Bullseye (11) GNU/Linux in testing.</p>
 <p>This is non-hardware specific tips.</p>
-<h3 id="almost-standard-packages">Almost standard packages</h3>
+<h2 id="installer-installed-extra-packages">Installer installed extra packages</h2>
+<p>After the initial installation, packages with <code>Priority:</code> values <code>required</code>, <code>important</code> and <code>standard</code> are installed.
+In addition to these packages, I see the installer installs following extra packages:</p>
 <ul>
-<li><code>aptitude</code></li>
-<li><code>mc</code></li>
-<li><code>vim</code> and <code>vim-scripts</code></li>
-<li><code>neovim</code></li>
-<li><code>sudo</code></li>
-<li><code>devscripts</code>, <code>git</code>, <code>gitk</code>, <code>schroot</code>, <code>sbuild</code></li>
-<li><code>ripgrep</code>, <code>fzf</code></li>
-<li><code>hugo</code></li>
-<li><code>chromium</code></li>
+<li><code>busybox</code></li>
+<li><code>console-setup</code></li>
+<li><code>discover</code></li>
+<li><code>grub-efi-amd64</code></li>
+<li><code>initramfs-tools</code></li>
+<li><code>installation-report</code></li>
+<li><code>keyboard-configuration</code></li>
+<li><code>laptop-detect</code></li>
+<li><code>libcap2-bin</code></li>
+<li><code>linux-image-amd64</code></li>
+<li><code>lsb-base</code></li>
+<li><code>popularity-contest</code></li>
+<li><code>shim-signed</code></li>
+<li><code>task-desktop</code></li>
+<li><code>task-english</code></li>
+<li><code>task-laptop</code></li>
+<li><code>tasksel</code></li>
+<li><code>usbutils</code></li>
 </ul>
-<h3 id="efi-based-firmware-updates">EFI-based firmware updates</h3>
+<h2 id="initial-setup">Initial setup</h2>
+<p>Running <code>initial-setup</code> script found at my repository should set up basics.</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup">https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup</a></li>
+</ul>
+<p>Let me describe what it does.</p>
+<h3 id="initial-setup-1">Initial setup</h3>
+<p>Drop <code>nano</code> and install <code>aptitude</code> first.</p>
+<p>Then, add few should-be-standard packages:</p>
+<ul>
+<li><code>btrfs-progs</code></li>
+<li><code>fzf</code></li>
+<li><code>git</code></li>
+<li><code>gitk</code></li>
+<li><code>locales-all</code></li>
+<li><code>mc</code></li>
+<li><code>neovim</code></li>
+<li><code>ripgrep</code></li>
+<li><code>sudo</code></li>
+<li><code>vim</code></li>
+<li><code>vim-scripts</code></li>
+</ul>
+<p>Also, add <code>non-free</code> and <code>contrib</code> in <code>/etc/apt/sources.list</code> and add some
+firmware packages:</p>
+<ul>
+<li><code>firmware-iwlwifi</code></li>
+<li><code>firmware-linux</code> (this pull in CPU micro code etc. via <code>firmware-linux-nonfree</code>)</li>
+<li><code>firmware-misc-nonfree</code></li>
+<li><code>firmware-realtek</code></li>
+</ul>
+<h3 id="set-up-sudo">Set-up <code>sudo</code></h3>
+<p><code>/etc/sudoers.d/custon</code>:</p>
+<pre tabindex="0"><code># No passowrd required for the user in sudo group
+# please note the last match wins configuration
+%sudo ALL = (ALL:ALL) NOPASSWD: ALL
+# No password for 8 hours
+#Defaults timestamp_timeout = 480
+#Defaults timestamp_type = global
+</code></pre><p>NOTE: Please note that the last matching configuration is active.</p>
+<h3 id="set-up-user-group-for-uid1000-user">Set-up user group for UID=1000 user</h3>
+<p>Add UID=1000 user to following additional groups:</p>
+<ul>
+<li><code>adm</code></li>
+<li><code>backup</code></li>
+<li><code>dialout</code></li>
+<li><code>dip</code></li>
+<li><code>games</code></li>
+<li><code>mail</code></li>
+<li><code>src</code></li>
+<li><code>staff</code></li>
+<li><code>sudo</code></li>
+<li><code>www-data</code></li>
+</ul>
+<h3 id="add-extra-packages">Add extra packages</h3>
+<p>Let&rsquo;s add a few GUI tools.</p>
+<ul>
+<li><code>chromium</code></li>
+<li><code>gnome-firmware</code></li>
+<li><code>gparted</code></li>
+<li><code>ibus-anthy</code></li>
+<li><code>ibus-mozc</code></li>
+<li><code>ssh-askpass-gnome</code></li>
+</ul>
+<p>Let&rsquo;s add a few development tools.</p>
+<ul>
+<li><code>devscripts</code></li>
+<li><code>dgit</code></li>
+<li><code>dh-exec</code></li>
+<li><code>hugo</code></li>
+<li><code>sbuild</code></li>
+<li><code>schroot</code></li>
+</ul>
+<h2 id="tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</h2>
+<p>Since I use <code>aptitude</code> as the primary package maintenance tool, I usually
+tidy-up package auto install flags (<code>M</code>) missing for some libraries.</p>
+<p>Use of <code>~i!~prequired!~pimportant!~pstandard!~M</code> in <code>l</code> prompt in <code>aptitude</code> to
+set library packages as auto-installed.  If some of them are not used by other
+program, let them remove.</p>
+<p>Now you can verify intentionally installed packages with:</p>
+<pre tabindex="0"><code>$ aptitude search &#39;~i!~prequired!~pimportant!~pstandard!~M&#39;
+</code></pre><h2 id="efi-based-firmware-updates">EFI-based firmware updates</h2>
 <p>Install <code>gnome-firmware</code> package and invoke GUI to update firmware on devices
 supported by <code>fwupd</code> using <a href="https://fwupd.org/">Linux Vendor Firmware Service</a>.</p>
 <p>Many firmware data can be updated using <code>gnome-firmware</code>.</p>
-<h4 id="workaround-for-some-firmware">Workaround for some firmware</h4>
+<h3 id="workaround-for-some-firmware">Workaround for some firmware</h3>
 <p>Some firmware devices may experience some problem to be updated by
 <code>gnome-firmware</code>.</p>
 <p>Most notable one on my system was &ldquo;Lenovo System Firmware&rdquo;.  (I don&rsquo;t know if
@@ -120,9 +224,9 @@ bootable CD and made USB key containing it image data:</p>
 up from the BIOS Update bootable CD image, you may need to disabled the Secure Boot option to use it.</p>
 <p>If Windows 10 or 11 is installed, you may need to reenable Secure Boot after
 this operation.</p>
-<h3 id="gui-desktop-customization">GUI Desktop customization</h3>
-<p>Install <code>gnome-tweak</code> package to the system and tweaked to add &ldquo;Applications&rdquo;
-to top bar etc.</p>
+<h2 id="gui-desktop-customization">GUI Desktop customization</h2>
+<p>The <code>gnome-tweak</code> package installed as a depencdency of <code>gnome</code> package helps to tweak the system.
+For example, you can add &ldquo;Applications&rdquo; to top bar etc.</p>
 <p>After installing
 <a href="https://chrome.google.com/webstore/detail/gnome-shell-integration/gphhapmejobijbbhgpjhcjognlahblep">GNOME Shell integration</a>
 to the Chrome browser, I installed following extensions:</p>
@@ -215,13 +319,13 @@ I have sets up for:</p>
 <li><code>reportbug</code> (add &ldquo;<code>mta /home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.reportbugrc</code>)</li>
 </ul>
 <p>I usually don&rsquo;t bother with fetchmail these days.</p>
-<h3 id="evolution-workaround-font">Evolution workaround (font)</h3>
+<h3 id="evolution-workaround-font----not-needed">Evolution workaround (font) &ndash; not needed</h3>
+<p>This bug is resolved: <a href="https://bugs.debian.org/987948">https://bugs.debian.org/987948</a></p>
 <p>Evolution for Debian 11 Bullseye (pre-release) under wayland has ugly font
 problem as of May 2, 2021.  (Some firefox, too).  It looked like some similar
 to WebKit issue exposed by sandboxing.
 <a href="https://gitlab.gnome.org/GNOME/evolution/-/issues/1161">https://gitlab.gnome.org/GNOME/evolution/-/issues/1161</a></p>
 <p>Installing <code>xdg-desktop-portal-gtk</code> fixed it.</p>
-<p>See <a href="https://bugs.debian.org/987948">https://bugs.debian.org/987948</a></p>
 <h2 id="command-line">Command line</h2>
 <p>Setups:</p>
 <ul>
