@@ -17,13 +17,14 @@
 subvolumeの使い方 使用法のガイド のリストのリンク先には興味深いコンテントがあります。 システム管理者ガイド 中の、subvolumeレイアウト の内容は、「使い方」を見詰め直す上で目から鱗でした。
 私は単純にFlatなsubvolumeレイアウトを乱用していましたが、 Nestedなsubvolumeレイアウトをうまく使い/etc/fstabを簡素化し、 よく考えて構成したMixedなsubvolumeレイアウトを使うと管理が楽そうです。
 この際、Ubuntu風の@home等の 慣習Subvolume命名法 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。
-Busterリリース後の d-i で btrfs への システム導入 busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem に指定すると、@rootfsというsubvolumeが作成され、その中にシステムが導入されます。
+Busterリリース後の d-i で btrfs への システム導入 RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。
+busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem に指定すると、@rootfsというsubvolumeが作成され、その中にシステムが導入されます。
 ホームディレクトリーにあるユーザーデーターを保護する上でも、ホームディレクトリー は別のsubvolumeに保存するのが良いようです。
-過去のRoot-fsのbtrfs化トリック(今は無効) RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。
-以下に示すように事をしてroot filesystemを@に置くと、2022年７月以降はトラブルが発生しました。素直に上記の様にd-i で btrfs への root filesystem導入刷るのが良いようです。
-btrfs化の全体手順 btrfs化を確実にするために、練習を兼ねてサブ環境で移行を確認した上でメイン環境を移行します。
-EFIパーティションを共有した2つ以上別のパーティションを使う2つ以上のLinuxが立ち上げられるマルチブート環境を作成します。（EFIパーティションはWindowsとも共有） サブのLinux環境のbtrfs化 メインのLinux環境を立ち上げ、サブのLinux環境をbtrfs化します。（btrfs-convertで処理） サブのLinux環境の/etc/fstabや/boot/grub/grub.cfg内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。 メインのLinux環境の/boot/grub/grub.cfg内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。(sudo dpkg-reconfigure grub-efi-amd64とするのでもいいはず) サブのLinux環境を立ち上げ、正常動作を確認します。 サブのLinux環境を立ち上げ、メインのLinux環境をbtrfs化します。（この時点では、subvol=/にメインのシステムあり） サブのLinux環境のsubvol=@への移動 サブのLinux環境のスナップショットを subvol=@に作成します。 メインのLinux環境を立ち上げ、サブのLinux環境のsubvol=/を/mntにマウントし、後述のバグ回避策の処理を行います。 subvol=@に移動したサブのLinux環境を立ち上げ、動作を確認します。 念のためsudo dpkg-reconfigure grub-efi-amd64とし、起動確認を確認します。 メインのLinux環境に関して、上記同様の、Linux環境のbtrfs化＋Linux環境のsubvol=@への移動を行います。 メインのLinux環境に関して、timeshiftを使えるようにsubvol=@homeを追加します。 Linux環境のbtrfs化 btrfs-convertによるファイルシステムの変換自体は、 Conversion from Ext3/4 and ReiserFS をトレースしました。
-ファイルシステムの変換だけでは、ブート可能なシステムにはなっていません。 ファイルシステムがext4からbtrfsに変更されると同時にデバイスのblkidも 変更されます。例えば、491a357c-822f-4f38-b56e-b998baea81a5 から 9be0d928-5892-4cdd-a647-1e8cce937b2e に変わったとします。</description>
+NOTE: root filesystemを@に置くと、2022年７月以降はトラブルが発生しました。 素直に上記の様にd-i で btrfs への root filesystem導入をはかるのが良いようです。
+subvol=@homeの追加など メインのLinux環境でtimeshiftを使うには、ルートファイルシステム以外にsubvol=@home を追加する必要がありました。この件を含めて、メインのLinux環境の整備は、 サブのLinux環境から行うとファイルシステムがマウントされ使われていないので 変更がスムーズに進みます。
+ユーザー権限でのsubvolume削除 ユーザー権限でのsubvolume削除を可能にすると、Nestedなsubvolumeレイアウトが 使いやすくなります。そのためには、btrfsをuser_subvol_rm_allowedオプションで mountする必要があります。
+例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、 /etc/fstabのエントリーを以下とします。
+UUID=???first / btrfs subvol=@,defaults 0 0 UUID=???second /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults 0 0 btrfs(5) mount option に以下の記載があるのに要注意です。&amp;ldquo;most mount options apply to the whole filesystem and only options in the first mounted subvolume will take effect.</description>
     </item>
     
     <item>

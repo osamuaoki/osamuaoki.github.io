@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/16 (initial publish),
-2022/07/12 (last update)
+2022/07/13 (last update)
 </h3>
 </div>
 
@@ -62,12 +62,8 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#subvolumeの使い方">subvolumeの使い方</a></li>
-    <li><a href="#busterリリース後の-d-i-で-btrfs-への-システム導入">Busterリリース後の d-i で btrfs への システム導入</a></li>
-    <li><a href="#過去のroot-fsのbtrfs化トリック今は無効">過去のRoot-fsのbtrfs化トリック(今は無効)</a>
+    <li><a href="#busterリリース後の-d-i-で-btrfs-への-システム導入">Busterリリース後の d-i で btrfs への システム導入</a>
       <ul>
-        <li><a href="#btrfs化の全体手順">btrfs化の全体手順</a></li>
-        <li><a href="#linux環境のbtrfs化">Linux環境のbtrfs化</a></li>
-        <li><a href="#linux環境のsubvolへの移動">Linux環境のsubvol=@への移動</a></li>
         <li><a href="#subvolhomeの追加など">subvol=<code>@home</code>の追加など</a></li>
         <li><a href="#ユーザー権限でのsubvolume削除">ユーザー権限でのsubvolume削除</a></li>
       </ul>
@@ -93,183 +89,15 @@ Nestedなsubvolumeレイアウトをうまく使い<code>/etc/fstab</code>を簡
 <a href="https://help.ubuntu.com/community/btrfs#Ubuntu-specific_subvolume_layout_in_11.04_and_later">慣習Subvolume命名法</a>
 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。</p>
 <h2 id="busterリリース後の-d-i-で-btrfs-への-システム導入">Busterリリース後の d-i で btrfs への システム導入</h2>
+<p>RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので
+ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。</p>
 <p>busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem
 に指定すると、<code>@rootfs</code>というsubvolumeが作成され、その中にシステムが導入されます。</p>
 <p>ホームディレクトリーにあるユーザーデーターを保護する上でも、ホームディレクトリー
 は別のsubvolumeに保存するのが良いようです。</p>
-<h2 id="過去のroot-fsのbtrfs化トリック今は無効">過去のRoot-fsのbtrfs化トリック(今は無効)</h2>
-<p>RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので
-ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。</p>
-<p>以下に示すように事をしてroot
-filesystemを<code>@</code>に置くと、2022年７月以降はトラブルが発生しました。素直に上記の様にd-i
-で btrfs への root filesystem導入刷るのが良いようです。</p>
-<h3 id="btrfs化の全体手順">btrfs化の全体手順</h3>
-<p>btrfs化を確実にするために、練習を兼ねてサブ環境で移行を確認した上でメイン環境を移行します。</p>
-<ul>
-<li>EFIパーティションを共有した2つ以上別のパーティションを使う2つ以上のLinuxが立ち上げられるマルチブート環境を作成します。（EFIパーティションはWindowsとも共有）</li>
-<li>サブのLinux環境のbtrfs化
-<ul>
-<li>メインのLinux環境を立ち上げ、サブのLinux環境をbtrfs化します。（<code>btrfs-convert</code>で処理）</li>
-<li>サブのLinux環境の<code>/etc/fstab</code>や<code>/boot/grub/grub.cfg</code>内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。</li>
-<li>メインのLinux環境の<code>/boot/grub/grub.cfg</code>内を編集し、サブのLinux環境関連の設定をbtrfsに変更し、新しく付与されたUUIDに更新します。(<code>sudo dpkg-reconfigure grub-efi-amd64</code>とするのでもいいはず)</li>
-<li>サブのLinux環境を立ち上げ、正常動作を確認します。</li>
-<li>サブのLinux環境を立ち上げ、メインのLinux環境をbtrfs化します。（この時点では、<code>subvol=/</code>にメインのシステムあり）</li>
-</ul>
-</li>
-<li>サブのLinux環境のsubvol=@への移動
-<ul>
-<li>サブのLinux環境のスナップショットを <code>subvol=@</code>に作成します。</li>
-<li>メインのLinux環境を立ち上げ、サブのLinux環境の<code>subvol=/</code>を<code>/mnt</code>にマウントし、後述のバグ回避策の処理を行います。</li>
-<li><code>subvol=@</code>に移動したサブのLinux環境を立ち上げ、動作を確認します。</li>
-<li>念のため<code>sudo dpkg-reconfigure grub-efi-amd64</code>とし、起動確認を確認します。</li>
-</ul>
-</li>
-<li>メインのLinux環境に関して、上記同様の、Linux環境のbtrfs化＋Linux環境のsubvol=@への移動を行います。</li>
-<li>メインのLinux環境に関して、<code>timeshift</code>を使えるようにsubvol=<code>@home</code>を追加します。</li>
-</ul>
-<h3 id="linux環境のbtrfs化">Linux環境のbtrfs化</h3>
-<p><code>btrfs-convert</code>によるファイルシステムの変換自体は、
-<a href="https://btrfs.wiki.kernel.org/index.php/Conversion_from_Ext3">Conversion from Ext3/4 and ReiserFS</a>
-をトレースしました。</p>
-<p>ファイルシステムの変換だけでは、ブート可能なシステムにはなっていません。
-ファイルシステムがext4からbtrfsに変更されると同時にデバイスのblkidも
-変更されます。例えば、<code>491a357c-822f-4f38-b56e-b998baea81a5</code> から
-<code>9be0d928-5892-4cdd-a647-1e8cce937b2e</code> に変わったとします。</p>
-<p>当然ですがこの変更に合わせ当然<code>/etc/fstab</code>に以下のdiffに相当する変更をします。</p>
-<pre tabindex="0"><code>--- fstab.orig  2021-02-19 14:49:32.768895933 +0900
-+++ fstab       2021-02-19 14:49:19.860921576 +0900
-@@ -6,6 +6,6 @@
- #
- # &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;
- # / was on /dev/nvme1n1p1 during installation
--UUID=491a357c-822f-4f38-b56e-b998baea81a5      /       ext4  errors=remount-ro 0       1
-+UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e      /       btrfs subvol=/,defaults 0       1
- # /boot/efi was on /dev/nvme0n1p1 during installation
-</code></pre><p>他のパーティションのシステムが設定するgrub2を使っていても、自分のシステムの
-<code>/boot/grub/grub.cfg</code>もキチッと以下のdiffに相当する変更をします。</p>
-<p>これができていなくて発生した起動不良にかなり悩みました。(update-grubは他の
-パーティションのOSに関してはそれらのgrub.cfgの内容を参照するので)</p>
-<pre tabindex="0"><code>--- grub.cfg-orig	2021-02-17 09:32:35.855910912 +0900
-+++ grub.cfg	2021-02-19 14:26:12.728005239 +0900
-@@ -59,11 +59,11 @@
-    font=unicode
- else
- insmod part_gpt
--insmod ext2
-+insmod btrfs
- if [ x$feature_platform_search_hint = xy ]; then
--  search --no-floppy --fs-uuid --set=root  491a357c-822f-4f38-b56e-b998baea81a5
-+  search --no-floppy --fs-uuid --set=root  9be0d928-5892-4cdd-a647-1e8cce937b2e
- else
--  search --no-floppy --fs-uuid --set=root 491a357c-822f-4f38-b56e-b998baea81a5
-+  search --no-floppy --fs-uuid --set=root 9be0d928-5892-4cdd-a647-1e8cce937b2e
- fi
-     font=&#34;/usr/share/grub/unicode.pf2&#34;
- fi
-@@ -93,11 +93,11 @@
-
- ### BEGIN /etc/grub.d/05_debian_theme ###
- insmod part_gpt
--insmod ext2
-+insmod btrfs
- if [ x$feature_platform_search_hint = xy ]; then
--  search --no-floppy --fs-uuid --set=root  491a357c-822f-4f38-b56e-b998baea81a5
-+  search --no-floppy --fs-uuid --set=root  9be0d928-5892-4cdd-a647-1e8cce937b2e
- else
--  search --no-floppy --fs-uuid --set=root 491a357c-822f-4f38-b56e-b998baea81a5
-+  search --no-floppy --fs-uuid --set=root 9be0d928-5892-4cdd-a647-1e8cce937b2e
- fi
- insmod png
- if background_image /usr/share/desktop-base/futureprototype-theme/grub/grub-4x3.png; then
-@@ -115,52 +115,52 @@
- }
- set linux_gfx_mode=
- export linux_gfx_mode
--menuentry &#39;Debian GNU/Linux&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-simple-491a357c-822f-4f38-b56e-b998baea81a5&#39; {
-+menuentry &#39;Debian GNU/Linux&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-simple-9be0d928-5892-4cdd-a647-1e8cce937b2e&#39; {
- 	load_video
- 	insmod gzio
- 	if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
- 	insmod part_gpt
--	insmod ext2
-+	insmod btrfs
- 	if [ x$feature_platform_search_hint = xy ]; then
--	  search --no-floppy --fs-uuid --set=root  491a357c-822f-4f38-b56e-b998baea81a5
-+	  search --no-floppy --fs-uuid --set=root  9be0d928-5892-4cdd-a647-1e8cce937b2e
- 	else
--	  search --no-floppy --fs-uuid --set=root 491a357c-822f-4f38-b56e-b998baea81a5
-+	  search --no-floppy --fs-uuid --set=root 9be0d928-5892-4cdd-a647-1e8cce937b2e
- 	fi
- 	echo	&#39;Loading Linux 5.10.0-3-amd64 ...&#39;
--	linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=491a357c-822f-4f38-b56e-b998baea81a5 ro  quiet
-+	linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e ro  quiet
- 	echo	&#39;Loading initial ramdisk ...&#39;
- 	initrd	/boot/initrd.img-5.10.0-3-amd64
- }
--submenu &#39;Advanced options for Debian GNU/Linux&#39; $menuentry_id_option &#39;gnulinux-advanced-491a357c-822f-4f38-b56e-b998baea81a5&#39; {
--	menuentry &#39;Debian GNU/Linux, with Linux 5.10.0-3-amd64&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-5.10.0-3-amd64-advanced-491a357c-822f-4f38-b56e-b998baea81a5&#39; {
-+submenu &#39;Advanced options for Debian GNU/Linux&#39; $menuentry_id_option &#39;gnulinux-advanced-9be0d928-5892-4cdd-a647-1e8cce937b2e&#39; {
-+	menuentry &#39;Debian GNU/Linux, with Linux 5.10.0-3-amd64&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-5.10.0-3-amd64-advanced-9be0d928-5892-4cdd-a647-1e8cce937b2e&#39; {
- 		load_video
- 		insmod gzio
- 		if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
- 		insmod part_gpt
--		insmod ext2
-+		insmod btrfs
- 		if [ x$feature_platform_search_hint = xy ]; then
--		  search --no-floppy --fs-uuid --set=root  491a357c-822f-4f38-b56e-b998baea81a5
-+		  search --no-floppy --fs-uuid --set=root  9be0d928-5892-4cdd-a647-1e8cce937b2e
- 		else
--		  search --no-floppy --fs-uuid --set=root 491a357c-822f-4f38-b56e-b998baea81a5
-+		  search --no-floppy --fs-uuid --set=root 9be0d928-5892-4cdd-a647-1e8cce937b2e
- 		fi
- 		echo	&#39;Loading Linux 5.10.0-3-amd64 ...&#39;
--		linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=491a357c-822f-4f38-b56e-b998baea81a5 ro  quiet
-+		linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e ro  quiet
- 		echo	&#39;Loading initial ramdisk ...&#39;
- 		initrd	/boot/initrd.img-5.10.0-3-amd64
- 	}
--	menuentry &#39;Debian GNU/Linux, with Linux 5.10.0-3-amd64 (recovery mode)&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-5.10.0-3-amd64-recovery-491a357c-822f-4f38-b56e-b998baea81a5&#39; {
-+	menuentry &#39;Debian GNU/Linux, with Linux 5.10.0-3-amd64 (recovery mode)&#39; --class debian --class gnu-linux --class gnu --class os $menuentry_id_option &#39;gnulinux-5.10.0-3-amd64-recovery-9be0d928-5892-4cdd-a647-1e8cce937b2e&#39; {
- 		load_video
- 		insmod gzio
- 		if [ x$grub_platform = xxen ]; then insmod xzio; insmod lzopio; fi
- 		insmod part_gpt
--		insmod ext2
-+		insmod btrfs
- 		if [ x$feature_platform_search_hint = xy ]; then
--		  search --no-floppy --fs-uuid --set=root  491a357c-822f-4f38-b56e-b998baea81a5
-+		  search --no-floppy --fs-uuid --set=root  9be0d928-5892-4cdd-a647-1e8cce937b2e
- 		else
--		  search --no-floppy --fs-uuid --set=root 491a357c-822f-4f38-b56e-b998baea81a5
-+		  search --no-floppy --fs-uuid --set=root 9be0d928-5892-4cdd-a647-1e8cce937b2e
- 		fi
- 		echo	&#39;Loading Linux 5.10.0-3-amd64 ...&#39;
--		linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=491a357c-822f-4f38-b56e-b998baea81a5 ro single
-+		linux	/boot/vmlinuz-5.10.0-3-amd64 root=UUID=9be0d928-5892-4cdd-a647-1e8cce937b2e ro single
- 		echo	&#39;Loading initial ramdisk ...&#39;
- 		initrd	/boot/initrd.img-5.10.0-3-amd64
- 	}
-</code></pre><h3 id="linux環境のsubvolへの移動">Linux環境のsubvol=@への移動</h3>
-<p>timeshift等を使うには、ルートファイルシステムsubvol=<code>/</code>からsubvol=<code>@</code>へ移動する必要があります。
-こうすると、マルチブートの他のシステムからの起動が少々トリッキーです。</p>
-<p>例えば&quot;<code>/dev/nvme1n1p1</code>&ldquo;がbtrfsで、&ldquo;subvol=@&ldquo;にシステムがある際に、他の
-パーティションにあるDebian Bulleseye 11 が作成する Grub 起動メニューに
-<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=983107">当システムがうまくリストされないバグ</a>
-の回避策は以下です。</p>
-<pre tabindex="0"><code>$ cd /mnt
-$ sudo ln -sf @/boot boot
-$ sudo ln -sf @/etc  etc
-$ sudo ln -sf @/usr  usr
-$ sudo ln -sf @/lib  lib
-$ sudo ln -sf @/initrd.img initrd.img
-$ sudo ln -sf @/vmlinuz    vmlinuz
-$ sudo ln -sf @/initrd.img.old initrd.img.old
-$ sudo ln -sf @/vmlinuz.old    vmlinuz.old
-$ sudo btrfs subvol set-default /mnt/@
-$ cd /
-$ sudo umount /mnt
-</code></pre><h3 id="subvolhomeの追加など">subvol=<code>@home</code>の追加など</h3>
+<p>NOTE:  root filesystemを<code>@</code>に置くと、2022年７月以降はトラブルが発生しました。
+素直に上記の様にd-i で btrfs への root filesystem導入をはかるのが良いようです。</p>
+<h3 id="subvolhomeの追加など">subvol=<code>@home</code>の追加など</h3>
 <p>メインのLinux環境で<code>timeshift</code>を使うには、ルートファイルシステム以外にsubvol=<code>@home</code>
 を追加する必要がありました。この件を含めて、メインのLinux環境の整備は、
 サブのLinux環境から行うとファイルシステムがマウントされ使われていないので
