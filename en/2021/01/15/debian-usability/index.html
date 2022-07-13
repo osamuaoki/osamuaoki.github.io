@@ -68,6 +68,7 @@
         <li><a href="#initial-setup-1">Initial setup</a></li>
         <li><a href="#set-up-sudo">Set-up <code>sudo</code></a></li>
         <li><a href="#set-up-user-group-for-uid1000-user">Set-up user group for UID=1000 user</a></li>
+        <li><a href="#set-up-grub">Set-up GRUB</a></li>
         <li><a href="#add-extra-packages">Add extra packages</a></li>
       </ul>
     </li>
@@ -103,7 +104,7 @@
 <h2 id="workstation-usability">Workstation usability</h2>
 <p>Let me keep up note on configuring and administrating my workstation under
 post-Debian Bullseye (11) GNU/Linux in testing.</p>
-<p>This is non-hardware specific tips.</p>
+<p>This is non-hardware specific notes and tips.</p>
 <h2 id="installer-installed-extra-packages">Installer installed extra packages</h2>
 <p>After the initial installation, packages with <code>Priority:</code> values <code>required</code>, <code>important</code> and <code>standard</code> are installed.
 In addition to these packages, I see the installer installs following extra packages:</p>
@@ -132,7 +133,8 @@ In addition to these packages, I see the installer installs following extra pack
 <ul>
 <li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup">https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup</a></li>
 </ul>
-<p>Let me describe what it does.</p>
+<p>Let me describe what it does with <code>./initial-setup 9</code>.</p>
+<p>(Just executing <code>./initial-setup</code> installs a bit more programs.)</p>
 <h3 id="initial-setup-1">Initial setup</h3>
 <p>Drop <code>nano</code> and install <code>aptitude</code> first.</p>
 <p>Then, add few should-be-standard packages:</p>
@@ -180,7 +182,11 @@ firmware packages:</p>
 <li><code>sudo</code></li>
 <li><code>www-data</code></li>
 </ul>
-<h3 id="add-extra-packages">Add extra packages</h3>
+<h3 id="set-up-grub">Set-up GRUB</h3>
+<p>In order to probe OSs on other drives, add a following line to
+<code>/etc/default/grub</code>:</p>
+<pre tabindex="0"><code>GRUB_DISABLE_OS_PROBER=false
+</code></pre><h3 id="add-extra-packages">Add extra packages</h3>
 <p>Let&rsquo;s add a few GUI tools.</p>
 <ul>
 <li><code>chromium</code></li>
@@ -201,7 +207,8 @@ firmware packages:</p>
 </ul>
 <h2 id="tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</h2>
 <p>Since I use <code>aptitude</code> as the primary package maintenance tool, I usually
-tidy-up package auto install flags (<code>M</code>) missing for some libraries.</p>
+tidy-up package auto install flags (<code>M</code>) missing for some libraries after the
+initial install.</p>
 <p>Use of <code>~i!~prequired!~pimportant!~pstandard!~M</code> in <code>l</code> prompt in <code>aptitude</code> to
 set library packages as auto-installed.  If some of them are not used by other
 program, let them remove.</p>
