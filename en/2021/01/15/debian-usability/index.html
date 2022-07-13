@@ -65,11 +65,11 @@
     <li><a href="#installer-installed-extra-packages">Installer installed extra packages</a></li>
     <li><a href="#initial-setup">Initial setup</a>
       <ul>
-        <li><a href="#initial-setup-1">Initial setup</a></li>
+        <li><a href="#install-basic-packages">Install basic packages</a></li>
         <li><a href="#set-up-sudo">Set-up <code>sudo</code></a></li>
         <li><a href="#set-up-user-group-for-uid1000-user">Set-up user group for UID=1000 user</a></li>
         <li><a href="#set-up-grub">Set-up GRUB</a></li>
-        <li><a href="#add-extra-packages">Add extra packages</a></li>
+        <li><a href="#install-extra-packages">Install extra packages</a></li>
       </ul>
     </li>
     <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
@@ -94,7 +94,7 @@
     </li>
     <li><a href="#mail">Mail</a>
       <ul>
-        <li><a href="#evolution-workaround-font----not-needed">Evolution workaround (font) &ndash; not needed</a></li>
+        <li><a href="#evolution-workaround-font----resolved">Evolution workaround (font) &ndash; resolved</a></li>
       </ul>
     </li>
     <li><a href="#command-line">Command line</a></li>
@@ -135,7 +135,7 @@ In addition to these packages, I see the installer installs following extra pack
 </ul>
 <p>Let me describe what it does with <code>./initial-setup 9</code>.</p>
 <p>(Just executing <code>./initial-setup</code> installs a bit more programs.)</p>
-<h3 id="initial-setup-1">Initial setup</h3>
+<h3 id="install-basic-packages">Install basic packages</h3>
 <p>Drop <code>nano</code> and install <code>aptitude</code> first.</p>
 <p>Then, add few should-be-standard packages:</p>
 <ul>
@@ -186,7 +186,7 @@ firmware packages:</p>
 <p>In order to probe OSs on other drives, add a following line to
 <code>/etc/default/grub</code>:</p>
 <pre tabindex="0"><code>GRUB_DISABLE_OS_PROBER=false
-</code></pre><h3 id="add-extra-packages">Add extra packages</h3>
+</code></pre><h3 id="install-extra-packages">Install extra packages</h3>
 <p>Let&rsquo;s add a few GUI tools.</p>
 <ul>
 <li><code>chromium</code></li>
@@ -232,7 +232,7 @@ up from the BIOS Update bootable CD image, you may need to disabled the Secure B
 <p>If Windows 10 or 11 is installed, you may need to reenable Secure Boot after
 this operation.</p>
 <h2 id="gui-desktop-customization">GUI Desktop customization</h2>
-<p>The <code>gnome-tweak</code> package installed as a depencdency of <code>gnome</code> package helps to tweak the system.
+<p>The <code>gnome-tweak</code> package installed as a dependency of <code>gnome</code> package helps to tweak the system.
 For example, you can add &ldquo;Applications&rdquo; to top bar etc.</p>
 <p>After installing
 <a href="https://chrome.google.com/webstore/detail/gnome-shell-integration/gphhapmejobijbbhgpjhcjognlahblep">GNOME Shell integration</a>
@@ -318,17 +318,17 @@ be default.</p>
 <code>application_password</code> in advance.)</p>
 <p>Whenever I wish to send out mails with &ldquo;@debian.org&rdquo; address, I use
 ssh+sendmail (created shell script <code>~/bin/sendmail-p.d.o</code>) to access a Debian
-host. (This trick may be usable for any hosts such as salsa.debian.org etc.)
-I have sets up for:</p>
+host. (This trick may be usable for any hosts such as salsa.debian.org etc.)</p>
+<p>I have mail configuration for:</p>
 <ul>
 <li>Evolution</li>
 <li><code>devscripts</code> (add &ldquo;<code>BTS_SENDMAIL_COMMAND='/home/osamu/bin/sendmail-p.d.o'</code>&rdquo; to <code>~/.devscripts</code>)</li>
 <li><code>reportbug</code> (add &ldquo;<code>mta /home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.reportbugrc</code>)</li>
 </ul>
 <p>I usually don&rsquo;t bother with fetchmail these days.</p>
-<h3 id="evolution-workaround-font----not-needed">Evolution workaround (font) &ndash; not needed</h3>
+<h3 id="evolution-workaround-font----resolved">Evolution workaround (font) &ndash; resolved</h3>
 <p>This bug is resolved: <a href="https://bugs.debian.org/987948">https://bugs.debian.org/987948</a></p>
-<p>Evolution for Debian 11 Bullseye (pre-release) under wayland has ugly font
+<p>Evolution for Debian 11 Bullseye (pre-release) under wayland had ugly font
 problem as of May 2, 2021.  (Some firefox, too).  It looked like some similar
 to WebKit issue exposed by sandboxing.
 <a href="https://gitlab.gnome.org/GNOME/evolution/-/issues/1161">https://gitlab.gnome.org/GNOME/evolution/-/issues/1161</a></p>
