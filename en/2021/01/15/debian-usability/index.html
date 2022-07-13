@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/15 (initial publish),
-2022/07/13 (last update)
+2022/07/14 (last update)
 </h3>
 </div>
 
@@ -73,6 +73,7 @@
       </ul>
     </li>
     <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
+    <li><a href="#re-install-and-uidgid-issues">Re-install and UID/GID issues</a></li>
     <li><a href="#efi-based-firmware-updates">EFI-based firmware updates</a>
       <ul>
         <li><a href="#workaround-for-some-firmware">Workaround for some firmware</a></li>
@@ -213,7 +214,13 @@ set library packages as auto-installed.  If some of them are not used by other
 program, let them remove.</p>
 <p>Now you can verify intentionally installed packages with:</p>
 <pre tabindex="0"><code>$ aptitude search &#39;~i!~prequired!~pimportant!~pstandard!~M&#39;
-</code></pre><h2 id="efi-based-firmware-updates">EFI-based firmware updates</h2>
+</code></pre><h2 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h2>
+<p>UID and GID used by some applications are not fixed.  So, if you reinstall the
+exact same packages in a different order, you end up assigning UID and GID for
+the application.</p>
+<p>UID in range between 101-999 such as ones for <code>avahi</code>, <code>saned</code>, <code>colord</code>,
+<code>_ssh</code>, &hellip;  are the most susceptible on this issue.</p>
+<h2 id="efi-based-firmware-updates">EFI-based firmware updates</h2>
 <p>Install <code>gnome-firmware</code> package and invoke GUI to update firmware on devices
 supported by <code>fwupd</code> using <a href="https://fwupd.org/">Linux Vendor Firmware Service</a>.</p>
 <p>Many firmware data can be updated using <code>gnome-firmware</code>.</p>
