@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2022/05/15 (last update)
+2022/07/14 (last update)
 </h3>
 </div>
 
@@ -204,8 +204,13 @@ EOF
 </code></pre><p>You can disable and enable each functionality by assigning 0 or 1 to
 corresponding variables.  You can customize this further for your GPG key etc.</p>
 <p>Then create the baseline chroot environment as:</p>
-<pre tabindex="0"><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/ftp.us.debian.org/debian
-</code></pre><p>Please note that the above create <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to be used by <code>schroot</code>.</p>
+<p>If <code>apt-cacher-ng</code> is NOT used:</p>
+<pre tabindex="0"><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://deb.debian.org/debian
+</code></pre><p>If <code>apt-cacher-ng</code> is used:</p>
+<pre tabindex="0"><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
+</code></pre><p>(The difference can be resolved later by editing the <code>.../etc/apt/sources.list</code>
+file found under <code>/srv/chroot/unstable-amd64-sbuild</code>.)</p>
+<p>Please note that the above create <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to be used by <code>schroot</code>.</p>
 <p>(This file needs to be removed together with the directory tree under <code>/srv/chroot/unstable-amd64-sbuild</code> to rerun above <code>sbuild-createchroot</code> if you messed up chroot contents.)</p>
 <p>TODO: decide on technical merits: eatmydata or tmpfs for /build etc.</p>
 <p>Prior to every use, you need to keep it up to date.</p>

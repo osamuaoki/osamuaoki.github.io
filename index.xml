@@ -545,14 +545,14 @@ Font Point 0O区別 1lI区別 Programing Japanese Overall Monospace 14 Good Good
 subvolumeの使い方 使用法のガイド のリストのリンク先には興味深いコンテントがあります。 システム管理者ガイド 中の、subvolumeレイアウト の内容は、「使い方」を見詰め直す上で目から鱗でした。
 私は単純にFlatなsubvolumeレイアウトを乱用していましたが、 Nestedなsubvolumeレイアウトをうまく使い/etc/fstabを簡素化し、 よく考えて構成したMixedなsubvolumeレイアウトを使うと管理が楽そうです。
 この際、Ubuntu風の@home等の 慣習Subvolume命名法 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。
-Busterリリース後の d-i で btrfs への システム導入 RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。
-busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem に指定すると、@rootfsというsubvolumeが作成され、その中にシステムが導入されます。
-ホームディレクトリーにあるユーザーデーターを保護する上でも、ホームディレクトリー は別のsubvolumeに保存するのが良いようです。
-NOTE: root filesystemを@に置くと、2022年７月以降はトラブルが発生しました。 素直に上記の様にd-i で btrfs への root filesystem導入をはかるのが良いようです。
-subvol=@homeの追加など メインのLinux環境でtimeshiftを使うには、ルートファイルシステム以外にsubvol=@home を追加する必要がありました。この件を含めて、メインのLinux環境の整備は、 サブのLinux環境から行うとファイルシステムがマウントされ使われていないので 変更がスムーズに進みます。
-ユーザー権限でのsubvolume削除 ユーザー権限でのsubvolume削除を可能にすると、Nestedなsubvolumeレイアウトが 使いやすくなります。そのためには、btrfsをuser_subvol_rm_allowedオプションで mountする必要があります。
+btrfs のシステムへの導入 RAID関係、圧縮関係、SWAP FILE関係にかかわらない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムのbtrfs化をめざします。
+busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem に指定すると、@rootfsというsubvolumeが作成され、その中にシステムが導入できます。
+NOTE: 強引にroot filesystemを@に置く設定をしてると、2022年７月以降はトラブルが 発生しました。素直に上記の様にd-i で btrfs への root filesystem導入をはかるのが良いようです。
+ユーザー毎のsubvolの追加など ホームディレクトリーにあるユーザーデーターをシステム再構築から保護する上でも、 ホームディレクトリーは別のパーティションかsubvolumeに保存するのが便利です。
+btrfsがあるので、@rootfsが置かれたbrtfs内に、ユーザー毎にsubvol=@homefooを 追加し、それを/etc/fstabからmountします。
+その際にユーザー権限でのsubvolume削除を可能にすると、Nestedなsubvolumeレイアウトが 使いやすくなります。そのためには、btrfsをuser_subvol_rm_allowedオプションで mountする必要があります。
 例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、 /etc/fstabのエントリーを以下とします。
-UUID=???first / btrfs subvol=@,defaults 0 0 UUID=???second /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults 0 0 btrfs(5) mount option に以下の記載があるのに要注意です。&amp;ldquo;most mount options apply to the whole filesystem and only options in the first mounted subvolume will take effect.</description>
+UUID=???first / btrfs subvol=@,defaults 0 0 UUID=???second /home/foo btrfs subvol=@homefoo,user_subvol_rm_allowed,defaults 0 0 btrfs(5) mount option に以下の記載があるのには要注意です。&amp;ldquo;most mount options apply to the whole filesystem and only options in the first mounted subvolume will take effect.</description>
     </item>
     
     <item>

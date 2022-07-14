@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/16 (initial publish),
-2022/07/13 (last update)
+2022/07/14 (last update)
 </h3>
 </div>
 
@@ -62,12 +62,8 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#subvolumeの使い方">subvolumeの使い方</a></li>
-    <li><a href="#busterリリース後の-d-i-で-btrfs-への-システム導入">Busterリリース後の d-i で btrfs への システム導入</a>
-      <ul>
-        <li><a href="#subvolhomeの追加など">subvol=<code>@home</code>の追加など</a></li>
-        <li><a href="#ユーザー権限でのsubvolume削除">ユーザー権限でのsubvolume削除</a></li>
-      </ul>
-    </li>
+    <li><a href="#btrfs-のシステムへの導入">btrfs のシステムへの導入</a></li>
+    <li><a href="#ユーザー毎のsubvolの追加など">ユーザー毎のsubvolの追加など</a></li>
     <li><a href="#no_cow-attribute">No_COW attribute</a></li>
     <li><a href="#bss-バップアップスクリプト">bss バップアップスクリプト</a></li>
     <li><a href="#参考サイト">参考サイト</a></li>
@@ -88,33 +84,30 @@ Nestedなsubvolumeレイアウトをうまく使い<code>/etc/fstab</code>を簡
 <p>この際、Ubuntu風の<code>@home</code>等の
 <a href="https://help.ubuntu.com/community/btrfs#Ubuntu-specific_subvolume_layout_in_11.04_and_later">慣習Subvolume命名法</a>
 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。</p>
-<h2 id="busterリリース後の-d-i-で-btrfs-への-システム導入">Busterリリース後の d-i で btrfs への システム導入</h2>
-<p>RAID関係、圧縮関係、SWAP FILE関係に嵌らない限りbtrfsはかなり安定なようなので
-ext4にしていたルートファイルシステムも含めてbtrfs化をめざします。</p>
+<h2 id="btrfs-のシステムへの導入">btrfs のシステムへの導入</h2>
+<p>RAID関係、圧縮関係、SWAP FILE関係にかかわらない限りbtrfsはかなり安定なようなので
+ext4にしていたルートファイルシステムのbtrfs化をめざします。</p>
 <p>busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem
-に指定すると、<code>@rootfs</code>というsubvolumeが作成され、その中にシステムが導入されます。</p>
-<p>ホームディレクトリーにあるユーザーデーターを保護する上でも、ホームディレクトリー
-は別のsubvolumeに保存するのが良いようです。</p>
-<p>NOTE:  root filesystemを<code>@</code>に置くと、2022年７月以降はトラブルが発生しました。
-素直に上記の様にd-i で btrfs への root filesystem導入をはかるのが良いようです。</p>
-<h3 id="subvolhomeの追加など">subvol=<code>@home</code>の追加など</h3>
-<p>メインのLinux環境で<code>timeshift</code>を使うには、ルートファイルシステム以外にsubvol=<code>@home</code>
-を追加する必要がありました。この件を含めて、メインのLinux環境の整備は、
-サブのLinux環境から行うとファイルシステムがマウントされ使われていないので
-変更がスムーズに進みます。</p>
-<h3 id="ユーザー権限でのsubvolume削除">ユーザー権限でのsubvolume削除</h3>
-<p>ユーザー権限でのsubvolume削除を可能にすると、Nestedなsubvolumeレイアウトが
+に指定すると、<code>@rootfs</code>というsubvolumeが作成され、その中にシステムが導入できます。</p>
+<p>NOTE:  強引にroot filesystemを<code>@</code>に置く設定をしてると、2022年７月以降はトラブルが
+発生しました。素直に上記の様にd-i で btrfs への root filesystem導入をはかるのが良いようです。</p>
+<h2 id="ユーザー毎のsubvolの追加など">ユーザー毎のsubvolの追加など</h2>
+<p>ホームディレクトリーにあるユーザーデーターをシステム再構築から保護する上でも、
+ホームディレクトリーは別のパーティションかsubvolumeに保存するのが便利です。</p>
+<p>btrfsがあるので、<code>@rootfs</code>が置かれたbrtfs内に、ユーザー毎にsubvol=<code>@homefoo</code>を
+追加し、それを<code>/etc/fstab</code>からmountします。</p>
+<p>その際にユーザー権限でのsubvolume削除を可能にすると、Nestedなsubvolumeレイアウトが
 使いやすくなります。そのためには、btrfsを<code>user_subvol_rm_allowed</code>オプションで
 mountする必要があります。</p>
 <p>例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、
 <code>/etc/fstab</code>のエントリーを以下とします。</p>
-<pre tabindex="0"><code>UUID=???first  /      btrfs subvol=@,defaults    0    0
-UUID=???second /home/ btrfs subvol=@home,user_subvol_rm_allowed,defaults    0    0
-</code></pre><p><code>btrfs</code>(5) mount option に以下の記載があるのに要注意です。&ldquo;most mount options
+<pre tabindex="0"><code>UUID=???first  /         btrfs subvol=@,defaults    0    0
+UUID=???second /home/foo btrfs subvol=@homefoo,user_subvol_rm_allowed,defaults    0    0
+</code></pre><p><code>btrfs</code>(5) mount option に以下の記載があるのには要注意です。&ldquo;most mount options
 apply to the whole filesystem and only options in the first mounted subvolume
 will take effect.&rdquo;</p>
 <p>また、最近(2019-06-13以降)の<code>useradd</code>コマンドにはマニュアルにはないけど
-<code>--btrfs-subvolume-home</code>があります。これを使うのも面白そうです。</p>
+<code>--btrfs-subvolume-home</code>があります。これを使うのも面白そうですがやっていません。</p>
 <p><code>adduser</code>は<a href="https://bugs.debian.org/863751">意識的にこのオプションをサポートしていません</a>。</p>
 <h2 id="no_cow-attribute">No_COW attribute</h2>
 <p>No_COWアトリビュートをディレクトリ毎<code>chattr +C &lt;dirname&gt;</code>で設定できるようです。
