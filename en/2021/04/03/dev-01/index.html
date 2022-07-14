@@ -219,13 +219,17 @@ file found under <code>/srv/chroot/unstable-amd64-sbuild</code>.)</p>
 <p>Prior to every use, you need to keep it up to date.</p>
 <pre tabindex="0"><code>$ sudo sbuild-update -udcar u
 </code></pre><h3 id="package-build-with-sbuild">Package build with sbuild</h3>
+<h4 id="for-unstable">For <code>unstable</code></h4>
 <p>Package build from the source directory is simply as:</p>
 <pre tabindex="0"><code>$ sbuild
 </code></pre><p>or using source package as:</p>
 <pre tabindex="0"><code>$ sbuild &lt;packagename&gt;.dsc
 </code></pre><p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
 bind-mount kernel feature smartly to make build environment quickly.</p>
-<h3 id="gbp-buildpackage-configuration">gbp-buildpackage configuration</h3>
+<h4 id="for-testing">For <code>testing</code></h4>
+<p>Package build from the source directory is simply as:</p>
+<pre tabindex="0"><code>$ sbuild -c testing-amd64-sbuild
+</code></pre><h3 id="gbp-buildpackage-configuration">gbp-buildpackage configuration</h3>
 <p>I changed gbp-buildpackage to use sbuild.</p>
 <pre tabindex="0"><code>[DEFAULT]
 # the default build command:
