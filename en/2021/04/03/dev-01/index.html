@@ -70,7 +70,13 @@
     <li><a href="#sbuild-infrastructure">Sbuild infrastructure</a>
       <ul>
         <li><a href="#setup">Setup</a></li>
-        <li><a href="#bench-mark">Bench mark</a></li>
+      </ul>
+    </li>
+    <li><a href="#chroot-update-optimization">Chroot update optimization</a>
+      <ul>
+        <li><a href="#via-eatmydata">Via <code>eatmydata</code></a></li>
+        <li><a href="#via-tmpfs">Via tmpfs</a></li>
+        <li><a href="#bench-mark-results">Bench mark results</a></li>
         <li><a href="#package-build-with-sbuild">Package build with sbuild</a></li>
         <li><a href="#gbp-buildpackage-configuration">gbp-buildpackage configuration</a></li>
         <li><a href="#access-to-the-source-chroot-environment-used-by-sbuild-as-root">Access to the source chroot environment used by sbuild as root</a></li>
@@ -215,12 +221,13 @@ file found under <code>/srv/chroot/unstable-amd64-sbuild</code>.)</p>
 <p>TODO: decide on technical merits: eatmydata or tmpfs for /build etc.</p>
 <p>Prior to every use, you need to keep it up to date.</p>
 <pre tabindex="0"><code>$ sudo sbuild-update -udcar u
-</code></pre><p>I added following line into
-<code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to speed up the package
-installation process.</p>
+</code></pre><h2 id="chroot-update-optimization">Chroot update optimization</h2>
+<p>Slow <code>fsync</code>(2) process problem caused by <code>dpkg</code> and SSD waring problem can be avoided.</p>
+<h3 id="via-eatmydata">Via <code>eatmydata</code></h3>
+<p>Add following line into <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> or similar to speed up the package installation process.</p>
 <pre tabindex="0"><code>command-prefix=eatmydata
-</code></pre><p>Since I have enough DRAM and want to avoid ware out of SSD, I added
-following to my <code>/etc/fstab</code>:</p>
+</code></pre><h3 id="via-tmpfs">Via tmpfs</h3>
+<p>Add following to my <code>/etc/fstab</code>:</p>
 <pre tabindex="0"><code># For speeding up sbuild/schroot and prevent SSD wear-out
 none /var/lib/schroot/session        tmpfs uid=root,gid=root,mode=0755 0 0
 none /var/lib/schroot/union/overlay  tmpfs uid=root,gid=root,mode=0755 0 0
@@ -233,8 +240,8 @@ installed during the build process.</li>
 <li><code>/var/lib/sbuild/build</code>: directory where the source package is unpacked and
 build.</li>
 </ul>
-<p>Please be aware, these directory may eat up some disk spaces.</p>
-<h3 id="bench-mark">Bench mark</h3>
+<p>Please be aware, these directory may eat up some disk spaces and you should have enough DRAM.</p>
+<h3 id="bench-mark-results">Bench mark results</h3>
 <p>Very rough benchmarks were performed to see impact of eatmydata, tmpfs, and
 parallel build.</p>
 <p>System used:</p>
@@ -388,9 +395,11 @@ parallel build.</p>
 </ul>
 <p>Conclusion:</p>
 <ul>
-<li>Use of APT cache is for reducing repository server load.</li>
-<li>Use of eatmydata is for skipping unnecessary waiting.</li>
-<li>Use of tmpfs is for longer SSD life.</li>
+<li>Use of APT cache is for reducing repository server load. (I have fast
+connection)</li>
+<li>Use of eatmydata is for skipping unnecessary waiting. (It may cause
+complication due to version so I stop using it.)</li>
+<li>Use of tmpfs is more for longer SSD life.  (I have lots of DRAM)</li>
 </ul>
 <h3 id="package-build-with-sbuild">Package build with sbuild</h3>
 <p>Package build from the source directory is simply as:</p>
