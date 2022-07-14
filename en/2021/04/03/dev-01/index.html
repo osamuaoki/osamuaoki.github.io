@@ -210,8 +210,8 @@ corresponding variables.  You can customize this further for your GPG key etc.</
 <pre tabindex="0"><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
 </code></pre><p>(The difference can be resolved later by editing the <code>.../etc/apt/sources.list</code>
 file found under <code>/srv/chroot/unstable-amd64-sbuild</code>.)</p>
-<p>Please note that the above create <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to be used by <code>schroot</code>.</p>
-<p>(This file needs to be removed together with the directory tree under <code>/srv/chroot/unstable-amd64-sbuild</code> to rerun above <code>sbuild-createchroot</code> if you messed up chroot contents.)</p>
+<p>Please note that the above create <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to be used by <code>schroot</code>.
+(This file is effectively a split-up <code>/etc/schroot/schroot.conf</code> and this file needs to be removed together with the chroot system directory tree under <code>/srv/chroot/unstable-amd64-sbuild</code> to rerun above <code>sbuild-createchroot</code> if you messed up chroot contents.)</p>
 <p>TODO: decide on technical merits: eatmydata or tmpfs for /build etc.</p>
 <p>Prior to every use, you need to keep it up to date.</p>
 <pre tabindex="0"><code>$ sudo sbuild-update -udcar u
