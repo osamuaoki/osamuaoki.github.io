@@ -545,6 +545,7 @@ Font Point 0O区別 1lI区別 Programing Japanese Overall Monospace 14 Good Good
 subvolumeの使い方 使用法のガイド のリストのリンク先には興味深いコンテントがあります。 システム管理者ガイド 中の、subvolumeレイアウト の内容は、「使い方」を見詰め直す上で目から鱗でした。
 私は単純にFlatなsubvolumeレイアウトを乱用していましたが、 Nestedなsubvolumeレイアウトをうまく使い/etc/fstabを簡素化し、 よく考えて構成したMixedなsubvolumeレイアウトを使うと管理が楽そうです。
 この際、Ubuntu風の@home等の 慣習Subvolume命名法 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。
+Debianでは、subvolume名 @rootfsがシステムの導入の際に使われています。 一方、Ubuntuでは、subvolume名 @がシステムの導入の際に使われているようなので、要注意です。
 btrfs のシステムへの導入 RAID関係、圧縮関係、SWAP FILE関係にかかわらない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムのbtrfs化をめざします。
 busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem に指定すると、@rootfsというsubvolumeが作成され、その中にシステムが導入できます。
 NOTE: 強引にroot filesystemを@に置く設定をしてると、2022年７月以降はトラブルが 発生しました。素直に上記の様にd-i で btrfs への root filesystem導入をはかるのが良いようです。
@@ -552,7 +553,7 @@ NOTE: 強引にroot filesystemを@に置く設定をしてると、2022年７月
 btrfsがあるので、@rootfsが置かれたbrtfs内に、ユーザー毎にsubvol=@homefooを 追加し、それを/etc/fstabからmountします。
 その際にユーザー権限でのsubvolume削除を可能にすると、Nestedなsubvolumeレイアウトが 使いやすくなります。そのためには、btrfsをuser_subvol_rm_allowedオプションで mountする必要があります。
 例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、 /etc/fstabのエントリーを以下とします。
-UUID=???first / btrfs subvol=@,defaults 0 0 UUID=???second /home/foo btrfs subvol=@homefoo,user_subvol_rm_allowed,defaults 0 0 btrfs(5) mount option に以下の記載があるのには要注意です。&amp;ldquo;most mount options apply to the whole filesystem and only options in the first mounted subvolume will take effect.</description>
+UUID=???first / btrfs subvol=@rootfs,defaults 0 0 UUID=???second /home/foo btrfs subvol=@homefoo,user_subvol_rm_allowed,defaults 0 0 btrfs(5) mount option に以下の記載があるのには要注意です。&amp;ldquo;most mount options apply to the whole filesystem and only options in the first mounted subvolume will take effect.</description>
     </item>
     
     <item>
@@ -735,7 +736,7 @@ Btrfsを意識したdedupeという視点では jdupesがよく使われてい�
 Subvolume命名法 Btrfs自体は 特定のSubvolume命名法の慣習を定めていません。
 Debianでは特にどうするって言う慣習が無いようです。
 ただ、Btrfsを積極的に使うディストリビューションが Subvolume命名法に関して特定の慣習をとっているため そこで開発されているGUIツールがそれに依存してる印象 があります。
-Ubuntu 慣習Subvolume命名法 @ @home スナップショット: timeshift OpenSuse 慣習Subvolume命名法 慣習Subvolume命名法(tutorial) @/ @/home スナップショット: snapper 最近のDebianでは、borgbackup以外だと timeshiftの人気が出ています。 でもシステムのロールバックにフォーカスしていてユーザーデーターの スナップショットをしたいだけだと意外と使いにくくて止めました。</description>
+Ubuntu 慣習Subvolume命名法 @ @home スナップショット: timeshift OpenSuse 慣習Subvolume命名法 慣習Subvolume命名法(tutorial) @/ @/home スナップショット: snapper Debian 慣習Subvolume命名法 @rootfs &amp;ndash; d-i setting @home &amp;ndash; manual (timeshift compatible) スナップショット: timeshift &amp;ndash; need patch s/@/@rootfs/ 最近のDebianでは、borgbackup以外だと timeshiftの人気が出ています。 でもシステムのロールバックにフォーカスしていてユーザーデーターの スナップショットをしたいだけだと意外と使いにくくて止めました。</description>
     </item>
     
     <item>

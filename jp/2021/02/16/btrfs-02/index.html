@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/02/16 (initial publish),
-2022/07/14 (last update)
+2022/07/15 (last update)
 </h3>
 </div>
 
@@ -84,6 +84,8 @@ Nestedなsubvolumeレイアウトをうまく使い<code>/etc/fstab</code>を簡
 <p>この際、Ubuntu風の<code>@home</code>等の
 <a href="https://help.ubuntu.com/community/btrfs#Ubuntu-specific_subvolume_layout_in_11.04_and_later">慣習Subvolume命名法</a>
 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。</p>
+<p>Debianでは、subvolume名 <code>@rootfs</code>がシステムの導入の際に使われています。
+一方、Ubuntuでは、subvolume名 <code>@</code>がシステムの導入の際に使われているようなので、要注意です。</p>
 <h2 id="btrfs-のシステムへの導入">btrfs のシステムへの導入</h2>
 <p>RAID関係、圧縮関係、SWAP FILE関係にかかわらない限りbtrfsはかなり安定なようなので
 ext4にしていたルートファイルシステムのbtrfs化をめざします。</p>
@@ -101,7 +103,7 @@ ext4にしていたルートファイルシステムのbtrfs化をめざしま�
 mountする必要があります。</p>
 <p>例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、
 <code>/etc/fstab</code>のエントリーを以下とします。</p>
-<pre tabindex="0"><code>UUID=???first  /         btrfs subvol=@,defaults    0    0
+<pre tabindex="0"><code>UUID=???first  /         btrfs subvol=@rootfs,defaults    0    0
 UUID=???second /home/foo btrfs subvol=@homefoo,user_subvol_rm_allowed,defaults    0    0
 </code></pre><p><code>btrfs</code>(5) mount option に以下の記載があるのには要注意です。&ldquo;most mount options
 apply to the whole filesystem and only options in the first mounted subvolume
