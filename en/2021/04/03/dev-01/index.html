@@ -77,7 +77,8 @@
     </li>
     <li><a href="#schroot-infrastructure-shared-data-persistent">Schroot infrastructure (shared data, persistent)</a>
       <ul>
-        <li><a href="#creating-pre-loaded-chroot-environments-for-schroot">Creating pre-loaded chroot environments for schroot</a></li>
+        <li><a href="#schroot-shell"><code>schroot-shell</code></a></li>
+        <li><a href="#customizing-etcschrootdesktopfstab">Customizing <code>/etc/schroot/desktop/fstab</code></a></li>
         <li><a href="#access-to-the-persistent-chroot-environment-as-user">Access to the persistent chroot environment as user</a></li>
       </ul>
     </li>
@@ -253,10 +254,10 @@ builder = sbuild -A -s --source-only-changes -v -d unstable
 latest minimal chroot environment is time consuming.  For this situation, it&rsquo;s
 better to have all required packages installed and have access to data in your
 home directory.</p>
-<h3 id="creating-pre-loaded-chroot-environments-for-schroot">Creating pre-loaded chroot environments for schroot</h3>
 <p>Let&rsquo;s create package pre-loaded chroot environments which can run x-apps using
 the schroot directly using a configuration profile based on
-<code>/etc/schroot/desktop/</code>.  (My user name is &ldquo;osamu&rdquo; and my hostname is &ldquo;goofy&rdquo;.)</p>
+<code>/etc/schroot/desktop/</code>.</p>
+<h3 id="schroot-shell"><code>schroot-shell</code></h3>
 <p>Since this is a bit repetitive tasks for oldstable, stable, testing, and
 unstable, I created a simple shell script:</p>
 <ul>
@@ -343,7 +344,8 @@ Parametrs:
   DIST    = &#39;unstable&#39;
   ARCH    = &#39;amd64&#39;
   CONFIG  = &#39;desktop&#39;
-</code></pre><p>I customized my desktop profile at <code>/etc/schroot/desktop/fstab</code> as follows:</p>
+</code></pre><h3 id="customizing-etcschrootdesktopfstab">Customizing <code>/etc/schroot/desktop/fstab</code></h3>
+<p>I customized my desktop profile at <code>/etc/schroot/desktop/fstab</code> as follows:</p>
 <ul>
 <li>Explicitly bind mount subdirectories under my home directory which are on
 different devices (including Btrfs subvolumes).</li>
