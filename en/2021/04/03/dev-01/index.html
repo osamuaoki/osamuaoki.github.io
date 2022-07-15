@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2022/07/14 (last update)
+2022/07/15 (last update)
 </h3>
 </div>
 
@@ -88,6 +88,7 @@
         <li><a href="#bench-mark-results">Bench mark results</a></li>
       </ul>
     </li>
+    <li><a href="#files-used-by-sbuild-and-schroot-shell">Files used by <code>sbuild</code> and <code>schroot-shell</code>.</a></li>
     <li><a href="#install-vm-infrastructure">Install VM infrastructure</a>
       <ul>
         <li><a href="#create-minimal-stable-vm">Create minimal stable VM</a></li>
@@ -158,6 +159,7 @@ problem.</p>
 <p>For my purpose, proxy is always the local for the host WS which is the gateway
 WS for guest VMs(=kvm).  Simply installing <code>auto-apt-proxy</code> is suffice to set
 up APT proxy for them.</p>
+<p>NOTE: Permission of <code>/var/cache/apt-cacher-ng/</code> is <code>drwxr-sr-x</code> with <code>apt-cacher-ng:apt-cacher-ng</code>.  Erasing its contents reset broken caching data related issues.</p>
 <h2 id="sbuild-infrastructure">Sbuild infrastructure</h2>
 <p>Sbuild provides clean <strong>binary</strong> package building environment using schroot as its
 backend.</p>
@@ -535,6 +537,19 @@ connection)</li>
 <li>Use of eatmydata is for skipping unnecessary waiting. (It may cause
 complication due to version so I stop using it.)</li>
 <li>Use of tmpfs is more for longer SSD life.  (I have lots of DRAM)</li>
+</ul>
+<h2 id="files-used-by-sbuild-and-schroot-shell">Files used by <code>sbuild</code> and <code>schroot-shell</code>.</h2>
+<p>The <code>sbuild</code> and <code>schroot-shell</code> use following files.</p>
+<ul>
+<li><code>~/.sbuildrc</code> by <code>sbuild</code>.</li>
+<li><code>/etc/sbuild/chroot</code> containing symlinks to the root of the <code>chroot</code> used by
+<code>sbuild</code>.</li>
+<li><code>/etc/schroot/chroot.d/</code> containing configuration files for <code>schroot</code> used by
+<code>sbuild</code> and <code>schroot-shell</code>.</li>
+<li><code>/etc/schroot/desktop-osamu/</code> containing copy of <code>/etc/schroot/desktop/</code>
+contents customized for use by <code>schroot-shell</code>.</li>
+<li><code>/srv/chroot/</code> containing the root of the <code>chroot</code> used by <code>sbuild</code> and
+<code>schroot-shell</code>.</li>
 </ul>
 <h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
