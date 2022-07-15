@@ -99,6 +99,7 @@
     </li>
     <li><a href="#vm-house-keepings">VM house keepings</a>
       <ul>
+        <li><a href="#mixing-gnome-boxes-and-virt-manager">Mixing <code>gnome-boxes</code> and <code>virt-manager</code></a></li>
         <li><a href="#changing-hostname">Changing hostname</a></li>
         <li><a href="#setting-up-ssh">Setting up SSH</a></li>
         <li><a href="#setting-up-sudo">Setting up <code>sudo</code></a></li>
@@ -554,7 +555,7 @@ complication due to version so I stop using it.)</li>
 </ul>
 <h2 id="install-vm-infrastructure">Install VM infrastructure</h2>
 <ul>
-<li>Execute: <code>apt install virt-manager qemu-kvm</code></li>
+<li>Execute: <code>apt install virt-manager gnome-boxes</code></li>
 <li>Read /usr/share/doc/libvirt-daemon/README.Debian.gz and follow it.</li>
 </ul>
 <pre tabindex="0"><code>$ sudo bash
@@ -568,6 +569,7 @@ bind-interfaces
 EOF
 # ^D
 </code></pre><h3 id="create-minimal-stable-vm">Create minimal stable VM</h3>
+<p>(This needs to be updated for &ldquo;bullseye&rdquo;.  It should be quite similar.  I primarily use gnome-boxes now.)</p>
 <ul>
 <li>Download the ISO for Debian stable. (netinst: 337MiB)</li>
 <li>Start virt-manager</li>
@@ -627,6 +629,9 @@ deb-src http://deb.debian.org/debian/ sid main
 <li><code>apt-get install devscripts</code></li>
 </ul>
 <h2 id="vm-house-keepings">VM house keepings</h2>
+<h3 id="mixing-gnome-boxes-and-virt-manager">Mixing <code>gnome-boxes</code> and <code>virt-manager</code></h3>
+<p>You can add VMs created by <code>gnome-boxes</code> to <code>virt-manager</code> by selecting
+<code>QEM/KVM User session</code> instead of <code>QEM/KVM</code> in <code>File -&gt; New connection</code> menu.</p>
 <h3 id="changing-hostname">Changing hostname</h3>
 <p>To change hostname of the VM permanently, you need to edit <code>/etc/hostname</code> and
 <code>/etc/hosts</code> and reboot the VM.  (The hostname of running system can be set to
