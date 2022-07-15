@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/15 (initial publish),
-2022/07/14 (last update)
+2022/07/15 (last update)
 </h3>
 </div>
 
@@ -186,7 +186,9 @@ firmware packages:</p>
 <p>In order to probe OSs on other drives, add a following line to
 <code>/etc/default/grub</code>:</p>
 <pre tabindex="0"><code>GRUB_DISABLE_OS_PROBER=false
-</code></pre><h3 id="install-extra-packages">Install extra packages</h3>
+</code></pre><p>But this is not so robust for btrfs.  See
+<a href="https://wiki.debian.org/Btrfs%20migration">https://wiki.debian.org/Btrfs%20migration</a> .</p>
+<h3 id="install-extra-packages">Install extra packages</h3>
 <p>Let&rsquo;s add a few GUI tools.</p>
 <ul>
 <li><code>chromium</code></li>
@@ -209,11 +211,11 @@ firmware packages:</p>
 <p>Since I use <code>aptitude</code> as the primary package maintenance tool, I usually
 tidy-up package auto install flags (<code>M</code>) missing for some libraries after the
 initial install.</p>
-<p>Use of <code>~i!~prequired!~pimportant!~pstandard!~M</code> in <code>l</code> prompt in <code>aptitude</code> to
+<p>Use of <code>~i!~M~poptional</code> in <code>l</code> prompt in <code>aptitude</code> to
 set library packages as auto-installed.  If some of them are not used by other
 program, let them remove.</p>
 <p>Now you can verify intentionally installed packages with:</p>
-<pre tabindex="0"><code>$ aptitude search &#39;~i!~prequired!~pimportant!~pstandard!~M&#39;
+<pre tabindex="0"><code>$ aptitude search &#39;~i!~M~poptional&#39;
 </code></pre><h2 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h2>
 <p>UID and GID used by some applications are not fixed.  So, if you reinstall the
 exact same packages in a different order, you end up assigning UID and GID for
