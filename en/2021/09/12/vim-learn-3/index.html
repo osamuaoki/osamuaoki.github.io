@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/09/12 (initial publish),
-2021/11/04 (last update)
+2022/07/16 (last update)
 </h3>
 </div>
 
@@ -61,7 +61,7 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#neovim-migration">Neovim migration</a></li>
+    <li><a href="#neovim-05-migration">Neovim 0.5 migration</a></li>
     <li><a href="#terminal-settings">Terminal settings</a></li>
     <li><a href="#key-bindings">Key bindings</a></li>
     <li><a href="#dependency-package-management">Dependency package management</a></li>
@@ -70,12 +70,14 @@
     <li><a href="#skipped-programs">Skipped programs</a></li>
     <li><a href="#note-on-delayed-loading">Note on delayed loading</a></li>
     <li><a href="#map">map</a></li>
+    <li><a href="#upstreamed-mod-for-tweak">Upstreamed mod for &ldquo;Tweak&rdquo;</a></li>
     <li><a href="#todo">TODO</a></li>
   </ul>
 </nav>
 
-<h2 id="neovim-migration">Neovim migration</h2>
-<p>After finding out <strong>Neovim</strong> (nvim) starts up 30%-40% faster than <strong>Vim 8</strong>
+<p>This page is here as my old memo.  See <a href="/en/2022/07/15/vim-learn-4/">Re-learning Vim (4)</a>.</p>
+<h2 id="neovim-05-migration">Neovim 0.5 migration</h2>
+<p>After finding out <strong>Neovim</strong> (nvim) 0.5 starts up 30%-40% faster than <strong>Vim 8</strong>
 probably due to asynchronous processing and more effective use of multi-core
 modern CPU, I decided to migrate to nvim.  Then lua thing got my attention.
 Since nvim source package for version 0.5 was available in Debian experimental,
@@ -234,26 +236,38 @@ used for usual <code>map(mode, keys, cmd, options)</code>.</p>
 <li>Packer load nvim-mapper&rsquo;s setup() and search keybindings at path <code>~/.config/nvim/lua</code></li>
 <li><code>lua/init.lua</code> &ndash;&gt; delayed &ndash;&gt; <code>lua/doom/extras/keybindings/init.lua</code></li>
 </ul>
-<h2 id="todo">TODO</h2>
+<h2 id="upstreamed-mod-for-tweak">Upstreamed mod for &ldquo;Tweak&rdquo;</h2>
 <ul>
-<li>securemodeline &ndash; done mostly, need to be better</li>
-<li>ale            &ndash; done mostly, need to be better</li>
-<li>spell-under    &ndash; needs work</li>
-<li>FZF needs work &ndash; needs work</li>
-<li>ALE and FZF needs key bindings (which-key)</li>
 <li>Toggle/rotate  features (which-key)
 <ul>
-<li>number</li>
-<li>spell</li>
-<li>syntax</li>
-<li>git</li>
-<li>ale</li>
-<li>indent 2/4/8</li>
+<li>number &ndash; done change_number</li>
+<li>spell  &ndash; done toggle_spell</li>
+<li>syntax &ndash; done change_syntax</li>
+<li>git &ndash; done toggle_signcolumn</li>
+<li>ale &ndash; no yet addressed</li>
+<li>indent 2/4/8 &ndash; done set_indent</li>
 </ul>
 </li>
+</ul>
+<pre tabindex="0"><code>      {
+        &#34;t&#34;,
+        name = &#34;+tweak&#34;,
+        {
+          { &#34;b&#34;, require(&#34;doom.core.functions&#34;).toggle_background, name = &#34;Toggle background&#34; },
+          { &#34;s&#34;, require(&#34;doom.core.functions&#34;).toggle_signcolumn, name = &#34;Toggle sigcolumn&#34; },
+          { &#34;i&#34;, require(&#34;doom.core.functions&#34;).set_indent, name = &#34;Set indent&#34; },
+          { &#34;n&#34;, require(&#34;doom.core.functions&#34;).change_number, name = &#34;Toggle number&#34; },
+          { &#34;S&#34;, require(&#34;doom.core.functions&#34;).toggle_spell, name = &#34;Toggle spelling&#34; },
+          { &#34;x&#34;, require(&#34;doom.core.functions&#34;).change_syntax, name = &#34;Toggle syntax&#34; },
+        },
+      },
+</code></pre><h2 id="todo">TODO</h2>
+<ul>
+<li>ale            &ndash; shellcheck integration needed</li>
 <li>Stop suggestion if CTRL-Y is pressed (same as <!-- raw HTML omitted -->.)</li>
 <li><code>F6</code>-<code>F10</code>, <code>ALT</code>/<code>SHIFT</code>/<code>WIN-SPACE</code> should be off limit (used by IM)</li>
 </ul>
+<p>Lack of good ALE equivalent support stalled me to use neovim 0.5.</p>
 <!-- raw HTML omitted -->
 
 
