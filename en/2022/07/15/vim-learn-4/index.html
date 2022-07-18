@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/07/15 (initial publish),
-2022/07/17 (last update)
+2022/07/18 (last update)
 </h3>
 </div>
 
@@ -64,6 +64,17 @@
     <li><a href="#neovim-07-migration">Neovim 0.7 migration</a></li>
     <li><a href="#syntax-checker">Syntax checker</a></li>
     <li><a href="#terminal-settings-and-modifier-keys">Terminal settings and modifier keys</a></li>
+    <li><a href="#internals-of-astronvim">Internals of AstroNvim</a>
+      <ul>
+        <li><a href="#prerequisite">Prerequisite</a></li>
+        <li><a href="#value-of-vim-option-and-runtimepath">Value of vim option and <code>runtimepath</code></a></li>
+        <li><a href="#tracing-source-code-of-astronvim">Tracing source code of AstroNvim</a></li>
+        <li><a href="#entry-point-initlua">Entry point: <code>init.lua</code></a></li>
+        <li><a href="#variable-astronvim">Variable <code>astronvim</code></a></li>
+        <li><a href="#function-user_plugin_opts">Function: <code>user_plugin_opts</code></a></li>
+        <li><a href="#function-conditional_func">Function: <code>conditional_func</code></a></li>
+      </ul>
+    </li>
     <li><a href="#customization">Customization</a></li>
   </ul>
 </nav>
@@ -72,9 +83,13 @@
 <p>After short trial of <strong>Neovim</strong> (nvim) 0.5 described in <a href="/en/2021/09/12/vim-learn-3/">Re-learning Vim
 (3)</a>, I went back to the good old <strong>Vim</strong> with
 ALE.</p>
-<p>After finding out <a href="https://neovim.io/">Neovim</a> (nvim) 0.7 now has native LSP
-support and tools around it seems to be getting mature, I decided to check out.</p>
-<p>I found 4 interesting projects which offer examples of best ways to use Neovim.</p>
+<p>As I find out <a href="https://neovim.io/">Neovim</a> (nvim) 0.7 now has native LSP
+support and tools around it seems to be getting mature, I decided to check nvim
+with lua again. I also found a nice recent review:</p>
+<ul>
+<li><a href="https://galexbh.hashnode.dev/the-best-ide-style-configurations-for-nvim">The best IDE-style configurations for nvim</a></li>
+</ul>
+<p>Then I checked code size etc on IDE system:</p>
 <ul>
 <li>DOOM-NVIM (572K effective code)
 <ul>
@@ -101,20 +116,144 @@ support and tools around it seems to be getting mature, I decided to check out.<
 </ul>
 </li>
 </ul>
-<p>Since AstroNvim seems to be interesting I tried it as the main <code>nvim</code>
-configuration.  I also tried Lunar Vim since it creates the <code>lvim</code> command
-which doesn&rsquo;t interfere with the normal <code>nvim</code> execution.  These can co-exist.</p>
+<p>Since AstroNvim seems to be most interesting for its compactness and
+pre-configured package settings, I tried it as the main <code>nvim</code> configuration.
+I also installed LunarVim since it creates the <code>lvim</code> command which doesn&rsquo;t
+interfere with the normal <code>nvim</code> execution.  These can co-exist.</p>
 <p>All these already use delayed loading etc., to save their start up time.  That
-is not what I am after any more.  My focus is now the out-of-box usability and
-the ease of configuration.</p>
+is not what I am focused any more.  My focus is now the out-of-box usability
+and the ease of configuration.</p>
 <h2 id="syntax-checker">Syntax checker</h2>
 <p>If I install <code>shellcheck</code>, both AstroNvim and LunarVim display error messages.
-Nice.</p>
+Nice out of box configuration.</p>
 <h2 id="terminal-settings-and-modifier-keys">Terminal settings and modifier keys</h2>
 <p>As before, set <code>DEL</code>-code(0x7F) for Backspace and use escape sequence for Delete.
 This frees the ASCII <code>BS</code> (CTRL-H) code so window jump can be mapped to <code>&lt;C-H&gt;</code>.</p>
-<p>Neovim 0.7 now correctly distinguishes these modifier key combos in its own
+<p>Neovim 0.7 now correctly distinguishes modifier key combos in its own
 input processing, so users can now map e.g. <code>&lt;Tab&gt;</code> and <code>&lt;C-I&gt;</code> separately.</p>
+<h2 id="internals-of-astronvim">Internals of AstroNvim</h2>
+<p>Let me record how I looked into the internals of AstroNvim.</p>
+<h3 id="prerequisite">Prerequisite</h3>
+<p>See <a href="https://github.com/nanotee/nvim-lua-guide">Getting started using Lua in Neovim</a> and its linked documents first.</p>
+<h3 id="value-of-vim-option-and-runtimepath">Value of vim option and <code>runtimepath</code></h3>
+<p>We can inspect the actual internal option value of running nvim from the nvim
+command mode.  The actual vim <code>runtimepath</code> option from lua&rsquo;s point of view can
+be inspected by:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(vim.opt.runtimepath))
+</span></span></code></pre></div><p>Here, it is impossible to read so much output and make any sense.  Here,
+<code>:redir</code> can be used to ease reading of these by capturing output in a file.
+(The use of <code>:sirent</code> kills pager prompt.)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:redir <span style="color:#f92672">&gt;</span> rtp.txt
+</span></span><span style="display:flex;"><span>:silent lua print(vim.inspect(vim.opt.runtimepath))
+</span></span><span style="display:flex;"><span>:redir END
+</span></span></code></pre></div><p>Now we know <code>scope = &quot;global&quot;</code>, <code>shortname = &quot;rtp&quot;</code>, etc.  We can always use
+short name, too.</p>
+<p>If we need its current value only,  it can be inspected and presented in lua
+table by:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(vim.opt.rtp:get()))
+</span></span></code></pre></div><p>Alternatively since we now know it is a global option, it can be accessed and
+presented in similar way as vim classic <code>:set rtp?</code> style by:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.go.rtp)
+</span></span></code></pre></div><p>From this output, we can confirm <code>rtp</code> to be scanned roughly as follows.</p>
+<ul>
+<li><code>/home/&lt;username&gt;/.config/nvim</code></li>
+<li><code>/home/&lt;username&gt;/.local/share/nvim/site/pack/packer/opt/*</code></li>
+<li><code>/home/&lt;username&gt;/.local/share/nvim/site/pack/packer/opt/*/after</code></li>
+<li><code>/home/&lt;username&gt;/.config/nvim/after</code></li>
+<li><code>/home/&lt;username&gt;/.config/astronvim</code></li>
+</ul>
+<p>The notable point is the last one specially inserted by AstroNvim.</p>
+<p>This allows us to move <code>lua/user/</code> directory out of <code>~/config/nvim</code> to
+<code>~/config/astronvim</code>.</p>
+<h3 id="tracing-source-code-of-astronvim">Tracing source code of AstroNvim</h3>
+<p>Let&rsquo;s try to trace source code of AstroNvim to understand how to customize it.</p>
+<h3 id="entry-point-initlua">Entry point: <code>init.lua</code></h3>
+<p>The entry point of nvim is <code>/home/&lt;username&gt;/.config/nvim/init.lua</code>.  It is
+simply as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">local</span> impatient_ok, impatient <span style="color:#f92672">=</span> pcall(require, <span style="color:#e6db74">&#34;impatient&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> impatient_ok <span style="color:#66d9ef">then</span> impatient.enable_profile() <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> _, source <span style="color:#66d9ef">in</span> ipairs {
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;core.utils&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;core.options&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;core.bootstrap&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;core.plugins&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;core.autocmds&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;core.mappings&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;core.ui&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;configs.which-key-register&#34;</span>,
+</span></span><span style="display:flex;"><span>} <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> status_ok, fault <span style="color:#f92672">=</span> pcall(require, source)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> status_ok <span style="color:#66d9ef">then</span> vim.api.nvim_err_writeln(<span style="color:#e6db74">&#34;Failed to load &#34;</span> <span style="color:#f92672">..</span> source <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n\n</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">..</span> fault) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>astronvim.conditional_func(astronvim.user_plugin_opts(<span style="color:#e6db74">&#34;polish&#34;</span>, <span style="color:#66d9ef">nil</span>, <span style="color:#66d9ef">false</span>))
+</span></span></code></pre></div><p>The first few lines are for
+<a href="https://github.com/lewis6991/impatient.nvim.git">impatient.nvim</a> package.  Its
+one of the package installed in
+<code>/home/&lt;username&gt;/.local/share/nvim/site/pack/packer/start/</code> together with
+<a href="https://github.com/wbthomason/packer.nvim">packer.nvim</a> and
+<a href="https://github.com/nvim-lua/popup.nvim.git">popup.nvim</a>.  These are loaded
+automatically upon starting nvim.</p>
+<p><code>impatient.nvim</code> speeds up loading Lua modules in Neovim to improve startup time.</p>
+<p>Then loop over <code>source</code> to set up AstroNvim&rsquo;s upstream configured system.
+We will get back to these.</p>
+<p>The last line is entry point for the user configuration.  So we need to find
+out what are the followings:</p>
+<ul>
+<li>Variable: <code>astronvim</code></li>
+<li>Function: <code>user_plugin_opts</code></li>
+<li>Function: <code>conditional_func</code></li>
+</ul>
+<h3 id="variable-astronvim">Variable <code>astronvim</code></h3>
+<p>The <code>astronvim</code> is the globally accessible variable within AstroNvim
+defined originally in <code>utils/init.lua</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>_G.astronvim <span style="color:#f92672">=</span> {}
+</span></span></code></pre></div><p>We can inspect its current value as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(astronvim))
+</span></span></code></pre></div><p>(It is too big to paste here but it is full of important informaion)</p>
+<h3 id="function-user_plugin_opts">Function: <code>user_plugin_opts</code></h3>
+<p>This is a function defined in <code>lua/core/utils/init.lua</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">user_plugin_opts</span>(module, default, extend, prefix)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> extend <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> extend <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span> <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  default <span style="color:#f92672">=</span> default <span style="color:#f92672">or</span> {}
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> user_settings <span style="color:#f92672">=</span> load_module_file((prefix <span style="color:#f92672">or</span> <span style="color:#e6db74">&#34;user&#34;</span>) <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;.&#34;</span> <span style="color:#f92672">..</span> module)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">and</span> prefix <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> user_settings <span style="color:#f92672">=</span> user_setting_table(module) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> default <span style="color:#f92672">=</span> func_or_extend(user_settings, default, extend) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><p>Since it is:</p>
+<ul>
+<li><code>module=&quot;polish&quot;</code></li>
+<li><code>default=nil</code></li>
+<li><code>extend=false</code></li>
+<li><code>prefix=nil</code></li>
+</ul>
+<p>The function processes essentially as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>  module<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;polish&#34;</span>
+</span></span><span style="display:flex;"><span>  default <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>  extend<span style="color:#f92672">=</span><span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  prefix<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> user_settings <span style="color:#f92672">=</span> load_module_file((<span style="color:#e6db74">&#34;user&#34;</span>) <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;.&#34;</span> <span style="color:#f92672">..</span> module)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> user_settings <span style="color:#f92672">=</span> user_setting_table(module) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> default <span style="color:#f92672">=</span> func_or_extend(user_settings, default, extend) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
+</span></span></code></pre></div><p>Here, we need to look into 3 functions:</p>
+<ul>
+<li>Function: <code>load_module_file</code></li>
+<li>Function: <code>user_setting_table</code></li>
+<li>Function: <code>func_or_exten</code></li>
+</ul>
+<h3 id="function-conditional_func">Function: <code>conditional_func</code></h3>
+<p>This is a simple function defined in <code>lua/core/utils/init.lua</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">conditional_func</span>(func, condition, ...)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (condition <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">and</span> <span style="color:#66d9ef">true</span> <span style="color:#f92672">or</span> condition) <span style="color:#f92672">and</span> type(func) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;function&#34;</span> <span style="color:#66d9ef">then</span> <span style="color:#66d9ef">return</span> func(...) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><ul>
+<li>If <code>condition</code> is not specified, and if <code>func</code> is the function type, return <code>func(...)</code>.</li>
+<li>If <code>condition</code> exists and is met, and if <code>func</code> is the function type, return <code>func(...)</code>.</li>
+</ul>
+<p>The above case is, <code>condition</code>=<code>nil</code> and <code>...</code> is <code>nil</code>.</p>
 <h2 id="customization">Customization</h2>
 <p>I added some features.</p>
 <ul>
