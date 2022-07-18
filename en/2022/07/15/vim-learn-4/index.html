@@ -67,11 +67,13 @@
       <ul>
         <li><a href="#prerequisite">Prerequisite</a></li>
         <li><a href="#value-of-vim-option-and-runtimepath">Value of vim option and <code>runtimepath</code></a></li>
-        <li><a href="#tracing-source-code-of-astronvim">Tracing source code of AstroNvim</a></li>
+        <li><a href="#tracing-source-code-of-astronvim-with-single-configastronvimuserinitlua">Tracing source code of AstroNvim with single <code>~/.config/astronvim/user/init.lua</code></a></li>
         <li><a href="#entry-point-initlua">Entry point: <code>init.lua</code></a></li>
         <li><a href="#variable-astronvim">Variable <code>astronvim</code></a></li>
         <li><a href="#function-conditional_func">Function: <code>conditional_func</code></a></li>
-        <li><a href="#function-user_plugin_opts">Function: <code>user_plugin_opts</code></a></li>
+        <li><a href="#function-user_plugin_opts-in-confignviminitlua">Function: <code>user_plugin_opts</code> in <code>~/.config/nvim/init.lua</code></a></li>
+        <li><a href="#3-local-functions-used-by-user_plugin_opts">3 local functions used by <code>user_plugin_opts</code></a></li>
+        <li><a href="#other-user_plugin_opts">other <code>user_plugin_opts</code></a></li>
       </ul>
     </li>
     <li><a href="#customization">Customization</a></li>
@@ -128,8 +130,7 @@ and the ease of configuration.</p>
 Nice out of box configuration.</p>
 <h2 id="internals-of-astronvim">Internals of AstroNvim</h2>
 <p>Let me record how I looked into the internals of AstroNvim for its user
-configuration.  Let me assume there is a user configuration file at
-<code>~/.config/astronvim/user/init.lua</code> for simplicity.</p>
+configuration.</p>
 <h3 id="prerequisite">Prerequisite</h3>
 <p>See <a href="https://github.com/nanotee/nvim-lua-guide">Getting started using Lua in
 Neovim</a> and its linked documents
@@ -141,7 +142,7 @@ be inspected by:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(vim.opt.runtimepath))
 </span></span></code></pre></div><p>It is impossible to read so much output and make any sense.  Here, <code>:redir</code> can
 be used to ease reading of these by capturing output in a file. (The use of
-<code>:sirent</code> kills pager prompt.)</p>
+<code>:silent</code> kills pager prompt.)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:redir <span style="color:#f92672">&gt;</span> rtp.txt
 </span></span><span style="display:flex;"><span>:silent lua print(vim.inspect(vim.opt.runtimepath))
 </span></span><span style="display:flex;"><span>:redir END
@@ -164,8 +165,13 @@ presented in similar way as vim classic <code>:set rtp?</code> style by:</p>
 <p>The notable point is the last one specially inserted by AstroNvim.</p>
 <p>This allows us to move <code>lua/user/</code> directory out of <code>~/config/nvim</code> to
 <code>~/config/astronvim</code>.</p>
-<h3 id="tracing-source-code-of-astronvim">Tracing source code of AstroNvim</h3>
+<h3 id="tracing-source-code-of-astronvim-with-single-configastronvimuserinitlua">Tracing source code of AstroNvim with single <code>~/.config/astronvim/user/init.lua</code></h3>
 <p>Let&rsquo;s try to trace source code of AstroNvim to understand how to customize it.</p>
+<p>Let me first assume there is a user configuration file at
+<code>~/.config/astronvim/user/init.lua</code> for simplicity.</p>
+<ul>
+<li><a href="https://astronvim.github.io/configuration/basic_configuration">Basic Configuration</a></li>
+</ul>
 <h3 id="entry-point-initlua">Entry point: <code>init.lua</code></h3>
 <p>The entry point of nvim is <code>/home/&lt;username&gt;/.config/nvim/init.lua</code>.  It is
 simply as:</p>
@@ -220,9 +226,10 @@ defined originally in <code>utils/init.lua</code> as:</p>
 <li>If <code>condition</code> is not specified, and if <code>func</code> is the function type, return <code>func(...)</code>.</li>
 <li>If <code>condition</code> exists and is met, and if <code>func</code> is the function type, return <code>func(...)</code>.</li>
 </ul>
-<p>The above case is, <code>condition</code>=<code>nil</code> and <code>...</code> is <code>nil</code>.</p>
-<p>So this simply calls <code>astrovim.user_plugin_opts(&quot;polish&quot;, nil, false)</code> here.</p>
-<h3 id="function-user_plugin_opts">Function: <code>user_plugin_opts</code></h3>
+<p>The above case is, <code>condition</code>=<code>nil</code> and <code>...</code> is <code>nil</code>.
+So this simply calls <code>astrovim.user_plugin_opts(&quot;polish&quot;, nil, false)</code> at the
+end of the nvim start up.</p>
+<h3 id="function-user_plugin_opts-in-confignviminitlua">Function: <code>user_plugin_opts</code> in <code>~/.config/nvim/init.lua</code></h3>
 <p>This is a function defined in <code>lua/core/utils/init.lua</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">user_plugin_opts</span>(module, default, extend, prefix)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> extend <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> extend <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span> <span style="color:#66d9ef">end</span>
@@ -232,37 +239,40 @@ defined originally in <code>utils/init.lua</code> as:</p>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> default <span style="color:#f92672">=</span> func_or_extend(user_settings, default, extend) <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
-</span></span></code></pre></div><p>Since it is:</p>
+</span></span></code></pre></div><p>Since in <code>lua/core/utils/init.lua</code>, following values are used.</p>
 <ul>
 <li><code>module=&quot;polish&quot;</code></li>
 <li><code>default=nil</code></li>
 <li><code>extend=false</code></li>
 <li><code>prefix=nil</code></li>
 </ul>
-<p>The function processes essentially as:</p>
+<p>Thus, this function processes essentially as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>  module<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;polish&#34;</span>
 </span></span><span style="display:flex;"><span>  default <span style="color:#f92672">=</span> {}
 </span></span><span style="display:flex;"><span>  extend<span style="color:#f92672">=</span><span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  prefix<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> user_settings <span style="color:#f92672">=</span> load_module_file(<span style="color:#e6db74">&#34;user.polish&#34;</span>)
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- nil with ~/.config/astrovim/usr/init.lua only configuration</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- nil with ~/.config/astrovim/lua/usr/init.lua only configuration</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> user_settings <span style="color:#f92672">=</span> user_setting_table(<span style="color:#e6db74">&#34;polish&#34;</span>) <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- load ~/.config/astrovim/usr/init.lua and return &#34;polish&#34; as</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- user_settings</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> default <span style="color:#f92672">=</span> func_or_extend(user_settings, default, extend) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- load ~/.config/astrovim/lua/usr/init.lua and return &#34;polish&#34; as</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- user_settings with some tricks</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> default <span style="color:#f92672">=</span> func_or_extend(user_settings, {} , <span style="color:#66d9ef">false</span>) <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- update default by user_settings in polish </span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
-</span></span></code></pre></div><p>Here, we need to look into 3 local functions to get to the above conclusion:</p>
+</span></span></code></pre></div><p>So essentially, if <code>lua/core/utils/init.lua</code> is given, its <code>polish</code> function
+seems to be executed. with some tricks.  (Of courese, 3 local functions used by
+<code>user_plugin_opts</code> needs to be examined carefully as follows to come to this
+conclusion.)</p>
+<h3 id="3-local-functions-used-by-user_plugin_opts">3 local functions used by <code>user_plugin_opts</code></h3>
+<p>Let&rsquo;s understand 3 local functions used by <code>user_plugin_opts</code> in
+<code>lua/core/utils/init.lua</code> first.</p>
 <ul>
 <li>Function: <code>load_module_file</code></li>
-<li>Function: <code>user_setting_table</code></li>
 <li>Function: <code>func_or_exten</code></li>
+<li>Function: <code>user_setting_table</code></li>
 </ul>
-<p>Let me read <code>lua/core/utils/init.lua</code> from the top by adding comment to the
-source.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>... <span style="color:#75715e">-- short hand definition etc.</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>astronvim.install <span style="color:#f92672">=</span> { home <span style="color:#f92672">=</span> stdpath <span style="color:#e6db74">&#34;config&#34;</span> } <span style="color:#75715e">-- ~/.config/nvim</span>
+<p>Key part of codes are commented as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>astronvim.install <span style="color:#f92672">=</span> { home <span style="color:#f92672">=</span> stdpath <span style="color:#e6db74">&#34;config&#34;</span> } <span style="color:#75715e">-- ~/.config/nvim</span>
 </span></span><span style="display:flex;"><span>astronvim.install.config <span style="color:#f92672">=</span> stdpath(<span style="color:#e6db74">&#34;config&#34;</span>):gsub(<span style="color:#e6db74">&#34;nvim$&#34;</span>, <span style="color:#e6db74">&#34;astronvim&#34;</span>) <span style="color:#75715e">-- ~/.config/`astronvim</span>
 </span></span><span style="display:flex;"><span>vim.opt.rtp:append(astronvim.install.config) <span style="color:#75715e">-- extend rtp to include ~/.config/astronvim</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">local</span> supported_configs <span style="color:#f92672">=</span> { astronvim.install.home, astronvim.install.config }
@@ -270,7 +280,7 @@ source.</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">load_module_file</span>(module)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> found_module <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> _, config_path <span style="color:#66d9ef">in</span> ipairs(supported_configs) <span style="color:#66d9ef">do</span> <span style="color:#75715e">-- loop over 2 install path</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> _, config_path <span style="color:#66d9ef">in</span> ipairs(supported_configs) <span style="color:#66d9ef">do</span> <span style="color:#75715e">-- loop over 2 paths</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">local</span> module_path <span style="color:#f92672">=</span> config_path <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;/lua/&#34;</span> <span style="color:#f92672">..</span> module:gsub(<span style="color:#e6db74">&#34;%.&#34;</span>, <span style="color:#e6db74">&#34;/&#34;</span>) <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;.lua&#34;</span>
 </span></span><span style="display:flex;"><span>      <span style="color:#75715e">-- module name with &#34;.&#34; -&gt; directory path with &#34;/&#34;.</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> vim.fn.filereadable(module_path) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">then</span> found_module <span style="color:#f92672">=</span> module_path <span style="color:#66d9ef">end</span>
@@ -285,14 +295,11 @@ source.</p>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> found_module
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>astronvim.user_settings <span style="color:#f92672">=</span> load_module_file <span style="color:#e6db74">&#34;user.init&#34;</span> <span style="color:#75715e">-- load &#34;user.init&#34;</span>
-</span></span><span style="display:flex;"><span>astronvim.default_compile_path <span style="color:#f92672">=</span> stdpath <span style="color:#e6db74">&#34;data&#34;</span> <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;/packer_compiled.lua&#34;</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e">-- ~/.local/share/nvim/acker_compiled.lua</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">func_or_extend</span>(overrides, default, extend)
+</span></span></code></pre></div><p>This extends load module capability not only from <code>/.config/nvim</code> but also
+~/.config/<code>astronvim</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>astronvim.user_settings <span style="color:#f92672">=</span> load_module_file <span style="color:#e6db74">&#34;user.init&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">-- load from &#34;user/init.lua&#34; in `/.config/nvim` or `~/.config/`astronvim`.</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">func_or_extend</span>(overrides, default, extend)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> extend <span style="color:#66d9ef">then</span> <span style="color:#75715e">-- false for this part of code run</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> type(overrides) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;table&#34;</span> <span style="color:#66d9ef">then</span>
 </span></span><span style="display:flex;"><span>      default <span style="color:#f92672">=</span> vim.tbl_deep_extend(<span style="color:#e6db74">&#34;force&#34;</span>, default, overrides)
@@ -304,10 +311,14 @@ source.</p>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">user_setting_table</span>(module)
+</span></span></code></pre></div><p>This seems to be the most ingeneous part of AstroNvim for user override
+mechanism.  For <code>override</code>, if corresponding user module name is given and such
+module exists, that result of user module is returned.  Otherwise, <code>default</code> in
+the argument is returned.</p>
+<p>This allows upstream code to set default values while a separate user module
+file <code>~/.config/astronvim/lua/user/init.lua</code> can override it.  No variable
+abstruction etc. involved.  Very nice.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">user_setting_table</span>(module)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> settings <span style="color:#f92672">=</span> astronvim.user_settings <span style="color:#f92672">or</span> {}
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> tbl <span style="color:#66d9ef">in</span> string.gmatch(module, <span style="color:#e6db74">&#34;([^%.]+)&#34;</span>) <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>    settings <span style="color:#f92672">=</span> settings[tbl]
@@ -315,20 +326,48 @@ source.</p>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> settings
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
-</span></span></code></pre></div><h2 id="customization">Customization</h2>
-<p>I added some features.</p>
+</span></span></code></pre></div><p>This seems to look into inside of user module for particular <code>module</code> name <code>polish</code> for
+the case under consideration.  It seems quite tricky.</p>
+<p>See discussion at <a href="https://www.reddit.com/r/neovim/comments/v8d3lx/astronvim_v140/">reddit on astronvim v140</a>.</p>
+<h3 id="other-user_plugin_opts">other <code>user_plugin_opts</code></h3>
+<p>There are many other use of this hook function to enable user configuration.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ grep -R  -v <span style="color:#e6db74">&#34;^ *local&#34;</span> . 2&gt;/dev/null |grep user_plugin_opts|wc -l
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">44</span>
+</span></span></code></pre></div><p>For those other <code>user_plugin_opts</code> in places other than <code>~/.config/init.lua</code>,
+they don&rsquo;t use <code>polish</code> but has actual module name found under
+<code>~/.config/astronvim/lua/user/</code> such as <code>plugins.packaer</code> for
+<code>~/.config/astrovim/lua/user/plugins/packer</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">user_plugin_opts</span>(module, default, extend, prefix)
+</span></span><span style="display:flex;"><span>  module<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;plugins.packaer&#34;</span>
+</span></span><span style="display:flex;"><span>  default <span style="color:#f92672">=</span> {some default values given ...}
+</span></span><span style="display:flex;"><span>  extend<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>  prefix<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> user_settings <span style="color:#f92672">=</span> load_module_file(<span style="color:#e6db74">&#34;plugins.packer&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- user_settings = ~/.config/astrovim/lua/usr/plugins/packer.lua user configuration</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> user_settings <span style="color:#f92672">=</span> user_setting_table(<span style="color:#e6db74">&#34;polish&#34;</span>) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- skip this</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> default <span style="color:#f92672">=</span> func_or_extend(user_settings, { ...}, <span style="color:#66d9ef">nil</span>) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- replace default by user_settings in  ~/.config/astrovim/lua/usr/plugins/packer.lua </span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
+</span></span></code></pre></div><p>In some sense, this is simple replacement of the upstream setting by user
+module.  Now I see where all maulti-file user configuration is coming from.</p>
+<ul>
+<li><a href="https://astronvim.github.io/configuration/splitting_up">Splitting Up Configuration</a></li>
+<li><a href="https://astronvim.github.io/recipes/black_belt">Black Belt Example User Configs</a></li>
+<li><a href="https://astronvim.github.io/configuration/override_formats#override-table">Override Table</a></li>
+<li><a href="https://astronvim.github.io/configuration/override_formats#override-function">Override Function</a></li>
+</ul>
+<h2 id="customization">Customization</h2>
+<p>I added some features quickly without learning internals of AstroNvim.</p>
 <ul>
 <li>Toggle line number</li>
 <li>Toggle toggle_signcolumn</li>
 <li>&hellip;</li>
 </ul>
+<p>I made a hackish effort for my immediate needs as
+<a href="https://github.com/AstroNvim/AstroNvim/issues/763">https://github.com/AstroNvim/AstroNvim/issues/763</a></p>
 <p>cmp needs some more work and code needs to be cleaned.</p>
-<p><a href="https://github.com/AstroNvim/AstroNvim/issues/763">https://github.com/AstroNvim/AstroNvim/issues/763</a></p>
-<p>I think I need to clean up using tricks discussed:
-<a href="https://www.reddit.com/r/neovim/comments/v8d3lx/astronvim_v140/">https://www.reddit.com/r/neovim/comments/v8d3lx/astronvim_v140/</a>
-<a href="https://astronvim.github.io/configuration/basic_configuration#example-user-configuration">https://astronvim.github.io/configuration/basic_configuration#example-user-configuration</a>
-<a href="https://astronvim.github.io/configuration/override_formats#override-table">https://astronvim.github.io/configuration/override_formats#override-table</a>
-<a href="https://astronvim.github.io/configuration/override_formats#override-function">https://astronvim.github.io/configuration/override_formats#override-function</a></p>
+<p>I think I need to clean up using tricks discussed:</p>
 <h2 id="terminal-settings-and-modifier-keys">Terminal settings and modifier keys</h2>
 <p>As before, set <code>DEL</code>-code(0x7F) for Backspace and use escape sequence for Delete.
 This frees the ASCII <code>BS</code> (CTRL-H) code so window jump can be mapped to <code>&lt;C-H&gt;</code>.</p>
