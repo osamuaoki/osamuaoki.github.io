@@ -128,7 +128,8 @@ and the ease of configuration.</p>
 Nice out of box configuration.</p>
 <h2 id="internals-of-astronvim">Internals of AstroNvim</h2>
 <p>Let me record how I looked into the internals of AstroNvim for its user
-configuration.</p>
+configuration.  Let me assume there is a user configuration file at
+<code>~/.config/astronvim/user/init.lua</code> for simplicity.</p>
 <h3 id="prerequisite">Prerequisite</h3>
 <p>See <a href="https://github.com/nanotee/nvim-lua-guide">Getting started using Lua in
 Neovim</a> and its linked documents
@@ -243,17 +244,77 @@ defined originally in <code>utils/init.lua</code> as:</p>
 </span></span><span style="display:flex;"><span>  default <span style="color:#f92672">=</span> {}
 </span></span><span style="display:flex;"><span>  extend<span style="color:#f92672">=</span><span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  prefix<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> user_settings <span style="color:#f92672">=</span> load_module_file((<span style="color:#e6db74">&#34;user&#34;</span>) <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;.&#34;</span> <span style="color:#f92672">..</span> module)
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> user_settings <span style="color:#f92672">=</span> user_setting_table(module) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> user_settings <span style="color:#f92672">=</span> load_module_file(<span style="color:#e6db74">&#34;user.polish&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- nil with ~/.config/astrovim/usr/init.lua only configuration</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> user_settings <span style="color:#f92672">=</span> user_setting_table(<span style="color:#e6db74">&#34;polish&#34;</span>) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- load ~/.config/astrovim/usr/init.lua and return &#34;polish&#34; as</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- user_settings</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> default <span style="color:#f92672">=</span> func_or_extend(user_settings, default, extend) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- update default by user_settings in polish </span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
-</span></span></code></pre></div><p>Here, we need to look into 3 functions:</p>
+</span></span></code></pre></div><p>Here, we need to look into 3 local functions to get to the above conclusion:</p>
 <ul>
 <li>Function: <code>load_module_file</code></li>
 <li>Function: <code>user_setting_table</code></li>
 <li>Function: <code>func_or_exten</code></li>
 </ul>
-<h2 id="customization">Customization</h2>
+<p>Let me read <code>lua/core/utils/init.lua</code> from the top by adding comment to the
+source.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>... <span style="color:#75715e">-- short hand definition etc.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>astronvim.install <span style="color:#f92672">=</span> { home <span style="color:#f92672">=</span> stdpath <span style="color:#e6db74">&#34;config&#34;</span> } <span style="color:#75715e">-- ~/.config/nvim</span>
+</span></span><span style="display:flex;"><span>astronvim.install.config <span style="color:#f92672">=</span> stdpath(<span style="color:#e6db74">&#34;config&#34;</span>):gsub(<span style="color:#e6db74">&#34;nvim$&#34;</span>, <span style="color:#e6db74">&#34;astronvim&#34;</span>) <span style="color:#75715e">-- ~/.config/`astronvim</span>
+</span></span><span style="display:flex;"><span>vim.opt.rtp:append(astronvim.install.config) <span style="color:#75715e">-- extend rtp to include ~/.config/astronvim</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">local</span> supported_configs <span style="color:#f92672">=</span> { astronvim.install.home, astronvim.install.config }
+</span></span><span style="display:flex;"><span> <span style="color:#75715e">-- support both ~/.config/nvim and ~/.config/`astronvim</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">load_module_file</span>(module)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> found_module <span style="color:#f92672">=</span> <span style="color:#66d9ef">nil</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> _, config_path <span style="color:#66d9ef">in</span> ipairs(supported_configs) <span style="color:#66d9ef">do</span> <span style="color:#75715e">-- loop over 2 install path</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">local</span> module_path <span style="color:#f92672">=</span> config_path <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;/lua/&#34;</span> <span style="color:#f92672">..</span> module:gsub(<span style="color:#e6db74">&#34;%.&#34;</span>, <span style="color:#e6db74">&#34;/&#34;</span>) <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;.lua&#34;</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#75715e">-- module name with &#34;.&#34; -&gt; directory path with &#34;/&#34;.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> vim.fn.filereadable(module_path) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">then</span> found_module <span style="color:#f92672">=</span> module_path <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> found_module <span style="color:#66d9ef">then</span> <span style="color:#75715e">-- if module file exists, load it safely with pcall.</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">local</span> status_ok, loaded_module <span style="color:#f92672">=</span> pcall(require, module)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> status_ok <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>      found_module <span style="color:#f92672">=</span> loaded_module
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>      astronvim.notify(<span style="color:#e6db74">&#34;Error loading &#34;</span> <span style="color:#f92672">..</span> found_module, <span style="color:#e6db74">&#34;error&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> found_module
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>astronvim.user_settings <span style="color:#f92672">=</span> load_module_file <span style="color:#e6db74">&#34;user.init&#34;</span> <span style="color:#75715e">-- load &#34;user.init&#34;</span>
+</span></span><span style="display:flex;"><span>astronvim.default_compile_path <span style="color:#f92672">=</span> stdpath <span style="color:#e6db74">&#34;data&#34;</span> <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;/packer_compiled.lua&#34;</span> <span style="color:#75715e">-- ~/.local/share/nvim/acker_compiled.lua</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">func_or_extend</span>(overrides, default, extend)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> extend <span style="color:#66d9ef">then</span> <span style="color:#75715e">-- false for this part of code run</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> type(overrides) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;table&#34;</span> <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>      default <span style="color:#f92672">=</span> vim.tbl_deep_extend(<span style="color:#e6db74">&#34;force&#34;</span>, default, overrides)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">elseif</span> type(overrides) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;function&#34;</span> <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>      default <span style="color:#f92672">=</span> overrides(default)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">elseif</span> overrides <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    default <span style="color:#f92672">=</span> overrides
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">user_setting_table</span>(module)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> settings <span style="color:#f92672">=</span> astronvim.user_settings <span style="color:#f92672">or</span> {}
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> tbl <span style="color:#66d9ef">in</span> string.gmatch(module, <span style="color:#e6db74">&#34;([^%.]+)&#34;</span>) <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    settings <span style="color:#f92672">=</span> settings[tbl]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> settings <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> <span style="color:#66d9ef">break</span> <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> settings
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><h2 id="customization">Customization</h2>
 <p>I added some features.</p>
 <ul>
 <li>Toggle line number</li>
