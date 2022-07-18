@@ -63,7 +63,6 @@
   <ul>
     <li><a href="#neovim-07-migration">Neovim 0.7 migration</a></li>
     <li><a href="#syntax-checker">Syntax checker</a></li>
-    <li><a href="#terminal-settings-and-modifier-keys">Terminal settings and modifier keys</a></li>
     <li><a href="#internals-of-astronvim">Internals of AstroNvim</a>
       <ul>
         <li><a href="#prerequisite">Prerequisite</a></li>
@@ -71,11 +70,12 @@
         <li><a href="#tracing-source-code-of-astronvim">Tracing source code of AstroNvim</a></li>
         <li><a href="#entry-point-initlua">Entry point: <code>init.lua</code></a></li>
         <li><a href="#variable-astronvim">Variable <code>astronvim</code></a></li>
-        <li><a href="#function-user_plugin_opts">Function: <code>user_plugin_opts</code></a></li>
         <li><a href="#function-conditional_func">Function: <code>conditional_func</code></a></li>
+        <li><a href="#function-user_plugin_opts">Function: <code>user_plugin_opts</code></a></li>
       </ul>
     </li>
     <li><a href="#customization">Customization</a></li>
+    <li><a href="#terminal-settings-and-modifier-keys">Terminal settings and modifier keys</a></li>
   </ul>
 </nav>
 
@@ -126,23 +126,21 @@ and the ease of configuration.</p>
 <h2 id="syntax-checker">Syntax checker</h2>
 <p>If I install <code>shellcheck</code>, both AstroNvim and LunarVim display error messages.
 Nice out of box configuration.</p>
-<h2 id="terminal-settings-and-modifier-keys">Terminal settings and modifier keys</h2>
-<p>As before, set <code>DEL</code>-code(0x7F) for Backspace and use escape sequence for Delete.
-This frees the ASCII <code>BS</code> (CTRL-H) code so window jump can be mapped to <code>&lt;C-H&gt;</code>.</p>
-<p>Neovim 0.7 now correctly distinguishes modifier key combos in its own
-input processing, so users can now map e.g. <code>&lt;Tab&gt;</code> and <code>&lt;C-I&gt;</code> separately.</p>
 <h2 id="internals-of-astronvim">Internals of AstroNvim</h2>
-<p>Let me record how I looked into the internals of AstroNvim.</p>
+<p>Let me record how I looked into the internals of AstroNvim for its user
+configuration.</p>
 <h3 id="prerequisite">Prerequisite</h3>
-<p>See <a href="https://github.com/nanotee/nvim-lua-guide">Getting started using Lua in Neovim</a> and its linked documents first.</p>
+<p>See <a href="https://github.com/nanotee/nvim-lua-guide">Getting started using Lua in
+Neovim</a> and its linked documents
+first.</p>
 <h3 id="value-of-vim-option-and-runtimepath">Value of vim option and <code>runtimepath</code></h3>
 <p>We can inspect the actual internal option value of running nvim from the nvim
 command mode.  The actual vim <code>runtimepath</code> option from lua&rsquo;s point of view can
 be inspected by:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(vim.opt.runtimepath))
-</span></span></code></pre></div><p>Here, it is impossible to read so much output and make any sense.  Here,
-<code>:redir</code> can be used to ease reading of these by capturing output in a file.
-(The use of <code>:sirent</code> kills pager prompt.)</p>
+</span></span></code></pre></div><p>It is impossible to read so much output and make any sense.  Here, <code>:redir</code> can
+be used to ease reading of these by capturing output in a file. (The use of
+<code>:sirent</code> kills pager prompt.)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:redir <span style="color:#f92672">&gt;</span> rtp.txt
 </span></span><span style="display:flex;"><span>:silent lua print(vim.inspect(vim.opt.runtimepath))
 </span></span><span style="display:flex;"><span>:redir END
@@ -199,11 +197,11 @@ automatically upon starting nvim.</p>
 <p>Then loop over <code>source</code> to set up AstroNvim&rsquo;s upstream configured system.
 We will get back to these.</p>
 <p>The last line is entry point for the user configuration.  So we need to find
-out what are the followings:</p>
+out followings:</p>
 <ul>
 <li>Variable: <code>astronvim</code></li>
-<li>Function: <code>user_plugin_opts</code></li>
 <li>Function: <code>conditional_func</code></li>
+<li>Function: <code>user_plugin_opts</code></li>
 </ul>
 <h3 id="variable-astronvim">Variable <code>astronvim</code></h3>
 <p>The <code>astronvim</code> is the globally accessible variable within AstroNvim
@@ -212,6 +210,17 @@ defined originally in <code>utils/init.lua</code> as:</p>
 </span></span></code></pre></div><p>We can inspect its current value as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(astronvim))
 </span></span></code></pre></div><p>(It is too big to paste here but it is full of important informaion)</p>
+<h3 id="function-conditional_func">Function: <code>conditional_func</code></h3>
+<p>This is a simple function defined in <code>lua/core/utils/init.lua</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">conditional_func</span>(func, condition, ...)
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (condition <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">and</span> <span style="color:#66d9ef">true</span> <span style="color:#f92672">or</span> condition) <span style="color:#f92672">and</span> type(func) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;function&#34;</span> <span style="color:#66d9ef">then</span> <span style="color:#66d9ef">return</span> func(...) <span style="color:#66d9ef">end</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
+</span></span></code></pre></div><ul>
+<li>If <code>condition</code> is not specified, and if <code>func</code> is the function type, return <code>func(...)</code>.</li>
+<li>If <code>condition</code> exists and is met, and if <code>func</code> is the function type, return <code>func(...)</code>.</li>
+</ul>
+<p>The above case is, <code>condition</code>=<code>nil</code> and <code>...</code> is <code>nil</code>.</p>
+<p>So this simply calls <code>astrovim.user_plugin_opts(&quot;polish&quot;, nil, false)</code> here.</p>
 <h3 id="function-user_plugin_opts">Function: <code>user_plugin_opts</code></h3>
 <p>This is a function defined in <code>lua/core/utils/init.lua</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">user_plugin_opts</span>(module, default, extend, prefix)
@@ -244,16 +253,6 @@ defined originally in <code>utils/init.lua</code> as:</p>
 <li>Function: <code>user_setting_table</code></li>
 <li>Function: <code>func_or_exten</code></li>
 </ul>
-<h3 id="function-conditional_func">Function: <code>conditional_func</code></h3>
-<p>This is a simple function defined in <code>lua/core/utils/init.lua</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">conditional_func</span>(func, condition, ...)
-</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (condition <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">and</span> <span style="color:#66d9ef">true</span> <span style="color:#f92672">or</span> condition) <span style="color:#f92672">and</span> type(func) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;function&#34;</span> <span style="color:#66d9ef">then</span> <span style="color:#66d9ef">return</span> func(...) <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
-</span></span></code></pre></div><ul>
-<li>If <code>condition</code> is not specified, and if <code>func</code> is the function type, return <code>func(...)</code>.</li>
-<li>If <code>condition</code> exists and is met, and if <code>func</code> is the function type, return <code>func(...)</code>.</li>
-</ul>
-<p>The above case is, <code>condition</code>=<code>nil</code> and <code>...</code> is <code>nil</code>.</p>
 <h2 id="customization">Customization</h2>
 <p>I added some features.</p>
 <ul>
@@ -268,6 +267,11 @@ defined originally in <code>utils/init.lua</code> as:</p>
 <a href="https://astronvim.github.io/configuration/basic_configuration#example-user-configuration">https://astronvim.github.io/configuration/basic_configuration#example-user-configuration</a>
 <a href="https://astronvim.github.io/configuration/override_formats#override-table">https://astronvim.github.io/configuration/override_formats#override-table</a>
 <a href="https://astronvim.github.io/configuration/override_formats#override-function">https://astronvim.github.io/configuration/override_formats#override-function</a></p>
+<h2 id="terminal-settings-and-modifier-keys">Terminal settings and modifier keys</h2>
+<p>As before, set <code>DEL</code>-code(0x7F) for Backspace and use escape sequence for Delete.
+This frees the ASCII <code>BS</code> (CTRL-H) code so window jump can be mapped to <code>&lt;C-H&gt;</code>.</p>
+<p>Neovim 0.7 now correctly distinguishes modifier key combos in its own
+input processing, so users can now map e.g. <code>&lt;Tab&gt;</code> and <code>&lt;C-I&gt;</code> separately.</p>
 <!-- raw HTML omitted -->
 
 
