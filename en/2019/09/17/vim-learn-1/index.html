@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/17 (initial publish),
-2021/09/03 (last update)
+2022/07/19 (last update)
 </h3>
 </div>
 
@@ -73,7 +73,8 @@
       </ul>
     </li>
     <li><a href="#insert-mode">INSERT MODE</a></li>
-    <li><a href="#command-mode">COMMAND MODE</a>
+    <li><a href="#command-mode">COMMAND MODE</a></li>
+    <li><a href="#emacsshell-like-key-sequences">EMACS/shell like key sequences</a>
       <ul>
         <li><a href="#tab-in-command-mode">TAB in COMMAND MODE</a></li>
         <li><a href="#basics-in-command-mode">Basics in COMMAND MODE</a></li>
@@ -85,6 +86,7 @@
         <li><a href="#terminal-job-mode">TERMINAL-JOB MODE</a></li>
       </ul>
     </li>
+    <li><a href="#terminal-settings">Terminal settings</a></li>
   </ul>
 </nav>
 
@@ -92,17 +94,16 @@
 multiple times.  This was functional but not so elegant!</p>
 <p>I decided to re-learn Vim to use it <strong>properly</strong>.  Here is my learning memo.</p>
 <p>For simplicity, I may use <code>^F</code> to mean <code>CTRL-F</code>.</p>
+<p>This page has been updated in 2022 since some basic summary is valid and common
+to neovim. See <a href="/en/2022/07/15/vim-learn-4/">Re-learning Vim (4)</a> to get the
+latest situation. (Modern configuration with which-key.nvim under neovim can
+allow us not to remember complicated bindings..)</p>
 <h2 id="concept">Concept</h2>
 <ul>
 <li>Use default vim (minimum configuration, if possible).
 <ul>
 <li>Use as much native functionalities.</li>
 <li>Don&rsquo;t force Vim to behave like another program.</li>
-</ul>
-</li>
-<li>50%/60%-keyboard ready.
-<ul>
-<li>Use no cursor keys, if possible.</li>
 </ul>
 </li>
 </ul>
@@ -126,11 +127,16 @@ remember them.</p>
 language but we didn&rsquo;t have native support to the asynchronously executing
 background process.  Now the asynchronously executing background process
 offering spell checker, lint, git monitoring, etc.  are widely used useful
-features.  So I have some deviations.</p>
-<p>Please note that I am publishing my current <code>~/.vim/</code> directory implementation
-at <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a> .  This uses Vim 8 native package
-management system via &lsquo;packadd!&rsquo;, <code>git</code> and <code>git submodule</code>.   This may give
-you interesting hints how you want to start.</p>
+features.  Neovim is building on this becoming mature and it use of lua as
+script language is great.</p>
+<p>Please note that I stop customizing vim and migrated to neovim for fancy
+customization. I only use vim as my backup editor when I suffer issues with my
+neovim. (My old <code>~/.vim/</code> directory implementation is published at
+<a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a> .  This uses Vim 8 native package
+management system via &lsquo;packadd!&rsquo;, <code>git</code> and <code>git submodule</code>.)</p>
+<p><code>nvim</code>, <code>vim</code> and <code>vi</code> are most likely configured to use neovim on my system.
+If you need vim for sure, call it as <code>vim.basic</code>, or <code>vim.tiny</code>.</p>
+<p>(Neovim uses <code>~/.config/nvim</code> is used instead of <code>~/.vim/</code>)</p>
 <h2 id="normal-mode">NORMAL MODE</h2>
 <p>Unlike other editors, the existence of NORMAL MODE is what makes Vim as the
 great editor which allows the minimum usage of the ALT-key and CTRL-key.</p>
@@ -210,22 +216,20 @@ etc.</p>
 <p>COMMAND MODE is normally started from NORMAL MODE by pressing <code>:</code> or <code>/</code> or <code>?</code>.</p>
 <p>You can use NORMAL-MODE-like editing for COMMAND MODE situation by starting it
 with <code>q:</code> or <code>q/</code> or <code>q?</code>.</p>
-<p>Although it is tempting and easy to map some CONTROL-key sequences to some
-cursor keys, I hate to override them since they are most likely used by Vim.</p>
-<p>Despite this, I decided to allow following minimal substitutions for COMMAND
-MODE and TERMINAL-JOB MODE in line with the shell command line usage of them
-where NORMAL mode is not easily accessible.</p>
+<h2 id="emacsshell-like-key-sequences">EMACS/shell like key sequences</h2>
+<p>Here are some non-intuitive key sequences used by INSERT MODE and COMMAND MODE
+and looks like EMACS/Shell sequence.</p>
 <ul>
-<li><code>CTRL-H</code> mapped to <code>&lt;BS&gt;</code> (actually, these are the same code)</li>
-<li><code>CTRL-D</code> mapped to <code>&lt;Del&gt;</code></li>
-<li><code>CTRL-B</code> mapped to <code>&lt;Left&gt;</code></li>
-<li><code>CTRL-F</code> mapped to <code>&lt;Right&gt;</code></li>
+<li>INSERT MODE and COMMAND MODE
+<ul>
+<li><code>^H</code>: Delete a character before the cursor. (same as <code>&lt;BS&gt;</code>)</li>
+<li><code>^W</code>: Delete the word before the cursor.</li>
+<li><code>^U</code>: Delete all entered characters before the cursor.</li>
+<li><code>^P</code>: Find previous keyword.</li>
+<li><code>^N</code>: Find next keyword.</li>
 </ul>
-<p>So I can&rsquo;t type <code>CTRL-F</code> to start NORMAL-MODE-like COMMAND HISTORY editing.</p>
-<p>(I guess I need to set up &lsquo;cedit&rsquo; option to either <code>CTRL-O</code> or <code>CTRL-X</code> if I
-want this feature.)</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+</li>
+</ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h3 id="tab-in-command-mode">TAB in COMMAND MODE</h3>
@@ -289,6 +293,10 @@ more envying EMACS terminal mode.</p>
 <h3 id="terminal-job-mode">TERMINAL-JOB MODE</h3>
 <p>Don&rsquo;t run Vim inside TERMINAL-JOB MODE.  I ended with &lsquo;buftype&rsquo; error.  It
 becomes &rsquo;terminal&rsquo; type.</p>
+<h2 id="terminal-settings">Terminal settings</h2>
+<p>For terminal, set <code>DEL</code>-code(0x7F) for Backspace and use escape sequence for
+Delete. This frees the ASCII <code>BS</code> (CTRL-H) code so window jump can be mapped to
+<code>&lt;C-H&gt;</code>.</p>
 <!-- raw HTML omitted -->
 
 
