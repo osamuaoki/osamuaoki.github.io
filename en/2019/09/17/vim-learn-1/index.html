@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/17 (initial publish),
-2022/07/19 (last update)
+2022/07/20 (last update)
 </h3>
 </div>
 
@@ -73,11 +73,11 @@
       </ul>
     </li>
     <li><a href="#insert-mode">INSERT MODE</a></li>
-    <li><a href="#command-mode">COMMAND MODE</a></li>
-    <li><a href="#emacsshell-like-key-sequences">EMACS/shell like key sequences</a>
+    <li><a href="#command-mode">COMMAND MODE</a>
       <ul>
         <li><a href="#tab-in-command-mode">TAB in COMMAND MODE</a></li>
         <li><a href="#basics-in-command-mode">Basics in COMMAND MODE</a></li>
+        <li><a href="#emacsshell-like-key-sequences">EMACS/shell-like key sequences</a></li>
       </ul>
     </li>
     <li><a href="#quickfix-mode">QUICKFIX MODE</a></li>
@@ -216,22 +216,6 @@ etc.</p>
 <p>COMMAND MODE is normally started from NORMAL MODE by pressing <code>:</code> or <code>/</code> or <code>?</code>.</p>
 <p>You can use NORMAL-MODE-like editing for COMMAND MODE situation by starting it
 with <code>q:</code> or <code>q/</code> or <code>q?</code>.</p>
-<h2 id="emacsshell-like-key-sequences">EMACS/shell like key sequences</h2>
-<p>Here are some non-intuitive key sequences used by INSERT MODE and COMMAND MODE
-and looks like EMACS/Shell sequence.</p>
-<ul>
-<li>INSERT MODE and COMMAND MODE
-<ul>
-<li><code>^H</code>: Delete a character before the cursor. (same as <code>&lt;BS&gt;</code>)</li>
-<li><code>^W</code>: Delete the word before the cursor.</li>
-<li><code>^U</code>: Delete all entered characters before the cursor.</li>
-<li><code>^P</code>: Find previous keyword.</li>
-<li><code>^N</code>: Find next keyword.</li>
-</ul>
-</li>
-</ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h3 id="tab-in-command-mode">TAB in COMMAND MODE</h3>
 <p>Normally, <code>TAB</code> in COMMAND MODE starts <strong>wildmenu</strong> under <code>:set wildmenu</code>.  You
 can use <code>TAB</code> and <code>S-TAB</code> to chose the one you want.</p>
@@ -252,6 +236,22 @@ can use <code>TAB</code> and <code>S-TAB</code> to chose the one you want.</p>
 <li><code>:bufdo ααα</code>: Execute ααα in each buffer in the buffer list.</li>
 </ul>
 <p>Use <code>|</code> as in-line command separator.</p>
+<h3 id="emacsshell-like-key-sequences">EMACS/shell-like key sequences</h3>
+<p>Here are some non-intuitive key sequences used by INSERT MODE and COMMAND MODE
+and looks like EMACS/Shell sequence.</p>
+<ul>
+<li>INSERT MODE and COMMAND MODE
+<ul>
+<li><code>^H</code>: Delete a character before the cursor. (same as <code>&lt;BS&gt;</code>)</li>
+<li><code>^W</code>: Delete the word before the cursor.</li>
+<li><code>^U</code>: Delete all entered characters before the cursor.</li>
+<li><code>^P</code>: Find previous keyword.</li>
+<li><code>^N</code>: Find next keyword.</li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h2 id="quickfix-mode">QUICKFIX MODE</h2>
 <p>If you have a task to search some text to make Vim to jump to particular places
 in its buffer, QUICKFIX MODE is the one to automate your process.  No more
