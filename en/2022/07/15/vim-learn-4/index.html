@@ -272,12 +272,30 @@ seems to be executed. with some tricks.  (Of courese, 3 local functions used by
 <code>user_plugin_opts</code> needs to be examined carefully as follows to come to this
 conclusion.)</p>
 <h3 id="3-local-functions-used-by-user_plugin_opts">3 local functions used by <code>user_plugin_opts</code></h3>
-<p>Let&rsquo;s understand 3 local functions used by <code>user_plugin_opts</code> in
-<code>lua/core/utils/init.lua</code> first.</p>
+<p>Let&rsquo;s understand 3 local functions and 1 vim&rsquo;s lua binding function used by
+<code>user_plugin_opts</code> in <code>lua/core/utils/init.lua</code> first.</p>
 <ul>
-<li>Function: <code>load_module_file</code></li>
-<li>Function: <code>func_or_exten</code></li>
-<li>Function: <code>user_setting_table</code></li>
+<li>Function: <code>load_module_file</code>
+<ul>
+<li>Load module from extended RTP containing <code>~/.config/astronvim</code>.</li>
+</ul>
+</li>
+<li>Function: <code>func_or_exten</code>
+<ul>
+<li>Mix system and user configuration</li>
+</ul>
+</li>
+<li>Function: <code>user_setting_table</code>
+<ul>
+<li>Load user setting from offset path with additional <code>/user/</code></li>
+</ul>
+</li>
+<li>Function: <code>vim.tbl_deep_extend</code>
+<ul>
+<li>See <code>:help tbl_deep_extend</code></li>
+<li>Merges recursively two or more map-like tables.</li>
+</ul>
+</li>
 </ul>
 <p>Key part of codes are commented as follows:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>astronvim.install <span style="color:#f92672">=</span> { home <span style="color:#f92672">=</span> stdpath <span style="color:#e6db74">&#34;config&#34;</span> } <span style="color:#75715e">-- ~/.config/nvim</span>
@@ -336,7 +354,10 @@ abstruction etc. involved.  Very nice.</p>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>This seems to look into inside of user module for particular <code>module</code> name <code>polish</code> for
 the case under consideration.  It seems quite tricky.</p>
-<p>See discussion at <a href="https://www.reddit.com/r/neovim/comments/v8d3lx/astronvim_v140/">reddit on astronvim v140</a>.</p>
+<p>See discussion at <a href="https://www.reddit.com/r/neovim/comments/v8d3lx/astronvim_v140/">reddit on astronvim
+v140</a>. In
+this, there are some user configuration tips with its mechanism discussion and
+benchmarks against popular configurations.</p>
 <h3 id="other-user_plugin_opts">other <code>user_plugin_opts</code></h3>
 <p>There are many other use of this hook function to enable user configuration.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ grep -R  -v <span style="color:#e6db74">&#34;^ *local&#34;</span> . 2&gt;/dev/null |grep user_plugin_opts|wc -l
