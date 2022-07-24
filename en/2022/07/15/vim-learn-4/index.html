@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/07/15 (initial publish),
-2022/07/20 (last update)
+2022/07/24 (last update)
 </h3>
 </div>
 
@@ -77,6 +77,7 @@
       </ul>
     </li>
     <li><a href="#customization">Customization</a></li>
+    <li><a href="#lazygit">Lazygit</a></li>
     <li><a href="#modifier-keys">Modifier keys</a></li>
     <li><a href="#paste-mode">Paste mode</a></li>
   </ul>
@@ -379,7 +380,14 @@ module.  Now I see where all maulti-file user configuration is coming from.</p>
 </span></span><span style="display:flex;"><span>      mapleader <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34; &#34;</span>, <span style="color:#75715e">-- sets vim.g.mapleader</span>
 </span></span><span style="display:flex;"><span>    },
 </span></span><span style="display:flex;"><span>  },
-</span></span></code></pre></div><h2 id="modifier-keys">Modifier keys</h2>
+</span></span></code></pre></div><p>For more, see <a href="https://github.com/osamuaoki/astronvim-osamu">https://github.com/osamuaoki/astronvim-osamu</a></p>
+<h2 id="lazygit">Lazygit</h2>
+<p>Lazygit is not yet packaged for Debian.  I installed it as:</p>
+<pre tabindex="0"><code>$ sudo aptitude install golang
+$ go install github.com/jesseduffield/lazygit@latest
+$ cd ~/bin
+$ ln -sf ~/go/bin/lazygit lazygit
+</code></pre><h2 id="modifier-keys">Modifier keys</h2>
 <p>Neovim 0.7 now correctly distinguishes modifier key combos in its own
 input processing, so users can now map e.g. <code>&lt;Tab&gt;</code> and <code>&lt;C-I&gt;</code> separately.</p>
 <h2 id="paste-mode">Paste mode</h2>
