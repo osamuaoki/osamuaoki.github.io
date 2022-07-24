@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/17 (initial publish),
-2022/07/20 (last update)
+2022/07/24 (last update)
 </h3>
 </div>
 
@@ -142,30 +142,31 @@ If you need vim for sure, call it as <code>vim.basic</code>, or <code>vim.tiny</
 great editor which allows the minimum usage of the ALT-key and CTRL-key.</p>
 <h3 id="cheat-sheet">Cheat sheet</h3>
 <p>Here is my cheat sheet to remind me of all the important key strokes used
-around NORMAL MODE with emphasis on motion keys:</p>
-<pre tabindex="0"><code> NORMAL MODE &lt;ESC&gt;:  Goto BOF → gg      r +--- Next Char
- screen                   n N # ?ααα   e / +-- End of Word (non-alnum)
- scroll        ai+wW({[&lt;sp&#34;&#39;`↓  ^B    t / / +- Word Next (non-alnum)
- ↓     Change c{motion} cc  c↑  ^U   n / / / + End of Word (space)
- ↓     Delete d{motion} dd  d↑  H   e / / / / +Word Next (space)
- +--+  Copy   y{motion} yy  y↑  {  C / / / / / +Till α, x  Delete char
- |zt|  Put After/Before p / P   ( / / / / / / / Find α, r  Replace char
- |^e|  &#34;α  Use α as register    k/ / / / / / /  / EOL,  ~  Change case
- |zz|     0 ^ Fα Tα gE B ge b h M l e w E W tα fα $    gd  Goto definiton
- |^y| ↓↓↓ Split Window ↓↓↓      j ←--- Line (J for Join line)   ^]  Tag jump
- |zb| ^W + ncsvhjkl=+-_&lt;&gt;|      ) ←--- Sentence        ^T  Tag jump-back
- +--+                           } ←--- Paragraph       ^I/^O  Jump next/prev
-      Forward Backward Search   L ←--- Bottom of Page  {visual}&gt;  Indent →
-      n N /ααα ?ααα ← Find ααα  ^D ←-- Prev 1/2 Page   {visual}&lt;  Indent ←
-      n N *    # ←--- Indicator ^F ←-- Next Page       {visual}=  Indent ⇆
-      , ; tα   Tα ←-- Till α    /ααα ← Find ααα * n N  {visual}gq Format Text
-      , ; fα   Fα ←-- Find α    G ←--- Goto EOF        J          Join line
-   Next Prev   %  ←-- Match     [{ ]} [[ ]] [] ][ Look for {}
- Record: qα, End-Record: q, Play-Record: @α, Mark as α: mα, Jump to α: `α/&#39;α
- Undo: u, Redo: ^R, Repeat: . , Fold: Open zo/zO/zr/zR, Close zc/zC/zm/zM
- Insert Mode: i/a Before/After Char, I/A Before/After Line, O/o above/below
- Visual Mode: v Char V Line ^V Block, Replace Mode: R, Ex Mode: : or q:
-</code></pre><p>This is intentionally terse.  <code>^</code> is used as prefix for CTRL-key.</p>
+around NORMAL MODE with emphasis on motion keys (mono space font to see this
+correctly):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-c" data-lang="c"><span style="display:flex;"><span> NORMAL MODE <span style="color:#f92672">&lt;</span>ESC<span style="color:#f92672">&gt;:</span>  Goto BOF <span style="color:#960050;background-color:#1e0010">→</span> gg      r <span style="color:#f92672">+---</span> Next Char
+</span></span><span style="display:flex;"><span> screen                   n N <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#f92672">?</span><span style="color:#960050;background-color:#1e0010">ααα</span>   e <span style="color:#f92672">/</span> <span style="color:#f92672">+--</span> End of Word (non<span style="color:#f92672">-</span>alnum)
+</span></span><span style="display:flex;"><span> scroll        ai<span style="color:#f92672">+</span>wW({[<span style="color:#f92672">&lt;</span>sp<span style="color:#e6db74">&#34;&#39;`↓  ^B    t / / +- Word Next (non-alnum)</span>
+</span></span><span style="display:flex;"><span> <span style="color:#960050;background-color:#1e0010">↓</span>     Change c{motion} cc  c<span style="color:#960050;background-color:#1e0010">↑</span>  <span style="color:#f92672">^</span>U   n <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">+</span> End of Word (space)
+</span></span><span style="display:flex;"><span> <span style="color:#960050;background-color:#1e0010">↓</span>     Delete d{motion} dd  d<span style="color:#960050;background-color:#1e0010">↑</span>  H   e <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">+</span>Word Next (space)
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">+--+</span>  Copy   y{motion} yy  y<span style="color:#960050;background-color:#1e0010">↑</span>  {  C <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">+</span>Till <span style="color:#960050;background-color:#1e0010">α</span>, x  Delete <span style="color:#66d9ef">char</span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">|</span>zt<span style="color:#f92672">|</span>  Put After<span style="color:#f92672">/</span>Before p <span style="color:#f92672">/</span> P   ( <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> <span style="color:#f92672">/</span> Find <span style="color:#960050;background-color:#1e0010">α</span>, r  Replace <span style="color:#66d9ef">char</span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">|^</span>e<span style="color:#f92672">|</span>  <span style="color:#e6db74">&#34;α  Use α as register    k/ / / / / / /  / EOL,  ~  Change case</span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">|</span>zz<span style="color:#f92672">|</span>     <span style="color:#ae81ff">0</span> <span style="color:#f92672">^</span> Fα Tα gE B ge b h M l e w E W tα fα <span style="color:#960050;background-color:#1e0010">$</span>    gd  Goto definiton
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">|^</span>y<span style="color:#f92672">|</span> <span style="color:#960050;background-color:#1e0010">↓↓↓</span> Split Window <span style="color:#960050;background-color:#1e0010">↓↓↓</span>      j <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">---</span> Line (J <span style="color:#66d9ef">for</span> Join line)   <span style="color:#f92672">^</span>]  Tag jump
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">|</span>zb<span style="color:#f92672">|</span> <span style="color:#f92672">^</span>W <span style="color:#f92672">+</span> ncsvhjkl<span style="color:#f92672">=+-</span>_<span style="color:#f92672">&lt;&gt;|</span>      ) <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">---</span> Sentence        <span style="color:#f92672">^</span>T  Tag jump<span style="color:#f92672">-</span>back
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">+--+</span>                           } <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">---</span> Paragraph       <span style="color:#f92672">^</span>I<span style="color:#f92672">/^</span>O  Jump next<span style="color:#f92672">/</span>prev
+</span></span><span style="display:flex;"><span>      Forward Backward Search   L <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">---</span> Bottom of Page  {visual}<span style="color:#f92672">&gt;</span>  Indent <span style="color:#960050;background-color:#1e0010">→</span>
+</span></span><span style="display:flex;"><span>      n N <span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">ααα</span> <span style="color:#f92672">?</span><span style="color:#960050;background-color:#1e0010">ααα</span> <span style="color:#960050;background-color:#1e0010">←</span> Find <span style="color:#960050;background-color:#1e0010">ααα</span>  <span style="color:#f92672">^</span>D <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">--</span> Prev <span style="color:#ae81ff">1</span><span style="color:#f92672">/</span><span style="color:#ae81ff">2</span> Page   {visual}<span style="color:#f92672">&lt;</span>  Indent <span style="color:#960050;background-color:#1e0010">←</span>
+</span></span><span style="display:flex;"><span>      n N <span style="color:#f92672">*</span>    <span style="color:#960050;background-color:#1e0010">#</span> <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">---</span> Indicator <span style="color:#f92672">^</span>F <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">--</span> Next Page       {visual}<span style="color:#f92672">=</span>  Indent <span style="color:#960050;background-color:#1e0010">⇆</span>
+</span></span><span style="display:flex;"><span>      , ; tα   Tα <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">--</span> Till <span style="color:#960050;background-color:#1e0010">α</span>    <span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">ααα</span> <span style="color:#960050;background-color:#1e0010">←</span> Find <span style="color:#960050;background-color:#1e0010">ααα</span> <span style="color:#f92672">*</span> n N  {visual}gq Format Text
+</span></span><span style="display:flex;"><span>      , ; fα   Fα <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">--</span> Find <span style="color:#960050;background-color:#1e0010">α</span>    G <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">---</span> Goto EOF        J          Join line
+</span></span><span style="display:flex;"><span>   Next Prev   <span style="color:#f92672">%</span>  <span style="color:#960050;background-color:#1e0010">←</span><span style="color:#f92672">--</span> Match     [{ ]} [[ ]] [] ][ Look <span style="color:#66d9ef">for</span> {}
+</span></span><span style="display:flex;"><span> Record: qα, End<span style="color:#f92672">-</span>Record: q, Play<span style="color:#f92672">-</span>Record: <span style="color:#960050;background-color:#1e0010">@α</span>, Mark as <span style="color:#960050;background-color:#1e0010">α</span><span style="color:#f92672">:</span> mα, Jump to <span style="color:#960050;background-color:#1e0010">α</span><span style="color:#f92672">:</span> <span style="color:#960050;background-color:#1e0010">`α</span><span style="color:#f92672">/</span><span style="color:#960050;background-color:#1e0010">&#39;α</span>
+</span></span><span style="display:flex;"><span> Undo: u, Redo: <span style="color:#f92672">^</span>R, Repeat: . , Fold: Open zo<span style="color:#f92672">/</span>zO<span style="color:#f92672">/</span>zr<span style="color:#f92672">/</span>zR, Close zc<span style="color:#f92672">/</span>zC<span style="color:#f92672">/</span>zm<span style="color:#f92672">/</span>zM
+</span></span><span style="display:flex;"><span> Insert Mode: i<span style="color:#f92672">/</span>a Before<span style="color:#f92672">/</span>After Char, I<span style="color:#f92672">/</span>A Before<span style="color:#f92672">/</span>After Line, O<span style="color:#f92672">/</span>o above<span style="color:#f92672">/</span>below
+</span></span><span style="display:flex;"><span> Visual Mode: v Char V Line <span style="color:#f92672">^</span>V Block, Replace Mode: R, Ex Mode: <span style="color:#f92672">:</span> or q:
+</span></span></code></pre></div><p>This is intentionally terse.  <code>^</code> is used as prefix for CTRL-key.</p>
 <p>I found some key sequences such as <code>3w</code>, <code>bc$</code>, <code>ciw</code>, <code>3yaw</code>, … quite useful,
 now.</p>
 <h3 id="hints-for-memorizing-key-strokes">Hints for memorizing key strokes</h3>
