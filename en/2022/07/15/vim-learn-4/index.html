@@ -219,7 +219,13 @@ defined originally in <code>utils/init.lua</code> as:</p>
 </span></span></code></pre></div><p>We can inspect its current value as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(astronvim))
 </span></span></code></pre></div><p>(It is too big to paste here but it is full of important informaion)</p>
-<h3 id="function-conditional_func">Function: <code>conditional_func</code></h3>
+<p>For checking user setting, use the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print (vim.inspect(astronvim.user_settings))
+</span></span></code></pre></div><p>For checking &ldquo;mappings&rdquo; only, use the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print (vim.inspect(astronvim.user_settings.mappings))
+</span></span></code></pre></div><p>For checking &ldquo;which-key&rdquo; only, use the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print (vim.inspect(astronvim.user_settings[<span style="color:#e6db74">&#34;which-key&#34;</span>]))
+</span></span></code></pre></div><h3 id="function-conditional_func">Function: <code>conditional_func</code></h3>
 <p>This is a simple function defined in <code>lua/core/utils/init.lua</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">conditional_func</span>(func, condition, ...)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (condition <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">and</span> <span style="color:#66d9ef">true</span> <span style="color:#f92672">or</span> condition) <span style="color:#f92672">and</span> type(func) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;function&#34;</span> <span style="color:#66d9ef">then</span> <span style="color:#66d9ef">return</span> func(...) <span style="color:#66d9ef">end</span>
