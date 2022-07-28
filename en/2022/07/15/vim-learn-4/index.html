@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/07/15 (initial publish),
-2022/07/24 (last update)
+2022/07/28 (last update)
 </h3>
 </div>
 
@@ -66,7 +66,8 @@
     <li><a href="#internals-of-astronvim">Internals of AstroNvim</a>
       <ul>
         <li><a href="#prerequisite">Prerequisite</a></li>
-        <li><a href="#value-of-vim-option-and-runtimepath">Value of vim option and <code>runtimepath</code></a></li>
+        <li><a href="#lua-basics">Lua basics</a></li>
+        <li><a href="#value-of-runtimepath-option">Value of <code>runtimepath</code> option</a></li>
         <li><a href="#tracing-source-code-of-astronvim-with-single-configastronvimuserinitlua">Tracing source code of AstroNvim with single <code>~/.config/astronvim/user/init.lua</code></a></li>
         <li><a href="#entry-point-initlua">Entry point: <code>init.lua</code></a></li>
         <li><a href="#variable-astronvim">Variable <code>astronvim</code></a></li>
@@ -74,6 +75,8 @@
         <li><a href="#function-user_plugin_opts-in-confignviminitlua">Function: <code>user_plugin_opts</code> in <code>~/.config/nvim/init.lua</code></a></li>
         <li><a href="#3-local-functions-used-by-user_plugin_opts">3 local functions used by <code>user_plugin_opts</code></a></li>
         <li><a href="#other-user_plugin_opts">other <code>user_plugin_opts</code></a></li>
+        <li><a href="#shim-function-and-its-hook-points">Shim function and its hook points</a></li>
+        <li><a href="#how-astronvim-works-for-user-settings">How AstroNvim works for user settings</a></li>
       </ul>
     </li>
     <li><a href="#customization">Customization</a></li>
@@ -137,10 +140,21 @@ configuration.</p>
 <p>See <a href="https://github.com/nanotee/nvim-lua-guide">Getting started using Lua in
 Neovim</a> and its linked documents
 first.</p>
-<h3 id="value-of-vim-option-and-runtimepath">Value of vim option and <code>runtimepath</code></h3>
-<p>We can inspect the actual internal option value of running nvim from the nvim
-command mode.  The actual vim <code>runtimepath</code> option from lua&rsquo;s point of view can
-be inspected by:</p>
+<h3 id="lua-basics">Lua basics</h3>
+<p>Please note <code>.</code> in the lua module path corresponds to <code>/</code> in the directory
+path.  Also the <code>foo.bar</code> lua module may be at <code>$runtimepath/foo/bar.lua</code> or
+<code>$runtimepath/foo/bar/init.lua</code>.</p>
+<p>For the definition of <code>vim.tbl_deep_extend</code>, see <code>:help tbl_deep_extend</code>.</p>
+<p>For the actual definition of <code>user_plugin_opts</code> and related functions, see
+their definition in <code>lua/core/utils/init.lua</code>.</p>
+<h3 id="value-of-runtimepath-option">Value of <code>runtimepath</code> option</h3>
+<p>The AstroNvim start-up code extends the value of <code>runtimepath</code> and it contains
+not only <code>$XDG_CONFIG_HOME/nvim</code> but also <code>$XDG_CONFIG_HOME/astronvim</code>. Here,
+<code>$XDG_CONFIG_HOME</code> is normally set to <code>~/.config</code>.</p>
+<p>This allows us to place user settings under the normal path of
+<code>~/.config/nvim/lua/user</code> and the offset path of
+<code>~/.config/astronvim/lua/user</code>.</p>
+<p>Its value can be verified by:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(vim.opt.runtimepath))
 </span></span></code></pre></div><p>It is impossible to read so much output and make any sense.  Here, <code>:redir</code> can
 be used to ease reading of these by capturing output in a file. (The use of
@@ -385,6 +399,82 @@ module.  Now I see where all maulti-file user configuration is coming from.</p>
 <li><a href="https://astronvim.github.io/recipes/black_belt">Black Belt Example User Configs</a></li>
 <li><a href="https://astronvim.github.io/configuration/override_formats#override-table">Override Table</a></li>
 <li><a href="https://astronvim.github.io/configuration/override_formats#override-function">Override Function</a></li>
+</ul>
+<p>I think I got some idea now.  Let me recap as below.</p>
+<h3 id="shim-function-and-its-hook-points">Shim function and its hook points</h3>
+<p>Configuration mechanism of AstroNvim uses the shim function
+<code>astronvim.user_plugin_opts</code> (usually aliased to local variable
+<code>user_plugin_opts</code>) when setting default values in the upstream source. The
+resulting default values returned by this shim function are the user requested
+combination of corresponding upstream and user settings.</p>
+<p>Running <code>rg user_plugin_opts</code> at the root of the source tree should reveal many
+hook points of <code>user_plugin_opts</code> calls in the source where the upstream sets
+default values.</p>
+<h3 id="how-astronvim-works-for-user-settings">How AstroNvim works for user settings</h3>
+<p>Let us describe tersely in plain words how this shim function
+<code>astronvim.user_plugin_opts</code> works in AstroNvim when it is called as
+<code>user_plugin_opts(&quot;MODULE&quot;, DEFAULT, EXTEND)</code> with a twist of
+oversimplification.  This should provide some perspective for how AstroNvim
+works for user settings.</p>
+<ul>
+<li>The <code>DEFAULT</code> contains a table setting the upstream default values.</li>
+<li>The <code>&quot;MODULE&quot;</code> contains a string specifying user settings by the module or
+variable name.</li>
+<li>If the module named <code>user.MODULE</code> doesn&rsquo;t exist, then AstroNvim obtains user
+settings from the <code>user/init.lua</code> file while looking for the <code>MODULE</code>
+variable in it.
+<ul>
+<li>This is the single setting file case using the <code>user/init.lua</code> file as
+discussed in <a href="https://astronvim.github.io/configuration/basic_configuration">Basic Configuration</a>.</li>
+<li>If the <code>EXTEND</code> is <code>nil</code> (missing) or <code>true</code>, settings are extended:
+<ul>
+<li>If the <code>MODULE</code> variable contains a table, then AstroNvim generates
+settings by calling the <code>vim.tbl_deep_extend(&quot;force&quot;, DEFAULT, MODULE)</code>
+function extending the <code>DEFAULT</code> table by the <code>MODULE</code> table.</li>
+<li>If the <code>MODULE</code> variable contains a function, then AstroNvim generates
+custom extended settings by calling the <code>MODULE</code> function with the
+<code>DEFAULT</code> as its argument.</li>
+</ul>
+</li>
+<li>If the <code>EXTEND</code> is <code>false</code>, settings are overridden:
+<ul>
+<li>If the <code>MODULE</code> variable contains a table, then AstroNvim ignores
+<code>DEFAULT</code> and generates settings from the <code>MODULE</code> table.</li>
+<li>If the <code>MODULE</code> variable contains a function, then AstroNvim ignores
+<code>DEFAULT</code> and generates settings by executing the <code>MODULE</code> function.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>If the module named <code>user.MODULE</code> exists, then AstroNvim obtains user
+settings from the <code>user.MODULE</code> module.
+<ul>
+<li>This is the <a href="https://astronvim.github.io/configuration/splitting_up">Splitting Up Configuration</a> case.</li>
+<li>If the <code>EXTEND</code> is <code>nil</code> (missing) or <code>true</code>, settings are extended:
+<ul>
+<li>If the <code>user.MODULE</code> module returns a table, then AstroNvim assigns the
+returned table to the <code>MODULE</code> variable, and generates settings by
+calling the <code>vim.tbl_deep_extend(&quot;force&quot;, DEFAULT, MODULE)</code> function
+extending the <code>DEFAULT</code> table the <code>MODULE</code> table.</li>
+<li>If the <code>user.MODULE</code> module returns a function, then AstroNvim assigns
+the returned function to the <code>MODULE</code> variable, and generates custom
+extended settings by calling the <code>MODULE</code> function with the <code>DEFAULT</code> as
+its argument.</li>
+</ul>
+</li>
+<li>If the <code>EXTEND</code> is <code>false</code>, settings are overridden:
+<ul>
+<li>If the <code>user.MODULE</code> module returns a table, then AstroNvim ignores
+<code>DEFAULT</code> and generates settings from the <code>MODULE</code> table.</li>
+<li>If the <code>user.MODULE</code> module returns a function, then AstroNvim ignores
+<code>DEFAULT</code> and generates settings by executing the <code>MODULE</code> function.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>If neither the module named <code>user.MODULE</code> nor the variable named <code>MODULE</code> in
+the <code>user/init.lua</code> file exist, then AstroNvim generates settings from the
+original upstream <code>DEFAULT</code>.</li>
 </ul>
 <h2 id="customization">Customization</h2>
 <p>I started to add some features quickly without learning internals of AstroNvim.  Features are the ones I created originally for DOOM-NVIM.  So I can control nvim behavior with simple key strokes.</p>
