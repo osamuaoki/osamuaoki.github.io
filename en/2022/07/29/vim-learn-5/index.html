@@ -63,10 +63,10 @@
   <ul>
     <li><a href="#revisit-syntax-checkers-and-beyond">Revisit syntax checkers and beyond</a>
       <ul>
-        <li><a href="#shell">Shell</a></li>
+        <li><a href="#shell-with-ls">Shell with LS</a></li>
         <li><a href="#python">Python</a></li>
-        <li><a href="#lua">Lua</a></li>
-        <li><a href="#others">Others</a></li>
+        <li><a href="#lua-with-ls">Lua with LS</a></li>
+        <li><a href="#others-with-ls">Others with LS</a></li>
       </ul>
     </li>
   </ul>
@@ -86,7 +86,7 @@ access local syntax checkers and code style formatter using <code>null-ls.nvim</
 <li>currently: <code>nvim-lsp-installer</code> (upstream: <a href="https://github.com/williamboman/nvim-lsp-installer">https://github.com/williamboman/nvim-lsp-installer</a>)</li>
 <li>Next:      <code>mason.nvim</code> (upstream: <a href="https://github.com/williamboman/mason.nvim">https://github.com/williamboman/mason.nvim</a>)</li>
 </ul>
-<h3 id="shell">Shell</h3>
+<h3 id="shell-with-ls">Shell with LS</h3>
 <ul>
 <li>static syntax checker package: <code>shellcheck</code> (deb)</li>
 <li>upstream: <a href="https://github.com/koalaman/shellcheck">shellcheck</a></li>
@@ -112,15 +112,25 @@ access local syntax checkers and code style formatter using <code>null-ls.nvim</
 <li>upstream: <a href="https://github.com/PyCQA/pylint">pylint</a></li>
 <li>configuration: <code>~/.plintrc</code>; <code>pylintrc</code> or <code>project.toml</code> (cwd)</li>
 </ul>
-<h4 id="my-new-ways">My new ways</h4>
+<h4 id="my-new-ways-with-ls">My new ways with LS</h4>
 <ul>
 <li>install backend python tool with <code>pip install pyright</code></li>
 <li>install language server with <code>npm i -g pyright</code></li>
 <li>Static type checker for Python</li>
 <li>upstream: <a href="https://github.com/microsoft/pyright">Pyright</a></li>
 </ul>
-<p>I also use an independent code re-formatter package: <code>black</code> .</p>
-<h3 id="lua">Lua</h3>
+<h4 id="independent-reformatter">Independent reformatter</h4>
+<p>I also use an independent code re-formatter package: <code>black</code>.</p>
+<ul>
+<li>upstream: <a href="https://github.com/psf/black">black</a></li>
+<li>configuration file (command line tool): <code>[tool.black]</code> section in <code>pyproject.toml</code></li>
+<li>Adjust other tools to <code>max-line-length = 88</code></li>
+</ul>
+<p>One more tool is <code>isort</code> for <code>import</code>.</p>
+<ul>
+<li>upstream: <a href="https://github.com/PyCQA/isort">isort</a></li>
+</ul>
+<h3 id="lua-with-ls">Lua with LS</h3>
 <ul>
 <li>rust cargo package / Node.js npm package</li>
 <li>upstream: <a href="https://github.com/JohnnyMorganz/StyLua">StyLua</a></li>
@@ -133,7 +143,7 @@ access local syntax checkers and code style formatter using <code>null-ls.nvim</
 </span></span><span style="display:flex;"><span>quote_style <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;AutoPreferDouble&#34;</span>
 </span></span><span style="display:flex;"><span>no_call_parentheses <span style="color:#f92672">=</span> true
 </span></span><span style="display:flex;"><span>collapse_simple_statement <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Always&#34;</span>
-</span></span></code></pre></div><h3 id="others">Others</h3>
+</span></span></code></pre></div><h3 id="others-with-ls">Others with LS</h3>
 <p>It seems there are supports not only on HTML but also markdown etc.</p>
 <!-- raw HTML omitted -->
 
