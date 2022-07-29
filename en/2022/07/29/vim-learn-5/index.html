@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Re-learning Vim (5) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Re-learning Vim (5)</span></h1>
+
+<h3 class="date">Date:
+2022/07/29 (initial publish),
+2022/07/29 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2022/07/15/vim-learn-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#revisit-syntax-checkers">Revisit syntax checkers</a>
+      <ul>
+        <li><a href="#shell">Shell</a></li>
+        <li><a href="#python">Python</a></li>
+        <li><a href="#lua">Lua</a></li>
+        <li><a href="#others">Others</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="revisit-syntax-checkers">Revisit syntax checkers</h2>
+<p>Let me revisit recent situation over static syntax checkers mentioned in
+<a href="/en/2019/09/24/vim-learn-2/">Re-learning Vim (2)</a>.</p>
+<p>Under NeoVim (&gt;0.7) with Lua, LSP ecosystem can be used to access local syntax
+checkers and code style formatter using <code>null-ls.nvim</code>.</p>
+<ul>
+<li>upstream: <a href="https://github.com/jose-elias-alvarez/null-ls.nvim">null-ls.nvim</a>.</li>
+</ul>
+<p>Many required packages seems to be installed by</p>
+<ul>
+<li>currently: <code>nvim-lsp-installer</code> (upstream: <a href="https://github.com/williamboman/nvim-lsp-installer">https://github.com/williamboman/nvim-lsp-installer</a>)</li>
+<li>Next:      <code>mason.nvim</code> (upstream: <a href="https://github.com/williamboman/mason.nvim">https://github.com/williamboman/mason.nvim</a>)</li>
+</ul>
+<h3 id="shell">Shell</h3>
+<ul>
+<li>static syntax checker package: <code>shellcheck</code> (deb)</li>
+<li>upstream: <a href="https://github.com/koalaman/shellcheck">shellcheck</a></li>
+<li>use configuration file: <code>~/.shellcheckrc</code>.  See its section in manpage for
+<a href="https://github.com/koalaman/shellcheck/blob/master/shellcheck.1.md#rc-files">shellcheck</a></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># SC2006: Use $(...) notation instead of legacy backticked `...`.               </span>
+</span></span><span style="display:flex;"><span>disable<span style="color:#f92672">=</span>SC2006
+</span></span></code></pre></div><h3 id="python">Python</h3>
+<h4 id="my-old-ways">My old ways</h4>
+<ul>
+<li>static syntax checker package: <code>flake8</code> (deb)</li>
+<li>upstream: <a href="https://github.com/PyCQA/flake8">flake8</a></li>
+<li>use configuration files to set them quiet to avoid excessive noise. <code>~/.pycodestyle</code></li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>[pycodestyle]
+</span></span><span style="display:flex;"><span>count <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>ignore <span style="color:#f92672">=</span> E203,E226,E302,E41
+</span></span><span style="display:flex;"><span>max<span style="color:#f92672">-</span>line<span style="color:#f92672">-</span>length <span style="color:#f92672">=</span> <span style="color:#ae81ff">160</span>
+</span></span><span style="display:flex;"><span>statistics <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+</span></span></code></pre></div><ul>
+<li>static syntax checker packages: <code>pylint</code> (deb)</li>
+<li>upstream: <a href="https://github.com/PyCQA/pylint">pylint</a></li>
+<li>configuration: <code>~/.plintrc</code>; <code>pylintrc</code> or <code>project.toml</code> (cwd)</li>
+</ul>
+<h4 id="my-new-ways">My new ways</h4>
+<ul>
+<li>install with <code>pip install pyright</code></li>
+<li>Static type checker for Python</li>
+<li>upstream: [Pyright]https://github.com/microsoft/pyright)</li>
+</ul>
+<p>I also use an independent code re-formatter package: <code>black</code> .</p>
+<h3 id="lua">Lua</h3>
+<ul>
+<li>rust cargo package / Node.js npm package</li>
+<li>upstream: <a href="https://github.com/JohnnyMorganz/StyLua">StyLua</a></li>
+<li>configuration file: <code>.stylua.toml</code> (project root)</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>column_width <span style="color:#f92672">=</span> <span style="color:#ae81ff">120</span>                                                                                                                                                           
+</span></span><span style="display:flex;"><span>line_endings <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Unix&#34;</span>
+</span></span><span style="display:flex;"><span>indent_type <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Spaces&#34;</span>
+</span></span><span style="display:flex;"><span>indent_width <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>quote_style <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;AutoPreferDouble&#34;</span>
+</span></span><span style="display:flex;"><span>no_call_parentheses <span style="color:#f92672">=</span> true
+</span></span><span style="display:flex;"><span>collapse_simple_statement <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Always&#34;</span>
+</span></span></code></pre></div><h3 id="others">Others</h3>
+<p>It seems there are supports not only on HTML but also markdown etc.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2022/07/15/vim-learn-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
