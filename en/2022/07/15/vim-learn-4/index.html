@@ -79,8 +79,9 @@
         <li><a href="#how-astronvim-works-for-user-settings">How AstroNvim works for user settings</a></li>
       </ul>
     </li>
-    <li><a href="#customization">Customization</a></li>
+    <li><a href="#customization-of-astronvim">Customization of AstroNvim</a></li>
     <li><a href="#lazygit">Lazygit</a></li>
+    <li><a href="#multiple-nvim-configuration-setups">Multiple Nvim configuration setups</a></li>
     <li><a href="#modifier-keys">Modifier keys</a></li>
     <li><a href="#paste-mode">Paste mode</a></li>
   </ul>
@@ -96,6 +97,8 @@ with lua again. I also found a nice recent review:</p>
 <ul>
 <li><a href="https://galexbh.hashnode.dev/the-best-ide-style-configurations-for-nvim">The best IDE-style configurations for nvim</a></li>
 </ul>
+<p>Since AstroNvim seems to be interesting for its compactness and
+pre-configured package settings, I tried it as the main <code>nvim</code> configuration.</p>
 <p>Then I checked code size etc on IDE system:</p>
 <ul>
 <li>DOOM-NVIM (572K effective code)
@@ -123,16 +126,12 @@ with lua again. I also found a nice recent review:</p>
 </ul>
 </li>
 </ul>
-<p>Since AstroNvim seems to be most interesting for its compactness and
-pre-configured package settings, I tried it as the main <code>nvim</code> configuration.
-I also installed LunarVim since it creates the <code>lvim</code> command which doesn&rsquo;t
-interfere with the normal <code>nvim</code> execution.  These can co-exist.</p>
 <p>All these already use delayed loading etc., to save their start up time.  That
 is not what I am focused any more.  My focus is now the out-of-box usability
 and the ease of configuration.</p>
 <h2 id="syntax-checker">Syntax checker</h2>
-<p>If I install <code>shellcheck</code>, both AstroNvim and LunarVim display error messages.
-Nice out of box configuration.</p>
+<p>If I install <code>shellcheck</code>,AstroNvim displays error messages. Nice out of box
+configuration.</p>
 <h2 id="internals-of-astronvim">Internals of AstroNvim</h2>
 <p>Let me record how I looked into the internals of AstroNvim for its user
 configuration.</p>
@@ -476,7 +475,7 @@ custom extended settings by calling the <code>MODULE</code> function with the
 the <code>user/init.lua</code> file exist, then AstroNvim generates settings from the
 original upstream <code>DEFAULT</code>.</li>
 </ul>
-<h2 id="customization">Customization</h2>
+<h2 id="customization-of-astronvim">Customization of AstroNvim</h2>
 <p>I started to add some features quickly without learning internals of AstroNvim.  Features are the ones I created originally for DOOM-NVIM.  So I can control nvim behavior with simple key strokes.</p>
 <ul>
 <li>Toggle line number</li>
@@ -510,7 +509,18 @@ original upstream <code>DEFAULT</code>.</li>
 $ go install github.com/jesseduffield/lazygit@latest
 $ cd ~/bin
 $ ln -sf ~/go/bin/lazygit lazygit
-</code></pre><h2 id="modifier-keys">Modifier keys</h2>
+</code></pre><h2 id="multiple-nvim-configuration-setups">Multiple Nvim configuration setups</h2>
+<p>I also installed LunarVim and NvChad.</p>
+<p>LunarNvim creates the <code>lvim</code> command which doesn&rsquo;t interfere with the normal
+<code>nvim</code> execution.  These can co-exist with the normal Nvim setup without extra
+work.</p>
+<p>Since Nvim supports <a href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG Base Directory
+Specification</a>,
+I decided to use it to create alternative nvim commands with multiple
+configuration settings using
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/xdg-install">xdg-install</a>
+script.  I installed multiple configuration isetups for AstroNvim and NvChad.</p>
+<h2 id="modifier-keys">Modifier keys</h2>
 <p>Neovim 0.7 now correctly distinguishes modifier key combos in its own
 input processing, so users can now map e.g. <code>&lt;Tab&gt;</code> and <code>&lt;C-I&gt;</code> separately.</p>
 <h2 id="paste-mode">Paste mode</h2>
