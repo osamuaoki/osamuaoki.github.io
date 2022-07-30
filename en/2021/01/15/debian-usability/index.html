@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Usability tips: Debian GNOME Workstation | Goofing Osamu</title>
+    <title>Debian Workstation (usability) | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,7 +32,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Usability tips: Debian GNOME Workstation</span></h1>
+<h1><span class="title">Debian Workstation (usability)</span></h1>
 
 <h3 class="date">Date:
 2021/01/15 (initial publish),
@@ -161,13 +161,13 @@ firmware packages:</p>
 </ul>
 <h3 id="set-up-sudo">Set-up <code>sudo</code></h3>
 <p><code>/etc/sudoers.d/custon</code>:</p>
-<pre tabindex="0"><code># No passowrd required for the user in sudo group
-# please note the last match wins configuration
-%sudo ALL = (ALL:ALL) NOPASSWD: ALL
-# No password for 8 hours
-#Defaults timestamp_timeout = 480
-#Defaults timestamp_type = global
-</code></pre><p>NOTE: Please note that the last matching configuration is active.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># No passowrd required for the user in sudo group</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># please note the last match wins configuration</span>
+</span></span><span style="display:flex;"><span>%sudo ALL <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ALL:ALL<span style="color:#f92672">)</span> NOPASSWD: ALL
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># No password for 8 hours</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Defaults timestamp_timeout = 480</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Defaults timestamp_type = global</span>
+</span></span></code></pre></div><p>NOTE: Please note that the last matching configuration is active.</p>
 <h3 id="set-up-user-group-for-uid1000-user">Set-up user group for UID=1000 user</h3>
 <p>Add UID=1000 user to following additional groups:</p>
 <ul>
@@ -185,9 +185,40 @@ firmware packages:</p>
 <h3 id="set-up-grub">Set-up GRUB</h3>
 <p>In order to probe OSs on other drives, add a following line to
 <code>/etc/default/grub</code>:</p>
-<pre tabindex="0"><code>GRUB_DISABLE_OS_PROBER=false
-</code></pre><p>But this is not so robust for btrfs.  See
-<a href="https://wiki.debian.org/Btrfs%20migration">https://wiki.debian.org/Btrfs%20migration</a> .</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>GRUB_DISABLE_OS_PROBER<span style="color:#f92672">=</span>false
+</span></span></code></pre></div><p>But this is not so robust for btrfs.</p>
+<h4 id="multi-boot-with-grub">Multi-boot with GRUB</h4>
+<p>For more robust multi-boot, I usually add following as <code>/etc/grub.d/40_fixed_linux</code> (The first line should be #!/bin/bash without space. Intentional mistype to avoid missing line):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>exec tail -n +3 $0
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This file provides an easy way to add custom menu entries.  Simply type the</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># menu entries you want to add after this comment.  Be careful not to change</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># the &#39;exec tail&#39; line above.</span>
+</span></span><span style="display:flex;"><span>menuentry <span style="color:#e6db74">&#39;Debian GNU/Linux --- main SSD&#39;</span> --class debian --class gnu-linux --class gnu --class os $menuentry_id_option <span style="color:#e6db74">&#39;gnulinux-fixed-fe3e1db5-6454-46d6-a14c-071208ebe4b1&#39;</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        load_video
+</span></span><span style="display:flex;"><span>        insmod gzio
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> x$grub_platform <span style="color:#f92672">=</span> xxen <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span> insmod xzio; insmod lzopio; <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>        insmod part_gpt
+</span></span><span style="display:flex;"><span>        insmod btrfs
+</span></span><span style="display:flex;"><span>        search --no-floppy --fs-uuid --set<span style="color:#f92672">=</span>root fe3e1db5-6454-46d6-a14c-071208ebe4b1
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading Linux from /dev/nvme0n1p5 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        linux   /@rootfs/vmlinuz root<span style="color:#f92672">=</span>UUID<span style="color:#f92672">=</span>fe3e1db5-6454-46d6-a14c-071208ebe4b1 ro rootflags<span style="color:#f92672">=</span>subvol<span style="color:#f92672">=</span>@rootfs  quiet
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading initial ramdisk from /dev/nvme0n1p5 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        initrd  /@rootfs/initrd.img
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>menuentry <span style="color:#e6db74">&#39;Debian GNU/Linux --- sub SSD&#39;</span> --class debian --class gnu-linux --class gnu --class os $menuentry_id_option <span style="color:#e6db74">&#39;gnulinux-fixed-51f9cd11-30b3-4d99-b2ed-fe411fa22ee6&#39;</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        load_video
+</span></span><span style="display:flex;"><span>        insmod gzio
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> x$grub_platform <span style="color:#f92672">=</span> xxen <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span> insmod xzio; insmod lzopio; <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>        insmod part_gpt
+</span></span><span style="display:flex;"><span>        insmod btrfs
+</span></span><span style="display:flex;"><span>        search --no-floppy --fs-uuid --set<span style="color:#f92672">=</span>root 51f9cd11-30b3-4d99-b2ed-fe411fa22ee6
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading Linux from /dev/nvme1n1p1 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        linux   /@rootfs/vmlinuz root<span style="color:#f92672">=</span>UUID<span style="color:#f92672">=</span>51f9cd11-30b3-4d99-b2ed-fe411fa22ee6 ro rootflags<span style="color:#f92672">=</span>subvol<span style="color:#f92672">=</span>@rootfs  quiet
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading initial ramdisk from /dev/nvme1n1p1 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        initrd  /@rootfs/initrd.img
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>See <a href="https://wiki.debian.org/Btrfs%20migration">https://wiki.debian.org/Btrfs%20migration</a> .</p>
 <h3 id="install-extra-packages">Install extra packages</h3>
 <p>Let&rsquo;s add a few GUI tools.</p>
 <ul>
@@ -215,8 +246,8 @@ initial install.</p>
 set library packages as auto-installed.  If some of them are not used by other
 program, let them remove.</p>
 <p>Now you can verify intentionally installed packages with:</p>
-<pre tabindex="0"><code>$ aptitude search &#39;~i!~M~poptional&#39;
-</code></pre><h2 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;~i!~M~poptional&#39;</span>
+</span></span></code></pre></div><h2 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h2>
 <p>UID and GID used by some applications are not fixed.  So, if you reinstall the
 exact same packages in a different order, you end up assigning UID and GID for
 the application.</p>
@@ -265,10 +296,10 @@ javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <li>SUPER-K: Mozc</li>
 </ul>
 <p>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is ANTHY and if you want to use SUPER-j to switch to ANTHY, you need to set as:</p>
-<pre tabindex="0"><code>Name     InputMethod_0
-Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  &#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;
-Shortcut SUPER-j
-</code></pre><p>Please make sure to enter the above command in a single line.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     InputMethod_0
+</span></span><span style="display:flex;"><span>Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  <span style="color:#e6db74">&#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;</span>
+</span></span><span style="display:flex;"><span>Shortcut SUPER-j
+</span></span></code></pre></div><p>Please make sure to enter the above command in a single line.</p>
 <p>See <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a></p>
 <h3 id="keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</h3>
 <p>For Vim use:</p>
