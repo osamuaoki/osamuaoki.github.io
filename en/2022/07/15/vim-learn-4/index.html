@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/07/15 (initial publish),
-2022/07/28 (last update)
+2022/07/30 (last update)
 </h3>
 </div>
 
@@ -420,32 +420,6 @@ works for user settings.</p>
 <li>The <code>DEFAULT</code> contains a table setting the upstream default values.</li>
 <li>The <code>&quot;MODULE&quot;</code> contains a string specifying user settings by the module or
 variable name.</li>
-<li>If the module named <code>user.MODULE</code> doesn&rsquo;t exist, then AstroNvim obtains user
-settings from the <code>user/init.lua</code> file while looking for the <code>MODULE</code>
-variable in it.
-<ul>
-<li>This is the single setting file case using the <code>user/init.lua</code> file as
-discussed in <a href="https://astronvim.github.io/configuration/basic_configuration">Basic Configuration</a>.</li>
-<li>If the <code>EXTEND</code> is <code>nil</code> (missing) or <code>true</code>, settings are extended:
-<ul>
-<li>If the <code>MODULE</code> variable contains a table, then AstroNvim generates
-settings by calling the <code>vim.tbl_deep_extend(&quot;force&quot;, DEFAULT, MODULE)</code>
-function extending the <code>DEFAULT</code> table by the <code>MODULE</code> table.</li>
-<li>If the <code>MODULE</code> variable contains a function, then AstroNvim generates
-custom extended settings by calling the <code>MODULE</code> function with the
-<code>DEFAULT</code> as its argument.</li>
-</ul>
-</li>
-<li>If the <code>EXTEND</code> is <code>false</code>, settings are overridden:
-<ul>
-<li>If the <code>MODULE</code> variable contains a table, then AstroNvim ignores
-<code>DEFAULT</code> and generates settings from the <code>MODULE</code> table.</li>
-<li>If the <code>MODULE</code> variable contains a function, then AstroNvim ignores
-<code>DEFAULT</code> and generates settings by executing the <code>MODULE</code> function.</li>
-</ul>
-</li>
-</ul>
-</li>
 <li>If the module named <code>user.MODULE</code> exists, then AstroNvim obtains user
 settings from the <code>user.MODULE</code> module.
 <ul>
@@ -467,6 +441,32 @@ its argument.</li>
 <li>If the <code>user.MODULE</code> module returns a table, then AstroNvim ignores
 <code>DEFAULT</code> and generates settings from the <code>MODULE</code> table.</li>
 <li>If the <code>user.MODULE</code> module returns a function, then AstroNvim ignores
+<code>DEFAULT</code> and generates settings by executing the <code>MODULE</code> function.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>If the module named <code>user.MODULE</code> doesn&rsquo;t exist, then AstroNvim obtains user
+settings from the <code>user/init.lua</code> file while looking for the <code>MODULE</code>
+variable in it.
+<ul>
+<li>This is the single setting file case using the <code>user/init.lua</code> file as
+discussed in <a href="https://astronvim.github.io/configuration/basic_configuration">Basic Configuration</a>.</li>
+<li>If the <code>EXTEND</code> is <code>nil</code> (missing) or <code>true</code>, settings are extended:
+<ul>
+<li>If the <code>MODULE</code> variable contains a table, then AstroNvim generates
+settings by calling the <code>vim.tbl_deep_extend(&quot;force&quot;, DEFAULT, MODULE)</code>
+function extending the <code>DEFAULT</code> table by the <code>MODULE</code> table.</li>
+<li>If the <code>MODULE</code> variable contains a function, then AstroNvim generates
+custom extended settings by calling the <code>MODULE</code> function with the
+<code>DEFAULT</code> as its argument.</li>
+</ul>
+</li>
+<li>If the <code>EXTEND</code> is <code>false</code>, settings are overridden:
+<ul>
+<li>If the <code>MODULE</code> variable contains a table, then AstroNvim ignores
+<code>DEFAULT</code> and generates settings from the <code>MODULE</code> table.</li>
+<li>If the <code>MODULE</code> variable contains a function, then AstroNvim ignores
 <code>DEFAULT</code> and generates settings by executing the <code>MODULE</code> function.</li>
 </ul>
 </li>
