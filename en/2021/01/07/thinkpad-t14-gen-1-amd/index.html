@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/07 (initial publish),
-2022/07/30 (last update)
+2022/08/19 (last update)
 </h3>
 </div>
 
@@ -79,6 +79,7 @@
         <li><a href="#workaround-rev-2-automatic">Workaround (rev. 2: automatic)</a></li>
       </ul>
     </li>
+    <li><a href="#system-recovery">System recovery</a></li>
   </ul>
 </nav>
 
@@ -110,9 +111,15 @@ installed to the original SSD slot.</p>
 <li><a href="https://donadona.hatenablog.jp/entry/2020/07/11/145458">https://donadona.hatenablog.jp/entry/2020/07/11/145458</a></li>
 <li><a href="https://www.myfixguide.com/lenovo-thinkpad-t14-disassembly/#:~:text=If%20you%20want%20to%20replace,screws%20for%20the%204G%20module">https://www.myfixguide.com/lenovo-thinkpad-t14-disassembly/#:~:text=If%20you%20want%20to%20replace,screws%20for%20the%204G%20module</a></li>
 </ul>
-<p>This is rather heavy high risk mod.  It is still working fine in Nov. 2021 with
+<p>This is rather heavy high risk mod.  It is still working fine in Oct. 2022 with
 btrfs.</p>
-<h2 id="distribution-selection">Distribution selection</h2>
+<p>The installation to btrfs is possible with bulleye d-i.  It uses <code>@rootfs</code>
+subvolume in the selected (or newly created) btrfs for the <code>/</code> file system
+destination.</p>
+<p>Be careful not to set <code>btrfs subvolume set-default</code>.</p>
+<pre tabindex="0"><code>$ sudo btrfs subvolume get-default /
+ID 5 (FS_TREE)
+</code></pre><h2 id="distribution-selection">Distribution selection</h2>
 <p>In order to have decent graphics support easily, current testing distribution
 (bullseye) is used.</p>
 <pre tabindex="0"><code>$ uname -a
@@ -139,20 +146,20 @@ source /etc/network/interfaces.d/*
 auto lo
 iface lo inet loopback
 
-# GNOME
-### The network interface on normal port
-allow-hotplug enp2s0
-# This is an autoconfigured IPv4 interface
-iface enp2s0 inet dhcp
-# This is an autoconfigured IPv6 interface
-iface enp2s0 inet6 auto
-
-### The network interface on extra port
-allow-hotplug enp2s0f0
-# This is an autoconfigured IPv4 interface
-iface enp2s0f0 inet dhcp
-# This is an autoconfigured IPv6 interface
-iface enp2s0f0 inet6 auto
+#### GNOME takes care via NM
+###### The network interface on normal port
+###allow-hotplug enp2s0
+#### This is an autoconfigured IPv4 interface
+###iface enp2s0 inet dhcp
+#### This is an autoconfigured IPv6 interface
+###iface enp2s0 inet6 auto
+###
+###### The network interface on extra port
+###allow-hotplug enp2s0f0
+#### This is an autoconfigured IPv4 interface
+###iface enp2s0f0 inet dhcp
+#### This is an autoconfigured IPv6 interface
+###iface enp2s0f0 inet6 auto
 </code></pre><h2 id="pc-speaker-configuration">PC speaker configuration</h2>
 <p>Beep sound of PC speaker is annoying.  Let&rsquo;s disable it by creating
 <code>/etc/modprobe.d/nobeep.conf</code> as:</p>
@@ -216,7 +223,9 @@ $ diff -u default.pa.orig  default.pa
 
  ### Automatically connect sink and source if JACK server is present
  .ifexists module-jackdbus-detect.so
-</code></pre><!-- raw HTML omitted -->
+</code></pre><h2 id="system-recovery">System recovery</h2>
+<p>I create some RO-snapshots of <code>@rootfs</code> for quick system recovery.</p>
+<!-- raw HTML omitted -->
 
 
 <table width="100%">

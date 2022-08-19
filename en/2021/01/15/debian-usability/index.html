@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/15 (initial publish),
-2022/07/30 (last update)
+2022/08/19 (last update)
 </h3>
 </div>
 
@@ -148,8 +148,9 @@ In addition to these packages, I see the installer installs following extra pack
 <li><code>fzf</code></li>
 <li><code>git</code></li>
 <li><code>gitk</code></li>
-<li><code>vim</code></li>
-<li><code>vim-scripts</code></li>
+<li><code>neovim</code></li>
+<li><del><code>vim</code></del></li>
+<li><del><code>vim-scripts</code></del></li>
 </ul>
 <p>Also, add <code>non-free</code> and <code>contrib</code> in <code>/etc/apt/sources.list</code> and add some
 firmware packages:</p>
@@ -160,7 +161,7 @@ firmware packages:</p>
 <li><code>firmware-realtek</code></li>
 </ul>
 <h3 id="set-up-sudo">Set-up <code>sudo</code></h3>
-<p><code>/etc/sudoers.d/custon</code>:</p>
+<p><code>/etc/sudoers.d/passwordless</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># No passowrd required for the user in sudo group</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># please note the last match wins configuration</span>
 </span></span><span style="display:flex;"><span>%sudo ALL <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ALL:ALL<span style="color:#f92672">)</span> NOPASSWD: ALL
@@ -253,6 +254,7 @@ exact same packages in a different order, you end up assigning UID and GID for
 the application.</p>
 <p>UID in range between 101-999 such as ones for <code>avahi</code>, <code>saned</code>, <code>colord</code>,
 <code>_ssh</code>, &hellip;  are the most susceptible on this issue.</p>
+<p><code>apt-cacher-ng</code> needs special attention.</p>
 <h2 id="efi-based-firmware-updates">EFI-based firmware updates</h2>
 <p>Install <code>gnome-firmware</code> package and invoke GUI to update firmware on devices
 supported by <code>fwupd</code> using <a href="https://fwupd.org/">Linux Vendor Firmware Service</a>.</p>
@@ -328,7 +330,7 @@ This enabled me to print nicely to Hagaki.</p>
 <h2 id="wallpaper">Wallpaper</h2>
 <h3 id="grub-2">GRUB 2</h3>
 <p>Place your JPEG wallpaper graphics (JPEG) in <code>/boot/grub/</code> and run
-<code>sudo update-grub</code>.</p>
+<code>sudo update-grub</code> or <code>sudo dpkg-reconfigure grub-efi-amd64</code>.</p>
 <h3 id="gnome">GNOME</h3>
 <p>You can set wallpaper graphics from:</p>
 <ul>

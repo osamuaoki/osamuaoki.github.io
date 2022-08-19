@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2022/07/15 (last update)
+2022/08/19 (last update)
 </h3>
 </div>
 
@@ -65,6 +65,7 @@
     <li><a href="#apt-proxy-on-host-ws">APT proxy on host WS</a>
       <ul>
         <li><a href="#set-up-proxy-for-the-local-apt">Set up proxy for the local APT</a></li>
+        <li><a href="#permission-and-ownership">Permission and ownership</a></li>
       </ul>
     </li>
     <li><a href="#sbuild-infrastructure">Sbuild infrastructure</a>
@@ -140,6 +141,7 @@ WS.</p>
 <ul>
 <li>This package is <a href="https://qa.debian.org/popcon-graph.php?packages=apt-cacher+apt-cacher-ng+approx+squid-deb-proxy&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=&amp;to_date=&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">the most popular package</a>.</li>
 <li>This package had <a href="https://wiki.debian.org/Simple-CDD/Howto?action=diff&amp;rev1=51&amp;rev2=50">some problem in 2010</a>.</li>
+<li>Bookworm (testing) version seems to be in very good shape.</li>
 </ul>
 </li>
 <li><a href="https://salsa.debian.org/ocaml-team/approx">approx</a>: Less docs but its simplicity seems to make it more robust.</li>
@@ -160,8 +162,17 @@ WS.</p>
 problem.</p>
 <p>For my purpose, proxy is always the local for the host WS which is the gateway
 WS for guest VMs(=kvm).  Simply installing <code>auto-apt-proxy</code> is suffice to set
-up APT proxy for them.</p>
-<p>NOTE: Permission of <code>/var/cache/apt-cacher-ng/</code> is <code>drwxr-sr-x</code> with <code>apt-cacher-ng:apt-cacher-ng</code>.  Erasing its contents reset broken caching data related issues.</p>
+up APT proxy for them.  For host WS itself or <code>chroot</code> (including ones created
+through <code>schroot</code>, <code>sbuild</code>) environment on the host WS, proxy is always the
+local.  So I simply add `/etc/apt/apt.conf.d/00proxy:</p>
+<pre tabindex="0"><code>Acquire::http { Proxy &#34;http://localhost:3142&#34;; }
+</code></pre><h3 id="permission-and-ownership">Permission and ownership</h3>
+<p>The permission and ownership of <code>/var/cache/apt-cacher-ng/</code> is <code>drwxr-sr-x</code>
+(2755) with <code>apt-cacher-ng:apt-cacher-ng</code>.</p>
+<p>If you reinstall system, you must be careful with UID and GID since they may be
+different for the reinstalled system.</p>
+<p>If you experience strange caching data related issues, erase the whole data
+under <code>/var/cache/apt-cacher-ng/</code> to reset.</p>
 <h2 id="sbuild-infrastructure">Sbuild infrastructure</h2>
 <p>Sbuild provides clean <strong>binary</strong> package building environment using schroot as its
 backend.</p>
@@ -653,7 +664,7 @@ generation goes:</p>
 Password:
 root@sid-dev:/home/osamu# /sbin/adduser osamu sudo
 ...
-root@sid-dev:/home/osamu# echo &gt;/etc/sudoers.d/sudo-group &lt;&lt;EOF
+root@sid-dev:/home/osamu# echo &gt;/etc/sudoers.d/passwordless &lt;&lt;EOF
 # NO password for the primary user
 %sudo ALL = (ALL) NOPASSWD: ALL
 EOF
