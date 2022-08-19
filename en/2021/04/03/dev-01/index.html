@@ -164,7 +164,7 @@ problem.</p>
 WS for guest VMs(=kvm).  Simply installing <code>auto-apt-proxy</code> is suffice to set
 up APT proxy for them.  For host WS itself or <code>chroot</code> (including ones created
 through <code>schroot</code>, <code>sbuild</code>) environment on the host WS, proxy is always the
-local.  So I simply add `/etc/apt/apt.conf.d/00proxy:</p>
+local.  So I simply add <code>/etc/apt/apt.conf.d/00proxy</code> as:</p>
 <pre tabindex="0"><code>Acquire::http { Proxy &#34;http://localhost:3142&#34;; }
 </code></pre><h3 id="permission-and-ownership">Permission and ownership</h3>
 <p>The permission and ownership of <code>/var/cache/apt-cacher-ng/</code> is <code>drwxr-sr-x</code>
