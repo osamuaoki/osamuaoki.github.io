@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Development system (4) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Development system (4)</span></h1>
+
+<h3 class="date">Date:
+2022/08/20 (initial publish),
+2022/08/21 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2022/07/29/vim-learn-5/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#package-repo-on-github-page">Package repo on github page</a>
+      <ul>
+        <li><a href="#gnu-pg">GNU PG</a></li>
+        <li><a href="#setting-up-secure-apt-cliant">Setting up secure-APT cliant</a></li>
+        <li><a href="#setting-up-package-repository">Setting up package repository</a></li>
+        <li><a href="#installing-package">Installing package</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="package-repo-on-github-page">Package repo on github page</h2>
+<p>Since Github offer nice web site hosting service, I decided to host my private
+build results there at <a href="http://osamuaoki.github.io/debian">http://osamuaoki.github.io/debian</a>.</p>
+<p>This let me skip running the web server as described in <a href="/en/2021/04/09/dev-02/">Local private package
+repo</a>.</p>
+<p>Since <a href="http://salsa.debian.org">Debian Salsa</a> runs Gitlab and itlab also offer
+equivalent service, one should be able to do the same there.  But considering
+tight resource constaints there, it may not be a good idea to do this on Salsa.</p>
+<p>Let me go step-by-step.</p>
+<h3 id="gnu-pg">GNU PG</h3>
+<p>Since I will use sub-key for this purpose, let me check:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ gpg --list-secret-keys  --with-subkey-fingerprint
+</span></span><span style="display:flex;"><span>pub   rsa4096 2010-09-23 <span style="color:#f92672">[</span>SC<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      3133724D6207881579E95D621E1356881DD8D791
+</span></span><span style="display:flex;"><span>uid           <span style="color:#f92672">[</span>ultimate<span style="color:#f92672">]</span> Osamu Aoki &lt;osamu@debian.org&gt;
+</span></span><span style="display:flex;"><span>sub   rsa4096 2010-09-23 <span style="color:#f92672">[</span>E<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
+</span></span><span style="display:flex;"><span>$ gpg --export -a 3133724D6207881579E95D621E1356881DD8D791
+</span></span><span style="display:flex;"><span>-----BEGIN PGP PUBLIC KEY BLOCK-----
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mQINBEya74YBEADDpLTJCmyS97kZ6JvlpUEoSoVbqEkyQVfrV7C7VqlBGWO0bTKI
+</span></span><span style="display:flex;"><span>... snip ...
+</span></span><span style="display:flex;"><span>-----END PGP PUBLIC KEY BLOCK-----
+</span></span></code></pre></div><h3 id="setting-up-secure-apt-cliant">Setting up secure-APT cliant</h3>
+<p>Let&rsquo;s use DEB822-STYLE FORMAT as explained in sources.list(5) and avoid using
+deprecated apt-key mechanism.</p>
+<p>I add <code>/etc/apt/sources.d/osamuaoki.sources</code> as follows:</p>
+<pre tabindex="0"><code>$ cat &gt;/etc/apt/sources.list.d/osamuaoki.sources  &lt;&lt;&#34;EOF&#34;
+Types: deb
+URIs: http://osamuaoki.github.io/debian/
+Suites: sid
+Components: main
+Signed-By:
+ -----BEGIN PGP PUBLIC KEY BLOCK-----
+ Version: GnuPG v1.4.10 (GNU/Linux)
+ . 
+ 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
+ xqPj8/NMvWK8mJoL07R52TxDk6k=
+ =2eP9
+ -----END PGP PUBLIC KEY BLOCK-----
+EOF
+</code></pre><p>(I suspect the above is shorter than what I generate now since it doesn&rsquo;t have
+as much signatures.)</p>
+<p>Anyway, adding repository and key in one file is nice.</p>
+<h3 id="setting-up-package-repository">Setting up package repository</h3>
+<p>Let&rsquo;s suppose I have this hugo repo checked out at <code>/path/to/osamuaoki-hugo/</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd /path/to/osamuaoki-hugo/static
+</span></span><span style="display:flex;"><span>$ mkdir -p debian/conf
+</span></span></code></pre></div><p>In <code>debian/conf</code> add <code>distributions</code> as:</p>
+<pre tabindex="0"><code>Origin: Osamu
+Label: Osamu
+Codename: sid
+Architectures: amd64 source
+Components: main
+Description: APT repository for Osamu&#39;s infrastructure
+SignWith: FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
+</code></pre><p>And <code>options</code> as:</p>
+<pre tabindex="0"><code>verbose
+basedir /path/to/osamuaoki-hugo/static/debian/
+ask-passphrase
+</code></pre><h3 id="installing-package">Installing package</h3>
+<p>For binary only site:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ reprepro -b ~/path/to/osamuaoki-hugo/static/debian includedeb sid *.deb
+</span></span></code></pre></div><p>I suppose, using <code>include</code> with <code>*.changes</code> should work too.</p>
+<p>Then build hugo pages as usual.</p>
+<pre tabindex="0"><code>$ reprepro --ignore=wrongdistribution -b ~/path/to/osamuaoki-hugo/static/debian \
+  include sid ~/path/to/bss/bss_1.0.1_source.changes
+.changes put in a distribution not listed within it!
+Ignoring as --ignore=wrongdistribution given.
+Exporting indices...
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2022/07/29/vim-learn-5/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

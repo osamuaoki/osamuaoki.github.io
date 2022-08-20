@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/09 (initial publish),
-2022/08/20 (last update)
+2022/08/21 (last update)
 </h3>
 </div>
 
@@ -69,7 +69,6 @@
         <li><a href="#installing-package">Installing package</a></li>
       </ul>
     </li>
-    <li><a href="#remote-semi-private-package-repo">Remote semi-private package repo</a></li>
   </ul>
 </nav>
 
@@ -138,17 +137,7 @@ basedir /var/www/html/debian/
 ask-passphrase
 </code></pre><h3 id="installing-package">Installing package</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ reprepro -b /path/to/package_build_results includedeb sid *.deb
-</span></span></code></pre></div><h2 id="remote-semi-private-package-repo">Remote semi-private package repo</h2>
-<p>Github and Gitlab (or even services using it such as <a href="http://salsa.debian.org">Debian Salsa</a>) can be made to be a publicly accessible private APT repository.  You must be careful for the policy of hosting services.</p>
-<p>Let&rsquo;s suppose I have this hugo repo at <code>/path/to/osamuaoki-hugo/</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd /path/to/osamuaoki-hugo/static
-</span></span><span style="display:flex;"><span>$ mkdir -p debian/conf
-</span></span></code></pre></div><p>In <code>debian/conf</code> add <code>distributions</code> as above and <code>options</code> as below:</p>
-<pre tabindex="0"><code>verbose
-basedir /path/to/osamuaoki-hugo/static/debian/
-ask-passphrase
-</code></pre><p>Then install debian package as above.</p>
-<!-- raw HTML omitted -->
+</span></span></code></pre></div><!-- raw HTML omitted -->
 
 
 <table width="100%">
