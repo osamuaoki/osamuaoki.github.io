@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/01/15 (initial publish),
-2022/08/19 (last update)
+2022/08/20 (last update)
 </h3>
 </div>
 
@@ -219,7 +219,10 @@ firmware packages:</p>
 </span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading initial ramdisk from /dev/nvme1n1p1 ...&#39;</span>
 </span></span><span style="display:flex;"><span>        initrd  /@rootfs/initrd.img
 </span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><p>See <a href="https://wiki.debian.org/Btrfs%20migration">https://wiki.debian.org/Btrfs%20migration</a> .</p>
+</span></span></code></pre></div><p>If you have multiple Debian system installed, you should make a backup copy
+of <code>/boot/efi/EFI/debian/grub.cfg</code> to protect it gets overridden by installing
+the second Debian system.</p>
+<p>See <a href="https://wiki.debian.org/Btrfs%20migration">https://wiki.debian.org/Btrfs%20migration</a> .</p>
 <h3 id="install-extra-packages">Install extra packages</h3>
 <p>Let&rsquo;s add a few GUI tools.</p>
 <ul>
