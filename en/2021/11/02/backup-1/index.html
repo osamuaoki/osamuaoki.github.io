@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/11/02 (initial publish),
-2021/11/15 (last update)
+2022/08/22 (last update)
 </h3>
 </div>
 
@@ -128,10 +128,10 @@ $ sudo mount /dev/mapper/disk ~/path/to/mnt
 ... (use files in ~/path/to/mnt as a user)
 $ sudo umount /dev/mapper/disk
 $ sudo cryptsetup close disk
-</code></pre><p>In order to skip passphrase hussle, let&rsquo;s use Gnome keyring.</p>
+</code></pre><p>In order to skip passphrase hassle, let&rsquo;s use Gnome keyring.</p>
 <p>Let me store <code>my_pass_phrase_value</code> in Gnome keyring.</p>
 <pre tabindex="0"><code>$ secret-tool store --Label=&#39;LUKS passowrd for disk.img&#39; LUKS disk_img
-</code></pre><p>Then, use Gnome keyring to unencrypt luks device.</p>
+</code></pre><p>Then, use Gnome keyring to decrypt luks device.</p>
 <pre tabindex="0"><code>$ secret-tool lookup LUKS disk_img | \
   cryptsetup open disk.img disk --type luks --key-file -
 </code></pre><p>This avoids storing key file data in plain text.</p>
