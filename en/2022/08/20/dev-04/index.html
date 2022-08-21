@@ -182,18 +182,18 @@ ask-passphrase
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ reprepro -b ~/path/to/osamuaoki-hugo/static/debian includedeb sid *.deb
 </span></span></code></pre></div><p>It worked as a valid package repository for debs. Great!</p>
 <p>Let&rsquo;s make a proper Debian package repository.</p>
-<p>I suppose, using <code>include</code> with <code>*.changes</code> should work too.  Then build hugo pages as usual.</p>
-<pre tabindex="0"><code>$ reprepro --ignore=wrongdistribution -b ~/path/to/osamuaoki-hugo/static/debian \
-  include sid ~/path/to/bss/bss_1.1.0_amd64.changes
-.changes put in a distribution not listed within it!
-Ignoring as --ignore=wrongdistribution given.
-Exporting indices...
-$ ./update
-</code></pre><p>No, it didn&rsquo;t work.  I realized I need to do the following to get updated.
+<p>I suppose, using <code>include</code> with <code>*.changes</code> should work too.  Then I can build hugo pages as usual with <code>./update.sh</code>. Let&rsquo;s see.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ reprepro --ignore<span style="color:#f92672">=</span>wrongdistribution -b ~/path/to/osamuaoki-hugo/static/debian <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  include sid ~/path/to/bss/bss_1.1.0_amd64.changes
+</span></span><span style="display:flex;"><span>.changes put in a distribution not listed within it!
+</span></span><span style="display:flex;"><span>Ignoring as --ignore<span style="color:#f92672">=</span>wrongdistribution given.
+</span></span><span style="display:flex;"><span>Exporting indices...
+</span></span><span style="display:flex;"><span>$ ./update
+</span></span></code></pre></div><p>No, it didn&rsquo;t work.  I realized I need to do the following to get updated.
 Dah&hellip;</p>
-<pre tabindex="0"><code>$ cd ~/path/to/osamuaoki-hugo/static
-$ git add -A .
-</code></pre><p>I updated <code>update.sh</code> to do the last command automatically.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd ~/path/to/osamuaoki-hugo/static
+</span></span><span style="display:flex;"><span>$ git add -A .
+</span></span></code></pre></div><p>I updated <code>update.sh</code> to do the last command automatically.</p>
 <!-- raw HTML omitted -->
 
 
