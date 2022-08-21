@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/08/20 (initial publish),
-2022/08/21 (last update)
+2022/08/22 (last update)
 </h3>
 </div>
 
@@ -180,18 +180,25 @@ ask-passphrase
 </code></pre><h3 id="installing-package">Installing package</h3>
 <p>For binary only site:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ reprepro -b ~/path/to/osamuaoki-hugo/static/debian includedeb sid *.deb
-</span></span></code></pre></div><p>I suppose, using <code>include</code> with <code>*.changes</code> should work too.</p>
-<p>Then build hugo pages as usual.</p>
+</span></span></code></pre></div><p>It worked as a valid package repository for debs. Great!</p>
+<p>Let&rsquo;s make a proper Debian package repository.</p>
+<p>I suppose, using <code>include</code> with <code>*.changes</code> should work too.  Then build hugo pages as usual.</p>
 <pre tabindex="0"><code>$ reprepro --ignore=wrongdistribution -b ~/path/to/osamuaoki-hugo/static/debian \
   include sid ~/path/to/bss/bss_1.1.0_amd64.changes
 .changes put in a distribution not listed within it!
 Ignoring as --ignore=wrongdistribution given.
 Exporting indices...
-$ cd ~/path/to/osamuaoki-hugo/static
+$ ./update
+</code></pre><p>No, it didn&rsquo;t work.  I realized I need to do the following to get updated.</p>
+<pre tabindex="0"><code>$ cd ~/path/to/osamuaoki-hugo/static
 $ git add -A .
-</code></pre><p>I updated update.sh to do the last command automatically.</p>
-<!-- raw HTML omitted -->
+```
 
+I updated `update.sh` to do the last command automatically.
+
+
+&lt;!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: --&gt;
+</code></pre>
 
 <table width="100%">
   <tbody>
