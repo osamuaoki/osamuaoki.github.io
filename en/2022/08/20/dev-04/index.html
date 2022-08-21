@@ -89,13 +89,16 @@ tight resource constaints there, it may not be a good idea to do this on Salsa.<
 </span></span><span style="display:flex;"><span>uid           <span style="color:#f92672">[</span>ultimate<span style="color:#f92672">]</span> Osamu Aoki &lt;osamu@debian.org&gt;
 </span></span><span style="display:flex;"><span>sub   rsa4096 2010-09-23 <span style="color:#f92672">[</span>E<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>      FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
-</span></span><span style="display:flex;"><span>$ gpg --export -a 3133724D6207881579E95D621E1356881DD8D791
-</span></span><span style="display:flex;"><span>-----BEGIN PGP PUBLIC KEY BLOCK-----
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>mQINBEya74YBEADDpLTJCmyS97kZ6JvlpUEoSoVbqEkyQVfrV7C7VqlBGWO0bTKI
-</span></span><span style="display:flex;"><span>... snip ...
-</span></span><span style="display:flex;"><span>-----END PGP PUBLIC KEY BLOCK-----
-</span></span></code></pre></div><h3 id="setting-up-secure-apt-cliant">Setting up secure-APT cliant</h3>
+</span></span></code></pre></div><p>Now we know hash for subkey.</p>
+<p>For getting a compact public key:</p>
+<pre tabindex="0"><code>$ gpg --export -a --export-options export-minimal \
+  3133724D6207881579E95D621E1356881DD8D791
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+mQINBEya74YBEADDpLTJCmyS97kZ6JvlpUEoSoVbqEkyQVfrV7C7VqlBGWO0bTKI
+... snip ...
+-----END PGP PUBLIC KEY BLOCK-----
+</code></pre><h3 id="setting-up-secure-apt-cliant">Setting up secure-APT cliant</h3>
 <p>Let&rsquo;s use DEB822-STYLE FORMAT as explained in sources.list(5) and avoid using
 deprecated apt-key mechanism.</p>
 <p>I add <code>/etc/apt/sources.d/osamuaoki.sources</code> as follows:</p>
@@ -106,8 +109,7 @@ Suites: sid
 Components: main
 Signed-By:
  -----BEGIN PGP PUBLIC KEY BLOCK-----
- Version: GnuPG v1.4.10 (GNU/Linux)
- . 
+ .
  mQINBEya74YBEADDpLTJCmyS97kZ6JvlpUEoSoVbqEkyQVfrV7C7VqlBGWO0bTKI
  z0QAOkzF47HIDTez+ISLRd84Dyh/BPpSTF2CP3HnLo21UxotvQFeVVs87EKTgrM5
  MsRgmEU4o28be0Uz0ix0U5ahaOqX6TI1+faZ8Bn2Q9MnhYoSaS0DyRrEAIU0xrSk
@@ -131,37 +133,34 @@ Signed-By:
  34CrZW2MfhrbOb3gh9phUXRLd2anU6k3cTiAMnMmLK+j8y3PDV2AApfhtaHQ7PPB
  EYCvtsiDj28kpTX2gh9rqhJFG/vQbHBDQQvb8C4eoIYCIwVrZ8GGXZTz+CSLsTax
  auCjBlLpV1I3n7jAddpHE4nsAA6FkQK63jhQg+maiiIOmdEQa00P+0Re4txOqlJR
- Kyao3TFRmJY/Z4Qbl3bfDfmzNZ0lZRHGZ+KIRgQQEQIABgUCTJszvAAKCRDoD8TB
- qAYfMnzoAJkBk91lkUmhMRpeyPBndB5DS9FwHQCfYZqI+/t4NHO/V/G7e+yr3ppG
- 2O+5Ag0ETJrvhgEQANuySzxnEDcSFToNbiGiotoRfCJvKdHjPWLke7Vji+ro4BR1
- 51wSjhv7lsVIiGhEmIp/bRO8mY3rwgiG1RUNI8cqDlzI0PtYJrrhcmi3ppB5y3fr
- kJilFgQijhDHnTTId1d3ntwwzzBrAxh8Bvx7BNbD9cN6ChIUJ6B6ISQpgw7EKnOT
- fYYc+EA/EppYcNsXKgm77W7/PC5Ss1Q01EQ2O9GDQxiF8OEbJANSO4wExAWK5LN4
- Kuod4vt7hoGzgfKo1woviuephAUxnqqKhK/WG0YB/nPFdGLn+mYWomMTe4ayrCIs
- HxS70gIt36DUAA1SDCTp8Fb34s9AB6YYEK83g4NW09e/Czoxl3W8Kej1uPwt62MV
- xjc8HzQ3wPCriXbye5Lc74NARj+N6lort5CwyPRiy5iBaygZVOw+pBA4kRdi5sGU
- vbSZ4tTvtCHMcg1zpSHs/P/qSUGsO+wGm9nWCB4i4zsDZ9GlEpneqSVtWgXKEbTz
- ymC/Z0tvORAOvamCkt06nnsbJqNdI7g82oCL/rkKCxNG/675kPHJGw/f1GyWuJz/
- 6U1Zv6QFpKzVID9Wj5+pow8uDLxywEWHXmFjMEfg8E0FO4UStCo+qsIUdd6jQHh/
- VuFsGPQS0lH1FnR+jYljyrxUFcUFlrVzG5YtDrXFILFbEVUkbKrGbsfYUU2BABEB
- AAGJAh8EGAECAAkFAkya74YCGwwACgkQHhNWiB3Y15HN0A//QAKmdXv7nuddbe0k
- Wb27779e0HXKpuhj9DyuKU7lXIMqSwtD+/yo4vbb1nGVnPO/+xTF6ecUjnDrEMe/
- Q2fqHbm3bglwlkii9flvwORjxxBfghdJipFuloL3C28VuQgx2kNeYtbvyLP6roZx
- R80c2+NQTHtkL2Ba2dtiptwsB4vKk+a0vi9g+MjbPknSkoZ6TbZVog7ia0HcbS+Q
- stfXCQUPi1ccKK9oNFVdTTBLamnq4Ts6TAPRmRt7y4ob2dBm4R0Hpb9qIhTsI0+Y
- KL7rtXHX2bFcMgg0OHz/Vn8LGT+euEgcZi9CQp8C6mrO+mFybBSWhndBra8NPTSY
- 4iLYz/MlHq6vvtFsmeCpO2BpfI5vUSWltSI7whA5B2wAEJ6oEWHfdxvWSzRDQ+BO
- Rk6I4QQZpulQRqjHpeDSiMLCZHXqikdooYlQr2hin9CBKPECAqNdqVSYjooOJlyE
- YfRbz/hqsOcfqigqKKJx3vqKSxkta6bieHjRE+iyP1usPbzY4bLj4gMP/CpDC8+m
- kNmNluFKFRHmCu+Jzlg+lcYH1tVUqVYe9wlS6op6YDVVwPWT9vU3sviry81ADb25
- Dg8TBQz5UCZvF8iHEpTS7KcmWKLW8oNY2y9kyyQKjvp2s5m59LrAy3gunqEqMS3o
- xqPj8/NMvWK8mJoL07R52TxDk6k=
- =2eP9
+ Kyao3TFRmJY/Z4Qbl3bfDfmzNZ0lZRHGZ+K5Ag0ETJrvhgEQANuySzxnEDcSFToN
+ biGiotoRfCJvKdHjPWLke7Vji+ro4BR151wSjhv7lsVIiGhEmIp/bRO8mY3rwgiG
+ 1RUNI8cqDlzI0PtYJrrhcmi3ppB5y3frkJilFgQijhDHnTTId1d3ntwwzzBrAxh8
+ Bvx7BNbD9cN6ChIUJ6B6ISQpgw7EKnOTfYYc+EA/EppYcNsXKgm77W7/PC5Ss1Q0
+ 1EQ2O9GDQxiF8OEbJANSO4wExAWK5LN4Kuod4vt7hoGzgfKo1woviuephAUxnqqK
+ hK/WG0YB/nPFdGLn+mYWomMTe4ayrCIsHxS70gIt36DUAA1SDCTp8Fb34s9AB6YY
+ EK83g4NW09e/Czoxl3W8Kej1uPwt62MVxjc8HzQ3wPCriXbye5Lc74NARj+N6lor
+ t5CwyPRiy5iBaygZVOw+pBA4kRdi5sGUvbSZ4tTvtCHMcg1zpSHs/P/qSUGsO+wG
+ m9nWCB4i4zsDZ9GlEpneqSVtWgXKEbTzymC/Z0tvORAOvamCkt06nnsbJqNdI7g8
+ 2oCL/rkKCxNG/675kPHJGw/f1GyWuJz/6U1Zv6QFpKzVID9Wj5+pow8uDLxywEWH
+ XmFjMEfg8E0FO4UStCo+qsIUdd6jQHh/VuFsGPQS0lH1FnR+jYljyrxUFcUFlrVz
+ G5YtDrXFILFbEVUkbKrGbsfYUU2BABEBAAGJAh8EGAECAAkFAkya74YCGwwACgkQ
+ HhNWiB3Y15HN0A//QAKmdXv7nuddbe0kWb27779e0HXKpuhj9DyuKU7lXIMqSwtD
+ +/yo4vbb1nGVnPO/+xTF6ecUjnDrEMe/Q2fqHbm3bglwlkii9flvwORjxxBfghdJ
+ ipFuloL3C28VuQgx2kNeYtbvyLP6roZxR80c2+NQTHtkL2Ba2dtiptwsB4vKk+a0
+ vi9g+MjbPknSkoZ6TbZVog7ia0HcbS+QstfXCQUPi1ccKK9oNFVdTTBLamnq4Ts6
+ TAPRmRt7y4ob2dBm4R0Hpb9qIhTsI0+YKL7rtXHX2bFcMgg0OHz/Vn8LGT+euEgc
+ Zi9CQp8C6mrO+mFybBSWhndBra8NPTSY4iLYz/MlHq6vvtFsmeCpO2BpfI5vUSWl
+ tSI7whA5B2wAEJ6oEWHfdxvWSzRDQ+BORk6I4QQZpulQRqjHpeDSiMLCZHXqikdo
+ oYlQr2hin9CBKPECAqNdqVSYjooOJlyEYfRbz/hqsOcfqigqKKJx3vqKSxkta6bi
+ eHjRE+iyP1usPbzY4bLj4gMP/CpDC8+mkNmNluFKFRHmCu+Jzlg+lcYH1tVUqVYe
+ 9wlS6op6YDVVwPWT9vU3sviry81ADb25Dg8TBQz5UCZvF8iHEpTS7KcmWKLW8oNY
+ 2y9kyyQKjvp2s5m59LrAy3gunqEqMS3oxqPj8/NMvWK8mJoL07R52TxDk6k=
+ =Ao1Z
  -----END PGP PUBLIC KEY BLOCK-----
 EOF
-</code></pre><p>(I suspect the above is shorter than what I generate now since it doesn&rsquo;t have
-as much signatures.)</p>
-<p>Anyway, adding repository and key in one file is nice.</p>
+</code></pre><p>Please note a leading space added to each line and for the blank line, it
+became &quot; .&quot; to follow Debian configuration file syntax.</p>
 <h3 id="setting-up-package-repository">Setting up package repository</h3>
 <p>Let&rsquo;s suppose I have this hugo repo checked out at <code>/path/to/osamuaoki-hugo/</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd /path/to/osamuaoki-hugo/static
