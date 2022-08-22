@@ -99,7 +99,7 @@ Teensy https://www.pjrc.com/teensy/counterfeit.html &amp;ndash; Aliexpress販売
       <pubDate>Tue, 18 Jan 2022 00:00:00 +0000</pubDate>
       
       <guid>/jp/2022/01/18/qmk-2/</guid>
-      <description>手始めに、QMK : キーマップのカスタマイズ (2018年頃)も参考に、できるだけ今風の(2022年)qmkコマンドを使って、１つのキーのカスタムキーボードを作ります。
+      <description>QMKを使ってファームウエアー作成 手始めに、QMK : キーマップのカスタマイズ (2018年頃)も参考に、できるだけ今風の(2022年)qmkコマンドを使って、１つのキーのカスタムキーボードを作ります。
 対象ハードはatmega32u4が載ったTeensy2.0の中華コンパチボードです。本物のTeensy2.0でないのでatmel-dfuがBOOTLOADERだったはずです。ただ、BOOTLOADERはISP接続で小さな(512 bytes)HIDデバイスのnanoBoot (w/LED)に書き換えています。
 .word 0x03EB // idVendor -- Vendor ID (Atmel VID, from LUFA) .word 0x2067 // idProduct -- Product ID (HID Class Bootloader PID, from LUFA) これってqmk-hidと同じIDです。ファームウエアーのサイズはqmk-hidの4KB(?)よりnanoBootは小さいメリットがあります。
 ファームエアーのアップロードプロトコルは同じ　halfkeyコンパチのID違いなので、指定は同じにして良い気がします。
@@ -117,7 +117,7 @@ Teensy https://www.pjrc.com/teensy/counterfeit.html &amp;ndash; Aliexpress販売
 とにかくカバーするキーボードハードウエアー数が大きくなってきたので、リファクターして共通部分の重複回避を試みている様です。
 QMKのドキュメントもかなり更新されています。
 復習を兼ねてコード・ドキュメントを追います。
-qmkコマンドとビルド 最近、QMK Toolboxをpip経由で導入する、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperのqmkというCLIコマンドが提供されています。
+qmkコマンド導入とファームウエアーのビルド 最近、QMK Toolboxをpip経由で導入する、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperのqmkというCLIコマンドが提供されています。
 qmkコマンドは、作業環境設定や、firmwareのビルド、はたまた種々の関連処理プログラムの提供や起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。
 まず、Install Using pipに従い環境をDebian 11 (Bullseye/testing)に導入しました。
 qmk setupの自動設定でチェックアウトされるレポは、git submoduleを使っていて、レボがうまくまとめられています。レポ内にグラフィクスなどを保存しなくなり、キーマッピングもキーボード間で共用可能なものをまとめたり、マッピングだけのユーザーカスタム化情報がメインのkeyboads/以下のソースツリー外に置けるようです。ただソースを理解するのが少々手間となりました。

@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/01/18 (initial publish),
-2022/02/20 (last update)
+2022/08/23 (last update)
 </h3>
 </div>
 
@@ -61,10 +61,14 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#テンプレート作成">テンプレート作成</a></li>
-    <li><a href="#ビルドシステムの動作確認">ビルドシステムの動作確認</a></li>
-    <li><a href="#接続の考察">接続の考察</a></li>
-    <li><a href="#ファームウエアーのビルド">ファームウエアーのビルド</a></li>
+    <li><a href="#qmkを使ってファームウエアー作成">QMKを使ってファームウエアー作成</a>
+      <ul>
+        <li><a href="#テンプレート作成">テンプレート作成</a></li>
+        <li><a href="#ビルドシステムの動作確認">ビルドシステムの動作確認</a></li>
+        <li><a href="#キーボードスイッチ接続の考察">キーボードスイッチ接続の考察</a></li>
+        <li><a href="#ファームウエアーのビルド">ファームウエアーのビルド</a></li>
+      </ul>
+    </li>
     <li><a href="#flash古いやり方">FLASH（古いやり方）</a></li>
     <li><a href="#flashqmk">FLASH（qmk）</a></li>
     <li><a href="#githubへのpush">githubへのPUSH</a></li>
@@ -72,6 +76,7 @@
   </ul>
 </nav>
 
+<h2 id="qmkを使ってファームウエアー作成">QMKを使ってファームウエアー作成</h2>
 <p>手始めに、<a href="https://leico.github.io/TechnicalNote/QMK/key-customize">QMK : キーマップのカスタマイズ (2018年頃)</a>も参考に、できるだけ今風の(2022年)<code>qmk</code>コマンドを使って、１つのキーのカスタムキーボードを作ります。</p>
 <p>対象ハードはatmega32u4が載ったTeensy2.0の中華コンパチボードです。本物のTeensy2.0でないのでatmel-dfuがBOOTLOADERだったはずです。ただ、BOOTLOADERはISP接続で小さな(512 bytes)HIDデバイスの<a href="https://github.com/osamuaoki/nanoBoot">nanoBoot (w/LED)</a>に書き換えています。</p>
 <pre tabindex="0"><code>   .word       0x03EB         // idVendor             -- Vendor ID (Atmel VID, from LUFA)
@@ -79,7 +84,7 @@
 </code></pre><p>これってqmk-hidと同じIDです。ファームウエアーのサイズはqmk-hidの4KB(?)よりnanoBootは小さいメリットがあります。</p>
 <p>ファームエアーのアップロードプロトコルは同じ　halfkeyコンパチのID違いなので、指定は同じにして良い気がします。</p>
 <p>作成デバイスはメディアキーのMUTE１つのデバイスです。</p>
-<h2 id="テンプレート作成">テンプレート作成</h2>
+<h3 id="テンプレート作成">テンプレート作成</h3>
 <pre tabindex="0"><code> $ qmk cd
  $ gitk --all
   ... (最新の「master」ブランチのリリースが0.15.15と確認)
@@ -101,14 +106,14 @@ Your real name: [osamuaoki] Osamu Aoki
 Ψ or open the directory in your preferred text editor.
 </code></pre><p>名前のデフォルトは<code>/etc/passwd</code>みたいですね。</p>
 <p>これで、<code>keyboards/one/</code>以下にテンプレートのソースが、<code>data/templates/</code>からAVR前提で作成されます。</p>
-<h2 id="ビルドシステムの動作確認">ビルドシステムの動作確認</h2>
+<h3 id="ビルドシステムの動作確認">ビルドシステムの動作確認</h3>
 <p>とりあえず試しにファームウエアーを作成します。</p>
 <pre tabindex="0"><code> $ qmk compile -km default -kb one
  ...
 </code></pre><p>ビルドシステムは順調が確認できました。これからカスタマイズしていくので、ひとまず全クリーンです。</p>
 <pre tabindex="0"><code> $ qmk clean -a
  ...
-</code></pre><h2 id="接続の考察">接続の考察</h2>
+</code></pre><h3 id="キーボードスイッチ接続の考察">キーボードスイッチ接続の考察</h3>
 <p>最初のテストデバイスは、D1にスイッチの１端子が繋がっていて、スイッチの反対の端子はGNDされています。ダイオードなど一切ついていません。</p>
 <p>一方QMKの前提構成は、スイッチが２次元の格子状マトリクスとなっており、クロストーク防止のダイオードが使用されています。
 スイッチの両方がMCUに繋がっていて、MCUの入力側は通常MCU内部のプルアップ抵抗が有効にされてい、MCUの出力側は通常VCCでGNDにすると有効となります。</p>
@@ -144,7 +149,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     [_BASE] = LAYOUT( KC_AUDIO_MUTE )
 };
 </code></pre><p>MCU中のBOOTLOADERはISP接続で小さな(512 bytes)HIDデバイスの<a href="https://github.com/osamuaoki/nanoBoot">nanoBoot (w/LED)</a>に書き換えているので、<code>rules.mk</code>中の<code>BOOTLOADER</code>は<code>qmk-hid</code>です。あと、直接の影響はないファイルをいくつか変更しました。</p>
-<h2 id="ファームウエアーのビルド">ファームウエアーのビルド</h2>
+<h3 id="ファームウエアーのビルド">ファームウエアーのビルド</h3>
 <p>ファームウエアーを作成します。</p>
 <pre tabindex="0"><code> $ qmk compile -km default -kb one
  ...

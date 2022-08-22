@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/01/14 (initial publish),
-2022/05/02 (last update)
+2022/08/23 (last update)
 </h3>
 </div>
 
@@ -61,20 +61,21 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#qmkコマンドとビルド"><code>qmk</code>コマンドとビルド</a>
+    <li><a href="#qmkコマンド導入とファームウエアーのビルド"><code>qmk</code>コマンド導入とファームウエアーのビルド</a>
       <ul>
         <li><a href="#qmkレポの移動方法">qmkレポの移動方法</a></li>
         <li><a href="#新規のクリーンなqmkレポを新規の場所に作成する方法">新規のクリーンなqmkレポを新規の場所に作成する方法</a></li>
         <li><a href="#qmkレポのremote名変更">qmkレポのREMOTE名変更</a></li>
+        <li><a href="#qmkで使われているmakefileのターゲットの整理">QMKで使われている<code>Makefile</code>のターゲットの整理</a></li>
+        <li><a href="#qmk導入先システムのpython-のアップグレード">QMK導入先システムのPython のアップグレード</a></li>
+        <li><a href="#qmk関連の参考文書">QMK関連の参考文書</a></li>
+        <li><a href="#ウェッブアプも含めた開発環境">ウェッブアプも含めた開発環境</a></li>
       </ul>
     </li>
-    <li><a href="#makefileのターゲットの整理"><code>Makefile</code>のターゲットの整理</a></li>
-    <li><a href="#システムのpython-のアップグレード">システムのPython のアップグレード</a></li>
-    <li><a href="#参考文書">参考文書</a></li>
-    <li><a href="#開発環境">開発環境</a></li>
-    <li><a href="#キーボードレイアウト">キーボードレイアウト</a></li>
+    <li><a href="#キーボードレイアウト外部ツール">キーボードレイアウト外部ツール</a></li>
     <li><a href="#qmkコードの全体感のメモ">QMKコードの全体感のメモ</a></li>
-    <li><a href="#注意点">注意点</a></li>
+    <li><a href="#qmkコードの注意点">QMKコードの注意点</a></li>
+    <li><a href="#qmk再導入の注意点">QMK再導入の注意点</a></li>
   </ul>
 </nav>
 
@@ -82,7 +83,7 @@
 <p>とにかくカバーするキーボードハードウエアー数が大きくなってきたので、リファクターして共通部分の重複回避を試みている様です。</p>
 <p><a href="https://docs.qmk.fm">QMKのドキュメント</a>もかなり更新されています。</p>
 <p>復習を兼ねてコード・ドキュメントを追います。</p>
-<h2 id="qmkコマンドとビルド"><code>qmk</code>コマンドとビルド</h2>
+<h2 id="qmkコマンド導入とファームウエアーのビルド"><code>qmk</code>コマンド導入とファームウエアーのビルド</h2>
 <p>最近、<a href="https://github.com/qmk/qmk_toolbox">QMK Toolbox</a>を<code>pip</code>経由で導入する、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperの<a href="https://docs.qmk.fm/#/cli">qmkというCLIコマンド</a>が提供されています。</p>
 <p><code>qmk</code>コマンドは、作業環境設定や、firmwareのビルド、はたまた種々の関連処理プログラムの提供や起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。</p>
 <p>まず、<a href="https://docs.qmk.fm/#/cli?id=install-using-easy_install-or-pip">Install Using pip</a>に従い環境をDebian 11 (Bullseye/testing)に導入しました。</p>
@@ -134,7 +135,7 @@ WARNING: Some git submodules are out of date or modified.
 </code></pre><pre tabindex="0"><code> $ git checkout master
  $ git pull upstream master
  $ git push origin master
-</code></pre><h2 id="makefileのターゲットの整理"><code>Makefile</code>のターゲットの整理</h2>
+</code></pre><h3 id="qmkで使われているmakefileのターゲットの整理">QMKで使われている<code>Makefile</code>のターゲットの整理</h3>
 <ul>
 <li><code>%</code> &ndash; ファームウエアーのビルド（<code>keyboard_folder:keymap_folder[:target]</code>で指定） &ndash; <code>qmk compile</code>  や <code>qmk flash</code></li>
 <li><code>clean</code> &ndash; ソースのクリーン（生成したファームウエアーは残す） &ndash; <code>qmk clean</code></li>
@@ -144,9 +145,9 @@ WARNING: Some git submodules are out of date or modified.
 <li><code>git-submodule</code> &ndash; 全サブモジュールの再帰的 sync&amp;update</li>
 <li><code>lib/%</code> &ndash; 該当サブモジュールの再帰的 sync&amp;update</li>
 </ul>
-<h2 id="システムのpython-のアップグレード">システムのPython のアップグレード</h2>
+<h3 id="qmk導入先システムのpython-のアップグレード">QMK導入先システムのPython のアップグレード</h3>
 <p>Python 3.9下でQMK Toolboxを導入すると、<code>~/.local/lib/python3.9</code>に導入されます。このままシステムのPython 3.10にアップグレードしたらQMK Toolboxが動かなくなりました。Symlink <code>~/.local/lib/python3.10 -&gt; ~/.local/lib/python3.9</code> を作ったら、とりあえず動いています。</p>
-<h2 id="参考文書">参考文書</h2>
+<h3 id="qmk関連の参考文書">QMK関連の参考文書</h3>
 <p>現状のビルド環境のカスタマイズのために自力でコードを見たあと、見通しのよいカスタマイズ方法の入門参考文書を見つけました。</p>
 <ul>
 <li><a href="https://leico.github.io/TechnicalNote/QMK/key-customize">QMK : キーマップのカスタマイズ</a></li>
@@ -159,8 +160,8 @@ WARNING: Some git submodules are out of date or modified.
 <li><a href="https://docs.qmk.fm/#/contributing">How to Contribute</a></li>
 <li><a href="https://docs.qmk.fm/#/data_driven_config">Data Driven Configuration</a> &ndash; <code>info.json</code>, <code>keymap.c</code>, 他のファイルの説明(INCLUDE順位の説明も)。</li>
 </ul>
-<h2 id="開発環境">開発環境</h2>
-<p>開発環境として<a href="https://github.com/qmk/qmk_web_stack">QMK Web Stack</a>を導入するのが良いみたい。</p>
+<h3 id="ウェッブアプも含めた開発環境">ウェッブアプも含めた開発環境</h3>
+<p>ウェッブアプも含めた開発環境として<a href="https://github.com/qmk/qmk_web_stack">QMK Web Stack</a>を導入するのが良いみたい。</p>
 <p>Debianだと<code>docker.io</code>パッケージ以外に、<code>docker-compose</code>パッケージも必要みたい。</p>
 <pre tabindex="0"><code> $ cd path/to/LAYOUTマクロ定義
  $ git clone -r https://github.com/qmk/qmk_web_stack.git
@@ -181,7 +182,7 @@ You should consider upgrading via the &#39;/usr/local/bin/python -m pip install 
  $ sudo ./populate_api.sh
 </code></pre><p>ローカルのQMK Configuratorが立ち上がってます: <a href="http://127.0.0.1:5000/">http://127.0.0.1:5000/</a></p>
 <p><code>docker-compose.yml</code>を変更すると、<code>qmk_firmware</code>のレポやブランチ指定が変更できるようなので、種々のレポへの変更をPUSHする前にローカルで試すのにはよさそうです。</p>
-<h2 id="キーボードレイアウト">キーボードレイアウト</h2>
+<h2 id="キーボードレイアウト外部ツール">キーボードレイアウト外部ツール</h2>
 <p>新規キーボードレイアウトのデザインには外部ツールの <a href="http://www.keyboard-layout-editor.com/">WEB ベースのキーボードレイアウトエディター (a.k.a KLE)</a> を利用すると便利です。</p>
 <p>このKLEが生成するJSONファイル（<code>layouts/</code>以下には<code>layout.json</code>に保存されている）からQMKが利用するJSONファイル（<code>info.json</code>）に変換するのには、<a href="https://qmk.fm/converter/">Convert KLE raw to QMK info.json</a>を用います。</p>
 <p>以前は手動でコーディングしていたQMKの<code>keymap.c</code>は、<code>info.json</code> から<code>qmk c2json ...</code>として生成できます。一度これを作るとQMK自身のコンフィギュレーターでデーターを編集できます。この<code>info.json</code>を用いる<a href="https://docs.qmk.fm/#/data_driven_config">Data Driven Configuration</a>がQMKの今後の方向の様です。</p>
@@ -230,11 +231,33 @@ You should consider upgrading via the &#39;/usr/local/bin/python -m pip install 
 <li>どうも今後の機能拡張の追加機能でキーのマッピングやLEDの設定をファームウエアーを変更せず、設定データーだけファームウエアーが受け取り書き換える機能が、<a href="https://caniusevia.com/">VIA</a>のようです。書き換えはどうも別のUSB endpointにデーターを送りつけ行うようです。だから、TERMINALは使え無いそうです。当面不要ですが、コンパチブルなコードは悪くないかもしれません。</li>
 <li>それにしても、巨大なレポです。使う部分だけの心配をすることにし、あとは実際に使ってみるのでしょう。</li>
 </ul>
-<h2 id="注意点">注意点</h2>
+<h2 id="qmkコードの注意点">QMKコードの注意点</h2>
 <ul>
 <li><code>keymap.c</code>の記述に、<code>A</code>等とするのは古いスタイル。今は<code>KC_A</code>等とフルネームで書く。</li>
 <li><code>KEYMAP</code>マクロ名は非推奨となり、<code>LAYOUT</code>が代わりに用いられている。</li>
 </ul>
+<h2 id="qmk再導入の注意点">QMK再導入の注意点</h2>
+<p>ホームディレクトリー中に開発環境を導入しているので、新規のシステムにホームディレクトリー関係を移動させる際にはいささか注意がいる。</p>
+<ul>
+<li>Debian package: python3-pip, libusb-dev</li>
+<li>sudoの導入を開発ユーザーのsudoグループへの追加は必要</li>
+<li><code>~/bin/</code>と<code>~/.local/bin</code>は事前に作成（無いとき）</li>
+<li><code>pip install qmk</code>
+<ul>
+<li>(自動導入されなかった際には、メッセージに従いpython moduleのpipによる導入。)</li>
+</ul>
+</li>
+<li><code>qmk setup</code>でqmk専用のbootloadHIDのコンパイルと<code>/usr/local/bin/</code>への導入や、少々お節介なudevルール導入もされる。</li>
+<li>エラーメッセージがでるので<code>qmk_firmware/util/udev/50-qmk.rules</code>を<code>/etc/usdev/rules.d/</code>にコピーします。`</li>
+<li>現在<code>hid_bootloader_cli</code>がうまく動かないので要注意。(<a href="https://github.com/qmk/qmk_firmware/issues/18134">https://github.com/qmk/qmk_firmware/issues/18134</a>)
+<ul>
+<li>Makefileからは<code>bootloadHID</code>でなく<code>hid_bootloader_cli</code>が呼ばれていて使えないし、強引にsymlinkで呼んでも<code>error opening -mmcu=at90usb1286: No such file or directory</code>となって動きません。</li>
+<li>仕方がないので<code>qmk_firmware/lib/lufa/Bootloaders/HID/HostLoaderApp</code>の中をcompileして<code>hid_bootloader_cli</code>を導入しました。</li>
+</ul>
+</li>
+</ul>
+<p>フレッシュなインストールのお試しにはKVMが便利。GNOME boxesが少々不安定だったので、Virtual Machine Manager (<code>virt-manage</code>パッケージ)を利用した。</p>
+<p>久しぶりに<code>qmk_firmware</code>のレポを見ると、私の出した「Caps&lt;-&gt;Esc交換マジックキー」関連のPRがマージされていました。これで楽になります。</p>
 <!-- raw HTML omitted -->
 
 
