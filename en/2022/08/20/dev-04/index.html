@@ -73,13 +73,14 @@
 </nav>
 
 <h2 id="package-repo-on-github-page">Package repo on github page</h2>
-<p>Since Github offer nice web site hosting service, I decided to host my private
+<p>Since Githubs offer nice web site hosting service, I decided to host my private
 build results there at <a href="http://osamuaoki.github.io/debian">http://osamuaoki.github.io/debian</a>.</p>
 <p>This let me skip running the web server as described in <a href="/en/2021/04/09/dev-02/">Local private package
 repo</a>.</p>
-<p>Since <a href="http://salsa.debian.org">Debian Salsa</a> runs Gitlab and itlab also offer
-equivalent service, one should be able to do the same there.  But considering
-tight resource constaints there, it may not be a good idea to do this on Salsa.</p>
+<p>Since <a href="http://salsa.debian.org">Debian Salsa</a> runs Gitlab and Gitlab also
+offers equivalent web site hosting service, one should be able to do the same
+there.  But considering tight resource constaints there, it may not be a good
+idea to do this on Salsa.</p>
 <p>Let me go step-by-step.</p>
 <h3 id="gnu-pg">GNU PG</h3>
 <p>Since I will use sub-key for this purpose, let me check:</p>
@@ -101,7 +102,7 @@ mQINBEya74YBEADDpLTJCmyS97kZ6JvlpUEoSoVbqEkyQVfrV7C7VqlBGWO0bTKI
 </code></pre><h3 id="setting-up-secure-apt-cliant">Setting up secure-APT cliant</h3>
 <p>Let&rsquo;s use DEB822-STYLE FORMAT as explained in sources.list(5) and avoid using
 deprecated apt-key mechanism.</p>
-<p>I add <code>/etc/apt/sources.d/osamuaoki.sources</code> as follows:</p>
+<p>I add <code>/etc/apt/sources.d/osamuaoki.sources</code> to the client as follows:</p>
 <pre tabindex="0"><code>$ cat &gt;/etc/apt/sources.list.d/osamuaoki.sources  &lt;&lt;&#34;EOF&#34;
 Types: deb
 URIs: http://osamuaoki.github.io/debian/
@@ -193,7 +194,12 @@ ask-passphrase
 Dah&hellip;</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd ~/path/to/osamuaoki-hugo/static
 </span></span><span style="display:flex;"><span>$ git add -A .
-</span></span></code></pre></div><p>I updated <code>update.sh</code> to do the last command automatically.</p>
+</span></span></code></pre></div><p>I updated <code>update.sh</code> to do the last command and a few file removals
+automatically.</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamuaoki-hugo">https://github.com/osamuaoki/osamuaoki-hugo</a> (source repo)</li>
+<li><a href="https://github.com/osamuaoki/osamuaoki.github.io">https://github.com/osamuaoki/osamuaoki.github.io</a> (published page repo)</li>
+</ul>
 <!-- raw HTML omitted -->
 
 
