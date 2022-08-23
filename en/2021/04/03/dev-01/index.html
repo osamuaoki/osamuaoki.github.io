@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2022/08/19 (last update)
+2022/08/23 (last update)
 </h3>
 </div>
 
@@ -171,8 +171,11 @@ local.  So I simply add <code>/etc/apt/apt.conf.d/00proxy</code> as:</p>
 (2755) with <code>apt-cacher-ng:apt-cacher-ng</code>.</p>
 <p>If you reinstall system, you must be careful with UID and GID since they may be
 different for the reinstalled system.</p>
-<p>If you experience strange caching data related issues, erase the whole data
-under <code>/var/cache/apt-cacher-ng/</code> to reset.</p>
+<p>If package files in upstream repo are replaced with different file with the
+same name, it will create caching problem with <code>apt-cacher-ng</code>.  Non Debian
+repository tends to do this. If you experience strange caching data related
+issues, erase the whole data under <code>/var/cache/apt-cacher-ng/</code> for that repo to
+reset situation.</p>
 <h2 id="sbuild-infrastructure">Sbuild infrastructure</h2>
 <p>Sbuild provides clean <strong>binary</strong> package building environment using schroot as its
 backend.</p>
