@@ -11,8 +11,8 @@ Build-Depends: debhelper-compat (= 13)
 Package-List:
  bss deb utils optional arch=all
 Checksums-Sha1:
- 600f4d404347705bbdb542bcdff17e56e2894d31 30184 bss_1.1.1.tar.xz
+ 615cf7778ad862f52ffcd0c4d81e488cf0c70fef 30196 bss_1.1.1.tar.xz
 Checksums-Sha256:
- 6d101c410e02a5779f7bf13b64050edd9793e6f7fa25532ac9a955e27901fbfb 30184 bss_1.1.1.tar.xz
+ ae85131b629e491fd4f24b7808ef70b4964b4ec2c71f09a94593d731dafda78e 30196 bss_1.1.1.tar.xz
 Files:
- 7bd95ea549411bfc2f55f73ac5928ea1 30184 bss_1.1.1.tar.xz
+ 00723b4eb07a6d7b00bf34398f611b41 30196 bss_1.1.1.tar.xz
