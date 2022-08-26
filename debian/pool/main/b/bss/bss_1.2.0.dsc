@@ -2,7 +2,7 @@ Format: 3.0 (native)
 Source: bss
 Binary: bss
 Architecture: all
-Version: 1.1.2
+Version: 1.2.0
 Maintainer: Osamu Aoki <osamu@debian.org>
 Homepage: https://github.com/osamuaoki/bss
 Standards-Version: 4.6.0
@@ -11,8 +11,8 @@ Build-Depends: debhelper-compat (= 13)
 Package-List:
  bss deb utils optional arch=all
 Checksums-Sha1:
- 8265bccdb92e49f628e2b05a20e180b4a4056292 30524 bss_1.1.2.tar.xz
+ fdac2be7777a648bdde7bc61a791b58552d108bc 31976 bss_1.2.0.tar.xz
 Checksums-Sha256:
- 0f66b2b71852c4e70f1e7b824e841b9be5601e0f3223626da0bbd5f1a78a08ac 30524 bss_1.1.2.tar.xz
+ 3a1891aa2627c2d30cbf634a86388f5d33318db686de0bf3977ff2c7ba197d54 31976 bss_1.2.0.tar.xz
 Files:
- 07cc9a4c68ef7cc9dcd6a36a44c985e0 30524 bss_1.1.2.tar.xz
+ a64f5964c251729b9791956da244ca9a 31976 bss_1.2.0.tar.xz
