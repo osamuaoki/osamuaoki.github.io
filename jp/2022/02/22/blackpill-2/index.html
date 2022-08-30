@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/22 (initial publish),
-2022/03/26 (last update)
+2022/08/30 (last update)
 </h3>
 </div>
 
@@ -79,7 +79,7 @@
 <p>STM32F411CEが載っているblackpillの導入記録の続きです。</p>
 <h2 id="hid-bootloader-の復元準備">HID BOOTLOADER の復元準備</h2>
 <p><a href="/jp/2022/02/07/blackpill-1/">前記の方法でQMKをDFUで内蔵フラッシュメモリーの<code>0x800 0000</code>から導入する</a>と上書きされてしまいます。書き換えできるメモリーの最後にbootloaderを置くAVRと異なり、ARM系のSTM32Fはフラッシュの最初の<code>0x800 0000</code>にBootloader等を置かれているからです。</p>
-<p>STM32F103のような、ROM化されたUSB対応bootloaderが無いMCUの場合にはHID BOOTLOADERが必要ですが、STM32F411等はROMがDFUをサポートしてUSB経由のファームウエアー書き換えに対応しているので、HID BOOTLOADERは必須要素技術ではありません。ここは、後学のため元のHID BOOTLOADERの復元法を記します。(元々は<code>A12</code>ピン問題で悩んでいた際の学習ノートです。)</p>
+<p>STM32F103のような、ROM化されたUSB対応bootloaderが無いMCUの場合にはHID BOOTLOADERが必要ですが、STM32F411等はROMがDFUをサポートしてUSB経由のファームウエアー書き換えに対応しているので、HID BOOTLOADERは必須要素技術ではありません。ここは、後学のため元のHID BOOTLOADERの復元法を記します。<a href="/jp/2022/02/07/blackpill-1/#%E4%BD%BF%E7%94%A8%E4%B8%8A%E3%81%AE%E6%B3%A8%E6%84%8Fa9-a12%E3%83%94%E3%83%B3">元々は<code>A9-A12</code>ピン問題で悩んでいた際の学習ノートです。</a></p>
 <p>最初に入っていたHID Bootloaderは、ベンダーの WeActTC の技術情報サイトを覗き入手します。</p>
 <ul>
 <li><a href="https://github.com/WeActTC">https://github.com/WeActTC</a></li>

@@ -139,7 +139,7 @@ usb 4-2: new full-speed USB device number 4 using xhci_hcd usb 4-2: device descr
       <guid>/jp/2022/02/22/blackpill-2/</guid>
       <description>STM32F411CEが載っているblackpillの導入記録の続きです。
 HID BOOTLOADER の復元準備 前記の方法でQMKをDFUで内蔵フラッシュメモリーの0x800 0000から導入すると上書きされてしまいます。書き換えできるメモリーの最後にbootloaderを置くAVRと異なり、ARM系のSTM32Fはフラッシュの最初の0x800 0000にBootloader等を置かれているからです。
-STM32F103のような、ROM化されたUSB対応bootloaderが無いMCUの場合にはHID BOOTLOADERが必要ですが、STM32F411等はROMがDFUをサポートしてUSB経由のファームウエアー書き換えに対応しているので、HID BOOTLOADERは必須要素技術ではありません。ここは、後学のため元のHID BOOTLOADERの復元法を記します。(元々はA12ピン問題で悩んでいた際の学習ノートです。)
+STM32F103のような、ROM化されたUSB対応bootloaderが無いMCUの場合にはHID BOOTLOADERが必要ですが、STM32F411等はROMがDFUをサポートしてUSB経由のファームウエアー書き換えに対応しているので、HID BOOTLOADERは必須要素技術ではありません。ここは、後学のため元のHID BOOTLOADERの復元法を記します。元々はA9-A12ピン問題で悩んでいた際の学習ノートです。
 最初に入っていたHID Bootloaderは、ベンダーの WeActTC の技術情報サイトを覗き入手します。
 https://github.com/WeActTC HEXファイルやバイナリーのホストプログラムとともに、元ネタサイト情報もありました。
 https://github.com/Serasidis/STM32_HID_Bootloader ARDUINO作成のスケッチのアップロードは、WeAct_HID_Flash-CLIで単純にBINファイルを書いているので、ARDUINO系のシステムでSTM32F103と共通のファームウエアーを作成し使用するには、HID_Bootloaderも良いかもしれません。

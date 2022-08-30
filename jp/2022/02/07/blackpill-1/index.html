@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/02/07 (initial publish),
-2022/04/02 (last update)
+2022/08/30 (last update)
 </h3>
 </div>
 
@@ -69,7 +69,7 @@
         <li><a href="#standbyからの起動">Standbyからの起動</a></li>
       </ul>
     </li>
-    <li><a href="#使用上の注意">使用上の注意</a></li>
+    <li><a href="#使用上の注意a9-a12ピン">使用上の注意(<code>A9-A12</code>ピン)</a></li>
     <li><a href="#pin接続-cgg56">PIN接続 (cgg56)</a></li>
     <li><a href="#factory-setting">FACTORY SETTING</a></li>
     <li><a href="#firmware書き込み-qmk-dfu">FIRMWARE書き込み (QMK DFU)</a></li>
@@ -148,7 +148,7 @@
 <p>STM32F411xx は のBOOTMODEはPattern1で起動する。つまり、BOOTMODE実行条件は：</p>
 <ul>
 <li><code>Boot0(pin) = 1</code> (BOOT SW, PUSHed)</li>
-<li><code>Boot1(pin) = 0</code> (Blackpillデフォルト</li>
+<li><code>Boot1(pin) = 0</code> (Blackpillデフォルト)</li>
 </ul>
 <p>つまり、REMAPを使い</p>
 <ul>
@@ -157,7 +157,7 @@
 </ul>
 <h3 id="standbyからの起動">Standbyからの起動</h3>
 <p><code>PA0 / WKUP1</code> が <code>0-&gt;</code>1 でwakeup　（つまり、USERのSWを離した時点）</p>
-<h2 id="使用上の注意">使用上の注意</h2>
+<h2 id="使用上の注意a9-a12ピン">使用上の注意(<code>A9-A12</code>ピン)</h2>
 <p><code>A9-A12</code>は、USBコネクターと共用ピンなので、これらを使うとUSB接続ができなくなります。</p>
 <p>これに気づくのにかなりの時間のロスをしました。結局、<a href="https://www.reddit.com/r/olkb/comments/mx5pkx/stm32f411_black_pill_with_qmk_not_recognized/">REDDITの記事</a>で原因に気づきました。</p>
 <h2 id="pin接続-cgg56">PIN接続 (cgg56)</h2>

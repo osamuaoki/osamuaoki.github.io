@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/03/06 (initial publish),
-2022/03/19 (last update)
+2022/08/30 (last update)
 </h3>
 </div>
 
@@ -101,7 +101,7 @@ usb 4-2: Device not responding to setup address.
 usb 4-2: device not accepting address 7, error -71
 ...
 </code></pre><p>ただ２回目以降は、スイッチの手順さえ守れば確実にDFUには入れます。</p>
-<p>今見直すと、<code>A12</code>ピン問題が在ったボードで、同時押しで時際にはRESETだけを押したので上記エラーが出た気もしないでも在りません。</p>
+<p>今見直すと、<a href="/jp/2022/02/07/blackpill-1/#%E4%BD%BF%E7%94%A8%E4%B8%8A%E3%81%AE%E6%B3%A8%E6%84%8Fa9-a12%E3%83%94%E3%83%B3"><code>A9-A12</code>ピン問題</a>が在ったボードで、同時押しで時際にはRESETだけを押したので上記エラーが出た気もしないでも在りません。</p>
 <p>どうも電源投入後すぐという意味の「cold start」では上手くいかないので電源投入後安定化したという意味の「warm」後の時点という話が、チップを温めると温度の話になった感じもなきにしもあらずです。(この差が、本当に温度か、ハイインピーダンス回路での浮遊容量への電荷蓄積の差かはよくわかりません。)</p>
 <h2 id="dfuファイル経由での導入例-circuitpython導入によるdfuの練習">DFUファイル経由での導入例 (CircuitPython導入によるDFUの練習)</h2>
 <p><a href="https://www.micropython.org/">MicroPython</a>のForkに<a href="https://circuitpython.org/">CircuitPython</a>があり、<a href="https://circuitpython.org/board/stm32f411ce_blackpill/">STM32F411CE Black Pillを明示的にサポート</a>しています。</p>
