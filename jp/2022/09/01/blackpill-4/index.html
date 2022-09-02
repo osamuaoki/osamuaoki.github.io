@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>STM32F411CE (4) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">STM32F411CE (4)</span></h1>
+
+<h3 class="date">Date:
+2022/09/01 (initial publish),
+2022/09/03 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/06/03/evdev01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#cgg56の反省と改造">cgg56の反省と改造</a></li>
+    <li><a href="#pin接続-cgs58">PIN接続 (cgs58)</a></li>
+    <li><a href="#配線確認">配線確認</a></li>
+  </ul>
+</nav>
+
+<h2 id="cgg56の反省と改造">cgg56の反省と改造</h2>
+<p>ARM系のMCU使用の練習に<a href="/jp/2022/02/07/blackpill-1/">STM32F411CE (1)</a>で
+作ったcgg56は結局 JoyStick は動きましたが、それほど操作性はよく
+ありませんでした。</p>
+<p>横に押すと、横にキーボード自体が動いてしまうという問題を抱えていました。</p>
+<p>そこでスプリットキーボードを試したかったので、ノコギリで２つに切り
+ポインティング部品無しで構成する改造をすることにしました。</p>
+<p>ポインティングデバイスを除いたスペースには、キースイッチを追加します。</p>
+<p>切り離して短くなったMCUボード無しの側は、ホームセンターで5mm角の
+アクリル棒で追加購入しセメダインで接着延長して対象に仕上げ、追加
+のMCUボードを取り付けました。左右接続は、余っていたUSB用のケーブルを
+両端切りコネクター無しで直結して対応します。できた物はcgs58と名付けます。</p>
+<h2 id="pin接続-cgs58">PIN接続 (cgs58)</h2>
+<p>canterを参考にピン配置を決めました。</p>
+<p>ところで、(R0, C0)はキーボードをキー面上から見て左上です。</p>
+<p>以下の図もキーボードをキー面上から見て(TOP VIEW)ですので、実際の配線では
+左右が逆になります。</p>
+<p>C6xとC7xは、C6とC7の内側のMCUボード横の穴にいれたキー向けの追加のカラムです。</p>
+<p>LTは左手側、RTは右手側です。</p>
+<pre tabindex="0"><code>Blackpill (TOP VIEW)
+
+
+    LT      RT                                       RT      LT
+                                  USB-C
+                            +---+-----+---+
+    R0      R0  ------- B12 |*  |     |  *|5V  -----
+    R1      R1  ------- B13 |*  |     |  *|GND -----
+    R2      R2  ------- B14 |*  |     |  *|3V3
+    R3      R3  ------- B15 |*  +-----+  *|B10       C7x         
+    C0          ------- A8  |*  B     N  @|B2 ------ *** BOOST1
+        [USB]   ------- A9  |*  O     R  @|B1 ------ XX
+        [USB]   ------- A10 |*  O     S  @|B0 ------ XX
+        [USB]   ------- A11 |*  T     T  *|A7 ------ 
+        [USB]   ------- A12 |*  0        *|A6 ------ C7x
+    C3          ------- A15 |*           *|A5 ------ C11  
+    C2          ------- B3  |*           *|A4 ------ C10  
+    C5          ------- B4  |*           *|A3 ------ C7 
+    C6          ------- B5  |*           *|A2 ------ C8
+    TX==\ /=TX  ------- B6  |*           *|A1 ------ C9 
+    RX==/ \=RX  ------- B7  |*           *|A0 ------ *** USR
+    C1          ------- B8  |*  K        *|R  ------ *** NRST (/RST, ~RST)
+    C4          ------- B9  |*  E        *|C15 ----- C12
+    **==5V==**  ------- 5V  |*  Y        *|C14 ----- C13     C6x
+    **==GND=**  ------- GND |*           *|C13 ------*** BLUE LED
+                        3V3 |*  @ @ @ @  *|VB
+                            +-------------+
+                                ^ ^ ^ ^
+                                | | | |
+          3V3    ---------------+ | | |
+        SWDIO    -----------PA13--+ | |
+        SWSCK    -----------PA14----+ |
+          GND    ---------------------+
+</code></pre><h2 id="配線確認">配線確認</h2>
+<p>実際には、連結以外の配線をして、qmkを書き込み配線確認をします。</p>
+<ul>
+<li>cgh29L</li>
+<li>cgh29R</li>
+</ul>
+<p>WIP &hellip;</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/06/03/evdev01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
