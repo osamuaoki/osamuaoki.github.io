@@ -61,27 +61,36 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#cgg56の反省と改造">cgg56の反省と改造</a></li>
-    <li><a href="#pin接続-cgs58">PIN接続 (cgs58)</a></li>
-    <li><a href="#左右別々に配線確認">左右別々に配線確認</a></li>
-    <li><a href="#分割キーボード">分割キーボード</a></li>
-    <li><a href="#左右検出handedness-by-pin法">左右検出(Handedness by Pin)法</a></li>
+    <li><a href="#cgg56の反省">cgg56の反省</a></li>
+    <li><a href="#分割キーボードの作成">分割キーボードの作成</a>
+      <ul>
+        <li><a href="#改造コンセプト">改造コンセプト</a></li>
+        <li><a href="#pin接続-cgs58">PIN接続 (cgs58)</a></li>
+        <li><a href="#テスト用ファームウエアーで左右別々に配線確認">テスト用ファームウエアーで左右別々に配線確認</a></li>
+        <li><a href="#左右検出handedness-by-pin法">左右検出(Handedness by Pin)法</a></li>
+        <li><a href="#分割キーボードのファームウエアー">分割キーボードのファームウエアー</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
-<h2 id="cgg56の反省と改造">cgg56の反省と改造</h2>
+<h2 id="cgg56の反省">cgg56の反省</h2>
 <p>ARM系のMCU使用の練習に<a href="/jp/2022/02/07/blackpill-1/">STM32F411CE (1)</a>で
 作ったcgg56は結局 JoyStick は動きましたが、それほど操作性はよく
 ありませんでした。</p>
 <p>横に押すと、横にキーボード自体が動いてしまうという問題を抱えていました。</p>
-<p>そこでスプリットキーボードを試したかったので、ノコギリで２つに切り
-ポインティング部品無しで構成する改造をすることにしました。</p>
+<p>一体型はcgc56がすでにあり、スプリットキーボードを試したかったので、
+こちらのcgg56は改造して再利用することにしました。</p>
+<h2 id="分割キーボードの作成">分割キーボードの作成</h2>
+<h3 id="改造コンセプト">改造コンセプト</h3>
+<p>cgg56をノコギリで２つに切り、ポインティング部品無しで構成する
+分割キーボードに改造をすることにしました。</p>
 <p>ポインティングデバイスを除いたスペースには、キースイッチを追加します。</p>
 <p>切り離して短くなったMCUボード無しの側は、ホームセンターで5mm角の
 アクリル棒で追加購入しセメダインで接着延長して対象に仕上げ、追加
 のMCUボードを取り付けました。左右接続は、余っていたUSB用のケーブルを
 両端切りコネクター無しで直結して対応します。できた物はcgs58と名付けます。</p>
-<h2 id="pin接続-cgs58">PIN接続 (cgs58)</h2>
+<h3 id="pin接続-cgs58">PIN接続 (cgs58)</h3>
 <p>canterを参考にピン配置を決めました。</p>
 <p>ところで、(R0, C0)はキーボードをキー面上から見て左上です。</p>
 <p>以下の図もキーボードをキー面上から見て(TOP VIEW)ですので、実際の配線では
@@ -121,7 +130,7 @@
         SWDIO    -----------PA13--+ | |
         SWSCK    -----------PA14----+ |
           GND    ---------------------+
-</code></pre><h2 id="左右別々に配線確認">左右別々に配線確認</h2>
+</code></pre><h3 id="テスト用ファームウエアーで左右別々に配線確認">テスト用ファームウエアーで左右別々に配線確認</h3>
 <p>実際には、連結以外の配線をして、qmkを書き込み配線確認をします。</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgh29l">cgh29l</a></li>
@@ -133,8 +142,7 @@ column for ease of programming</li>
 </li>
 </ul>
 <p>動作確認OK</p>
-<h2 id="分割キーボード">分割キーボード</h2>
-<h2 id="左右検出handedness-by-pin法">左右検出(Handedness by Pin)法</h2>
+<h3 id="左右検出handedness-by-pin法">左右検出(Handedness by Pin)法</h3>
 <p>今回は簡単に、使ってないB10ピンを使い、右キーボードを 50 K-ohm 抵抗でGND, 左キーボードを 50 K-ohm 抵抗でPULL-UPして区別する。使う抵抗値は、基本使わないピンはハイインピーダンスの入力のはずなので、内部回路がP-UP/P-DNの際に使う50
 K-ohm位が良い気がする。</p>
 <ul>
@@ -150,6 +158,10 @@ K-ohm位が良い気がする。</p>
 <li><a href="https://github.com/qmk/qmk_firmware/tree/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411">https://github.com/qmk/qmk_firmware/tree/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411</a></li>
 <li><a href="https://github.com/qmk/qmk_firmware/blob/master/keyboards/mlego/m60_split/rev2/config.h">https://github.com/qmk/qmk_firmware/blob/master/keyboards/mlego/m60_split/rev2/config.h</a></li>
 <li><a href="https://github.com/qmk/qmk_firmware/blob/master/docs/serial_driver.md#choosing-a-driver-subsystem">https://github.com/qmk/qmk_firmware/blob/master/docs/serial_driver.md#choosing-a-driver-subsystem</a></li>
+</ul>
+<h3 id="分割キーボードのファームウエアー">分割キーボードのファームウエアー</h3>
+<ul>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgs58">cgs58</a></li>
 </ul>
 <!-- raw HTML omitted -->
 
