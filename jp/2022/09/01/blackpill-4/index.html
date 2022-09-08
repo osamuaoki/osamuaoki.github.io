@@ -135,12 +135,13 @@ column for ease of programming</li>
 <p>動作確認OK</p>
 <h2 id="分割キーボード">分割キーボード</h2>
 <h2 id="左右検出handedness-by-pin法">左右検出(Handedness by Pin)法</h2>
-<p>今回は簡単に、使ってないB10ピンを使い、右キーボードを 5 K-ohm 抵抗でGNDして区別する。</p>
+<p>今回は簡単に、使ってないB10ピンを使い、右キーボードを 50 K-ohm 抵抗でGND, 左キーボードを 50 K-ohm 抵抗でPULL-UPして区別する。使う抵抗値は、基本使わないピンはハイインピーダンスの入力のはずなので、内部回路がP-UP/P-DNの際に使う50
+K-ohm位が良い気がする。</p>
 <ul>
-<li><a href="https://www.reddit.com/r/ErgoMechKeyboards/comments/qead6j/help_qmk_handedness_using_a_high_pin_will_this/">https://www.reddit.com/r/ErgoMechKeyboards/comments/qead6j/help_qmk_handedness_using_a_high_pin_will_this/</a> (5K-ohm)</li>
-<li><a href="https://github.com/qmk/qmk_firmware/blob/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411/config.h">https://github.com/qmk/qmk_firmware/blob/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411/config.h</a> (68K-ohm but what)</li>
+<li><a href="https://www.reddit.com/r/ErgoMechKeyboards/comments/qead6j/help_qmk_handedness_using_a_high_pin_will_this/">https://www.reddit.com/r/ErgoMechKeyboards/comments/qead6j/help_qmk_handedness_using_a_high_pin_will_this/</a> (ここは5K-ohm)</li>
+<li><a href="https://github.com/qmk/qmk_firmware/blob/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411/config.h">https://github.com/qmk/qmk_firmware/blob/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411/config.h</a> (ここになぜか68K-ohm とある)</li>
 <li><a href="https://www.st.com/content/ccc/resource/technical/document/datasheet/59/f6/fa/84/20/4e/4c/59/CD00191185.pdf/files/CD00191185.pdf/jcr:content/translations/en.CD00191185.pdf">https://www.st.com/content/ccc/resource/technical/document/datasheet/59/f6/fa/84/20/4e/4c/59/CD00191185.pdf/files/CD00191185.pdf/jcr:content/translations/en.CD00191185.pdf</a>
-(internal ~ 40K-ohm -&gt; 5 K-ohm is good enough and safe)</li>
+(internal ~ 40K-ohm -&gt; これで充分)</li>
 <li><a href="https://docs.qmk.fm/#/config_options?id=setting-handedness">https://docs.qmk.fm/#/config_options?id=setting-handedness</a></li>
 </ul>
 <p>(ピン数が足りないならソフト的対応も可能だが、それは後日の機会に。)</p>
