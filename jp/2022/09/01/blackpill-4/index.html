@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/09/01 (initial publish),
-2022/09/03 (last update)
+2022/09/09 (last update)
 </h3>
 </div>
 
@@ -63,7 +63,9 @@
   <ul>
     <li><a href="#cgg56の反省と改造">cgg56の反省と改造</a></li>
     <li><a href="#pin接続-cgs58">PIN接続 (cgs58)</a></li>
-    <li><a href="#配線確認">配線確認</a></li>
+    <li><a href="#左右別々に配線確認">左右別々に配線確認</a></li>
+    <li><a href="#分割キーボード">分割キーボード</a></li>
+    <li><a href="#左右検出handedness-by-pin法">左右検出(Handedness by Pin)法</a></li>
   </ul>
 </nav>
 
@@ -95,7 +97,7 @@
     R0      R0  ------- B12 |*  |     |  *|5V  -----
     R1      R1  ------- B13 |*  |     |  *|GND -----
     R2      R2  ------- B14 |*  |     |  *|3V3
-    R3      R3  ------- B15 |*  +-----+  *|B10       C7x         
+    R3      R3  ------- B15 |*  +-----+  *|B10       P/D 66K-ohm (hand)
     C0          ------- A8  |*  B     N  @|B2 ------ *** BOOST1
         [USB]   ------- A9  |*  O     R  @|B1 ------ XX
         [USB]   ------- A10 |*  O     S  @|B0 ------ XX
@@ -119,13 +121,35 @@
         SWDIO    -----------PA13--+ | |
         SWSCK    -----------PA14----+ |
           GND    ---------------------+
-</code></pre><h2 id="配線確認">配線確認</h2>
+</code></pre><h2 id="左右別々に配線確認">左右別々に配線確認</h2>
 <p>実際には、連結以外の配線をして、qmkを書き込み配線確認をします。</p>
 <ul>
-<li>cgh29L</li>
-<li>cgh29R</li>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgh29l">cgh29l</a></li>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgh29r">cgh29r</a>
+<ul>
+<li>single key column on physical left is logically placed right most
+column for ease of programming</li>
 </ul>
-<p>WIP &hellip;</p>
+</li>
+</ul>
+<p>動作確認OK</p>
+<h2 id="分割キーボード">分割キーボード</h2>
+<h2 id="左右検出handedness-by-pin法">左右検出(Handedness by Pin)法</h2>
+<p>今回は簡単に、使ってないB10ピンを使い、右キーボードを 5 K-ohm 抵抗でGNDして区別する。</p>
+<ul>
+<li><a href="https://www.reddit.com/r/ErgoMechKeyboards/comments/qead6j/help_qmk_handedness_using_a_high_pin_will_this/">https://www.reddit.com/r/ErgoMechKeyboards/comments/qead6j/help_qmk_handedness_using_a_high_pin_will_this/</a> (5K-ohm)</li>
+<li><a href="https://github.com/qmk/qmk_firmware/blob/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411/config.h">https://github.com/qmk/qmk_firmware/blob/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411/config.h</a> (68K-ohm but what)</li>
+<li><a href="https://www.st.com/content/ccc/resource/technical/document/datasheet/59/f6/fa/84/20/4e/4c/59/CD00191185.pdf/files/CD00191185.pdf/jcr:content/translations/en.CD00191185.pdf">https://www.st.com/content/ccc/resource/technical/document/datasheet/59/f6/fa/84/20/4e/4c/59/CD00191185.pdf/files/CD00191185.pdf/jcr:content/translations/en.CD00191185.pdf</a>
+(internal ~ 40K-ohm -&gt; 5 K-ohm is good enough and safe)</li>
+<li><a href="https://docs.qmk.fm/#/config_options?id=setting-handedness">https://docs.qmk.fm/#/config_options?id=setting-handedness</a></li>
+</ul>
+<p>(ピン数が足りないならソフト的対応も可能だが、それは後日の機会に。)</p>
+<p>フルデュプレクスでいく。参考となるのは：</p>
+<ul>
+<li><a href="https://github.com/qmk/qmk_firmware/tree/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411">https://github.com/qmk/qmk_firmware/tree/master/keyboards/handwired/dactyl_manuform/6x6/blackpill_f411</a></li>
+<li><a href="https://github.com/qmk/qmk_firmware/blob/master/keyboards/mlego/m60_split/rev2/config.h">https://github.com/qmk/qmk_firmware/blob/master/keyboards/mlego/m60_split/rev2/config.h</a></li>
+<li><a href="https://github.com/qmk/qmk_firmware/blob/master/docs/serial_driver.md#choosing-a-driver-subsystem">https://github.com/qmk/qmk_firmware/blob/master/docs/serial_driver.md#choosing-a-driver-subsystem</a></li>
+</ul>
 <!-- raw HTML omitted -->
 
 
