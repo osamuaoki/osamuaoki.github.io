@@ -7,6 +7,22 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>QMK (7) -- 再キーマップ改善</title>
+      <link>/jp/2022/09/09/home-mt2/</link>
+      <pubDate>Fri, 09 Sep 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2022/09/09/home-mt2/</guid>
+      <description>キーマップ改善の方針 キーマップ改善の基本方針のタップとホールドの有効利用は、QMK (4) – キーマップ改善から変わりません。
+さらに、以前から遊んでいたAVR系でQMKを使うcgc56という一体型キーボードと、 今回ARM系でQMKを使うSTM32F411CE (4)で作ったcgs58という分割キーボードと、 できれば将来interceptionを使いLaptop PCの内蔵キーボードの全てで、キーマッピングの基本部分を共用できるようにすることに配慮しました。
+cgc56を使ってきた経験を重要視しました。設計指針の要点を記すと；
+標準キーボードとキーの位置をできるだけ変えないことでメンタルストレス無くする。(QWERTY) フィジカルストレスが少なくなる指の動きが少なくする。(3rows x 6columns + 2thums ) x 2sides HOME-ROW MODを採用する。 キーマップ pico 「基本的に使う部分」は、左6x3_2キーと右6x3_2キーと限定し、配列の要点は以下のようなpico系に落ち着いて来ました。
+│Tab│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │Bsp│ │Esc│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│Ent│ │Mut│ Z │ X │lgC│ V2│ B │***│***│ N │ M │ , │ . │ / │Psc│ │***│***│***│***│Muh│Sp1│***│***│Sp1│Hen│***│***│***│***│ 全ての指のポジション移動量を1U以下に押さえられます。
+日本語キーボードの変換・無変換キーをSPACEの横におきます。
+あまり使わない真ん中のキーはFnキーに割降ります。(あまり使わない気もしますが)
+最下段の両端のキーを全く使わないのももったいないので、メディアキーなどに割り振ります。</description>
+    </item>
+    
+    <item>
       <title>STM32F411CE (4)</title>
       <link>/jp/2022/09/01/blackpill-4/</link>
       <pubDate>Thu, 01 Sep 2022 00:00:00 +0000</pubDate>

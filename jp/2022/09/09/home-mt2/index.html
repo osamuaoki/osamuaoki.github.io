@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>QMK (7) -- 再キーマップ改善 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">QMK (7) &ndash; 再キーマップ改善</span></h1>
+
+<h3 class="date">Date:
+2022/09/09 (initial publish),
+2022/09/10 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/09/01/blackpill-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#キーマップ改善の方針">キーマップ改善の方針</a>
+      <ul>
+        <li><a href="#キーマップ-pico">キーマップ pico</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="キーマップ改善の方針">キーマップ改善の方針</h2>
+<p>キーマップ改善の基本方針のタップとホールドの有効利用は、<a href="/jp/2022/03/15/home-mt/">QMK (4) – キーマップ改善</a>から変わりません。</p>
+<p>さらに、以前から遊んでいたAVR系でQMKを使う<a href="https://github.com/osamuaoki/cg56">cgc56</a>という一体型キーボードと、
+今回ARM系でQMKを使う<a href="/jp/2022/09/01/blackpill-4/">STM32F411CE (4)</a>で作ったcgs58という分割キーボードと、
+できれば将来interceptionを使いLaptop PCの内蔵キーボードの全てで、キーマッピングの基本部分を共用できるようにすることに配慮しました。</p>
+<p>cgc56を使ってきた経験を重要視しました。設計指針の要点を記すと；</p>
+<ul>
+<li>標準キーボードとキーの位置をできるだけ変えないことでメンタルストレス無くする。(QWERTY)</li>
+<li>フィジカルストレスが少なくなる指の動きが少なくする。(3rows x 6columns + 2thums ) x 2sides</li>
+<li>HOME-ROW MODを採用する。</li>
+</ul>
+<h3 id="キーマップ-pico">キーマップ pico</h3>
+<p>「基本的に使う部分」は、左<code>6x3_2</code>キーと右<code>6x3_2</code>キーと限定し、配列の要点は以下のようなpico系に落ち着いて来ました。</p>
+<pre tabindex="0"><code> │Tab│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │Bsp│
+ │Esc│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│Ent│
+ │Mut│ Z │ X │lgC│ V2│ B │***│***│ N │ M │ , │ . │ / │Psc│
+ │***│***│***│***│Muh│Sp1│***│***│Sp1│Hen│***│***│***│***│
+</code></pre><p>全ての指のポジション移動量を1U以下に押さえられます。</p>
+<p>日本語キーボードの変換・無変換キーをSPACEの横におきます。</p>
+<p>あまり使わない真ん中のキーはFnキーに割降ります。(あまり使わない気もしますが)</p>
+<p>最下段の両端のキーを全く使わないのももったいないので、メディアキーなどに割り振ります。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/09/01/blackpill-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
