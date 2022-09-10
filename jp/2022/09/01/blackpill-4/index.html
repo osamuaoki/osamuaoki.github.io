@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/09/01 (initial publish),
-2022/09/10 (last update)
+2022/09/11 (last update)
 </h3>
 </div>
 
@@ -169,10 +169,17 @@ column for ease of programming</li>
 <li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgs58">cgs58</a> keymap=<code>default</code></li>
 </ul>
 <p>動きがちょっと悪かった１つのキーの原因は、ホットメルト接着剤がはみ出してキーがしっかりボトムしきれない物理的問題でした。</p>
+<p>また、配線まわりのホットメルトがはみ出して裏板がしっくりしない問題解決策でニッパーで切る際に誤って配線を切って気づかずにいました。
+後からある縦一列が無反応となっているのに気づき直しました。</p>
 <h3 id="led問題">LED問題</h3>
 <p>cgc56では8つもあったのですが、gcs58ではキーボードの状態表示に使えるLEDは左右１つづつです。</p>
 <p>単純なアプローチではこれらは同じピンなので同時点滅しかしません。</p>
 <p>その解決策を書くのに左右どちらかを確認する関数をさがしていたら、<code>quantum/split_common/split_util.c</code>中に<code>is_keyboard_left()</code>を見つけました。</p>
+<p>分割キーボードスレーブ側のMCUに仕事をさせるのにちょっと戸惑いましたが、副産物でより良いカスタマイゼーション法が分かり、cgc56のコードも書き直ました。</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgc56">cgc56</a> keymap=<code>pico</code></li>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgs58">cgs58</a> keymap=<code>pico</code></li>
+</ul>
 <!-- raw HTML omitted -->
 
 
