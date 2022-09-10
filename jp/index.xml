@@ -39,7 +39,7 @@ PIN接続 (cgs58) canterを参考にピン配置を決めました。
 以下の図もキーボードをキー面上から見て(TOP VIEW)ですので、実際の配線では 左右が逆になります。
 C6xとC7xは、C6とC7の内側のMCUボード横の穴にいれたキー向けの追加のカラムです。
 LTは左手側、RTは右手側です。
-Blackpill (TOP VIEW) LT RT RT LT USB-C +---+-----+---+ R0 R0 ------- B12 |* | | *|5V ----- R1 R1 ------- B13 |* | | *|GND -----------------+ R2 R2 ------- B14 |* | | *|3V3 z 10 K-ohm R3 R3 ------- B15 |* +-----+ *|B10 Open --+ C0 ------- A8 |* B N @|B2 ------ *** BOOST1 [USB] ------- A9 |* O R @|B1 ------ XX [USB] ------- A10 |* O S @|B0 ------ XX [USB] ------- A11 |* T T *|A7 ------ [USB] ------- A12 |* 0 *|A6 ------ C7x C3 ------- A15 |* *|A5 ------ C11 C2 ------- B3 |* *|A4 ------ C10 C5 ------- B4 |* *|A3 ------ C7 C6 ------- B5 |* *|A2 ------ C8 TX==\ /=TX ------- B6 |* *|A1 ------ C9 RX==/ \=RX ------- B7 |* *|A0 ------ *** USR C1 ------- B8 |* K *|R ------ *** NRST (/RST, ~RST) C4 ------- B9 |* E *|C15 ----- C12 **==5V==** ------- 5V |* Y *|C14 ----- C13 C6x **==GND=** ------- GND |* *|C13 ------*** BLUE LED 3V3 |* @ @ @ @ *|VB +-------------+ ^ ^ ^ ^ | | | | 3V3 ---------------+ | | | SWDIO -----------PA13--+ | | SWSCK -----------PA14----+ | GND ---------------------+ テスト用ファームウエアーで左右別々に配線確認 実際には、連結以外の配線をして、qmkを書き込み配線確認をします。</description>
+Blackpill (TOP VIEW) LT RT RT LT USB-C +---+-----+---+ R0 R0 ------- B12 |* | | *|5V ----- R1 R1 ------- B13 |* | | *|GND -----------------+ R2 R2 ------- B14 |* | | *|3V3 z 10 K-ohm R3 R3 ------- B15 |* +-----+ *|B10 Open --+ C0 ------- A8 |* B N @|B2 ------ *** BOOT1 [USB] ------- A9 |* O R @|B1 ------ XX [USB] ------- A10 |* O S @|B0 ------ XX [USB] ------- A11 |* T T *|A7 ------ [USB] ------- A12 |* 0 *|A6 ------ C7x C3 ------- A15 |* *|A5 ------ C11 C2 ------- B3 |* *|A4 ------ C10 C5 ------- B4 |* *|A3 ------ C7 C6 ------- B5 |* *|A2 ------ C8 TX==\ /=TX ------- B6 |* *|A1 ------ C9 RX==/ \=RX ------- B7 |* *|A0 ------ *** USR C1 ------- B8 |* K *|R ------ *** NRST (/RST, ~RST) C4 ------- B9 |* E *|C15 ----- C12 **==5V==** ------- 5V |* Y *|C14 ----- C13 C6x **==GND=** ------- GND |* *|C13 ------*** BLUE LED 3V3 |* @ @ @ @ *|VB +-------------+ ^ ^ ^ ^ | | | | 3V3 ---------------+ | | | SWDIO -----------PA13--+ | | SWSCK -----------PA14----+ | GND ---------------------+ テスト用ファームウエアーで左右別々に配線確認 実際には、連結以外の配線をして、qmkを書き込み配線確認をします。</description>
     </item>
     
     <item>
@@ -161,7 +161,8 @@ QMKでは意外と多くのハードを利用してマウス機能の提供が�
 DFUのこつ 「DFUに入りにくい」などと言うことをNETで散見します。（チップを温めるなどという「おまじない」も日本語のどこかで見ました。）
 確かに、無頓着にBOOT0とNRSTのPUSHスイッチを同時押し・同時離しでDFUに入ろうとすると上手くいかないことがありました。
 でも、以下の手順をとれば、確実にDFUに入れます。
-まず、BOOT0を押す(1sこの状態を保つ) 併せて、NRSTも押す(1sこの状態を保つ) NRSTを離す(この時もBOOT0は押したまま) 3ステップの1s後、BOOT0を離す DFUデバイスのrealtimeの確認は、今風にjournalctl -fコマンドです。(昔はsudo dmsg -w)。
+まず、BOOT0を押す(1sこの状態を保つ) 併せて、NRSTも押す(1sこの状態を保つ) NRSTを離す(この時もBOOT0は押したまま) 3ステップの1s後、BOOT0を離す In short:
+Push BOOT0 &amp;ndash;&amp;gt; Push RESET &amp;ndash;&amp;gt; Release RESET &amp;ndash;&amp;gt; Release BOOT0. DFUデバイスのrealtimeの確認は、今風にjournalctl -fコマンドです。(昔はsudo dmsg -w)。
 繋がったDFUデバイスの詳細状況は、dfu-util -lで確認します。
 電源投入後すぐだと、一度以下のようなエラーでDFUに入れないことがありました。
 usb 4-2: new full-speed USB device number 4 using xhci_hcd usb 4-2: device descriptor read/64, error -71 usb 4-2: device descriptor read/64, error -71 usb 4-2: new full-speed USB device number 5 using xhci_hcd usb 4-2: device descriptor read/64, error -71 usb 4-2: device descriptor read/64, error -71 usb usb4-port2: attempt power cycle usb 4-2: new full-speed USB device number 6 using xhci_hcd usb 4-2: Device not responding to setup address.</description>

@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/03/06 (initial publish),
-2022/08/30 (last update)
+2022/09/10 (last update)
 </h3>
 </div>
 
@@ -81,6 +81,10 @@
 <li>NRSTを離す(この時もBOOT0は押したまま)</li>
 <li>3ステップの1s後、BOOT0を離す</li>
 </ol>
+<p>In short:</p>
+<ul>
+<li>Push <code>BOOT0</code> &ndash;&gt; Push <code>RESET</code> &ndash;&gt; Release <code>RESET</code> &ndash;&gt; Release <code>BOOT0</code>.</li>
+</ul>
 <p>DFUデバイスのrealtimeの確認は、今風に<code>journalctl -f</code>コマンドです。(昔は<code>sudo dmsg -w</code>)。</p>
 <p>繋がったDFUデバイスの詳細状況は、<code>dfu-util -l</code>で確認します。</p>
 <p>電源投入後すぐだと、一度以下のようなエラーでDFUに入れないことがありました。</p>
