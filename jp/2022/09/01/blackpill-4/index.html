@@ -69,6 +69,7 @@
         <li><a href="#テスト用ファームウエアーで左右別々に配線と動作確認">テスト用ファームウエアーで左右別々に配線と動作確認</a></li>
         <li><a href="#左右検出handedness-by-pin法">左右検出(Handedness by Pin)法</a></li>
         <li><a href="#テスト用ファームウエアーで分割キーボードの配線と動作確認">テスト用ファームウエアーで分割キーボードの配線と動作確認</a></li>
+        <li><a href="#led問題">LED問題</a></li>
       </ul>
     </li>
   </ul>
@@ -168,6 +169,10 @@ column for ease of programming</li>
 <li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgs58">cgs58</a> keymap=<code>default</code></li>
 </ul>
 <p>動きがちょっと悪かった１つのキーの原因は、ホットメルト接着剤がはみ出してキーがしっかりボトムしきれない物理的問題でした。</p>
+<h3 id="led問題">LED問題</h3>
+<p>cgc56では8つもあったのですが、gcs58ではキーボードの状態表示に使えるLEDは左右１つづつです。</p>
+<p>単純なアプローチではこれらは同じピンなので同時点滅しかしません。</p>
+<p>その解決策を書くのに左右どちらかを確認する関数をさがしていたら、<code>quantum/split_common/split_util.c</code>中に<code>is_keyboard_left()</code>を見つけました。</p>
 <!-- raw HTML omitted -->
 
 
