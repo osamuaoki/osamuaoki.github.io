@@ -61,24 +61,26 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#キーマップ改善の方針">キーマップ改善の方針</a>
+    <li><a href="#キーマップ改善の状況">キーマップ改善の状況</a>
       <ul>
         <li><a href="#キーマップ-pico">キーマップ pico</a></li>
+        <li><a href="#キーキャップ配置">キーキャップ配置</a></li>
       </ul>
     </li>
   </ul>
 </nav>
 
-<h2 id="キーマップ改善の方針">キーマップ改善の方針</h2>
+<h2 id="キーマップ改善の状況">キーマップ改善の状況</h2>
 <p>キーマップ改善の基本方針のタップとホールドの有効利用は、<a href="/jp/2022/03/15/home-mt/">QMK (4) – キーマップ改善</a>から変わりません。</p>
 <p>さらに、以前から遊んでいたAVR系でQMKを使う<a href="https://github.com/osamuaoki/cg56">cgc56</a>という一体型キーボードと、
 今回ARM系でQMKを使う<a href="/jp/2022/09/01/blackpill-4/">STM32F411CE (4)</a>で作ったcgs58という分割キーボードと、
 できれば将来interceptionを使いLaptop PCの内蔵キーボードの全てで、キーマッピングの基本部分を共用できるようにすることに配慮しました。</p>
-<p>cgc56を使ってきた経験を重要視しました。設計指針の要点を記すと；</p>
+<p>cgc56を使ってきた経験を重要視し、細かな調整を加えました。設計指針の要点をもう一度まとめると以下です。</p>
 <ul>
-<li>標準キーボードとキーの位置をできるだけ変えないことでメンタルストレス無くする。(QWERTY)</li>
-<li>フィジカルストレスが少なくなる指の動きが少なくする。(3rows x 6columns + 2thums ) x 2sides</li>
+<li>標準キーボードとキーの位置をできるだけ変えないことでメンタルストレス無くする。(QWERTYの中心利用。ブロック毎に動かす感じ。)</li>
+<li>フィジカルストレスが少なくなる指の動きが少なくする。(3rows x 6columns + 2thums ) x 2sides (1U以上の動き無し)</li>
 <li>HOME-ROW MODを採用する。</li>
+<li>日本語と英語・コーディングの両方の用途に配慮する。(ANSIなのに「無変換」「変換」キーをつける。)</li>
 </ul>
 <h3 id="キーマップ-pico">キーマップ pico</h3>
 <p>「基本的に使う部分」は、左<code>6x3_2</code>キーと右<code>6x3_2</code>キーと限定し、配列の要点は以下のようなpico系に落ち着いて来ました。</p>
@@ -91,6 +93,17 @@
 <p>ちょっと変則的ですが、日本語キーボードの変換・無変換キーをSPACEの横におきます。これでソフトは動きます。</p>
 <p>あまり使わない真ん中のキーはFnキーに等に割り降ります。(あまり使わない気もしますが)</p>
 <p>HOME-ROW-MODで出番の減った両端のシフトキーを、タップで使わないのももったいないので、メディアキーなどに割り振ります。ただHOLDはシフトのままにしておきます。viの「ZZ」等はこの方が良いので。</p>
+<h3 id="キーキャップ配置">キーキャップ配置</h3>
+<ul>
+<li>
+<p>cgc56 with DSA profile keycaps (pico):
+<img src="/img/cgc56-20220911.jpg" alt="cgc56 with DSA profile keycaps (pico)"></p>
+</li>
+<li>
+<p>cgs58 with OEM profile keycaps (pico):
+<img src="/img/cgs58-20220911.jpg" alt="cgs58 with OEM profile keycaps (pico)"></p>
+</li>
+</ul>
 <!-- raw HTML omitted -->
 
 
