@@ -66,9 +66,9 @@
       <ul>
         <li><a href="#改造コンセプト">改造コンセプト</a></li>
         <li><a href="#pin接続-cgs58">PIN接続 (cgs58)</a></li>
-        <li><a href="#テスト用ファームウエアーで左右別々に配線確認">テスト用ファームウエアーで左右別々に配線確認</a></li>
+        <li><a href="#テスト用ファームウエアーで左右別々に配線と動作確認">テスト用ファームウエアーで左右別々に配線と動作確認</a></li>
         <li><a href="#左右検出handedness-by-pin法">左右検出(Handedness by Pin)法</a></li>
-        <li><a href="#分割キーボードのファームウエアー">分割キーボードのファームウエアー</a></li>
+        <li><a href="#テスト用ファームウエアーで分割キーボードの配線と動作確認">テスト用ファームウエアーで分割キーボードの配線と動作確認</a></li>
       </ul>
     </li>
   </ul>
@@ -130,7 +130,7 @@
         SWDIO    -----------PA13--+ | |
         SWSCK    -----------PA14----+ |
           GND    ---------------------+
-</code></pre><h3 id="テスト用ファームウエアーで左右別々に配線確認">テスト用ファームウエアーで左右別々に配線確認</h3>
+</code></pre><h3 id="テスト用ファームウエアーで左右別々に配線と動作確認">テスト用ファームウエアーで左右別々に配線と動作確認</h3>
 <p>実際には、連結以外の配線をして、qmkを書き込み配線確認をします。</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgh29l">cgh29l</a></li>
@@ -161,10 +161,11 @@ column for ease of programming</li>
 <li><a href="https://github.com/qmk/qmk_firmware/blob/master/keyboards/mlego/m60_split/rev2/config.h">https://github.com/qmk/qmk_firmware/blob/master/keyboards/mlego/m60_split/rev2/config.h</a></li>
 <li><a href="https://github.com/qmk/qmk_firmware/blob/master/docs/serial_driver.md#choosing-a-driver-subsystem">https://github.com/qmk/qmk_firmware/blob/master/docs/serial_driver.md#choosing-a-driver-subsystem</a></li>
 </ul>
-<h3 id="分割キーボードのファームウエアー">分割キーボードのファームウエアー</h3>
+<h3 id="テスト用ファームウエアーで分割キーボードの配線と動作確認">テスト用ファームウエアーで分割キーボードの配線と動作確認</h3>
+<p>左右のキーボードを４線で接続しました。電源(+5V)赤、電源(GND)黒、TXとRXはクロス接続で白・緑を用い直結です。</p>
 <p>以下の試験ファームウエアーを入れたら、一発で１つのキー以外全て順調な稼働が確認できました。</p>
 <ul>
-<li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgs58">cgs58</a></li>
+<li><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgs58">cgs58</a> keymap=<code>default</code></li>
 </ul>
 <p>動きがちょっと悪かった１つのキーの原因は、ホットメルト接着剤がはみ出してキーがしっかりボトムしきれない物理的問題でした。</p>
 <!-- raw HTML omitted -->
