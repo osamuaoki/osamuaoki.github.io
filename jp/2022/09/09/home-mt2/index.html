@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/09/09 (initial publish),
-2022/09/11 (last update)
+2022/09/13 (last update)
 </h3>
 </div>
 
@@ -71,13 +71,13 @@
 <h2 id="キーマップ改善の経緯">キーマップ改善の経緯</h2>
 <p>キーマップ改善の基本方針としてのタップとホールドの有効利用は、<a href="/jp/2022/03/15/home-mt/">QMK (4) – キーマップ改善</a>から変わっていません。</p>
 <p>以前から遊んでいたAVR系でQMKを使う<a href="https://github.com/osamuaoki/cg56">cgc56</a>という一体型キーボードと、
-今回ARM系でQMKを使う<a href="/jp/2022/09/01/blackpill-4/">STM32F411CE (4)</a>で作ったcgs58という分割キーボードと、
+今回ARM系でQMKを使う<a href="/jp/2022/09/01/blackpill-4/">STM32F411CE (4)</a>で作ったcgs58・cgs50という分割キーボードと、
 できれば将来interceptionを使いLaptop PCの内蔵キーボードの全てで、キーマッピングの基本部分を共用できるようにすることにも配慮しました。</p>
 <p>特にcgc56を使ってきた経験を生かし、細かな調整を加えました。設計指針の要点をもう一度まとめると以下です。</p>
 <ul>
 <li>標準キーボードとキーの位置をできるだけ変えないことで、使用時のメンタルストレス無くする。(QWERTYの中心利用。ブロック毎に動かす感じ。)</li>
 <li>フィジカルストレスが少なくなるように、指の動きを少なくする。「基本的に使う部分」を(3rows x 6columns + 2thums ) x 2sides とし、1U以上の動き無くす。</li>
-<li>HOME-ROW MODを採用する。</li>
+<li>HOME-ROW MODを採用する。(HOMEポジションがわかりやすいキー配置)</li>
 <li>日本語と英語・コーディングの両方の用途に配慮する。(ANSIなのに「無変換」「変換」キーをつける変則構成。)</li>
 </ul>
 <h2 id="キーマップ-pico">キーマップ pico</h2>
@@ -95,17 +95,26 @@
 <ul>
 <li>
 <p><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgc56">cgc56のソースコード</a> keymap=<code>pico</code></p>
-</li>
-<li>
-<p>cgc56 with DSA profile keycaps (pico):
-<img src="/img/cgc56-20220911.jpg" alt="cgc56 with DSA profile keycaps (pico)"></p>
+<ul>
+<li>cgc56 with DSA profile keycaps (pico):
+<img src="/img/cgc56-20220911.jpg" alt="cgc56 with DSA profile keycaps (pico)"></li>
+<li>USBをマグネットでつけたのが良かった。</li>
+</ul>
 </li>
 <li>
 <p><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgs58">cgs58のソースコード</a> keymap=<code>pico</code></p>
+<ul>
+<li>cgs58 with OEM profile keycaps (pico):
+<img src="/img/cgs58-20220911.jpg" alt="cgs58 with OEM profile keycaps (pico)"></li>
+<li>少々大きすぎた。両端を叩き斬って、下のcgs50に改造した。</li>
+</ul>
 </li>
 <li>
-<p>cgs58 with OEM profile keycaps (pico):
-<img src="/img/cgs58-20220911.jpg" alt="cgs58 with OEM profile keycaps (pico)"></p>
+<p><a href="https://github.com/osamuaoki/qmk_firmware/tree/osamu1/keyboards/cgs50">cgs50のソースコード</a> keymap=<code>pico</code></p>
+<ul>
+<li>cgs50 with OEM profile keycaps (pico):
+<img src="/img/cgs50-20220913.jpg" alt="cgs50 with OEM profile keycaps (pico)"></li>
+</ul>
 </li>
 </ul>
 <h2 id="今後への考察">今後への考察</h2>
