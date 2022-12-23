@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>内蔵キーボードのキーマップ改変 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">内蔵キーボードのキーマップ改変</span></h1>
+
+<h3 class="date">Date:
+2022/06/03 (initial publish),
+2022/12/23 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/06/03/evdev01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/jp/2022/09/01/blackpill-4/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#実験準備">実験準備</a>
+      <ul>
+        <li><a href="#本体付属キーボードi8042用の設定">本体付属キーボード(i8042)用の設定</a></li>
+      </ul>
+    </li>
+    <li><a href="#フィルター-evmk">フィルター <code>evmk</code></a></li>
+  </ul>
+</nav>
+
+<h2 id="実験準備">実験準備</h2>
+<p><a href="/jp/2022/06/03/evdev01/">内蔵キーボードのキーマップ改変準備</a>の結果を生かす環境をつくるべく、とりあえずDebianの正式パッケージ<a href="https://tracker.debian.org/pkg/interception-tools">interception-tools</a>をアップロードしました。</p>
+<p>アップストリームはシェルからの直接起動方法の基本として以下を例示してます。</p>
+<pre tabindex="0"><code>$ sudo nice -n -20 udevmon -c udevmon.yaml &gt;udevmon.log 2&gt;udevmon.err &amp;
+</code></pre><p><a href="https://github.com/maricn/interception-vimproved">Interception plugin for vimproved input</a>の作者が示している、テスト時のトラブル防止策が参考になります。</p>
+<pre tabindex="0"><code># sleep 1 &amp;&amp; sudo nice -n -20 timeout 10 udevmon -c /etc/udevmon.yml
+</code></pre><ul>
+<li>sleepで１秒待つことで、ターミナルから離れて実験環境に移動できます。</li>
+<li>timeoutでキーボード入力ができなくなったままになる事を回避しています。</li>
+</ul>
+<p>(わたしは、追加の外付けUSBキーボードをつないでおくことも考えています。)</p>
+<p>また、使用するフィルタープログラムは、<a href="https://gitlab.com/interception/linux/tools/-/merge_requests/20">起動時に入出力バッファをクリアーする</a>ことも推奨されるようです。</p>
+<p>アップストリーム作成の<code>udevmon.service</code>ファイルは、<code>-3</code> Debian revision 以降はバイナリーパッケージに同梱されています。</p>
+<p><code>udevmon</code>を<code>udevmon.service</code>ファイルを使ってSystemdにより<code>udevmon</code>を自動起動させるよう、このファイルをとりあえず<code>/etc/systemd/system/</code>に置きます。
+(もちろん、パッケージとしては<code>/lib/systemd/system/</code>にでもこのファイルをインストールして、そこに<code>/etc/systemd/system/</code>からsymlinkをはるようするのでしょう。)</p>
+<p>この自動起動設定の有効化と起動実験は以下となります。（これだと、シェルからの直接起動の様にsleepすることはない模様）</p>
+<pre tabindex="0"><code>$ sudo systemctl enable --now udevmon.service
+</code></pre><p>また、フィルターを書く際に気になるのは<a href="https://gitlab.com/interception/linux/tools/-/merge_requests/20/diffs?commit_id=78515ec0a7f53d2673048fcf05ae12be18390808">clearing buffer</a>ですが、そえは後ほど。。。。</p>
+<h3 id="本体付属キーボードi8042用の設定">本体付属キーボード(i8042)用の設定</h3>
+<p>内蔵キーボードは<code>/dev/input/by-path/platform-i8042-serio-0-event-kbd</code>ということがわかっているので、<code>/etc/interception/udevmon.d/</code>ディレクトリーを作成し、テスト用のダミーの<code>int-kbd.yaml</code>ファイルを以下の内容で作成しました。</p>
+<pre tabindex="0"><code>- JOB: intercept -g $DEVNODE | cat - | uinput -d $DEVNODE
+  DEVICE:
+    LINK: /dev/input/by-path/platform-i8042-serio-0-event-kbd
+</code></pre><p>上記の様にして起動実験して問題無しです。</p>
+<h2 id="フィルター-evmk">フィルター <code>evmk</code></h2>
+<p>今度はsystemdのjournalへのログ出力ができるようにした、改良版のフィルター・ログ用のプログラム<a href="https://github.com/osamuaoki/evmk">evmk</a>を使うように、<code>int-kbd.yaml</code>ファイルを以下の内容で作成しました。</p>
+<pre tabindex="0"><code>- JOB: intercept -g $DEVNODE | /usr/local/bin/evmk | uinput -d $DEVNODE
+  DEVICE:
+    LINK: /dev/input/by-path/platform-i8042-serio-0-event-kbd
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/06/03/evdev01/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/jp/2022/09/01/blackpill-4/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -69,9 +69,29 @@ currently: nvim-lsp-installer (upstream: https://github.com/williamboman/nvim-ls
       <pubDate>Fri, 15 Jul 2022 00:00:00 +0000</pubDate>
       
       <guid>/en/2022/07/15/vim-learn-4/</guid>
-      <description>Neovim 0.7 migration After short trial of Neovim (nvim) 0.5 described in Re-learning Vim (3), I went back to the good old Vim with ALE.
-As I find out Neovim (nvim) 0.7 now has native LSP support and tools around it seems to be getting mature, I decided to check nvim with lua again. I also found a nice recent review:
-The best IDE-style configurations for nvim Since AstroNvim seems to be interesting for its compactness and pre-configured package settings, I tried it as the main nvim configuration.</description>
+      <description>NOTE: As of 2022-12-23, I use NeoVim (v0.8.1 upstream deb) with AstroNvim (v2.10.1). Upstream of AstroNvim has included many things written below as a part of its official documentation and adopted new features proposed below.
+Neovim 0.7 migration After short trial of Neovim (nvim) 0.5 described in Re-learning Vim (3), I went back to the good old Vim with ALE.
+As I find out Neovim (nvim) 0.7 now has native LSP support and tools around it seems to be getting mature, I decided to check nvim with lua again.</description>
+    </item>
+    
+    <item>
+      <title>内蔵キーボードのキーマップ改変</title>
+      <link>/jp/2022/06/03/evdev02/</link>
+      <pubDate>Fri, 03 Jun 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2022/06/03/evdev02/</guid>
+      <description>実験準備 内蔵キーボードのキーマップ改変準備の結果を生かす環境をつくるべく、とりあえずDebianの正式パッケージinterception-toolsをアップロードしました。
+アップストリームはシェルからの直接起動方法の基本として以下を例示してます。
+$ sudo nice -n -20 udevmon -c udevmon.yaml &amp;gt;udevmon.log 2&amp;gt;udevmon.err &amp;amp; Interception plugin for vimproved inputの作者が示している、テスト時のトラブル防止策が参考になります。
+# sleep 1 &amp;amp;&amp;amp; sudo nice -n -20 timeout 10 udevmon -c /etc/udevmon.yml sleepで１秒待つことで、ターミナルから離れて実験環境に移動できます。 timeoutでキーボード入力ができなくなったままになる事を回避しています。 (わたしは、追加の外付けUSBキーボードをつないでおくことも考えています。)
+また、使用するフィルタープログラムは、起動時に入出力バッファをクリアーすることも推奨されるようです。
+アップストリーム作成のudevmon.serviceファイルは、-3 Debian revision 以降はバイナリーパッケージに同梱されています。
+udevmonをudevmon.serviceファイルを使ってSystemdによりudevmonを自動起動させるよう、このファイルをとりあえず/etc/systemd/system/に置きます。 (もちろん、パッケージとしては/lib/systemd/system/にでもこのファイルをインストールして、そこに/etc/systemd/system/からsymlinkをはるようするのでしょう。)
+この自動起動設定の有効化と起動実験は以下となります。（これだと、シェルからの直接起動の様にsleepすることはない模様）
+$ sudo systemctl enable --now udevmon.service また、フィルターを書く際に気になるのはclearing bufferですが、そえは後ほど。。。。
+本体付属キーボード(i8042)用の設定 内蔵キーボードは/dev/input/by-path/platform-i8042-serio-0-event-kbdということがわかっているので、/etc/interception/udevmon.d/ディレクトリーを作成し、テスト用のダミーのint-kbd.yamlファイルを以下の内容で作成しました。
+- JOB: intercept -g $DEVNODE | cat - | uinput -d $DEVNODE DEVICE: LINK: /dev/input/by-path/platform-i8042-serio-0-event-kbd 上記の様にして起動実験して問題無しです。
+フィルター evmk 今度はsystemdのjournalへのログ出力ができるようにした、改良版のフィルター・ログ用のプログラムevmkを使うように、int-kbd.</description>
     </item>
     
     <item>
