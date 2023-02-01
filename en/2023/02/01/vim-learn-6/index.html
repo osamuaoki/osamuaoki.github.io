@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Re-learning Vim (6) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Re-learning Vim (6)</span></h1>
+
+<h3 class="date">Date:
+2023/02/01 (initial publish),
+2023/02/01 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2022/08/20/dev-04/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#neovim-v082-with-astronvim-v2118">Neovim v0.8.2 with AstroNvim v2.11.8</a>
+      <ul>
+        <li><a href="#local-customization">Local customization</a></li>
+        <li><a href="#treesitter-language-support">Treesitter language support</a></li>
+        <li><a href="#lsp-server-support">LSP server support</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="neovim-v082-with-astronvim-v2118">Neovim v0.8.2 with AstroNvim v2.11.8</h2>
+<p>In order to update AstroNvim, Neovim needed to be updated v0.8+.  Since the
+official Debian package was stuck at v0.7, I installed upstream provided deb
+package.  See <a href="https://bugs.debian.org/1021339">Debian BTS #1021339</a>.</p>
+<p>The following configuration was built on top of the configuration mentioned in
+<a href="/en/2022/07/29/vim-learn-5/">Re-learning Vim (5)</a>.</p>
+<h3 id="local-customization">Local customization</h3>
+<p>I customized my Neovim with <code>~/.config/astronvim</code> and installed a few extra
+packages as <a href="https://github.com/osamuaoki/astronvim-osamu">astronvim-osamu</a>.</p>
+<p>Key local features:</p>
+<ul>
+<li>Unicode code point display in status line.</li>
+<li>Reopen file with its cursor at the last place.</li>
+<li>Vimhelp documentation available for delayed loading packages.</li>
+<li>Cheatsheet for Vim.</li>
+</ul>
+<p><a href="https://github.com/osamuaoki/osamu-utils/blob/main/vimdoc-install">vimdoc-install</a>
+script to make all available Vimhelp documentation easily accessible via <code>:h</code>.</p>
+<h3 id="treesitter-language-support">Treesitter language support</h3>
+<p>Treesitter supports for pertinent languages were installed as:</p>
+<pre tabindex="0"><code>:TSInstall {language}
+</code></pre><p>See <code>:h nvim-treesitter</code></p>
+<h3 id="lsp-server-support">LSP server support</h3>
+<p>LSP server supports for pertinent languages were installed as:</p>
+<pre tabindex="0"><code>:Lspinstall {language}
+</code></pre><p>See <code>:h mason-lspconfig.nvim</code></p>
+<p>Some local Debian packages were installed as backend programs for LSP.</p>
+<ul>
+<li><code>shellcheck</code></li>
+<li><code>shfmt</code></li>
+<li><code>pyright</code></li>
+<li><code>black</code></li>
+<li><code>isort</code></li>
+</ul>
+<p>I also added
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/dot/.editorconfig">~/.editorconfig</a>
+to cope with sources using <a href="https://editorconfig.org/">editorconfig</a>.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2022/08/20/dev-04/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
