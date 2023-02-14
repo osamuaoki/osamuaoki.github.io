@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/01 (initial publish),
-2023/02/04 (last update)
+2023/02/14 (last update)
 </h3>
 </div>
 
@@ -68,13 +68,14 @@
         <li><a href="#lspdaplinterformatter-language-support">LSP/DAP/Linter/Formatter language support</a></li>
       </ul>
     </li>
+    <li><a href="#astronvim-v3-branch-with-lazynvim">AstroNvim v3 branch with lazy.nvim</a></li>
   </ul>
 </nav>
 
 <h2 id="neovim-v082-with-astronvim-v2118">Neovim v0.8.2 with AstroNvim v2.11.8</h2>
-<p>In order to update AstroNvim, Neovim needed to be updated v0.8+.  Since the
+<p>In order to update AstroNvim, Neovim needed to be updated v0.8+. Since the
 official Debian package was stuck at v0.7, I installed upstream provided deb
-package.  See <a href="https://bugs.debian.org/1021339">Debian BTS #1021339</a>.</p>
+package. See <a href="https://bugs.debian.org/1021339">Debian BTS #1021339</a>.</p>
 <p>The following configuration was built on top of the configuration mentioned in
 <a href="/en/2022/07/29/vim-learn-5/">Re-learning Vim (5)</a>.</p>
 <h3 id="local-customization">Local customization</h3>
@@ -88,15 +89,16 @@ packages as <a href="https://github.com/osamuaoki/astronvim-osamu">astronvim-osa
 <li>Cheatsheet for Vim.</li>
 </ul>
 <p><a href="https://github.com/osamuaoki/osamu-utils/blob/main/vimdoc-install">vimdoc-install</a>
-script to make all available Vimhelp documentation easily accessible via <code>:h</code>.</p>
+script to make all available Vimhelp documentation easily accessible via <code>:h</code>
+by creating symlinks in <code>~/.config/astronvim/doc/</code> directories to them.</p>
 <h3 id="treesitter-language-support">Treesitter language support</h3>
 <p>Treesitter supports for pertinent languages were installed as:</p>
-<pre tabindex="0"><code>:TSInstall {language}
-</code></pre><p>See <code>:h nvim-treesitter</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span>:<span style="color:#a6e22e">TSInstall</span> {<span style="color:#a6e22e">language</span>}<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>See <code>:h nvim-treesitter</code></p>
 <h3 id="lspdaplinterformatter-language-support">LSP/DAP/Linter/Formatter language support</h3>
-<p>LSP/DAP/Linter/Formatter supports for pertinent languages were interactively installed as:</p>
-<pre tabindex="0"><code>:Mason
-</code></pre><p>Basically, this installs requested <code>&lt;packagename&gt;</code> package into
+<p>LSP/DAP/Linter/Formatter supports for pertinent languages were interactively
+installed by <code>&lt;leader&gt;pI</code> or <code>:Mason</code>.</p>
+<p>Basically, this helps us to install requested <code>&lt;packagename&gt;</code> package into
 <code>~/.local/share/nvim/mason/packages/&lt;packagename&gt;/</code> and make its executable
 <code>&lt;progname&gt;</code> program accessible from Neovim in
 <code>~/.local/share/nvim/mason/bin/&lt;progname&gt;</code>. So executable programs from Neovim
@@ -104,33 +106,33 @@ plugins are not the one on the main system.</p>
 <p>In order this to work, some system programs are needed to be installed in
 advance. As I see my situation with <code>:checkhealth mason.nvim</code> (after
 <code>mason.nvim</code> has been delay loaded by opening a file).:</p>
-<pre tabindex="0"><code>mason: require(&#34;mason.health&#34;).check()
-========================================================================
-## mason.nvim report
-  - OK: neovim version &gt;= 0.7.0
-  - OK: **Go**: `go version go1.19.5 linux/amd64`
-  - OK: **cargo**: `cargo 1.65.0`
-  - OK: **luarocks**: `/usr/bin/luarocks 3.8.0`
-  - OK: **Ruby**: `ruby 3.1.2p20 (2022-04-12 revision 4491bb740a) [x86_64-linux-gnu]`
-  - OK: **RubyGem**: `3.3.15`
-  - WARNING: **Composer**: not available
-  - WARNING: **PHP**: not available
-  - OK: **npm**: `9.2.0`
-  - OK: **node**: `v18.13.0`
-  - OK: **python3**: `Python 3.11.1`
-  - OK: **pip3**: `pip 22.3.1 from /usr/lib/python3/dist-packages/pip (python 3.11)`
-  - WARNING: **javac**: not available
-  - OK: **java**: `openjdk version &#34;17.0.6&#34; 2023-01-17`
-  - WARNING: **julia**: not available
-  - OK: **wget**: `GNU Wget 1.21.3 built on linux-gnu.`
-  - OK: **curl**: `curl 7.87.0 (x86_64-pc-linux-gnu) libcurl/7.87.0 OpenSSL/3.0.7 zlib/1.2.13 brotli/1.0.9 zstd/1.5.2 libidn2/2.3.3 libpsl/0.21.0 (+libidn2/2.3.0) libssh2/1.10.0 nghttp2/1.51.0 librtmp/2.3`
-  - OK: **gzip**: `gzip 1.12`
-  - OK: **tar**: `tar (GNU tar) 1.34`
-  - WARNING: **pwsh**: not available
-  - OK: **bash**: `GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)`
-  - OK: **sh**: `Ok`
-  - OK: GitHub API rate limit. Used: 0. Remaining: 60. Limit: 60. Reset: Sat 04 Feb 2023 06:10:16 AM JST.
-</code></pre><p>I ended up to install following Debian packages as required system programs.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>mason: require(&#34;mason.health&#34;).check()
+</span></span><span style="display:flex;"><span>========================================================================
+</span></span><span style="display:flex;"><span>## mason.nvim report
+</span></span><span style="display:flex;"><span>  - OK: neovim version &gt;= 0.7.0
+</span></span><span style="display:flex;"><span>  - OK: **Go**: `go version go1.19.5 linux/amd64`
+</span></span><span style="display:flex;"><span>  - OK: **cargo**: `cargo 1.65.0`
+</span></span><span style="display:flex;"><span>  - OK: **luarocks**: `/usr/bin/luarocks 3.8.0`
+</span></span><span style="display:flex;"><span>  - OK: **Ruby**: `ruby 3.1.2p20 (2022-04-12 revision 4491bb740a) [x86_64-linux-gnu]`
+</span></span><span style="display:flex;"><span>  - OK: **RubyGem**: `3.3.15`
+</span></span><span style="display:flex;"><span>  - WARNING: **Composer**: not available
+</span></span><span style="display:flex;"><span>  - WARNING: **PHP**: not available
+</span></span><span style="display:flex;"><span>  - OK: **npm**: `9.2.0`
+</span></span><span style="display:flex;"><span>  - OK: **node**: `v18.13.0`
+</span></span><span style="display:flex;"><span>  - OK: **python3**: `Python 3.11.1`
+</span></span><span style="display:flex;"><span>  - OK: **pip3**: `pip 22.3.1 from /usr/lib/python3/dist-packages/pip (python 3.11)`
+</span></span><span style="display:flex;"><span>  - WARNING: **javac**: not available
+</span></span><span style="display:flex;"><span>  - OK: **java**: `openjdk version &#34;17.0.6&#34; 2023-01-17`
+</span></span><span style="display:flex;"><span>  - WARNING: **julia**: not available
+</span></span><span style="display:flex;"><span>  - OK: **wget**: `GNU Wget 1.21.3 built on linux-gnu.`
+</span></span><span style="display:flex;"><span>  - OK: **curl**: `curl 7.87.0 (x86_64-pc-linux-gnu) libcurl/7.87.0 OpenSSL/ ...
+</span></span><span style="display:flex;"><span>  - OK: **gzip**: `gzip 1.12`
+</span></span><span style="display:flex;"><span>  - OK: **tar**: `tar (GNU tar) 1.34`
+</span></span><span style="display:flex;"><span>  - WARNING: **pwsh**: not available
+</span></span><span style="display:flex;"><span>  - OK: **bash**: `GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)`
+</span></span><span style="display:flex;"><span>  - OK: **sh**: `Ok`
+</span></span><span style="display:flex;"><span>  - OK: GitHub API rate limit. Used: 0. Remaining: 60. Limit: 60. Reset: Sat 0 ...
+</span></span></code></pre></div><p>I ended up to install following Debian packages as required system programs.</p>
 <ul>
 <li><code>luarocks</code></li>
 <li><code>npm</code></li>
@@ -142,9 +144,23 @@ advance. As I see my situation with <code>:checkhealth mason.nvim</code> (after
 <li><code>wget</code></li>
 </ul>
 <p>See more <code>:h mason.nvim</code></p>
+<p>In order to make LSP/DAP/Linter/Formatter programs accessible from shell
+prompt, I have modifies <code>~.profile</code> to include the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># set PATH so it includes mason.nvim&#39;s private bin if it exists (Neovim/mason.nvim)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -d <span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.local/share/nvim/mason/bin/&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.local/share/nvim/mason/bin:</span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><p>I got annoyed with automatic reformat upon file save.  The upstream gave me a
+<a href="https://github.com/AstroNvim/AstroNvim/issues/1572">lesson</a> pointing me to a
+<a href="https://astronvim.com/Recipes/advanced_lsp#disabling-formatting-for-a-list-of-language-servers">solution</a>.</p>
 <p>I also added
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/dot/.editorconfig">~/.editorconfig</a>
 to cope with sources using <a href="https://editorconfig.org/">editorconfig</a>.</p>
+<h2 id="astronvim-v3-branch-with-lazynvim">AstroNvim v3 branch with lazy.nvim</h2>
+<p>It looks like AstoNvim is migrating to the new package manager <code>lazy.nvim</code> as I
+see its v3 branch development.</p>
+<p>Once we migrate, files under <code>~/.local/share/nvim/site/pack/packer</code> seems to be
+safely removed after migration.</p>
 <!-- raw HTML omitted -->
 
 
