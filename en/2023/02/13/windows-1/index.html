@@ -63,7 +63,6 @@
   <ul>
     <li><a href="#information-related-to-how-to-install-windows">Information related to how to install Windows</a></li>
     <li><a href="#useful-tools-on-debian-to-manipulate-disk-data">Useful tools on Debian to manipulate disk data</a></li>
-    <li><a href="#key-point-to-use-the-official-iso-image-on-the-usb-flash-drive">Key point to use the official ISO image on the USB flash drive</a></li>
     <li><a href="#how-to-create-a-usb-flash-drive-to-install-windows">How to create a USB flash drive to install Windows</a></li>
     <li><a href="#related-articles-and-resources">Related articles and resources</a></li>
   </ul>
@@ -86,7 +85,7 @@
 </li>
 <li><a href="https://www.microsoft.com/en-US/software-download/windows11">Windows 11 ISO image download page</a></li>
 </ul>
-<p>You should probably get your localized <strong>Windows 10 pro</strong> image for <strong>Windows 10</strong> (Not Windows 10N, Windows 10KN if you are not living in South Korea or Europe).</p>
+<p>You should probably get your localized <strong>Windows 10 pro</strong> image for <strong>Windows 10</strong> (Not Windows 10N nor Windows 10KN.  These are for people living in Europe or South Korea).</p>
 <h2 id="useful-tools-on-debian-to-manipulate-disk-data">Useful tools on Debian to manipulate disk data</h2>
 <ul>
 <li><a href="https://packages.debian.org/sid/gdisk">gdisk</a> &ndash; GPT fdisk text-mode partitioning tool (with in place conversion of MBR to GPT)</li>
@@ -95,22 +94,20 @@
 <li><a href="https://packages.debian.org/sid/msb">msb</a> &ndash; Master Boot Record for IBM-PC compatible computers</li>
 <li><a href="https://packages.debian.org/unstable/wimtools">wimtools</a> &ndash; Tools for manipulating Windows Imaging files</li>
 </ul>
-<h2 id="key-point-to-use-the-official-iso-image-on-the-usb-flash-drive">Key point to use the official ISO image on the USB flash drive</h2>
-<p>The Windows ISO image contains <code>sources/install.wim</code> which is about 5GiB and exceeds 4 GiB filesize limit on FAT32 frequently used for the USB flash disk.</p>
-<p>If your image is larger than the filesize limit, use <code>wimsplit</code>, or equivalently <code>wimlib-imagex split</code>, to split WIMFILE into parts.</p>
 <h2 id="how-to-create-a-usb-flash-drive-to-install-windows">How to create a USB flash drive to install Windows</h2>
+<p>The recent Windows ISO image contains <code>sources/install.wim</code> which is about 5GiB and exceeds 4 GiB filesize limit on FAT32 frequently used for the USB flash disk.</p>
 <p>The following is for Windows USB install via UEFI.</p>
 <ul>
 <li>Download Windows 10 install media</li>
 <li>Format USB flash drive with FAT32 on GPT</li>
 <li>Copy everything in the ISO image to USB flash drive
 <ul>
-<li>split <code>sources/install.wim</code> to avoid filesize limitation</li>
+<li>split <code>sources/install.wim</code> using <code>wimsplit</code>, or equivalently <code>wimlib-imagex split</code>, into parts</li>
 </ul>
 </li>
 </ul>
-<p>If your UEFI supports NTFS, you can skip splitting <code>sources/install.wim</code>.  (I
-read this tip somewhere before but I haven&rsquo;t test this.)</p>
+<p>If your UEFI supports NTFS, you can skip splitting <code>sources/install.wim</code>.
+(I read this tip somewhere before but I haven&rsquo;t test this.)</p>
 <h2 id="related-articles-and-resources">Related articles and resources</h2>
 <ul>
 <li><a href="https://blog.be-dama.com/2021/08/03/linux_winboot_usb/">Linux環境でWindows10のインストールUSBメモリを作成</a></li>
