@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/13 (initial publish),
-2023/02/14 (last update)
+2023/02/15 (last update)
 </h3>
 </div>
 
@@ -68,7 +68,9 @@
   </ul>
 </nav>
 
-<p>This can be automated by using <a href="https://github.com/WoeUSB/WoeUSB">https://github.com/WoeUSB/WoeUSB</a> &ndash; A Microsoft Windows® USB installation media preparer for GNU+Linux</p>
+<p>This can be automated by using
+<a href="https://github.com/WoeUSB/WoeUSB">https://github.com/WoeUSB/WoeUSB</a> &ndash; A
+Microsoft Windows® USB installation media preparer for GNU+Linux</p>
 <p>Let&rsquo;s see what is involved.</p>
 <h2 id="information-related-to-how-to-install-windows">Information related to how to install Windows</h2>
 <p>The official Microsoft documentation gives us good entry points:</p>
@@ -85,7 +87,9 @@
 </li>
 <li><a href="https://www.microsoft.com/en-US/software-download/windows11">Windows 11 ISO image download page</a></li>
 </ul>
-<p>You should probably get your localized <strong>Windows 10 pro</strong> image for <strong>Windows 10</strong> (Not Windows 10N nor Windows 10KN.  These are for people living in Europe or South Korea).</p>
+<p>You should probably get your localized <strong>Windows 10 pro</strong> image for <strong>Windows
+10</strong> (Not Windows 10N nor Windows 10KN.  These are for people living in Europe
+or South Korea).</p>
 <h2 id="useful-tools-on-debian-to-manipulate-disk-data">Useful tools on Debian to manipulate disk data</h2>
 <ul>
 <li><a href="https://packages.debian.org/sid/gdisk">gdisk</a> &ndash; GPT fdisk text-mode partitioning tool (with in place conversion of MBR to GPT)</li>
@@ -95,19 +99,26 @@
 <li><a href="https://packages.debian.org/unstable/wimtools">wimtools</a> &ndash; Tools for manipulating Windows Imaging files</li>
 </ul>
 <h2 id="how-to-create-a-usb-flash-drive-to-install-windows">How to create a USB flash drive to install Windows</h2>
-<p>The recent Windows ISO image contains <code>sources/install.wim</code> which is about 5GiB and exceeds 4 GiB filesize limit on FAT32 frequently used for the USB flash disk.</p>
-<p>The following is for Windows USB install via UEFI.</p>
+<p>The recent Windows ISO image contains <code>sources/install.wim</code> which is about 5GiB
+and exceeds 4 GiB filesize limit on FAT32 frequently used on the USB flash
+disk.  So we need some care to cope with this situation.</p>
+<p>The following can make a USB flash drive to install Windows via UEFI on GPT
+disk.</p>
 <ul>
 <li>Download Windows 10 install media</li>
-<li>Format USB flash drive with FAT32 on GPT</li>
+<li>Format USB flash drive with FAT32 filesystem on the first partition of GPT
+disk.</li>
 <li>Copy everything in the ISO image to USB flash drive
 <ul>
-<li>split <code>sources/install.wim</code> using <code>wimsplit</code>, or equivalently <code>wimlib-imagex split</code>, into parts</li>
+<li>split <code>sources/install.wim</code> using <code>wimsplit</code>, or equivalently
+<code>wimlib-imagex split</code>, into parts to cope with the 4GiB limit</li>
 </ul>
 </li>
 </ul>
-<p>If your UEFI supports NTFS, you can skip splitting <code>sources/install.wim</code>.
-(I read this tip somewhere before but I haven&rsquo;t test this.)</p>
+<p>If the UEFI available on your system supports NTFS or you use
+<a href="https://github.com/pbatard/uefi-ntfs">UEFI:NTFS</a>, you can boot Windows by
+copying the original <code>sources/install.wim</code> into  NTDF without splitting it.</p>
+<p>You may also make this to Legacy/UEFI hybrid boot disk.</p>
 <h2 id="related-articles-and-resources">Related articles and resources</h2>
 <ul>
 <li><a href="https://blog.be-dama.com/2021/08/03/linux_winboot_usb/">Linux環境でWindows10のインストールUSBメモリを作成</a></li>
