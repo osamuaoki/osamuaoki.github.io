@@ -61,18 +61,20 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#information-related-to-how-to-install-windows">Information related to how to install Windows</a></li>
-    <li><a href="#useful-tools-on-debian-to-manipulate-disk-data">Useful tools on Debian to manipulate disk data</a></li>
+    <li><a href="#windows-from-linux">Windows from Linux</a></li>
+    <li><a href="#information-on-windows">Information on Windows</a></li>
+    <li><a href="#available-gnu--linux-tools">Available GNU + Linux tools</a></li>
     <li><a href="#how-to-create-a-usb-flash-drive-to-install-windows">How to create a USB flash drive to install Windows</a></li>
     <li><a href="#related-articles-and-resources">Related articles and resources</a></li>
   </ul>
 </nav>
 
-<p>This can be automated by using
-<a href="https://github.com/WoeUSB/WoeUSB">https://github.com/WoeUSB/WoeUSB</a> &ndash; A
-Microsoft Windows® USB installation media prepared for GNU+Linux</p>
-<p>Let&rsquo;s see what is involved.</p>
-<h2 id="information-related-to-how-to-install-windows">Information related to how to install Windows</h2>
+<h2 id="windows-from-linux">Windows from Linux</h2>
+<p>Creation of Windows USB installation media on GNU + Linux platform can be
+automated by using
+<a href="https://github.com/WoeUSB/WoeUSB">https://github.com/WoeUSB/WoeUSB</a>.</p>
+<p>Let&rsquo;s see what is involved behind &ldquo;Windows from Linux&rdquo; as below.</p>
+<h2 id="information-on-windows">Information on Windows</h2>
 <p>The official Microsoft documentation gives us good entry points:</p>
 <ul>
 <li><a href="https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/install-windows-from-a-usb-flash-drive">Install Windows from a USB Flash Drive</a></li>
@@ -90,7 +92,8 @@ Microsoft Windows® USB installation media prepared for GNU+Linux</p>
 <p>You should probably get your localized <strong>Windows 10 pro</strong> image for <strong>Windows
 10</strong> (Not Windows 10N nor Windows 10KN.  These are for people living in Europe
 or South Korea).</p>
-<h2 id="useful-tools-on-debian-to-manipulate-disk-data">Useful tools on Debian to manipulate disk data</h2>
+<h2 id="available-gnu--linux-tools">Available GNU + Linux tools</h2>
+<p>Useful tools on Debian to manipulate disk data:</p>
 <ul>
 <li><a href="https://packages.debian.org/sid/gdisk">gdisk</a> &ndash; GPT fdisk text-mode partitioning tool (with in place conversion of MBR to GPT)</li>
 <li><a href="https://packages.debian.org/sid/parted">parted</a> &ndash; disk partition manipulator (CLI)</li>
@@ -101,17 +104,18 @@ or South Korea).</p>
 <h2 id="how-to-create-a-usb-flash-drive-to-install-windows">How to create a USB flash drive to install Windows</h2>
 <p>The recent Windows ISO image contains <code>sources/install.wim</code> which is about 5GiB
 and exceeds 4 GiB filesize limit on FAT32 frequently used on the USB flash
-disk.  So we need some care to cope with this situation.</p>
+disk.  So we need some care to cope with this limitation.</p>
 <p>The following can make a USB flash drive to install Windows via UEFI on GPT
 disk.</p>
 <ul>
-<li>Download Windows 10 install media</li>
+<li>Download Windows 10 install media as ISO image</li>
+<li>Mount ISO image and make its contents accessible</li>
 <li>Format USB flash drive with FAT32 filesystem on the first partition of GPT
 disk.</li>
 <li>Copy everything in the ISO image to USB flash drive
 <ul>
-<li>split <code>sources/install.wim</code> using <code>wimsplit</code>, or equivalently
-<code>wimlib-imagex split</code>, into parts to cope with the 4GiB limit</li>
+<li>split <code>sources/install.wim</code> using <code>wimsplit</code> (equivalently
+<code>wimlib-imagex split</code>) into parts to cope with the 4GiB filesize limit</li>
 </ul>
 </li>
 </ul>
