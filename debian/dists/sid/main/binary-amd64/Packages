@@ -34,16 +34,16 @@ Architecture: all
 Maintainer: Osamu Aoki <osamu@debian.org>
 Installed-Size: 8
 Depends: 00-min, build-essential, debhelper, devscripts
-Recommends: 00-jpn, apt-file, asciidoc, ben, black, cargo, ccache, cgdb, clang-format, cmake, curl, debmake, dgit, dh-python, docbook-xml, docbook-xsl, eatmydata, faketime, gdb, gdebi, gettext, git, git-buildpackage, gitk, glade, golang, golang-any, graphicsmagick-imagemagick-compat, hugo, imediff, libreply-perl, libterm-readline-gnu-perl, libxml2-utils, lsof, ltrace, luarocks, meld, nodejs, npm, perl, pipx, po4a, python3, python3-distutils-extra, python3-gi, python3-pil, python3-venv, quilt, reprepro, rlwrap, rpm2cpio, rustc, sbuild, shellcheck, shunit2, signing-party, strace, texinfo, xsltproc, xtrace
+Recommends: 00-jpn, apt-file, asciidoc-base, ben, black, cargo, ccache, cgdb, clang-format, cmake, curl, debmake, dgit, dh-python, docbook-xml, docbook-xsl, eatmydata, faketime, gdb, gdebi, gettext, git, git-buildpackage, gitk, glade, golang, golang-any, graphicsmagick-imagemagick-compat, hugo, imediff, libreply-perl, libterm-readline-gnu-perl, libxml2-utils, lsof, ltrace, luarocks, meld, nodejs, npm, perl, pipx, po4a, python3, python3-distutils-extra, python3-gi, python3-pil, python3-venv, quilt, reprepro, rlwrap, rpm2cpio, rustc, sbuild, shellcheck, shunit2, signing-party, strace, texinfo, xsltproc, xtrace
 Multi-Arch: foreign
 Homepage: https://github.com/osamuaoki/osamu-task
 Priority: optional
 Section: tasks
 Filename: pool/main/o/osamu-task/00-dev_0.1_all.deb
-Size: 2064
-SHA256: 4af8b32788993d037cecaa6a6d19b7af5a6677f7a4dc639424de1746404a85f0
-SHA1: 7464a299e0e7e627c47f327d792b1b677439e904
-MD5sum: 0afe8b165aa5f7fc7678ea24a516d243
+Size: 2068
+SHA256: a52e5d41e672bbd3de9d3be4de7b429183a92cdb901bc9f524fa704fd72ad0e4
+SHA1: fdde44545ffe6fc7530854e0fccf15bd53991e2d
+MD5sum: 7abf8805caf761693624e789a0c3294b
 Description: Task for the baseline development system
  This is a task package installing the baseline development system.
  .
@@ -85,16 +85,16 @@ Architecture: all
 Maintainer: Osamu Aoki <osamu@debian.org>
 Installed-Size: 8
 Depends: 00-dev
-Recommends: fail2ban, git-svn, knockd, linux-cpupower, memtest86+, parallel, rclone, rename, shellinabox, subversion
+Recommends: asciidoc, asciidoctor, fail2ban, git-svn, knockd, linux-cpupower, memtest86+, parallel, rclone, rename, shellinabox, subversion
 Multi-Arch: foreign
 Homepage: https://github.com/osamuaoki/osamu-task
 Priority: optional
 Section: tasks
 Filename: pool/main/o/osamu-task/00-extra_0.1_all.deb
-Size: 1720
-SHA256: 53cbc82e353a8a663ee913ae35e56e15a6ab87a5f94c81bc5d69104da1097030
-SHA1: b9731d451f7c96ef2f8cff9cb4d2b60f48e4ace9
-MD5sum: 24e648c951412c10359da9012114499d
+Size: 1736
+SHA256: 222e74259f4ee68918bd10ed4802dda12c0a368c914b120bf3400a6497cddd70
+SHA1: 8be0779b4f43b50707b5f7c99e49462dd2a746af
+MD5sum: a281606ba0127d7ebf5f5eed38824f6a
 Description: Task to add extra utilities
  This is a task package to add extra utilities.  Anything which doesn't fit in
  the existing tasks are moved to here.
@@ -183,7 +183,8 @@ Version: 0.1
 Architecture: all
 Maintainer: Osamu Aoki <osamu@debian.org>
 Installed-Size: 8
-Recommends: aptitude, locales-all, mc, sudo, vim, wget
+Depends: aptitude, locales-all, sudo
+Recommends: mc, vim, wget
 Replaces: nano
 Provides: nano
 Multi-Arch: foreign
@@ -191,10 +192,10 @@ Homepage: https://github.com/osamuaoki/osamu-task
 Priority: optional
 Section: tasks
 Filename: pool/main/o/osamu-task/00-min_0.1_all.deb
-Size: 1672
-SHA256: a0cf20b2fc614353896e01205601b72e362090363a7b3ebfb6e35d20b2f1403d
-SHA1: fb6b227150408552b1db99298d41949109cc9c24
-MD5sum: a7e7e785300b4a00b95411c2aaf0eaf9
+Size: 1676
+SHA256: e3357fbdedd0fdabdb1498bd0cf5746cd3aec2250ba3e296292c27787725d32e
+SHA1: 617315cbf4135bb86f6dcb3b4451724d6eba9412
+MD5sum: b9f396e4568747b4167bb8430b1e4ad7
 Description: Task for the minimal system
  This is a task package installing minimal system without GUI.
  .
@@ -208,16 +209,16 @@ Architecture: all
 Maintainer: Osamu Aoki <osamu@debian.org>
 Installed-Size: 8
 Depends: 00-dev
-Recommends: dblatex, fonts-arphic-bsmi00lp, fonts-arphic-gbsn00lp, fonts-wqy-zenhei, texlive-full
+Recommends: asciidoc, dblatex, fonts-arphic-bsmi00lp, fonts-arphic-gbsn00lp, fonts-wqy-zenhei, texlive-full
 Multi-Arch: foreign
 Homepage: https://github.com/osamuaoki/osamu-task
 Priority: optional
 Section: tasks
 Filename: pool/main/o/osamu-task/00-tex_0.1_all.deb
-Size: 1652
-SHA256: 620ecc4d0a21f25eaffa2fa78e48d15252697ced06ce21f3eb4d8fb92b1f0b24
-SHA1: a5f59063d2eb2764cfeea6b37cbf60dda9cf2d27
-MD5sum: d56bf09322b0f7b7c47b21b1bfe1ccac
+Size: 1664
+SHA256: aafd19a2983ae74a3152f7d3c02b2fa82dcc79eb895266bafed1d940e597d767
+SHA1: 0e0710274e09306fd10f30888419ddf2577d9669
+MD5sum: fb2a4923975bb3543d157333c6201414
 Description: Task to add TeX support
  This is a task package to add TeX support.
  .
