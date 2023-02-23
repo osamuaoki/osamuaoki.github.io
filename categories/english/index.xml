@@ -6,7 +6,19 @@
     <description>Recent content in english on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 13 Feb 2023 00:00:00 +0001</lastBuildDate><atom:link href="/categories/english/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 20 Feb 2023 00:00:00 +0001</lastBuildDate><atom:link href="/categories/english/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>systemd-nspawn (1)</title>
+      <link>/en/2023/02/20/systemd-nspawn-1/</link>
+      <pubDate>Mon, 20 Feb 2023 00:00:00 +0001</pubDate>
+      
+      <guid>/en/2023/02/20/systemd-nspawn-1/</guid>
+      <description>Host preparation for systemd-nspawn Get required packages:
+$ sudo apt install systemd-container debootstrap Configuring systemd-sysctl.service to enable unprivileged user namespaces required for -U option:
+$ echo &amp;#39;kernel.unprivileged_userns_clone=1&amp;#39; | sudo tee /etc/sysctl.d/nspawn.conf $ systemctl restart systemd-sysctl.service Creating a bookworm based a01 system at /srv/chroot/a01/:
+$ sudo mkdir -p /srv/chroot/a01 $ sudo debootstrap bookworm /srv/chroot/a01 http://deb.debian.org/debian/ $ sudo systemd-nspawn -D /srv/chroot/a01 -U --machine a01 Related articles and resources Linux環境でWindows10のインストールUSBメモリを作成 Create a windows system from scratch using Linux Rufus &amp;ndash; The Reliable USB Formatting Utility UEFI:NTFS - Boot NTFS or exFAT partitions from UEFI Debian wiki: UEFI </description>
+    </item>
+    
     <item>
       <title>Windows from Linux (1)</title>
       <link>/en/2023/02/13/windows-1/</link>

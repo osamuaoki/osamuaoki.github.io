@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>systemd-nspawn (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">systemd-nspawn (1)</span></h1>
+
+<h3 class="date">Date:
+2023/02/20 (initial publish),
+2023/02/23 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/13/windows-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#host-preparation-for-systemd-nspawn">Host preparation for <code>systemd-nspawn</code></a></li>
+    <li><a href="#related-articles-and-resources">Related articles and resources</a></li>
+  </ul>
+</nav>
+
+<h2 id="host-preparation-for-systemd-nspawn">Host preparation for <code>systemd-nspawn</code></h2>
+<p>Get required packages:</p>
+<pre tabindex="0"><code>$ sudo apt install systemd-container debootstrap
+</code></pre><p>Configuring <code>systemd-sysctl.service</code> to enable unprivileged user namespaces required for <code>-U</code> option:</p>
+<pre tabindex="0"><code>$ echo &#39;kernel.unprivileged_userns_clone=1&#39; | sudo tee /etc/sysctl.d/nspawn.conf
+$ systemctl restart systemd-sysctl.service
+</code></pre><p>Creating a <code>bookworm</code> based <code>a01</code> system at <code>/srv/chroot/a01/</code>:</p>
+<pre tabindex="0"><code>$ sudo mkdir -p /srv/chroot/a01
+$ sudo debootstrap bookworm /srv/chroot/a01 http://deb.debian.org/debian/
+</code></pre><pre tabindex="0"><code>$ sudo systemd-nspawn -D /srv/chroot/a01 -U --machine a01
+</code></pre><h2 id="related-articles-and-resources">Related articles and resources</h2>
+<ul>
+<li><a href="https://blog.be-dama.com/2021/08/03/linux_winboot_usb/">Linux環境でWindows10のインストールUSBメモリを作成</a></li>
+<li><a href="http://reboot.pro/topic/20468-create-a-windows-system-from-scratch-using-linux/">Create a windows system from scratch using Linux</a></li>
+<li><a href="https://github.com/pbatard/rufus">Rufus &ndash; The Reliable USB Formatting Utility</a></li>
+<li><a href="https://github.com/pbatard/uefi-ntfs">UEFI:NTFS - Boot NTFS or exFAT partitions from UEFI</a></li>
+<li><a href="https://wiki.debian.org/UEFI">Debian wiki: UEFI</a></li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/13/windows-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
