@@ -23,25 +23,25 @@ Package-List:
  00-typ deb tasks optional arch=all
  00-virt deb tasks optional arch=all
 Checksums-Sha1:
- c58bb4b82629a97fdc66dce69ccf4ea82a39366b 9140 osamu-task_0.1.tar.xz
+ 11a5ce1f38e15413d59f9466cea016dbad7585d1 9176 osamu-task_0.1.tar.xz
 Checksums-Sha256:
- 179faea3fe86277a4920b825802ea8aac1a43e942dfdc29a4fe2e96c490855d9 9140 osamu-task_0.1.tar.xz
+ 88866435a68d3ac4d5e829fc13ebca5f5afce97b577a776c855e4903ea1ad294 9176 osamu-task_0.1.tar.xz
 Files:
- d963c7e8a712833fec39bec5d11ae9d0 9140 osamu-task_0.1.tar.xz
+ f41e99eda22f4e87c4716a094c48ca6e 9176 osamu-task_0.1.tar.xz
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEMTNyTWIHiBV56V1iHhNWiB3Y15EFAmP28nwACgkQHhNWiB3Y
-15EVkg//Y1xUikrx5DgXSiwl1kuxElnGTa9jGRNzHo9aU/uVElBV8O6TJU8X9uc4
-xj1GcMjhamFTTeoGoBLXxDG0IGlGqQ3Y91nxIwac4tVfzw4UnN01u7oapelWy6IS
-zDwn7yDuTCor5jbBaBPr1T7rmIgzFJ0d2lk+TvSMkgw8+MhSRayEUgbMWeg5l92L
-e46jH+wNeqBHHu6MU6XZ0L7lR/5sQkZl+jyHAyDrX8p/Scncmdg5yYW7H9UT6fGH
-BDEtYrQGw+XBzmdiw1e6FYIGDhLdEOtvS5wHd5EszFm0SxNIwfYKg0Er1wjpY8tZ
-lPRcDHZDokEY+/Ktw58vc5ZEMdQRVnbaX4jvWKSqNSwocgEwmbF/FIdYfx2OQB9M
-KbnuyQtxJbE6ZV1w/BwqLaxJALfOdZCYLuiplAxGA+/GdvjG1Vprib3EBXLeO4PX
-SV8rP4gJj04TVdwIPU3jHYVC6Z0rfGm5sQ4RdR1NzwnxLL4NWr13xjuSz/fhC5f8
-boiud9mQFIjYg/m7Mxy2TQub1bOE+01yu8aehmjSjOgKBMW5dg4V0JlTsB0MyGJY
-UE22qky+OJRy/ASB02pxeXF/7ryUV0Xbm0eejRGOlFfNWbzkc6SQeeOX9n3PCSfL
-mGG7ajIZuwD+a0ZfWzXRkyflYplpZdlmEQWxI8wyj4+aj1bUHQ4=
-=VcZD
+iQIzBAEBCgAdFiEEMTNyTWIHiBV56V1iHhNWiB3Y15EFAmP3FGEACgkQHhNWiB3Y
+15FQMg//S0+AIKRFOjwbj0j0StqmEvdtxL107yHmJRShlEzx+Snx5nQqNqwj16tl
+Lx8NCUq4/vpSiyOCOC9UMWRWhnFy9NR0vUe8HcSpoe4cuSdZj09Wpvr9CJkbu6wz
+L50Bs4+LsKvq1ITnoPltlM+IjsN5plJtxKIjStPX73tGbTecUyL+1+mQ60iWnmQ+
+N5UUothqnMcbIMt9Jt3W5sx48/hiI17amXY6/a/lPMZUZ41c4EsAmalFRJvQsp6q
+WrkYrUfxiw5WaAF/1j3OWBVD7uozpsGeCfJTFZQ0+9X2K9LSd1+5VCW+3FHO2e6n
+Yxw4Iz+ADzuTZAAVm6KopCmwcmqRhNcjgQ8/El9keW6p6lwpsSju1aJ64ME+g0mR
+Ddg2tEFZpyJMixG6l3a9ZjGq8cqk7Ov09dceGAc/MfUeTu49YmdyR0f5Jn9Koq1i
+mXhEcaE7nTvQsEPXym4oen3sGoUFL2WwnspLSyKyhbQj2sJ4vmWuC2bV0NNEQ/9r
+LYv2eayVG1AjugBDa/j7DSEcyce4OXbQEc4d4lJbzZXbuyN5PXjW9jAm6NUxFmP0
+SpFP2eL2GSau61pDzr77HsqNfUnNgYKiF3KuHPbeizFf+VcYAys/vLRA8qm5L+Oh
+KWVNLETHFFwz3ZtbCxcyzfADBm6eYsPA0tp8uCF5yfO4DrrFcw0=
+=sgFb
 -----END PGP SIGNATURE-----
