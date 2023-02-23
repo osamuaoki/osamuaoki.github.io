@@ -1,3 +1,256 @@
+Package: 00-cli
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 00-min, apt-file, bsd-mailx, btrfs-progs, bzip2, cryptsetup, cups, dislocker, dmsetup, e2fsprogs, eject, exfatprogs, fdisk, fzf, gdisk, gdu, git, gnupg, gpart, hardinfo, hdparm, htop, hwinfo, imediff, info, iproute2, iptables, kpartx, less, liblz4-tool, libsecret-tools, mc, moreutils, mtools, mutt, ntfs-3g, nvme-cli, openssh-client, openssh-server, parted, pinentry-curses, printer-driver-escpr, rsync, scdaemon, screen, smartmontools, sudo, systemd-container, task-english, task-laptop, testdisk, time, tmux, tree, udftools, usbutils, w3m, xfsprogs, xorriso, xxd, xz-utils, zip, zstd
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-cli_0.1_all.deb
+Size: 2008
+SHA256: c93ea4d8f7985d506b6e8772b719d83e3b4616d80b3200097a3e0c395b48fbe4
+SHA1: c76d370283100bbf96b3590f5a9289b4e32b27ed
+MD5sum: 522e6128a891d32b408a0811157b27b5
+Description: Task for the baseline CLI system
+ This is a task package installing the baseline CLI system without GUI.
+ .
+ This contains:
+  * File system CLI tools
+  * Compression CLI tools
+  * Network CLI tools
+ .
+ This doesn't contain:
+  * Tools to compile and run programs
+  * Tools to install external programs not packaged by Debian
+
+Package: 00-dev
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 00-jpn, asciidoc, ben, black, build-essential, cargo, ccache, cgdb, clang-format, cmake, curl, debhelper, debmake, devscripts, dgit, dh-python, docbook-xml, docbook-xsl, eatmydata, faketime, gdb, gdebi, gettext, git-buildpackage, glade, golang, golang-any, graphicsmagick-imagemagick-compat, hugo, imediff, libreply-perl, libterm-readline-gnu-perl, libxml2-utils, lsof, ltrace, luarocks, nodejs, npm, perl, po4a, python3, python3-distutils-extra, python3-gi, python3-pil, python3-pipx, python3-venv, quilt, rlwrap, rpm2cpio, rustc, sbuild, shellcheck, shunit2, signing-party, strace, texinfo, xsltproc, xtrace
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-dev_0.1_all.deb
+Size: 1988
+SHA256: f74b714716d0ef02100d3cd89ff3f1bc296b599805093397d2e8f1fd51e93b63
+SHA1: f415b66929269c3780c5ed2a52055ceab1a99ac6
+MD5sum: 4249b82cd1df0d696b9ac764c2b325fa
+Description: Task for the baseline development system
+ This is a task package installing the baseline development system.
+ .
+ This contains:
+  * Tools to compile, run and debug programs
+  * Tools to develop Debian packages
+  * Tools to install external programs not packaged by Debian
+
+Package: 00-doc
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 11
+Depends: cpp-doc, debian-policy, debian-reference, debmake-doc, developers-reference, doc-base, gcc-doc, gccintro, gdb-doc, git-doc, ibus-doc, iproute2-doc, maint-guide, make-doc, perl-doc, python3-doc
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-doc_0.1_all.deb
+Size: 1808
+SHA256: e302749141fc806ed81a8c8de171e7127e38f4c5dfa06e219364fd0ac4263c98
+SHA1: c2df148f75875f144c335d964857b1be7d9fbb87
+MD5sum: 2707e5ab495e7b89e196fa083133e5be
+Description: Task to add documentation support
+ This is a task package to add documentation support for the baseline
+ development system.
+
+Package: 00-extra
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: fail2ban, git-svn, knockd, knocker, linux-cpupower, memtest86+, parallel, rclone, rename, shellinabox, subversion
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-extra_0.1_all.deb
+Size: 1716
+SHA256: ad069cf13e710225814366a6303a385e8cb7af9291af8481ecd91c2c4a01f36b
+SHA1: dd1cd6935f31f16f1f8ccec562ba324b84130729
+MD5sum: ef2f8bea23ceb6349cf84ab452691a8d
+Description: Task to add extra utilities
+ This is a task package to add extra utilities.  Anything which doesn't fit in
+ the existing tasks are moved to here.
+ .
+ This is here to easily add and remove relevant packages.
+
+Package: 00-gui
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 00-cli, adwaita-qt, btrfs-heatmap, chromium, gitk, gnome-software-plugin-flatpak, gnome-software-plugin-snap, gparted, meld, pinentry-gnome3, smart-notifier, ssh-askpass, task-desktop, tkinfo, wl-clipboard, xclip, xdg-desktop-portal, xdu, xsel, zim
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-gui_0.1_all.deb
+Size: 1804
+SHA256: 5f7d3150b577ec2b1e2840d0807b25f38b434be5981d7f054a891acbefbadf56
+SHA1: 0e9e757f30450f0a273f48027cf13e068c2a34b3
+MD5sum: e51ad519f761f81bfd60f2500caede5c
+Description: Task for the baseline GUI system
+ This is a task package installing the baseline GUI system.
+ .
+ This contains:
+  * Desktop GUI tools
+  * Network GUI tools
+ .
+ This doesn't contain:
+  * Tools to compile and run programs
+  * Tools to install external programs not packaged by Debian
+
+Package: 00-iot
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 00-dev, arduino, arduino-mk, avra, avrdude, avrp, binutils-avr, freecad, fritzing, gcc-avr, gdb-avr, geda, kicad, librecad, openscad, simavr, simulavr
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-iot_0.1_all.deb
+Size: 1680
+SHA256: 011e278bdb4a8dba06d6f0508619c12b3f1658a5475ae4f6d83ee0e0830138d3
+SHA1: 23d47e9a1cc5bfb1fb7731aa62acb2d55b04b08d
+MD5sum: 1ed01803ee7d70572b8b635c6fc9993e
+Description: Task to add IoT development support
+ This is a task package to add IoT development support.
+ .
+ This is here to easily add and remove relevant packages.
+
+Package: 00-jpn
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 00-gui, fonts-takao, fonts-vlgothic, ibus-anthy, ibus-gtk, ibus-gtk3, ibus-mozc, ibus-wayland, libqt5gui5, lv, nkf
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-jpn_0.1_all.deb
+Size: 1684
+SHA256: 0003a89a42ad89b0de4514479575efcb5c65157d24e247f291c9d4782ed2bab2
+SHA1: b52ef37f872d6e4574412d505c36df4fc3dc2ba6
+MD5sum: 956dca8fd6d8c895b3827a037a705624
+Description: Task for the baseline Japanese GUI system
+ This is a task package installing the baseline Japanese GUI system.
+ .
+ This contain:
+  * Input methods
+  * Fonts
+  * Encoding filter
+
+Package: 00-min
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: aptitude, locales-all, sudo, vim, wget
+Replaces: nano
+Provides: nano
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-min_0.1_all.deb
+Size: 1668
+SHA256: 6e8503602399b3431e658dac3856798944b8cc739265efdda389d2ffa0b40641
+SHA1: d2cdb107b208242928d44189fca7c47471ffdb46
+MD5sum: 2dea1015ced874d90a0f82d4e43c50c1
+Description: Task for the minimal system
+ This is a task package installing minimal system without GUI.
+ .
+ This is meant to be used for creating the initial image for the minimal chroot
+ and virtual system.
+
+Package: 00-tex
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 00-dev, dblatex, fonts-arphic-bsmi00lp, fonts-arphic-gbsn00lp, fonts-wqy-zenhei, texlive-full
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-tex_0.1_all.deb
+Size: 1636
+SHA256: 6df64e521426cb96614f948177ecb99ed8d4fdd4bfcc8b2c10cf917080fd8e65
+SHA1: 2393e2145b187524e1facdc3f0fc9e25d1d6b8ba
+MD5sum: 0638afc706930aab0970e0f20d009408
+Description: Task to add TeX support
+ This is a task package to add TeX support.
+ .
+ This is here to easily add and remove relevant packages.
+
+Package: 00-typ
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 00-dev, 00-doc, 00-jpn
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-typ_0.1_all.deb
+Size: 1604
+SHA256: 4680e021889b6323cad5ecccedce73860b990f59e5020419ac2fae9c719dfc76
+SHA1: 3ec835fd8928bd2f19aebd2a7c1bff3e0768df1a
+MD5sum: e5df06a3316bf5c7e771439f1f116454
+Description: Task for the typical desktop system
+ This is a task package installing the typical desktop system.
+ .
+ This is Osamu's default Desktop installation.
+
+Package: 00-virt
+Source: osamu-task
+Version: 0.1
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 00-dev, gnome-boxes, lxc, vde2, virt-manager, virt-viewer
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/tasks-osamu
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-virt_0.1_all.deb
+Size: 1636
+SHA256: 5ef506daac0ffa10e9ff094b3fda0cfdf37313ceb71edf9607a68eb15179a1f2
+SHA1: 48ef91a0ee7ccf7e19983fe8d5da63cff248a1db
+MD5sum: 228ac4b94b64cae0ebd7d78f3d03caf8
+Description: Task to add virtual OS environment support
+ This is a task package to add virtual OS environment support.
+ .
+ This is here to easily add and remove relevant packages.
+
 Package: bss
 Version: 1.2.2
 Architecture: all
@@ -9,10 +262,10 @@ Homepage: https://github.com/osamuaoki/bss
 Priority: optional
 Section: utils
 Filename: pool/main/b/bss/bss_1.2.2_all.deb
-Size: 33480
-SHA256: cfb3aa5bc6cb51c3f766837a13fc25ccb66b2f5a7e17d83685d336eb54e67979
-SHA1: 38b90695c2ad9a1eb03a20b43a0b214eeacbeff5
-MD5sum: 139988e262fa31d2105e216e274d9ee8
+Size: 33476
+SHA256: 4f26741a35a785867db5e339eb33869e61a38f6b45473aa9c7fbbefd2d04a650
+SHA1: da3fdfa593048c55cb5400b8d4784287e6bbaf3b
+MD5sum: 155ecce736a3b0372a62629ef1259c81
 Description: Btrfs Subvolume Snapshot Utility
  "bss" is basically a "btrfs subvolume ..." command wrapper to create and age
  historical snapshots with the intuitive snapshot subvolume name and flexible
@@ -34,257 +287,4 @@ Description: Btrfs Subvolume Snapshot Utility
        operations on Debian/Ubuntu system.
      * Systemd timer to snapshot on boot and hourly
      * Systemd timer to age snapshots on boot and daily.
-
-Package: tasks-osamu-cli
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: apt-file, bsd-mailx, btrfs-progs, bzip2, cryptsetup, cups, dislocker, dmsetup, e2fsprogs, eject, exfat-utils, fdisk, fzf, gdisk, gdu, git, gnupg, gpart, hardinfo, hdparm, htop, hwinfo, imediff, info, iproute2, iptables, kpartx, less, liblz4-tool, libsecret-tools, mc, moreutils, mtools, mutt, ntfs-3g, nvme-cli, openssh-client, openssh-server, parted, pinentry-curses, printer-driver-escpr, rsync, scdaemon, screen, smartmontools, sudo, systemd-container, task-english, task-laptop, tasks-osamu-min, testdisk, time, tmux, tree, udftools, usbutils, w3m, xfsprogs, xorriso, xxd, xz-utils, zip, zstd
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-cli_0.1_all.deb
-Size: 2004
-SHA256: d8a8f59b1911030ede59f6d86e19fef581b3c53ecbf0edb9f0b57a593e76bc48
-SHA1: 0551e9706e815ca0629b6e08327a9be9aeb38d62
-MD5sum: c796e338656b4341c3ae03f38fbb3f11
-Description: Task for the baseline CLI system
- This is a task package installing the baseline CLI system without GUI.
- .
- This contains:
-  * File system CLI tools
-  * Compression CLI tools
-  * Network CLI tools
- .
- This doesn't contain:
-  * Tools to compile and run programs
-  * Tools to install external programs not packaged by Debian
-
-Package: tasks-osamu-dev
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: asciidoc, ben, black, build-essential, cargo, ccache, cgdb, clang-format, cmake, curl, debhelper, debmake, devscripts, dgit, dh-python, docbook-xml, docbook-xsl, eatmydata, faketime, gdb, gdebi, gettext, git-buildpackage, glade, golang, golang-any, graphicsmagick-imagemagick-compat, hugo, imediff, libreply-perl, libterm-readline-gnu-perl, libxml2-utils, lsof, ltrace, luarocks, nodejs, npm, perl, po4a, python3, python3-distutils-extra, python3-gi, python3-pil, python3-pipx, python3-venv, quilt, rlwrap, rpm2cpio, rustc, sbuild, shellcheck, shunit2, signing-party, strace, tasks-osamu-jpn, texinfo, xsltproc, xtrace
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-dev_0.1_all.deb
-Size: 1984
-SHA256: 0b3106f936178eb2d70356eba0f79fdf695ab2b0ca2ef66a4cd6132bdee55a7b
-SHA1: 3601fd48e0b0bf9ae5cd48ba4be46402535e766c
-MD5sum: de27f17b468f623c78aad8ba1c116a0f
-Description: Task for the baseline development system
- This is a task package installing the baseline development system.
- .
- This contains:
-  * Tools to compile, run and debug programs
-  * Tools to develop Debian packages
-  * Tools to install external programs not packaged by Debian
-
-Package: tasks-osamu-doc
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 11
-Depends: cpp-doc, debian-policy, debian-reference, debmake-doc, developers-reference, doc-base, gcc-doc, gccintro, gdb-doc, git-doc, ibus-doc, iproute2-doc, maint-guide, make-doc, perl-doc, python3-doc
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-doc_0.1_all.deb
-Size: 1812
-SHA256: 4eea9fdd5537bd66736ca00aa502d897726e7556e8bf4e7e8686e23a301936b0
-SHA1: 5593705556c1a7cb874b942a7601ec3002d96678
-MD5sum: 8bf4ebb647c5002875893f4183136385
-Description: Task to add documentation support
- This is a task package to add documentation support for the baseline
- development system.
-
-Package: tasks-osamu-extra
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: fail2ban, git-svn, knockd, knocker, linux-cpupower, memtest86+, parallel, rclone, rename, shellinabox, subversion
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-extra_0.1_all.deb
-Size: 1712
-SHA256: f20e942982768ad6cb8f5eb68397d7e3c31bdc99bb4710d66ce2ed29ff4bcf7b
-SHA1: de41f3ce2e621393b32a0469a2fe9a2d573bc3ae
-MD5sum: ff2b2cb9a68f1325d307794bc722a9b6
-Description: Task to add extra utilities
- This is a task package to add extra utilities.  Anything which doesn't fit in
- the existing tasks are moved to here.
- .
- This is here to easily add and remove relevant packages.
-
-Package: tasks-osamu-gui
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: adwaita-qt, btrfs-heatmap, chromium, gitk, gnome-software-plugin-flatpak, gnome-software-plugin-snap, gparted, meld, pinentry-gnome3, smart-notifier, ssh-askpass, task-desktop, tasks-osamu-cli, tkinfo, wl-clipboard, xclip, xdg-desktop-portal, xdu, xsel, zim
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-gui_0.1_all.deb
-Size: 1804
-SHA256: 9214e7d1c108793813a9919fdf25c804fcf6ae11f9082b677bd44c19ca5f29a1
-SHA1: 334d6878a9a8d1df82f6593bea25b864c367a4ea
-MD5sum: f0acb158ee8956ad8c5967dc505c4c4b
-Description: Task for the baseline GUI system
- This is a task package installing the baseline GUI system.
- .
- This contains:
-  * Desktop GUI tools
-  * Network GUI tools
- .
- This doesn't contain:
-  * Tools to compile and run programs
-  * Tools to install external programs not packaged by Debian
-
-Package: tasks-osamu-iot
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: arduino, arduino-mk, avra, avrdude, avrp, binutils-avr, freecad, fritzing, gcc-avr, gdb-avr, geda, kicad, librecad, openscad, simavr, simulavr, tasks-osamu-dev
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-iot_0.1_all.deb
-Size: 1676
-SHA256: 1da9380d48097d4da413e103c8d746ba0ed9ea7793171111ca9bb32304e1760c
-SHA1: 7e21179dba8440c5c1264e46893e8ade178f16e6
-MD5sum: b1f786f11f69034d12c461426d5146fe
-Description: Task to add IoT development support
- This is a task package to add IoT development support.
- .
- This is here to easily add and remove relevant packages.
-
-Package: tasks-osamu-jpn
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: fonts-takao, fonts-vlgothic, ibus-anthy, ibus-gtk, ibus-gtk3, ibus-mozc, ibus-wayland, libqt5gui5, lv, nkf, tasks-osamu-gui
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-jpn_0.1_all.deb
-Size: 1676
-SHA256: ae0aa1c60fea4718d9f7a0d7ab136898df02a98dba51b05bd0a9804ed87ea118
-SHA1: 1835deb06265e772ad319611866aea8d21c8a448
-MD5sum: dfcc0f29eadda5d6b9819d158fc8e28f
-Description: Task for the baseline Japanese GUI system
- This is a task package installing the baseline Japanese GUI system.
- .
- This contain:
-  * Input methods
-  * Fonts
-  * Encoding filter
-
-Package: tasks-osamu-min
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: aptitude, locales-all, sudo, vim, wget
-Replaces: nano
-Provides: nano
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-min_0.1_all.deb
-Size: 1668
-SHA256: b9044846ce1b768c053da879123413c39b166d76284b90077dafbfbeeb364cba
-SHA1: a1189328c44dee5b1c949b7185da4d0bb939c7c0
-MD5sum: 4bf4b3f98657112ad5c9ee26a0a5d76c
-Description: Task for the minimal system
- This is a task package installing minimal system without GUI.
- .
- This is meant to be used for creating the initial image for the minimal chroot
- and virtual system.
-
-Package: tasks-osamu-tex
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: dblatex, fonts-arphic-bsmi00lp, fonts-arphic-gbsn00lp, fonts-wqy-zenhei, tasks-osamu-dev, texlive-full
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-tex_0.1_all.deb
-Size: 1640
-SHA256: da7e0dcc66a7ea8132f93602f0b04802a6dd3ae444e091f323ad4b24e3311b38
-SHA1: 25d033d9e330b8a2a36f8747a11b77babece78c0
-MD5sum: 5c79d41e634583cbb105b18cf3a36009
-Description: Task to add TeX support
- This is a task package to add TeX support.
- .
- This is here to easily add and remove relevant packages.
-
-Package: tasks-osamu-typ
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: tasks-osamu-dev, tasks-osamu-doc, tasks-osamu-jpn
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-typ_0.1_all.deb
-Size: 1604
-SHA256: 37172bf31a25a0b4d8a778f73bba28288d9fac4f69678c7a6cea75dba6c513ad
-SHA1: f584fc49a4d0d593ff9d6b9bdd8d6a9279171be7
-MD5sum: 7818e6890f570afa3da1875ebe30bea1
-Description: Task for the typical desktop system
- This is a task package installing the typical desktop system.
- .
- This is Osamu's default Desktop installation.
-
-Package: tasks-osamu-virt
-Source: tasks-osamu
-Version: 0.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: gnome-boxes, lxc, tasks-osamu-dev, vde2, virt-manager, virt-viewer
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/tasks-osamu
-Priority: optional
-Section: tasks
-Filename: pool/main/t/tasks-osamu/tasks-osamu-virt_0.1_all.deb
-Size: 1636
-SHA256: 71722da6689d91e807218a8610d976ec61ce27c0e5040decf9ef7bc96e3553cc
-SHA1: 347a71dc3d3383e418f7a3b2cbc9e0a27bc21cc1
-MD5sum: 4ffec6289fed4e366f4e9f1969d2ac77
-Description: Task to add virtual OS environment support
- This is a task package to add virtual OS environment support.
- .
- This is here to easily add and remove relevant packages.
 
