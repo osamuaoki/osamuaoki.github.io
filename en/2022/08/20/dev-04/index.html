@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/08/20 (initial publish),
-2022/08/23 (last update)
+2023/02/23 (last update)
 </h3>
 </div>
 
@@ -66,9 +66,9 @@
         <li><a href="#gnu-pg">GNU PG</a></li>
         <li><a href="#setting-up-secure-apt-cliant">Setting up secure-APT cliant</a></li>
         <li><a href="#setting-up-package-repository">Setting up package repository</a></li>
-        <li><a href="#installing-package">Installing package</a></li>
       </ul>
     </li>
+    <li><a href="#adding-personal-binary-package-repository">Adding personal binary package repository</a></li>
   </ul>
 </nav>
 
@@ -178,24 +178,11 @@ SignWith: FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
 <pre tabindex="0"><code>verbose
 basedir /path/to/osamuaoki-hugo/static/debian/
 ask-passphrase
-</code></pre><h3 id="installing-package">Installing package</h3>
-<p>For binary only site:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ reprepro -b ~/path/to/osamuaoki-hugo/static/debian includedeb sid *.deb
-</span></span></code></pre></div><p>It worked as a valid package repository for debs. Great!</p>
-<p>Let&rsquo;s make a proper Debian package repository.</p>
-<p>I suppose, using <code>include</code> with <code>*.changes</code> should work too.  Then I can build hugo pages as usual with <code>./update.sh</code>. Let&rsquo;s see.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ reprepro --ignore<span style="color:#f92672">=</span>wrongdistribution -b ~/path/to/osamuaoki-hugo/static/debian <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  include sid ~/path/to/bss/bss_1.1.0_amd64.changes
-</span></span><span style="display:flex;"><span>.changes put in a distribution not listed within it!
-</span></span><span style="display:flex;"><span>Ignoring as --ignore<span style="color:#f92672">=</span>wrongdistribution given.
-</span></span><span style="display:flex;"><span>Exporting indices...
-</span></span><span style="display:flex;"><span>$ ./update
-</span></span></code></pre></div><p>No, it didn&rsquo;t work.  I realized I need to do the following to get updated.
-Dah&hellip;</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd ~/path/to/osamuaoki-hugo/static
-</span></span><span style="display:flex;"><span>$ git add -A .
-</span></span></code></pre></div><p>I updated <code>update.sh</code> to do the last command and a few file removals
-automatically.</p>
+</code></pre><h2 id="adding-personal-binary-package-repository">Adding personal binary package repository</h2>
+<p>You create source Debian package source trees in <code>../packages/</code> relative to this web site
+source.</p>
+<p>You update repository in this web site source by running <code>./repository.sh</code> in this web site source.</p>
+<p>Then I can build hugo pages as usual with <code>./update.sh</code>.</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/osamuaoki-hugo">https://github.com/osamuaoki/osamuaoki-hugo</a> (source repo)</li>
 <li><a href="https://github.com/osamuaoki/osamuaoki.github.io">https://github.com/osamuaoki/osamuaoki.github.io</a> (published page repo)</li>
