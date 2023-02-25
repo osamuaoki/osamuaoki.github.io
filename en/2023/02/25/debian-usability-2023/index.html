@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Debian Workstation (usability) (version 2023) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Debian Workstation (usability) (version 2023)</span></h1>
+
+<h3 class="date">Date:
+2023/02/25 (initial publish),
+2023/02/26 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/20/systemd-nspawn-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#workstation-usability">Workstation usability</a></li>
+    <li><a href="#installer-installed-extra-packages">Installer installed extra packages</a>
+      <ul>
+        <li><a href="#initial-setup">Initial setup</a></li>
+        <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
+        <li><a href="#install-typical-packages">Install typical packages</a></li>
+        <li><a href="#set-up-grub">Set-up GRUB</a></li>
+      </ul>
+    </li>
+    <li><a href="#re-install-and-uidgid-issues">Re-install and UID/GID issues</a></li>
+    <li><a href="#efi-based-firmware-updates">EFI-based firmware updates</a>
+      <ul>
+        <li><a href="#workaround-for-some-firmware">Workaround for some firmware</a></li>
+      </ul>
+    </li>
+    <li><a href="#desktop-customization">Desktop customization</a>
+      <ul>
+        <li><a href="#gui-desktop-customization">GUI Desktop customization</a></li>
+        <li><a href="#terminal-customization">Terminal customization</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-settings">Keyboard shortcut customization (GNOME Settings)</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</a></li>
+        <li><a href="#keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</a></li>
+      </ul>
+    </li>
+    <li><a href="#libreoffice">LibreOffice</a></li>
+    <li><a href="#wallpaper">Wallpaper</a>
+      <ul>
+        <li><a href="#grub-2">GRUB 2</a></li>
+        <li><a href="#gnome">GNOME</a></li>
+      </ul>
+    </li>
+    <li><a href="#mail">Mail</a>
+      <ul>
+        <li><a href="#evolution-workaround-font----resolved">Evolution workaround (font) &ndash; resolved</a></li>
+      </ul>
+    </li>
+    <li><a href="#command-line">Command line</a></li>
+    <li><a href="#test-accounts">Test accounts</a></li>
+  </ul>
+</nav>
+
+<p>This is an updated guide based on the older <a href="/en/2021/01/15/debian-usability/">guide</a>.</p>
+<h2 id="workstation-usability">Workstation usability</h2>
+<p>Let me update note on configuring and administrating my workstation under
+post-Debian Bookworm (12) GNU/Linux in testing.</p>
+<p>This is non-hardware specific notes and tips.</p>
+<h2 id="installer-installed-extra-packages">Installer installed extra packages</h2>
+<p>After the initial installation by the <code>debian-installer</code>, packages with <code>Priority:</code> values <code>required</code>, <code>important</code> and <code>standard</code> are installed.</p>
+<h3 id="initial-setup">Initial setup</h3>
+<p>Running <code>initial-setup</code> script found at my repository should set up basics for
+my needs.</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup">https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup</a></li>
+</ul>
+<p>Just executing <code>./initial-setup</code> creates
+<code>/etc/apt/sources.d/osamuaoki.sources</code> as described in
+<a href="/en/2022/08/20/dev-04/">Development system (4)</a>
+and installs <code>sudo</code> and <code>aptitude</code>. This also sets up <code>sudo</code> as passwordless.</p>
+<h3 id="tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</h3>
+<p>Since I use <code>aptitude</code> as the primary package maintenance tool, I usually
+tidy-up package auto install flags (<code>M</code>) missing for some libraries after the
+initial install.</p>
+<p>Use of <code>~i!~M~poptional</code> in <code>l</code> prompt in <code>aptitude</code> to
+set library packages as auto-installed.  If some of them are not used by other
+program, let them remove.</p>
+<p>Now you can verify intentionally installed packages with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;~i!~M~poptional&#39;</span>
+</span></span></code></pre></div><p>Development system (4)
+(This intensionally ignores some outdated packages with priority=extra packages.)</p>
+<h3 id="install-typical-packages">Install typical packages</h3>
+<p>Typically, installing <code>00-typ</code> and <code>00-notex</code> sets up a decent workstation.</p>
+<h3 id="set-up-grub">Set-up GRUB</h3>
+<p>In order to probe OSs on other drives, add a following line to
+<code>/etc/default/grub</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>GRUB_DISABLE_OS_PROBER<span style="color:#f92672">=</span>false
+</span></span></code></pre></div><p>This is good idea for dual-boot on MBR disk.</p>
+<p>But this is not so robust for btrfs.</p>
+<h4 id="multi-boot-with-grub">Multi-boot with GRUB</h4>
+<p>For more robust multi-boot, I usually add following as <code>/etc/grub.d/40_fixed_linux</code> (The first line should be #!/bin/bash without space. Intentional mistype to avoid missing line):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>exec tail -n +3 $0
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This file provides an easy way to add custom menu entries.  Simply type the</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># menu entries you want to add after this comment.  Be careful not to change</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># the &#39;exec tail&#39; line above.</span>
+</span></span><span style="display:flex;"><span>menuentry <span style="color:#e6db74">&#39;Debian GNU/Linux --- main SSD&#39;</span> --class debian --class gnu-linux --class gnu --class os $menuentry_id_option <span style="color:#e6db74">&#39;gnulinux-fixed-fe3e1db5-6454-46d6-a14c-071208ebe4b1&#39;</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        load_video
+</span></span><span style="display:flex;"><span>        insmod gzio
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> x$grub_platform <span style="color:#f92672">=</span> xxen <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span> insmod xzio; insmod lzopio; <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>        insmod part_gpt
+</span></span><span style="display:flex;"><span>        insmod btrfs
+</span></span><span style="display:flex;"><span>        search --no-floppy --fs-uuid --set<span style="color:#f92672">=</span>root fe3e1db5-6454-46d6-a14c-071208ebe4b1
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading Linux from /dev/nvme0n1p5 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        linux   /@rootfs/vmlinuz root<span style="color:#f92672">=</span>UUID<span style="color:#f92672">=</span>fe3e1db5-6454-46d6-a14c-071208ebe4b1 ro rootflags<span style="color:#f92672">=</span>subvol<span style="color:#f92672">=</span>@rootfs  quiet
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading initial ramdisk from /dev/nvme0n1p5 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        initrd  /@rootfs/initrd.img
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>menuentry <span style="color:#e6db74">&#39;Debian GNU/Linux --- sub SSD&#39;</span> --class debian --class gnu-linux --class gnu --class os $menuentry_id_option <span style="color:#e6db74">&#39;gnulinux-fixed-51f9cd11-30b3-4d99-b2ed-fe411fa22ee6&#39;</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        load_video
+</span></span><span style="display:flex;"><span>        insmod gzio
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> x$grub_platform <span style="color:#f92672">=</span> xxen <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span> insmod xzio; insmod lzopio; <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>        insmod part_gpt
+</span></span><span style="display:flex;"><span>        insmod btrfs
+</span></span><span style="display:flex;"><span>        search --no-floppy --fs-uuid --set<span style="color:#f92672">=</span>root 51f9cd11-30b3-4d99-b2ed-fe411fa22ee6
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading Linux from /dev/nvme1n1p1 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        linux   /@rootfs/vmlinuz root<span style="color:#f92672">=</span>UUID<span style="color:#f92672">=</span>51f9cd11-30b3-4d99-b2ed-fe411fa22ee6 ro rootflags<span style="color:#f92672">=</span>subvol<span style="color:#f92672">=</span>@rootfs  quiet
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading initial ramdisk from /dev/nvme1n1p1 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        initrd  /@rootfs/initrd.img
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>If you have multiple Debian system installed, you should make a backup copy
+of <code>/boot/efi/EFI/debian/grub.cfg</code> to protect it gets overridden by installing
+the second Debian system.</p>
+<p>See <a href="https://wiki.debian.org/Btrfs%20migration">https://wiki.debian.org/Btrfs%20migration</a> .</p>
+<h2 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h2>
+<p>UID and GID used by some applications are not fixed.  So, if you reinstall the
+exact same packages in a different order, you end up assigning UID and GID for
+the application.</p>
+<p>UID in range between 101-999 such as ones for <code>avahi</code>, <code>saned</code>, <code>colord</code>,
+<code>_ssh</code>, &hellip;  are the most susceptible on this issue.</p>
+<p><code>apt-cacher-ng</code> needs special attention.</p>
+<h2 id="efi-based-firmware-updates">EFI-based firmware updates</h2>
+<p>Install <code>gnome-firmware</code> package and invoke GUI to update firmware on devices
+supported by <code>fwupd</code> using <a href="https://fwupd.org/">Linux Vendor Firmware Service</a>.</p>
+<p>Many firmware data can be updated using <code>gnome-firmware</code>.</p>
+<h3 id="workaround-for-some-firmware">Workaround for some firmware</h3>
+<p>Some firmware devices may experience some problem to be updated by
+<code>gnome-firmware</code>.</p>
+<p>Most notable one on my system was &ldquo;Lenovo System Firmware&rdquo;.  (I don&rsquo;t know if
+this was version dependent or not.) I used vendor&rsquo;s BIOS update offered as
+bootable CD and made USB key containing it image data:</p>
+<ul>
+<li><a href="https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue/downloads/driver-list/component?name=BIOS%2FUEFI">https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue/downloads/driver-list/component?name=BIOS%2FUEFI</a></li>
+</ul>
+<p>If the BIOS options <code>Security &gt; Secure Boot</code> is enabled, it may restrict booting
+up from the BIOS Update bootable CD image, you may need to disabled the Secure Boot option to use it.</p>
+<p>If Windows 10 or 11 is installed, you may need to reenable Secure Boot after
+this operation.</p>
+<h2 id="desktop-customization">Desktop customization</h2>
+<p>These settings need to be set again after some major update of GNOME.</p>
+<h3 id="gui-desktop-customization">GUI Desktop customization</h3>
+<p>The <code>gnome-tweak</code> package installed as a dependency of <code>gnome</code> package helps to tweak the system.
+For example, you can add &ldquo;Applications&rdquo; to top bar etc.</p>
+<p>After installing
+<a href="https://chrome.google.com/webstore/detail/gnome-shell-integration/gphhapmejobijbbhgpjhcjognlahblep">GNOME Shell integration</a>
+to the Chrome browser, I installed following extensions:</p>
+<ul>
+<li><a href="https://extensions.gnome.org/extension/744/hide-activities-button/">Hide Activities Button</a></li>
+</ul>
+<p>Adjust locally installed GNOME extensions via browser from <a href="https://extensions.gnome.org/local/">GNOME Extension web
+site</a>.</p>
+<h3 id="terminal-customization">Terminal customization</h3>
+<ul>
+<li>Use <code>MONO 14</code> or equivalent (HACK NERD FONT MONO)</li>
+<li>Disable &ldquo;F10&rdquo;</li>
+<li>Shell as login shell if you want anything other than Bash.</li>
+</ul>
+<h3 id="keyboard-shortcut-customization-gnome-settings">Keyboard shortcut customization (GNOME Settings)</h3>
+<p>For selecting IM deterministically (instead of Super-SPACE toggle), bind
+javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
+<ul>
+<li>SUPER-Enter: English</li>
+<li>SUPER-J: Anthy</li>
+<li>SUPER-K: Mozc</li>
+</ul>
+<p>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is ANTHY and if you want to use SUPER-j to switch to ANTHY, you need to set as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     InputMethod_0
+</span></span><span style="display:flex;"><span>Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  <span style="color:#e6db74">&#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;</span>
+</span></span><span style="display:flex;"><span>Shortcut SUPER-j
+</span></span></code></pre></div><p>Please make sure to enter the above command in a single line.</p>
+<p>See <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a></p>
+<h3 id="keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</h3>
+<p>For Vim use:</p>
+<ul>
+<li>Click <code>Keyboard &amp; Mouse</code> tab</li>
+<li>Click <code>Keyboard</code> / <code>Overview Shortcut</code> / <code>Additional Layout Options</code> button</li>
+<li>Click to expand <code>Caps Lock behavior</code></li>
+<li>Enable <code>Make Caps Lock as additional Esc</code>.</li>
+</ul>
+<h3 id="keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</h3>
+<p>For Japanese input with US keyboard, set IM (anthy etc.) as:</p>
+<ul>
+<li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent</li>
+<li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent</li>
+</ul>
+<h2 id="libreoffice">LibreOffice</h2>
+<p>The version of LibreOffice available on Debian testing environment has some
+glitches more often than the version available on Debian stable environment.
+Issues for printing to Hagaki was the killer bug for me.</p>
+<p>I find that the installation of <a href="https://www.libreoffice.org/download/download/?type=deb-x86_64&amp;lang=en">LibreOffice Debian
+packages</a>
+available from <a href="https://www.libreoffice.org/">the upstream LibreOffice site</a> on
+Debian testing environment is the least effort solution for me.  For stability,
+I chose older stable 6.4.7.2-2 version aimed for business deployments (2021/12).
+This enabled me to print nicely to Hagaki.</p>
+<h2 id="wallpaper">Wallpaper</h2>
+<h3 id="grub-2">GRUB 2</h3>
+<p>Place your JPEG wallpaper graphics (JPEG) in <code>/boot/grub/</code> and run
+<code>sudo update-grub</code> or <code>sudo dpkg-reconfigure grub-efi-amd64</code>.</p>
+<h3 id="gnome">GNOME</h3>
+<p>You can set wallpaper graphics from:</p>
+<ul>
+<li>
+<p>Desktop: <code>Settings</code> -&gt; <code>Background</code></p>
+</li>
+<li>
+<p>Desktop: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code></p>
+</li>
+<li>
+<p>Lock Screen: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Lock Screen</code></p>
+</li>
+<li>
+<p>GDM3: &mdash; Not so easy (leave this as is)</p>
+</li>
+</ul>
+<h2 id="mail">Mail</h2>
+<p>For the GUI access to the remotely hosted IMAP4 mail services, use GNOME Online
+accounts and Evolution.  This approach works for Gmail etc. and compatible with
+using other devices such as smart phones.  Evolution can also be configured to
+read locally delivered mails to mbox too.  (send+receive).</p>
+<p>For the command line such as <code>reportbug</code> and daemon programs such as <code>cron</code> to
+send mails to external hosts and local accounts, use of <code>exim4</code> as the locally
+installed MTA is good idea.  With &ldquo;sudo dpkg-reconfigure exim4-config&rdquo;, Select
+&ldquo;mail sent by smarthost; received via SMTP or fetchmail&rdquo;.  Everything else can
+be default.</p>
+<p>To use Gmail for smarthost, set up &ldquo;Mail Server configuration&rdquo; as
+&ldquo;smtp.gmail.com::587&rdquo;.  It is irrelevant for us to worry &ldquo;Hide local mail name
+&hellip;&rdquo; since the smarthost service rewrites it anyway.  Edit
+<code>/etc/exim4/passwd.client</code> as:
+<code>smtp.gmail.com:foo.bar@gmail.com:application_password</code> (You need to create
+<code>application_password</code> in advance.)</p>
+<p>Whenever I wish to send out mails with &ldquo;@debian.org&rdquo; address, I use
+ssh+sendmail (created shell script <code>~/bin/sendmail-p.d.o</code>) to access a Debian
+host. (This trick may be usable for any hosts such as salsa.debian.org etc.)</p>
+<p>I have mail configuration for:</p>
+<ul>
+<li>Evolution</li>
+<li><code>devscripts</code> (add &ldquo;<code>BTS_SENDMAIL_COMMAND='/home/osamu/bin/sendmail-p.d.o'</code>&rdquo; to <code>~/.devscripts</code>)</li>
+<li><code>reportbug</code> (add &ldquo;<code>mta /home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.reportbugrc</code>)</li>
+</ul>
+<p>I usually don&rsquo;t bother with fetchmail these days.</p>
+<h3 id="evolution-workaround-font----resolved">Evolution workaround (font) &ndash; resolved</h3>
+<p>This bug is resolved: <a href="https://bugs.debian.org/987948">https://bugs.debian.org/987948</a></p>
+<p>Evolution for Debian 11 Bullseye (pre-release) under wayland had ugly font
+problem as of May 2, 2021.  (Some firefox, too).  It looked like some similar
+to WebKit issue exposed by sandboxing.
+<a href="https://gitlab.gnome.org/GNOME/evolution/-/issues/1161">https://gitlab.gnome.org/GNOME/evolution/-/issues/1161</a></p>
+<p>Installing <code>xdg-desktop-portal-gtk</code> fixed it.</p>
+<h2 id="command-line">Command line</h2>
+<p>Setups:</p>
+<ul>
+<li><code>~/bin</code> scripts: <a href="https://github.com/osamuaoki/osamu-utils">https://github.com/osamuaoki/osamu-utils</a> (<code>hal</code>, <code>sendmail-p.d.o</code>)
+<ul>
+<li>key files in <code>~/</code> and <code>~/.config</code> are backuped to <code>~/bin/dot/</code> with &ldquo;<code>hal conf up</code>&rdquo;</li>
+</ul>
+</li>
+<li>main editor: <code>nvim</code> configuration: <a href="https://github.com/osamuaoki/astronvim-osamu">https://github.com/osamuaoki/astronvim-osamu</a>
+<ul>
+<li>NeoVim 0.7 with <a href="https://github.com/AstroNvim/AstroNvim">AstroNvim</a></li>
+<li>See <a href="/en/2022/07/15/vim-learn-4/">Re-learning Vim (4)</a>.</li>
+</ul>
+</li>
+<li>backup editor: <code>vim</code> configuration: <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a>
+<ul>
+<li>Custom package management of Vim 8 with native <code>packadd!</code>.</li>
+<li>See <a href="/en/2019/09/24/vim-learn-2/">Re-learning Vim (2)</a>.</li>
+</ul>
+</li>
+</ul>
+<p>Frequent commands to use:</p>
+<ul>
+<li><code>mc</code>: file manager for shell</li>
+<li><code>fzf</code>: fuzzy finder for shell and vim.</li>
+</ul>
+<h2 id="test-accounts">Test accounts</h2>
+<p>Adding extra user name for <code>/etc/passwd</code> and <code>/etc/shadow</code> with the same
+UID=1000 enables useful test accounts.  Please make sure to create different
+home directory for each user name.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/20/systemd-nspawn-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
