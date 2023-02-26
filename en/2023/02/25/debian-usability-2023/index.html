@@ -82,7 +82,8 @@
       <ul>
         <li><a href="#gui-desktop-customization">GUI Desktop customization</a></li>
         <li><a href="#terminal-customization">Terminal customization</a></li>
-        <li><a href="#keyboard-shortcut-customization-gnome-settings">Keyboard shortcut customization (GNOME Settings)</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</a></li>
         <li><a href="#keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</a></li>
         <li><a href="#keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</a></li>
         <li><a href="#web-browser">Web browser</a></li>
@@ -252,24 +253,37 @@ to the Chrome browser, I installed following extensions:</p>
 site</a>.</p>
 <h3 id="terminal-customization">Terminal customization</h3>
 <ul>
-<li>Use <code>MONO 14</code> or equivalent (HACK NERD FONT MONO)</li>
+<li>Use <code>MONO 14</code> or equivalent (HACK <a href="https://www.nerdfonts.com/font-downloads">NERD FONT</a> MONO)</li>
 <li>Disable &ldquo;F10&rdquo;</li>
 <li>Shell as login shell if you want anything other than Bash.</li>
 </ul>
-<h3 id="keyboard-shortcut-customization-gnome-settings">Keyboard shortcut customization (GNOME Settings)</h3>
-<p>For selecting IM deterministically (instead of Super-SPACE toggle), bind
+<h3 id="keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</h3>
+<ul>
+<li>SUPER-C: launch calculator</li>
+<li>SUPER-E: launch email client</li>
+<li>SUPER-B: launch web browser</li>
+</ul>
+<h3 id="keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</h3>
+<ul>
+<li>SUPER-T: launcher for terminal</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     Terminal
+</span></span><span style="display:flex;"><span>Command  gnome-terminal
+</span></span><span style="display:flex;"><span>Shortcut SUPER-T
+</span></span></code></pre></div><p>For selecting IM deterministically (instead of Super-SPACE toggle), bind
 javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <ul>
 <li>SUPER-Enter: English</li>
 <li>SUPER-J: Anthy</li>
 <li>SUPER-K: Mozc</li>
 </ul>
-<p>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is ANTHY and if you want to use SUPER-j to switch to ANTHY, you need to set as:</p>
+<p><strong>NEED TO BE UPDATED (DOES NOT WORK: 2023-02-26)</strong>:
+<del>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is ANTHY and if you want to use SUPER-j to switch to ANTHY, you need to set as:</del></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     InputMethod_0
 </span></span><span style="display:flex;"><span>Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  <span style="color:#e6db74">&#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;</span>
 </span></span><span style="display:flex;"><span>Shortcut SUPER-j
-</span></span></code></pre></div><p>Please make sure to enter the above command in a single line.</p>
-<p>See <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a></p>
+</span></span></code></pre></div><p><del>Please make sure to enter the above command in a single line.</del></p>
+<p><del>See <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a></del></p>
 <h3 id="keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</h3>
 <p>For Vim use:</p>
 <ul>
@@ -279,7 +293,7 @@ javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <li>Enable <code>Make Caps Lock as additional Esc</code>.</li>
 </ul>
 <h3 id="keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</h3>
-<p>For Japanese input with US keyboard, set IM (anthy etc.) as:</p>
+<p>For Japanese input with US keyboard, set IM (anthy etc.) configuration as:</p>
 <ul>
 <li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent</li>
 <li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent</li>
