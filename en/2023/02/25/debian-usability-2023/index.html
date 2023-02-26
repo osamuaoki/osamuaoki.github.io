@@ -270,15 +270,16 @@ site</a>.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     Terminal
 </span></span><span style="display:flex;"><span>Command  gnome-terminal
 </span></span><span style="display:flex;"><span>Shortcut SUPER-T
-</span></span></code></pre></div><p>For selecting IM deterministically (instead of Super-SPACE toggle), bind
-javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
+</span></span></code></pre></div><p><strong>THE FOLLOWING NEEDS TO BE UPDATED (DOES NOT WORK: 2023-02-26)</strong>:</p>
+<p><del>For selecting IM deterministically (instead of Super-SPACE toggle), bind
+javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</del></p>
 <ul>
 <li>SUPER-Enter: English</li>
 <li>SUPER-J: Anthy</li>
 <li>SUPER-K: Mozc</li>
+<li>SUPER-\: English (international)</li>
 </ul>
-<p><strong>NEED TO BE UPDATED (DOES NOT WORK: 2023-02-26)</strong>:
-<del>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is ANTHY and if you want to use SUPER-j to switch to ANTHY, you need to set as:</del></p>
+<p><del>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is ANTHY and if you want to use SUPER-j to switch to ANTHY, you need to set as:</del></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     InputMethod_0
 </span></span><span style="display:flex;"><span>Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  <span style="color:#e6db74">&#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;</span>
 </span></span><span style="display:flex;"><span>Shortcut SUPER-j
