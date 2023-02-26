@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Debian Workstation (usability) (version 2023) | Goofing Osamu</title>
+    <title>Debian Workstation (usability) (v2023) | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,7 +32,7 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Debian Workstation (usability) (version 2023)</span></h1>
+<h1><span class="title">Debian Workstation (usability) (v2023)</span></h1>
 
 <h3 class="date">Date:
 2023/02/25 (initial publish),
@@ -62,9 +62,11 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#workstation-usability">Workstation usability</a></li>
-    <li><a href="#installer-installed-extra-packages">Installer installed extra packages</a>
+    <li><a href="#system-installation">System installation</a>
       <ul>
-        <li><a href="#initial-setup">Initial setup</a></li>
+        <li><a href="#initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></a></li>
+        <li><a href="#initial-setup-manual">Initial setup (manual)</a></li>
+        <li><a href="#initial-setup-automatic">Initial setup (automatic)</a></li>
         <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
         <li><a href="#install-typical-packages">Install typical packages</a></li>
         <li><a href="#set-up-grub">Set-up GRUB</a></li>
@@ -83,42 +85,80 @@
         <li><a href="#keyboard-shortcut-customization-gnome-settings">Keyboard shortcut customization (GNOME Settings)</a></li>
         <li><a href="#keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</a></li>
         <li><a href="#keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</a></li>
-      </ul>
-    </li>
-    <li><a href="#libreoffice">LibreOffice</a></li>
-    <li><a href="#wallpaper">Wallpaper</a>
-      <ul>
-        <li><a href="#grub-2">GRUB 2</a></li>
-        <li><a href="#gnome">GNOME</a></li>
-      </ul>
-    </li>
-    <li><a href="#mail">Mail</a>
-      <ul>
-        <li><a href="#evolution-workaround-font----resolved">Evolution workaround (font) &ndash; resolved</a></li>
+        <li><a href="#web-browser">Web browser</a></li>
+        <li><a href="#mail-client">Mail client</a></li>
+        <li><a href="#grub-2-wallpaper">GRUB 2 wallpaper</a></li>
+        <li><a href="#gnome-desktop-wallpaper">GNOME desktop wallpaper</a></li>
       </ul>
     </li>
     <li><a href="#command-line">Command line</a></li>
     <li><a href="#test-accounts">Test accounts</a></li>
+    <li><a href="#libreoffice">LibreOffice</a></li>
   </ul>
 </nav>
 
-<p>This is an updated guide based on the older <a href="/en/2021/01/15/debian-usability/">guide</a>.</p>
+<p>This is an updated guide.  The <a href="/en/2021/01/15/debian-usability/">older deprecated guide</a> was used as its base.</p>
 <h2 id="workstation-usability">Workstation usability</h2>
 <p>Let me update note on configuring and administrating my workstation under
 post-Debian Bookworm (12) GNU/Linux in testing.</p>
 <p>This is non-hardware specific notes and tips.</p>
-<h2 id="installer-installed-extra-packages">Installer installed extra packages</h2>
-<p>After the initial installation by the <code>debian-installer</code>, packages with <code>Priority:</code> values <code>required</code>, <code>important</code> and <code>standard</code> are installed.</p>
-<h3 id="initial-setup">Initial setup</h3>
-<p>Running <code>initial-setup</code> script found at my repository should set up basics for
-my needs.</p>
+<p>For the hardware specific notes and tips, see:</p>
+<ul>
+<li><a href="/en/2021/01/07/thinkpad-t14-gen-1-amd/">Thinkpad T14</a></li>
+<li><a href="/en/2023/02/13/windows-1/#install-to-sony-vaio-svt1313-2013-model">Sony Vaio SVT1313</a></li>
+</ul>
+<h2 id="system-installation">System installation</h2>
+<h3 id="initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></h3>
+<p>The initial installation by the <code>debian-installer</code> should skip &ldquo;Desktop environment&rdquo; task to make it light GUI-less install.</p>
+<p>This installs (mostly) packages with <code>Priority:</code> values in <code>required</code>, <code>important</code> and <code>standard</code>.</p>
+<h3 id="initial-setup-manual">Initial setup (manual)</h3>
+<p>I found running following provides convenient work environment for the normal
+installation.  (For the virtual environment installation, you may skip some
+parts.)</p>
+<ul>
+<li>Use &ldquo;CTRL-ALT-F?&rdquo; (<code>?</code> can be 1-6) to access Linux virtual terminal login
+prompt, if yor are at GUI prompt.  Otherwise, you are already at it.
+<ul>
+<li>login to <code>root</code> account if you set the password for <code>root</code> during
+installation.</li>
+<li>login to your primary user account if you didn&rsquo;t set password for <code>root</code>,
+and then execute <code>sudo bash -i</code> to login to <code>root</code> account using the
+primary user&rsquo;s password.</li>
+</ul>
+</li>
+<li>Execute <code>apt-get update &amp;&amp; apt-get install aptitude sudo vim mc wget nano-</code></li>
+<li>Add personal repo by adding <a href="/en/2022/08/20/dev-04/#setting-up-secure-apt-cliant">its configuration file</a>.</li>
+<li>Set-up user group for UID=1000 user by adding membership to additional groups:
+<ul>
+<li><code>adm</code></li>
+<li><code>backup</code></li>
+<li><code>dialout</code></li>
+<li><code>dip</code></li>
+<li><code>games</code></li>
+<li><code>mail</code></li>
+<li><code>src</code></li>
+<li><code>staff</code></li>
+<li><code>sudo</code>  &ndash;  by adding this, you enable sudo with password</li>
+<li><code>www-data</code></li>
+</ul>
+</li>
+<li>If passwordless operation is desired, configure <code>sudo</code> by adding <code>/etc/sudoers.d/passwordless</code> as:</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># No passowrd required for the user in sudo group</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># please note the last match wins configuration</span>
+</span></span><span style="display:flex;"><span>%sudo ALL <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ALL:ALL<span style="color:#f92672">)</span> NOPASSWD: ALL
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># No password for 8 hours</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Defaults timestamp_timeout = 480</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#Defaults timestamp_type = global</span>
+</span></span></code></pre></div><p>NOTE: Please note that the last matching configuration is active for <code>sudo</code>.</p>
+<h3 id="initial-setup-automatic">Initial setup (automatic)</h3>
+<p>Running <code>initial-setup</code> script found at my repository should set up the same as
+the above <a href="#initial-setup-manual">manual case</a>.</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup">https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup</a></li>
 </ul>
-<p>Just executing <code>./initial-setup</code> creates
-<code>/etc/apt/sources.d/osamuaoki.sources</code> as described in
-<a href="/en/2022/08/20/dev-04/">Development system (4)</a>
-and installs <code>sudo</code> and <code>aptitude</code>. This also sets up <code>sudo</code> as passwordless.</p>
+<p>NOTE: See <a href="/en/2022/08/20/dev-04/">Development system (4)</a> for how personal repo
+is created and used.</p>
 <h3 id="tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</h3>
 <p>Since I use <code>aptitude</code> as the primary package maintenance tool, I usually
 tidy-up package auto install flags (<code>M</code>) missing for some libraries after the
@@ -128,10 +168,10 @@ set library packages as auto-installed.  If some of them are not used by other
 program, let them remove.</p>
 <p>Now you can verify intentionally installed packages with:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;~i!~M~poptional&#39;</span>
-</span></span></code></pre></div><p>Development system (4)
-(This intensionally ignores some outdated packages with priority=extra packages.)</p>
+</span></span></code></pre></div><p>(This intensionally ignores some outdated packages with priority=extra packages.)</p>
 <h3 id="install-typical-packages">Install typical packages</h3>
-<p>Typically, installing <code>00-typ</code> and <code>00-notex</code> sets up a decent workstation.</p>
+<p>Typically, installing <code>00-typ</code> and <code>00-notex</code> task packages from the
+<a href="/en/2022/08/20/dev-04/">personal repo</a> sets up a decent workstation.</p>
 <h3 id="set-up-grub">Set-up GRUB</h3>
 <p>In order to probe OSs on other drives, add a following line to
 <code>/etc/default/grub</code>:</p>
@@ -198,7 +238,7 @@ up from the BIOS Update bootable CD image, you may need to disabled the Secure B
 <p>If Windows 10 or 11 is installed, you may need to reenable Secure Boot after
 this operation.</p>
 <h2 id="desktop-customization">Desktop customization</h2>
-<p>These settings need to be set again after some major update of GNOME.</p>
+<p>These settings also need to be set again after some major update of GNOME.</p>
 <h3 id="gui-desktop-customization">GUI Desktop customization</h3>
 <p>The <code>gnome-tweak</code> package installed as a dependency of <code>gnome</code> package helps to tweak the system.
 For example, you can add &ldquo;Applications&rdquo; to top bar etc.</p>
@@ -244,37 +284,19 @@ javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent</li>
 <li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent</li>
 </ul>
-<h2 id="libreoffice">LibreOffice</h2>
-<p>The version of LibreOffice available on Debian testing environment has some
-glitches more often than the version available on Debian stable environment.
-Issues for printing to Hagaki was the killer bug for me.</p>
-<p>I find that the installation of <a href="https://www.libreoffice.org/download/download/?type=deb-x86_64&amp;lang=en">LibreOffice Debian
-packages</a>
-available from <a href="https://www.libreoffice.org/">the upstream LibreOffice site</a> on
-Debian testing environment is the least effort solution for me.  For stability,
-I chose older stable 6.4.7.2-2 version aimed for business deployments (2021/12).
-This enabled me to print nicely to Hagaki.</p>
-<h2 id="wallpaper">Wallpaper</h2>
-<h3 id="grub-2">GRUB 2</h3>
-<p>Place your JPEG wallpaper graphics (JPEG) in <code>/boot/grub/</code> and run
-<code>sudo update-grub</code> or <code>sudo dpkg-reconfigure grub-efi-amd64</code>.</p>
-<h3 id="gnome">GNOME</h3>
-<p>You can set wallpaper graphics from:</p>
-<ul>
-<li>
-<p>Desktop: <code>Settings</code> -&gt; <code>Background</code></p>
-</li>
-<li>
-<p>Desktop: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code></p>
-</li>
-<li>
-<p>Lock Screen: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Lock Screen</code></p>
-</li>
-<li>
-<p>GDM3: &mdash; Not so easy (leave this as is)</p>
-</li>
-</ul>
-<h2 id="mail">Mail</h2>
+<h3 id="web-browser">Web browser</h3>
+<p>Although <a href="https://tracker.debian.org/pkg/chromium">Chromium</a> exists in the
+official Debian repository, it lacks <a href="https://blog.chromium.org/2021/01/limiting-private-api-availability-in.html">account synchronization capability with
+other devices since
+2021</a>.
+Although there are <a href="https://stackoverflow.com/questions/67459316/enabling-chromium-to-sync-with-google-account">some workarounds tips posted on
+web</a>,
+installing <a href="https://www.google.com/chrome/">Chrome</a> can solve this situation
+for sure.</p>
+<p>The best solution seems to be adding APT repository by adding
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/etc/apt/sources.list.d/google.sources">/etc/apt/sources.d/google.sources</a>
+in DEB822-STYLE FORMAT and select the <code>google-chrome-stable</code> package.</p>
+<h3 id="mail-client">Mail client</h3>
 <p>For the GUI access to the remotely hosted IMAP4 mail services, use GNOME Online
 accounts and Evolution.  This approach works for Gmail etc. and compatible with
 using other devices such as smart phones.  Evolution can also be configured to
@@ -299,14 +321,26 @@ host. (This trick may be usable for any hosts such as salsa.debian.org etc.)</p>
 <li><code>devscripts</code> (add &ldquo;<code>BTS_SENDMAIL_COMMAND='/home/osamu/bin/sendmail-p.d.o'</code>&rdquo; to <code>~/.devscripts</code>)</li>
 <li><code>reportbug</code> (add &ldquo;<code>mta /home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.reportbugrc</code>)</li>
 </ul>
-<p>I usually don&rsquo;t bother with fetchmail these days.</p>
-<h3 id="evolution-workaround-font----resolved">Evolution workaround (font) &ndash; resolved</h3>
-<p>This bug is resolved: <a href="https://bugs.debian.org/987948">https://bugs.debian.org/987948</a></p>
-<p>Evolution for Debian 11 Bullseye (pre-release) under wayland had ugly font
-problem as of May 2, 2021.  (Some firefox, too).  It looked like some similar
-to WebKit issue exposed by sandboxing.
-<a href="https://gitlab.gnome.org/GNOME/evolution/-/issues/1161">https://gitlab.gnome.org/GNOME/evolution/-/issues/1161</a></p>
-<p>Installing <code>xdg-desktop-portal-gtk</code> fixed it.</p>
+<p>I usually don&rsquo;t bother with <code>fetchmail</code> these days.</p>
+<h3 id="grub-2-wallpaper">GRUB 2 wallpaper</h3>
+<p>Place your JPEG wallpaper graphics (JPEG) in <code>/boot/grub/</code> and run
+<code>sudo update-grub</code> or <code>sudo dpkg-reconfigure grub-efi-amd64</code>.</p>
+<h3 id="gnome-desktop-wallpaper">GNOME desktop wallpaper</h3>
+<p>You can set wallpaper graphics from:</p>
+<ul>
+<li>
+<p>Desktop: <code>Settings</code> -&gt; <code>Background</code></p>
+</li>
+<li>
+<p>Desktop: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code></p>
+</li>
+<li>
+<p>Lock Screen: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Lock Screen</code></p>
+</li>
+<li>
+<p>GDM3: &mdash; Not so easy (leave this as is)</p>
+</li>
+</ul>
 <h2 id="command-line">Command line</h2>
 <p>Setups:</p>
 <ul>
@@ -317,8 +351,8 @@ to WebKit issue exposed by sandboxing.
 </li>
 <li>main editor: <code>nvim</code> configuration: <a href="https://github.com/osamuaoki/astronvim-osamu">https://github.com/osamuaoki/astronvim-osamu</a>
 <ul>
-<li>NeoVim 0.7 with <a href="https://github.com/AstroNvim/AstroNvim">AstroNvim</a></li>
-<li>See <a href="/en/2022/07/15/vim-learn-4/">Re-learning Vim (4)</a>.</li>
+<li>NeoVim 0.8 (or 0.9 soon) with <a href="https://github.com/AstroNvim/AstroNvim">AstroNvim</a></li>
+<li>See <a href="/en/2023/02/01/vim-learn-6/">Re-learning Vim (6)</a>.</li>
 </ul>
 </li>
 <li>backup editor: <code>vim</code> configuration: <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a>
@@ -337,6 +371,19 @@ to WebKit issue exposed by sandboxing.
 <p>Adding extra user name for <code>/etc/passwd</code> and <code>/etc/shadow</code> with the same
 UID=1000 enables useful test accounts.  Please make sure to create different
 home directory for each user name.</p>
+<p>For <code>sudo</code>, you need to set account membership for each account.</p>
+<p>GDM seems to get confused by this situation.  Please login using explicitly
+using account name.</p>
+<h2 id="libreoffice">LibreOffice</h2>
+<p>The version of LibreOffice available on Debian testing environment has some
+glitches more often than the version available on Debian stable environment.
+Issues for printing to Hagaki was the killer bug for me.</p>
+<p>I find that the installation of <a href="https://www.libreoffice.org/download/download/?type=deb-x86_64&amp;lang=en">LibreOffice Debian
+packages</a>
+available from <a href="https://www.libreoffice.org/">the upstream LibreOffice site</a> on
+Debian testing environment is the least effort solution for me.  For stability,
+I chose older stable 6.4.7.2-2 version aimed for business deployments (2021/12).
+This enabled me to print nicely to Hagaki.</p>
 <!-- raw HTML omitted -->
 
 

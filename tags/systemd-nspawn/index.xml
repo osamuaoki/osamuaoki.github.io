@@ -16,7 +16,7 @@
       <description>Host preparation for systemd-nspawn Get required packages:
 $ sudo apt install systemd-container debootstrap Configuring systemd-sysctl.service to enable unprivileged user namespaces required for -U option:
 $ echo &amp;#39;kernel.unprivileged_userns_clone=1&amp;#39; | sudo tee /etc/sysctl.d/nspawn.conf $ systemctl restart systemd-sysctl.service Creating a bookworm based a01 system at /srv/chroot/a01/:
-$ sudo mkdir -p /srv/chroot/a01 $ sudo debootstrap bookworm /srv/chroot/a01 http://deb.debian.org/debian/ $ sudo systemd-nspawn -D /srv/chroot/a01 -U --machine a01 Related articles and resources Linux環境でWindows10のインストールUSBメモリを作成 Create a windows system from scratch using Linux Rufus &amp;ndash; The Reliable USB Formatting Utility UEFI:NTFS - Boot NTFS or exFAT partitions from UEFI Debian wiki: UEFI </description>
+$ sudo mkdir -p /srv/chroot/a01 $ sudo debootstrap bookworm /srv/chroot/a01 http://deb.debian.org/debian/ $ sudo systemd-nspawn -D /srv/chroot/a01 -U --machine a01 </description>
     </item>
     
   </channel>

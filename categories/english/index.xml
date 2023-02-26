@@ -8,16 +8,16 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 25 Feb 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/english/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Debian Workstation (usability) (version 2023)</title>
+      <title>Debian Workstation (usability) (v2023)</title>
       <link>/en/2023/02/25/debian-usability-2023/</link>
       <pubDate>Sat, 25 Feb 2023 00:00:00 +0000</pubDate>
       
       <guid>/en/2023/02/25/debian-usability-2023/</guid>
-      <description>This is an updated guide based on the older guide.
+      <description>This is an updated guide. The older deprecated guide was used as its base.
 Workstation usability Let me update note on configuring and administrating my workstation under post-Debian Bookworm (12) GNU/Linux in testing.
 This is non-hardware specific notes and tips.
-Installer installed extra packages After the initial installation by the debian-installer, packages with Priority: values required, important and standard are installed.
-Initial setup Running initial-setup script found at my repository should set up basics for my needs.</description>
+For the hardware specific notes and tips, see:
+Thinkpad T14 Sony Vaio SVT1313 System installation Initial installation by debian-installer The initial installation by the debian-installer should skip &amp;ldquo;Desktop environment&amp;rdquo; task to make it light GUI-less install.</description>
     </item>
     
     <item>
@@ -29,7 +29,7 @@ Initial setup Running initial-setup script found at my repository should set up 
       <description>Host preparation for systemd-nspawn Get required packages:
 $ sudo apt install systemd-container debootstrap Configuring systemd-sysctl.service to enable unprivileged user namespaces required for -U option:
 $ echo &amp;#39;kernel.unprivileged_userns_clone=1&amp;#39; | sudo tee /etc/sysctl.d/nspawn.conf $ systemctl restart systemd-sysctl.service Creating a bookworm based a01 system at /srv/chroot/a01/:
-$ sudo mkdir -p /srv/chroot/a01 $ sudo debootstrap bookworm /srv/chroot/a01 http://deb.debian.org/debian/ $ sudo systemd-nspawn -D /srv/chroot/a01 -U --machine a01 Related articles and resources Linux環境でWindows10のインストールUSBメモリを作成 Create a windows system from scratch using Linux Rufus &amp;ndash; The Reliable USB Formatting Utility UEFI:NTFS - Boot NTFS or exFAT partitions from UEFI Debian wiki: UEFI </description>
+$ sudo mkdir -p /srv/chroot/a01 $ sudo debootstrap bookworm /srv/chroot/a01 http://deb.debian.org/debian/ $ sudo systemd-nspawn -D /srv/chroot/a01 -U --machine a01 </description>
     </item>
     
     <item>
@@ -309,12 +309,13 @@ APT proxy on the host WS.</description>
     </item>
     
     <item>
-      <title>Debian Workstation (usability)</title>
+      <title>Debian Workstation (usability) (old)</title>
       <link>/en/2021/01/15/debian-usability/</link>
       <pubDate>Fri, 15 Jan 2021 00:00:00 +0000</pubDate>
       
       <guid>/en/2021/01/15/debian-usability/</guid>
-      <description>Workstation usability Let me keep up note on configuring and administrating my workstation under post-Debian Bullseye (11) GNU/Linux in testing.
+      <description>This is an outdated deprecated guide. Please read the updated guide.
+Workstation usability Let me keep up note on configuring and administrating my workstation under post-Debian Bullseye (11) GNU/Linux in testing.
 This is non-hardware specific notes and tips.
 Installer installed extra packages After the initial installation, packages with Priority: values required, important and standard are installed. In addition to these packages, I see the installer installs following extra packages:
 busybox console-setup discover grub-efi-amd64 initramfs-tools installation-report keyboard-configuration laptop-detect libcap2-bin linux-image-amd64 lsb-base popularity-contest shim-signed task-desktop task-english task-laptop tasksel usbutils Initial setup Running initial-setup script found at my repository should set up basics.</description>
