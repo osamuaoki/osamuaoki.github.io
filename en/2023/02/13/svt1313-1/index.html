@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Vaio SVT1313 (Intel i5, 2013 model) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Vaio SVT1313 (Intel i5, 2013 model)</span></h1>
+
+<h3 class="date">Date:
+2023/02/13 (initial publish),
+2023/02/27 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/13/windows-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/02/20/systemd-nspawn-1/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#hardware-of-sony-vaio">Hardware of Sony VAIO</a></li>
+    <li><a href="#touchpad-of-sony-vaio">Touchpad of Sony VAIO</a></li>
+  </ul>
+</nav>
+
+<p>Let me keep up note on configuring and administrating my Sony Vaio SVT1313
+(Intel i5) under Debian GNU/Linux.  This is hardware specific tips.</p>
+<h2 id="hardware-of-sony-vaio">Hardware of Sony VAIO</h2>
+<p>Pressing <strong>ASSIST</strong> button instead of <strong>POWER</strong> button starts PC with boot
+device and BIOS setting selection menu.</p>
+<p>I got this machine as second hand. This PC came with <a href="https://wiki.debian.org/UEFI#Force_grub-efi_installation_manually">a buggy
+UEFI</a> which
+refuses to accommodate dual boot scenario with reasonable usability.</p>
+<ul>
+<li>I ended up selecting &ldquo;legacy&rdquo; mode to use MBR.  No more secure boot.</li>
+<li>I replaced the internal keyboard.  (Missing key event problems on &ldquo;e&rdquo;, &ldquo;u&rdquo;
+and &ldquo;Delete&rdquo; are fixed.)</li>
+<li>The card side contacts of SO-DDR DRAM needed to be rubbed by eraser to get it
+work right.</li>
+</ul>
+<h2 id="touchpad-of-sony-vaio">Touchpad of Sony VAIO</h2>
+<p>Touch pad only functions as left-click button.  I verified it by opening its
+touch pad to see one button switch under it.  So realizing left/right click needs some driver
+support.  So far under Wayland, I didn&rsquo;t see any easy solution. Interesting references are:</p>
+<ul>
+<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=597082">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=597082</a></li>
+<li><a href="https://xorg-team.pages.debian.net/xorg/howto/configure-input.html">https://xorg-team.pages.debian.net/xorg/howto/configure-input.html</a></li>
+<li><a href="https://www.linux.org/threads/right-click-with-macbook.9667/">https://www.linux.org/threads/right-click-with-macbook.9667/</a></li>
+<li><a href="https://help.ubuntu.com/stable/ubuntu-help/mouse-mousekeys.html.en">https://help.ubuntu.com/stable/ubuntu-help/mouse-mousekeys.html.en</a></li>
+<li><a href="https://help.ubuntu.com/stable/ubuntu-help/a11y-right-click.html.en">https://help.ubuntu.com/stable/ubuntu-help/a11y-right-click.html.en</a></li>
+</ul>
+<p>For Mac or some Sony Vaio with single tap pad button, this allows secondary
+click under the current GNOME.</p>
+<ul>
+<li>Settings</li>
+<li>-&gt; Accessibility</li>
+<li>-&gt; Pointing &amp; Clicking: Click Assist On</li>
+<li>-&gt; Simulated Secondary Click ON</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/13/windows-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/02/20/systemd-nspawn-1/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

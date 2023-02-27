@@ -16,7 +16,7 @@
 Workstation usability Let me update note on configuring and administrating my workstation under post-Debian Bookworm (12) GNU/Linux in testing.
 This is non-hardware specific notes and tips.
 For the hardware specific notes and tips, see:
-Thinkpad T14 Sony Vaio SVT1313 System installation Initial installation by debian-installer The initial installation by the debian-installer should skip &amp;ldquo;Desktop environment&amp;rdquo; task to make it light GUI-less install.</description>
+Thinkpad T14 Gen 1 Sony Vaio SVT1313 System installation Initial installation by debian-installer The initial installation by the debian-installer should skip &amp;ldquo;Desktop environment&amp;rdquo; task to make it light GUI-less install.</description>
     </item>
     
     <item>
@@ -29,6 +29,18 @@ Thinkpad T14 Sony Vaio SVT1313 System installation Initial installation by debia
 $ sudo apt install systemd-container debootstrap Configuring systemd-sysctl.service to enable unprivileged user namespaces required for -U option:
 $ echo &amp;#39;kernel.unprivileged_userns_clone=1&amp;#39; | sudo tee /etc/sysctl.d/nspawn.conf $ systemctl restart systemd-sysctl.service Creating a bookworm based a01 system at /srv/chroot/a01/:
 $ sudo mkdir -p /srv/chroot/a01 $ sudo debootstrap bookworm /srv/chroot/a01 http://deb.debian.org/debian/ $ sudo systemd-nspawn -D /srv/chroot/a01 -U --machine a01 </description>
+    </item>
+    
+    <item>
+      <title>Vaio SVT1313 (Intel i5, 2013 model)</title>
+      <link>/en/2023/02/13/svt1313-1/</link>
+      <pubDate>Mon, 13 Feb 2023 00:00:00 +0001</pubDate>
+      
+      <guid>/en/2023/02/13/svt1313-1/</guid>
+      <description>Let me keep up note on configuring and administrating my Sony Vaio SVT1313 (Intel i5) under Debian GNU/Linux. This is hardware specific tips.
+Hardware of Sony VAIO Pressing ASSIST button instead of POWER button starts PC with boot device and BIOS setting selection menu.
+I got this machine as second hand. This PC came with a buggy UEFI which refuses to accommodate dual boot scenario with reasonable usability.
+I ended up selecting &amp;ldquo;legacy&amp;rdquo; mode to use MBR.</description>
     </item>
     
     <item>
