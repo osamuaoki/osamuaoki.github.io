@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Debianで確定申告2022 (e-Tax) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Debianで確定申告2022 (e-Tax)</span></h1>
+
+<h3 class="date">Date:
+2023/02/28 (initial publish),
+2023/02/28 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/09/09/home-mt2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#確定申告">確定申告</a></li>
+  </ul>
+</nav>
+
+<h2 id="確定申告">確定申告</h2>
+<p><a href="https://www.keisan.nta.go.jp/kyoutu/ky/sm/top#bsctrl">日本の国税庁のウエッブサイト</a>
+からクリックしていくと、一見Windows環境以外からの電子申請が無理な感さえ受けます。</p>
+<p><img src="/img/e-tax-compat-win.png" alt="e-tax compat image win">
+<img src="/img/e-tax-compat-mac.png" alt="e-tax compat image mac"></p>
+<p>実際にはDebian GNU/Linuxシステムからでも、以前から制約が甘い「ID・パスワード方式」
+を選べば、さすがに「推奨環境」には挙げてもらえていませんが、拒否されること無く
+Debianで申請ができました。実際に私も使用していました。</p>
+<p>ただ、「マイナンバーカード」を利用しようとすると、ユーザー・エージェントチェックに
+引っかかり前に進めなくなります。</p>
+<p><img src="/img/e-tax-UA-block.png" alt="e-tax UA block image"></p>
+<p>以前は専用カードリーダーが必要な問題もあったので、敢えて「マイナンバーカード」利用
+にチャレンジしていませんでした。</p>
+<p>2023年の2月からスマホと連携できるようになり「マイナンバーカード」を
+使っての申請が簡単にできるようになりました。今年は，「医療費集計フォーム」は
+Debian上のLibreOfficeで作成しましたが、実際の2022年度分の申請にはとりあえず
+上記ユーザー・エージェントチェック問題を避けるべくWindows10のPCを使いました。</p>
+<p>無事申請し終わってみて振り返ると、Debianを使っての申請ができないのは、どう考えても
+前時代的なユーザー・エージェントチェックだけが理由の気がしました。
+申請に当たってはバイナリープログラムの導入等は一切ありませんでした。スマホとの連携は
+スクリーン表示なので、デバイスドライバーが引っかかるような障害があるとも思えません。</p>
+<p><a href="https://developer.chrome.com/blog/user-agent-reduction-deprecation-trial/">ユーザー・エージェント文字列というメカニズム自体、すでにgoogleが非推奨としている</a>
+中で、何か簡単に文字列を変えるツールは無いものかと探しました。良いのがあります</p>
+<ul>
+<li><a href="https://chrome.google.com/webstore/detail/user-agent-switcher-and-m/bhchdcejhohfmigjafbampogmaanbfkghttps://chrome.google.com/webstore/detail/user-agent-switcher-and-m/bhchdcejhohfmigjafbampogmaanbfkg">User-Agent Switcher and Manager</a> &ndash; Chrome/Chromium用</li>
+<li><a href="https://addons.mozilla.org/ja/firefox/addon/user-agent-string-switcher/">User-Agent Switcher and Manager</a> &ndash; firefox用</li>
+</ul>
+<p>Chromeでこれを試してみました。Debian上のChromeでWindowsのふりの設定ができます。</p>
+<p><img src="/img/UA-SM.png" alt="UA-SM"></p>
+<p>この設定をした後は、上記のようにユーザー・エージェントチェックに引っかかり前に進めなくなることはなく、どうも何事もなく前に進めていました。（最後までしたわけでは無いんですが…）</p>
+<p>医療費控除やふるさと納税のために来年度確定申告する際には、これを試します。</p>
+<p>NOTE: Chromiumでも、Googleアカウントにloginする必要はありますが、Chromeと同じextensionが導入できます。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2022/09/09/home-mt2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
