@@ -100,7 +100,7 @@ codes.</li>
 <li>LazyVim package itself is installed under the <code>~/.local/share/nvim/lazy</code>
 together with all other packages including the package manager
 <a href="https://github.com/folke/lazy.nvim">💤lazy.nvim</a>.</li>
-<li>Installed packages can be managed by <code>:Lazy</code> (alternatively, <code>&lt;SPACE&gt;l</code>).</li>
+<li>Installed lua packages can be managed by <code>:Lazy</code> (alternatively, <code>&lt;SPACE&gt;l</code>).</li>
 </ul>
 <h3 id="terminal-emulator">Terminal emulator</h3>
 <p>The current <code>gnome-terminal</code> seems to support true color and undercurls without
@@ -118,14 +118,15 @@ readability for programs such as <code>mc</code>.</p>
 <li>for the first keys just by pressing <code>&lt;BS&gt;</code>-key after any random keys such as <code>&lt;SPACE&gt;</code>-key.</li>
 </ul>
 </li>
-<li>Notable first keys used by system and user defined commands:
+<li>Notable first keys used by native Neovim and user defined commands:
 <ul>
-<li><code>&lt;SPACE&gt;</code>-key: utility commands</li>
+<li><code>&lt;SPACE&gt;</code>-key: user defined utility commands</li>
 <li><code>g</code>-key: MOVE-type commands</li>
 <li><code>z</code>-key: FOLD-type commands</li>
 <li><code>[</code>-key: PREVIOUS-type commands</li>
 <li><code>]</code>-key: NEXT-type commands</li>
-<li><code>l</code>-key: Lazy package manager</li>
+<li><code>&lt;SPACE&gt;l</code>-key: Lazy lua package manager</li>
+<li><code>&lt;SPACE&gt;cm</code>-key: Mason binary command manager</li>
 </ul>
 </li>
 </ul>
@@ -135,8 +136,9 @@ readability for programs such as <code>mc</code>.</p>
 dark background, I add <code>vim.go.background = &quot;dark&quot;</code> to
 <code>~/.config/nvim/lua/config/options.lua</code>.</p>
 <h3 id="masonnvim-support"><code>mason.nvim</code> support</h3>
-<p><code>mason.nvim</code> managed program files can be compiled and updated by <code>:Mason</code>
-(alternatively, <code>&lt;SPACE&gt;cm</code>) and pressing &ldquo;U&rdquo;.</p>
+<p><code>mason.nvim</code> manages binary commands used by <code>null-ls.nvim</code>.  It can be started
+by <code>:Mason</code> (alternatively, <code>&lt;SPACE&gt;cm</code>).  To update binary commands to the
+latest, just press &ldquo;U&rdquo;.</p>
 <p>Basically, this helps us to install requested <code>&lt;packagename&gt;</code> package into
 <code>~/.local/share/nvim/mason/packages/&lt;packagename&gt;/</code> and make its executable
 <code>&lt;progname&gt;</code> program accessible from Neovim in
