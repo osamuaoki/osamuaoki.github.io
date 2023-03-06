@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Re-learning Vim (7) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Re-learning Vim (7)</span></h1>
+
+<h3 class="date">Date:
+2023/03/05 (initial publish),
+2023/03/07 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/25/debian-usability-2023/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#nvim-configuration-history">Nvim configuration history</a></li>
+    <li><a href="#lazyvim">LazyVim</a>
+      <ul>
+        <li><a href="#terminal-emulator">Terminal emulator</a></li>
+        <li><a href="#key-bindings">Key bindings</a></li>
+        <li><a href="#colorscheme-of-lazyvim">Colorscheme of Lazyvim</a></li>
+        <li><a href="#masonnvim-support"><code>mason.nvim</code> support</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="nvim-configuration-history">Nvim configuration history</h2>
+<p>I have been updating Nvim configuration with AstroNvim as described in
+<a href="/en/2022/07/29/vim-learn-5/">Re-learning Vim (5)</a> and
+<a href="/en/2023/02/01/vim-learn-6/">Re-learning Vim (6)</a>.</p>
+<p>Although AstroNvim provided me with great features with simple and consistent
+customization mechanism, they were still a bit overwhelming and sometimes too
+much.  I needed a simpler baseline Neovim configuration platform which offers
+most features as <strong>opt-in</strong>.</p>
+<h2 id="lazyvim">LazyVim</h2>
+<p>A new baseline Neovim setup system <a href="https://github.com/LazyVim/LazyVim">LazyVim</a> is
+published by the upstream of the new smart delayed package loader
+<a href="https://github.com/folke/lazy.nvim">💤lazy.nvim</a>.</p>
+<p>Its guide is available at <a href="https://www.lazyvim.org/">www.lazyvim.org</a>.</p>
+<p>This functions as a nice baseline Neovim configuration system similar to
+<a href="https://github.com/AstroNvim/AstroNvim">AstroNvim</a> but with less complication.
+So I decided to switch over to this.</p>
+<p><a href="https://github.com/LazyVim/LazyVim">LazyVim</a> is designed to install a set of
+trivial template file copies in <code>~/.config/nvim</code>. They are meant to be
+customized by the user.  <a href="https://github.com/LazyVim/LazyVim">LazyVim</a> contains
+non-trivial template files with utility codes and is installed under the
+<code>~/.local/share/nvim/lazy</code> together with all other packages including the
+package manager <a href="https://github.com/folke/lazy.nvim">💤lazy.nvim</a>.</p>
+<h3 id="terminal-emulator">Terminal emulator</h3>
+<p>The current <code>gnome-terminal</code> seems to support true color and undercurls without
+much issues.</p>
+<p>Just to be usure, I also installed <code>kitty</code> and <code>alacritty</code> which are officially
+supported by <a href="https://www.lazyvim.org/">www.lazyvim.org</a>.</p>
+<p>The <code>colorscheme</code> for them was adjusted to match <code>gnome-terminal</code> to ensure
+readability for programs such as <code>mc</code>.</p>
+<h3 id="key-bindings">Key bindings</h3>
+<ul>
+<li>You can reach Normal mode by pressing <code>&lt;ESC&gt;</code>-key.</li>
+<li>In Normal mode, <code>which-key.nvim</code> displays the key binding.
+<ul>
+<li>for the second and following keys as you type.</li>
+<li>for the first keys just by pressing <code>&lt;BS&gt;</code>-key after any random keys such as <code>&lt;SPACE&gt;</code>-key.</li>
+</ul>
+</li>
+<li>Notable first keys used by system and user defined commands:
+<ul>
+<li><code>&lt;SPACE&gt;</code>-key: utility commands</li>
+<li><code>g</code>-key: MOVE-type commands</li>
+<li><code>z</code>-key: FOLD-type commands</li>
+<li><code>[</code>-key: PREVIOUS-type commands</li>
+<li><code>]</code>-key: NEXT-type commands</li>
+</ul>
+</li>
+</ul>
+<p>NOTE: comment is <code>gc</code> for LazyVim (it is <code>&lt;SPACE&gt;/</code> for AstroNvim).</p>
+<h3 id="colorscheme-of-lazyvim">Colorscheme of Lazyvim</h3>
+<p>The default <code>colorscheme</code> for <code>Lazyvim</code> is <code>tokyonight</code>.  Since I like the
+dark background, I add <code>vim.go.background = &quot;dark&quot;</code> to
+<code>~/.config/nvim/lua/config/options.lua</code>.</p>
+<h3 id="masonnvim-support"><code>mason.nvim</code> support</h3>
+<p><code>mason.nvim</code> managed program files can be compiled and updated by <code>:Mason</code> and
+pressing &ldquo;U&rdquo;.</p>
+<p>Basically, this helps us to install requested <code>&lt;packagename&gt;</code> package into
+<code>~/.local/share/nvim/mason/packages/&lt;packagename&gt;/</code> and make its executable
+<code>&lt;progname&gt;</code> program accessible from Neovim in
+<code>~/.local/share/nvim/mason/bin/&lt;progname&gt;</code>. So executable programs from Neovim
+plugins are not the one on the main system.</p>
+<p>As I see my situation with <code>:checkhelth mason</code>.:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>mason: require(&#34;mason.health&#34;).check()
+</span></span><span style="display:flex;"><span>========================================================================
+</span></span><span style="display:flex;"><span>## mason.nvim report
+</span></span><span style="display:flex;"><span>  - OK: neovim version &gt;= 0.7.0
+</span></span><span style="display:flex;"><span>  - OK: **Go**: `go version go1.19.6 linux/amd64`
+</span></span><span style="display:flex;"><span>  - OK: **cargo**: `cargo 1.65.0`
+</span></span><span style="display:flex;"><span>  - OK: **luarocks**: `/usr/bin/luarocks 3.8.0`
+</span></span><span style="display:flex;"><span>  - OK: **Ruby**: `ruby 3.1.2p20 (2022-04-12 revision 4491bb740a) [x86_64-linux-gnu]`
+</span></span><span style="display:flex;"><span>  - OK: **RubyGem**: `3.3.15`
+</span></span><span style="display:flex;"><span>  - WARNING: **Composer**: not available
+</span></span><span style="display:flex;"><span>  - WARNING: **PHP**: not available
+</span></span><span style="display:flex;"><span>  - OK: **npm**: `9.2.0`
+</span></span><span style="display:flex;"><span>  - OK: **node**: `v18.13.0`
+</span></span><span style="display:flex;"><span>  - OK: **python3**: `Python 3.11.2`
+</span></span><span style="display:flex;"><span>  - OK: **pip3**: `pip 23.0.1 from /usr/lib/python3/dist-packages/pip (python 3.11)`
+</span></span><span style="display:flex;"><span>  - WARNING: **javac**: not available
+</span></span><span style="display:flex;"><span>  - OK: **java**: `openjdk version &#34;17.0.6&#34; 2023-01-17`
+</span></span><span style="display:flex;"><span>  - WARNING: **julia**: not available
+</span></span><span style="display:flex;"><span>  - OK: **wget**: `GNU Wget 1.21.3 built on linux-gnu.`
+</span></span><span style="display:flex;"><span>  - OK: **curl**: `curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.8 zlib/1.2.13 brotli/1.0.9 zstd/1.5.4 libidn2/2.3.3 libpsl/0.21.2 (+libidn2/2.3.3) libssh2/1.10.0 nghttp2/1.52.0 librtmp/2.3`
+</span></span><span style="display:flex;"><span>  - OK: **gzip**: `gzip 1.12`
+</span></span><span style="display:flex;"><span>  - OK: **tar**: `tar (GNU tar) 1.34`
+</span></span><span style="display:flex;"><span>  - WARNING: **pwsh**: not available
+</span></span><span style="display:flex;"><span>  - OK: **bash**: `GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)`
+</span></span><span style="display:flex;"><span>  - OK: **sh**: `Ok`
+</span></span><span style="display:flex;"><span>  - OK: GitHub API rate limit. Used: 0. Remaining: 60. Limit: 60. Reset: Tue 07 Mar 2023 01:45:13 AM JST.
+</span></span></code></pre></div><p>I ended up to install following Debian packages as required system programs.</p>
+<ul>
+<li><code>luarocks</code></li>
+<li><code>npm</code></li>
+<li><code>nodejs</code></li>
+<li><code>cargo</code></li>
+<li><code>python3-pip</code></li>
+<li><code>python3-venv</code></li>
+<li><code>curl</code></li>
+<li><code>wget</code></li>
+</ul>
+<p>See more <code>:h mason.nvim</code></p>
+<p>In order to make <code>mason.nvim</code> generated programs accessible from shell
+prompt, I have modifies <code>~.profile</code> to include the following:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># set PATH so it includes mason.nvim&#39;s private bin if it exists (Neovim/mason.nvim)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -d <span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.local/share/nvim/mason/bin/&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.local/share/nvim/mason/bin:</span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><p>I also added
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/dot/.editorconfig">~/.editorconfig</a>
+to cope with sources using <a href="https://editorconfig.org/">editorconfig</a>.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/25/debian-usability-2023/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
