@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/03/07 (last update)
+2023/03/09 (last update)
 </h3>
 </div>
 
@@ -61,7 +61,14 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#nvim-configuration-history">Nvim configuration history</a></li>
+    <li><a href="#build-neovim-090-pre-release-on-march-2023">Build Neovim (0.9.0 pre-release on March, 2023)</a>
+      <ul>
+        <li><a href="#build-tools">Build tools</a></li>
+        <li><a href="#libraries-to-install">Libraries to install</a></li>
+        <li><a href="#build-neovim-ver-090-prerelease-etc">Build Neovim (ver. 0.9.0 prerelease etc.)</a></li>
+      </ul>
+    </li>
+    <li><a href="#nvim-configuration-retrospective">Nvim configuration retrospective</a></li>
     <li><a href="#lazyvim">LazyVim</a>
       <ul>
         <li><a href="#terminal-emulator">Terminal emulator</a></li>
@@ -73,7 +80,58 @@
   </ul>
 </nav>
 
-<h2 id="nvim-configuration-history">Nvim configuration history</h2>
+<h2 id="build-neovim-090-pre-release-on-march-2023">Build Neovim (0.9.0 pre-release on March, 2023)</h2>
+<p>Since Neovim is fast moving platform, it is nice to have its latest version.</p>
+<h3 id="build-tools">Build tools</h3>
+<ul>
+<li><a href="/en/2022/08/20/dev-04/">Development system (4)</a></li>
+<li>build-essential</li>
+<li>cmake</li>
+<li>ninja-build</li>
+</ul>
+<h3 id="libraries-to-install">Libraries to install</h3>
+<ul>
+<li>libc6-dev                bookworm</li>
+<li>libluajit-5.1-dev        bookworm</li>
+<li>libmsgpack-dev           bookworm</li>
+<li>libtermkey-dev           bookworm</li>
+<li>libtree-sitter-dev       bookworm</li>
+<li>libunibilium-dev         bookworm</li>
+<li>libuv1-dev               bookworm</li>
+<li>libvterm-dev             experimental (0.3.1-1) &ndash; needs this version</li>
+<li>lua-luv-dev              bookworm &ndash; needs extra cmake options</li>
+</ul>
+<h3 id="build-neovim-ver-090-prerelease-etc">Build Neovim (ver. 0.9.0 prerelease etc.)</h3>
+<p>I used the following reference links and previous Debian package&rsquo;s <code>debian/rules</code> as my guide.</p>
+<ul>
+<li><a href="https://cmake.org/cmake/help/latest/cpack_gen/deb.html">https://cmake.org/cmake/help/latest/cpack_gen/deb.html</a></li>
+<li><a href="https://decovar.dev/blog/2021/09/23/cmake-cpack-package-deb-apt/">https://decovar.dev/blog/2021/09/23/cmake-cpack-package-deb-apt/</a></li>
+</ul>
+<pre tabindex="0"><code>#!/bin/sh
+
+# prepair for cmake
+mkdir &#34;build&#34; ; cd build
+# execute cmake in build
+BUILD_TYPE=Release
+#BUILD_TYPE=Debug
+
+# dpkg-architecture
+DEB_HOST_MULTIARCH=x86_64-linux-gnu
+
+# Configure to build with Ninja (use luajit)
+cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+               -DBUSTED_OUTPUT_TYPE=nvim \
+               -DPREFER_LUA=OFF \
+               -DLIBLUV_LIBRARY:FILEPATH=/usr/lib/$DEB_HOST_MULTIARCH/lua/5.1/luv.so \
+               -DLIBLUV_INCLUDE_DIR:PATH=/usr/include/lua5.1 \
+               -DCOMPILE_LUA=OFF \
+               ..
+
+# Build with Ninja
+cmake --build .
+# Build Debian package
+cpack -G DEB
+</code></pre><h2 id="nvim-configuration-retrospective">Nvim configuration retrospective</h2>
 <p>I have been updating Nvim configuration with AstroNvim as described in
 <a href="/en/2022/07/29/vim-learn-5/">Re-learning Vim (5)</a> and
 <a href="/en/2023/02/01/vim-learn-6/">Re-learning Vim (6)</a>.</p>
