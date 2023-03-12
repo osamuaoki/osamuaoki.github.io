@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/03/10 (last update)
+2023/03/12 (last update)
 </h3>
 </div>
 
@@ -98,18 +98,14 @@ This was written for March 2023 situation with Neovim 0.9.0.</p>
 <li>libtree-sitter-dev       bookworm</li>
 <li>libunibilium-dev         bookworm</li>
 <li>libuv1-dev               bookworm</li>
-<li>libvterm-dev             experimental (0.3.1-1) &ndash; needs this version</li>
 <li>lua-luv-dev              bookworm &ndash; needs extra cmake options</li>
+<li>libvterm-dev             experimental (0.3.1-1) &ndash; needs this version</li>
 </ul>
 <h3 id="build-neovim-090">Build Neovim (0.9.0)</h3>
-<p>I used the following reference links and previous Debian package&rsquo;s <code>debian/rules</code> as my guide.</p>
-<ul>
-<li><a href="https://cmake.org/cmake/help/latest/cpack_gen/deb.html">cmake reference: CPack DEB Generator</a></li>
-<li><a href="https://decovar.dev/blog/2021/09/23/cmake-cpack-package-deb-apt/">Making a deb package with CMake/CPack and hosting it in a private APT repository</a></li>
-<li><a href="https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1">cmake best practices (3.0+)</a></li>
-<li><a href="https://izzys.casa/2019/02/everything-you-never-wanted-to-know-about-cmake/">cmake pitfalls</a></li>
-</ul>
-<p>Here is a script to build a Neovim Debian package from the current git repo:</p>
+<p>I used the previous Debian package&rsquo;s <code>debian/rules</code> as my guide to set
+parameters.</p>
+<p>Here is a script to build a Neovim Debian package from the
+<a href="https://github.com/neovim/neovim">current Neovim upstream git repo</a>:</p>
 <pre tabindex="0"><code>#!/bin/sh
 
 # prepair for cmake
@@ -134,7 +130,14 @@ cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
 cmake --build .
 # Build Debian package
 cpack -G DEB
-</code></pre><h2 id="nvim-configuration-retrospective">Nvim configuration retrospective</h2>
+</code></pre><p>I also used following interesting references.</p>
+<ul>
+<li><a href="https://cmake.org/cmake/help/latest/cpack_gen/deb.html">cmake reference: CPack DEB Generator</a></li>
+<li><a href="https://decovar.dev/blog/2021/09/23/cmake-cpack-package-deb-apt/">Making a deb package with CMake/CPack and hosting it in a private APT repository</a></li>
+<li><a href="https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1">cmake best practices (3.0+)</a></li>
+<li><a href="https://izzys.casa/2019/02/everything-you-never-wanted-to-know-about-cmake/">cmake pitfalls</a></li>
+</ul>
+<h2 id="nvim-configuration-retrospective">Nvim configuration retrospective</h2>
 <p>I have been updating Nvim configuration with AstroNvim as described in
 <a href="/en/2022/07/29/vim-learn-5/">Re-learning Vim (5)</a> and
 <a href="/en/2023/02/01/vim-learn-6/">Re-learning Vim (6)</a>.</p>
