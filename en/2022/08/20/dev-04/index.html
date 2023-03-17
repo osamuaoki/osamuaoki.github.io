@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/08/20 (initial publish),
-2023/02/24 (last update)
+2023/03/17 (last update)
 </h3>
 </div>
 
@@ -70,6 +70,7 @@
     </li>
     <li><a href="#adding-personal-binary-package-repository">Adding personal binary package repository</a></li>
     <li><a href="#personal-packages">Personal packages</a></li>
+    <li><a href="#changing-environment-of-gui-program">Changing environment of GUI program</a></li>
   </ul>
 </nav>
 
@@ -194,7 +195,25 @@ source.</p>
 <li><a href="https://github.com/osamuaoki/bss">https://github.com/osamuaoki/bss</a> &ndash; Btrfs Subvolume Snapshot Utility</li>
 <li><a href="https://github.com/osamuaoki/osamu-task">https://github.com/osamuaoki/osamu-task</a> &ndash; Osamu&rsquo;s Task Packages</li>
 </ul>
-<!-- raw HTML omitted -->
+<h2 id="changing-environment-of-gui-program">Changing environment of GUI program</h2>
+<p>Let&rsquo;s make a GUI program <code>gnucash</code> started under Japanese environment
+<code>ja_JP.UTF-8</code> while keeping your system under <code>en_US.UTF-8</code>.</p>
+<p>Simple use of <code>sudo mv /usr/bin/gnucash /usr/bin/gnucash.orig</code> isn&rsquo;t robust
+against package update.  Here, <code>dpkg-divert</code> must be used, instead.</p>
+<p>Let&rsquo;s first make a command to start <code>gnucash</code> under Japanese environment as
+<code>/usr/bin/gnucash.ja</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh -e
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>LANG<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ja_JP.UTF-8&#34;</span> LANGUAGE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;ja_JP;ja&#34;</span> /usr/bin/gnucash.orig
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ cd /usr/bin
+</span></span><span style="display:flex;"><span> $ sudo chown <span style="color:#ae81ff">755</span> gnucash.ja
+</span></span><span style="display:flex;"><span> $ sudo dpkg-divert --local --rename --divert /usr/bin/gnucash.orig --add /usr/bin/gnucash
+</span></span><span style="display:flex;"><span> $ sudo ln -sf gnucash.ja gnucash
+</span></span></code></pre></div><p>With this set up, one can switch among different environment by changing
+symlink.</p>
+<p>You can restore the original state as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ rm gnucash
+</span></span><span style="display:flex;"><span> $ sudo dpkg-divert --local --rename --remove /usr/bin/gnucash
+</span></span></code></pre></div><!-- raw HTML omitted -->
 
 
 <table width="100%">
