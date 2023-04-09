@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>日付フォーマット変換 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">日付フォーマット変換</span></h1>
+
+<h3 class="date">Date:
+2023/04/08 (initial publish),
+2023/04/09 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2023/02/28/etax2022/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#日付フォーマット問題">日付フォーマット問題</a>
+      <ul>
+        <li><a href="#gnucashによる対応">GNUcashによる対応</a></li>
+        <li><a href="#libreoffice-calcによる対応">LibreOffice Calcによる対応</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<h2 id="日付フォーマット問題">日付フォーマット問題</h2>
+<p>日本語で銀行等のデーターをCSVファイルで落とすと、ファイル中のデーターは
+「2023/1/31」等となります。</p>
+<p>一方、GNUcashは「2023-01-31」等の表記でないと、デフォルトでは日付としてうまく
+読み込めません。</p>
+<h3 id="gnucashによる対応">GNUcashによる対応</h3>
+<p>GNUcash（日本語ロカール化済み）はファイルのインポートの際に、以下の注意をすれば良いようです。</p>
+<ul>
+<li>勘定科目を設定</li>
+<li>列設定で、「日付」を設定</li>
+<li>文字コード: 日本語(Shift_JIS)</li>
+<li>日付の書式: 年-月-日</li>
+</ul>
+<h3 id="libreoffice-calcによる対応">LibreOffice Calcによる対応</h3>
+<p>CSVファイルをダブルクリックすると、LibreOffice Calc(英語UTF-8環境)のCSV Importのダイアローグが表示される。</p>
+<ul>
+<li>Character setをJapanese(Shift-JIS)とする</li>
+<li>Fieldsの中の日付の列の読み込みタイプ「Standard」をクリック</li>
+<li>Column typeに読み込みタイプ「Standard」が表示される。</li>
+<li>それのPull-downから、Column typeの読み込みタイプを「Date(YMD)」にする。</li>
+</ul>
+<p>読み込むと、日付の列は「文字列」ではなく「日付」として読み込まれる。</p>
+<p>日付の列を選択，<code>Format-&gt;Cells-&gt;Numbersタブ-&gt;Date-&gt;1999-12-31</code>とすれば
+ISO形式の日付文字列になる。ISO形式の日付文字列は、読み込みタイプ「Standard」
+のままでも、日付としてスプレッドシート中に読み込まれる。</p>
+<p>CSVファイルのencodingをJapanese(Shift-JIS)からUTF-8に変換したい場合には、
+<code>iconv</code>等の外部ツールをCSVを使う。</p>
+<p>当該方法は、文字列関数で複雑なスプレッドシート式を作るより簡単で汎用性がある。</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2023/02/28/etax2022/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

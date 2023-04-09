@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>gnucash on Goofing Osamu</title>
+    <link>/categories/gnucash/</link>
+    <description>Recent content in gnucash on Goofing Osamu</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 08 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/gnucash/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>日付フォーマット変換</title>
+      <link>/jp/2023/04/08/date-format-1/</link>
+      <pubDate>Sat, 08 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2023/04/08/date-format-1/</guid>
+      <description>日付フォーマット問題 日本語で銀行等のデーターをCSVファイルで落とすと、ファイル中のデーターは 「2023/1/31」等となります。
+一方、GNUcashは「2023-01-31」等の表記でないと、デフォルトでは日付としてうまく 読み込めません。
+GNUcashによる対応 GNUcash（日本語ロカール化済み）はファイルのインポートの際に、以下の注意をすれば良いようです。
+勘定科目を設定 列設定で、「日付」を設定 文字コード: 日本語(Shift_JIS) 日付の書式: 年-月-日 LibreOffice Calcによる対応 CSVファイルをダブルクリックすると、LibreOffice Calc(英語UTF-8環境)のCSV Importのダイアローグが表示される。
+Character setをJapanese(Shift-JIS)とする Fieldsの中の日付の列の読み込みタイプ「Standard」をクリック Column typeに読み込みタイプ「Standard」が表示される。 それのPull-downから、Column typeの読み込みタイプを「Date(YMD)」にする。 読み込むと、日付の列は「文字列」ではなく「日付」として読み込まれる。
+日付の列を選択，Format-&amp;gt;Cells-&amp;gt;Numbersタブ-&amp;gt;Date-&amp;gt;1999-12-31とすれば ISO形式の日付文字列になる。ISO形式の日付文字列は、読み込みタイプ「Standard」 のままでも、日付としてスプレッドシート中に読み込まれる。
+CSVファイルのencodingをJapanese(Shift-JIS)からUTF-8に変換したい場合には、 iconv等の外部ツールをCSVを使う。
+当該方法は、文字列関数で複雑なスプレッドシート式を作るより簡単で汎用性がある。</description>
+    </item>
+    
+  </channel>
+</rss>

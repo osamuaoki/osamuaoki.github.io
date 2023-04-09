@@ -7,13 +7,40 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>日付フォーマット変換</title>
+      <link>/jp/2023/04/08/date-format-1/</link>
+      <pubDate>Sat, 08 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2023/04/08/date-format-1/</guid>
+      <description>日付フォーマット問題 日本語で銀行等のデーターをCSVファイルで落とすと、ファイル中のデーターは 「2023/1/31」等となります。
+一方、GNUcashは「2023-01-31」等の表記でないと、デフォルトでは日付としてうまく 読み込めません。
+GNUcashによる対応 GNUcash（日本語ロカール化済み）はファイルのインポートの際に、以下の注意をすれば良いようです。
+勘定科目を設定 列設定で、「日付」を設定 文字コード: 日本語(Shift_JIS) 日付の書式: 年-月-日 LibreOffice Calcによる対応 CSVファイルをダブルクリックすると、LibreOffice Calc(英語UTF-8環境)のCSV Importのダイアローグが表示される。
+Character setをJapanese(Shift-JIS)とする Fieldsの中の日付の列の読み込みタイプ「Standard」をクリック Column typeに読み込みタイプ「Standard」が表示される。 それのPull-downから、Column typeの読み込みタイプを「Date(YMD)」にする。 読み込むと、日付の列は「文字列」ではなく「日付」として読み込まれる。
+日付の列を選択，Format-&amp;gt;Cells-&amp;gt;Numbersタブ-&amp;gt;Date-&amp;gt;1999-12-31とすれば ISO形式の日付文字列になる。ISO形式の日付文字列は、読み込みタイプ「Standard」 のままでも、日付としてスプレッドシート中に読み込まれる。
+CSVファイルのencodingをJapanese(Shift-JIS)からUTF-8に変換したい場合には、 iconv等の外部ツールをCSVを使う。
+当該方法は、文字列関数で複雑なスプレッドシート式を作るより簡単で汎用性がある。</description>
+    </item>
+    
+    <item>
       <title>Re-learning Vim (7)</title>
       <link>/en/2023/03/05/vim-learn-7/</link>
-      <pubDate>Sun, 05 Mar 2023 00:00:00 +0000</pubDate>
+      <pubDate>Sun, 05 Mar 2023 00:00:01 +0000</pubDate>
       
       <guid>/en/2023/03/05/vim-learn-7/</guid>
-      <description>Get latest Neovim Since Neovim is fast moving platform, it is nice to have its latest version. This was written for March 2023 situation with Neovim 0.9.0.
-Build tools build-essential cmake ninja-build Libraries to install libc6-dev bookworm libluajit-5.1-dev bookworm libmsgpack-dev bookworm libtermkey-dev bookworm libtree-sitter-dev bookworm libunibilium-dev bookworm libuv1-dev bookworm lua-luv-dev bookworm &amp;ndash; needs extra cmake options libvterm-dev experimental (0.3.1-1) &amp;ndash; needs this version Build Neovim (0.9.0) I used the previous Debian package&amp;rsquo;s debian/rules as my guide to set parameters.</description>
+      <description>Nvim configuration retrospective I have been updating Nvim configuration with AstroNvim as described in Re-learning Vim (5) and Re-learning Vim (6).
+I also build the latest Nvim in Building Neovim to be compatible with the latest packages.
+Although AstroNvim provided me with great features with simple and consistent customization mechanism, they were still a bit overwhelming and sometimes too much. I needed a simpler baseline Neovim configuration platform which offers most features as opt-in.</description>
+    </item>
+    
+    <item>
+      <title>Building Neovim</title>
+      <link>/en/2023/03/05/nvim-build/</link>
+      <pubDate>Sun, 05 Mar 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2023/03/05/nvim-build/</guid>
+      <description>Debian Neovim Debian ships Neovim based on v0.7.2 upstream version (released on 2022-06-27) for the upcoming bookworm release.
+$ ldd /usr/bin/nvim linux-vdso.so.1 (0x00007ffec159e000) liblua5.1-luv.so.0 =&amp;gt; /lib/x86_64-linux-gnu/liblua5.1-luv.so.0 (0x00007f4788c16000) libuv.so.1 =&amp;gt; /lib/x86_64-linux-gnu/libuv.so.1 (0x00007f4788be6000) libmsgpackc.so.2 =&amp;gt; /lib/x86_64-linux-gnu/libmsgpackc.so.2 (0x00007f4788bdd000) libvterm.so.0 =&amp;gt; /lib/x86_64-linux-gnu/libvterm.so.0 (0x00007f4788bca000) libtermkey.so.1 =&amp;gt; /lib/x86_64-linux-gnu/libtermkey.so.1 (0x00007f4788bbd000) libunibilium.so.4 =&amp;gt; /lib/x86_64-linux-gnu/libunibilium.so.4 (0x00007f4788ba6000) libtree-sitter.so.0 =&amp;gt; /lib/x86_64-linux-gnu/libtree-sitter.so.0 (0x00007f4788b78000) libm.so.6 =&amp;gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007f4788521000) libluajit-5.1.so.2 =&amp;gt; /lib/x86_64-linux-gnu/libluajit-5.1.so.2 (0x00007f4788aec000) libc.so.6 =&amp;gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4788340000) libpthread.so.0 =&amp;gt; /lib/x86_64-linux-gnu/libpthread.so.0 (0x00007f4788ae7000) libdl.so.2 =&amp;gt; /lib/x86_64-linux-gnu/libdl.so.2 (0x00007f4788ae0000) /lib64/ld-linux-x86-64.</description>
     </item>
     
     <item>

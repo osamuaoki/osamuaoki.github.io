@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/03/12 (last update)
+2023/04/09 (last update)
 </h3>
 </div>
 
@@ -47,7 +47,7 @@
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2023/02/25/debian-usability-2023/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2023/03/05/nvim-build/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
@@ -61,13 +61,6 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#get-latest-neovim">Get latest Neovim</a>
-      <ul>
-        <li><a href="#build-tools">Build tools</a></li>
-        <li><a href="#libraries-to-install">Libraries to install</a></li>
-        <li><a href="#build-neovim-090">Build Neovim (0.9.0)</a></li>
-      </ul>
-    </li>
     <li><a href="#nvim-configuration-retrospective">Nvim configuration retrospective</a></li>
     <li><a href="#lazyvim">LazyVim</a>
       <ul>
@@ -81,67 +74,13 @@
   </ul>
 </nav>
 
-<h2 id="get-latest-neovim">Get latest Neovim</h2>
-<p>Since Neovim is fast moving platform, it is nice to have its latest version.
-This was written for March 2023 situation with Neovim 0.9.0.</p>
-<h3 id="build-tools">Build tools</h3>
-<ul>
-<li>build-essential</li>
-<li>cmake</li>
-<li>ninja-build</li>
-</ul>
-<h3 id="libraries-to-install">Libraries to install</h3>
-<ul>
-<li>libc6-dev                bookworm</li>
-<li>libluajit-5.1-dev        bookworm</li>
-<li>libmsgpack-dev           bookworm</li>
-<li>libtermkey-dev           bookworm</li>
-<li>libtree-sitter-dev       bookworm</li>
-<li>libunibilium-dev         bookworm</li>
-<li>libuv1-dev               bookworm</li>
-<li>lua-luv-dev              bookworm &ndash; needs extra cmake options</li>
-<li>libvterm-dev             experimental (0.3.1-1) &ndash; needs this version</li>
-</ul>
-<h3 id="build-neovim-090">Build Neovim (0.9.0)</h3>
-<p>I used the previous Debian package&rsquo;s <code>debian/rules</code> as my guide to set
-parameters.</p>
-<p>Here is a script to build a Neovim Debian package from the
-<a href="https://github.com/neovim/neovim">current Neovim upstream git repo</a>:</p>
-<pre tabindex="0"><code>#!/bin/sh
-
-# prepair for cmake
-mkdir &#34;build&#34; ; cd build
-# execute cmake in build
-BUILD_TYPE=Release
-#BUILD_TYPE=Debug
-
-# dpkg-architecture
-DEB_HOST_MULTIARCH=x86_64-linux-gnu
-
-# Configure to build with Ninja (use luajit)
-cmake -G Ninja -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-               -DBUSTED_OUTPUT_TYPE=nvim \
-               -DPREFER_LUA=OFF \
-               -DLIBLUV_LIBRARY:FILEPATH=/usr/lib/$DEB_HOST_MULTIARCH/lua/5.1/luv.so \
-               -DLIBLUV_INCLUDE_DIR:PATH=/usr/include/lua5.1 \
-               -DCOMPILE_LUA=OFF \
-               ..
-
-# Build with Ninja
-cmake --build .
-# Build Debian package
-cpack -G DEB
-</code></pre><p>I also used following interesting references.</p>
-<ul>
-<li><a href="https://cmake.org/cmake/help/latest/cpack_gen/deb.html">cmake reference: CPack DEB Generator</a></li>
-<li><a href="https://decovar.dev/blog/2021/09/23/cmake-cpack-package-deb-apt/">Making a deb package with CMake/CPack and hosting it in a private APT repository</a></li>
-<li><a href="https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1">cmake best practices (3.0+)</a></li>
-<li><a href="https://izzys.casa/2019/02/everything-you-never-wanted-to-know-about-cmake/">cmake pitfalls</a></li>
-</ul>
 <h2 id="nvim-configuration-retrospective">Nvim configuration retrospective</h2>
 <p>I have been updating Nvim configuration with AstroNvim as described in
 <a href="/en/2022/07/29/vim-learn-5/">Re-learning Vim (5)</a> and
 <a href="/en/2023/02/01/vim-learn-6/">Re-learning Vim (6)</a>.</p>
+<p>I also build the latest Nvim in
+<a href="/en/2023/03/05/nvim-build/">Building Neovim</a> to be compatible with the latest
+packages.</p>
 <p>Although AstroNvim provided me with great features with simple and consistent
 customization mechanism, they were still a bit overwhelming and sometimes too
 much.  I needed a simpler baseline Neovim configuration platform which offers
@@ -268,7 +207,7 @@ command to make help files available under <code>LOCAL ADDITIONS:</code>.</p>
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2023/02/25/debian-usability-2023/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2023/03/05/nvim-build/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   

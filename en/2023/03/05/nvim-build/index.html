@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Building Neovim | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Building Neovim</span></h1>
+
+<h3 class="date">Date:
+2023/03/05 (initial publish),
+2023/04/09 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/25/debian-usability-2023/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/03/05/vim-learn-7/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#debian-neovim">Debian Neovim</a>
+      <ul>
+        <li><a href="#why-debian-neovim-is-stack-in-072">Why Debian Neovim is stack in 0.7.2.</a></li>
+      </ul>
+    </li>
+    <li><a href="#build-neovim-deb-package-without-deian">Build Neovim DEB package without <code>deian/*</code></a>
+      <ul>
+        <li><a href="#cmake-basics">Cmake basics</a></li>
+        <li><a href="#install-via-deb-package">Install via DEB-package</a></li>
+        <li><a href="#options-needed-for-configuring-neovim-on-debian">Options needed for configuring Neovim on Debian</a></li>
+      </ul>
+    </li>
+    <li><a href="#build-and-install-the-latest-neovim-deb-package">Build and install the latest Neovim DEB package</a>
+      <ul>
+        <li><a href="#caveat">Caveat</a></li>
+      </ul>
+    </li>
+    <li><a href="#references">references</a></li>
+  </ul>
+</nav>
+
+<h2 id="debian-neovim">Debian Neovim</h2>
+<p>Debian ships <a href="https://tracker.debian.org/pkg/neovim">Neovim</a> based on v0.7.2 upstream version (released on 2022-06-27) for the upcoming bookworm release.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ldd /usr/bin/nvim
+</span></span><span style="display:flex;"><span>        linux-vdso.so.1 <span style="color:#f92672">(</span>0x00007ffec159e000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        liblua5.1-luv.so.0 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/liblua5.1-luv.so.0 <span style="color:#f92672">(</span>0x00007f4788c16000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libuv.so.1 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libuv.so.1 <span style="color:#f92672">(</span>0x00007f4788be6000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libmsgpackc.so.2 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libmsgpackc.so.2 <span style="color:#f92672">(</span>0x00007f4788bdd000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libvterm.so.0 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libvterm.so.0 <span style="color:#f92672">(</span>0x00007f4788bca000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libtermkey.so.1 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libtermkey.so.1 <span style="color:#f92672">(</span>0x00007f4788bbd000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libunibilium.so.4 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libunibilium.so.4 <span style="color:#f92672">(</span>0x00007f4788ba6000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libtree-sitter.so.0 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libtree-sitter.so.0 <span style="color:#f92672">(</span>0x00007f4788b78000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libm.so.6 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libm.so.6 <span style="color:#f92672">(</span>0x00007f4788521000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libluajit-5.1.so.2 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libluajit-5.1.so.2 <span style="color:#f92672">(</span>0x00007f4788aec000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libc.so.6 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libc.so.6 <span style="color:#f92672">(</span>0x00007f4788340000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libpthread.so.0 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libpthread.so.0 <span style="color:#f92672">(</span>0x00007f4788ae7000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libdl.so.2 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libdl.so.2 <span style="color:#f92672">(</span>0x00007f4788ae0000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        /lib64/ld-linux-x86-64.so.2 <span style="color:#f92672">(</span>0x00007f4788c61000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        libgcc_s.so.1 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 <span style="color:#f92672">(</span>0x00007f4788ac0000<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>Please note this uses external libraries via shared library mechanism.</p>
+<p>This Neovim in Debian bookworm uses 0.1.4 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a> which is found in Debian bookworm.</p>
+<h3 id="why-debian-neovim-is-stack-in-072">Why Debian Neovim is stack in 0.7.2.</h3>
+<p>The Debian bookworm/testing uses the upstream Neovim v0.7.2 release (2022-06-27) which requires to use 0.1.4 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.  The 0.1.4 version of libvterm is available in bookworm/testing repository as of 2023-04-09.</p>
+<p>The newer upstream Neovim v0.8.0 release (2022-10-01) requires to use 0.3 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.</p>
+<p>The latest upstream Neovim v0.9.0 release (2023-04-07) requires to use 0.3.1 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.</p>
+<p>The 0.3.1 version of libvterm isn&rsquo;t available in bookworm/testing nor unstable/sid repository as of 2023-04-09.</p>
+<p>This is the cause of Debian Neovim to be stack in 0.7.2.</p>
+<p>The 0.3.1 version of libvterm is available in experimental repository as of 2023-04-09.</p>
+<p>So it is possible to build Neovim using experimental repo.</p>
+<p>You should be able to build Debian package using the essentially the same code
+in <code>debian/*</code> after updating it to cope with new upstream source tree for
+post-build testing. Following packages are needed:</p>
+<ul>
+<li>build-essential</li>
+<li>cmake</li>
+<li>ninja-build</li>
+<li>libc6-dev                bookworm</li>
+<li>libluajit-5.1-dev        bookworm</li>
+<li>libmsgpack-dev           bookworm</li>
+<li>libtermkey-dev           bookworm</li>
+<li>libtree-sitter-dev       bookworm</li>
+<li>libunibilium-dev         bookworm</li>
+<li>libuv1-dev               bookworm</li>
+<li>lua-luv-dev              bookworm &ndash; needs extra cmake options</li>
+<li>libvterm-dev             experimental (0.3.1-1) &ndash; needs this version</li>
+</ul>
+<h2 id="build-neovim-deb-package-without-deian">Build Neovim DEB package without <code>deian/*</code></h2>
+<h3 id="cmake-basics">Cmake basics</h3>
+<p>The good old way to configure a source package with CMAKE is as follows:</p>
+<pre tabindex="0"><code>$ cd path/to/source
+$ mkdir build
+$ cd build
+$ cmake [&lt;options&gt;] ..
+</code></pre><p>Then, build and install the configured source package with the generated build
+system, e.g., &ldquo;Unix Makefile&rdquo; is as follows (executed in <code>build/</code> directory):</p>
+<pre tabindex="0"><code>$ make
+$ sudo make install
+</code></pre><p>Here, this build and install process can also be done with the build system agnostic way as:</p>
+<pre tabindex="0"><code>$ cmake --build . --verbose
+$ sudo cmake --install . --verbose
+</code></pre><h3 id="install-via-deb-package">Install via DEB-package</h3>
+<p>This above basic method installs binary executables directory to the system.
+The removal of installed files is a bit tricky.  It will be nice if we can
+create a DEB-package and install it with <code>dpkg -i &lt;packagename&gt;.deb</code>.  Then its
+clean removal is intuitive process.</p>
+<pre tabindex="0"><code>$ cmake --build . --verbose
+$ cpack --build . -G DEB --verbose
+$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
+</code></pre><h3 id="options-needed-for-configuring-neovim-on-debian">Options needed for configuring Neovim on Debian</h3>
+<p>Since some file paths need to be adjusted, initial <code>cmake</code> needs to be executed
+with following options for Neovim on Debian.</p>
+<pre tabindex="0"><code># Use ninja build system
+GENERATOR=&#34;-G Ninja&#34;
+# execute cmake in build
+BUILD_TYPE=RelWithDebInfo
+# dpkg-architecture
+DEB_HOST_MULTIARCH=x86_64-linux-gnu
+
+# Configure to build with Ninja (use luajit)
+mkdir build
+cd build
+cmake \
+  $GENERATOR \
+  -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
+  -DBUSTED_OUTPUT_TYPE=nvim \
+  -DLIBLUV_LIBRARY:FILEPATH=/usr/lib/$DEB_HOST_MULTIARCH/lua/5.1/luv.so \
+  -DLIBLUV_INCLUDE_DIR:PATH=/usr/include/lua5.1 \
+  -DPREFER_LUA=OFF \
+  -DCOMPILE_LUA=OFF \
+  &#34;$LOGLEVEL&#34; ..
+</code></pre><p>This configure source to use -dev packages and build a binary executable linked
+to shared libraries like normal DEB-package build via <code>debian/*</code>.</p>
+<h2 id="build-and-install-the-latest-neovim-deb-package">Build and install the latest Neovim DEB package</h2>
+<p>Since Neovim is fast moving platform, it is nice to have its latest version.</p>
+<p>Statically linking external libraries free us from library version mismatch
+troubles.</p>
+<p>Let&rsquo;s build Neovim as described in
+<a href="https://github.com/neovim/neovim/wiki/Building-Neovim#quick-start">Building Neovim: Quick start</a>
+for Developer.</p>
+<pre tabindex="0"><code>$ git clone https://github.com/neovim/neovim
+$ cd neovim &amp;&amp; make CMAKE_BUILD_TYPE=RelWithDebInfo
+$ cd build
+$ cpack -G DEB --verbose
+$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
+</code></pre><p>Now (2023-04-09), this builds the latest Neovim master branch on git repo
+(0.10.0-dev version) with all external libraries statically linked.</p>
+<pre tabindex="0"><code>$ bin/nvim --version
+NVIM v0.10.0-dev-19+g339011f59
+Build type: Debug
+LuaJIT 2.1.0-beta3
+Compilation: /usr/bin/cc -g -Wall -Wextra -pedantic -Wno-unused-parameter -Wstrict-prototypes -std=gnu99 -Wshadow -Wconversion -Wvla -Wdouble-promotion -Wmissing-noreturn -Wmissing-format-attribute -Wmissing-prototypes -fno-common -Wimplicit-fallthrough -fdiagnostics-color=always -fstack-protector-strong -DNVIM_LOG_DEBUG -DUNIT_TESTING -DINCLUDE_GENERATED_DECLARATIONS -D_GNU_SOURCE -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include/luajit-2.1 -I/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/build/src/nvim/auto -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/build/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/build/cmake.config -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/src -I/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include
+
+   system vimrc file: &#34;$VIM/sysinit.vim&#34;
+  fall-back for $VIM: &#34;/usr/local/share/nvim&#34;
+
+Run :checkhealth for more info
+
+$ ldd bin/nvim
+    linux-vdso.so.1 (0x00007fff131a7000)
+    libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007f4860921000)
+    libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f48610b0000)
+    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4860740000)
+    /lib64/ld-linux-x86-64.so.2 (0x00007f48610ed000)
+</code></pre><h3 id="caveat">Caveat</h3>
+<p>Debian <code>neovim</code> package installs <code>neovim-runtime</code>.  Before installing
+DEB-package build by CMAKE, you must remove both packages in advance.</p>
+<p>The DEB-package build by CMAKE doesn&rsquo;t support update-alternatives mechanism.
+You need to work around using command alias etc.</p>
+<h2 id="references">references</h2>
+<p>I used following interesting references.</p>
+<ul>
+<li><a href="https://cmake.org/cmake/help/latest/cpack_gen/deb.html">cmake reference: CPack DEB Generator</a></li>
+<li><a href="https://decovar.dev/blog/2021/09/23/cmake-cpack-package-deb-apt/">Making a deb package with CMake/CPack and hosting it in a private APT repository</a></li>
+<li><a href="https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1">cmake best practices (3.0+)</a></li>
+<li><a href="https://izzys.casa/2019/02/everything-you-never-wanted-to-know-about-cmake/">cmake pitfalls</a></li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/02/25/debian-usability-2023/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/03/05/vim-learn-7/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
