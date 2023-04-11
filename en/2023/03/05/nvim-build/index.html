@@ -117,6 +117,7 @@ clean removal is intuitive process.</p>
 </span></span></code></pre></div><p>Please note this is not how official Debian packages are build.  This CMake
 functionality merely creates a DEB-package compliant to its bunary package
 format without adding <code>debian/*</code> files.</p>
+<p>If <code>cpack</code> is invoked without <code>-G DEB</code>, this also builds TGZ-package.</p>
 <h2 id="prebuild-neovim-deb-package">Prebuild Neovim DEB-package</h2>
 <h3 id="debian-neovim-deb-package">Debian Neovim DEB-package</h3>
 <p><a href="https://tracker.debian.org/pkg/neovim">Debian ships Neovim</a> based on <a href="https://github.com/neovim/neovim">upstream Neovim</a> v0.7.2 version (released on 2022-06-27) for the upcoming bookworm release.</p>
@@ -257,7 +258,7 @@ for Developer.</p>
 <li>update-alternatives mechanism</li>
 <li>package dependency (conflict-related features)</li>
 </ul>
-<p>Before installing DEB-packages build by CMake (including ones build by
+<p>Before installing DEB-packages build by CMake (including ones built by
 upstream), you must remove both Debian <code>neovim</code> and <code>neovim-runtime</code> packages
 in advance to avoid package conflicts.</p>
 <p>Since command normally provided by the update-alternatives are not available, following
