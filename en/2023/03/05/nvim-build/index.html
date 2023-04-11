@@ -83,7 +83,7 @@
 </nav>
 
 <h2 id="debian-neovim">Debian Neovim</h2>
-<p>Debian ships <a href="https://tracker.debian.org/pkg/neovim">Neovim</a> based on v0.7.2 upstream version (released on 2022-06-27) for the upcoming bookworm release.</p>
+<p><a href="https://tracker.debian.org/pkg/neovim">Debian ships Neovim</a> based on <a href="https://github.com/neovim/neovim">upstream Neovim</a> v0.7.2 version (released on 2022-06-27) for the upcoming bookworm release.</p>
 <p>Please note this uses external libraries via shared library mechanism.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ldd /usr/bin/nvim
 </span></span><span style="display:flex;"><span>        linux-vdso.so.1 <span style="color:#f92672">(</span>0x00007ffec159e000<span style="color:#f92672">)</span>
@@ -103,7 +103,7 @@
 </span></span><span style="display:flex;"><span>        libgcc_s.so.1 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 <span style="color:#f92672">(</span>0x00007f4788ac0000<span style="color:#f92672">)</span>
 </span></span></code></pre></div><p>This Neovim in Debian bookworm uses 0.1.4 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a> which is the one found in Debian bookworm.</p>
 <h3 id="why-debian-neovim-is-stack-in-072">Why Debian Neovim is stack in 0.7.2.</h3>
-<p>The Debian bookworm/testing uses the upstream Neovim v0.7.2 release (2022-06-27) which requires to use 0.1.4 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.  The 0.1.4 version of libvterm is available in bookworm/testing repository as of 2023-04-09.</p>
+<p>The Debian bookworm/testing uses the <a href="https://github.com/neovim/neovim">upstream Neovim</a> v0.7.2 release (2022-06-27) which requires to use 0.1.4 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.  The 0.1.4 version of libvterm is available in bookworm/testing repository as of 2023-04-09.</p>
 <p>The newer upstream Neovim v0.8.0 release (2022-10-01) requires to use 0.3 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.</p>
 <p>The latest upstream Neovim v0.9.0 release (2023-04-07) requires to use 0.3.1 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.</p>
 <p>The 0.3.1 version of libvterm isn&rsquo;t available in bookworm/testing nor unstable/sid repository as of 2023-04-09.</p>
@@ -174,10 +174,16 @@ cmake \
 </code></pre><p>This configure source to use -dev packages and build a binary executable linked
 to shared libraries like normal DEB-package build via <code>debian/*</code>.</p>
 <h2 id="build-and-install-the-latest-neovim-deb-package">Build and install the latest Neovim DEB package</h2>
-<p>Since Neovim is fast moving platform, it is nice to have its latest version.</p>
+<p>Since <a href="https://github.com/neovim/neovim">upstream Neovim</a> is fast moving
+platform, it is nice to have its latest version.</p>
 <p>Statically linking external libraries free us from library version mismatch
 troubles.</p>
-<p>Here is how to build such Neovim.</p>
+<p>Upstream provide the DEB-package for Linux (x64) == amd64 platform at:</p>
+<ul>
+<li><a href="https://github.com/neovim/neovim/releases/tag/stable">Nvim release build</a></li>
+<li><a href="https://github.com/neovim/neovim/releases/nightly">Nvim development (prerelease) build</a></li>
+</ul>
+<p>Here is how to build such Neovim by oneself.</p>
 <p>Let&rsquo;s build Neovim as described in
 <a href="https://github.com/neovim/neovim/wiki/Building-Neovim#quick-start">Building Neovim: Quick start</a>
 for Developer.</p>
