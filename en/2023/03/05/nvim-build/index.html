@@ -61,28 +61,64 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#debian-neovim">Debian Neovim</a>
+    <li><a href="#cmake-revisited">CMake revisited</a>
       <ul>
-        <li><a href="#why-debian-neovim-is-stack-in-072">Why Debian Neovim is stack in 0.7.2.</a></li>
+        <li><a href="#cmake-basics">CMake basics</a></li>
+        <li><a href="#cmake-and-deb-package">CMake and DEB-package</a></li>
       </ul>
     </li>
-    <li><a href="#build-neovim-deb-package-without-deian">Build Neovim DEB package without <code>deian/*</code></a>
+    <li><a href="#prebuild-neovim-deb-package">Prebuild Neovim DEB-package</a>
       <ul>
-        <li><a href="#cmake-basics">Cmake basics</a></li>
-        <li><a href="#install-via-deb-package">Install via DEB-package</a></li>
-        <li><a href="#options-needed-for-configuring-neovim-on-debian">Options needed for configuring Neovim on Debian</a></li>
+        <li><a href="#debian-neovim-deb-package">Debian Neovim DEB-package</a></li>
+        <li><a href="#why-debian-neovim-package-is-stack-in-072">Why Debian Neovim package is stack in 0.7.2.</a></li>
+        <li><a href="#upstream-neovim-deb-package">Upstream Neovim DEB-package</a></li>
       </ul>
     </li>
-    <li><a href="#build-and-install-the-latest-neovim-deb-package">Build and install the latest Neovim DEB package</a>
+    <li><a href="#local-build-of-neovim-deb-packages-using-cmake">Local build of Neovim DEB-packages using CMake</a>
       <ul>
-        <li><a href="#caveat">Caveat</a></li>
+        <li><a href="#external-dependencies-as-shared-library">External dependencies as shared library</a></li>
+        <li><a href="#external-dependencies-as-statically-linked-library">External dependencies as statically linked library</a></li>
       </ul>
     </li>
-    <li><a href="#references">references</a></li>
+    <li><a href="#caveat-of-deb-package-made-by-cmake">Caveat of DEB-package made by CMake</a></li>
   </ul>
 </nav>
 
-<h2 id="debian-neovim">Debian Neovim</h2>
+<h2 id="cmake-revisited">CMake revisited</h2>
+<p>Since Neovim uses CMake as its build system, I made quick review of its usage
+after reading following interesting references.</p>
+<ul>
+<li><a href="https://cmake.org/cmake/help/latest/cpack_gen/deb.html">CMake Reference: CPack DEB Generator</a></li>
+<li><a href="https://decovar.dev/blog/2021/09/23/cmake-cpack-package-deb-apt/">Making a deb package with CMake/CPack and hosting it in a private APT repository</a></li>
+<li><a href="https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1">Effective Modern CMake</a></li>
+<li><a href="https://izzys.casa/2019/02/everything-you-never-wanted-to-know-about-cmake/">Everything You Never Wanted to Know About CMake</a></li>
+</ul>
+<h3 id="cmake-basics">CMake basics</h3>
+<p>The good old way to configure a source package with CMake is as follows:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd path/to/source
+</span></span><span style="display:flex;"><span>$ mkdir build
+</span></span><span style="display:flex;"><span>$ cd build
+</span></span><span style="display:flex;"><span>$ cmake <span style="color:#f92672">[</span>&lt;options&gt;<span style="color:#f92672">]</span> ..
+</span></span></code></pre></div><p>Then, build and install the configured source package with the generated build
+system, e.g., &ldquo;Unix Makefile&rdquo; is as follows (executed in <code>build/</code> directory):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make
+</span></span><span style="display:flex;"><span>$ sudo make install
+</span></span></code></pre></div><p>Here, this build and install process can also be done with the build system agnostic way as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cmake --build . --verbose
+</span></span><span style="display:flex;"><span>$ sudo cmake --install . --verbose
+</span></span></code></pre></div><h3 id="cmake-and-deb-package">CMake and DEB-package</h3>
+<p>This above basic method installs binary executables directory to the system.
+The removal of installed files is a bit tricky.  It will be nice if we can
+create a DEB-package and install it with <code>dpkg -i &lt;packagename&gt;.deb</code>.  Then its
+clean removal is intuitive process.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cmake --build . --verbose
+</span></span><span style="display:flex;"><span>$ cpack -G DEB --verbose
+</span></span><span style="display:flex;"><span>$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
+</span></span></code></pre></div><p>Please note this is not how official Debian packages are build.  This CMake
+functionality merely creates a DEB-package compliant to its bunary package
+format without adding <code>debian/*</code> files.</p>
+<h2 id="prebuild-neovim-deb-package">Prebuild Neovim DEB-package</h2>
+<h3 id="debian-neovim-deb-package">Debian Neovim DEB-package</h3>
 <p><a href="https://tracker.debian.org/pkg/neovim">Debian ships Neovim</a> based on <a href="https://github.com/neovim/neovim">upstream Neovim</a> v0.7.2 version (released on 2022-06-27) for the upcoming bookworm release.</p>
 <p>Please note this uses external libraries via shared library mechanism.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ldd /usr/bin/nvim
@@ -102,12 +138,12 @@
 </span></span><span style="display:flex;"><span>        /lib64/ld-linux-x86-64.so.2 <span style="color:#f92672">(</span>0x00007f4788c61000<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>        libgcc_s.so.1 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 <span style="color:#f92672">(</span>0x00007f4788ac0000<span style="color:#f92672">)</span>
 </span></span></code></pre></div><p>This Neovim in Debian bookworm uses 0.1.4 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a> which is the one found in Debian bookworm.</p>
-<h3 id="why-debian-neovim-is-stack-in-072">Why Debian Neovim is stack in 0.7.2.</h3>
+<h3 id="why-debian-neovim-package-is-stack-in-072">Why Debian Neovim package is stack in 0.7.2.</h3>
 <p>The Debian bookworm/testing uses the <a href="https://github.com/neovim/neovim">upstream Neovim</a> v0.7.2 release (2022-06-27) which requires to use 0.1.4 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.  The 0.1.4 version of libvterm is available in bookworm/testing repository as of 2023-04-09.</p>
 <p>The newer upstream Neovim v0.8.0 release (2022-10-01) requires to use 0.3 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.</p>
 <p>The latest upstream Neovim v0.9.0 release (2023-04-07) requires to use 0.3.1 version of <a href="http://www.leonerd.org.uk/code/libvterm/">libvterm</a>.</p>
 <p>The 0.3.1 version of libvterm isn&rsquo;t available in bookworm/testing nor unstable/sid repository as of 2023-04-09.</p>
-<p>This is the cause of Debian Neovim to be stack in 0.7.2.</p>
+<p>This is the cause of Debian Neovim/testing to be stack in 0.7.2 as of 2023-04-11.</p>
 <p>The 0.3.1 version of libvterm is available in experimental repository as of 2023-04-09.</p>
 <p>So it is possible to build Neovim using experimental repo.</p>
 <p>You should be able to build Debian package using the essentially the same code
@@ -127,103 +163,96 @@ post-build testing. Following packages are needed:</p>
 <li>lua-luv-dev              bookworm &ndash; needs extra cmake options</li>
 <li>libvterm-dev             experimental (0.3.1-1) &ndash; needs this version</li>
 </ul>
-<h2 id="build-neovim-deb-package-without-deian">Build Neovim DEB package without <code>deian/*</code></h2>
-<h3 id="cmake-basics">Cmake basics</h3>
-<p>The good old way to configure a source package with CMAKE is as follows:</p>
-<pre tabindex="0"><code>$ cd path/to/source
-$ mkdir build
-$ cd build
-$ cmake [&lt;options&gt;] ..
-</code></pre><p>Then, build and install the configured source package with the generated build
-system, e.g., &ldquo;Unix Makefile&rdquo; is as follows (executed in <code>build/</code> directory):</p>
-<pre tabindex="0"><code>$ make
-$ sudo make install
-</code></pre><p>Here, this build and install process can also be done with the build system agnostic way as:</p>
-<pre tabindex="0"><code>$ cmake --build . --verbose
-$ sudo cmake --install . --verbose
-</code></pre><h3 id="install-via-deb-package">Install via DEB-package</h3>
-<p>This above basic method installs binary executables directory to the system.
-The removal of installed files is a bit tricky.  It will be nice if we can
-create a DEB-package and install it with <code>dpkg -i &lt;packagename&gt;.deb</code>.  Then its
-clean removal is intuitive process.</p>
-<pre tabindex="0"><code>$ cmake --build . --verbose
-$ cpack --build . -G DEB --verbose
-$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
-</code></pre><h3 id="options-needed-for-configuring-neovim-on-debian">Options needed for configuring Neovim on Debian</h3>
-<p>Since some file paths need to be adjusted, initial <code>cmake</code> needs to be executed
-with following options for Neovim on Debian.</p>
-<pre tabindex="0"><code># Use ninja build system
-GENERATOR=&#34;-G Ninja&#34;
-# execute cmake in build
-BUILD_TYPE=RelWithDebInfo
-# dpkg-architecture
-DEB_HOST_MULTIARCH=x86_64-linux-gnu
-
-# Configure to build with Ninja (use luajit)
-mkdir build
-cd build
-cmake \
-  $GENERATOR \
-  -DCMAKE_BUILD_TYPE=$BUILD_TYPE \
-  -DBUSTED_OUTPUT_TYPE=nvim \
-  -DLIBLUV_LIBRARY:FILEPATH=/usr/lib/$DEB_HOST_MULTIARCH/lua/5.1/luv.so \
-  -DLIBLUV_INCLUDE_DIR:PATH=/usr/include/lua5.1 \
-  -DPREFER_LUA=OFF \
-  -DCOMPILE_LUA=OFF \
-  &#34;$LOGLEVEL&#34; ..
-</code></pre><p>This configure source to use -dev packages and build a binary executable linked
-to shared libraries like normal DEB-package build via <code>debian/*</code>.</p>
-<h2 id="build-and-install-the-latest-neovim-deb-package">Build and install the latest Neovim DEB package</h2>
-<p>Since <a href="https://github.com/neovim/neovim">upstream Neovim</a> is fast moving
-platform, it is nice to have its latest version.</p>
-<p>Statically linking external libraries free us from library version mismatch
-troubles.</p>
-<p>Upstream provide the DEB-package for Linux (x64) == amd64 platform at:</p>
+<p>External library dependencies are linked dynamically for this case.</p>
+<h3 id="upstream-neovim-deb-package">Upstream Neovim DEB-package</h3>
+<p>Upstream provides DEB-packages for Linux (x64) == amd64 platform at:</p>
 <ul>
 <li><a href="https://github.com/neovim/neovim/releases/tag/stable">Nvim release build</a></li>
 <li><a href="https://github.com/neovim/neovim/releases/nightly">Nvim development (prerelease) build</a></li>
 </ul>
+<p>External library dependencies are linked statically.</p>
+<h2 id="local-build-of-neovim-deb-packages-using-cmake">Local build of Neovim DEB-packages using CMake</h2>
+<p>Since <a href="https://github.com/neovim/neovim">upstream Neovim</a> is fast moving
+platform, it is nice to have its latest version.</p>
+<h3 id="external-dependencies-as-shared-library">External dependencies as shared library</h3>
+<p>When building Neovim, you need to provide options to configure Neovim source to
+match header and library file locations on Debian. Initial <code>cmake</code> needs to be
+executed with following options.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ GENERATOR<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-G Ninja&#34;</span>
+</span></span><span style="display:flex;"><span>$ BUILD_TYPE<span style="color:#f92672">=</span>RelWithDebInfo
+</span></span><span style="display:flex;"><span>$ DEB_HOST_MULTIARCH<span style="color:#f92672">=</span>x86_64-linux-gnu
+</span></span><span style="display:flex;"><span>$ cd path/to/source
+</span></span><span style="display:flex;"><span>$ mkdir build
+</span></span><span style="display:flex;"><span>$ cd build
+</span></span><span style="display:flex;"><span>$ cmake <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  $GENERATOR <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DCMAKE_BUILD_TYPE<span style="color:#f92672">=</span>$BUILD_TYPE <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DBUSTED_OUTPUT_TYPE<span style="color:#f92672">=</span>nvim <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DLIBLUV_LIBRARY:FILEPATH<span style="color:#f92672">=</span>/usr/lib/$DEB_HOST_MULTIARCH/lua/5.1/luv.so <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DLIBLUV_INCLUDE_DIR:PATH<span style="color:#f92672">=</span>/usr/include/lua5.1 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DPREFER_LUA<span style="color:#f92672">=</span>OFF <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DCOMPILE_LUA<span style="color:#f92672">=</span>OFF <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#e6db74">&#34;</span>$LOGLEVEL<span style="color:#e6db74">&#34;</span> ..
+</span></span><span style="display:flex;"><span>$ cpack -G DEB
+</span></span><span style="display:flex;"><span>$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
+</span></span></code></pre></div><p>This configure source to use -dev packages and build a binary executable linked
+to shared libraries like normal DEB-package build via <code>debian/*</code> for the official Debian repository.</p>
+<h3 id="external-dependencies-as-statically-linked-library">External dependencies as statically linked library</h3>
+<p>Statically linking external libraries frees us from library version mismatch
+troubles.</p>
 <p>Here is how to build such Neovim by oneself.</p>
 <p>Let&rsquo;s build Neovim as described in
 <a href="https://github.com/neovim/neovim/wiki/Building-Neovim#quick-start">Building Neovim: Quick start</a>
 for Developer.</p>
-<pre tabindex="0"><code>$ git clone https://github.com/neovim/neovim
-$ cd neovim &amp;&amp; make CMAKE_BUILD_TYPE=RelWithDebInfo
-$ cd build
-$ cpack -G DEB --verbose
-$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
-</code></pre><p>Now (2023-04-09), this builds the latest Neovim master branch on git repo
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ git clone https://github.com/neovim/neovim
+</span></span><span style="display:flex;"><span>$ cd neovim <span style="color:#f92672">&amp;&amp;</span> make CMake_BUILD_TYPE<span style="color:#f92672">=</span>RelWithDebInfo
+</span></span><span style="display:flex;"><span>$ cd build
+</span></span><span style="display:flex;"><span>$ cpack -G DEB --verbose
+</span></span><span style="display:flex;"><span>$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
+</span></span></code></pre></div><p>This <code>cpack -G DEB</code> is probably how upstream builds its DEB-packages.</p>
+<p>Now (2023-04-09), this builds the latest Neovim master branch on git repo
 (0.10.0-dev version) with all external libraries statically linked.</p>
-<pre tabindex="0"><code>$ bin/nvim --version
-NVIM v0.10.0-dev-19+g339011f59
-Build type: Debug
-LuaJIT 2.1.0-beta3
-Compilation: /usr/bin/cc -g -Wall -Wextra -pedantic -Wno-unused-parameter -Wstrict-prototypes -std=gnu99 -Wshadow -Wconversion -Wvla -Wdouble-promotion -Wmissing-noreturn -Wmissing-format-attribute -Wmissing-prototypes -fno-common -Wimplicit-fallthrough -fdiagnostics-color=always -fstack-protector-strong -DNVIM_LOG_DEBUG -DUNIT_TESTING -DINCLUDE_GENERATED_DECLARATIONS -D_GNU_SOURCE -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include/luajit-2.1 -I/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/build/src/nvim/auto -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/build/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/build/cmake.config -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/src -I/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include
-
-   system vimrc file: &#34;$VIM/sysinit.vim&#34;
-  fall-back for $VIM: &#34;/usr/local/share/nvim&#34;
-
-Run :checkhealth for more info
-
-$ ldd bin/nvim
-    linux-vdso.so.1 (0x00007fff131a7000)
-    libm.so.6 =&gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007f4860921000)
-    libgcc_s.so.1 =&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x00007f48610b0000)
-    libc.so.6 =&gt; /lib/x86_64-linux-gnu/libc.so.6 (0x00007f4860740000)
-    /lib64/ld-linux-x86-64.so.2 (0x00007f48610ed000)
-</code></pre><h3 id="caveat">Caveat</h3>
-<p>Debian <code>neovim</code> package installs <code>neovim-runtime</code>.  Before installing
-DEB-package build by CMAKE, you must remove both packages in advance.</p>
-<p>The DEB-package build by CMAKE doesn&rsquo;t support update-alternatives mechanism.
-You need to work around using command alias etc.</p>
-<h2 id="references">references</h2>
-<p>I used following interesting references.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ bin/nvim --version
+</span></span><span style="display:flex;"><span>NVIM v0.10.0-dev-19+g339011f59
+</span></span><span style="display:flex;"><span>Build type: Debug
+</span></span><span style="display:flex;"><span>LuaJIT 2.1.0-beta3
+</span></span><span style="display:flex;"><span>Compilation: /usr/bin/cc -g -Wall -Wextra -pedantic -Wno-unused-parameter -Wstrict-prototypes -std<span style="color:#f92672">=</span>gnu99 -Wshadow -Wconversion -Wvla -Wdouble-promotion -Wmissing-noreturn -Wmissing-format-attribute -Wmissing-prototypes -fno-common -Wimplicit-fallthrough -fdiagnostics-color<span style="color:#f92672">=</span>always -fstack-protector-strong -DNVIM_LOG_DEBUG -DUNIT_TESTING -DINCLUDE_GENERATED_DECLARATIONS -D_GNU_SOURCE -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include/luajit-2.1 -I/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/build/src/nvim/auto -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/build/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/build/cmake.config -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/src -I/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include -I/home/osamu/github/neovim/neovim-cmake-deb/neovim/.deps/usr/include
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   system vimrc file: <span style="color:#e6db74">&#34;</span>$VIM<span style="color:#e6db74">/sysinit.vim&#34;</span>
+</span></span><span style="display:flex;"><span>  fall-back <span style="color:#66d9ef">for</span> $VIM: <span style="color:#e6db74">&#34;/usr/local/share/nvim&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Run :checkhealth <span style="color:#66d9ef">for</span> more info
+</span></span></code></pre></div><p>Let&rsquo;s see what was built.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ldd bin/nvim
+</span></span><span style="display:flex;"><span>    linux-vdso.so.1 <span style="color:#f92672">(</span>0x00007fff131a7000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    libm.so.6 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libm.so.6 <span style="color:#f92672">(</span>0x00007f4860921000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    libgcc_s.so.1 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 <span style="color:#f92672">(</span>0x00007f48610b0000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    libc.so.6 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libc.so.6 <span style="color:#f92672">(</span>0x00007f4860740000<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    /lib64/ld-linux-x86-64.so.2 <span style="color:#f92672">(</span>0x00007f48610ed000<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h2 id="caveat-of-deb-package-made-by-cmake">Caveat of DEB-package made by CMake</h2>
+<p>The DEB-package build by CMake doesn&rsquo;t use some package features.</p>
 <ul>
-<li><a href="https://cmake.org/cmake/help/latest/cpack_gen/deb.html">cmake reference: CPack DEB Generator</a></li>
-<li><a href="https://decovar.dev/blog/2021/09/23/cmake-cpack-package-deb-apt/">Making a deb package with CMake/CPack and hosting it in a private APT repository</a></li>
-<li><a href="https://gist.github.com/mbinna/c61dbb39bca0e4fb7d1f73b0d66a4fd1">cmake best practices (3.0+)</a></li>
-<li><a href="https://izzys.casa/2019/02/everything-you-never-wanted-to-know-about-cmake/">cmake pitfalls</a></li>
+<li>update-alternatives mechanism</li>
+<li>package dependency</li>
 </ul>
+<p>Before installing DEB-packages build by CMake (including ones build by
+upstream), you must remove both Debian <code>neovim</code> and <code>neovim-runtime</code> packages
+in advance to avoid package conflicts.</p>
+<p>Since command normally provided by the update-alternatives are not available, following
+commands needs some workaround to be accessible using Neovim as their backend.</p>
+<ul>
+<li><code>editor</code></li>
+<li><code>ex</code></li>
+<li><code>rview</code></li>
+<li><code>view</code></li>
+<li><code>vi</code></li>
+<li><code>vim</code></li>
+<li><code>vimdiff</code></li>
+<li><code>vimdiff</code></li>
+</ul>
+<p>One way to work around this situation is the use of shell command alias mechanism set in <code>~/.bashrc</code>.  For example for <code>vi</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias vi<span style="color:#f92672">=</span>/usr/bin/nvim
+</span></span></code></pre></div><p>This should force to use Neovim as the backend of <code>vi</code> command.</p>
 <!-- raw HTML omitted -->
 
 

@@ -12,14 +12,20 @@
       <pubDate>Sat, 08 Apr 2023 00:00:00 +0000</pubDate>
       
       <guid>/jp/2023/04/08/date-format-1/</guid>
-      <description>日付フォーマット問題 日本語で銀行等のデーターをCSVファイルで落とすと、ファイル中のデーターは 「2023/1/31」等となります。
-一方、GNUcashは「2023-01-31」等の表記でないと、デフォルトでは日付としてうまく 読み込めません。
+      <description>日付フォーマット問題 日本語で銀行等のデーターをCSVファイルで落とすと、ファイル中のデーターは 「2023/1/31」等の形式のことがあります。一方、他のプログラムのデフォルト状態で このCSVファイルを読み込んだらうまく読み込めまないことがあります。
+GNUcashデフォルトの「Standard」では、日付列のデーター読み込みは「2023-01-31」等のISO形式が要件です。
+LibreOffice Calcデフォルトの読み込みは、「2023/1/31」は文字列になります。（MS Excelでもほぼ状況は同じなのか、この問題をねっとで散見します。)
+以前は、文字列として読み込まれた日付データーの変換を、事後で面倒な文字列処理で変換していたのですが、よく考えたら簡単にできる道筋があったので、ここにメモにしました。
 GNUcashによる対応 GNUcash（日本語ロカール化済み）はファイルのインポートの際に、以下の注意をすれば良いようです。
-勘定科目を設定 列設定で、「日付」を設定 文字コード: 日本語(Shift_JIS) 日付の書式: 年-月-日 LibreOffice Calcによる対応 CSVファイルをダブルクリックすると、LibreOffice Calc(英語UTF-8環境)のCSV Importのダイアローグが表示される。
+勘定科目を設定 列設定で、「日付」を設定 文字コード: 日本語(Shift_JIS) 日付の書式: 年-月-日 「日付の書式」は 「年-月-日」としているが、「年/月/日」にもうまく対応するようだ。
+LibreOffice Calcによる対応 CSVファイルをダブルクリックすると、LibreOffice Calc(英語UTF-8環境)のCSV Importのダイアローグが表示される。
 Character setをJapanese(Shift-JIS)とする Fieldsの中の日付の列の読み込みタイプ「Standard」をクリック Column typeに読み込みタイプ「Standard」が表示される。 それのPull-downから、Column typeの読み込みタイプを「Date(YMD)」にする。 読み込むと、日付の列は「文字列」ではなく「日付」として読み込まれる。
-日付の列を選択，Format-&amp;gt;Cells-&amp;gt;Numbersタブ-&amp;gt;Date-&amp;gt;1999-12-31とすれば ISO形式の日付文字列になる。ISO形式の日付文字列は、読み込みタイプ「Standard」 のままでも、日付としてスプレッドシート中に読み込まれる。
+「Date(YMD)」等は、「年-月-日」と「年/月/日」の両方に対応するようだ。
+日付の列を選択，Format-&amp;gt;Cells-&amp;gt;Numbersタブ-&amp;gt;Date-&amp;gt;1999-12-31とすれば ISO形式の日付文字列になる。（ISO形式の日付文字列は、読み込みタイプ「Standard」 のままでも、日付としてスプレッドシート中に読み込まれる。）
+この状態でCSV 形式で保存すれば、日付の文字列表現が変換されたCSVファイルとなる。
 CSVファイルのencodingをJapanese(Shift-JIS)からUTF-8に変換したい場合には、 iconv等の外部ツールをCSVを使う。
-当該方法は、文字列関数で複雑なスプレッドシート式を作るより簡単で汎用性がある。</description>
+当該方法は、文字列関数で複雑なスプレッドシート式を作るより簡単で汎用性がある日付の文字列表現の変換方法である。
+プログラム自体に日付の文字列表現形式への対応機能が無いプログラム等への対応のツールとしても有用である。</description>
     </item>
     
     <item>
@@ -39,9 +45,9 @@ Although AstroNvim provided me with great features with simple and consistent cu
       <pubDate>Sun, 05 Mar 2023 00:00:00 +0000</pubDate>
       
       <guid>/en/2023/03/05/nvim-build/</guid>
-      <description>Debian Neovim Debian ships Neovim based on upstream Neovim v0.7.2 version (released on 2022-06-27) for the upcoming bookworm release.
-Please note this uses external libraries via shared library mechanism.
-$ ldd /usr/bin/nvim linux-vdso.so.1 (0x00007ffec159e000) liblua5.1-luv.so.0 =&amp;gt; /lib/x86_64-linux-gnu/liblua5.1-luv.so.0 (0x00007f4788c16000) libuv.so.1 =&amp;gt; /lib/x86_64-linux-gnu/libuv.so.1 (0x00007f4788be6000) libmsgpackc.so.2 =&amp;gt; /lib/x86_64-linux-gnu/libmsgpackc.so.2 (0x00007f4788bdd000) libvterm.so.0 =&amp;gt; /lib/x86_64-linux-gnu/libvterm.so.0 (0x00007f4788bca000) libtermkey.so.1 =&amp;gt; /lib/x86_64-linux-gnu/libtermkey.so.1 (0x00007f4788bbd000) libunibilium.so.4 =&amp;gt; /lib/x86_64-linux-gnu/libunibilium.so.4 (0x00007f4788ba6000) libtree-sitter.so.0 =&amp;gt; /lib/x86_64-linux-gnu/libtree-sitter.so.0 (0x00007f4788b78000) libm.so.6 =&amp;gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007f4788521000) libluajit-5.1.so.2 =&amp;gt; /lib/x86_64-linux-gnu/libluajit-5.1.so.2 (0x00007f4788aec000) libc.</description>
+      <description>CMake revisited Since Neovim uses CMake as its build system, I made quick review of its usage after reading following interesting references.
+CMake Reference: CPack DEB Generator Making a deb package with CMake/CPack and hosting it in a private APT repository Effective Modern CMake Everything You Never Wanted to Know About CMake CMake basics The good old way to configure a source package with CMake is as follows:
+$ cd path/to/source $ mkdir build $ cd build $ cmake [&amp;lt;options&amp;gt;] .</description>
     </item>
     
     <item>

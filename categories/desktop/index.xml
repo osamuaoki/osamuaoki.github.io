@@ -24,9 +24,9 @@ Although AstroNvim provided me with great features with simple and consistent cu
       <pubDate>Sun, 05 Mar 2023 00:00:00 +0000</pubDate>
       
       <guid>/en/2023/03/05/nvim-build/</guid>
-      <description>Debian Neovim Debian ships Neovim based on upstream Neovim v0.7.2 version (released on 2022-06-27) for the upcoming bookworm release.
-Please note this uses external libraries via shared library mechanism.
-$ ldd /usr/bin/nvim linux-vdso.so.1 (0x00007ffec159e000) liblua5.1-luv.so.0 =&amp;gt; /lib/x86_64-linux-gnu/liblua5.1-luv.so.0 (0x00007f4788c16000) libuv.so.1 =&amp;gt; /lib/x86_64-linux-gnu/libuv.so.1 (0x00007f4788be6000) libmsgpackc.so.2 =&amp;gt; /lib/x86_64-linux-gnu/libmsgpackc.so.2 (0x00007f4788bdd000) libvterm.so.0 =&amp;gt; /lib/x86_64-linux-gnu/libvterm.so.0 (0x00007f4788bca000) libtermkey.so.1 =&amp;gt; /lib/x86_64-linux-gnu/libtermkey.so.1 (0x00007f4788bbd000) libunibilium.so.4 =&amp;gt; /lib/x86_64-linux-gnu/libunibilium.so.4 (0x00007f4788ba6000) libtree-sitter.so.0 =&amp;gt; /lib/x86_64-linux-gnu/libtree-sitter.so.0 (0x00007f4788b78000) libm.so.6 =&amp;gt; /lib/x86_64-linux-gnu/libm.so.6 (0x00007f4788521000) libluajit-5.1.so.2 =&amp;gt; /lib/x86_64-linux-gnu/libluajit-5.1.so.2 (0x00007f4788aec000) libc.</description>
+      <description>CMake revisited Since Neovim uses CMake as its build system, I made quick review of its usage after reading following interesting references.
+CMake Reference: CPack DEB Generator Making a deb package with CMake/CPack and hosting it in a private APT repository Effective Modern CMake Everything You Never Wanted to Know About CMake CMake basics The good old way to configure a source package with CMake is as follows:
+$ cd path/to/source $ mkdir build $ cd build $ cmake [&amp;lt;options&amp;gt;] .</description>
     </item>
     
     <item>
