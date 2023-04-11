@@ -174,6 +174,28 @@ post-build testing. Following packages are needed:</p>
 <h2 id="local-build-of-neovim-deb-packages-using-cmake">Local build of Neovim DEB-packages using CMake</h2>
 <p>Since <a href="https://github.com/neovim/neovim">upstream Neovim</a> is fast moving
 platform, it is nice to have its latest version.</p>
+<p>Upstream repository situation on 2023-04-11.</p>
+<ul>
+<li>branch
+<ul>
+<li>master (branch head builds candidate for v0.10.0)</li>
+<li>release-0.9 (branch head builds candidate for v0.9.1)</li>
+</ul>
+</li>
+<li>tag
+<ul>
+<li>nightly (on master branch)</li>
+<li>stable (on release-0.9 branch)</li>
+<li>v0.9.0 (same as stable at 2023-04-11)</li>
+<li>v0.8.3</li>
+<li>v0.8.2</li>
+<li>v0.8.1</li>
+<li>v0.8.0</li>
+<li>v0.7.2</li>
+<li>&hellip;</li>
+</ul>
+</li>
+</ul>
 <h3 id="external-dependencies-as-shared-library">External dependencies as shared library</h3>
 <p>When building Neovim, you need to provide options to configure Neovim source to
 match header and library file locations on Debian. Initial <code>cmake</code> needs to be
@@ -194,7 +216,7 @@ executed with following options.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DCOMPILE_LUA<span style="color:#f92672">=</span>OFF <span style="color:#ae81ff">\
 </span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#e6db74">&#34;</span>$LOGLEVEL<span style="color:#e6db74">&#34;</span> ..
 </span></span><span style="display:flex;"><span>$ cpack -G DEB
-</span></span><span style="display:flex;"><span>$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
+</span></span><span style="display:flex;"><span>$ sudo dpkg -i nvim-linux64.deb
 </span></span></code></pre></div><p>This configure source to use -dev packages and build a binary executable linked
 to shared libraries like normal DEB-package build via <code>debian/*</code> for the official Debian repository.</p>
 <h3 id="external-dependencies-as-statically-linked-library">External dependencies as statically linked library</h3>
@@ -208,7 +230,7 @@ for Developer.</p>
 </span></span><span style="display:flex;"><span>$ cd neovim <span style="color:#f92672">&amp;&amp;</span> make CMake_BUILD_TYPE<span style="color:#f92672">=</span>RelWithDebInfo
 </span></span><span style="display:flex;"><span>$ cd build
 </span></span><span style="display:flex;"><span>$ cpack -G DEB --verbose
-</span></span><span style="display:flex;"><span>$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
+</span></span><span style="display:flex;"><span>$ sudo dpkg -i nvim-linux64.deb
 </span></span></code></pre></div><p>This <code>cpack -G DEB</code> is probably how upstream builds its DEB-packages.</p>
 <p>Now (2023-04-09), this builds the latest Neovim master branch on git repo
 (0.10.0-dev version) with all external libraries statically linked.</p>
