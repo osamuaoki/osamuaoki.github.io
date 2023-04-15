@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/04/14 (last update)
+2023/04/15 (last update)
 </h3>
 </div>
 
@@ -76,7 +76,7 @@
         <li><a href="#update-gitigonore">Update <code>.gitigonore</code></a></li>
         <li><a href="#opening-gzip-files">Opening Gzip files</a></li>
         <li><a href="#vimdoc-help-files">Vimdoc help files</a></li>
-        <li><a href="#autoformat-as-opt-in-feature">Autoformat as opt-in feature</a></li>
+        <li><a href="#extra-features-as-opt-in-features">Extra features as opt-in features</a></li>
       </ul>
     </li>
   </ul>
@@ -210,6 +210,7 @@ to cope with sources using <a href="https://editorconfig.org/">editorconfig</a>.
 <a href="https://neovim.io/doc/user/treesitter.html">Treesitter</a> and
 <a href="https://neovim.io/doc/user/lsp.html">LSP</a>.
 Reddit gave me good intro: <a href="https://www.reddit.com/r/neovim/comments/1109wgr/treesitter_vs_lsp_differences_ans_overlap/">Treesitter vs LSP. Differences ans overlap</a>.</p>
+<p>The <a href="https://github.com/nvim-treesitter/playground">nvim-treesitter playground</a> plugin is now integrated into Neovim v0.9, so <code>:InspectTree</code> works without installing this plugin.</p>
 <h2 id="lazyvim-customization">LazyVim customization</h2>
 <p>I created <a href="https://github.com/osamuaoki/starter">folked LazyVim starter</a> with
 my changes in <code>osamu</code> branch to keep backup of my local configuration.  I
@@ -223,12 +224,13 @@ plugin for <code>view</code> purpose.</p>
 <p>I add access to many hidden help files available under <code>LOCAL ADDITIONS:</code> by
 running
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/vimdoc-lazy">vimdoc-lazy</a>.</p>
-<h3 id="autoformat-as-opt-in-feature">Autoformat as opt-in feature</h3>
-<p>I want autoformat as opt-in feature.</p>
-<p>Since <code>opts.autoformat</code> is initialized in
-<code>LazyVim/lua/lazyvim/plugins/lsp/init.lua</code> as <code>true</code>, I decided to override it by creating
-<code>~/.config/nvim/lua/plugins/lsp.lua</code> by setting <code>opts.autoformat</code> to <code>false</code>
-for <code>&quot;neovim/nvim-lspconfig&quot;</code>.</p>
+<h3 id="extra-features-as-opt-in-features">Extra features as opt-in features</h3>
+<p>I made following extra features as opt-in features.</p>
+<ul>
+<li>input pairs</li>
+<li>auto format on save</li>
+<li>input suggestions</li>
+</ul>
 <!-- raw HTML omitted -->
 
 
