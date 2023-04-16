@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2019/09/17 (initial publish),
-2022/12/30 (last update)
+2023/04/16 (last update)
 </h3>
 </div>
 
@@ -134,9 +134,14 @@ customization. I only use vim as my backup editor when I suffer issues with my
 neovim. (My old <code>~/.vim/</code> directory implementation is published at
 <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a> .  This uses Vim 8 native package
 management system via &lsquo;packadd!&rsquo;, <code>git</code> and <code>git submodule</code>.)</p>
-<p>For <code>v</code>, and <code>nvim</code>, <em>neovim</em> is used on my system.  (<code>v</code> is accessed via bash alias)</p>
-<p>For <code>vi</code> and <code>vim</code>, <em>vim</em> is used on my system.  (<code>vi</code> is accessed via <code>update-alternatives</code>).</p>
-<p>I also create bash aliases <code>vim0</code> and <code>vi0</code> to start <code>vim</code> and <code>nvim</code> with <code>-u NORC</code>.  These are handy when editor configuration files contain bugs.</p>
+<p>For <code>vi</code>, and <code>nvim</code>, <em>neovim</em> is used on my system.  (<code>vi</code> is accessed via bash alias)</p>
+<p>For <code>vim</code>, <em>vim</em> is used on my system.</p>
+<p>I also create bash aliases:</p>
+<ul>
+<li><code>v</code> to start <code>nvim -u NORC</code></li>
+<li><code>v0</code> to start <code>nvim -u ~/.nvim</code> (very simple setting)</li>
+</ul>
+<p>These are handy when Neovim configuration files contain bugs.</p>
 <p>(Neovim uses <code>~/.config/nvim</code> instead of <code>~/.vim/</code> for its configuration)</p>
 <h2 id="normal-mode">NORMAL MODE</h2>
 <p>Unlike other editors, the existence of NORMAL MODE is what makes Vim as the
