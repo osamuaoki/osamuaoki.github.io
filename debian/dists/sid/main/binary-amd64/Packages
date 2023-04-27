@@ -333,3 +333,47 @@ Description: Btrfs Subvolume Snapshot Utility
      * Systemd timer to snapshot on boot and hourly
      * Systemd timer to age snapshots on boot and daily.
 
+Package: unzip
+Version: 6.0-27ubuntu1.1
+Architecture: amd64
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Installed-Size: 380
+Depends: libbz2-1.0, libc6 (>= 2.34)
+Suggests: zip
+Multi-Arch: foreign
+Homepage: http://www.info-zip.org/UnZip.html
+Priority: optional
+Section: utils
+Filename: pool/main/u/unzip/unzip_6.0-27ubuntu1.1_amd64.deb
+Size: 168056
+SHA256: 9d30d1ad6d2f2ec79ec0e4bda5ecbc0e36c7a53a99777adf61a779c34c7ac76c
+SHA1: 8e6aa7266c204363c079195106d8538b0582a597
+MD5sum: d69e80aa6803fe70008575dc82f94b93
+Description: De-archiver for .zip files
+ InfoZIP's unzip program. With the exception of multi-volume archives
+ (ie, .ZIP files that are split across several disks using PKZIP's /& option),
+ this can handle any file produced either by PKZIP, or the corresponding
+ InfoZIP zip program.
+ .
+ This version supports encryption.
+Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
+Package: unzip-dbgsym
+Source: unzip
+Version: 6.0-27ubuntu1.1
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+Installed-Size: 330
+Depends: unzip (= 6.0-27ubuntu1.1)
+Priority: optional
+Section: debug
+Filename: pool/main/u/unzip/unzip-dbgsym_6.0-27ubuntu1.1_amd64.deb
+Size: 280284
+SHA256: b18839aa7606799c784f147b97e7d45b1c61d71e2307c5f59cc7665a5fb42856
+SHA1: 7cb8031e6f043d45ba09a403e08762bb5f646264
+MD5sum: 3c7a3f166eef5258def4ec45c4a1d5a7
+Description: debug symbols for unzip
+Build-Ids: 7f1f4eac8d4d39a1243de85ef700572cee4d991e c85f585cd7a5e936ccf6861721c34356e681ffbc d6c589583781e28107b4db5e15e1bb974dfe3275
+Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
