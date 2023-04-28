@@ -190,7 +190,7 @@ source.</p>
 <li><a href="https://github.com/osamuaoki/osamuaoki.github.io">https://github.com/osamuaoki/osamuaoki.github.io</a> (published page repo)</li>
 </ul>
 <h2 id="personal-packages">Personal packages</h2>
-<p>These are my personal package sources:</p>
+<p>These are my personal packages and their source repo:</p>
 <ul>
 <li>bss: Btrfs Subvolume Snapshot Utility
 <ul>
@@ -205,9 +205,18 @@ source.</p>
 </li>
 <li>unzip: patched unzip (-O and -I options to support encoding of filenames)
 <ul>
-<li><a href="https://packages.ubuntu.com/lunar/unzip">https://packages.ubuntu.com/lunar/unzip</a> (backported from this to bookworm/Debian)</li>
+<li><a href="https://github.com/osamuaoki/unzip">https://github.com/osamuaoki/unzip</a></li>
+<li>provides unzip-i18n</li>
 </ul>
 </li>
+</ul>
+<p>Build script is <a href="https://github.com/osamuaoki/osamuaoki-hugo/blob/main/repository.sh">repository.sh</a>.</p>
+<ul>
+<li>Source is cloned first.</li>
+<li>Native packages are build with <code>debuild</code></li>
+<li>Non-native packages use gbp-style repo and <code>gbp extract-orig</code> is run before
+<code>debuild</code>.</li>
+<li><code>repropro</code> publishes build packages to github web pages.</li>
 </ul>
 <h2 id="changing-environment-of-gui-program">Changing environment of GUI program</h2>
 <p>Let&rsquo;s make a GUI program <code>gnucash</code> started under Japanese environment
