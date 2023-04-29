@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Backup and snapshots | Goofing Osamu</title>
+    <title>Backup and snapshot | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,11 +32,11 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Backup and snapshots</span></h1>
+<h1><span class="title">Backup and snapshot</span></h1>
 
 <h3 class="date">Date:
 2021/11/02 (initial publish),
-2023/04/29 (last update)
+2023/04/30 (last update)
 </h3>
 </div>
 
@@ -62,6 +62,7 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#backup-and-snapshot">Backup and snapshot</a></li>
+    <li><a href="#setup-usb-storage-backup">Setup USB storage backup</a></li>
     <li><a href="#secure-backup">Secure backup</a>
       <ul>
         <li><a href="#create-and-format-an-encrypted-filesystem-in-a-disk-image">Create and format an encrypted filesystem in a disk image</a></li>
@@ -78,9 +79,17 @@ my choice to do this.</p>
 <p>For <strong>snapshot</strong>, data can stay on the same device .  <code>btrfs subvolume snapshot ...</code>
 is my choice to do this.</p>
 <p>I created <a href="https://github.com/osamuaoki/bss">bss</a> script to help me do these easily
-and its examples contain key parts of the settings.  Here are the basic tricks used in them.</p>
-<p>I also created USB stick backup script <a href="https://github.com/osamuaoki/osamu-utils/blob/main/bu">bu</a>.</p>
+and its examples contain key parts of the settings.</p>
+<h2 id="setup-usb-storage-backup">Setup USB storage backup</h2>
+<p>I have a USB Serial-ATA HDD/SSD external case with USB connector.  I put an SSD
+in it.  I configured this with the MBR partition table holding a single Btrfs
+partition with GUI operations using the <code>gparted</code> package.  This Btrfs was
+labeled as <code>BKUP_USB</code>.</p>
+<p>Then, this USB device is used for a single command backup with the
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/bu">bu</a> command.</p>
 <h2 id="secure-backup">Secure backup</h2>
+<p>Here are the basic tricks used in the <a href="https://github.com/osamuaoki/bss">bss</a>
+package offering <code>bss</code> and <code>luksimg</code>.</p>
 <p>In order to securely backup private data using non-secure remote storage, data
 needs to be encrypted.  Roughly, the following is an approach:</p>
 <ul>
