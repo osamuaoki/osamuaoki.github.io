@@ -7,6 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/en/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Changing environment of GUI program</title>
+      <link>/en/2023/04/28/env-1/</link>
+      <pubDate>Fri, 28 Apr 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2023/04/28/env-1/</guid>
+      <description>Changing environment of GUI program Let&amp;rsquo;s make a GUI program gnucash started globally under Japanese environment ja_JP.UTF-8 while keeping your system under en_US.UTF-8.
+Simple use of sudo mv /usr/bin/gnucash /usr/bin/gnucash.orig isn&amp;rsquo;t robust against package update. Here, dpkg-divert must be used, instead.
+Let&amp;rsquo;s first make a command to start gnucash under Japanese environment as /usr/bin/gnucash.ja:
+#!/bin/sh -e LANG=&amp;#34;ja_JP.UTF-8&amp;#34; LANGUAGE=&amp;#34;ja_JP;ja&amp;#34; /usr/bin/gnucash.orig $ cd /usr/bin $ sudo chown 755 gnucash.ja $ sudo dpkg-divert --local --rename --divert /usr/bin/gnucash.</description>
+    </item>
+    
+    <item>
       <title>HEIF image files</title>
       <link>/en/2023/04/21/heif-1/</link>
       <pubDate>Fri, 21 Apr 2023 00:00:00 +0000</pubDate>
@@ -101,12 +113,12 @@ Local customization I customized my Neovim with ~/.</description>
     </item>
     
     <item>
-      <title>Development system (4)</title>
-      <link>/en/2022/08/20/dev-04/</link>
+      <title>Personal DEB package repository</title>
+      <link>/en/2022/08/20/deb-repo-1/</link>
       <pubDate>Sat, 20 Aug 2022 00:00:00 +0000</pubDate>
       
-      <guid>/en/2022/08/20/dev-04/</guid>
-      <description>Package repo on github page Since Githubs offer nice web site hosting service, I decided to host my private build results there at http://osamuaoki.github.io/debian.
+      <guid>/en/2022/08/20/deb-repo-1/</guid>
+      <description>Personal DEB-package repo on github page Since Githubs offer nice web site hosting service, I decided to host my private build results there at http://osamuaoki.github.io/debian.
 This let me skip running the web server as described in Local private package repo.
 Since Debian Salsa runs Gitlab and Gitlab also offers equivalent web site hosting service, one should be able to do the same there. But considering tight resource constaints there, it may not be a good idea to do this on Salsa.</description>
     </item>
@@ -334,11 +346,11 @@ The Python GTK+ 3 Tutorial (as of 2021-07) goes as:</description>
       <pubDate>Fri, 09 Apr 2021 00:00:00 +0000</pubDate>
       
       <guid>/en/2021/04/09/dev-02/</guid>
-      <description>Local private package repo After reading https://wiki.debian.org/DebianRepository/Setup checking their popularity, I decided to go with reprepro package.
+      <description>See Personal DEB package repository for updated easier alternative method.
+Local private package repo After reading https://wiki.debian.org/DebianRepository/Setup checking their popularity, I decided to go with reprepro package.
 Here, I follow https://wiki.debian.org/DebianRepository/SetupWithReprepro (It was slightly outdated. I update it.)
 Setting up an web server $ sudo apt install apache2 Now you can see a nice &amp;ldquo;Default Page&amp;rdquo; at &amp;ldquo;[::1]&amp;rdquo; (or &amp;ldquo;127.0.0.1&amp;rdquo; for IPV4) using browser.
-Let&amp;rsquo;s create a simple directory tree for single distribution case.
-$ sudo bash -i # mkdir -p /var/www/html/debian # cat &amp;gt; /etc/apache2/conf-available/repos.</description>
+Let&amp;rsquo;s create a simple directory tree for single distribution case.</description>
     </item>
     
     <item>
