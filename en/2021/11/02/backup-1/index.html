@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/11/02 (initial publish),
-2023/04/30 (last update)
+2023/05/01 (last update)
 </h3>
 </div>
 
@@ -63,7 +63,7 @@
   <ul>
     <li><a href="#backup-and-snapshot">Backup and snapshot</a></li>
     <li><a href="#setup-usb-storage-backup">Setup USB storage backup</a></li>
-    <li><a href="#secure-backup">Secure backup</a>
+    <li><a href="#setup-remote-secure-backup">Setup remote secure backup</a>
       <ul>
         <li><a href="#create-and-format-an-encrypted-filesystem-in-a-disk-image">Create and format an encrypted filesystem in a disk image</a></li>
         <li><a href="#mount-and-use-an-encrypted-filesystem-in-a-disk-image">Mount and use an encrypted filesystem in a disk image</a></li>
@@ -87,7 +87,14 @@ partition with GUI operations using the <code>gparted</code> package.  This Btrf
 labeled as <code>BKUP_USB</code>.</p>
 <p>Then, this USB device is used for a single command backup with the
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/bu">bu</a> command.</p>
-<h2 id="secure-backup">Secure backup</h2>
+<p>The essence of this setting is listing volume label <code>BKUP_USB</code> with btrfs
+subvolume directory name <code>Documents</code> as:</p>
+<pre tabindex="0"><code>backup BKUP_USB Documents
+</code></pre><p>When <code>bu</code> is executed while USB drive volume with label <code>BKUP_USB</code> is
+connected, <code>bu</code> backs up the <code>Documents</code> directory which is a btrfs subvolume.</p>
+<h2 id="setup-remote-secure-backup">Setup remote secure backup</h2>
+<p>NOTE: This section needs to be updated.</p>
+<p>Remote backup with rsync can be secured by storing data in encrypted format.</p>
 <p>Here are the basic tricks used in the <a href="https://github.com/osamuaoki/bss">bss</a>
 package offering <code>bss</code> and <code>luksimg</code>.</p>
 <p>In order to securely backup private data using non-secure remote storage, data
