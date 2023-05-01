@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/13 (initial publish),
-2023/04/21 (last update)
+2023/05/02 (last update)
 </h3>
 </div>
 
@@ -94,14 +94,36 @@ support.  So far under Wayland, I didn&rsquo;t see any easy solution. Interestin
 <li><a href="https://help.ubuntu.com/stable/ubuntu-help/mouse-mousekeys.html.en">https://help.ubuntu.com/stable/ubuntu-help/mouse-mousekeys.html.en</a></li>
 <li><a href="https://help.ubuntu.com/stable/ubuntu-help/a11y-right-click.html.en">https://help.ubuntu.com/stable/ubuntu-help/a11y-right-click.html.en</a></li>
 </ul>
-<p>For Mac or some Sony Vaio with single tap pad button, this allows secondary
-click under the current GNOME.</p>
+<p>I initially used following (now deprecated) setup.</p>
 <ul>
-<li>Settings</li>
-<li>-&gt; Accessibility</li>
-<li>-&gt; Pointing &amp; Clicking: Click Assist On</li>
-<li>-&gt; Simulated Secondary Click ON</li>
+<li><del>Settings</del></li>
+<li>-&gt; <del>Accessibility</del></li>
+<li>-&gt; <del>Pointing &amp; Clicking: Click Assist On</del></li>
+<li>-&gt; <del>Simulated Secondary Click ON</del></li>
 </ul>
+<p>This method yields not-so-good user experiences when I wanted to open a linked
+page to another browser tab page with &ldquo;right-click &amp; select&rdquo;:</p>
+<ul>
+<li>Press TP</li>
+<li>&ndash;&gt; No left- nor right- pressed event</li>
+<li>Hold TP</li>
+<li>&ndash;&gt; Timer displayed to wait</li>
+<li>Release TP after timer</li>
+<li>&ndash;&gt; Left-released event (annoying)</li>
+<li>&ndash;&gt; Right-click (==pressed then released)</li>
+</ul>
+<p>I then found interesting setting in GNOME Tweak.</p>
+<ul>
+<li>Tweaks</li>
+<li>-&gt; &ldquo;Keyboard and Mouse&rdquo; tab</li>
+<li>-&gt; &ldquo;Mouse Click Emulation&rdquo; section
+<ul>
+<li>-&gt; Check on &ldquo;Area&rdquo;</li>
+</ul>
+</li>
+</ul>
+<p>For Mac or some Sony Vaio with single tap pad button, this allows secondary
+click as expected.</p>
 <!-- raw HTML omitted -->
 
 
