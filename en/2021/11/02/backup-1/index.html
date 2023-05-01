@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/11/02 (initial publish),
-2023/05/01 (last update)
+2023/05/02 (last update)
 </h3>
 </div>
 
@@ -80,14 +80,22 @@ my choice to do this.</p>
 is my choice to do this.</p>
 <p>I created <a href="https://github.com/osamuaoki/bss">bss</a> script to help me do these easily
 and its examples contain key parts of the settings.</p>
+<p>This <a href="https://github.com/osamuaoki/bss">bss</a> is designed for flexibility with
+choice of many options, commands and arguments.</p>
 <h2 id="setup-usb-storage-backup">Setup USB storage backup</h2>
 <p>I have a USB Serial-ATA HDD/SSD external case with USB connector.  I put an SSD
 in it.  I configured this with the MBR partition table holding a single Btrfs
 partition with GUI operations using the <code>gparted</code> package.  This Btrfs was
 labeled as <code>BKUP_USB</code>.</p>
 <p>Then, this USB device is used for a single command backup with the
-<a href="https://github.com/osamuaoki/osamu-utils/blob/main/bu">bu</a> command.</p>
-<p>The essence of this setting is listing volume label <code>BKUP_USB</code> with btrfs
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/bu">bu</a> command which wraps
+<a href="https://github.com/osamuaoki/bss">bss</a>.</p>
+<p>This <code>bu</code> command is designed:</p>
+<ul>
+<li>to be edited easily to suite target storage usages, and</li>
+<li>to be invoked easily without command arguments.</li>
+</ul>
+<p>The essence of the <code>bu</code> setting is listing volume label <code>BKUP_USB</code> with btrfs
 subvolume directory name <code>Documents</code> as:</p>
 <pre tabindex="0"><code>backup BKUP_USB Documents
 </code></pre><p>When <code>bu</code> is executed while USB drive volume with label <code>BKUP_USB</code> is
