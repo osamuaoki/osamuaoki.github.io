@@ -8,15 +8,14 @@
     <language>en-us</language>
     <lastBuildDate>Fri, 28 Apr 2023 00:00:00 +0000</lastBuildDate><atom:link href="/tags/heif/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Changing environment of GUI program</title>
-      <link>/en/2023/04/28/env-1/</link>
+      <title>L17N of programs</title>
+      <link>/en/2023/04/28/l10n-1/</link>
       <pubDate>Fri, 28 Apr 2023 00:00:00 +0000</pubDate>
       
-      <guid>/en/2023/04/28/env-1/</guid>
-      <description>Changing environment of GUI program Let&amp;rsquo;s make a GUI program gnucash started globally under Japanese environment ja_JP.UTF-8 while keeping your system under en_US.UTF-8.
-Simple use of sudo mv /usr/bin/gnucash /usr/bin/gnucash.orig isn&amp;rsquo;t robust against package update. Here, dpkg-divert must be used, instead.
-Let&amp;rsquo;s first make a command to start gnucash under Japanese environment as /usr/bin/gnucash.ja:
-#!/bin/sh -e LANG=&amp;#34;ja_JP.UTF-8&amp;#34; LANGUAGE=&amp;#34;ja_JP;ja&amp;#34; /usr/bin/gnucash.orig $ cd /usr/bin $ sudo chown 755 gnucash.ja $ sudo dpkg-divert --local --rename --divert /usr/bin/gnucash.</description>
+      <guid>/en/2023/04/28/l10n-1/</guid>
+      <description>One of the most annoying L10N problem is font variant selection. zh_CN seems to be chosen as Asian font variant default for en_US environment. This prompted me to summarize tips here.
+L10N mechanism L10N (localization) of programs written with proper I18N (internationalization) is controlled by the values of environment variables.
+LC_* variables are described in locale(7) manpage. LANGUAGE is described in info gettext &amp;quot;The LANGUAGE variable&amp;quot;. According to setlocale(3), for glibc based programs, effective locale values are set for each category as:</description>
     </item>
     
     <item>
