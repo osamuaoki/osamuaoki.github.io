@@ -68,6 +68,7 @@
     <li><a href="#custom-l10ned-execution-without-logout-for-gui">Custom L10Ned execution without logout for GUI</a></li>
     <li><a href="#set-default-in-all-applications-of-libreoffice">Set default in all applications of Libreoffice</a></li>
     <li><a href="#set-default-page-size-in-libreoffice">Set default page size in Libreoffice</a></li>
+    <li><a href="#l10n-for-displayed-page-of-web-content-by-the-browser">L10N for displayed page of web content by the browser</a></li>
   </ul>
 </nav>
 
@@ -76,7 +77,7 @@ to be chosen as Asian font variant default for en_US environment.  This
 prompted me to summarize tips here.</p>
 <h2 id="l10n-mechanism">L10N mechanism</h2>
 <p>L10N (localization) of programs written with proper I18N (internationalization)
-is controlled by the values of environment variables.</p>
+may be controlled by the values of environment variables.</p>
 <ul>
 <li><code>LC_*</code> variables are described in <code>locale</code>(7) manpage.</li>
 <li><code>LANGUAGE</code> is described in <code>info gettext &quot;The LANGUAGE variable&quot;</code>.</li>
@@ -247,7 +248,9 @@ applications of Libreoffice (7.4).  Here are how for each application:</p>
 <p>I used corresponding
 <a href="https://ask.libreoffice.org/t/how-can-i-change-the-default-font-in-all-components-of-libreoffice-for-network-organisation-deployment/9570/3">tips from 2014</a>
 as my baseline.</p>
-<p><a href="https://ask.libreoffice.org/t/how-do-you-set-the-default-font-in-libreoffice-calc-v6-2/52814/8">Pre-template default font across all applications seems to be accessible</a>.  Under 7.4, the same can be done as:</p>
+<p>Saving <a href="https://help.libreoffice.org/latest/en-US/text/shared/guide/standard_template.html">template with configuration</a>
+seems to be a trick to make these changes persistent.</p>
+<p><a href="https://ask.libreoffice.org/t/how-do-you-set-the-default-font-in-libreoffice-calc-v6-2/52814/8">Pre-template default font settings across all applications seem to be accessible</a>.  Under 7.4, the same can be done as:</p>
 <ul>
 <li>Calc
 <ul>
@@ -262,9 +265,7 @@ as my baseline.</p>
 <li>-&gt; Open &ldquo;org.openoffice.VCL&rdquo;</li>
 <li>-&gt; DefaultFonts
 <ul>
-<li>-&gt; &ldquo;ja&rdquo; and select item and edit
-TBH, these are too complicated to be edited wisely.  So I decided to keep
-myself away from these.</li>
+<li>-&gt; &ldquo;ja&rdquo; and select item and edit</li>
 </ul>
 </li>
 </ul>
@@ -274,12 +275,15 @@ myself away from these.</li>
 </ul>
 </li>
 </ul>
+<p>TBH, this &ldquo;Advanced&rdquo; tricks are too complicated to be edited wisely for me.  So
+I decided to keep myself away from these.</p>
 <h2 id="set-default-page-size-in-libreoffice">Set default page size in Libreoffice</h2>
 <p>Libreoffice doesn&rsquo;t seem to respect the setting in <code>/etc/papersize</code>.
-Follow <a href="https://ask.libreoffice.org/t/how-do-i-change-the-default-page-size-from-letter-to-a4/63116/2">Libreoffice wiki</a>.
-Saving template with configuration seems to be a trick to make change
-persistent.</p>
+Follow <a href="https://ask.libreoffice.org/t/how-do-i-change-the-default-page-size-from-letter-to-a4/63116/2">Libreoffice wiki</a>.</p>
 <p>CUPS configuration may be performed via browser pointing to <a href="http://localhost:631/">http://localhost:631/</a>.</p>
+<h2 id="l10n-for-displayed-page-of-web-content-by-the-browser">L10N for displayed page of web content by the browser</h2>
+<p>Displayed page of web content by the browser can be set independent of GUI dialog language set by <code>LANG</code>.</p>
+<p>For Chrome, click &ldquo;customize and control&rdquo; at the top-right corner to display &ldquo;Settings&rdquo;.  Then click &ldquo;Languages&rdquo; and configure &ldquo;Preferred languages&rdquo;.</p>
 <!-- raw HTML omitted -->
 
 
