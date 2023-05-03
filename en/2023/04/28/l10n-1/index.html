@@ -72,9 +72,9 @@
   </ul>
 </nav>
 
-<p>One of the most annoying L10N problem is font variant selection.  zh_CN seems
-to be chosen as Asian font variant default for en_US environment.  This
-prompted me to summarize tips here.</p>
+<p>The most annoying L10N problem for me as <code>ja</code> user is the font variant
+selection.  <code>zh_CN</code> seems to be chosen as Asian font variant default for
+<code>en_US</code> environment.  This prompted me to summarize tips here.</p>
 <h2 id="l10n-mechanism">L10N mechanism</h2>
 <p>L10N (localization) of programs written with proper I18N (internationalization)
 may be controlled by the values of environment variables.</p>
@@ -122,8 +122,8 @@ command sets other variable values inside it.  See variables exported.</p>
 <code>LANG</code> and <code>LANGUAGE</code> variables to the program to be executed.</p>
 <p>Here, <code>LANG</code> is respected by many programs while <code>LANGUAGE</code> seems to be respected only by programs using GNU Gettext system.</p>
 <p>I check actual situation by invoking program as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ LANG<span style="color:#f92672">=</span>ja_JP.UTF-8 programname
-</span></span><span style="display:flex;"><span>$ LANG<span style="color:#f92672">=</span>en_US.UTF-8 LANGUAGE<span style="color:#f92672">=</span>ja programname
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ LANG<span style="color:#f92672">=</span>ja_JP.UTF-8 program_name
+</span></span><span style="display:flex;"><span>$ LANG<span style="color:#f92672">=</span>en_US.UTF-8 LANGUAGE<span style="color:#f92672">=</span>ja program_name
 </span></span></code></pre></div><p>My cursory checks yielded:</p>
 <ul>
 <li>
@@ -208,7 +208,7 @@ applications of Libreoffice (7.4).  Here are how for each application:</p>
 <li>-&gt; Language Setting</li>
 <li>-&gt; Languages</li>
 <li>-&gt; Default Languages for Documents</li>
-<li>-&gt; Asian (check) and select Japanese</li>
+<li>-&gt; Asian (check) and select <strong>Japanese</strong> &ndash; This is <strong>important</strong>.</li>
 <li>-&gt; LibreOffice Writer</li>
 <li>Basic Fonts (Western)</li>
 <li>Set Fonts and Size</li>
@@ -245,12 +245,11 @@ applications of Libreoffice (7.4).  Here are how for each application:</p>
 </ul>
 </li>
 </ul>
-<p>I used corresponding
-<a href="https://ask.libreoffice.org/t/how-can-i-change-the-default-font-in-all-components-of-libreoffice-for-network-organisation-deployment/9570/3">tips from 2014</a>
-as my baseline.</p>
-<p>Saving <a href="https://help.libreoffice.org/latest/en-US/text/shared/guide/standard_template.html">template with configuration</a>
-seems to be a trick to make these changes persistent.</p>
-<p><a href="https://ask.libreoffice.org/t/how-do-you-set-the-default-font-in-libreoffice-calc-v6-2/52814/8">Pre-template default font settings across all applications seem to be accessible</a>.  Under 7.4, the same can be done as:</p>
+<p>I came to the above from
+<a href="https://ask.libreoffice.org/t/how-can-i-change-the-default-font-in-all-components-of-libreoffice-for-network-organisation-deployment/9570/3">corresponding tips in 2014</a>.</p>
+<p>Saving <a href="https://help.libreoffice.org/latest/en-US/text/shared/guide/standard_template.html">template with the configuration</a>
+may be a trick to make these changes persistent.</p>
+<p><a href="https://ask.libreoffice.org/t/how-do-you-set-the-default-font-in-libreoffice-calc-v6-2/52814/8">Pre-template default font settings across all applications seem to be accessible</a>.  Under LibreOffice 7.4, the same can be done as:</p>
 <ul>
 <li>Calc
 <ul>
@@ -275,11 +274,12 @@ seems to be a trick to make these changes persistent.</p>
 </ul>
 </li>
 </ul>
-<p>TBH, this &ldquo;Advanced&rdquo; tricks are too complicated to be edited wisely for me.  So
-I decided to keep myself away from these.</p>
+<p>TBH, this &ldquo;Advanced&rdquo; trick is too complicated for me.  So
+I decided to keep myself away from this.</p>
 <h2 id="set-default-page-size-in-libreoffice">Set default page size in Libreoffice</h2>
-<p>Libreoffice doesn&rsquo;t seem to respect the setting in <code>/etc/papersize</code>.
-Follow <a href="https://ask.libreoffice.org/t/how-do-i-change-the-default-page-size-from-letter-to-a4/63116/2">Libreoffice wiki</a>.</p>
+<p>Libreoffice doesn&rsquo;t seem to respect the setting in <code>/etc/papersize</code> set by
+<code>paperconf</code>(1).  Follow
+<a href="https://ask.libreoffice.org/t/how-do-i-change-the-default-page-size-from-letter-to-a4/63116/2">Libreoffice wiki</a>.</p>
 <p>CUPS configuration may be performed via browser pointing to <a href="http://localhost:631/">http://localhost:631/</a>.</p>
 <h2 id="l10n-for-displayed-page-of-web-content-by-the-browser">L10N for displayed page of web content by the browser</h2>
 <p>Displayed page of web content by the browser can be set independent of GUI dialog language set by <code>LANG</code>.</p>
