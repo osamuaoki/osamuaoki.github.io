@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/04/11 (last update)
+2023/05/04 (last update)
 </h3>
 </div>
 
@@ -261,21 +261,25 @@ for Developer.</p>
 <p>Before installing DEB-packages build by CMake (including ones built by
 upstream), you must remove both Debian <code>neovim</code> and <code>neovim-runtime</code> packages
 in advance to avoid package conflicts.</p>
-<p>Since command normally provided by the update-alternatives are not available, following
-commands needs some workaround to be accessible using Neovim as their backend.</p>
-<ul>
-<li><code>editor</code></li>
-<li><code>ex</code></li>
-<li><code>rview</code></li>
-<li><code>view</code></li>
-<li><code>vi</code></li>
-<li><code>vim</code></li>
-<li><code>vimdiff</code></li>
-<li><code>vimdiff</code></li>
-</ul>
-<p>One way to work around this situation is the use of shell command alias mechanism set in <code>~/.bashrc</code>.  For example for <code>vi</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias vi<span style="color:#f92672">=</span>/usr/bin/nvim
-</span></span></code></pre></div><p>This should force to use Neovim as the backend of <code>vi</code> command.</p>
+<p>Since command normally provided by the update-alternatives are not available, <code>view</code>, <code>vimdiff</code>, <code>ex</code>, and <code>editor</code>
+commands needs some workaround such as the use of alias defined in <code>~/.bashrc</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># nvim: nvim with LazyVim -- as /usr/bin/nvim</span>
+</span></span><span style="display:flex;"><span>export EDITOR<span style="color:#f92672">=</span>nvim
+</span></span><span style="display:flex;"><span>export VISUAL<span style="color:#f92672">=</span>nvim
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># `vi` as neovim with LazyVim</span>
+</span></span><span style="display:flex;"><span>alias vi<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># `v` as neovim without resource file</span>
+</span></span><span style="display:flex;"><span>alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim  -u NORC&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># `v0` as neovim with minimum resouce file</span>
+</span></span><span style="display:flex;"><span>alias v0<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -u ~/.nvim&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># sudoedit to use nvim w/o resource file</span>
+</span></span><span style="display:flex;"><span>alias svi<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SUDO_EDITOR=&#39;/usr/bin/nvim -u NORC&#39; /usr/bin/sudoedit&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># vim alias</span>
+</span></span><span style="display:flex;"><span>alias vimdiff<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -d&#39;</span>
+</span></span><span style="display:flex;"><span>alias view<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -R&#39;</span>
+</span></span><span style="display:flex;"><span>alias ex<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -e&#39;</span>
+</span></span><span style="display:flex;"><span>alias editor<span style="color:#f92672">=</span>nvim
+</span></span></code></pre></div><p>This should force to use Neovim as the backend of <code>vim</code>-related command.</p>
 <!-- raw HTML omitted -->
 
 
