@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/13 (initial publish),
-2023/05/07 (last update)
+2023/05/14 (last update)
 </h3>
 </div>
 
@@ -116,7 +116,13 @@ or South Korea).</p>
 <h3 id="how-to-create-a-usb-flash-drive-to-install-windows">How to create a USB flash drive to install Windows</h3>
 <p>The recent Windows ISO image contains <code>sources/install.wim</code> which is about 5GiB
 and exceeds 4 GiB filesize limit on FAT32 frequently used on the USB flash
-disk.  So we need some care to cope with this limitation.</p>
+disk.</p>
+<p>Although the disk image is called &ldquo;ISO file&rdquo;, this is not formatted in ISO9660
+but actually formatted in UDF format which doesn&rsquo;t suffer from 4GB file size
+limitation. This &ldquo;ISO file&rdquo; isn&rsquo;t a hybrid file system overlaying harddisk file
+system so you can&rsquo;t use this ISO image with simple &ldquo;<code>dd if= ...</code>&rdquo; to make
+bootable USB key (I know many of us Linux user feel like doing it.)</p>
+<p>So we need to cope with this complication.</p>
 <p>The following can make a USB flash drive to install Windows via UEFI on GPT
 disk.</p>
 <ul>
@@ -131,6 +137,10 @@ disk.</li>
 </ul>
 </li>
 </ul>
+<p>If the <code>install.wim</code> is slightly larger than 4GB limit, you may use file
+compression with <code>wimlib-imagex optimize install.wim --solid</code> to <a href="https://tqdev.com/2019-cannot-copy-windows-10-install-wim">make it fit in
+4GB limit</a> and do
+without using <code>split</code>, instead.</p>
 <p>If the UEFI available on your system also supports NTFS or the
 <a href="https://github.com/pbatard/uefi-ntfs">UEFI:NTFS</a> is used along with the UEFI,
 you can format USB flash drive with NTFS filesystem instead and boot Windows by
