@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2023/04/29 (last update)
+2023/05/15 (last update)
 </h3>
 </div>
 
@@ -662,6 +662,17 @@ case, you must SSH into user account first and sudo/su to root.</p>
 <p>Use of SSH key placed in user&rsquo;s home directory is a good idea.  Typical key
 generation goes:</p>
 <pre tabindex="0"><code>osamu@sid-dev:~$ ssh-keygen -t rsa
+</code></pre><p>This should create:</p>
+<ul>
+<li><code>id_rsa</code> contains the private key</li>
+<li><code>id_rsa.pub</code> contains the public key</li>
+</ul>
+<p>In order to give passwordless SSH access from an account on <code>sid-dev</code> to an
+account on <code>sid-GNOME</code>, you need to append the content of <code>id_rsa.pub</code> on
+<code>sid-dev</code> to <code>~/.ssh/authorized_keys</code> on the <code>sid-GNOME</code>.</p>
+<p>Please make sure to set proper permissions on the remote host:</p>
+<pre tabindex="0"><code>osamu@sid-GNOME $ chmod 700 ~/.ssh
+osamu@sid-GNOME $ chmod 600 ~/.ssh/authorized_keys
 </code></pre><h3 id="setting-up-sudo">Setting up <code>sudo</code></h3>
 <p>Following will configure <code>sudo</code> to allow user &ldquo;osamu&rdquo; for root privilege.</p>
 <pre tabindex="0"><code> $ su
