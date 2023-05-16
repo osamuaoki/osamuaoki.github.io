@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/04/28 (initial publish),
-2023/05/03 (last update)
+2023/05/16 (last update)
 </h3>
 </div>
 
@@ -131,7 +131,22 @@ command sets other variable values inside it.  See variables exported.</p>
 <ul>
 <li><code>aptitude</code></li>
 <li><code>vim</code></li>
-<li><code>gnucash</code></li>
+<li><code>gnucash</code>
+<ul>
+<li><code>LANG</code> sets the default currency to JPY</li>
+<li><code>LANGUAGE</code> sets the GUI messages to Japanese</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>Programs supporting <code>LANGUAGE</code></p>
+<ul>
+<li><code>google-chrome-stable</code>
+<ul>
+<li><code>LANGUAGE</code> sets the GUI messages to Japanese</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>
@@ -139,6 +154,7 @@ command sets other variable values inside it.  See variables exported.</p>
 <ul>
 <li><code>gitk</code></li>
 <li><code>lowriter</code> (Libreoffice Writer)</li>
+<li><code>libreoffice</code> (Libreoffice)</li>
 <li><code>ls -l</code></li>
 </ul>
 </li>
@@ -150,11 +166,9 @@ command sets other variable values inside it.  See variables exported.</p>
 </ul>
 </li>
 </ul>
-<p>The local setting not only changed messages produced by programs but also
-changed default values such as the default font set used by the GUI program.
-In case of <code>gnucash</code>, even the default currency was changed by <code>LANGUAGE</code>.  So
-I use <code>LANG</code> alone for LibreOffice while I set both <code>LANG</code> and <code>LANGUAGE</code> for
-<code>gnucash</code>.</p>
+<p>The locale setting not only changed messages produced by programs but also
+changed default values such as the default font set used by the GUI program.</p>
+<p>In case of <code>gnucash</code>, the default currency was controlled by <code>LANG</code>.</p>
 <h2 id="normal-way-to-change-l10n">Normal way to change L10N</h2>
 <p>For GNOME, normal way to change L10N is:</p>
 <ul>
@@ -168,12 +182,13 @@ desirable L10N setting</li>
 <h2 id="custom-l10ned-execution-without-logout-for-cli">Custom L10Ned execution without logout for CLI</h2>
 <p>The use shell alias can be used to execute program under an arbitral L10N
 environment without <strong>logout</strong> and without changing the main system environment.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias <span style="color:#e6db74">&#34;jwriter=LANG=ja_JP.UTF-8 lowriter&#34;</span>
-</span></span><span style="display:flex;"><span>alias <span style="color:#e6db74">&#34;jimpress=LANG=ja_JP.UTF-8 loimpress&#34;</span>
-</span></span><span style="display:flex;"><span>alias <span style="color:#e6db74">&#34;jcash=LANG=ja_JP.UTF-8 gnucash&#34;</span>
-</span></span></code></pre></div><p>If above alias settings are included in <code>~/.bashrc</code>, typing <code>jwriter</code> starts
-&ldquo;LibreOffice Writer&rdquo; under more or less desirable Japanese settings including
-font choice (No zh_CN oriented gliphs) and typing <code>jcash</code> starts &ldquo;GNuCash&rdquo;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias jo<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANG=ja_JP.UTF-8 libreoffice&#34;</span>
+</span></span><span style="display:flex;"><span>alias jw<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANG=ja_JP.UTF-8 lowriter&#34;</span>
+</span></span><span style="display:flex;"><span>alias jc<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANG=ja_JP.UTF-8 LANGUAGE=ja gnucash&#34;</span>
+</span></span><span style="display:flex;"><span>alias jc<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANGUAGE=ja google-chrome-stable&#34;</span>
+</span></span></code></pre></div><p>If above alias settings are included in <code>~/.bashrc</code>, typing <code>jo</code> starts
+&ldquo;LibreOffice&rdquo; under more or less desirable Japanese settings including
+font choice (No zh_CN oriented gliphs) and typing <code>jc</code> starts &ldquo;GNuCash&rdquo;
 under more or less desirable Japanese settings including JPY as currency and
 account entry names in Japanese.</p>
 <p>This is least invasive and easy to manage.</p>
