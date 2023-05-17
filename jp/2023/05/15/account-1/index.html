@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GnuCash (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GnuCash (1)</span></h1>
+
+<h3 class="date">Date:
+2023/05/15 (initial publish),
+2023/05/17 (last update)
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2023/04/08/date-format-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#gnucashは複式簿記">GnuCashは複式簿記</a></li>
+    <li><a href="#会計用語の日英比較整理">会計用語の日英比較整理</a></li>
+    <li><a href="#会計データーの入力">会計データーの入力</a></li>
+    <li><a href="#会計データー集計結果の出力">会計データー集計結果の出力</a>
+      <ul>
+        <li><a href="#貸借対照表balance-sheet">貸借対照表(Balance sheet)</a></li>
+        <li><a href="#損益計算書pl">損益計算書(P/L)</a></li>
+        <li><a href="#一般仕訳帳general-journal">一般仕訳帳(General Journal)</a></li>
+        <li><a href="#取引出納帳-transaction-reportと総勘定元帳-general-ledger">取引出納帳 (Transaction Report)と総勘定元帳 (General Ledger)</a></li>
+        <li><a href="#決算close-book">決算(Close Book)</a></li>
+      </ul>
+    </li>
+    <li><a href="#青色申告gnucashの関連参考サイト">「青色申告　GNUCASH」の関連参考サイト</a></li>
+    <li><a href="#会計の関連参考サイト">会計の関連参考サイト</a></li>
+  </ul>
+</nav>
+
+<h2 id="gnucashは複式簿記">GnuCashは複式簿記</h2>
+<p>GnuCashは企業の会計で用いられる複式簿記を採用した本格的な会計管理ソフトです。以下は、Version: 4.13ベースのメモです。</p>
+<p>使い方さえ慣れれば、家計簿にも使えます。家計でも支払い方法が「現金」・「銀行振込」・「クレジットカード」と複雑になり見通しが悪くなりがちです。支払い方法に関わらず支出タイプごとに集計できるので重宝です。</p>
+<p>ただ、GnuCashを使おうとすると、チュートリアルは日本語訳されているのですが、GnuCash Manualは英語しかないという問題もあります。</p>
+<p>また、GnuCashのメニューは各言語の文字コード順にソートされたりするので、英語マニュアルとメニューの場所が微妙に違う問題があります。</p>
+<p>さらに、会計とか簿記の世界は素人には辛い専門用語が多いという課題があります。会計用語は、「帳票」の英語が「Reports」だったりと、英語のほうが分かりやすいこともありますが、対応関係で混乱してしまいます。</p>
+<p>そこで、<a href="/en/2023/04/28/l10n-1/#custom-l10ned-execution-without-logout-for-cli">英語と日本語で起動</a>させ比較して状況を整理し、また参考サイトのリンク集を作成しました。</p>
+<h2 id="会計用語の日英比較整理">会計用語の日英比較整理</h2>
+<p>まず、メニューにある気になる項目の日英比較を以下に作成しました。</p>
+<table>
+<thead>
+<tr>
+<th>English</th>
+<th>Japanse</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Account</td>
+<td>勘定科目</td>
+</tr>
+<tr>
+<td>Account Summary</td>
+<td>勘定科目集計</td>
+</tr>
+<tr>
+<td>Auto-clear</td>
+<td>自動精算</td>
+</tr>
+<tr>
+<td>Balance</td>
+<td>賃借残高</td>
+</tr>
+<tr>
+<td>Balance sheet</td>
+<td>賃借対照表</td>
+</tr>
+<tr>
+<td>Close book</td>
+<td>決算</td>
+</tr>
+<tr>
+<td>Formal</td>
+<td>正式</td>
+</tr>
+<tr>
+<td>General Journal</td>
+<td>一般仕訳帳</td>
+</tr>
+<tr>
+<td>Reconcile</td>
+<td>照合</td>
+</tr>
+<tr>
+<td>Reconciliation Report</td>
+<td>照合帳票</td>
+</tr>
+<tr>
+<td>Register</td>
+<td>記録簿</td>
+</tr>
+<tr>
+<td>Reports</td>
+<td>帳票</td>
+</tr>
+<tr>
+<td>Scheduled</td>
+<td>予定</td>
+</tr>
+<tr>
+<td>Total</td>
+<td>合計</td>
+</tr>
+<tr>
+<td>Transaction Report</td>
+<td>取引出納帳</td>
+</tr>
+<tr>
+<td>Transfer</td>
+<td>資金移動</td>
+</tr>
+<tr>
+<td>Trial Balance</td>
+<td>試算表</td>
+</tr>
+</tbody>
+</table>
+<p>また、会計で用いる正式ラベルのDebit/Creditと異なるGnuCash独自の複式簿記入力欄のラベルを、各アカウントタイプ毎に日英表記で整理しました。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">Position↓</th>
+<th style="text-align:center">Formal↓ \ Type→</th>
+<th style="text-align:center">Asset</th>
+<th style="text-align:center">Equity</th>
+<th style="text-align:center">Expenses</th>
+<th style="text-align:center">Income</th>
+<th style="text-align:center">Liabilities</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">位置↓</td>
+<td style="text-align:center">正式名↓ \ タイプ→</td>
+<td style="text-align:center">資産</td>
+<td style="text-align:center">純資産</td>
+<td style="text-align:center">費用</td>
+<td style="text-align:center">収益</td>
+<td style="text-align:center">負債</td>
+</tr>
+<tr>
+<td style="text-align:center">Left Column</td>
+<td style="text-align:center">Debit</td>
+<td style="text-align:center">Increase</td>
+<td style="text-align:center">Decrease</td>
+<td style="text-align:center">Expense</td>
+<td style="text-align:center">Charge</td>
+<td style="text-align:center">Payment</td>
+</tr>
+<tr>
+<td style="text-align:center">左列</td>
+<td style="text-align:center">借方</td>
+<td style="text-align:center">増加</td>
+<td style="text-align:center">減少</td>
+<td style="text-align:center">費用</td>
+<td style="text-align:center">請求</td>
+<td style="text-align:center">支払</td>
+</tr>
+<tr>
+<td style="text-align:center">Right Column</td>
+<td style="text-align:center">Credit</td>
+<td style="text-align:center">Decrease</td>
+<td style="text-align:center">Increase</td>
+<td style="text-align:center">Rebate</td>
+<td style="text-align:center">Income</td>
+<td style="text-align:center">Charge</td>
+</tr>
+<tr>
+<td style="text-align:center">右列</td>
+<td style="text-align:center">貸方</td>
+<td style="text-align:center">減少</td>
+<td style="text-align:center">増加</td>
+<td style="text-align:center">値引</td>
+<td style="text-align:center">収益</td>
+<td style="text-align:center">請求</td>
+</tr>
+</tbody>
+</table>
+<p>正式の複式簿記では、左の列が借方(Debit)、右の列が貸方(Credit)と一貫してラベルされています。デフォルトのGnuCashでは各列のラベルを上記の表のようにアカウントタイプごとに素人でもわかる表現で置き換えています。</p>
+<p>このラベル表記法は、<code>編集</code> -&gt; <code>設定</code> -&gt; <code>勘定項目</code> -&gt; <code>ラベル</code> (<code>Edit</code> -&gt; <code>Preferences</code> -&gt; <code>Accounts</code> -&gt; <code>Labels</code>)を使って選択できます。</p>
+<h2 id="会計データーの入力">会計データーの入力</h2>
+<p>まず「勘定科目」(Accounts)を作成します。</p>
+<p>取引のあった「勘定科目」(Accounts)を開くと、データーが入力できます。その際、相手先の勘定科目にもデーターが入力されます。これが入力の基本です。
+慣れたら、スプレッドシートで同様のことをするより遥かに効率的です。</p>
+<p>銀行の記録やクレジットカードの記録は、CVS形式でダウンロードして読み込んでいます。日本語の場合、UTF-8でなくShiftJisのことも多いのでエンコーディングは要注意です。</p>
+<p>ちなみに、<code>ツール</code>(<code>Tools</code>)-&gt;<code>一般仕訳帳</code>(<code>General Journal</code>)で表示される一般仕訳帳があります。これからも編集可能ですが、何でも出来すぎて危険なので日常的な入力には使わないようにしています。</p>
+<h2 id="会計データー集計結果の出力">会計データー集計結果の出力</h2>
+<p>会計データーの集計結果の出力は<code>帳票</code>(<code>Reports</code>)メニューから行います。</p>
+<h3 id="貸借対照表balance-sheet">貸借対照表(Balance sheet)</h3>
+<p>貸借対照表(Balance sheet)は、GnuCash(日本語)では、<code>帳票</code>-&gt;<code>資産・負債</code>と進んだ先に、<code>貸借対照表</code>があり、GnuCash(英語)では、<code>Reports</code>-&gt;<code>Asset &amp; Liabilities</code>と進んだ先に、<code>Balance sheet</code>があり、選択すると貸借対照表(Balance sheet)が表示されます。会計用語はわかりにくいので、日英表記を交えておさらいします。</p>
+<p>貸借対照表(Balance sheet)、<code>資産＝負債＋純資産</code>なので、左右同額でバランスします。</p>
+<ul>
+<li>左側(GnuCashでは出力前半の上側)
+<ul>
+<li>会社が事業のために保有する「資産(Asset)」で、その合計は「総資産」</li>
+<li>「資産(Asset)」は「流動資産(Current Assets)」、「固定資産(Fixed Assets)」、「繰延資産(Differed Assets)」に区分される。</li>
+</ul>
+</li>
+<li>右側(GnuCashでは出力後半の下側)
+<ul>
+<li>会社が資産を調達した内容で、その合計は「総資本」</li>
+<li>返済義務のある「負債(Liabilities)」と、返済義務のない「純資産(Equity)」に区分される。</li>
+<li>「負債(Liabilities)」は、調達資金で、「流動負債(Current liabilities)」や「固定負債(Fixed liabilities)」に区分される。</li>
+<li>「純資産(Equity)」は、自己資金で、「資本金(Capital stock)」や「利益剰余金(Retained earnings)」等に区分される。</li>
+</ul>
+</li>
+</ul>
+<p>日本語だと「資産」と「純資産」は一見似た響きの言葉ですが、英語は「Asset」と「Equity」と違うように、まったく異種のコンセプトであることに注意が必要です。</p>
+<p>「流動」か「固定」かの判別基準:</p>
+<ul>
+<li>「正常営業循環基準」
+<ul>
+<li>通常の販売・仕入取引で生じる債権・債務は、その回収期間を問わずに流動資産</li>
+<li>具体的には、棚卸資産、受取手形、売掛金などが流動資産となる。</li>
+</ul>
+</li>
+<li>「1年基準（ワン・イヤー・ルール）」（上記以外に適用）
+<ul>
+<li>1年以内に現金ができるものは「流動資産」、そうでないものは「固定資産」</li>
+<li>具体的には、建物、土地、車両運搬具、ソフトウェア、投資有価証券などで１０万円以上のものが固定資産となる。</li>
+</ul>
+</li>
+</ul>
+<p><code>帳票</code>-&gt;<code>実験中</code>(<code>Reports</code>-&gt;<code>Experimental</code>)から、貸借対照表(Balance sheet)の左右出力ができます。</p>
+<h3 id="損益計算書pl">損益計算書(P/L)</h3>
+<p>GnuCash(日本語)では、<code>帳票</code>-&gt;<code>収益・費用</code>と進んだ先に、<code>損益計算書</code>と<code>損益計算書(P/L)</code>というメニューがあり一見不思議です。GnuCash(英語)では、<code>Reports</code>-&gt;<code>Income &amp; Expenses</code>と進んだ先に、<code>Income Statement</code>と<code>Profit &amp; Loss</code>という、<a href="https://ja.wikipedia.org/wiki/%E6%90%8D%E7%9B%8A%E8%A8%88%E7%AE%97%E6%9B%B8">P/Lに関する英国・米国の両方の表記慣習</a>にあわせてメニューがあるので、同一機能のメニューが２つあるのも納得です。</p>
+<p><code>帳票</code>-&gt;<code>実験中</code>(<code>Reports</code>-&gt;<code>Experimental</code>)から、損益計算書(P/L)の左右出力ができます。</p>
+<h3 id="一般仕訳帳general-journal">一般仕訳帳(General Journal)</h3>
+<p>一般仕訳帳(General Journal)は、仕分けを時系列で列挙した帳票で、GnuCash(日本語)では、<code>帳票</code>-&gt;<code>収益・費用</code>と進んだ先に、<code>一般仕訳帳</code>があり、GnuCash(英語)では、<code>Reports</code>-&gt;<code>Income &amp; Expenses</code>と進んだ先に、<code>General Journal</code>があり、選択すると「記録簿(Register)」タブに一般仕訳帳(General Journal)が表示されます。</p>
+<p>また前述のように、<code>ツール</code>(<code>Tools</code>)-&gt;<code>一般仕訳帳</code>(<code>General Journal</code>)で表示される一般仕訳帳がありますが、これはデーター入力用で、レポート出力には使いません。</p>
+<p>一見GnuCashでは一般仕訳帳を期間限定で切り出せないようにも見えますが、実は次述の手があります。</p>
+<h3 id="取引出納帳-transaction-reportと総勘定元帳-general-ledger">取引出納帳 (Transaction Report)と総勘定元帳 (General Ledger)</h3>
+<p>GnuCashのメニュー上の以下の２エントリーは、 GnuCashの同一機能への初期デフォルト設定違いへアクセスします。</p>
+<ul>
+<li>取引出納帳 (Transaction Report) : <code>帳票</code>-&gt;<code>取引出納帳</code>(<code>Reports</code>&gt;<code>Transaction Report</code>)</li>
+<li>総勘定元帳 (General Ledger): <code>帳票</code>-&gt;<code>収益・費用</code>-&gt;<code>総勘定元帳</code>(<code>Reports</code>&gt;<code>Assets &amp; Liabilities</code>&gt;<code>General Ledger</code>)</li>
+</ul>
+<p>レポート対象区間を設定し、日付順にソートして全アカウント出力すると、レポート対象区間が設定された一般仕訳帳(General Journal)が得られます。
+詳しくは、<a href="https://money.senooken.jp/post/2020/07/17/4290/">GnuCashでの仕訳帳 (General Journal) の期間指定2</a>を参照しましょう。</p>
+<p>ソート・フィルター・アカウント制約等など、会計の集計で非常に高機能です。</p>
+<p>「勘定科目」(Accounts)の設定時に、勘定科目コードを設定すると、ソートに使えます。</p>
+<h3 id="決算close-book">決算(Close Book)</h3>
+<p>まだ使っていないので、よくわかりません。</p>
+<p>マニュアルによると、「GnuCash で帳簿を閉じる必要がないことに注意してください。 各会計期間の終わりに収入と支出の勘定科目をゼロにする必要はありません。GnuCash の組み込みレポートは、2つの異なる会計期間間の留保利益などの概念を自動的に処理します。実際、帳簿を閉じると、標準レポートの有用性が低下します。これは、レポートが現時点では決算トランザクションを理解していないためです。したがって、彼らの観点からは、特定の期間の各口座の純収益または純支出が単純にゼロであるように見えます。」とあります。</p>
+<p>一説には、何年も一つのファイルを使い続けると、収益・費用が無限に大きくなるようです。それを防ぐには年度・決算期が新しくなるときには、&ldquo;Close Book&quot;を実行するとのことです。毎年新しいファイルを作るのであれば(1つのファイルを使い続けることにこだわりがなければ)、この処理は必要ないとも言われています。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://dullwhale-public.hateblo.jp/entry/2023/01/03/165650">GnuCashで決算 (2023-01-03)</a></li>
+<li><a href="http://neko2015.sblo.jp/article/189310690.html">GnuCashで決算 (2022-02-02)</a></li>
+<li><a href="https://www.nofuture.tv/20180307">GnuCashで決算と期首処理 (2018-03-07)</a></li>
+<li><a href="http://orangeprose.blog.fc2.com/blog-entry-1006.html">GnuCash――決算整理と期首整理 (2014-03-22)</a></li>
+</ul>
+<h2 id="青色申告gnucashの関連参考サイト">「青色申告　GNUCASH」の関連参考サイト</h2>
+<ul>
+<li><a href="https://tesu-go.com/?s=gnucash">てすの暮らしの知恵 (Search=gnucash)</a> &ndash; 「【GnuCash】確定申告・国税納入方法まとめ (2023-02-17)」　ほかの記事多数</li>
+<li><a href="https://money.senooken.jp/post/2020/02/24/3915/">GnuCashによる確定申告に必要な帳簿と決算書の作成 (2020-02-24)</a></li>
+<li><a href="https://www.nofuture.tv/20180212">個人事業主になって初めて青色申告をすることになったのでメモとTips (2018-02-12)</a></li>
+</ul>
+<h2 id="会計の関連参考サイト">会計の関連参考サイト</h2>
+<ul>
+<li><a href="https://biz.moneyforward.com/accounting/basic/56495/">頻出勘定科目132選</a></li>
+<li><a href="http://www.urasoebusiness.net/BSAccountList.html">貸借対照表 (Balance Sheet）</a></li>
+<li><a href="https://keiriplus.jp/tips/kaikei-english/">会計英語の勘定科目123選！決算書ベースで頻出単語を覚えよう</a></li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2023/04/08/date-format-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2021 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
