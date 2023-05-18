@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/05/15 (initial publish),
-2023/05/17 (last update)
+2023/05/18 (last update)
 </h3>
 </div>
 
@@ -51,7 +51,7 @@
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2023/05/18/pdf-1/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -74,8 +74,14 @@
         <li><a href="#決算close-book">決算(Close Book)</a></li>
       </ul>
     </li>
-    <li><a href="#青色申告gnucashの関連参考サイト">「青色申告　GNUCASH」の関連参考サイト</a></li>
-    <li><a href="#会計の関連参考サイト">会計の関連参考サイト</a></li>
+    <li><a href="#納税関連文書の電子保存やタイムスタンプ">納税関連文書の電子保存やタイムスタンプ</a></li>
+    <li><a href="#上記に関連する情報サイト集">上記に関連する情報サイト集</a>
+      <ul>
+        <li><a href="#青色申告gnucashでの検索結果で見つかる関連サイト">「青色申告　GNUCASH」での検索結果で見つかる関連サイト</a></li>
+        <li><a href="#国税庁の税金関連サイト">国税庁の税金関連サイト</a></li>
+        <li><a href="#会計用語の参考サイト">会計用語の参考サイト</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -233,12 +239,12 @@
 <p>まず「勘定科目」(Accounts)を作成します。</p>
 <p>取引のあった「勘定科目」(Accounts)を開くと、データーが入力できます。その際、相手先の勘定科目にもデーターが入力されます。これが入力の基本です。
 慣れたら、スプレッドシートで同様のことをするより遥かに効率的です。</p>
-<p>銀行の記録やクレジットカードの記録は、CVS形式でダウンロードして読み込んでいます。日本語の場合、UTF-8でなくShiftJisのことも多いのでエンコーディングは要注意です。</p>
+<p>銀行の記録やクレジットカードの記録は、CVS形式でダウンロードして読み込んでいます。日本語の場合、UTF-8でなくShiftJisのことも多いので<a href="/jp/2023/04/08/date-format-1/">日付フォーマット対応やエンコーディング変換</a>は要注意です。</p>
 <p>ちなみに、<code>ツール</code>(<code>Tools</code>)-&gt;<code>一般仕訳帳</code>(<code>General Journal</code>)で表示される一般仕訳帳があります。これからも編集可能ですが、何でも出来すぎて危険なので日常的な入力には使わないようにしています。</p>
 <h2 id="会計データー集計結果の出力">会計データー集計結果の出力</h2>
 <p>会計データーの集計結果の出力は<code>帳票</code>(<code>Reports</code>)メニューから行います。</p>
 <h3 id="貸借対照表balance-sheet">貸借対照表(Balance sheet)</h3>
-<p>よくB/Sと略される貸借対照表(Balance sheet)は、GnuCash(日本語)では、<code>帳票</code>-&gt;<code>資産・負債</code>と進んだ先に、<code>貸借対照表</code>があり、GnuCash(英語)では、<code>Reports</code>-&gt;<code>Asset &amp; Liabilities</code>と進んだ先に、<code>Balance sheet</code>があり、選択すると表示されます。会計用語はわかりにくいので、日英表記を交えておさらいします。</p>
+<p>よくB/Sと略される貸借対照表(Balance sheet)は、GnuCash(日本語)では、<code>帳票</code>-&gt;<code>資産・負債</code>と進んだ先に<code>貸借対照表</code>があり、GnuCash(英語)では、<code>Reports</code>-&gt;<code>Asset &amp; Liabilities</code>と進んだ先に<code>Balance sheet</code>があり、これを選択すると表示されます。会計用語はわかりにくいので、日英表記を交えておさらいします。</p>
 <p>貸借対照表(Balance sheet)、<code>資産＝負債＋純資産</code>なので、左右同額でバランスします。</p>
 <ul>
 <li>左側(GnuCashでは出力前半の上側)
@@ -295,7 +301,7 @@ GnuCashを使って会計をすれば簡単に準備できます。</p>
 <p>ソート・フィルター・アカウント制約等など、会計の集計で非常に高機能です。</p>
 <p>「勘定科目」(Accounts)の設定時に、勘定科目コードを設定すると、ソートに使えます。</p>
 <h3 id="予算budget">予算(Budget)</h3>
-<p>まだ使っていないので、よくわかりません。<code>アクション</code>-&gt;<code>予算</code>-&gt;<code>...</code>(<code>Actions</code>-&gt;<code>Budget</code>-&gt;&hellip;)でスタートする。</p>
+<p>まだ使っていないので、よくわかりません。<code>アクション</code>-&gt;<code>予算</code>-&gt;<code>...</code>(<code>Actions</code>-&gt;<code>Budget</code>-&gt;&hellip;)でスタートする。予算と実績を月次で追いかけられそう。</p>
 <h3 id="決算close-book">決算(Close Book)</h3>
 <p>まだ使っていないので、よくわかりません。<code>ツール</code>-&gt;<code>決算</code>(<code>Tools</code>-&gt;<code>Close Book</code>)でスタートする。</p>
 <p>マニュアルによると、「GnuCash で帳簿を閉じる必要がないことに注意してください。 各会計期間の終わりに収入と支出の勘定科目をゼロにする必要はありません。GnuCash の組み込みレポートは、2つの異なる会計期間間の留保利益などの概念を自動的に処理します。実際、帳簿を閉じると、標準レポートの有用性が低下します。これは、レポートが現時点では決算トランザクションを理解していないためです。したがって、彼らの観点からは、特定の期間の各口座の純収益または純支出が単純にゼロであるように見えます。」とあります。</p>
@@ -307,13 +313,45 @@ GnuCashを使って会計をすれば簡単に準備できます。</p>
 <li><a href="https://www.nofuture.tv/20180307">GnuCashで決算と期首処理 (2018-03-07)</a></li>
 <li><a href="http://orangeprose.blog.fc2.com/blog-entry-1006.html">GnuCash――決算整理と期首整理 (2014-03-22)</a></li>
 </ul>
-<h2 id="青色申告gnucashの関連参考サイト">「青色申告　GNUCASH」の関連参考サイト</h2>
+<h2 id="納税関連文書の電子保存やタイムスタンプ">納税関連文書の電子保存やタイムスタンプ</h2>
+<p>有料の業者サービスを使わずに、領収書などの文書をタイムスタンプを押し保存するフリーソフト環境下での手法を考えてみました。</p>
+<p>「<a href="https://www.nta.go.jp/law/joho-zeikaishaku/sonota/jirei/pdf/0021011-017.pdf">教えて！！令和３年度改正　電子帳簿保存法 (pdf)</a>」のP9にある要件、「NTPサーバーによるタイムスタンプ」を「自己が管理しないクラウドサービス」を見て気づいたのは、これにメールサービスが利用できそうだということです。「スキャンデーター等を添付したメールを作成」、「DKIMの署名をつけて送信するメールサーバーを通して送信」、「保存用メールアカウントに保存」すれば、メールサーバーがNTPデーターによりタイムスタンプしているし、メールサーバー運用会社が持つ秘密キーを用いてメールを署名しているので改竄防止されています。</p>
+<p>まあ、これが認められるかどうかは知りませんが。。。</p>
+<p>参考：</p>
+<ul>
+<li><a href="https://www.nta.go.jp/taxes/shiraberu/shinkoku/kojin_jigyo/index.htm">個人で事業を行っている方の記帳・帳簿等の保存について</a></li>
+<li><a href="https://www.nta.go.jp/law/joho-zeikaishaku/sonota/jirei/index.htm">電子帳簿保存法関係</a>
+<ul>
+<li>よくわからないが、最初から電子データーの書類はそのまま保管で良い。</li>
+<li>帳簿などはPDF・JPEGでの保存では不十分で、元データーやCVS等の検索可能なデーター保管が必須</li>
+</ul>
+</li>
+<li><a href="https://www.nta.go.jp/law/joho-zeikaishaku/sonota/jirei/12.htm">令和３年度税制改正による電子帳簿等保存制度の見直しについて</a></li>
+<li><a href="https://www.nta.go.jp/law/joho-zeikaishaku/sonota/1506/01.htm">法第4条（（国税関係帳簿書類の電磁的記録による保存等））関係</a></li>
+<li><a href="https://www.nta.go.jp/law/joho-zeikaishaku/sonota/jirei/pdf/0021006-031_02.pdf">電子帳簿保存法一問一答 (pdf)</a></li>
+<li><a href="https://www.nta.go.jp/law/joho-zeikaishaku/sonota/jirei/pdf/0021011-017.pdf">教えて！！令和３年度改正　電子帳簿保存法 (pdf)</a></li>
+</ul>
+<h2 id="上記に関連する情報サイト集">上記に関連する情報サイト集</h2>
+<h3 id="青色申告gnucashでの検索結果で見つかる関連サイト">「青色申告　GNUCASH」での検索結果で見つかる関連サイト</h3>
 <ul>
 <li><a href="https://tesu-go.com/?s=gnucash">てすの暮らしの知恵 (Search=gnucash)</a> &ndash; 「【GnuCash】確定申告・国税納入方法まとめ (2023-02-17)」　ほかの記事多数</li>
 <li><a href="https://money.senooken.jp/post/2020/02/24/3915/">GnuCashによる確定申告に必要な帳簿と決算書の作成 (2020-02-24)</a></li>
 <li><a href="https://www.nofuture.tv/20180212">個人事業主になって初めて青色申告をすることになったのでメモとTips (2018-02-12)</a></li>
 </ul>
-<h2 id="会計の関連参考サイト">会計の関連参考サイト</h2>
+<h3 id="国税庁の税金関連サイト">国税庁の税金関連サイト</h3>
+<ul>
+<li><a href="https://www.keisan.nta.go.jp">国税庁 確定申告書等作成コーナー</a></li>
+<li><a href="https://www.nta.go.jp/publication/pamph/koho/kurashi/html/04_1.htm">医療費を支払ったとき</a> &ndash; 通院交通費（バス・電車はOK）
+<ul>
+<li>医療費データーはLibreOfficeで作成したEXCEL形式ファイルのアップロードが可能</li>
+<li><a href="https://www.nta.go.jp/publication/pamph/shotoku/kichou01.pdf">はじめてみませんか？　青色申告(pdf)</a></li>
+</ul>
+</li>
+<li><a href="https://www.nta.go.jp/taxes/tetsuzuki/shinsei/annai/shinkoku/annai/09.htm">［手続名］所得税の青色申告承認申請手続</a></li>
+<li><a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2072.htm">No.2072 青色申告特別控除</a></li>
+<li><a href="https://www.nta.go.jp/taxes/shiraberu/taxanswer/shotoku/2100.htm">No.2100 減価償却のあらまし</a></li>
+</ul>
+<h3 id="会計用語の参考サイト">会計用語の参考サイト</h3>
 <ul>
 <li><a href="https://biz.moneyforward.com/accounting/basic/56495/">頻出勘定科目132選</a></li>
 <li><a href="http://www.urasoebusiness.net/BSAccountList.html">貸借対照表 (Balance Sheet）</a></li>
@@ -330,7 +368,7 @@ GnuCashを使って会計をすれば簡単に準備できます。</p>
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/jp/2023/05/18/pdf-1/">Next Post</a></td>
   
   </tr>
   </tbody>
