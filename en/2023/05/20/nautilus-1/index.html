@@ -63,40 +63,45 @@
   <ul>
     <li><a href="#gnome-files">Gnome Files</a></li>
     <li><a href="#gnome-terminal-from-nautilus"><code>gnome-terminal</code> from <code>nautilus</code></a></li>
-    <li><a href="#extension-via-python3-nautilus">Extension via python3-nautilus</a></li>
+    <li><a href="#extension-via-python3-nautilus">Extension via <code>python3-nautilus</code></a></li>
     <li><a href="#extension-with-script">Extension with script</a></li>
+    <li><a href="#extension-via-libnautilus-extension4">Extension via <code>libnautilus-extension4</code></a></li>
     <li><a href="#reference-sites">Reference sites</a></li>
+    <li><a href="#thoughts">Thoughts</a></li>
   </ul>
 </nav>
 
-<p>This is based on <code>nautilus</code> version 43.2 in 2023.</p>
+<p>This is based on <code>nautilus</code> version 43.2 in 2023 (Debian/Bookworm).</p>
 <h2 id="gnome-files">Gnome Files</h2>
 <p>&ldquo;Gnome Files&rdquo; (a.k.a <code>nautilus</code>) is the default file manager for GNOME desktop
 environment.  It is rather a simple file manager with primitive
 functionalities, but it can be extended to offer rich features.</p>
 <p>I consider following packages as essential and installed these:</p>
 <ul>
-<li>nautilus-extension-gnome-terminal (recommended by gnome-terminal)</li>
-<li>python3-nautilus (needed to support extensions)</li>
-<li>nautilus-image-converter</li>
-</ul>
-<p>I am interested but doing without these packages to keep things simple:</p>
+<li><code>nautilus-extension-gnome-terminal</code>
 <ul>
-<li>nautilus-hide</li>
-<li>seahorse-nautilus</li>
-<li>nautilus-admin</li>
+<li>recommended by <code>gnome-terminal</code></li>
+<li>written in C++, uses <code>libnautilus-extension4</code></li>
+</ul>
+</li>
+<li><code>nautilus-image-converter</code>
+<ul>
+<li>written in C with GTK4, uses <code>libnautiqlus-extension4</code></li>
+</ul>
+</li>
+<li><code>python3-nautilus</code> (needed to support extensions)</li>
 </ul>
 <h2 id="gnome-terminal-from-nautilus"><code>gnome-terminal</code> from <code>nautilus</code></h2>
 <p>There are 2 ways to start <code>gnome-terminal</code> from <code>nautilus</code> using
 <code>nautilus-extension-gnome-terminal</code>.</p>
 <ul>
-<li>Left click <code>⋮</code> at the right of directory box in the top bar.</li>
-<li>Right click folder icon for directory on the right pane.</li>
+<li>Left click &ldquo;<code>⋮</code>&quot;-icon at the right of directory box in the top bar.</li>
+<li>Right click folder icon for directory in the right pane.</li>
 </ul>
-<p>This enables me to start a terminal session at the intuitive current directory.
-I find this is the most useful feature to access CLI shell prompt.</p>
-<h2 id="extension-via-python3-nautilus">Extension via python3-nautilus</h2>
-<p>This is a full-featured and newer interface to <code>nautilus</code>.</p>
+<p>This starts a terminal CLI session with its current directory intuitively
+selected by GUI.</p>
+<h2 id="extension-via-python3-nautilus">Extension via <code>python3-nautilus</code></h2>
+<p>This is a full-featured and newer interface to <code>nautilus</code> using Python.</p>
 <p>You can process selected files etc., by placing an extension which subclasses
 <code>Nautilus.MenuProvide</code> to <code>python3-nautilus</code> in
 <code>~/.local/share/nautilus-python/extensions</code>.</p>
@@ -107,13 +112,25 @@ site</li>
 <li><a href="https://discourse.gnome.org/t/nautilus-extensions-how-do-you-write-them-now-g43/11283">Nautilus extensions - how do you write them now G43? (2022)</a> &ndash; links to examples</li>
 <li><a href="https://linuxconfig.org/how-to-write-nautilus-extensions-with-nautilus-python">How to write Nautilus extensions with nautilus-python (2022-10-03)</a></li>
 </ul>
+<p>Here are some examples using this approaches:</p>
+<ul>
+<li><code>nautilus-hide</code> (<a href="https://github.com/brunonova/nautilus-hide">stalled upstream</a>, patched by Debian)</li>
+<li><code>nautilus-admin</code> (<a href="https://github.com/brunonova/nautilus-admin">stalled upstream</a>, patched by Debian)</li>
+<li><a href="https://github.com/ronen25/nautilus-copypath">nautilus-copypath</a> &ndash; A small Nautilus extension for quickly copying file/Samba paths (for <code>nautilus</code> 3.0 now)</li>
+<li><a href="https://github.com/Lich-Corals/Nautilus-fileconverter-43">Nautilus-fileconverter-43</a> &ndash; convert images, audio files and video</li>
+</ul>
 <h2 id="extension-with-script">Extension with script</h2>
 <p>This is a simpler and older interface to <code>nautilus</code>.</p>
 <p>You can run a script on selected files etc., by placing a script in
 <code>~/.local/share/nautilus/scripts</code>.  <code>nautilus</code> passes its selection
 to script using the value of certain environment variables.</p>
 <ul>
-<li><a href="https://linuxconfig.org/how-to-extend-the-gnome-nautilus-file-manager-with-custom-scripts">How to extend the GNOME Nautilus file manager with custom scripts (2022-06-03)</a></li>
+<li><a href="https://linuxconfig.org/how-to-extend-the-gnome-nautilus-file-manager-with-custom-scripts">How to extend the GNOME Nautilus file manager with custom scripts (2022-06-03)</a>
+<ul>
+<li>There is an example <code>organize.py</code> which organizes image files by the date
+information in EXIF.</li>
+</ul>
+</li>
 <li><a href="https://help.ubuntu.com/community/NautilusScriptsHowto">Ubuntu: NautilusScriptsHowto (2015-04-25)</a></li>
 </ul>
 <p>Notable variables:</p>
@@ -123,22 +140,27 @@ to script using the value of certain environment variables.</p>
 <li><code>NAUTILUS_SCRIPT_CURRENT_URI</code></li>
 <li><code>NAUTILUS_SCRIPT_WINDOW_GEOMETRY</code></li>
 </ul>
-<p>There is <code>organize.py</code> which organizes image files by the date information in
-EXIF.</p>
-<h2 id="reference-sites">Reference sites</h2>
+<h2 id="extension-via-libnautilus-extension4">Extension via <code>libnautilus-extension4</code></h2>
+<p>This is a full-featured extension to <code>nautilus</code> for C/C++ programs using
+<code>libnautilus-extension4</code>.</p>
 <ul>
-<li><a href="https://www.gnome-look.org/browse?cat=126">Nautilus Scripts (2023-05-14)</a>
-<ul>
+<li><code>seahorse-nautilus</code> (in Debian)</li>
 <li><a href="https://gitlab.gnome.org/madmurphy/nautilus-annotations">nautilus-annotations</a> &ndash; Annotate files and directories</li>
-<li><a href="https://github.com/ronen25/nautilus-copypath">nautilus-copypath</a> &ndash; A small Nautilus extension for quickly copying file/Samba paths</li>
-<li><a href="https://github.com/Lich-Corals/Nautilus-fileconverter-43">Nautilus-fileconverter-43</a> &ndash; convert images, audio files and video</li>
 <li><a href="https://github.com/madmurphy/nautilus-launch">nautilus-launch</a> &ndash; launchers via right-click menu</li>
 </ul>
-</li>
+<h2 id="reference-sites">Reference sites</h2>
+<ul>
+<li><a href="https://www.gnome-look.org/browse?cat=126">Nautilus Scripts (2023-05-14)</a></li>
 <li><a href="https://github.com/topics/nautilus-extension?o=desc&amp;s=updated">github topics: nautilus-extension (2023-04-14)</a></li>
 <li><a href="https://itsfoss.com/nautilus-tips-tweaks/">13 Ways to Tweak Nautilus File Manager in Linux to Get More Out of it (2023-04-07)</a></li>
 <li><a href="https://www.makeuseof.com/nautilus-extensions-to-enhance-your-gnome-file-manager/">5 Nautilus Extensions to Enhance Your GNOME File Manager (2022-09-30)</a></li>
 </ul>
+<h2 id="thoughts">Thoughts</h2>
+<p>Batch convert from <code>*.doc</code>, <code>*.wri</code>, <code>*.rtf</code> to PDF may be created using
+following as the baseline:</p>
+<pre tabindex="0"><code> $ lowriter --headless --convert-to pdf *.odt
+</code></pre><p><code>organize.py</code> may be adopted to use <code>python3-nautilus</code> with some GUI to select
+output directory style, or even adjust timestamps.</p>
 <!-- raw HTML omitted -->
 
 
