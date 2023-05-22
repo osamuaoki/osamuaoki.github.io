@@ -63,7 +63,8 @@
   <ul>
     <li><a href="#gnome-files">Gnome Files</a></li>
     <li><a href="#gnome-terminal-started-from-nautilus-using-extension"><code>gnome-terminal</code> started from <code>nautilus</code> using extension</a></li>
-    <li><a href="#extension-methods">Extension methods</a>
+    <li><a href="#practical-extension">Practical extension</a></li>
+    <li><a href="#extension-methods-explained">Extension methods explained</a>
       <ul>
         <li><a href="#extension-using-libnautilus-extension4-from-cc-code">Extension using <code>libnautilus-extension4</code> from C/C++ code</a></li>
         <li><a href="#extension-using-python3-nautilus-from-python-code">Extension using <code>python3-nautilus</code> from Python code</a></li>
@@ -71,9 +72,7 @@
       </ul>
     </li>
     <li><a href="#review-of-extensions">Review of extensions</a></li>
-    <li><a href="#practical-extension">Practical extension</a></li>
     <li><a href="#reference-sites">Reference sites</a></li>
-    <li><a href="#thoughts">Thoughts</a></li>
   </ul>
 </nav>
 
@@ -95,7 +94,42 @@ functionalities, but it can be extended to offer rich features.</p>
 prompt.</p>
 <p>This is the most useful extension of <code>nautilus</code> for me and is written in C++
 using <code>libnautilus-extension4</code> as its backend.</p>
-<h2 id="extension-methods">Extension methods</h2>
+<h2 id="practical-extension">Practical extension</h2>
+<p>If you want to run a simple script on GUI selected files, practical approach is
+to use the simple script-type extension.</p>
+<p>Here is an example to convert iPhone HEIC image into JPEG and Microsoft Word
+document into PDF.  You can see its execution log with <code>journalctl -f</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>__exec<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  systemd-cat -p <span style="color:#ae81ff">3</span> -t <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>0##*/<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;</span>$NAUTILUS_SCRIPT_CURRENT_URI<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>NAUTILUS_SCRIPT_CURRENT_URI#file://<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># not starting with file://</span>
+</span></span><span style="display:flex;"><span>  __exec echo <span style="color:#e6db74">&#34;Not local path: &#39;</span>$NAUTILUS_SCRIPT_CURRENT_URI<span style="color:#e6db74">&#39;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  echo <span style="color:#e6db74">&#34;</span>$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS<span style="color:#e6db74">&#34;</span> | <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> true; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>      read FILE_PATH
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;</span>$FILE_PATH<span style="color:#e6db74">&#34;</span> in
+</span></span><span style="display:flex;"><span>      *.HEIC | *.heic<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        __exec heif-convert <span style="color:#e6db74">&#34;</span>$FILE_PATH<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>FILE_PATH%.*<span style="color:#e6db74">}</span><span style="color:#e6db74">.jpeg&#34;</span>
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>      *.doc | *.wri | *.rtf | *.odt | *.DOC | *.WRI | *.RTF<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        __exec lowriter --headless --convert-to pdf <span style="color:#e6db74">&#34;</span>$FILE_PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        break
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>      *<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        __exec echo <span style="color:#e6db74">&#34;Unknown file: &#39;</span>$FILE_PATH<span style="color:#e6db74">&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">esac</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><p>This is very trivial coding and very handy extension of <code>nautilus</code>.</p>
+<h2 id="extension-methods-explained">Extension methods explained</h2>
 <p>There are mainly 3 paths to extend <code>nautilus</code>.</p>
 <ul>
 <li>Extension using <code>libnautilus-extension4</code> from C/C++ code</li>
@@ -103,9 +137,11 @@ using <code>libnautilus-extension4</code> as its backend.</p>
 <li>Extension using script interface of <code>nautilus</code></li>
 </ul>
 <h3 id="extension-using-libnautilus-extension4-from-cc-code">Extension using <code>libnautilus-extension4</code> from C/C++ code</h3>
-<p>This is a full-featured extension but require some learning before using it.</p>
+<p>This is a full-featured extension.  This requires serious learning before
+using.</p>
 <h3 id="extension-using-python3-nautilus-from-python-code">Extension using <code>python3-nautilus</code> from Python code</h3>
-<p>This is a full-featured extension but require less learning before using it.</p>
+<p>This is a full-featured extension.  This requires less learning before using
+but it&rsquo;s non-trivial.</p>
 <p>You must install <code>python3-nautilus</code> for this.</p>
 <p>You can process selected files etc., by placing an extension Python code which
 subclasses <code>Nautilus.MenuProvide</code> to <code>python3-nautilus</code> in
@@ -164,7 +200,12 @@ only. Here are my thoughts on them.  I may be incorrect.</p>
 <ul>
 <li>DEB: <code>nautilus-admin</code> (<a href="https://github.com/brunonova/nautilus-admin">stalled upstream</a>) &ndash; no <code>gedit</code> for root operation.</li>
 <li>DEB: <code>nautilus-hide</code> (<a href="https://github.com/brunonova/nautilus-hide">stalled upstream</a>)  &ndash; why hide?</li>
-<li><a href="https://github.com/ronen25/nautilus-copypath">nautilus-copypath</a> and <a href="https://github.com/chr314/nautilus-copy-path">nautilus-copy-path</a> &ndash; copy path, URI, name or content  &ndash; native copy is sufficient (also outdated for GTK4, not easy to fix)</li>
+<li><a href="https://github.com/ronen25/nautilus-copypath">nautilus-copypath</a> and <a href="https://github.com/chr314/nautilus-copy-path">nautilus-copy-path</a> &ndash; copy path, URI, name or content
+<ul>
+<li>native &ldquo;copy&rdquo;-menu is sufficient for my needs</li>
+<li>outdated code for GTK4, not easy to fix properly. (Gtk-&gt;Gdk etc.)</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -175,41 +216,8 @@ only. Here are my thoughts on them.  I may be incorrect.</p>
 </ul>
 </li>
 </ul>
-<h2 id="practical-extension">Practical extension</h2>
-<p>If you want to run a simple script on GUI selected files, practical approach is
-to use the script-type extension.</p>
-<p>Here is an example to convert iPhone HEIC image into JPEG and Microsoft Word
-document into PDF.  You can see its execution log with <code>journalctl -f</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>__exec<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>  systemd-cat -p <span style="color:#ae81ff">3</span> -t <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>0##*/<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;</span>$NAUTILUS_SCRIPT_CURRENT_URI<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>NAUTILUS_SCRIPT_CURRENT_URI#file://<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># not starting with file://</span>
-</span></span><span style="display:flex;"><span>  __exec echo <span style="color:#e6db74">&#34;Not local path: &#39;</span>$NAUTILUS_SCRIPT_CURRENT_URI<span style="color:#e6db74">&#39;&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
-</span></span><span style="display:flex;"><span>  echo <span style="color:#e6db74">&#34;</span>$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS<span style="color:#e6db74">&#34;</span> | <span style="color:#f92672">{</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> true; <span style="color:#66d9ef">do</span>
-</span></span><span style="display:flex;"><span>      read FILE_PATH
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;</span>$FILE_PATH<span style="color:#e6db74">&#34;</span> in
-</span></span><span style="display:flex;"><span>      *.HEIC | *.heic<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        __exec heif-convert <span style="color:#e6db74">&#34;</span>$FILE_PATH<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>FILE_PATH%.*<span style="color:#e6db74">}</span><span style="color:#e6db74">.jpeg&#34;</span>
-</span></span><span style="display:flex;"><span>        ;;
-</span></span><span style="display:flex;"><span>      *.doc | *.wri | *.rtf | *.odt | *.DOC | *.WRI | *.RTF<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        __exec lowriter --headless --convert-to pdf <span style="color:#e6db74">&#34;</span>$FILE_PATH<span style="color:#e6db74">&#34;</span>
-</span></span><span style="display:flex;"><span>        ;;
-</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        break
-</span></span><span style="display:flex;"><span>        ;;
-</span></span><span style="display:flex;"><span>      *<span style="color:#f92672">)</span>
-</span></span><span style="display:flex;"><span>        __exec echo <span style="color:#e6db74">&#34;Unknown file: &#39;</span>$FILE_PATH<span style="color:#e6db74">&#39;&#34;</span>
-</span></span><span style="display:flex;"><span>        ;;
-</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">esac</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">done</span>
-</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
-</span></span></code></pre></div><p>This is very trivial coding and very handy extension of <code>nautilus</code>.</p>
+<p><code>organize.py</code> may be adopted to use <code>python3-nautilus</code> with some GUI to select
+output directory style, or even adjust timestamps.</p>
 <h2 id="reference-sites">Reference sites</h2>
 <ul>
 <li><a href="https://www.gnome-look.org/browse?cat=126">Nautilus Scripts (2023-05-14)</a></li>
@@ -217,9 +225,6 @@ document into PDF.  You can see its execution log with <code>journalctl -f</code
 <li><a href="https://itsfoss.com/nautilus-tips-tweaks/">13 Ways to Tweak Nautilus File Manager in Linux to Get More Out of it (2023-04-07)</a></li>
 <li><a href="https://www.makeuseof.com/nautilus-extensions-to-enhance-your-gnome-file-manager/">5 Nautilus Extensions to Enhance Your GNOME File Manager (2022-09-30)</a></li>
 </ul>
-<h2 id="thoughts">Thoughts</h2>
-<p><code>organize.py</code> may be adopted to use <code>python3-nautilus</code> with some GUI to select
-output directory style, or even adjust timestamps.</p>
 <!-- raw HTML omitted -->
 
 
