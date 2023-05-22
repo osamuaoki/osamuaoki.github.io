@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/05/20 (initial publish),
-2023/05/21 (last update)
+2023/05/22 (last update)
 </h3>
 </div>
 
@@ -62,10 +62,16 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#gnome-files">Gnome Files</a></li>
-    <li><a href="#gnome-terminal-from-nautilus"><code>gnome-terminal</code> from <code>nautilus</code></a></li>
-    <li><a href="#extension-via-python3-nautilus">Extension via <code>python3-nautilus</code></a></li>
-    <li><a href="#extension-with-script">Extension with script</a></li>
-    <li><a href="#extension-via-libnautilus-extension4">Extension via <code>libnautilus-extension4</code></a></li>
+    <li><a href="#gnome-terminal-started-from-nautilus-using-extension"><code>gnome-terminal</code> started from <code>nautilus</code> using extension</a></li>
+    <li><a href="#extension-methods">Extension methods</a>
+      <ul>
+        <li><a href="#extension-using-libnautilus-extension4-from-cc-code">Extension using <code>libnautilus-extension4</code> from C/C++ code</a></li>
+        <li><a href="#extension-using-python3-nautilus-from-python-code">Extension using <code>python3-nautilus</code> from Python code</a></li>
+        <li><a href="#extension-using-script-interface-of-nautilus">Extension using script interface of <code>nautilus</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#review-of-extensions">Review of extensions</a></li>
+    <li><a href="#practical-extension">Practical extension</a></li>
     <li><a href="#reference-sites">Reference sites</a></li>
     <li><a href="#thoughts">Thoughts</a></li>
   </ul>
@@ -76,34 +82,33 @@
 <p>&ldquo;Gnome Files&rdquo; (a.k.a <code>nautilus</code>) is the default file manager for GNOME desktop
 environment.  It is rather a simple file manager with primitive
 functionalities, but it can be extended to offer rich features.</p>
-<p>I consider following packages as essential and installed these:</p>
-<ul>
-<li><code>nautilus-extension-gnome-terminal</code>
-<ul>
-<li>recommended by <code>gnome-terminal</code></li>
-<li>written in C++, uses <code>libnautilus-extension4</code></li>
-</ul>
-</li>
-<li><code>nautilus-image-converter</code>
-<ul>
-<li>written in C with GTK4, uses <code>libnautiqlus-extension4</code></li>
-</ul>
-</li>
-<li><code>python3-nautilus</code> (needed to support extensions)</li>
-</ul>
-<h2 id="gnome-terminal-from-nautilus"><code>gnome-terminal</code> from <code>nautilus</code></h2>
-<p>There are 2 ways to start <code>gnome-terminal</code> from <code>nautilus</code> using
-<code>nautilus-extension-gnome-terminal</code>.</p>
+<h2 id="gnome-terminal-started-from-nautilus-using-extension"><code>gnome-terminal</code> started from <code>nautilus</code> using extension</h2>
+<p>The <code>nautilus-extension-gnome-terminal</code> package is automatically installed when
+<code>gnome-terminal</code> is installed and enables <code>nautilus</code> GUI to start
+<code>gnome-terminal</code> CLI session.  There are 2 ways.</p>
 <ul>
 <li>Left click &ldquo;<code>⋮</code>&quot;-icon at the right of directory box in the top bar.</li>
 <li>Right click folder icon for directory in the right pane.</li>
 </ul>
-<p>This starts a terminal CLI session with its current directory intuitively
-selected by GUI.</p>
-<h2 id="extension-via-python3-nautilus">Extension via <code>python3-nautilus</code></h2>
-<p>This is a full-featured and newer interface to <code>nautilus</code> using Python.</p>
-<p>You can process selected files etc., by placing an extension which subclasses
-<code>Nautilus.MenuProvide</code> to <code>python3-nautilus</code> in
+<p>The current directory of started terminal is intuitively set by GUI.</p>
+<p>You can copy file/directory paths selected on the GUI dialogue to the terminal
+prompt.</p>
+<p>This is the most useful extension of <code>nautilus</code> for me and is written in C++
+using <code>libnautilus-extension4</code> as its backend.</p>
+<h2 id="extension-methods">Extension methods</h2>
+<p>There are mainly 3 paths to extend <code>nautilus</code>.</p>
+<ul>
+<li>Extension using <code>libnautilus-extension4</code> from C/C++ code</li>
+<li>Extension using <code>python3-nautilus</code> from Python code</li>
+<li>Extension using script interface of <code>nautilus</code></li>
+</ul>
+<h3 id="extension-using-libnautilus-extension4-from-cc-code">Extension using <code>libnautilus-extension4</code> from C/C++ code</h3>
+<p>This is a full-featured extension but require some learning before using it.</p>
+<h3 id="extension-using-python3-nautilus-from-python-code">Extension using <code>python3-nautilus</code> from Python code</h3>
+<p>This is a full-featured extension but require less learning before using it.</p>
+<p>You must install <code>python3-nautilus</code> for this.</p>
+<p>You can process selected files etc., by placing an extension Python code which
+subclasses <code>Nautilus.MenuProvide</code> to <code>python3-nautilus</code> in
 <code>~/.local/share/nautilus-python/extensions</code>.</p>
 <ul>
 <li><a href="https://wiki.gnome.org/Projects/NautilusPython">Nautilus Python</a> &ndash; upstream
@@ -112,14 +117,9 @@ site</li>
 <li><a href="https://discourse.gnome.org/t/nautilus-extensions-how-do-you-write-them-now-g43/11283">Nautilus extensions - how do you write them now G43? (2022)</a> &ndash; links to examples</li>
 <li><a href="https://linuxconfig.org/how-to-write-nautilus-extensions-with-nautilus-python">How to write Nautilus extensions with nautilus-python (2022-10-03)</a></li>
 </ul>
-<p>Here are some examples using this approaches:</p>
-<ul>
-<li><code>nautilus-hide</code> (<a href="https://github.com/brunonova/nautilus-hide">stalled upstream</a>, patched by Debian)</li>
-<li><code>nautilus-admin</code> (<a href="https://github.com/brunonova/nautilus-admin">stalled upstream</a>, patched by Debian)</li>
-<li><a href="https://github.com/ronen25/nautilus-copypath">nautilus-copypath</a> &ndash; A small Nautilus extension for quickly copying file/Samba paths (for <code>nautilus</code> 3.0 now)</li>
-<li><a href="https://github.com/Lich-Corals/Nautilus-fileconverter-43">Nautilus-fileconverter-43</a> &ndash; convert images, audio files and video</li>
-</ul>
-<h2 id="extension-with-script">Extension with script</h2>
+<p>Due to recent changes of <code>nautilus</code> and GTK(3-&gt;4), some published extensions
+don&rsquo;t function as expected.  I will talk about them later.</p>
+<h3 id="extension-using-script-interface-of-nautilus">Extension using script interface of <code>nautilus</code></h3>
 <p>This is a simpler and older interface to <code>nautilus</code>.</p>
 <p>You can run a script on selected files etc., by placing a script in
 <code>~/.local/share/nautilus/scripts</code>.  <code>nautilus</code> passes its selection
@@ -140,14 +140,76 @@ information in EXIF.</li>
 <li><code>NAUTILUS_SCRIPT_CURRENT_URI</code></li>
 <li><code>NAUTILUS_SCRIPT_WINDOW_GEOMETRY</code></li>
 </ul>
-<h2 id="extension-via-libnautilus-extension4">Extension via <code>libnautilus-extension4</code></h2>
-<p>This is a full-featured extension to <code>nautilus</code> for C/C++ programs using
-<code>libnautilus-extension4</code>.</p>
+<h2 id="review-of-extensions">Review of extensions</h2>
+<p>There are many extensions. I am mostly using basic Debian packaged extensions
+only. Here are my thoughts on them.  I may be incorrect.</p>
 <ul>
-<li><code>seahorse-nautilus</code> (in Debian)</li>
+<li><code>libnautilus-extension4</code>-type extension
+<ul>
+<li>DEB: <code>nautilus-extension-gnome-terminal</code> &ndash; above mentioned (essential)</li>
+<li>DEB: <code>nautilus-image-converter</code> &ndash; resize and rotate images (optional)</li>
+<li>DEB: <code>seahorse-nautilus</code> &ndash; encrypt/decrypt files (optional)</li>
+<li>Not-installed
+<ul>
 <li><a href="https://gitlab.gnome.org/madmurphy/nautilus-annotations">nautilus-annotations</a> &ndash; Annotate files and directories</li>
 <li><a href="https://github.com/madmurphy/nautilus-launch">nautilus-launch</a> &ndash; launchers via right-click menu</li>
 </ul>
+</li>
+</ul>
+</li>
+<li><code>python3-nautilus</code>-type extension
+<ul>
+<li><a href="https://github.com/Lich-Corals/Nautilus-fileconverter-43">Nautilus-fileconverter-43</a> &ndash; convert images, audio files and video (convert HEIC or DOC files are not easy to be included in this)</li>
+<li>Not installed:
+<ul>
+<li>DEB: <code>nautilus-admin</code> (<a href="https://github.com/brunonova/nautilus-admin">stalled upstream</a>) &ndash; no <code>gedit</code> for root operation.</li>
+<li>DEB: <code>nautilus-hide</code> (<a href="https://github.com/brunonova/nautilus-hide">stalled upstream</a>)  &ndash; why hide?</li>
+<li><a href="https://github.com/ronen25/nautilus-copypath">nautilus-copypath</a> and <a href="https://github.com/chr314/nautilus-copy-path">nautilus-copy-path</a> &ndash; copy path, URI, name or content  &ndash; native copy is sufficient (also outdated for GTK4, not easy to fix)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>script-type extension
+<ul>
+<li><code>organize.py</code> <a href="https://linuxconfig.org/how-to-extend-the-gnome-nautilus-file-manager-with-custom-scripts">demonstrates usefulness of this simple extension method</a></li>
+</ul>
+</li>
+</ul>
+<h2 id="practical-extension">Practical extension</h2>
+<p>If you want to run a simple script on GUI selected files, practical approach is
+to use the script-type extension.</p>
+<p>Here is an example to convert iPhone HEIC image into JPEG and Microsoft Word
+document into PDF.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>__exec<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  systemd-cat -p <span style="color:#ae81ff">3</span> -t <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>0##*/<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> <span style="color:#e6db74">&#34;</span>$NAUTILUS_SCRIPT_CURRENT_URI<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>NAUTILUS_SCRIPT_CURRENT_URI#file://<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># not starting with file://</span>
+</span></span><span style="display:flex;"><span>  __exec echo <span style="color:#e6db74">&#34;Not local path: &#39;</span>$NAUTILUS_SCRIPT_CURRENT_URI<span style="color:#e6db74">&#39;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  echo <span style="color:#e6db74">&#34;</span>$NAUTILUS_SCRIPT_SELECTED_FILE_PATHS<span style="color:#e6db74">&#34;</span> | <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> true; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>      read FILE_PATH
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">case</span> <span style="color:#e6db74">&#34;</span>$FILE_PATH<span style="color:#e6db74">&#34;</span> in
+</span></span><span style="display:flex;"><span>      *.HEIC | *.heic<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        __exec heif-convert <span style="color:#e6db74">&#34;</span>$FILE_PATH<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>FILE_PATH%.*<span style="color:#e6db74">}</span><span style="color:#e6db74">.jpeg&#34;</span>
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>      *.doc | *.wri | *.rtf | *.odt | *.DOC | *.WRI | *.RTF<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        __exec lowriter --headless --convert-to pdf <span style="color:#e6db74">&#34;</span>$FILE_PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>      <span style="color:#e6db74">&#34;&#34;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        break
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>      *<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        __exec echo <span style="color:#e6db74">&#34;Unknown file: &#39;</span>$FILE_PATH<span style="color:#e6db74">&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">esac</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><p>You can see execution log of above with <code>journalctl -f</code></p>
 <h2 id="reference-sites">Reference sites</h2>
 <ul>
 <li><a href="https://www.gnome-look.org/browse?cat=126">Nautilus Scripts (2023-05-14)</a></li>
@@ -156,10 +218,7 @@ information in EXIF.</li>
 <li><a href="https://www.makeuseof.com/nautilus-extensions-to-enhance-your-gnome-file-manager/">5 Nautilus Extensions to Enhance Your GNOME File Manager (2022-09-30)</a></li>
 </ul>
 <h2 id="thoughts">Thoughts</h2>
-<p>Batch convert from <code>*.doc</code>, <code>*.wri</code>, <code>*.rtf</code> to PDF may be created using
-following as the baseline:</p>
-<pre tabindex="0"><code> $ lowriter --headless --convert-to pdf *.odt
-</code></pre><p><code>organize.py</code> may be adopted to use <code>python3-nautilus</code> with some GUI to select
+<p><code>organize.py</code> may be adopted to use <code>python3-nautilus</code> with some GUI to select
 output directory style, or even adjust timestamps.</p>
 <!-- raw HTML omitted -->
 
