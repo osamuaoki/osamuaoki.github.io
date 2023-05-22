@@ -118,7 +118,7 @@ site</li>
 <li><a href="https://linuxconfig.org/how-to-write-nautilus-extensions-with-nautilus-python">How to write Nautilus extensions with nautilus-python (2022-10-03)</a></li>
 </ul>
 <p>Due to recent changes of <code>nautilus</code> and GTK(3-&gt;4), some published extensions
-don&rsquo;t function as expected.  I will talk about them later.</p>
+don&rsquo;t function as expected.  So this is non-trivial.</p>
 <h3 id="extension-using-script-interface-of-nautilus">Extension using script interface of <code>nautilus</code></h3>
 <p>This is a simpler and older interface to <code>nautilus</code>.</p>
 <p>You can run a script on selected files etc., by placing a script in
@@ -179,7 +179,7 @@ only. Here are my thoughts on them.  I may be incorrect.</p>
 <p>If you want to run a simple script on GUI selected files, practical approach is
 to use the script-type extension.</p>
 <p>Here is an example to convert iPhone HEIC image into JPEG and Microsoft Word
-document into PDF.</p>
+document into PDF.  You can see its execution log with <code>journalctl -f</code></p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>__exec<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
 </span></span><span style="display:flex;"><span>  systemd-cat -p <span style="color:#ae81ff">3</span> -t <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>0##*/<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
@@ -209,7 +209,7 @@ document into PDF.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">done</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">}</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
-</span></span></code></pre></div><p>You can see execution log of above with <code>journalctl -f</code></p>
+</span></span></code></pre></div><p>This is very trivial coding and very handy extension of <code>nautilus</code>.</p>
 <h2 id="reference-sites">Reference sites</h2>
 <ul>
 <li><a href="https://www.gnome-look.org/browse?cat=126">Nautilus Scripts (2023-05-14)</a></li>
