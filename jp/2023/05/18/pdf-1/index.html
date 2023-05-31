@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/05/18 (initial publish),
-2023/05/18 (last update)
+2023/05/31 (last update)
 </h3>
 </div>
 
@@ -61,7 +61,7 @@
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#日本語pdf書式フォーム問題">日本語PDF書式フォーム問題</a>
+    <li><a href="#pdf書式フォーム問題特に日本語環境下">PDF書式フォーム問題(特に日本語環境下)</a>
       <ul>
         <li><a href="#chrome--chromium">Chrome / Chromium</a></li>
         <li><a href="#ocular----kde">Ocular &ndash; KDE</a></li>
@@ -71,12 +71,18 @@
         <li><a href="#gv">gv</a></li>
       </ul>
     </li>
+    <li><a href="#pdf非フォームの編集印刷">PDF非フォームの編集・印刷</a>
+      <ul>
+        <li><a href="#libreoffice-draw">Libreoffice (Draw)</a></li>
+        <li><a href="#gnu-image-manipulation-program-gimp">GNU Image Manipulation Program (GIMP)</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
-<h2 id="日本語pdf書式フォーム問題">日本語PDF書式フォーム問題</h2>
-<p>提出書式が書き込み可能なPDF書式のフォームで提供されていることが多くなりました。</p>
-<p>PDFを扱えるフリーのプログラムは、表示だけなら問題ないのですが、フォーム入力では必ずしもうまく行きません。</p>
+<h2 id="pdf書式フォーム問題特に日本語環境下">PDF書式フォーム問題(特に日本語環境下)</h2>
+<p>公的な、出書式が、書き込み可能なPDFの「書式フォーム」で提供されていることが多くなりました。</p>
+<p>PDFを扱えるフリーのプログラムは、表示だけならどんなPDFでも問題ないのですが、フォーム入力では必ずしもうまく行きません。</p>
 <p>特に日本語で作られたフォームでは問題が多いようです。</p>
 <h3 id="chrome--chromium">Chrome / Chromium</h3>
 <p>日本語も含め書式フォームは使える。ほぼ問題ない。書き込み保存可能。一番キレイ。</p>
@@ -92,6 +98,16 @@
 <p>PDFは読めるが、フォーム記入内容は欠落する。書式フォームはもちろん使えないリードオンリー。</p>
 <h3 id="gv">gv</h3>
 <p>PDFはフォーム記入内容を含めて読めるが、日本語だと書式フォーム部の表示はひどい文字化け。リードオンリー。</p>
+<h2 id="pdf非フォームの編集印刷">PDF非フォームの編集・印刷</h2>
+<p>役所のサイトには、今だに単に印刷可能だがフォーム入力対応しない申請書の類のPDFファイルがあることがあります。PDFを開くソフトのdefaultはGNOMEでは<code>evince</code>ですが、これにはPDF化された文書内容の編集機能はありません。（つまり<code>acrobat</code>同様の機能）</p>
+<p>印刷前にできるだけ記入してから印刷するFOSS環境下の術は、推奨ソフトにある編集機能のあるLibreoffice(Draw)とGNU Image Manipulation Program (GIMP)があり、これらが有望そうなので試してみました。</p>
+<h3 id="libreoffice-draw">Libreoffice (Draw)</h3>
+<p>意外でしたが、もとの文字がスケーラブルフォントを使う編集可能なベクトルデーター集合としてうまく読み込めます。Libreoffice (Writer)ででも同様に読込可能です。だから書式フォーム以外の部分も文字としての編集が可能です。</p>
+<p>ただ書式フォーム関連の位置などは少々ずれるなどの難が少しあるようです。</p>
+<h3 id="gnu-image-manipulation-program-gimp">GNU Image Manipulation Program (GIMP)</h3>
+<p>ビットマップデーターとして、指定解像度で読み込めます。デフォルトはFAX並の100DPIですが、レーザープリンター品質の300DPIでの読込も、解像度のプロンプト時に簡単に指定できます。</p>
+<p>編集対象データーは完全にビットマップ化され元データーの痕跡はないので、既存文字は文字としての書き換えはできません。下地を白の箱背景で隠して新規の文字を貼り付ければ、任意の文字で強引に書き換えはできます。</p>
+<p>機能が単純なので、どうもズレ問題はありません。</p>
 <!-- raw HTML omitted -->
 
 
