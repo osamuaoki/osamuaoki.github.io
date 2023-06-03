@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/13 (initial publish),
-2023/05/14 (last update)
+2023/06/03 (last update)
 </h3>
 </div>
 
@@ -62,7 +62,7 @@
 <nav id="TableOfContents">
   <ul>
     <li><a href="#windows-from-linux">Windows from Linux</a></li>
-    <li><a href="#windows-installation-from-linux">Windows installation from Linux</a>
+    <li><a href="#dual-boot-windows-installation-from-linux">Dual boot Windows installation from Linux</a>
       <ul>
         <li><a href="#information-on-windows-installation">Information on Windows installation</a></li>
         <li><a href="#available-gnu--linux-tools-for-windows-installation">Available GNU + Linux tools for Windows installation</a></li>
@@ -70,18 +70,19 @@
         <li><a href="#related-articles-and-resources-for-windows-installation">Related articles and resources for Windows installation</a></li>
       </ul>
     </li>
+    <li><a href="#windows-365-from-web-browsers">Windows 365 from web browsers</a></li>
   </ul>
 </nav>
 
 <h2 id="windows-from-linux">Windows from Linux</h2>
-<p>There are few ways to access Windows resources.</p>
+<p>There are <a href="https://www.makeuseof.com/tag/install-use-microsoft-office-linux/">few ways</a> to access Windows resources.</p>
 <ul>
 <li>Install Microsoft Windows into a disk partition and make it dual-bootable.</li>
-<li>Use <a href="https://www.microsoft.com/ja-jp/microsoft-365">Windows 365</a> to <a href="https://www.makeuseof.com/tag/install-use-microsoft-office-linux/">use it from a web browser</a></li>
+<li>Use <a href="https://www.microsoft.com/ja-jp/microsoft-365">Windows 365</a> to use it from web browsers</li>
 <li><a href="https://ruados.github.io/articles/2021-05/office365-wine">Run Office 365 application in Wine</a></li>
 <li><a href="https://itsfoss.com/use-microsoft-office-linux/#using-crossover">Other tips</a></li>
 </ul>
-<h2 id="windows-installation-from-linux">Windows installation from Linux</h2>
+<h2 id="dual-boot-windows-installation-from-linux">Dual boot Windows installation from Linux</h2>
 <p>Creation of Windows USB installation media on GNU + Linux platform can be
 automated by using
 <a href="https://github.com/WoeUSB/WoeUSB">https://github.com/WoeUSB/WoeUSB</a>.</p>
@@ -156,6 +157,20 @@ the standard tricks.</p>
 <li><a href="https://github.com/pbatard/uefi-ntfs">UEFI:NTFS - Boot NTFS or exFAT partitions from UEFI</a></li>
 <li><a href="https://wiki.debian.org/UEFI">Debian wiki: UEFI</a></li>
 </ul>
+<h2 id="windows-365-from-web-browsers">Windows 365 from web browsers</h2>
+<p>If you have an account of Windows 365, you can access windows resources from
+chrome-compatible browsers using <code>https://www.office.com</code> (after login).</p>
+<p>In order to make this work smoothly, I needed to adjust my cookie policy.</p>
+<ul>
+<li>Click <code>Settings</code> on the pull-down menu opened from the top bar</li>
+<li>Click <code>Settings</code> on left top corner of the opened dialog</li>
+<li>Click <code>Privacy and security</code> in the pull-down menu</li>
+<li>Click <code>Cookies and other site data</code> to open a dialog</li>
+<li>Scroll down to <code>Customized behaviors</code></li>
+<li>Click <code>Add</code> button on the right of <code>Sites that can always use cookies</code></li>
+<li>Add URL: <code>https://teams.microsoft.com</code> (Including third-party cookies on this site)</li>
+</ul>
+<p>(I see I did similar for <code>https://www.paypal.com:443</code> for paypal transactions)</p>
 <!-- raw HTML omitted -->
 
 
