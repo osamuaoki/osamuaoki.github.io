@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/04/16 (last update)
+2023/06/08 (last update)
 </h3>
 </div>
 
@@ -75,8 +75,9 @@
         <li><a href="#update-gitigonore">Update <code>.gitigonore</code></a></li>
         <li><a href="#opening-gzip-files">Opening Gzip files</a></li>
         <li><a href="#extra-features-as-opt-in-features">Extra features as opt-in features</a></li>
-        <li><a href="#unicode-codepoint-in-statusline">Unicode codepoint in statusline</a></li>
+        <li><a href="#column-and-line-number-and-unicode-codepoint-in-statusline">Column and Line number and, Unicode codepoint in statusline</a></li>
         <li><a href="#vimdoc-help-files">Vimdoc help files</a></li>
+        <li><a href="#extra-plugins">Extra plugins</a></li>
       </ul>
     </li>
     <li><a href="#treesitter-and-lsp">Treesitter and LSP</a></li>
@@ -198,7 +199,7 @@ plugins are not the one on the main system.</p>
 </ul>
 <p>See more <code>:h mason.nvim</code></p>
 <p>In order to make <code>mason.nvim</code> generated programs accessible from shell
-prompt, I have modifies <code>~.profile</code> to include the following:</p>
+prompt, I have modifies <code>~/.profile</code> to include the following:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># set PATH so it includes mason.nvim&#39;s private bin if it exists (Neovim/mason.nvim)</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -d <span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.local/share/nvim/mason/bin/&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
 </span></span><span style="display:flex;"><span>    PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.local/share/nvim/mason/bin:</span>$PATH<span style="color:#e6db74">&#34;</span>
@@ -207,10 +208,12 @@ prompt, I have modifies <code>~.profile</code> to include the following:</p>
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/dot/.editorconfig">~/.editorconfig</a>
 to cope with sources using <a href="https://editorconfig.org/">editorconfig</a>.</p>
 <p>I also create bash aliases:</p>
-<ul>
-<li><code>v</code> to start <code>nvim -u NORC</code></li>
-<li><code>v0</code> to start <code>nvim -u ~/.nvim</code> (very simple setting)</li>
-</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim  -u NORC&#39;</span>
+</span></span><span style="display:flex;"><span>alias v0<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -u ~/.nvim&#39;</span>
+</span></span><span style="display:flex;"><span>alias vi<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim&#39;</span>
+</span></span><span style="display:flex;"><span>alias view<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -R&#39;</span>
+</span></span><span style="display:flex;"><span>alias vimdiff<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -d&#39;</span>
+</span></span></code></pre></div><p>Here, <code>~/.nvim</code> contains very simple setting.</p>
 <h2 id="lazyvim-customization">LazyVim customization</h2>
 <p>I created <a href="https://github.com/osamuaoki/starter">folked LazyVim starter</a> with
 my changes in <code>osamu</code> branch to keep backup of my local configuration.  I
@@ -229,12 +232,22 @@ bindings.</p>
 <li>auto format on save (<code>nvim-lspconfig</code>, Toggle with <code>&lt;leader&gt;uf</code>)</li>
 </ul>
 <p>I also made <code>&lt;leader&gt;uu</code> as NOP to avoid accidental undo <code>u</code>.</p>
-<h3 id="unicode-codepoint-in-statusline">Unicode codepoint in statusline</h3>
-<p>I replaced clock display in statusline with unicode codepoint such as <code>[+U0044]</code>.</p>
+<h3 id="column-and-line-number-and-unicode-codepoint-in-statusline">Column and Line number and, Unicode codepoint in statusline</h3>
+<p>Using <code>~/.config/nvim/lua/plugin/ui.lua</code>, I replaced clock display in statusline with Column and Line number and, Unicode codepoint as <code>1: 1 [+U20]</code>.</p>
 <h3 id="vimdoc-help-files">Vimdoc help files</h3>
 <p>I add access to many hidden help files available under <code>LOCAL ADDITIONS:</code> by
 running
 <a href="https://github.com/osamuaoki/starter/blob/osamu/vimdoc-lazy">vimdoc-lazy</a>.</p>
+<h3 id="extra-plugins">Extra plugins</h3>
+<p>A few extra plugin supports are introduced by adding configuration files in
+<code>~/.config/nvim/lua/plugin/</code> of
+<a href="https://github.com/osamuaoki/starter">my folked LazyVim starter</a> in
+<code>osamu</code> branch.</p>
+<ul>
+<li><code>escape.lua</code> for <code>max397574/better-escape.nvim</code></li>
+<li><code>neorg.lua</code> for <code>nvim-neorg/neorg</code></li>
+<li><code>oil.lua</code> for <code>stevearc/oil.nvim</code></li>
+</ul>
 <h2 id="treesitter-and-lsp">Treesitter and LSP</h2>
 <p>It is a bit confusing what is all about
 <a href="https://neovim.io/doc/user/treesitter.html">Treesitter</a> and
