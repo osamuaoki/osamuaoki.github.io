@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/25 (initial publish),
-2023/05/03 (last update)
+2023/06/17 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00038.md
@@ -88,8 +88,8 @@ en/note-00038.md
         <li><a href="#right-mouse-click-with-single-button">Right mouse click with single button</a></li>
         <li><a href="#keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</a></li>
         <li><a href="#keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</a></li>
-        <li><a href="#keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</a></li>
         <li><a href="#keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</a></li>
         <li><a href="#web-browser">Web browser</a></li>
         <li><a href="#mail-client">Mail client</a></li>
         <li><a href="#grub-2-wallpaper">GRUB 2 wallpaper</a></li>
@@ -281,32 +281,42 @@ proper secondary-click (or even middle-click).</p>
 </ul>
 <h3 id="keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</h3>
 <ul>
-<li>SUPER-C: launch calculator</li>
-<li>SUPER-E: launch email client</li>
-<li>SUPER-B: launch web browser</li>
+<li><code>SUPER-C</code>: launch calculator</li>
+<li><code>SUPER-E</code>: launch email client</li>
+<li><code>SUPER-B</code>: launch web browser</li>
 </ul>
 <h3 id="keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</h3>
 <ul>
-<li>SUPER-T: launcher for terminal</li>
+<li>SUPER-O: Open terminal</li>
 </ul>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     Terminal
 </span></span><span style="display:flex;"><span>Command  gnome-terminal
-</span></span><span style="display:flex;"><span>Shortcut SUPER-T
-</span></span></code></pre></div><p><strong>THE FOLLOWING NEEDS TO BE UPDATED (DOES NOT WORK: 2023-02-26)</strong>:</p>
-<p><del>For selecting IM deterministically (instead of Super-SPACE toggle), bind
-javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</del></p>
+</span></span><span style="display:flex;"><span>Shortcut SUPER-O
+</span></span></code></pre></div><p>(<code>SUPER-O</code> is easier to type than <code>SUPER-T</code>.  I also created <code>SUPER-\\</code> )</p>
+<p>For selecting IM deterministically (instead of Super-SPACE toggles), bind
+javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <ul>
-<li>SUPER-Enter: English</li>
-<li>SUPER-J: Anthy</li>
-<li>SUPER-K: Mozc</li>
-<li>SUPER-\: English (international)</li>
+<li><code>SUPER-ENTER</code>: English</li>
+<li><code>SUPER-ALT_ENTER</code>: Anthy</li>
+<li><code>SUPER-SHIFT-ENTER</code>: Mozc</li>
+<li><code>SUPER-CTRL-ENTER</code>: English (international)</li>
 </ul>
-<p><del>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is ANTHY and if you want to use SUPER-j to switch to ANTHY, you need to set as:</del></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     InputMethod_0
+<p>(I use &ldquo;ENTER&rdquo;-combos for shortcuts to enter easily with both hands.)</p>
+<p>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is English (US) and if you want to use SUPER-ENTER to switch to US, you need to set as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     IM_0
 </span></span><span style="display:flex;"><span>Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  <span style="color:#e6db74">&#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;</span>
-</span></span><span style="display:flex;"><span>Shortcut SUPER-j
-</span></span></code></pre></div><p><del>Please make sure to enter the above command in a single line.</del></p>
-<p><del>See <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a></del></p>
+</span></span><span style="display:flex;"><span>Shortcut SUPER-ENTER
+</span></span></code></pre></div><p>Please make sure to enter the above <strong>Command</strong> in a single line.</p>
+<p>Since 2022, we must install
+<a href="https://github.com/linushdot/unsafe-mode-menu">Unsafe Mode Menu</a> extension and enable it to get the above command to work as expected.</p>
+<p><img src="/img/unsafe-mode.png" alt="unsafe mode screen"></p>
+<p>See my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> and its <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a>.</p>
+<h3 id="keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</h3>
+<p>For Japanese input with US keyboard, set IM (anthy etc.) configuration as:</p>
+<ul>
+<li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent</li>
+<li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent</li>
+</ul>
 <h3 id="keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</h3>
 <p>For Vim use:</p>
 <ul>
@@ -314,12 +324,6 @@ javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</del></p>
 <li>Click <code>Keyboard</code> / <code>Overview Shortcut</code> / <code>Additional Layout Options</code> button</li>
 <li>Click to expand <code>Caps Lock behavior</code></li>
 <li>Enable <code>Make Caps Lock as additional Esc</code>.</li>
-</ul>
-<h3 id="keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</h3>
-<p>For Japanese input with US keyboard, set IM (anthy etc.) configuration as:</p>
-<ul>
-<li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent</li>
-<li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent</li>
 </ul>
 <h3 id="web-browser">Web browser</h3>
 <p>Although <a href="https://tracker.debian.org/pkg/chromium">Chromium</a> exists in the
