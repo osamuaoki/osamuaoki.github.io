@@ -67,13 +67,19 @@ en/note-00044.md
     <li><a href="#keyboad-shortcuts-stopped-working">Keyboad shortcuts stopped working</a></li>
     <li><a href="#where-in-gnome-shell-package-can-i-find-its-javascript-codes">Where in gnome-shell package can I find its javascript codes?</a></li>
     <li><a href="#are-there-any-changes-in-related-javascript-codes-in-gnome-shell">Are there any changes in related javascript codes in gnome-shell.</a></li>
+    <li><a href="#getting-start-with-looking-glass">Getting start with &ldquo;Looking Glass&rdquo;</a>
+      <ul>
+        <li><a href="#tricks-for-the-looking-glass-prompt">Tricks for the &ldquo;Looking Glass&rdquo; prompt</a></li>
+      </ul>
+    </li>
     <li><a href="#testing-under-looking-glass">Testing under &ldquo;Looking Glass&rdquo;</a></li>
     <li><a href="#gdbus-error">gdbus error</a></li>
     <li><a href="#references-to-write-proper-gnome-shell-extensions">References to write proper GNOME shell extensions</a></li>
   </ul>
 </nav>
 
-<p>Since 2022, tricks written in <a href="https://osamuaoki.github.io/en/2021/01/15/debian-usability/#keyboard-shortcut-customization-gnome-settings">Keyboard shortcut customization (GNOME Settings)</a> stopped working for me.   This is my memo to update it to the current working state.</p>
+<p>Since 2022, tricks written in my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">キーボード入力モード選択</a> and its English translated description
+<a href="/en/2023/02/25/debian-usability-2023/#keyboard-shortcut-customization-gnome-settings">Debian Workstation (usability) (v2023) &ndash; Keyboard shortcut customization (GNOME Settings)</a> stopped working for me.   This is my memo to update  <a href="/en/2023/02/25/debian-usability-2023/">Debian Workstation (usability) (v2023)</a> to the current working state.</p>
 <h2 id="keyboad-shortcuts-stopped-working">Keyboad shortcuts stopped working</h2>
 <p>This breakage seemed to have happened with changes made in 2022.</p>
 <table>
@@ -119,7 +125,7 @@ keyboard.js
 2172:        this._inputSourceManager = InputSourceManager.getInputSourceManager();
 2240:            const inputSourceManager = InputSourceManager.getInputSourceManager();
 </code></pre><p>Checking code around these lines for both versions used in bookworm (2023) and buster (2021), I don&rsquo;t see much changes.</p>
-<h2 id="testing-under-looking-glass">Testing under &ldquo;Looking Glass&rdquo;</h2>
+<h2 id="getting-start-with-looking-glass">Getting start with &ldquo;Looking Glass&rdquo;</h2>
 <p>Looking Glass is GNOME Shell&rsquo;s integrated debugger and inspector tool.  It&rsquo;s basic usage goes:</p>
 <ul>
 <li>Open with <code>Alt-F2</code></li>
@@ -127,6 +133,12 @@ keyboard.js
 <li>Enter a command e.g. <code>global.get_window_actors()</code> to the &ldquo;Looking Glass&rdquo; prompt</li>
 <li>Enter <code>Esc</code> to leave &ldquo;Looking Glass&rdquo;</li>
 </ul>
+<h3 id="tricks-for-the-looking-glass-prompt">Tricks for the &ldquo;Looking Glass&rdquo; prompt</h3>
+<ul>
+<li><code>St.set_slow_down_facor(10)</code> &ndash; slow down</li>
+<li><code>St.get_slow_down_facor()</code> &ndash; check ???? not working</li>
+</ul>
+<h2 id="testing-under-looking-glass">Testing under &ldquo;Looking Glass&rdquo;</h2>
 <p>I tested the following javascript snippet and its variants from &ldquo;Looking Glass&rdquo; prompt.</p>
 <pre tabindex="0"><code>imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()
 </code></pre><p>This switched Input method to the first one.  Using <code>inputSources[1]</code> instead swiched Input method to the second one.  So this javascript code itself is still valid one.</p>
