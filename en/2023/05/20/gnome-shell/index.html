@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GNOME shell | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GNOME shell</span></h1>
+
+<h3 class="date">Date:
+2023/05/20 (initial publish),
+2023/06/17 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00044.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/04/28/l10n-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/05/20/nautilus-1/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#keyboad-shortcuts-stopped-working">Keyboad shortcuts stopped working</a></li>
+    <li><a href="#where-in-gnome-shell-package-can-i-find-its-javascript-codes">Where in gnome-shell package can I find its javascript codes?</a></li>
+    <li><a href="#are-there-any-changes-in-related-javascript-codes-in-gnome-shell">Are there any changes in related javascript codes in gnome-shell.</a></li>
+    <li><a href="#testing-under-looking-glass">Testing under &ldquo;Looking Glass&rdquo;</a></li>
+    <li><a href="#gdbus-error">gdbus error</a></li>
+    <li><a href="#references-to-write-proper-gnome-shell-extensions">References to write proper GNOME shell extensions</a></li>
+  </ul>
+</nav>
+
+<p>Since 2022, tricks written in <a href="https://osamuaoki.github.io/en/2021/01/15/debian-usability/#keyboard-shortcut-customization-gnome-settings">Keyboard shortcut customization (GNOME Settings)</a> stopped working for me.   This is my memo to update it to the current working state.</p>
+<h2 id="keyboad-shortcuts-stopped-working">Keyboad shortcuts stopped working</h2>
+<p>This breakage seemed to have happened with changes made in 2022.</p>
+<table>
+<thead>
+<tr>
+<th><em>package</em></th>
+<th><em>bullseye</em> (2021)</th>
+<th><em>bookworm</em> (2023)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>gnome-shell</code></td>
+<td><code>3.38.6-1~deb11u1</code></td>
+<td><code>43.4-1</code></td>
+</tr>
+</tbody>
+</table>
+<p>GNOME post-40 releases have major changes from previous ones.</p>
+<p>My initial reaction to brokage of trick method was this may be caused by changes of javascript codes in gnome-shell.</p>
+<h2 id="where-in-gnome-shell-package-can-i-find-its-javascript-codes">Where in gnome-shell package can I find its javascript codes?</h2>
+<p>Older documentation such as
+&ldquo;<a href="http://mathematicalcoffee.blogspot.com/2012/09/gnome-shell-javascript-source.html">GNOME shell: Javascript Source Documentation (extensions development)</a>&rdquo;
+written in 2012 talks about javascript codes in <code>/usr/share/gnome-shell/js/ui</code>.
+But I don&rsquo;t see them on my system.</p>
+<p>Then I found
+&ldquo;<a href="https://askubuntu.com/questions/1305948/where-are-gnome-shells-ui-javascript-files-on-ubuntu-20-04">Where are gnome-shell&rsquo;s UI javascript files on Ubuntu 20.04</a>&rdquo;
+written in 2020.</p>
+<p>Now the whole javascript codes are packed into
+<code>/usr/lib/gnome-shell/libgnome-shell.so</code>. The javascript codes can be found in
+the original source tree or retrieved from installed
+<code>/usr/lib/gnome-shell/libgnome-shell.so</code> using <code>gresource</code> command.</p>
+<h2 id="are-there-any-changes-in-related-javascript-codes-in-gnome-shell">Are there any changes in related javascript codes in gnome-shell.</h2>
+<p>Let&rsquo;s check the original source tree under <code>js</code></p>
+<pre tabindex="0"><code>$ cd path/to/gnome-shell-43.4/js/ui
+$ rg getInputSourceManager
+status/keyboard.js
+793:function getInputSourceManager() {
+864:        this._inputSourceManager = getInputSourceManager();
+
+keyboard.js
+202:        let inputSourceManager = InputSourceManager.getInputSourceManager();
+2172:        this._inputSourceManager = InputSourceManager.getInputSourceManager();
+2240:            const inputSourceManager = InputSourceManager.getInputSourceManager();
+</code></pre><p>Checking code around these lines for both versions used in bookworm (2023) and buster (2021), I don&rsquo;t see much changes.</p>
+<h2 id="testing-under-looking-glass">Testing under &ldquo;Looking Glass&rdquo;</h2>
+<p>Looking Glass is GNOME Shell&rsquo;s integrated debugger and inspector tool.  It&rsquo;s basic usage goes:</p>
+<ul>
+<li>Open with <code>Alt-F2</code></li>
+<li>Enter <code>lg</code> to &ldquo;Run a Command&rdquo; prompt to start &ldquo;Looking Glass&rdquo;</li>
+<li>Enter a command e.g. <code>global.get_window_actors()</code> to the &ldquo;Looking Glass&rdquo; prompt</li>
+<li>Enter <code>Esc</code> to leave &ldquo;Looking Glass&rdquo;</li>
+</ul>
+<p>I tested the following javascript snippet and its variants from &ldquo;Looking Glass&rdquo; prompt.</p>
+<pre tabindex="0"><code>imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()
+</code></pre><p>This switched Input method to the first one.  Using <code>inputSources[1]</code> instead swiched Input method to the second one.  So this javascript code itself is still valid one.</p>
+<p>So, problem is not javascript but its call via <code>gdbus</code> executed on the bash prompt.</p>
+<pre tabindex="0"><code>$ gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval &#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;
+(false, &#39;&#39;)
+</code></pre><p>This <strong>false</strong> looks suspicious.</p>
+<p>Let me check if this calling was syntax correct by introspection:</p>
+<pre tabindex="0"><code>$ gdbus introspect --session --dest org.gnome.Shell --object-path /org/gnome/Shell
+node /org/gnome/Shell {
+  ...
+  interface org.gnome.Shell {
+    methods:
+      Eval(in  s script,
+           out b success,
+           out s result);
+      ...
+  };
+  ...
+};
+</code></pre><p>So the calling syntax looks OK.</p>
+<h2 id="gdbus-error">gdbus error</h2>
+<p>Searching on &ldquo;gdbus error&rdquo; within 1 year lead me to the following articles.</p>
+<ul>
+<li><a href="https://askubuntu.com/questions/1412130/dbus-calls-to-gnome-shell-dont-work-under-ubuntu-22-04">dbus calls to gnome shell don&rsquo;t work under Ubuntu 22.04</a> &ndash; 2022</li>
+<li>commit: <a href="https://gitlab.gnome.org/GNOME/gnome-shell/-/commit/a628bbc4">shellDBus: Restrict callers</a> &ndash; 2022</li>
+<li><a href="https://github.com/linushdot/unsafe-mode-menu">Unsafe Mode Menu</a> &ndash; Simple GNOME extension to change the Gnome Shell unsafe-mode via the quick settings menu/panel menu.</li>
+</ul>
+<p>It looks like now shellDBus restricts callers to block <code>gdbus</code> calls.</p>
+<p>I decided to install <a href="https://github.com/linushdot/unsafe-mode-menu">Unsafe Mode Menu</a> and it worked!</p>
+<p>For now, this is good enough.</p>
+<h2 id="references-to-write-proper-gnome-shell-extensions">References to write proper GNOME shell extensions</h2>
+<ul>
+<li><a href="https://gitlab.gnome.org/GNOME/gnome-shell">GNOME shell - GNOME</a> (current)</li>
+<li><a href="https://github.com/GNOME/gnome-shell">GNOME shell - github</a> Read-only mirror (current)</li>
+<li><a href="https://wiki.gnome.org/Projects/GnomeShell">GNOME shell - wiki</a> (2021)</li>
+<li><a href="https://itnext.io/hacking-the-gnome-shell-create-extensions-ef3e4ecac325">Hack the GNOME Shell — Create Extensions</a> (2022)</li>
+<li><a href="https://github.com/julio641742/gnome-shell-extension-reference">GNOME Shell Extension Reference</a> &ndash; user (2016)</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/04/28/l10n-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/05/20/nautilus-1/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
