@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GNOME extensions | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GNOME extensions</span></h1>
+
+<h3 class="date">Date:
+2023/06/17 (initial publish),
+2023/06/21 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00045.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/06/16/gnome-shell/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#list-of-interesting-gnome-extensions">List of interesting GNOME extensions</a>
+      <ul>
+        <li><a href="#essential-gnome-extensions-for-better-ux">Essential GNOME extensions for better UX</a></li>
+        <li><a href="#basic-gnome-extensions">Basic GNOME extensions</a></li>
+        <li><a href="#optional-gnome-extensions">Optional GNOME extensions</a></li>
+        <li><a href="#extra-gnome-extensions">Extra GNOME extensions</a></li>
+        <li><a href="#avoided-gnome-extensions">Avoided GNOME extensions</a></li>
+        <li><a href="#gnome-extensions-to-be-studied-to-create-my-extensions">GNOME extensions to be studied to create my extensions</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>After learning to use GNOME shell extension: <strong>unsafe-mode-menu</strong> for
+workaround in <a href="/en/2023/06/16/gnome-shell/">GNOME shell</a>, I checked other available and interesting GNOME extensions.  Resources checked are:</p>
+<ul>
+<li><code>*D</code>: <code>*.deb</code> package available</li>
+<li><code>*U</code>: <a href="https://www.omgubuntu.co.uk/best-gnome-shell-extensions">15 Best GNOME Extensions for Ubuntu (2022 Edition)</a></li>
+<li><code>*L</code>: <a href="https://linuxhint.com/best_gnome_extensions/">30 Best GNOME Extensions for Ubuntu in 2023</a></li>
+<li><code>*N</code>: <a href="https://medium.com/nerd-for-tech/18-best-gnome-extensions-8e7c4f947ef5">Top +30 Best GNOME Extensions | 2023 Updated</a></li>
+<li><code>*M</code>: <a href="https://www.makeuseof.com/must-have-gnome-shell-extensions-linux-desktop/">10 Must Have GNOME Shell Extensions for Customizing Your Linux Desktop in 2022</a></li>
+<li><code>*A</code>: <a href="https://github.com/Kazhnuz/awesome-gnome">Awesome GNOME</a></li>
+</ul>
+<p>I used local install approach of GNOME extension to
+<code>~/.local/share/gnome-shell/extensions/</code>
+and activated them with GNOME&rsquo;s <code>Extensions</code> (<code>gnome-extensions</code>).
+Under GNOME 43, this
+<code>Extensions</code> is as important as GNOME&rsquo;s <code>Tweaks</code> (<code>gnome-tweaks</code>) to get my
+GNOME Desktop environment configured as I want.</p>
+<p>I cloned extensions under <code>~/.local/share/gnome-shell/gitrepo/</code> and added
+<code>Makefile</code> to be used by <code>make</code> on my branch.</p>
+<h2 id="list-of-interesting-gnome-extensions">List of interesting GNOME extensions</h2>
+<p>Here is a list of interesting GNOME extensions.</p>
+<h3 id="essential-gnome-extensions-for-better-ux">Essential GNOME extensions for better UX</h3>
+<p>These GNOME extensions are essential ones for better Desktop UX.</p>
+<ul>
+<li><a href="https://github.com/icedman/suppress-startup-animation.git">icedman/suppress-startup-animation</a>
+<ul>
+<li>Suppress the overview startup animation and be greeted with your wall paper instead</li>
+<li>PRO: less invasive and less noisy UI</li>
+<li>CON: un-intuitive for new user</li>
+</ul>
+</li>
+<li><a href="https://github.com/nmingori/gnome-hide-actitivies-button">nmingori/gnome-hide-actitivies-button</a>: <code>*U</code>
+<ul>
+<li>Hide Activities Button</li>
+<li>PRO: less noisy UI</li>
+<li>CON: un-intuitive for new user</li>
+</ul>
+</li>
+<li><a href="https://github.com/micheleg/dash-to-dock">micheleg/dash-to-dock</a>: <code>*U</code>
+<ul>
+<li><a href="https://extensions.gnome.org/extension/1967/zorin-dash/">Dash to Dock from Zorin OS</a></li>
+<li>PRO: Make dock icon visible only with mouse pointer hitting bottom (mature)</li>
+<li>CON: none</li>
+</ul>
+</li>
+<li><a href="https://github.com/MichaelAquilina/improved-workspace-indicator">MichaelAquilina/improved-workspace-indicator</a>: <code>*U</code>
+<ul>
+<li>workspace indicator more similar to i3/sway</li>
+<li>PRO: smaller and clear ID# (Better than the one from the official GNOME extension)</li>
+<li>CON: none</li>
+</ul>
+</li>
+<li><a href="https://github.com/linushdot/unsafe-mode-menu.git">linushdot/unsafe-mode-menu</a>
+<ul>
+<li>Change GNOME Shell unsafe-mode via quick settings menu/panel menu</li>
+<li>PRO: enable <code>gdbus</code> usage in launcher to switch input methods</li>
+<li>CON: <strong>unsafe</strong> isn&rsquo;t nice (Use this until I find better alternative.)</li>
+</ul>
+</li>
+</ul>
+<h3 id="basic-gnome-extensions">Basic GNOME extensions</h3>
+<p>These GNOME extensions are basic ones providing specific functionalities.</p>
+<ul>
+<li><a href="https://github.com/EasyScreenCast/EasyScreenCast">EasyScreenCast/EasyScreenCast</a>: <code>*L</code>, <code>*N</code>
+<ul>
+<li>Simplifies the use of the video recording function integrated in gnome shell</li>
+</ul>
+</li>
+<li><a href="https://github.com/corecoding/Vitals">corecoding/Vitals</a>: <code>*U</code>, <code>*L</code>, <code>*N</code>, <code>*M</code>
+<ul>
+<li>Display CPU temperature, voltage, fan speed, memory usage, CPU load, and net speed.</li>
+<li>PRO: Interestng and cute extra information</li>
+</ul>
+</li>
+<li><a href="https://github.com/eonpatapon/gnome-shell-extension-caffeine">eonpatapon/gnome-shell-extension-caffeine</a>: <code>*U</code>, <code>*L</code>, <code>*N</code>, <code>*M</code>
+<ul>
+<li>Disable screensaver and auto suspend</li>
+</ul>
+</li>
+<li><a href="https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator">Tudmotu/gnome-shell-extension-clipboard-indicator</a>: <code>*U</code>, <code>*L</code>, <code>*N</code>
+<ul>
+<li>Clipboard Manager extension for Gnome-Shell - Adds a clipboard indicator to the top panel, and saves clipboard history.</li>
+</ul>
+</li>
+</ul>
+<h3 id="optional-gnome-extensions">Optional GNOME extensions</h3>
+<p>These GNOME extensions are optional ones providing specific functionalities.
+(These are less likely to be needed, though.)</p>
+<ul>
+<li><a href="https://github.com/zagortenay333/cronomix">zagortenay333/cronomix</a>: <code>*L</code>
+<ul>
+<li>All-in-one timer, stopwatch, pomodoro, alarm, todo and time tracker gnome-shell extension</li>
+<li>???: I don&rsquo;t use timer</li>
+</ul>
+</li>
+<li><a href="https://github.com/maoschanz/notes-extension-gnome">maoschanz/notes-extension-gnome</a>: <code>*L</code>
+<ul>
+<li>A GNOME Shell extension providing customizable sticky notes</li>
+</ul>
+</li>
+<li><a href="https://gitlab.com/paddatrapper/shortcuts-gnome-extension">paddatrapper/shortcuts-gnome-extension</a>
+<ul>
+<li>Creates a pop-up that describes the commonly used keyboard shortcuts in GNOME Shell when Super + S is pressed</li>
+</ul>
+</li>
+<li><a href="https://github.com/matthijskooijman/gnome-shell-more-keyboard-shortcuts">matthijskooijman/gnome-shell-more-keyboard-shortcuts</a>
+<ul>
+<li>Gnome-shell extension to add some additional window-switching keyboard shortcuts</li>
+</ul>
+</li>
+</ul>
+<h3 id="extra-gnome-extensions">Extra GNOME extensions</h3>
+<p>These GNOME extensions are optional ones providing rundom functionalities which
+I probably don&rsquo;t use.</p>
+<ul>
+<li><a href="https://gitlab.com/skrewball/openweather">skrewball/openweather</a>: <code>*L</code>, <code>*N</code>, <code>*M</code>
+<ul>
+<li>Display weather information for any location on Earth in the GNOME Shell</li>
+<li>???: use cell phone app</li>
+</ul>
+</li>
+<li><a href="https://gitlab.gnome.org/jrahmatzadeh/just-perfection">jrahmatzadeh/just-perfection</a>: <code>*N</code>
+<ul>
+<li>Disable GNOME Shell UI Elements, Change the Behavior and Customize your GNOME Shell Desktop.</li>
+<li>???: I don&rsquo;t care to use these changes</li>
+</ul>
+</li>
+<li><a href="https://github.com/axxapy/gnome-ui-tune">axxapy/gnome-ui-tune</a>: <code>*N</code>
+<ul>
+<li>Tunes overview UI of the gnome 40 a bit</li>
+<li>???: I don&rsquo;t care to use these changes</li>
+</ul>
+</li>
+<li>Workspace Indicator (in deb:<code>gnome-shell-extensions</code>)
+<ul>
+<li>Display workspace indicator on top bar</li>
+<li>PRO: make workspace location visible</li>
+<li>CON: duplicate as mini dash screen thumb nails, no-ID#</li>
+</ul>
+</li>
+<li><a href="https://gitlab.com/rastersoft/desktop-icons-ng">rastersoft/desktop-icons-ng</a>: <code>*U</code> (in deb:<code>gnome-shell-extensions</code>)
+<ul>
+<li>A fork from the official desktop icons project, with several enhancements like Drag&rsquo;n&rsquo;Drop.</li>
+</ul>
+</li>
+</ul>
+<h3 id="avoided-gnome-extensions">Avoided GNOME extensions</h3>
+<p>These GNOME extensions should be avoided since it doesn&rsquo;t add value to my use
+case.</p>
+<ul>
+<li><a href="https://github.com/icedman/dash2dock-lite">icedman/dash2dock-lite</a>
+<ul>
+<li>&ldquo;Dash to Dock&rdquo; with animated zooming dock icons</li>
+<li>PRO: eye-catchy animated dock icon looks</li>
+<li>CON: interference with mouse clicks around the bottom area</li>
+<li>Use <code>dash-to-dock</code> instead</li>
+</ul>
+</li>
+<li><a href="https://github.com/kgshank/gse-sound-output-device-chooser">kgshank/gse-sound-output-device-chooser</a>: <code>*L</code>, <code>*N</code>
+<ul>
+<li>Gnome Shell Extension to show a simple chooser to select Input &amp; Output device based on gnome control center</li>
+<li><a href="https://github.com/kgshank/gse-sound-output-device-chooser/issues/265">Broken</a></li>
+</ul>
+</li>
+<li><a href="https://github.com/kgshank/gse-refresh-wifi">kgshank/gse-refresh-wifi</a>: <code>*L</code>
+<ul>
+<li>Gnome Shell Extension - Refresh Wifi</li>
+</ul>
+</li>
+<li><a href="https://github.com/bjarosze/gnome-bluetooth-quick-connect">bjarosze/gnome-bluetooth-quick-connect</a>: <code>*N</code>
+<ul>
+<li>Allow to connect bluetooth paired devices from gnome control panel</li>
+</ul>
+</li>
+<li><a href="https://github.com/deinstapel/cpupower">deinstapel/cpupower</a>: <code>*L</code>
+<ul>
+<li>Manage the frequency scaling driver of your CPU</li>
+<li>???: A bit odd icon display (very dark dot)</li>
+<li>???: Needs more test to see if useful</li>
+<li>???: duplicated functionality</li>
+</ul>
+</li>
+</ul>
+<h3 id="gnome-extensions-to-be-studied-to-create-my-extensions">GNOME extensions to be studied to create my extensions</h3>
+<p>My interest is to create GNOME extension for input method to avoid using <code>unsafe-mode-menu</code>.</p>
+<ul>
+<li><a href="https://github.com/matthijskooijman/gnome-shell-more-keyboard-shortcuts">matthijskooijman/gnome-shell-more-keyboard-shortcuts</a></li>
+<li><a href="https://superuser.com/questions/471606/gnome-shell-extension-key-binding">Gnome Shell Extension Key Binding</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/06/16/gnome-shell/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

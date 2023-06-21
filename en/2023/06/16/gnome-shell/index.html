@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/16 (initial publish),
-2023/06/17 (last update)
+2023/06/21 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00044.md
@@ -54,7 +54,7 @@ en/note-00044.md
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2023/06/17/gnome-extensions/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -64,24 +64,33 @@ en/note-00044.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#keyboad-shortcuts-stopped-working">Keyboad shortcuts stopped working</a></li>
-    <li><a href="#where-in-gnome-shell-package-can-i-find-its-javascript-codes">Where in gnome-shell package can I find its javascript codes?</a></li>
-    <li><a href="#are-there-any-changes-in-related-javascript-codes-in-gnome-shell">Are there any changes in related javascript codes in gnome-shell.</a></li>
-    <li><a href="#getting-start-with-looking-glass">Getting start with &ldquo;Looking Glass&rdquo;</a>
+    <li><a href="#keyboad-shortcuts-stopped-working">Keyboad shortcuts stopped working</a>
       <ul>
-        <li><a href="#tricks-for-the-looking-glass-prompt">Tricks for the &ldquo;Looking Glass&rdquo; prompt</a></li>
+        <li><a href="#where-in-gnome-shell-package-can-i-find-its-javascript-codes">Where in gnome-shell package can I find its javascript codes?</a></li>
+        <li><a href="#are-there-any-changes-in-related-javascript-codes-in-gnome-shell">Are there any changes in related javascript codes in gnome-shell.</a></li>
+        <li><a href="#getting-start-with-looking-glass">Getting start with &ldquo;Looking Glass&rdquo;</a></li>
+        <li><a href="#testing-under-looking-glass">Testing under &ldquo;Looking Glass&rdquo;</a></li>
+        <li><a href="#root-cause-gdbus-error">Root cause: <code>gdbus</code> error</a></li>
+        <li><a href="#workaround-unsafe-mode-menu">Workaround: Unsafe Mode Menu</a></li>
       </ul>
     </li>
-    <li><a href="#testing-under-looking-glass">Testing under &ldquo;Looking Glass&rdquo;</a></li>
-    <li><a href="#gdbus-error">gdbus error</a></li>
-    <li><a href="#references-to-write-proper-gnome-shell-extensions">References to write proper GNOME shell extensions</a></li>
+    <li><a href="#note-on-code-tracing">Note on code tracing</a>
+      <ul>
+        <li><a href="#string-match-to-find-associated-code-points">String match to find associated code points</a></li>
+        <li><a href="#what-is-a11y">What is <strong>a11y</strong></a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
-<p>Since 2022, tricks written in my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">キーボード入力モード選択</a> and its English translated description
-<a href="/en/2021/01/15/debian-usability/#keyboard-shortcut-customization-gnome-settings">Debian Workstation (usability) (old)) &ndash; Keyboard shortcut customization (GNOME Settings)</a> stopped working for me.   This is how I came to update my memo to <a href="/en/2023/02/25/debian-usability-2023/#keyboard-shortcut-customization-gnome-settings----custom-shortcut">Debian Workstation (usability) (v2023) &ndash; Keyboard shortcut customization (GNOME Settings – custom shortcut)</a>.</p>
+<p>This is how I resolved GNOME shell configuration trouble and came up as <a href="/en/2023/02/25/debian-usability-2023/#keyboard-shortcut-customization-gnome-settings----custom-shortcut">Debian Workstation (usability) (v2023) &ndash; Keyboard shortcut customization (GNOME Settings – custom shortcut)</a></p>
 <h2 id="keyboad-shortcuts-stopped-working">Keyboad shortcuts stopped working</h2>
+<p>Since 2022, tricks written in my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">キーボード入力モード選択</a> and its English translated description
+<a href="/en/2021/01/15/debian-usability/#keyboard-shortcut-customization-gnome-settings">Debian Workstation (usability) (old)) &ndash; Keyboard shortcut customization (GNOME Settings)</a>
+stopped working for me.</p>
 <p>This breakage seemed to have happened with changes made in 2022.</p>
+<p>My initial reaction to brokage of trick method was this may be caused by changes of javascript codes in gnome-shell.</p>
+<p>GNOME post-40 releases have major changes from previous ones.</p>
 <table>
 <thead>
 <tr>
@@ -98,9 +107,7 @@ en/note-00044.md
 </tr>
 </tbody>
 </table>
-<p>GNOME post-40 releases have major changes from previous ones.</p>
-<p>My initial reaction to brokage of trick method was this may be caused by changes of javascript codes in gnome-shell.</p>
-<h2 id="where-in-gnome-shell-package-can-i-find-its-javascript-codes">Where in gnome-shell package can I find its javascript codes?</h2>
+<h3 id="where-in-gnome-shell-package-can-i-find-its-javascript-codes">Where in gnome-shell package can I find its javascript codes?</h3>
 <p>Older documentation such as
 &ldquo;<a href="http://mathematicalcoffee.blogspot.com/2012/09/gnome-shell-javascript-source.html">GNOME shell: Javascript Source Documentation (extensions development)</a>&rdquo;
 written in 2012 talks about javascript codes in <code>/usr/share/gnome-shell/js/ui</code>.
@@ -112,7 +119,7 @@ written in 2020.</p>
 <code>/usr/lib/gnome-shell/libgnome-shell.so</code>. The javascript codes can be found in
 the original source tree or retrieved from installed
 <code>/usr/lib/gnome-shell/libgnome-shell.so</code> using <code>gresource</code> command.</p>
-<h2 id="are-there-any-changes-in-related-javascript-codes-in-gnome-shell">Are there any changes in related javascript codes in gnome-shell.</h2>
+<h3 id="are-there-any-changes-in-related-javascript-codes-in-gnome-shell">Are there any changes in related javascript codes in gnome-shell.</h3>
 <p>Let&rsquo;s check the original source tree under <code>js</code></p>
 <pre tabindex="0"><code>$ cd path/to/gnome-shell-43.4/js/ui
 $ rg getInputSourceManager
@@ -125,7 +132,7 @@ keyboard.js
 2172:        this._inputSourceManager = InputSourceManager.getInputSourceManager();
 2240:            const inputSourceManager = InputSourceManager.getInputSourceManager();
 </code></pre><p>Checking code around these lines for both versions used in bookworm (2023) and buster (2021), I don&rsquo;t see much changes.</p>
-<h2 id="getting-start-with-looking-glass">Getting start with &ldquo;Looking Glass&rdquo;</h2>
+<h3 id="getting-start-with-looking-glass">Getting start with &ldquo;Looking Glass&rdquo;</h3>
 <p>Looking Glass is GNOME Shell&rsquo;s integrated debugger and inspector tool.  It&rsquo;s basic usage goes:</p>
 <ul>
 <li>Open with <code>Alt-F2</code></li>
@@ -133,12 +140,12 @@ keyboard.js
 <li>Enter a command e.g. <code>global.get_window_actors()</code> to the &ldquo;Looking Glass&rdquo; prompt</li>
 <li>Enter <code>Esc</code> to leave &ldquo;Looking Glass&rdquo;</li>
 </ul>
-<h3 id="tricks-for-the-looking-glass-prompt">Tricks for the &ldquo;Looking Glass&rdquo; prompt</h3>
+<h4 id="tricks-for-the-looking-glass-prompt">Tricks for the &ldquo;Looking Glass&rdquo; prompt</h4>
 <ul>
 <li><code>St.set_slow_down_facor(10)</code> &ndash; slow down</li>
 <li><code>St.get_slow_down_facor()</code> &ndash; check ???? not working</li>
 </ul>
-<h2 id="testing-under-looking-glass">Testing under &ldquo;Looking Glass&rdquo;</h2>
+<h3 id="testing-under-looking-glass">Testing under &ldquo;Looking Glass&rdquo;</h3>
 <p>I tested the following javascript snippet and its variants from &ldquo;Looking Glass&rdquo; prompt.</p>
 <pre tabindex="0"><code>imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()
 </code></pre><p>This switched Input method to the first one.  Using <code>inputSources[1]</code> instead swiched Input method to the second one.  So this javascript code itself is still valid one.</p>
@@ -160,7 +167,7 @@ node /org/gnome/Shell {
   ...
 };
 </code></pre><p>So the calling syntax looks OK.</p>
-<h2 id="gdbus-error">gdbus error</h2>
+<h3 id="root-cause-gdbus-error">Root cause: <code>gdbus</code> error</h3>
 <p>Searching on &ldquo;gdbus error&rdquo; within 1 year lead me to the following articles.</p>
 <ul>
 <li><a href="https://askubuntu.com/questions/1412130/dbus-calls-to-gnome-shell-dont-work-under-ubuntu-22-04">dbus calls to gnome shell don&rsquo;t work under Ubuntu 22.04</a> &ndash; 2022</li>
@@ -168,16 +175,29 @@ node /org/gnome/Shell {
 <li><a href="https://github.com/linushdot/unsafe-mode-menu">Unsafe Mode Menu</a> &ndash; Simple GNOME extension to change the Gnome Shell unsafe-mode via the quick settings menu/panel menu.</li>
 </ul>
 <p>It looks like now shellDBus restricts callers to block <code>gdbus</code> calls.</p>
+<h3 id="workaround-unsafe-mode-menu">Workaround: Unsafe Mode Menu</h3>
 <p>I decided to install <a href="https://github.com/linushdot/unsafe-mode-menu">Unsafe Mode Menu</a> and it worked!</p>
-<p>For now, this is good enough.</p>
-<h2 id="references-to-write-proper-gnome-shell-extensions">References to write proper GNOME shell extensions</h2>
+<p>This workaround was good enough to update
+<a href="/en/2023/02/25/debian-usability-2023/#keyboard-shortcut-customization-gnome-settings----custom-shortcut">Debian Workstation (usability) (v2023) &ndash; Keyboard shortcut customization (GNOME Settings – custom shortcut)</a>.</p>
+<h2 id="note-on-code-tracing">Note on code tracing</h2>
+<h3 id="string-match-to-find-associated-code-points">String match to find associated code points</h3>
+<p>I tried to find interesting code points from associated menu strings by running <code>rg</code> or <code>rg -i</code> command over source code trees.</p>
 <ul>
-<li><a href="https://gitlab.gnome.org/GNOME/gnome-shell">GNOME shell - GNOME</a> (current)</li>
-<li><a href="https://github.com/GNOME/gnome-shell">GNOME shell - github</a> Read-only mirror (current)</li>
-<li><a href="https://wiki.gnome.org/Projects/GnomeShell">GNOME shell - wiki</a> (2021)</li>
-<li><a href="https://itnext.io/hacking-the-gnome-shell-create-extensions-ef3e4ecac325">Hack the GNOME Shell — Create Extensions</a> (2022)</li>
-<li><a href="https://github.com/julio641742/gnome-shell-extension-reference">GNOME Shell Extension Reference</a> &ndash; user (2016)</li>
+<li>&ldquo;<code>Launchers</code>&rdquo; is in the <code>gnome-shell</code> source tree as &ldquo;<code>name=&quot;Launchers</code>&rdquo; in &ldquo;<code>data/50-gnome-shell-launchers.xml</code>&rdquo;</li>
+<li>But I can&rsquo;t find&quot;<code>Custom Shortcuts</code>&quot; with case matched in <code>gnome-shell</code> nor in <code>gnome-settings-daemon</code></li>
+<li>Exact &ldquo;<code>Custom Shortcuts</code>&rdquo; isn&rsquo;t in <code>gnome-shell</code> nor <code>gnome-settings-daemon</code> source trees.</li>
+<li>Case-insensitive &ldquo;<code>Custom Shortcuts</code>&rdquo; is in the <code>gnome-settings-daemon</code> source tree as comment &ldquo;<code>/* Custom shortcuts */</code>&rdquo;.
+<ul>
+<li>This leads to look for &ldquo;<code>custom-keybindings</code>&rdquo; and found it in <code>data/org.gnome.settings-daemon.plugins.media-keys.gschema.xml.in</code>.</li>
 </ul>
+</li>
+<li>Exact &ldquo;<code>Custom Shortcuts</code>&rdquo; is in the <code>gnome-control-center</code> source tree as C code.</li>
+</ul>
+<p>So I need to search multiple packages to understand how GNOME desktop works and
+not all UI frontend codes such as ones in <code>gnome-control-center</code> are written in javascript.</p>
+<p>I suppose I need to revisit this problem after learning GNOME.</p>
+<h3 id="what-is-a11y">What is <strong>a11y</strong></h3>
+<p>Although many file names and directory names in the GNOME source code use intuitive names, <code>a11y</code> was a bit intriguing.  <a href="https://www.a11yproject.com/">a11y</a> stands for <strong>ACCESSIBILITY</strong>.</p>
 <!-- raw HTML omitted -->
 
 
@@ -189,7 +209,7 @@ node /org/gnome/Shell {
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2023/06/17/gnome-extensions/">Next Post</a></td>
   
   </tr>
   </tbody>
