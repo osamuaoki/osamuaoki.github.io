@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GNOME internals | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GNOME internals</span></h1>
+
+<h3 class="date">Date:
+2023/06/17 (initial publish),
+2023/06/22 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00046.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/06/16/gnome-shell/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/06/17/gnome-extensions/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#launching-of-a-program-from-gui">Launching of a program from GUI</a></li>
+    <li><a href="#configuration-settings-of-gnome-programs">Configuration settings of GNOME programs</a></li>
+    <li><a href="#references-to-write-proper-gnome-shell-extensions">References to write proper GNOME shell extensions</a></li>
+  </ul>
+</nav>
+
+<h2 id="launching-of-a-program-from-gui">Launching of a program from GUI</h2>
+<p>You can create a desktop entry file with <code>.desktop</code> extension placed in <code>~/.local/share/applications/</code> to launch your program from GUI.</p>
+<p>See:</p>
+<ul>
+<li>XDG <a href="https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-latest.html">Desktop Entry Specification</a></li>
+<li><a href="https://endy-tech.hatenablog.jp/entry/desktop_entry">Linux デスクトップファイルの書き方</a></li>
+</ul>
+<h2 id="configuration-settings-of-gnome-programs">Configuration settings of GNOME programs</h2>
+<p>GNOME programs store their settings in
+<a href="https://wiki.gnome.org/HowDoI/GSettings">GSettings</a>.
+The configuration tool for GSettings is CLI: <code>gsettings</code>(1).
+GSettings use a dconf database as the binary data storage backend with its data
+in <code>~/.config/dconf/user</code>.
+The configuration tool for the dconf database is CLI: <code>dconf</code>(1) and GUI:
+<code>dconf-editor</code>(1).</p>
+<p>You can see entire settings by:</p>
+<ul>
+<li><code>gsettings reset-recursively /</code></li>
+<li><code>dconf dump /</code></li>
+<li><code>dconf-editor</code></li>
+</ul>
+<p>TIP: See <a href="https://en.wikipedia.org/wiki/Database_schema">Database schema</a> to
+understand what is <strong>schema</strong>.</p>
+<p>Typically, &ldquo;dconf schemas&rdquo; translate nicely into &ldquo;gsettings schemas&rdquo; by replacing slashes with dots and vice versa.
+For &ldquo;relocatable schemas&rdquo;, schema also requires a particular path added.
+See <a href="https://blog.gtk.org/2017/05/01/first-steps-with-gsettings/">First steps with GSettings</a> (2017)</p>
+<p><code>dconf-editor</code> has nice search functionality but dconf database lacks some
+information available from <code>gsettings</code> command such as &ldquo;<code>writable</code>&rdquo;, &ldquo;<code>range</code>&rdquo;,
+and &ldquo;<code>describe</code>&rdquo;.</p>
+<p>I created a simple shell script
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/gsettings-grep">gsettings-grep</a>
+to get them conveniently as grep result.</p>
+<h2 id="references-to-write-proper-gnome-shell-extensions">References to write proper GNOME shell extensions</h2>
+<p>My interest is to create GNOME extension for input method to avoid using <code>unsafe-mode-menu</code>.</p>
+<ul>
+<li><a href="https://gitlab.gnome.org/GNOME/gnome-shell">GNOME shell - GNOME</a> (current)</li>
+<li><a href="https://github.com/GNOME/gnome-shell">GNOME shell - github</a> Read-only mirror (current)</li>
+<li><a href="https://wiki.gnome.org/HowDoI/GSettings">Using GSettings</a> (2023, Gnome wiki)</li>
+<li><a href="https://wiki.gnome.org/Projects/GnomeShell">GNOME shell - wiki</a> (2021)</li>
+<li><a href="https://bharatkalluri.gitbook.io/gnome-developer-handbook/">GNOME Developer handbook</a> (2021) (gitbook)</li>
+<li><a href="https://github.com/p-e-w/argos">Create GNOME Shell extensions in seconds</a> (2023) &ndash; extension example</li>
+<li><a href="https://github.com/ManeLippert/gnome-shell-extension-pop-launcher-super-key">Pop!_OS Launcher on Super-Key</a> (2023) &ndash; extension example</li>
+<li><a href="https://github.com/matthijskooijman/gnome-shell-more-keyboard-shortcuts">More keyboard shortcuts for Gnome Shell</a> (2023) &ndash; extension example</li>
+<li><a href="https://superuser.com/questions/471606/gnome-shell-extension-key-binding">Gnome Shell Extension Key Binding</a> (2013?) &ndash; code example</li>
+<li><a href="https://itnext.io/hacking-the-gnome-shell-create-extensions-ef3e4ecac325">Hack the GNOME Shell — Create Extensions</a> (2022) &ndash; blog</li>
+<li><a href="https://encarsia.github.io/en/posts/gsettings/">The GSettings configuration storage system</a> (2017)</li>
+<li><a href="https://github.com/julio641742/gnome-shell-extension-reference">GNOME Shell Extension Reference</a> &ndash; user (2016)</li>
+<li><a href="https://fut-nis.hatenadiary.jp/entry/20120626/1340716798">GNOME Shell Extension を調べてみた</a> (2012)</li>
+<li><a href="https://unix.stackexchange.com/questions/596308/custom-keybindings-for-linux-mint-20-via-gsettings">Custom keybindings For Linux Mint 20 via gsettings</a> &ndash; <code>dconf write</code> example</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/06/16/gnome-shell/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/06/17/gnome-extensions/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
