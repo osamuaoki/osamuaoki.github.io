@@ -116,31 +116,28 @@ to get them conveniently as grep result.</p>
 </span></span><span style="display:flex;"><span>        -s        search PATTERN on <span style="color:#e6db74">&#39;gsettings list-schema&#39;</span> <span style="color:#f92672">(=</span>default<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>        -E        use ERE search PATTERN instead of default BRE
 </span></span><span style="display:flex;"><span>        -i        <span style="color:#66d9ef">case</span> insensitive search instead
-</span></span><span style="display:flex;"><span>$ gsettings-grep org.gnome.FileRoller.Dialogs.Extract
-</span></span><span style="display:flex;"><span>SCHEMA     <span style="color:#f92672">=</span> org.gnome.FileRoller.Dialogs.Extract
-</span></span><span style="display:flex;"><span>  KEY      <span style="color:#f92672">=</span> recreate-folders
-</span></span><span style="display:flex;"><span>  VALUE    <span style="color:#f92672">=</span> true
-</span></span><span style="display:flex;"><span>  DESC     <span style="color:#f92672">=</span> Recreate the folders stored in the archive
-</span></span><span style="display:flex;"><span>  RANGE    <span style="color:#f92672">=</span> type b
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$ gsettings-grep org.gnome.settings-daemon.peripherals.smartcard
+</span></span><span style="display:flex;"><span>SCHEMA     <span style="color:#f92672">=</span> org.gnome.settings-daemon.peripherals.smartcard
+</span></span><span style="display:flex;"><span>  KEY      <span style="color:#f92672">=</span> removal-action
+</span></span><span style="display:flex;"><span>  VALUE    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;none&#39;</span>
+</span></span><span style="display:flex;"><span>  DESC     <span style="color:#f92672">=</span> Set this to one of “none”, “lock-screen”, or “force-logout”. The action will get performed when the smartcard used <span style="color:#66d9ef">for</span> log in is removed.
+</span></span><span style="display:flex;"><span>  RANGE    <span style="color:#f92672">=</span> enum	<span style="color:#e6db74">&#39;none&#39;</span>	<span style="color:#e6db74">&#39;lock-screen&#39;</span>	<span style="color:#e6db74">&#39;force-logout&#39;</span>
 </span></span><span style="display:flex;"><span>  WRITABLE <span style="color:#f92672">=</span> true
-</span></span><span style="display:flex;"><span>SCHEMA     <span style="color:#f92672">=</span> org.gnome.FileRoller.Dialogs.Extract
-</span></span><span style="display:flex;"><span>  KEY      <span style="color:#f92672">=</span> skip-newer
-</span></span><span style="display:flex;"><span>  VALUE    <span style="color:#f92672">=</span> false
-</span></span><span style="display:flex;"><span>  DESC     <span style="color:#f92672">=</span> Do not overwrite newer files
-</span></span><span style="display:flex;"><span>  RANGE    <span style="color:#f92672">=</span> type b
-</span></span><span style="display:flex;"><span>$ gsettings-grep -a ibus.*key.*0
-</span></span><span style="display:flex;"><span>SCHEMA     <span style="color:#f92672">=</span> org.freedesktop.ibus.engine.anthy.thumb
-</span></span><span style="display:flex;"><span>  KEY      <span style="color:#f92672">=</span> keyboard-layout
-</span></span><span style="display:flex;"><span>  VALUE    <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
-</span></span><span style="display:flex;"><span>  DESC     <span style="color:#f92672">=</span>
-</span></span><span style="display:flex;"><span>  RANGE    <span style="color:#f92672">=</span> type i
+</span></span><span style="display:flex;"><span>$ gsettings-grep bell-mode
+</span></span><span style="display:flex;"><span>$ gsettings-grep -a bell-mode
+</span></span><span style="display:flex;"><span>SCHEMA     <span style="color:#f92672">=</span> org.gnome.settings-daemon.peripherals.keyboard
+</span></span><span style="display:flex;"><span>  KEY      <span style="color:#f92672">=</span> bell-mode
+</span></span><span style="display:flex;"><span>  VALUE    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;on&#39;</span>
+</span></span><span style="display:flex;"><span>  DESC     <span style="color:#f92672">=</span> Possible values are “on”, “off”, and “custom”.
+</span></span><span style="display:flex;"><span>  RANGE    <span style="color:#f92672">=</span> enum	<span style="color:#e6db74">&#39;on&#39;</span>	<span style="color:#e6db74">&#39;off&#39;</span>	<span style="color:#e6db74">&#39;custom&#39;</span>
 </span></span><span style="display:flex;"><span>  WRITABLE <span style="color:#f92672">=</span> true
-</span></span><span style="display:flex;"><span>$ gsettings-grep -a mouse-tracking
-</span></span><span style="display:flex;"><span>SCHEMA     <span style="color:#f92672">=</span> org.gnome.desktop.a11y.magnifier
-</span></span><span style="display:flex;"><span>  KEY      <span style="color:#f92672">=</span> mouse-tracking
-</span></span><span style="display:flex;"><span>  VALUE    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;proportional&#39;</span>
-</span></span><span style="display:flex;"><span>  DESC     <span style="color:#f92672">=</span> Determines the position of the magnified mouse image within the magnified view and how it reacts to system mouse movement. The values are • none: no mouse tracking; • centered: the mouse image is displayed at the center of the zoom region <span style="color:#f92672">(</span>which also represents the point under the system mouse<span style="color:#f92672">)</span> and the magnified contents are scrolled as the system mouse moves; • proportional: the position of the magnified mouse in the zoom region is proportionally the same as the position of the system mouse on screen; • push: when the magnified mouse intersects a boundary of the zoom region, the contents are scrolled into view.
-</span></span><span style="display:flex;"><span>  RANGE    <span style="color:#f92672">=</span> enum	<span style="color:#e6db74">&#39;none&#39;</span>	<span style="color:#e6db74">&#39;centered&#39;</span>	<span style="color:#e6db74">&#39;proportional&#39;</span>	<span style="color:#e6db74">&#39;push&#39;</span>
+</span></span><span style="display:flex;"><span>$ gsettings-grep -a 🎌
+</span></span><span style="display:flex;"><span>SCHEMA     <span style="color:#f92672">=</span> org.gnome.Characters
+</span></span><span style="display:flex;"><span>  KEY      <span style="color:#f92672">=</span> recent-characters
+</span></span><span style="display:flex;"><span>  VALUE    <span style="color:#f92672">=</span> <span style="color:#f92672">[</span><span style="color:#e6db74">&#39;§&#39;</span>, <span style="color:#e6db74">&#39;√&#39;</span>, <span style="color:#e6db74">&#39;»&#39;</span>, <span style="color:#e6db74">&#39;😊&#39;</span>, <span style="color:#e6db74">&#39;👿&#39;</span>, <span style="color:#e6db74">&#39;🎌&#39;</span><span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>  DESC     <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>null<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>  RANGE    <span style="color:#f92672">=</span> type as
 </span></span><span style="display:flex;"><span>  WRITABLE <span style="color:#f92672">=</span> true
 </span></span></code></pre></div><h2 id="references-to-write-proper-gnome-shell-extensions">References to write proper GNOME shell extensions</h2>
 <p>My interest is to create GNOME extension for input method to avoid using <code>unsafe-mode-menu</code>.</p>
