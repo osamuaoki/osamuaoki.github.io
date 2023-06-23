@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/17 (initial publish),
-2023/06/22 (last update)
+2023/06/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00045.md
@@ -104,18 +104,11 @@ GNOME Desktop environment configured as I want.</p>
 <h3 id="essential-gnome-extensions-for-better-ux">Essential GNOME extensions for better UX</h3>
 <p>These GNOME extensions are essential ones for better Desktop UX.</p>
 <ul>
-<li><a href="https://github.com/icedman/suppress-startup-animation.git">icedman/suppress-startup-animation</a>
+<li><a href="https://github.com/linushdot/unsafe-mode-menu.git">linushdot/unsafe-mode-menu</a>
 <ul>
-<li>Suppress the overview startup animation and be greeted with your wall paper instead</li>
-<li>PRO: less invasive and less noisy UI</li>
-<li>CON: un-intuitive for new user</li>
-</ul>
-</li>
-<li><a href="https://github.com/nmingori/gnome-hide-actitivies-button">nmingori/gnome-hide-actitivies-button</a>: <code>*U</code>
-<ul>
-<li>Hide Activities Button</li>
-<li>PRO: less noisy UI</li>
-<li>CON: un-intuitive for new user</li>
+<li>Change GNOME Shell unsafe-mode via quick settings menu/panel menu</li>
+<li>PRO: enable <code>gdbus</code> usage in launcher to switch input methods (Must)</li>
+<li>CON: <strong>unsafe</strong> isn&rsquo;t nice (Use this until I find better alternative.)</li>
 </ul>
 </li>
 <li><a href="https://github.com/micheleg/dash-to-dock">micheleg/dash-to-dock</a>: <code>*U</code>
@@ -132,36 +125,54 @@ GNOME Desktop environment configured as I want.</p>
 <li>CON: none</li>
 </ul>
 </li>
-<li><a href="https://github.com/linushdot/unsafe-mode-menu.git">linushdot/unsafe-mode-menu</a>
+<li><a href="https://github.com/icedman/suppress-startup-animation.git">icedman/suppress-startup-animation</a>
 <ul>
-<li>Change GNOME Shell unsafe-mode via quick settings menu/panel menu</li>
-<li>PRO: enable <code>gdbus</code> usage in launcher to switch input methods</li>
-<li>CON: <strong>unsafe</strong> isn&rsquo;t nice (Use this until I find better alternative.)</li>
+<li>Suppress the overview startup animation and be greeted with your wall paper instead</li>
+<li>PRO: less invasive and less noisy UI</li>
+<li>CON: none
+<ul>
+<li>dash-to-dock eliminates needs for initial dash screen even for new user</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://github.com/nmingori/gnome-hide-actitivies-button">nmingori/gnome-hide-actitivies-button</a>: <code>*U</code>
+<ul>
+<li>Hide Activities Button</li>
+<li>PRO: less noisy UI</li>
+<li>CON: none
+<ul>
+<li>un-intuitive only for new user (but I already know corner activation)</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
 <h3 id="basic-gnome-extensions">Basic GNOME extensions</h3>
 <p>These GNOME extensions are basic ones providing specific functionalities.</p>
 <ul>
-<li><a href="https://github.com/EasyScreenCast/EasyScreenCast">EasyScreenCast/EasyScreenCast</a>: <code>*L</code>, <code>*N</code>
+<li><a href="https://github.com/eonpatapon/gnome-shell-extension-caffeine">eonpatapon/gnome-shell-extension-caffeine</a>: <code>*U</code>, <code>*L</code>, <code>*N</code>, <code>*M</code>
 <ul>
-<li>Simplifies the use of the video recording function integrated in gnome shell</li>
+<li>Disable screensaver and auto suspend</li>
+<li>PRO: Convenient</li>
 </ul>
 </li>
 <li><a href="https://github.com/corecoding/Vitals">corecoding/Vitals</a>: <code>*U</code>, <code>*L</code>, <code>*N</code>, <code>*M</code>
 <ul>
 <li>Display CPU temperature, voltage, fan speed, memory usage, CPU load, and net speed.</li>
-<li>PRO: Interestng and cute extra information</li>
-</ul>
-</li>
-<li><a href="https://github.com/eonpatapon/gnome-shell-extension-caffeine">eonpatapon/gnome-shell-extension-caffeine</a>: <code>*U</code>, <code>*L</code>, <code>*N</code>, <code>*M</code>
-<ul>
-<li>Disable screensaver and auto suspend</li>
+<li>PRO: Interesting and cute extra information</li>
 </ul>
 </li>
 <li><a href="https://github.com/Tudmotu/gnome-shell-extension-clipboard-indicator">Tudmotu/gnome-shell-extension-clipboard-indicator</a>: <code>*U</code>, <code>*L</code>, <code>*N</code>
 <ul>
 <li>Clipboard Manager extension for Gnome-Shell - Adds a clipboard indicator to the top panel, and saves clipboard history.</li>
+<li>PRO: Ocasionary convenient (set to 5 levels)</li>
+</ul>
+</li>
+<li><a href="https://github.com/maoschanz/notes-extension-gnome">maoschanz/notes-extension-gnome</a>: <code>*L</code>
+<ul>
+<li>A GNOME Shell extension providing customizable sticky notes</li>
+<li>PRO: Ocasionary convenient (quick notes)</li>
 </ul>
 </li>
 </ul>
@@ -169,25 +180,16 @@ GNOME Desktop environment configured as I want.</p>
 <p>These GNOME extensions are optional ones providing specific functionalities.
 (These are less likely to be needed, though.)</p>
 <ul>
-<li><a href="https://github.com/maoschanz/notes-extension-gnome">maoschanz/notes-extension-gnome</a>: <code>*L</code>
-<ul>
-<li>A GNOME Shell extension providing customizable sticky notes</li>
-</ul>
-</li>
-<li><a href="https://gitlab.com/paddatrapper/shortcuts-gnome-extension">paddatrapper/shortcuts-gnome-extension</a>
-<ul>
-<li>Creates a pop-up that describes the commonly used keyboard shortcuts in GNOME Shell when Super + S is pressed</li>
-</ul>
-</li>
-<li><a href="https://github.com/matthijskooijman/gnome-shell-more-keyboard-shortcuts">matthijskooijman/gnome-shell-more-keyboard-shortcuts</a>
-<ul>
-<li>Gnome-shell extension to add some additional window-switching keyboard shortcuts</li>
-</ul>
-</li>
 <li><a href="https://github.com/zagortenay333/cronomix">zagortenay333/cronomix</a>: <code>*L</code>
 <ul>
 <li>All-in-one timer, stopwatch, pomodoro, alarm, todo and time tracker gnome-shell extension</li>
 <li>???: I don&rsquo;t use timer but &hellip;</li>
+</ul>
+</li>
+<li><a href="https://github.com/axxapy/gnome-ui-tune">axxapy/gnome-ui-tune</a>: <code>*N</code>
+<ul>
+<li>Tunes overview UI of the gnome 40 a bit</li>
+<li>???: I don&rsquo;t care to use these changes</li>
 </ul>
 </li>
 </ul>
@@ -207,10 +209,29 @@ I probably don&rsquo;t use.</p>
 <li>???: I don&rsquo;t care to use these changes, too many settings</li>
 </ul>
 </li>
-<li><a href="https://github.com/axxapy/gnome-ui-tune">axxapy/gnome-ui-tune</a>: <code>*N</code>
+<li><a href="https://github.com/EasyScreenCast/EasyScreenCast">EasyScreenCast/EasyScreenCast</a>: <code>*L</code>, <code>*N</code>
 <ul>
-<li>Tunes overview UI of the gnome 40 a bit</li>
-<li>???: I don&rsquo;t care to use these changes</li>
+<li>Simplifies the use of the video recording function integrated in gnome shell</li>
+<li>CON: Redundant
+<ul>
+<li>???: Menu presented by &ldquo;Print&rdquo; has video icon already.</li>
+<li>???: Shortcut <code>Alt-Ctrl-Shift-R</code> can invoke video</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://gitlab.com/paddatrapper/shortcuts-gnome-extension">paddatrapper/shortcuts-gnome-extension</a>
+<ul>
+<li>Creates a pop-up that describes the commonly used keyboard shortcuts in GNOME Shell when Super + S is pressed</li>
+</ul>
+</li>
+<li><a href="https://github.com/matthijskooijman/gnome-shell-more-keyboard-shortcuts">matthijskooijman/gnome-shell-more-keyboard-shortcuts</a>
+<ul>
+<li>Gnome-shell extension to add some additional window-switching keyboard shortcuts
+<ul>
+<li>???: use this as baseline to create useful shortcuts for input methods</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>Workspace Indicator (in deb:<code>gnome-shell-extensions</code>)
