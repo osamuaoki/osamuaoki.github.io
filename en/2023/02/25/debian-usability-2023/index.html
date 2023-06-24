@@ -305,7 +305,13 @@ javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <li><code>SUPER-ALT_ENTER</code>: Anthy</li>
 </ul>
 <p>(I use &ldquo;ENTER&rdquo;-combos for shortcuts to enter easily with both hands.)</p>
+<h4 id="new-better-way-with-gnome-extension">New better way with GNOME extension</h4>
+<p>Install my GNOME extension:</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/inputmethod-shortcuts">Keyboard shortcuts for switching input methods under GNOME shell</a></li>
+</ul>
 <h4 id="old-hackish-way-with-gdbus">Old hackish way with <code>gdbus</code></h4>
+<p><strong>This is for historical record.</strong></p>
 <p>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is English (US) and if you want to use SUPER-ENTER to switch to US, you need to set as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     IM_0
 </span></span><span style="display:flex;"><span>Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  <span style="color:#e6db74">&#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;</span>
@@ -318,11 +324,6 @@ javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <p>This &ldquo;Unsafe mode&rdquo; can be enabled via GNOME right top corner dialog.</p>
 <p><img src="/img/unsafe-mode.png" alt="unsafe mode screen"></p>
 <p>The history of how I came to the above is recorded in <a href="/en/2023/06/16/gnome-shell-1/">GNOME shell changes</a>.</p>
-<h4 id="new-better-way-with-gnome-extension">New better way with GNOME extension</h4>
-<p>Install my GNOME extension:</p>
-<ul>
-<li><a href="https://github.com/osamuaoki/inputmethod-shortcuts">Keyboard shortcuts for switching input methods under GNOME shell</a></li>
-</ul>
 <h3 id="note-on-non-usable-shortcut-key-combos-for-super">Note on non usable shortcut key combos for super</h3>
 <ul>
 <li>Any use of <code>SUPER</code>+<code>modifier</code>+<code>SPACE</code> or <code>SUPER</code>-<code>SPACE</code> breaks normal <code>SUPER</code>-<code>SPACE</code> for rotating input method and bad idea</li>
