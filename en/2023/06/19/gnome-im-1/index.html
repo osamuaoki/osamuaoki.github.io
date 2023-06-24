@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GNOME shell extension for input methods | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">GNOME shell extension for input methods</span></h1>
+
+<h3 class="date">Date:
+2023/06/19 (initial publish),
+2023/06/25 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00047.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/06/18/gnome-tweaks-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#simple-gnome-shell-extension">Simple GNOME shell extension</a></li>
+    <li><a href="#how-to-get-keybinding">How to get keybinding</a>
+      <ul>
+        <li><a href="#gnome-extension-shortcuts">GNOME extension &ldquo;Shortcuts&rdquo;</a></li>
+        <li><a href="#gnome-extension-more-keyboard-shortcuts">GNOME extension &ldquo;More keyboard shortcuts&rdquo;</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>Since I didn&rsquo;t find GNOME shell extension to provide shortcuts to input method
+activations, I decided to create one by following examples of existing
+extensions without rigorous learning.</p>
+<h2 id="simple-gnome-shell-extension">Simple GNOME shell extension</h2>
+<p>One can create a skelton of a simple GNOME shell extension as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ gnome-shell-extension-tool --create-extension
+</span></span></code></pre></div><p>This created a almost empty GNOME shell extension under
+<code>~/.local/share/gnome-shell/extensions/</code>.</p>
+<p>After &ldquo;Log out&rdquo; and &ldquo;Log in&rdquo; to my account, this GNOME shell extension can be
+seen from &ldquo;Extensions&rdquo;.  But this was too simple to do anything useful.</p>
+<h2 id="how-to-get-keybinding">How to get keybinding</h2>
+<p>In order to find keybinding definition examples, I looked around for simple
+extensions.</p>
+<h3 id="gnome-extension-shortcuts">GNOME extension &ldquo;Shortcuts&rdquo;</h3>
+<p>GNOME extension <a href="https://gitlab.com/paddatrapper/shortcuts-gnome-extension">Shortcuts</a>
+looked like simple enough since all it does is toggling of display when <code>&lt;Super&gt;s</code> is pressed.</p>
+<p>But there is no text like <code>super</code> in the source.  It looks like <code>imports.ui.main.overview</code> gets a call back to enable toggling of display.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">Main</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">imports</span>.<span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">main</span>;
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>  <span style="color:#a6e22e">Main</span>.<span style="color:#a6e22e">overview</span>.<span style="color:#a6e22e">_specialToggle</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span> (<span style="color:#a6e22e">evt</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_toggleShortcuts</span>();
+</span></span><span style="display:flex;"><span>  };
+</span></span></code></pre></div><p><code>gnome-shell</code> source has <code>js/ui/main.js</code> which calls <code>overview.init()</code> then <code>js/ui/overviw.js</code> which has <code>overview.init()</code> calling:</p>
+<pre tabindex="0"><code>const Main = imports.ui.main;
+...
+Main.wm.addKeybinding(
+    &#39;toggle-overview&#39;,
+    new Gio.Settings({ schema_id: WindowManager.SHELL_KEYBINDINGS_SCHEMA }),
+    Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
+    Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW,
+    this.toggle.bind(this));
+</code></pre><p>In <code>data/org.gnome.shell.gschema.xml.in</code> from <code>gnome-shell</code> source, I found:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;key</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;toggle-overview&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;as&#34;</span><span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span>│ <span style="color:#f92672">&lt;default&gt;</span>[&#34;&amp;lt;Super&amp;gt;s&#34;]<span style="color:#f92672">&lt;/default&gt;</span>
+</span></span><span style="display:flex;"><span>│ <span style="color:#f92672">&lt;summary&gt;</span>Keybinding to open the overview<span style="color:#f92672">&lt;/summary&gt;</span>
+</span></span><span style="display:flex;"><span>│ <span style="color:#f92672">&lt;description&gt;</span>
+</span></span><span style="display:flex;"><span>│ │ Keybinding to open the Activities Overview.
+</span></span><span style="display:flex;"><span>│ <span style="color:#f92672">&lt;/description&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/key&gt;</span>
+</span></span></code></pre></div><p>So basically, this extension uses keybinding defined by <code>gnome-shell</code>.</p>
+<p>The schema definition <code>&lt;default&gt;[&quot;&amp;lt;Super&amp;gt;s&quot;]&lt;/default&gt;</code> used in <code>data/org.gnome.shell.gschema.xml.in</code> is interesting.
+Also, <code>imports.ui.main.wm.addKeybinding()</code> seems to be the way to bind specific
+key to a javascript code.</p>
+<h3 id="gnome-extension-more-keyboard-shortcuts">GNOME extension &ldquo;More keyboard shortcuts&rdquo;</h3>
+<p><a href="https://github.com/matthijskooijman/gnome-shell-more-keyboard-shortcuts">More keyboard shortcuts</a>
+also looked like simple enough since all it does is
+switching window on the current workspace
+when <code>&lt;Super&gt;j</code>  or <code>&lt;Super&gt;k</code> is pressed.</p>
+<p>This source has its own <code>schemas/org.gnome.shell.extensions.more-keyboard-shortcuts.gschema.xml</code> with <code>&lt;default&gt;&lt;![CDATA[['&lt;Super&gt;j']]]&gt;&lt;/default&gt;</code> and <code>&lt;default&gt;&lt;![CDATA[['&lt;Super&gt;k']]]&gt;&lt;/default&gt;</code> for <code>&lt;key type=&quot;as&quot; name=&quot;switch-window-next-workspace&quot;&gt;</code> and <code>&lt;key type=&quot;as&quot; name=&quot;switch-window-prev-workspace&quot;&gt;</code>.</p>
+<p>I suppose this <code>CDATA</code> thing is the same thing as <code>&lt;default&gt;[&quot;&amp;lt;Super&amp;gt;j&quot;]&lt;/default&gt;</code> and <code>&lt;default&gt;[&quot;&amp;lt;Super&amp;gt;k&quot;]&lt;/default&gt;</code>.</p>
+<p>I also see <code>extension.js</code> has the following which binds &ldquo;key name&rdquo; to javascript.</p>
+<pre tabindex="0"><code>function enable() {
+    Main.wm.addKeybinding(&#34;switch-window-next-workspace&#34;,
+        settings,
+        Meta.KeyBindingFlags.NONE,
+        Shell.ActionMode ? Shell.ActionMode.NORMAL : Shell.KeyBindingMode.NORMAL,
+        function(display, screen, window, binding) {
+            switchWindow(true);
+        }
+    );
+    Main.wm.addKeybinding(&#34;switch-window-prev-workspace&#34;,
+        settings,
+        Meta.KeyBindingFlags.NONE,
+        Shell.ActionMode ? Shell.ActionMode.NORMAL : Shell.KeyBindingMode.NORMAL,
+        function(display, screen, window, binding) {
+            switchWindow(false);
+        }
+    );
+}
+</code></pre><p>By replacing <code>switchWindow()</code> with Input Method setting javascript function, I
+think I can get desired extension.  See my result at:</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/inputmethod-shortcuts">Keyboard shortcuts for switching input methods under GNOME shell</a></li>
+</ul>
+<p>I also updated <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a>.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/06/18/gnome-tweaks-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
