@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/06/25 (last update)
+2023/06/26 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -69,6 +69,7 @@ en/note-00047.md
       <ul>
         <li><a href="#gnome-extension-shortcuts">GNOME extension &ldquo;Shortcuts&rdquo;</a></li>
         <li><a href="#gnome-extension-more-keyboard-shortcuts">GNOME extension &ldquo;More keyboard shortcuts&rdquo;</a></li>
+        <li><a href="#gnome-extension-uploading">GNOME extension uploading</a></li>
       </ul>
     </li>
   </ul>
@@ -114,9 +115,11 @@ Main.wm.addKeybinding(
 </span></span><span style="display:flex;"><span>│ <span style="color:#f92672">&lt;/description&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">&lt;/key&gt;</span>
 </span></span></code></pre></div><p>So basically, this extension uses keybinding defined by <code>gnome-shell</code>.</p>
-<p>The schema definition <code>&lt;default&gt;[&quot;&amp;lt;Super&amp;gt;s&quot;]&lt;/default&gt;</code> used in <code>data/org.gnome.shell.gschema.xml.in</code> is interesting.
-Also, <code>imports.ui.main.wm.addKeybinding()</code> seems to be the way to bind specific
-key to a javascript code.</p>
+<p>The schema definition <code>&lt;default&gt;[&quot;&amp;lt;Super&amp;gt;s&quot;]&lt;/default&gt;</code> used in
+<code>data/org.gnome.shell.gschema.xml.in</code> is interesting. Also,
+<code>imports.ui.main.wm.addKeybinding()</code> seems to be the way to bind specific key
+to a javascript code.</p>
+<p>I also got idea to use <strong>IGNORE_AUTOREPEAT</strong> from this.</p>
 <h3 id="gnome-extension-more-keyboard-shortcuts">GNOME extension &ldquo;More keyboard shortcuts&rdquo;</h3>
 <p><a href="https://github.com/matthijskooijman/gnome-shell-more-keyboard-shortcuts">More keyboard shortcuts</a>
 also looked like simple enough since all it does is
@@ -144,7 +147,66 @@ when <code>&lt;Super&gt;j</code>  or <code>&lt;Super&gt;k</code> is pressed.</p>
     );
 }
 </code></pre><p>By replacing <code>switchWindow()</code> with Input Method setting javascript function, I
-think I can get desired extension.  See my result at:</p>
+think I can get desired extension functionality.</p>
+<p>Since this was my first javascript program, there were many rough edges.</p>
+<h3 id="gnome-extension-uploading">GNOME extension uploading</h3>
+<p>I then went to upload a zip file of this newly made extension to GNOME site.</p>
+<p><strong>JustPerfection</strong> gave me feed backs.</p>
+<p>Version 1:</p>
+<pre tabindex="0"><code>OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 1 has a new review:
+
+JustPerfection posted a review on June 25, 2023:
+
+1. Please remove `stylesheet.css` since you are not using it:
+    https://gjs.guide/extensions/review-guidelines/review-guidelines.html#don-t-include-unnecessary-files
+
+2. Remove versions &amp;gt;=45 since we don&amp;#x27;t have those versions yet.
+
+3. Use initTranslations() and getSettings() from ExtensionUtils instead of creating your own custom functions (remove convenience.js after that):
+    https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/misc/extensionUtils.js
+
+4. That&amp;#x27;s too much for init (line 42 extension.js):
+    https://gjs.guide/extensions/review-guidelines/review-guidelines.html#only-use-init-for-initialization
+
+    Move that line to enable and null that out in disable:
+    https://gjs.guide/extensions/review-guidelines/review-guidelines.html#destroy-all-objects
+
+5. Remove all the key bindings on disable (line 118-149 extension.js).
+
+If you need any help with your extension you can ask us on:
+- [GNOME Matrix Channel](https://matrix.to/#/#extensions:gnome.org)
+- IRC Bridge: irc://irc.gimpnet.org/shell-extensions
+
+Please use the review page to follow up:
+
+https://extensions.gnome.org/review/42618
+</code></pre><p>This was very helpful.  I thought I fixed them all but (I forgot to erase old
+zip in the source tree.)  I uploaded again.</p>
+<p>Version 2:</p>
+<pre tabindex="0"><code>OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 2 has a new review:
+
+JustPerfection posted a review on June 25, 2023:
+
+1. You forgot to remove `stylesheet.css` and `convenience.js`.
+2. As I said before, you should null out `settings` in disable.
+3. I recommend to Import in top of the code instead of inside enable (line 51, 60, 69 and 78 extension.js).
+
+Please use the review page to follow up:
+
+https://extensions.gnome.org/review/42621
+OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 2 has a new review:
+
+JustPerfection posted a review on June 25, 2023:
+
+1. You forgot to remove `stylesheet.css` and `convenience.js`.
+2. As I said before, you should null out `settings` in disable.
+3. I recommend to Import in top of the code instead of inside enable (line 51, 60, 69 and 78 extension.js).
+
+Please use the review page to follow up:
+
+https://extensions.gnome.org/review/42621
+</code></pre><p>Very kind words on careless newbie.  I fixed and uploaded.</p>
+<p>See my result at:</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/inputmethod-shortcuts">Keyboard shortcuts for switching input methods under GNOME shell</a></li>
 </ul>
