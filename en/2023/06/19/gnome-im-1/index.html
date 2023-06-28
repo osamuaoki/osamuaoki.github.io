@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/06/26 (last update)
+2023/06/28 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -72,6 +72,7 @@ en/note-00047.md
         <li><a href="#gnome-extension-uploading">GNOME extension uploading</a></li>
       </ul>
     </li>
+    <li><a href="#learning-javascript-for-gjs">Learning JavaScript for GJS</a></li>
   </ul>
 </nav>
 
@@ -98,15 +99,15 @@ looked like simple enough since all it does is toggling of display when <code>&l
 </span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_toggleShortcuts</span>();
 </span></span><span style="display:flex;"><span>  };
 </span></span></code></pre></div><p><code>gnome-shell</code> source has <code>js/ui/main.js</code> which calls <code>overview.init()</code> then <code>js/ui/overviw.js</code> which has <code>overview.init()</code> calling:</p>
-<pre tabindex="0"><code>const Main = imports.ui.main;
-...
-Main.wm.addKeybinding(
-    &#39;toggle-overview&#39;,
-    new Gio.Settings({ schema_id: WindowManager.SHELL_KEYBINDINGS_SCHEMA }),
-    Meta.KeyBindingFlags.IGNORE_AUTOREPEAT,
-    Shell.ActionMode.NORMAL | Shell.ActionMode.OVERVIEW,
-    this.toggle.bind(this));
-</code></pre><p>In <code>data/org.gnome.shell.gschema.xml.in</code> from <code>gnome-shell</code> source, I found:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">const</span> <span style="color:#a6e22e">Main</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">imports</span>.<span style="color:#a6e22e">ui</span>.<span style="color:#a6e22e">main</span>;
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Main</span>.<span style="color:#a6e22e">wm</span>.<span style="color:#a6e22e">addKeybinding</span>(
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;toggle-overview&#39;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">new</span> <span style="color:#a6e22e">Gio</span>.<span style="color:#a6e22e">Settings</span>({ <span style="color:#a6e22e">schema_id</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">WindowManager</span>.<span style="color:#a6e22e">SHELL_KEYBINDINGS_SCHEMA</span> }),
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Meta</span>.<span style="color:#a6e22e">KeyBindingFlags</span>.<span style="color:#a6e22e">IGNORE_AUTOREPEAT</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Shell</span>.<span style="color:#a6e22e">ActionMode</span>.<span style="color:#a6e22e">NORMAL</span> <span style="color:#f92672">|</span> <span style="color:#a6e22e">Shell</span>.<span style="color:#a6e22e">ActionMode</span>.<span style="color:#a6e22e">OVERVIEW</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">toggle</span>.<span style="color:#a6e22e">bind</span>(<span style="color:#66d9ef">this</span>));
+</span></span></code></pre></div><p>In <code>data/org.gnome.shell.gschema.xml.in</code> from <code>gnome-shell</code> source, I found:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-xml" data-lang="xml"><span style="display:flex;"><span><span style="color:#f92672">&lt;key</span> <span style="color:#a6e22e">name=</span><span style="color:#e6db74">&#34;toggle-overview&#34;</span> <span style="color:#a6e22e">type=</span><span style="color:#e6db74">&#34;as&#34;</span><span style="color:#f92672">&gt;</span>
 </span></span><span style="display:flex;"><span>│ <span style="color:#f92672">&lt;default&gt;</span>[&#34;&amp;lt;Super&amp;gt;s&#34;]<span style="color:#f92672">&lt;/default&gt;</span>
 </span></span><span style="display:flex;"><span>│ <span style="color:#f92672">&lt;summary&gt;</span>Keybinding to open the overview<span style="color:#f92672">&lt;/summary&gt;</span>
@@ -118,7 +119,7 @@ Main.wm.addKeybinding(
 <p>The schema definition <code>&lt;default&gt;[&quot;&amp;lt;Super&amp;gt;s&quot;]&lt;/default&gt;</code> used in
 <code>data/org.gnome.shell.gschema.xml.in</code> is interesting. Also,
 <code>imports.ui.main.wm.addKeybinding()</code> seems to be the way to bind specific key
-to a javascript code.</p>
+to a JavaScript code.</p>
 <p>I also got idea to use <strong>IGNORE_AUTOREPEAT</strong> from this.</p>
 <h3 id="gnome-extension-more-keyboard-shortcuts">GNOME extension &ldquo;More keyboard shortcuts&rdquo;</h3>
 <p><a href="https://github.com/matthijskooijman/gnome-shell-more-keyboard-shortcuts">More keyboard shortcuts</a>
@@ -127,90 +128,121 @@ switching window on the current workspace
 when <code>&lt;Super&gt;j</code>  or <code>&lt;Super&gt;k</code> is pressed.</p>
 <p>This source has its own <code>schemas/org.gnome.shell.extensions.more-keyboard-shortcuts.gschema.xml</code> with <code>&lt;default&gt;&lt;![CDATA[['&lt;Super&gt;j']]]&gt;&lt;/default&gt;</code> and <code>&lt;default&gt;&lt;![CDATA[['&lt;Super&gt;k']]]&gt;&lt;/default&gt;</code> for <code>&lt;key type=&quot;as&quot; name=&quot;switch-window-next-workspace&quot;&gt;</code> and <code>&lt;key type=&quot;as&quot; name=&quot;switch-window-prev-workspace&quot;&gt;</code>.</p>
 <p>I suppose this <code>CDATA</code> thing is the same thing as <code>&lt;default&gt;[&quot;&amp;lt;Super&amp;gt;j&quot;]&lt;/default&gt;</code> and <code>&lt;default&gt;[&quot;&amp;lt;Super&amp;gt;k&quot;]&lt;/default&gt;</code>.</p>
-<p>I also see <code>extension.js</code> has the following which binds &ldquo;key name&rdquo; to javascript.</p>
-<pre tabindex="0"><code>function enable() {
-    Main.wm.addKeybinding(&#34;switch-window-next-workspace&#34;,
-        settings,
-        Meta.KeyBindingFlags.NONE,
-        Shell.ActionMode ? Shell.ActionMode.NORMAL : Shell.KeyBindingMode.NORMAL,
-        function(display, screen, window, binding) {
-            switchWindow(true);
-        }
-    );
-    Main.wm.addKeybinding(&#34;switch-window-prev-workspace&#34;,
-        settings,
-        Meta.KeyBindingFlags.NONE,
-        Shell.ActionMode ? Shell.ActionMode.NORMAL : Shell.KeyBindingMode.NORMAL,
-        function(display, screen, window, binding) {
-            switchWindow(false);
-        }
-    );
-}
-</code></pre><p>By replacing <code>switchWindow()</code> with Input Method setting javascript function, I
+<p>I also see <code>extension.js</code> has the following which binds &ldquo;key name&rdquo; to JavaScript.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">enable</span>() {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Main</span>.<span style="color:#a6e22e">wm</span>.<span style="color:#a6e22e">addKeybinding</span>(<span style="color:#e6db74">&#34;switch-window-next-workspace&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">settings</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Meta</span>.<span style="color:#a6e22e">KeyBindingFlags</span>.<span style="color:#a6e22e">NONE</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Shell</span>.<span style="color:#a6e22e">ActionMode</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">Shell</span>.<span style="color:#a6e22e">ActionMode</span>.<span style="color:#a6e22e">NORMAL</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">Shell</span>.<span style="color:#a6e22e">KeyBindingMode</span>.<span style="color:#a6e22e">NORMAL</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">display</span>, <span style="color:#a6e22e">screen</span>, window, <span style="color:#a6e22e">binding</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">switchWindow</span>(<span style="color:#66d9ef">true</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">Main</span>.<span style="color:#a6e22e">wm</span>.<span style="color:#a6e22e">addKeybinding</span>(<span style="color:#e6db74">&#34;switch-window-prev-workspace&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">settings</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Meta</span>.<span style="color:#a6e22e">KeyBindingFlags</span>.<span style="color:#a6e22e">NONE</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">Shell</span>.<span style="color:#a6e22e">ActionMode</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">Shell</span>.<span style="color:#a6e22e">ActionMode</span>.<span style="color:#a6e22e">NORMAL</span> <span style="color:#f92672">:</span> <span style="color:#a6e22e">Shell</span>.<span style="color:#a6e22e">KeyBindingMode</span>.<span style="color:#a6e22e">NORMAL</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">display</span>, <span style="color:#a6e22e">screen</span>, window, <span style="color:#a6e22e">binding</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">switchWindow</span>(<span style="color:#66d9ef">false</span>);
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    );
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>By replacing <code>switchWindow()</code> with Input Method setting JavaScript function, I
 think I can get desired extension functionality.</p>
-<p>Since this was my first javascript program, there were many rough edges.</p>
+<p>Since this was my first JavaScript program, there were many rough edges.</p>
 <h3 id="gnome-extension-uploading">GNOME extension uploading</h3>
 <p>I then went to upload a zip file of this newly made extension to GNOME site.</p>
 <p><strong>JustPerfection</strong> gave me feed backs.</p>
 <p>Version 1:</p>
-<pre tabindex="0"><code>OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 1 has a new review:
-
-JustPerfection posted a review on June 25, 2023:
-
-1. Please remove `stylesheet.css` since you are not using it:
-    https://gjs.guide/extensions/review-guidelines/review-guidelines.html#don-t-include-unnecessary-files
-
-2. Remove versions &amp;gt;=45 since we don&amp;#x27;t have those versions yet.
-
-3. Use initTranslations() and getSettings() from ExtensionUtils instead of creating your own custom functions (remove convenience.js after that):
-    https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/misc/extensionUtils.js
-
-4. That&amp;#x27;s too much for init (line 42 extension.js):
-    https://gjs.guide/extensions/review-guidelines/review-guidelines.html#only-use-init-for-initialization
-
-    Move that line to enable and null that out in disable:
-    https://gjs.guide/extensions/review-guidelines/review-guidelines.html#destroy-all-objects
-
-5. Remove all the key bindings on disable (line 118-149 extension.js).
-
-If you need any help with your extension you can ask us on:
-- [GNOME Matrix Channel](https://matrix.to/#/#extensions:gnome.org)
-- IRC Bridge: irc://irc.gimpnet.org/shell-extensions
-
-Please use the review page to follow up:
-
-https://extensions.gnome.org/review/42618
-</code></pre><p>This was very helpful.  I thought I fixed them all but (I forgot to erase old
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 1 has a new review:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>JustPerfection posted a review on June 25, 2023:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>1. Please remove `stylesheet.css` since you are not using it:
+</span></span><span style="display:flex;"><span>    https://gjs.guide/extensions/review-guidelines/review-guidelines.html#don-t-include-unnecessary-files
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>2. Remove versions &amp;gt;=45 since we don&amp;#x27;t have those versions yet.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>3. Use initTranslations() and getSettings() from ExtensionUtils instead of creating your own custom functions (remove convenience.js after that):
+</span></span><span style="display:flex;"><span>    https://gitlab.gnome.org/GNOME/gnome-shell/-/blob/main/js/misc/extensionUtils.js
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>4. That&amp;#x27;s too much for init (line 42 extension.js):
+</span></span><span style="display:flex;"><span>    https://gjs.guide/extensions/review-guidelines/review-guidelines.html#only-use-init-for-initialization
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Move that line to enable and null that out in disable:
+</span></span><span style="display:flex;"><span>    https://gjs.guide/extensions/review-guidelines/review-guidelines.html#destroy-all-objects
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>5. Remove all the key bindings on disable (line 118-149 extension.js).
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>If you need any help with your extension you can ask us on:
+</span></span><span style="display:flex;"><span>- [GNOME Matrix Channel](https://matrix.to/#/#extensions:gnome.org)
+</span></span><span style="display:flex;"><span>- IRC Bridge: irc://irc.gimpnet.org/shell-extensions
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Please use the review page to follow up:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>https://extensions.gnome.org/review/42618
+</span></span></code></pre></div><p>This was very helpful.  I thought I fixed them all but (I forgot to erase old
 zip in the source tree.)  I uploaded again.</p>
 <p>Version 2:</p>
-<pre tabindex="0"><code>OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 2 has a new review:
-
-JustPerfection posted a review on June 25, 2023:
-
-1. You forgot to remove `stylesheet.css` and `convenience.js`.
-2. As I said before, you should null out `settings` in disable.
-3. I recommend to Import in top of the code instead of inside enable (line 51, 60, 69 and 78 extension.js).
-
-Please use the review page to follow up:
-
-https://extensions.gnome.org/review/42621
-OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 2 has a new review:
-
-JustPerfection posted a review on June 25, 2023:
-
-1. You forgot to remove `stylesheet.css` and `convenience.js`.
-2. As I said before, you should null out `settings` in disable.
-3. I recommend to Import in top of the code instead of inside enable (line 51, 60, 69 and 78 extension.js).
-
-Please use the review page to follow up:
-
-https://extensions.gnome.org/review/42621
-</code></pre><p>Very kind words on careless newbie.  I fixed and uploaded.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 2 has a new review:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>JustPerfection posted a review on June 25, 2023:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>1. You forgot to remove `stylesheet.css` and `convenience.js`.
+</span></span><span style="display:flex;"><span>2. As I said before, you should null out `settings` in disable.
+</span></span><span style="display:flex;"><span>3. I recommend to Import in top of the code instead of inside enable (line 51, 60, 69 and 78 extension.js).
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Please use the review page to follow up:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>https://extensions.gnome.org/review/42621
+</span></span><span style="display:flex;"><span>OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 2 has a new review:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>JustPerfection posted a review on June 25, 2023:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>1. You forgot to remove `stylesheet.css` and `convenience.js`.
+</span></span><span style="display:flex;"><span>2. As I said before, you should null out `settings` in disable.
+</span></span><span style="display:flex;"><span>3. I recommend to Import in top of the code instead of inside enable (line 51, 60, 69 and 78 extension.js).
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Please use the review page to follow up:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>https://extensions.gnome.org/review/42621
+</span></span></code></pre></div><p>Very kind words on careless newbie.  I fixed and uploaded.</p>
 <p>See my result at:</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/inputmethod-shortcuts">Keyboard shortcuts for switching input methods under GNOME shell</a></li>
 </ul>
 <p>I also updated <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a>.</p>
+<h2 id="learning-javascript-for-gjs">Learning JavaScript for GJS</h2>
+<p>When I started to write GJS JavaScript code for this extension, I had no idea
+on JavaScript except it is a interpreter with C/C++-like syntax. Here are
+list of documents I decided to read following references to understand
+JavaScript and its use for GNOME.</p>
+<ul>
+<li>Wikipedia: <a href="s://en.wikipedia.org/wiki/JavaScript">JavaScript</a></li>
+<li>Wikipedia: <a href="https://en.wikipedia.org/wiki/ECMAScript">ECMAScript</a></li>
+<li>MDN: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+<li><a href="https://gjs.guide/">A Guide to JavaScript for GNOME</a>
+<ul>
+<li><a href="https://gjs.guide/guides/">Developer Guides</a>
+<ul>
+<li><a href="https://gjs.guide/guides/gjs/intro.html">GNOME JavaScript Introduction</a></li>
+<li><a href="https://gjs.guide/guides/gjs/features-across-versions.html">Feature Compatibility</a></li>
+<li><a href="https://gjs.guide/guides/gjs/legacy-class-syntax.html">GJS Legacy Class Syntax</a></li>
+<li><a href="https://gjs.guide/guides/gjs/style-guide.html">GJS Style Guide</a></li>
+</ul>
+</li>
+<li><a href="https://gjs.guide/extensions/">GNOME Shell Extensions</a></li>
+<li><a href="https://gjs-docs.gnome.org/javascript/">JavaScript reference</a></li>
+</ul>
+</li>
+</ul>
+<p>JavaScript versions were confusing to me.  Major versions are:</p>
+<ul>
+<li>ES5: ECMAScript 5 (2009)</li>
+<li>ES6: ECMAScript 6 (2015)</li>
+</ul>
+<p>I also find a nice summary of generic style equivalences of ES5 and ES6 at
+<a href="https://www.w3schools.com/js/js_es6.asp">w3schools.com site for JavaScript</a>.</p>
 <!-- raw HTML omitted -->
 
 
