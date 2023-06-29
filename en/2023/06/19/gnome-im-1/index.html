@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/06/28 (last update)
+2023/06/29 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -65,14 +65,27 @@ en/note-00047.md
 <nav id="TableOfContents">
   <ul>
     <li><a href="#simple-gnome-shell-extension">Simple GNOME shell extension</a></li>
-    <li><a href="#how-to-get-keybinding">How to get keybinding</a>
+    <li><a href="#reference-examples">Reference examples</a>
       <ul>
         <li><a href="#gnome-extension-shortcuts">GNOME extension &ldquo;Shortcuts&rdquo;</a></li>
         <li><a href="#gnome-extension-more-keyboard-shortcuts">GNOME extension &ldquo;More keyboard shortcuts&rdquo;</a></li>
-        <li><a href="#gnome-extension-uploading">GNOME extension uploading</a></li>
+      </ul>
+    </li>
+    <li><a href="#initial-working-gnome-shell-extension-for-switching-input-methods">Initial working GNOME shell extension for switching input methods</a>
+      <ul>
+        <li><a href="#inputmethod-shortcuts-v1-rejected"><code>inputmethod-shortcuts</code> (v1: rejected)</a></li>
+        <li><a href="#inputmethod-shortcuts-v2-rejected"><code>inputmethod-shortcuts</code> (v2: rejected)</a></li>
+        <li><a href="#inputmethod-shortcuts-v3-rejected"><code>inputmethod-shortcuts</code> (v3: rejected)</a></li>
+        <li><a href="#inputmethod-shortcuts-v4-accepted"><code>inputmethod-shortcuts</code> (v4: accepted)</a></li>
       </ul>
     </li>
     <li><a href="#learning-javascript-for-gjs">Learning JavaScript for GJS</a></li>
+    <li><a href="#checking-systemd-log">Checking systemd log</a></li>
+    <li><a href="#more-refactoring-of-inputmethod-shortcuts">More refactoring of <code>inputmethod-shortcuts</code></a>
+      <ul>
+        <li><a href="#use-of-es6-class-syntax-v5">Use of ES6 <strong>class</strong>-syntax (v5)</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -86,9 +99,9 @@ extensions without rigorous learning.</p>
 <code>~/.local/share/gnome-shell/extensions/</code>.</p>
 <p>After &ldquo;Log out&rdquo; and &ldquo;Log in&rdquo; to my account, this GNOME shell extension can be
 seen from &ldquo;Extensions&rdquo;.  But this was too simple to do anything useful.</p>
-<h2 id="how-to-get-keybinding">How to get keybinding</h2>
-<p>In order to find keybinding definition examples, I looked around for simple
-extensions.</p>
+<h2 id="reference-examples">Reference examples</h2>
+<p>Since I had no idea how to set up keybindings for switching input methods, I
+looked around examples on simple GNOME extensions with &ldquo;shortcut&rdquo; as a keyword.</p>
 <h3 id="gnome-extension-shortcuts">GNOME extension &ldquo;Shortcuts&rdquo;</h3>
 <p>GNOME extension <a href="https://gitlab.com/paddatrapper/shortcuts-gnome-extension">Shortcuts</a>
 looked like simple enough since all it does is toggling of display when <code>&lt;Super&gt;s</code> is pressed.</p>
@@ -150,10 +163,11 @@ when <code>&lt;Super&gt;j</code>  or <code>&lt;Super&gt;k</code> is pressed.</p>
 </span></span></code></pre></div><p>By replacing <code>switchWindow()</code> with Input Method setting JavaScript function, I
 think I can get desired extension functionality.</p>
 <p>Since this was my first JavaScript program, there were many rough edges.</p>
-<h3 id="gnome-extension-uploading">GNOME extension uploading</h3>
-<p>I then went to upload a zip file of this newly made extension to GNOME site.</p>
+<h2 id="initial-working-gnome-shell-extension-for-switching-input-methods">Initial working GNOME shell extension for switching input methods</h2>
+<p>I then went to upload a zip file of this newly made extension to GNOME site.
+It became very interesting learning experiences.</p>
+<h3 id="inputmethod-shortcuts-v1-rejected"><code>inputmethod-shortcuts</code> (v1: rejected)</h3>
 <p><strong>JustPerfection</strong> gave me feed backs.</p>
-<p>Version 1:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 1 has a new review:
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>JustPerfection posted a review on June 25, 2023:
@@ -183,7 +197,7 @@ think I can get desired extension functionality.</p>
 </span></span><span style="display:flex;"><span>https://extensions.gnome.org/review/42618
 </span></span></code></pre></div><p>This was very helpful.  I thought I fixed them all but (I forgot to erase old
 zip in the source tree.)  I uploaded again.</p>
-<p>Version 2:</p>
+<h3 id="inputmethod-shortcuts-v2-rejected"><code>inputmethod-shortcuts</code> (v2: rejected)</h3>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>OsamuAoki&#39;s extension, &#34;Shortcuts to activate input methods&#34;, version 2 has a new review:
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>JustPerfection posted a review on June 25, 2023:
@@ -206,7 +220,13 @@ zip in the source tree.)  I uploaded again.</p>
 </span></span><span style="display:flex;"><span>Please use the review page to follow up:
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>https://extensions.gnome.org/review/42621
-</span></span></code></pre></div><p>Very kind words on careless newbie.  I fixed and uploaded.</p>
+</span></span></code></pre></div><p>Very kind words on careless newbie.</p>
+<h3 id="inputmethod-shortcuts-v3-rejected"><code>inputmethod-shortcuts</code> (v3: rejected)</h3>
+<p>I missed issue 2 pointed out for version 2.  So I uploaded another one before
+getting official rejection.</p>
+<h3 id="inputmethod-shortcuts-v4-accepted"><code>inputmethod-shortcuts</code> (v4: accepted)</h3>
+<p>This got accepted.  (I saw some minor issues and fixed them in git repo,
+later.)</p>
 <p>See my result at:</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/inputmethod-shortcuts">Keyboard shortcuts for switching input methods under GNOME shell</a></li>
@@ -243,6 +263,16 @@ use for GNOME.</p>
 </ul>
 <p>I also find a nice summary of generic style equivalences of ES5 and ES6 at
 <a href="https://www.w3schools.com/js/js_es6.asp">w3schools.com site for JavaScript</a>.</p>
+<h2 id="checking-systemd-log">Checking systemd log</h2>
+<p>I can see all <strong>gnome-shell</strong> log including DEBUG output from the last system
+boot as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ journalctl -p <span style="color:#ae81ff">7</span> -b -g gnome-shell
+</span></span></code></pre></div><h2 id="more-refactoring-of-inputmethod-shortcuts">More refactoring of <code>inputmethod-shortcuts</code></h2>
+<h3 id="use-of-es6-class-syntax-v5">Use of ES6 <strong>class</strong>-syntax (v5)</h3>
+<p>Both ES5 prototype-syntax and ES6 class-syntax offer OOP features, but ES6
+class-syntax is less confusing for me.  So I decided to rewite
+<code>inputmethod-shortcuts</code> using ES6 class-syntax.</p>
+<p>Also repeating codes looked stupid.  So I added for-loop.</p>
 <!-- raw HTML omitted -->
 
 
