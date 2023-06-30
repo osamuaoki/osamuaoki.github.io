@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/06/29 (last update)
+2023/06/30 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -81,9 +81,12 @@ en/note-00047.md
     </li>
     <li><a href="#learning-javascript-for-gjs">Learning JavaScript for GJS</a></li>
     <li><a href="#checking-systemd-log">Checking systemd log</a></li>
-    <li><a href="#more-refactoring-of-inputmethod-shortcuts">More refactoring of <code>inputmethod-shortcuts</code></a>
+    <li><a href="#improvement-of-gnome-extension-inputmethod-shortcuts">Improvement of GNOME extension <code>inputmethod-shortcuts</code></a>
       <ul>
         <li><a href="#use-of-es6-class-syntax-v5">Use of ES6 <strong>class</strong>-syntax (v5)</a></li>
+        <li><a href="#use-for-loop">Use for-loop</a></li>
+        <li><a href="#add-prefsjs">Add prefs.js</a></li>
+        <li><a href="#get-im-settings">Get IM settings</a></li>
       </ul>
     </li>
   </ul>
@@ -267,12 +270,18 @@ use for GNOME.</p>
 <p>I can see all <strong>gnome-shell</strong> log including DEBUG output from the last system
 boot as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ journalctl -p <span style="color:#ae81ff">7</span> -b -g gnome-shell
-</span></span></code></pre></div><h2 id="more-refactoring-of-inputmethod-shortcuts">More refactoring of <code>inputmethod-shortcuts</code></h2>
+</span></span></code></pre></div><h2 id="improvement-of-gnome-extension-inputmethod-shortcuts">Improvement of GNOME extension <code>inputmethod-shortcuts</code></h2>
+<p>I explored more refactoring of code and feature additions.</p>
 <h3 id="use-of-es6-class-syntax-v5">Use of ES6 <strong>class</strong>-syntax (v5)</h3>
 <p>Both ES5 prototype-syntax and ES6 class-syntax offer OOP features, but ES6
 class-syntax is less confusing for me.  So I decided to rewite
-<code>inputmethod-shortcuts</code> using ES6 class-syntax.</p>
-<p>Also repeating codes looked stupid.  So I added for-loop.</p>
+<code>inputmethod-shortcuts</code> using ES6 class-syntax.  &ndash; done</p>
+<h3 id="use-for-loop">Use for-loop</h3>
+<p>Repeating codes looks stupid.  So I added for-loop. &ndash; done</p>
+<h3 id="add-prefsjs">Add prefs.js</h3>
+<p>Make shortcut key choice configurable. &ndash; done</p>
+<h3 id="get-im-settings">Get IM settings</h3>
+<p><em><strong>WIP</strong></em> &ndash; Use <code>Gio</code>Settings`?</p>
 <!-- raw HTML omitted -->
 
 
