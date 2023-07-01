@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/25 (initial publish),
-2023/06/25 (last update)
+2023/07/01 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00038.md
@@ -296,6 +296,28 @@ proper secondary-click (or even middle-click).</p>
 </span></span><span style="display:flex;"><span>Shortcut SUPER-<span style="color:#ae81ff">\
 </span></span></span></code></pre></div><p>(<code>SUPER-\</code> is easier to type than <code>SUPER-T</code>.)</p>
 <h3 id="keyboard-shortcut-customization-input-method">Keyboard shortcut customization (Input Method)</h3>
+<h4 id="new-better-way-with-gnome-extension">New better way with GNOME extension</h4>
+<ul>
+<li>Installed my GNOME extension: <a href="https://github.com/osamuaoki/inputmethod-shortcuts">Keyboard shortcuts for switching input methods under GNOME shell</a></li>
+<li>Log out and log in to GNOME</li>
+<li>Disabled normal <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts in &ldquo;Settings&rdquo; -&gt; &ldquo;Keyboard&rdquo; -&gt; &ldquo;Keyboard Shortcuts&rdquo; -&gt; &ldquo;Typing&rdquo;.
+<ul>
+<li>If you don&rsquo;t intend to use <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts in below, this is not required.</li>
+</ul>
+</li>
+<li>Enabled shortcuts from GNOME shell extension preference menu as:
+<ul>
+<li><code>SUPER-SPACE</code>: English (US)</li>
+<li><code>SUPER-SHIFT-SPACE</code>: Mozc</li>
+<li><code>SUPER-CTRL-SPACE</code>: English (international)</li>
+<li><code>SUPER-ALT-SPACE</code>: Anthy</li>
+</ul>
+</li>
+</ul>
+<p><img src="/img/InputMethods.png" alt="prefs.js"></p>
+<p>For other extensions I use, see <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a>.</p>
+<h4 id="old-hackish-way-with-gdbus">Old hackish way with <code>gdbus</code></h4>
+<p><strong>This is for historical record.</strong></p>
 <p>For selecting IM deterministically (instead of Super-SPACE toggles), bind
 javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <ul>
@@ -305,14 +327,6 @@ javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
 <li><code>SUPER-ALT_ENTER</code>: Anthy</li>
 </ul>
 <p>(I use &ldquo;ENTER&rdquo;-combos for shortcuts to enter easily with both hands.)</p>
-<h4 id="new-better-way-with-gnome-extension">New better way with GNOME extension</h4>
-<p>Install my GNOME extension:</p>
-<ul>
-<li><a href="https://github.com/osamuaoki/inputmethod-shortcuts">Keyboard shortcuts for switching input methods under GNOME shell</a></li>
-</ul>
-<p>For other extensions I use, see <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a>.</p>
-<h4 id="old-hackish-way-with-gdbus">Old hackish way with <code>gdbus</code></h4>
-<p><strong>This is for historical record.</strong></p>
 <p>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is English (US) and if you want to use SUPER-ENTER to switch to US, you need to set as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     IM_0
 </span></span><span style="display:flex;"><span>Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  <span style="color:#e6db74">&#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;</span>
