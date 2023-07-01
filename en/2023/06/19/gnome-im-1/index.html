@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/06/30 (last update)
+2023/07/01 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -270,7 +270,11 @@ use for GNOME.</p>
 <p>I can see all <strong>gnome-shell</strong> log including DEBUG output from the last system
 boot as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ journalctl -p <span style="color:#ae81ff">7</span> -b -g gnome-shell
-</span></span></code></pre></div><h2 id="improvement-of-gnome-extension-inputmethod-shortcuts">Improvement of GNOME extension <code>inputmethod-shortcuts</code></h2>
+</span></span></code></pre></div><ul>
+<li>Use <code>-g gjs</code> for <code>prefs.js</code>.</li>
+<li>Use <code>-f</code> instead of <code>-b</code> to monitor continuously.</li>
+</ul>
+<h2 id="improvement-of-gnome-extension-inputmethod-shortcuts">Improvement of GNOME extension <code>inputmethod-shortcuts</code></h2>
 <p>I explored more refactoring of code and feature additions.</p>
 <h3 id="use-of-es6-class-syntax-v5">Use of ES6 <strong>class</strong>-syntax (v5)</h3>
 <p>Both ES5 prototype-syntax and ES6 class-syntax offer OOP features, but ES6
@@ -281,7 +285,8 @@ class-syntax is less confusing for me.  So I decided to rewite
 <h3 id="add-prefsjs">Add prefs.js</h3>
 <p>Make shortcut key choice configurable. &ndash; done</p>
 <h3 id="get-im-settings">Get IM settings</h3>
-<p><em><strong>WIP</strong></em> &ndash; Use <code>Gio</code>Settings`?</p>
+<p>Use <code>Gio</code> -&gt; <code>Settings</code> &ndash; done</p>
+<p>So IM names are displayed and their shortcuts are configurable up to 10.</p>
 <!-- raw HTML omitted -->
 
 
