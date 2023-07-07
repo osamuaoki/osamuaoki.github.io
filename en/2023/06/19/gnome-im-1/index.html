@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/07/02 (last update)
+2023/07/08 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -79,9 +79,7 @@ en/note-00047.md
         <li><a href="#inputmethod-shortcuts-v4-accepted"><code>inputmethod-shortcuts</code> (v4: accepted)</a></li>
       </ul>
     </li>
-    <li><a href="#learning-javascript-for-gjs">Learning JavaScript for GJS</a></li>
-    <li><a href="#checking-systemd-log">Checking systemd log</a></li>
-    <li><a href="#improvement-of-gnome-extension-inputmethod-shortcuts-v5--v8">Improvement of GNOME extension <code>inputmethod-shortcuts</code> (v5 .. v8)</a>
+    <li><a href="#further-improvements-of-gnome-extension-inputmethod-shortcuts-v5--v11-">Further improvements of GNOME extension <code>inputmethod-shortcuts</code> (v5 &hellip; v11 &hellip;)</a>
       <ul>
         <li><a href="#use-of-es6-class-syntax">Use of ES6 <strong>class</strong>-syntax</a></li>
         <li><a href="#use-for-loop">Use for-loop</a></li>
@@ -90,6 +88,14 @@ en/note-00047.md
         <li><a href="#control-touchpad-enabled--disabled">Control touchpad <code>enabled</code> / <code>disabled</code></a></li>
         <li><a href="#input-method-shortcuts-example-screenshot">Input Method Shortcuts (example screenshot)</a></li>
         <li><a href="#touchpad-shortcuts-example-screenshot">Touchpad Shortcuts (example screenshot)</a></li>
+        <li><a href="#xkbru-interference-fix"><code>xkb=ru</code> interference fix</a></li>
+      </ul>
+    </li>
+    <li><a href="#references">References</a>
+      <ul>
+        <li><a href="#learning-javascript-for-gjs">Learning JavaScript for GJS</a></li>
+        <li><a href="#history-and-migration-gtk3gtk4libadwaitagnome">History and migration: GTK3/GTK4/Libadwaita/GNOME</a></li>
+        <li><a href="#tip-checking-systemd-log">Tip: Checking systemd log</a></li>
       </ul>
     </li>
   </ul>
@@ -238,46 +244,7 @@ getting official rejection.</p>
 <h3 id="inputmethod-shortcuts-v4-accepted"><code>inputmethod-shortcuts</code> (v4: accepted)</h3>
 <p>This got accepted.  (I saw some minor issues and fixed them in git repo,
 later.)</p>
-<h2 id="learning-javascript-for-gjs">Learning JavaScript for GJS</h2>
-<p>When I started to write GJS JavaScript code for this extension, I had no idea
-on JavaScript except it is a interpreter with C/C++-like syntax. Here is a
-list of reference documents I decided to read to understand JavaScript and its
-use for GNOME.</p>
-<ul>
-<li>Wikipedia: <a href="s://en.wikipedia.org/wiki/JavaScript">JavaScript</a></li>
-<li>Wikipedia: <a href="https://en.wikipedia.org/wiki/ECMAScript">ECMAScript</a></li>
-<li>MDN: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
-<li><a href="https://gjs.guide/">A Guide to JavaScript for GNOME</a>
-<ul>
-<li><a href="https://gjs.guide/guides/">Developer Guides</a>
-<ul>
-<li><a href="https://gjs.guide/guides/gjs/intro.html">GNOME JavaScript Introduction</a></li>
-<li><a href="https://gjs.guide/guides/gjs/features-across-versions.html">Feature Compatibility</a></li>
-<li><a href="https://gjs.guide/guides/gjs/legacy-class-syntax.html">GJS Legacy Class Syntax</a></li>
-<li><a href="https://gjs.guide/guides/gjs/style-guide.html">GJS Style Guide</a></li>
-</ul>
-</li>
-<li><a href="https://gjs.guide/extensions/">GNOME Shell Extensions</a></li>
-<li><a href="https://gjs-docs.gnome.org/javascript/">JavaScript reference</a></li>
-</ul>
-</li>
-</ul>
-<p>JavaScript versions were confusing to me.  Major versions are:</p>
-<ul>
-<li>ES5: ECMAScript 5 (2009)</li>
-<li>ES6: ECMAScript 6 (2015)</li>
-</ul>
-<p>I also find a nice summary of generic style equivalences of ES5 and ES6 at
-<a href="https://www.w3schools.com/js/js_es6.asp">w3schools.com site for JavaScript</a>.</p>
-<h2 id="checking-systemd-log">Checking systemd log</h2>
-<p>I can see all <strong>gnome-shell</strong> log including DEBUG output from the last system
-boot as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ journalctl -p <span style="color:#ae81ff">7</span> -b -g gnome-shell
-</span></span></code></pre></div><ul>
-<li>Use <code>-g gjs</code> for <code>prefs.js</code>.</li>
-<li>Use <code>-f</code> instead of <code>-b</code> to monitor continuously.</li>
-</ul>
-<h2 id="improvement-of-gnome-extension-inputmethod-shortcuts-v5--v8">Improvement of GNOME extension <code>inputmethod-shortcuts</code> (v5 .. v8)</h2>
+<h2 id="further-improvements-of-gnome-extension-inputmethod-shortcuts-v5--v11-">Further improvements of GNOME extension <code>inputmethod-shortcuts</code> (v5 &hellip; v11 &hellip;)</h2>
 <p>I explored more refactoring of code and feature additions to support
 shortcut configuration.</p>
 <h3 id="use-of-es6-class-syntax">Use of ES6 <strong>class</strong>-syntax</h3>
@@ -317,6 +284,72 @@ changes to the touchpad state.
 -&gt; &ldquo;Keyboard&rdquo; -&gt; &ldquo;Keyboard shortcuts&rdquo; -&gt; &ldquo;Typing&rdquo; before setting up as above.</p>
 <h3 id="touchpad-shortcuts-example-screenshot">Touchpad Shortcuts (example screenshot)</h3>
 <p><img src="/img/pref-touchpad.png" alt="Pref - Touchpad"></p>
+<h3 id="xkbru-interference-fix"><code>xkb=ru</code> interference fix</h3>
+<p>Normal ibus-based input methods break when they are invoked after using
+<code>xkb=ru</code>.  In order to reduce shortcut key presses, I added feature to go
+through the primary xkb before invoking any ibus.</p>
+<h2 id="references">References</h2>
+<h3 id="learning-javascript-for-gjs">Learning JavaScript for GJS</h3>
+<p>When I started to write GJS JavaScript code for this extension, I had no idea
+on JavaScript except it is a interpreter with C/C++-like syntax. Here is a
+list of reference documents I decided to read to understand JavaScript and its
+use for GNOME.</p>
+<ul>
+<li>Wikipedia: <a href="s://en.wikipedia.org/wiki/JavaScript">JavaScript</a></li>
+<li>Wikipedia: <a href="https://en.wikipedia.org/wiki/ECMAScript">ECMAScript</a></li>
+<li>MDN: <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">JavaScript</a></li>
+<li><a href="https://gjs.guide/">A Guide to JavaScript for GNOME</a>
+<ul>
+<li><a href="https://gjs.guide/guides/">Developer Guides</a>
+<ul>
+<li><a href="https://gjs.guide/guides/gjs/intro.html">GNOME JavaScript Introduction</a></li>
+<li><a href="https://gjs.guide/guides/gjs/features-across-versions.html">Feature Compatibility</a></li>
+<li><a href="https://gjs.guide/guides/gjs/legacy-class-syntax.html">GJS Legacy Class Syntax</a></li>
+<li><a href="https://gjs.guide/guides/gjs/style-guide.html">GJS Style Guide</a></li>
+</ul>
+</li>
+<li><a href="https://gjs.guide/extensions/">GNOME Shell Extensions</a></li>
+<li><a href="https://gjs-docs.gnome.org/javascript/">JavaScript reference</a></li>
+</ul>
+</li>
+</ul>
+<p>JavaScript versions were confusing to me.  Major versions are:</p>
+<ul>
+<li>ES5: ECMAScript 5 (2009)</li>
+<li>ES6: ECMAScript 6 (2015)</li>
+</ul>
+<p>I also find a nice summary of generic style equivalences of ES5 and ES6 at
+<a href="https://www.w3schools.com/js/js_es6.asp">w3schools.com site for JavaScript</a>.</p>
+<h3 id="history-and-migration-gtk3gtk4libadwaitagnome">History and migration: GTK3/GTK4/Libadwaita/GNOME</h3>
+<p>Following references helped me to orient myself what is going on.</p>
+<ul>
+<li>History
+<ul>
+<li><a href="https://adrienplazas.com/blog/2021/03/31/introducing-libadwaita.html">Introducing Libadwaita (2021-03-31)</a> &ndash; Adrien Plazas</li>
+<li><a href="https://help.gnome.org/misc/release-notes/41.0/">Introducing GNOME 41 (2021-09-22)</a></li>
+<li><a href="https://release.gnome.org/42/">Introducing GNOME 42 (2022-03-23)</a></li>
+<li><a href="https://blogs.gnome.org/christopherdavis/2022/04/03/plans-for-gnome-43-and-beyond/?ref=news.itsfoss.com">Plans for GNOME 43 and Beyond (2022-04-03)</a> &ndash; CHRIS DAVIS</li>
+<li><a href="https://theevilskeleton.gitlab.io/2022/07/28/libadwaita-fixing-usability-problems-on-the-linux-desktop.html">libadwaita: Fixing Usability Problems on the Linux Desktop (2022-07-28)</a> &ndash; Hari Rana</li>
+<li><a href="https://release.gnome.org/43/">Introducing GNOME 43, “Guadalajara” (2022-09-21)</a></li>
+<li><a href="https://blog.gtk.org/2023/02/09/updates-from-inside-gtk/">Updates from inside GTK (2023-02-09)</a> &ndash; GTK Development Blog</li>
+<li><a href="">Introducing GNOME 44, “Kuala Lumpur” (2023-03-22)</a></li>
+</ul>
+</li>
+<li>Migration
+<ul>
+<li><a href="https://docs.gtk.org/gtk4/migrating-3to4.html">Migrating from GTK 3.x to GTK 4</a></li>
+<li><a href="https://gnome.pages.gitlab.gnome.org/libadwaita/doc/main/migrating-libhandy-1-4-to-libadwaita.html">Migrating from Libhandy 1.4 to Libadwaita</a></li>
+</ul>
+</li>
+</ul>
+<h3 id="tip-checking-systemd-log">Tip: Checking systemd log</h3>
+<p>I can see all <strong>gnome-shell</strong> log including DEBUG output from the last system
+boot as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ journalctl -p <span style="color:#ae81ff">7</span> -b -g gnome-shell
+</span></span></code></pre></div><ul>
+<li>Use <code>-g gjs</code> for <code>prefs.js</code>.</li>
+<li>Use <code>-f</code> instead of <code>-b</code> to monitor continuously.</li>
+</ul>
 <!-- raw HTML omitted -->
 
 
