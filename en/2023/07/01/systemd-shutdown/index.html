@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Systemd and shutdown | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Systemd and shutdown</span></h1>
+
+<h3 class="date">Date:
+2023/07/01 (initial publish),
+2023/07/07 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00048.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/06/19/gnome-im-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#quick-workaround">Quick workaround</a></li>
+    <li><a href="#root-cause-fix">Root cause fix</a></li>
+  </ul>
+</nav>
+
+<p>Here is a memo to make a Linux system shutdown smoothly and quickly.</p>
+<h2 id="quick-workaround">Quick workaround</h2>
+<ul>
+<li><a href="https://itsfoss.com/long-shutdown-linux/">https://itsfoss.com/long-shutdown-linux/</a></li>
+</ul>
+<p>Edit <code>/etc/systemd/system.conf</code> to reduce timeout from default 100s according to
+<code>systemd-system.conf</code>(5):</p>
+<pre tabindex="0"><code> DefaultTimeoutStartSec=, DefaultTimeoutStopSec=,
+ DefaultTimeoutAbortSec=, DefaultRestartSec=
+     Configures the default timeouts for starting, stopping and aborting
+     of units, as well as the default time to sleep between automatic
+     restarts of units, as configured per-unit in TimeoutStartSec=,
+     TimeoutStopSec=, TimeoutAbortSec= and RestartSec= (for services, see
+     systemd.service(5) for details on the per-unit settings). Disabled
+     by default, when service with Type=oneshot is used. For non-service
+     units, DefaultTimeoutStartSec= sets the default TimeoutSec= value.
+     DefaultTimeoutStartSec= and DefaultTimeoutStopSec= default to 90s.
+     DefaultTimeoutAbortSec= is not set by default so that all units fall
+     back to TimeoutStopSec=.  DefaultRestartSec= defaults to 100ms.
+</code></pre><p>This can be a quick workaround to reduce time to shutdown from 100s to 60s
+without knowing the offending process.</p>
+<p>This is not the root cause fix.</p>
+<h2 id="root-cause-fix">Root cause fix</h2>
+<ul>
+<li><a href="https://github.com/systemd/systemd/issues/11821#issuecomment-477545885">https://github.com/systemd/systemd/issues/11821#issuecomment-477545885</a></li>
+</ul>
+<p>Setting up proper shutdown sequence is the root cause fix.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>For example, I edited the seemingly offending <code>*.service</code> files such as
+<code>/lib/systemd/user/tracke~er-fs-control-3.service</code> by adding dependency as:</p>
+<pre tabindex="0"><code>[Unit]
+...
+Conflicts=shutdown.target initrd-switch-root.target
+Before=shutdown.target initrd-switch-root.target
+
+[Service]
+...
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/06/19/gnome-im-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
