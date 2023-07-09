@@ -8,14 +8,16 @@
     <language>en-us</language>
     <lastBuildDate>Sat, 01 Jul 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/english/index.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>Systemd and shutdown</title>
+      <title>System loads and shutdown timeout</title>
       <link>/en/2023/07/01/systemd-shutdown/</link>
       <pubDate>Sat, 01 Jul 2023 00:00:00 +0000</pubDate>
       
       <guid>/en/2023/07/01/systemd-shutdown/</guid>
-      <description>Here is a memo to make a Linux system shutdown smoothly and quickly.
-Quick workaround https://itsfoss.com/long-shutdown-linux/ Edit /etc/systemd/system.conf to reduce timeout from default 100s according to systemd-system.conf(5):
-DefaultTimeoutStartSec=, DefaultTimeoutStopSec=, DefaultTimeoutAbortSec=, DefaultRestartSec= Configures the default timeouts for starting, stopping and aborting of units, as well as the default time to sleep between automatic restarts of units, as configured per-unit in TimeoutStartSec=, TimeoutStopSec=, TimeoutAbortSec= and RestartSec= (for services, see systemd.service(5) for details on the per-unit settings).</description>
+      <description>Here is a memo to make a Linux system run and shutdown smoothly and quickly.
+Ruducing system loads I have edited Settings -&amp;gt; Search menu to disable background jobs.
+Currently, I disabled everything. This seems to reduce CPU loads from the following process names:
+tracker-miner-fs-3 about 5-8% tracker-extract-3 about 3-5% Quick workaround for timeout https://itsfoss.com/long-shutdown-linux/ Edit /etc/systemd/system.conf to reduce timeout from default 100s according to systemd-system.conf(5):
+DefaultTimeoutStartSec=, DefaultTimeoutStopSec=, DefaultTimeoutAbortSec=, DefaultRestartSec= Configures the default timeouts for starting, stopping and aborting of units, as well as the default time to sleep between automatic restarts of units, as configured per-unit in TimeoutStartSec=, TimeoutStopSec=, TimeoutAbortSec= and RestartSec= (for services, see systemd.</description>
     </item>
     
     <item>

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Systemd and shutdown | Goofing Osamu</title>
+    <title>System loads and shutdown timeout | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,11 +32,11 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Systemd and shutdown</span></h1>
+<h1><span class="title">System loads and shutdown timeout</span></h1>
 
 <h3 class="date">Date:
 2023/07/01 (initial publish),
-2023/07/07 (last update)
+2023/07/09 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00048.md
@@ -64,13 +64,22 @@ en/note-00048.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#quick-workaround">Quick workaround</a></li>
-    <li><a href="#root-cause-fix">Root cause fix</a></li>
+    <li><a href="#ruducing-system-loads">Ruducing system loads</a></li>
+    <li><a href="#quick-workaround-for-timeout">Quick workaround for timeout</a></li>
+    <li><a href="#root-cause-fix-for-timeout">Root cause fix for timeout</a></li>
   </ul>
 </nav>
 
-<p>Here is a memo to make a Linux system shutdown smoothly and quickly.</p>
-<h2 id="quick-workaround">Quick workaround</h2>
+<p>Here is a memo to make a Linux system run and shutdown smoothly and quickly.</p>
+<h2 id="ruducing-system-loads">Ruducing system loads</h2>
+<p>I have edited <code>Settings</code> -&gt; <code>Search</code> menu to disable background jobs.</p>
+<p>Currently, I disabled everything.  This seems to reduce CPU loads from the
+following process names:</p>
+<ul>
+<li><code>tracker-miner-fs-3</code> about 5-8%</li>
+<li><code>tracker-extract-3</code> about 3-5%</li>
+</ul>
+<h2 id="quick-workaround-for-timeout">Quick workaround for timeout</h2>
 <ul>
 <li><a href="https://itsfoss.com/long-shutdown-linux/">https://itsfoss.com/long-shutdown-linux/</a></li>
 </ul>
@@ -91,7 +100,7 @@ en/note-00048.md
 </code></pre><p>This can be a quick workaround to reduce time to shutdown from 100s to 60s
 without knowing the offending process.</p>
 <p>This is not the root cause fix.</p>
-<h2 id="root-cause-fix">Root cause fix</h2>
+<h2 id="root-cause-fix-for-timeout">Root cause fix for timeout</h2>
 <ul>
 <li><a href="https://github.com/systemd/systemd/issues/11821#issuecomment-477545885">https://github.com/systemd/systemd/issues/11821#issuecomment-477545885</a></li>
 </ul>
@@ -107,7 +116,8 @@ Before=shutdown.target initrd-switch-root.target
 
 [Service]
 ...
-</code></pre><!-- raw HTML omitted -->
+</code></pre><p>This seemed to help avoid waiting for timeout.</p>
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
