@@ -88,6 +88,7 @@ en/note-00047.md
         <li><a href="#control-touchpad-enabled--disabled">Control touchpad <code>enabled</code> / <code>disabled</code></a></li>
         <li><a href="#input-method-shortcuts-example-screenshot">Input Method Shortcuts (example screenshot)</a></li>
         <li><a href="#touchpad-shortcuts-example-screenshot">Touchpad Shortcuts (example screenshot)</a></li>
+        <li><a href="#operation-preference-example-screenshot">Operation Preference (example screenshot)</a></li>
         <li><a href="#xkbru-interference-fix"><code>xkb=ru</code> interference fix</a></li>
         <li><a href="#add-test-keys-for-verification">Add <code>test-keys</code> for verification</a></li>
         <li><a href="#use--keyvalisforbiddenkeyval">Use  <code>keyvalIsForbidden(keyval)</code></a></li>
@@ -283,11 +284,19 @@ class-syntax is less confusing for me.  So I decided to rewite
 changes to the touchpad state.
 (schema=<code>org.gnome.settings-daemon.plugins.media-keys</code>, key=<code>touchpad-on</code>)</p>
 <h3 id="input-method-shortcuts-example-screenshot">Input Method Shortcuts (example screenshot)</h3>
-<p><img src="/img/pref-inputmethods.png" alt="Pref - InputMethods"></p>
+<p><img src="/img/pref-im.png" alt="InputMethod Shortcuts"></p>
 <p>Here, I disabled <code>&lt;Super&gt;Space</code> and <code>&lt;Super&gt;&lt;Shift&gt;Space</code> usages in &ldquo;Settings&rdquo;
 -&gt; &ldquo;Keyboard&rdquo; -&gt; &ldquo;Keyboard shortcuts&rdquo; -&gt; &ldquo;Typing&rdquo; before setting up as above.</p>
+<p>Please note that, if an ibus can offer its internal shortcuts to activate input
+method engine (IME) and to deactivate IME by using direct input mode just with
+xkb for latin character set, switching between IME and direct input mode within
+ibus is quicker than using Desktop based input method switching functionality
+handled by this extension.</p>
 <h3 id="touchpad-shortcuts-example-screenshot">Touchpad Shortcuts (example screenshot)</h3>
-<p><img src="/img/pref-touchpad.png" alt="Pref - Touchpad"></p>
+<p><img src="/img/pref-tp.png" alt="Touchpad Shortcuts"></p>
+<p>Please note that you don&rsquo;t need to set all shortcut bindings.</p>
+<h3 id="operation-preference-example-screenshot">Operation Preference (example screenshot)</h3>
+<p><img src="/img/pref-op.png" alt="Operation Preference"></p>
 <h3 id="xkbru-interference-fix"><code>xkb=ru</code> interference fix</h3>
 <p>Normal ibus-based input methods break when they are invoked after using
 <code>xkb=ru</code>.  In order to reduce shortcut key presses, I added feature to go
