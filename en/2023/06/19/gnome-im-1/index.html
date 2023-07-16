@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/07/08 (last update)
+2023/07/16 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -79,7 +79,7 @@ en/note-00047.md
         <li><a href="#inputmethod-shortcuts-v4-accepted"><code>inputmethod-shortcuts</code> (v4: accepted)</a></li>
       </ul>
     </li>
-    <li><a href="#further-improvements-of-gnome-extension-inputmethod-shortcuts-v5--v11-">Further improvements of GNOME extension <code>inputmethod-shortcuts</code> (v5 &hellip; v11 &hellip;)</a>
+    <li><a href="#further-improvements-of-gnome-extension-inputmethod-shortcuts-v5--v15">Further improvements of GNOME extension <code>inputmethod-shortcuts</code> (v5 &hellip; v15)</a>
       <ul>
         <li><a href="#use-of-es6-class-syntax">Use of ES6 <strong>class</strong>-syntax</a></li>
         <li><a href="#use-for-loop">Use for-loop</a></li>
@@ -89,6 +89,10 @@ en/note-00047.md
         <li><a href="#input-method-shortcuts-example-screenshot">Input Method Shortcuts (example screenshot)</a></li>
         <li><a href="#touchpad-shortcuts-example-screenshot">Touchpad Shortcuts (example screenshot)</a></li>
         <li><a href="#xkbru-interference-fix"><code>xkb=ru</code> interference fix</a></li>
+        <li><a href="#add-test-keys-for-verification">Add <code>test-keys</code> for verification</a></li>
+        <li><a href="#use--keyvalisforbiddenkeyval">Use  <code>keyvalIsForbidden(keyval)</code></a></li>
+        <li><a href="#fix-constant-calling">Fix Constant calling</a></li>
+        <li><a href="#use-only-non-shift-backspace-to-delete">Use only non-SHIFT BackSpace to delete</a></li>
       </ul>
     </li>
     <li><a href="#references">References</a>
@@ -244,7 +248,7 @@ getting official rejection.</p>
 <h3 id="inputmethod-shortcuts-v4-accepted"><code>inputmethod-shortcuts</code> (v4: accepted)</h3>
 <p>This got accepted.  (I saw some minor issues and fixed them in git repo,
 later.)</p>
-<h2 id="further-improvements-of-gnome-extension-inputmethod-shortcuts-v5--v11-">Further improvements of GNOME extension <code>inputmethod-shortcuts</code> (v5 &hellip; v11 &hellip;)</h2>
+<h2 id="further-improvements-of-gnome-extension-inputmethod-shortcuts-v5--v15">Further improvements of GNOME extension <code>inputmethod-shortcuts</code> (v5 &hellip; v15)</h2>
 <p>I explored more refactoring of code and feature additions to support
 shortcut configuration.</p>
 <h3 id="use-of-es6-class-syntax">Use of ES6 <strong>class</strong>-syntax</h3>
@@ -288,7 +292,17 @@ changes to the touchpad state.
 <p>Normal ibus-based input methods break when they are invoked after using
 <code>xkb=ru</code>.  In order to reduce shortcut key presses, I added feature to go
 through the primary xkb before invoking any ibus.</p>
-<h2 id="references">References</h2>
+<h3 id="add-test-keys-for-verification">Add <code>test-keys</code> for verification</h3>
+<p>I created dummy extension to test code snippets to debug code</p>
+<h3 id="use--keyvalisforbiddenkeyval">Use  <code>keyvalIsForbidden(keyval)</code></h3>
+<p>Force to avoid cursor and return keys.</p>
+<h3 id="fix-constant-calling">Fix Constant calling</h3>
+<pre tabindex="0"><code>-    if ((mask === 0 || mask === Gdk.SHIFT_MASK) &amp;&amp; keycode !== 0) {
++    if ((mask === 0 || mask === Gdk.ModifierType.SHIFT_MASK) &amp;&amp; keycode !== 0) {
+</code></pre><h3 id="use-only-non-shift-backspace-to-delete">Use only non-SHIFT BackSpace to delete</h3>
+<pre tabindex="0"><code>-            if (keyval === Gdk.KEY_BackSpace) {
++            if (mask === 0 &amp;&amp; keyval === Gdk.KEY_BackSpace) {
+</code></pre><h2 id="references">References</h2>
 <h3 id="learning-javascript-for-gjs">Learning JavaScript for GJS</h3>
 <p>When I started to write GJS JavaScript code for this extension, I had no idea
 on JavaScript except it is a interpreter with C/C++-like syntax. Here is a
