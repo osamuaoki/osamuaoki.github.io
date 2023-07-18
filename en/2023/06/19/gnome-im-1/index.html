@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/07/16 (last update)
+2023/07/18 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -90,10 +90,11 @@ en/note-00047.md
         <li><a href="#touchpad-shortcuts-example-screenshot">Touchpad Shortcuts (example screenshot)</a></li>
         <li><a href="#operation-preference-example-screenshot">Operation Preference (example screenshot)</a></li>
         <li><a href="#xkbru-interference-fix"><code>xkb=ru</code> interference fix</a></li>
-        <li><a href="#add-test-keys-for-verification">Add <code>test-keys</code> for verification</a></li>
+        <li><a href="#add-test-keys-for-code-verification">Add <code>test-keys</code> for code verification</a></li>
         <li><a href="#use--keyvalisforbiddenkeyval">Use  <code>keyvalIsForbidden(keyval)</code></a></li>
         <li><a href="#fix-constant-calling">Fix Constant calling</a></li>
         <li><a href="#use-only-non-shift-backspace-to-delete">Use only non-SHIFT BackSpace to delete</a></li>
+        <li><a href="#modifier-combos-as-shortcut">Modifier-combos as shortcut</a></li>
       </ul>
     </li>
     <li><a href="#references">References</a>
@@ -303,7 +304,7 @@ handled by this extension.</p>
 <p>Normal ibus-based input methods break when they are invoked after using
 <code>xkb=ru</code>.  In order to reduce shortcut key presses, I added feature to go
 through the primary xkb before invoking any ibus.</p>
-<h3 id="add-test-keys-for-verification">Add <code>test-keys</code> for verification</h3>
+<h3 id="add-test-keys-for-code-verification">Add <code>test-keys</code> for code verification</h3>
 <p>I created dummy extension to test code snippets to debug code</p>
 <h3 id="use--keyvalisforbiddenkeyval">Use  <code>keyvalIsForbidden(keyval)</code></h3>
 <p>Force to avoid cursor and return keys.</p>
@@ -313,7 +314,15 @@ through the primary xkb before invoking any ibus.</p>
 </code></pre><h3 id="use-only-non-shift-backspace-to-delete">Use only non-SHIFT BackSpace to delete</h3>
 <pre tabindex="0"><code>-            if (keyval === Gdk.KEY_BackSpace) {
 +            if (mask === 0 &amp;&amp; keyval === Gdk.KEY_BackSpace) {
-</code></pre><h2 id="references">References</h2>
+</code></pre><h3 id="modifier-combos-as-shortcut">Modifier-combos as shortcut</h3>
+<p>There are some odd key code:</p>
+<ul>
+<li><code>Shift-Alt_L</code> pressed &ndash;&gt; <code>&lt;Shift&gt;Meta_L</code> generated</li>
+<li><code>Control-Alt_L</code> pressed &ndash;&gt; <code>&lt;Control&gt;Alt_L</code> generated</li>
+</ul>
+<p>So adding feature to register Modifier-combos as shortcut was a bit tricky.</p>
+<p><img src="/img/pref-im-alt.png" alt="prefs-im-alt.js"></p>
+<h2 id="references">References</h2>
 <h3 id="learning-javascript-for-gjs">Learning JavaScript for GJS</h3>
 <p>When I started to write GJS JavaScript code for this extension, I had no idea
 on JavaScript except it is a interpreter with C/C++-like syntax. Here is a
