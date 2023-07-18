@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2023/05/15 (last update)
+2023/07/19 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00012.md
@@ -169,8 +169,8 @@ WS for guest VMs(=kvm).  Simply installing <code>auto-apt-proxy</code> is suffic
 up APT proxy for them.  For host WS itself or <code>chroot</code> (including ones created
 through <code>schroot</code>, <code>sbuild</code>) environment on the host WS, proxy is always the
 local.  So I simply add <code>/etc/apt/apt.conf.d/00proxy</code> as:</p>
-<pre tabindex="0"><code>Acquire::http { Proxy &#34;http://localhost:3142&#34;; }
-</code></pre><h3 id="permission-and-ownership">Permission and ownership</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Acquire::http <span style="color:#f92672">{</span> Proxy <span style="color:#e6db74">&#34;http://localhost:3142&#34;</span>; <span style="color:#f92672">}</span>
+</span></span></code></pre></div><h3 id="permission-and-ownership">Permission and ownership</h3>
 <p>The permission and ownership of <code>/var/cache/apt-cacher-ng/</code> is <code>drwxr-sr-x</code>
 (2755) with <code>apt-cacher-ng:apt-cacher-ng</code>.</p>
 <p>If you reinstall system, you must be careful with UID and GID since they may be
@@ -186,89 +186,98 @@ backend.</p>
 <h3 id="setup">Setup</h3>
 <p>Here, I follow <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> (I have made a few updates there,
 too.).</p>
-<pre tabindex="0"><code>$ sudo apt install sbuild piuparts autopkgtest lintian
-$ adduser osamu sbuild
-</code></pre><p>Logout and login to check you are a member of <code>sbuild</code> group.</p>
-<pre tabindex="0"><code>$ id
-uid=1000(osamu) gid=1000(osamu) groups=1000(osamu),...,132(sbuild)
-</code></pre><p>Let&rsquo;s create the configuration file <code>~/.sbuildrc</code> in line with recent Debian
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo apt install sbuild piuparts autopkgtest lintian
+</span></span><span style="display:flex;"><span>$ adduser osamu sbuild
+</span></span></code></pre></div><p>Logout and login to check you are a member of <code>sbuild</code> group.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ id
+</span></span><span style="display:flex;"><span>uid<span style="color:#f92672">=</span>1000<span style="color:#f92672">(</span>osamu<span style="color:#f92672">)</span> gid<span style="color:#f92672">=</span>1000<span style="color:#f92672">(</span>osamu<span style="color:#f92672">)</span> groups<span style="color:#f92672">=</span>1000<span style="color:#f92672">(</span>osamu<span style="color:#f92672">)</span>,...,132<span style="color:#f92672">(</span>sbuild<span style="color:#f92672">)</span>
+</span></span></code></pre></div><p>Let&rsquo;s create the configuration file <code>~/.sbuildrc</code> in line with recent Debian
 practice <a href="https://wiki.debian.org/SourceOnlyUpload">https://wiki.debian.org/SourceOnlyUpload</a> as:</p>
-<pre tabindex="0"><code>cat &gt;~/.sbuildrc &lt;&lt; &#39;EOF&#39;
-##############################################################################
-# PACKAGE BUILD RELATED (source-only-upload as default)
-##############################################################################
-# -d
-$distribution = &#39;unstable&#39;;
-# -A
-$build_arch_all = 1;
-# -s
-$build_source = 1;
-# --source-only-changes or not
-# (1: for &#34;dput&#34;, 0: for &#34;dgit source-push&#34;)
-$source_only_changes = 1;
-# -v
-$verbose = 1;
-# parallel build
-$ENV{&#39;DEB_BUILD_OPTIONS&#39;} = &#39;parallel=12&#39;;
-##############################################################################
-# POST-BUILD RELATED (turn off functionality by setting variables to 0)
-##############################################################################
-$run_lintian = 1;
-$lintian_opts = [&#39;-i&#39;, &#39;-I&#39;];
-$run_piuparts = 1;
-$piuparts_opts = [&#39;--schroot&#39;, &#39;unstable-amd64-sbuild&#39;, &#39;--no-eatmydata&#39;];
-$run_autopkgtest = 1;
-$autopkgtest_root_args = &#39;&#39;;
-$autopkgtest_opts = [ &#39;--&#39;, &#39;schroot&#39;, &#39;%r-%a-sbuild&#39; ];
-
-##############################################################################
-# PERL MAGIC
-##############################################################################
-1;
-EOF
-</code></pre><p>You can disable and enable each functionality by assigning 0 or 1 to
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat &gt;~/.sbuildrc <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">##############################################################################
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># PACKAGE BUILD RELATED (source-only-upload as default)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">##############################################################################
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># -d
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$distribution = &#39;unstable&#39;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># -A
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$build_arch_all = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># -s
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$build_source = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># --source-only-changes or not
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># (1: for &#34;dput&#34;, 0: for &#34;dgit source-push&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$source_only_changes = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># -v
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$verbose = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># parallel build
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$ENV{&#39;DEB_BUILD_OPTIONS&#39;} = &#39;parallel=12&#39;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">##############################################################################
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># POST-BUILD RELATED (turn off functionality by setting variables to 0)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">##############################################################################
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$run_lintian = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$lintian_opts = [&#39;-i&#39;, &#39;-I&#39;];
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$run_piuparts = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$piuparts_opts = [&#39;--schroot&#39;, &#39;unstable-amd64-sbuild&#39;, &#39;--no-eatmydata&#39;];
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$run_autopkgtest = 1;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$autopkgtest_root_args = &#39;&#39;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$autopkgtest_opts = [ &#39;--&#39;, &#39;schroot&#39;, &#39;%r-%a-sbuild&#39; ];
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">##############################################################################
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># PERL MAGIC
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">##############################################################################
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">1;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><p>You can disable and enable each functionality by assigning 0 or 1 to
 corresponding variables.  You can customize this further for your GPG key etc.</p>
-<p>Then create the baseline chroot environment as:</p>
+<p>Currently, I have several variants and switch among them with symlink.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ls -l .sbuild*
+</span></span><span style="display:flex;"><span>lrwxrwxrwx <span style="color:#ae81ff">1</span> osamu osamu   <span style="color:#ae81ff">13</span> May  <span style="color:#ae81ff">4</span> 07:58 .sbuildrc -&gt; .sbuildrc-src
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> osamu osamu <span style="color:#ae81ff">1377</span> May  <span style="color:#ae81ff">4</span> 07:58 .sbuildrc-bin
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> osamu osamu <span style="color:#ae81ff">1330</span> May  <span style="color:#ae81ff">4</span> 07:58 .sbuildrc-no-test
+</span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> osamu osamu <span style="color:#ae81ff">1330</span> May  <span style="color:#ae81ff">4</span> 07:58 .sbuildrc-src
+</span></span></code></pre></div><p>Then create the baseline chroot environment as:</p>
 <p>If <code>apt-cacher-ng</code> is NOT used:</p>
-<pre tabindex="0"><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://deb.debian.org/debian
-</code></pre><p>If <code>apt-cacher-ng</code> is used:</p>
-<pre tabindex="0"><code>$ sudo sbuild-createchroot --include=eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
-</code></pre><p>(The difference can be resolved later by editing the <code>.../etc/apt/sources.list</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-createchroot --include<span style="color:#f92672">=</span>eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://deb.debian.org/debian
+</span></span></code></pre></div><p>If <code>apt-cacher-ng</code> is used:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-createchroot --include<span style="color:#f92672">=</span>eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
+</span></span></code></pre></div><p>(The difference can be resolved later by editing the <code>.../etc/apt/sources.list</code>
 file found under <code>/srv/chroot/unstable-amd64-sbuild</code>.)</p>
 <p>Please note that the above create <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to be used by <code>schroot</code>.
 (This file is effectively a split-up <code>/etc/schroot/schroot.conf</code> and this file needs to be removed together with the chroot system directory tree under <code>/srv/chroot/unstable-amd64-sbuild</code> to rerun above <code>sbuild-createchroot</code> if you messed up chroot contents.)</p>
 <p>TODO: decide on technical merits: eatmydata or tmpfs for /build etc.</p>
 <p>Prior to every use, you need to keep it up to date.</p>
-<pre tabindex="0"><code>$ sudo sbuild-update -udcar u
-</code></pre><h3 id="package-build-with-sbuild">Package build with sbuild</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-update -udcar u
+</span></span></code></pre></div><h3 id="package-build-with-sbuild">Package build with sbuild</h3>
 <h4 id="for-unstable">For <code>unstable</code></h4>
 <p>Package build from the source directory is simply as:</p>
-<pre tabindex="0"><code>$ sbuild
-</code></pre><p>or using source package as:</p>
-<pre tabindex="0"><code>$ sbuild &lt;packagename&gt;.dsc
-</code></pre><p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild
+</span></span></code></pre></div><p>or using source package as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild &lt;packagename&gt;.dsc
+</span></span></code></pre></div><p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
 bind-mount kernel feature smartly to make build environment quickly.</p>
 <h4 id="for-testing">For <code>testing</code></h4>
 <p>Package build from the source directory is simply as:</p>
-<pre tabindex="0"><code>$ sbuild -c testing-amd64-sbuild
-</code></pre><h3 id="gbp-buildpackage-configuration">gbp-buildpackage configuration</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild -c testing-amd64-sbuild
+</span></span></code></pre></div><h4 id="for-stable">For <code>stable</code></h4>
+<p>Package build from the source directory is simply as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild -c stable-amd64-sbuild
+</span></span></code></pre></div><h3 id="gbp-buildpackage-configuration">gbp-buildpackage configuration</h3>
 <p>I changed gbp-buildpackage to use sbuild.</p>
-<pre tabindex="0"><code>[DEFAULT]
-# the default build command:
-builder = sbuild -A -s --source-only-changes -v -d unstable
-...
-</code></pre><p>(Actually, with the above <code>~/.sbuidrc</code>, we should be able to skip options after
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#f92672">[</span>DEFAULT<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># the default build command:</span>
+</span></span><span style="display:flex;"><span>builder <span style="color:#f92672">=</span> sbuild -A -s --source-only-changes -v -d unstable
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>(Actually, with the above <code>~/.sbuildrc</code>, we should be able to skip options after
 <code>sbuild</code> here.)</p>
 <h3 id="access-to-the-source-chroot-environment-used-by-sbuild-as-root">Access to the source chroot environment used by sbuild as root</h3>
 <p>In order to access the minimum unstable chroot environment used by sbuild, use the standard command.</p>
-<pre tabindex="0"><code>$ sudo sbuild-shell u
-</code></pre><p>In order to update the minimum unstable chroot environment used by sbuild, use the standard command.</p>
-<pre tabindex="0"><code>$ sudo sbuild-update -udcar u
-</code></pre><p>In order to access the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
-<pre tabindex="0"><code>$ sudo schroot-shell -u o
-</code></pre><p>In order to update the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
-<pre tabindex="0"><code>$ sudo sbuild-update -udcar o
-</code></pre><h2 id="schroot-infrastructure-shared-data-persistent">Schroot infrastructure (shared data, persistent)</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-shell u
+</span></span></code></pre></div><p>In order to update the minimum unstable chroot environment used by sbuild, use the standard command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-update -udcar u
+</span></span></code></pre></div><p>In order to access the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo schroot-shell -u o
+</span></span></code></pre></div><p>In order to update the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-update -udcar o
+</span></span></code></pre></div><h2 id="schroot-infrastructure-shared-data-persistent">Schroot infrastructure (shared data, persistent)</h2>
 <p>For package development, creating the test build environment starting from the
 latest minimal chroot environment is time consuming.  For this situation, it&rsquo;s
 better to have all required packages installed and have access to data in your
@@ -282,88 +291,88 @@ unstable, I created a simple shell script:</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell">https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell</a></li>
 </ul>
-<pre tabindex="0"><code>$ schroot-shell -h
-NAME
-    schroot-shell - start a shell in chroot with current home data.
-
-SYNOPSIS
-    schroot-shell [DIST [CONFIG]]
-    schroot-shell --config [CONFIG]
-    schroot-shell [--init|--prep|--upgrade] [DIST [CONFIG]]
-
-DESCRIPTION
-
-This wrapper command of *schroot* offers a set of helper commands to work in
-the persistent pre-loaded (source) chroot system environment while sharing the
-user data from the user&#39;s home directory of the host system.
-
-Here, if &#39;CONFIG&#39; and &#39;DIST&#39; are missing in the command line, &#39;desktop&#39; for
-&#39;CONFIG&#39; and &#39;unstable&#39; for &#39;DIST&#39; are used as the default values.  Normally,
-you skip specifying &#39;CONFIG&#39; to use its default value.  This command
-automatically becomes root when needed.
-
-The *schroot-shell* command is normally invoked as:
-
-   schroot-shell [DIST [CONFIG]]
-
-This starts an interactive shell in the &#39;DIST-amd64-CONFIG&#39; source chroot
-managed by the *schroot* command while bind mounting the user data from the
-user&#39;s home directory of the host system.  This is somewhat modeled after
-*sbuild-shell*.  While *sbuild-shell* is designed to work with the session
-chroot and the changes made from *sbuild-shell* to the chroot is discarded,
-the changes made from *schroot-shell* to the chroot is persistent.
-
-In order for the *schroot-shell* command to function, you need to set up the
-&#39;DIST-amd64-CONFIG&#39; source chroot properly.
-
-The &#39;DIST-amd64-CONFIG&#39; source chroot can be initialized in 3
-steps.
-
-  1. Create the setup script configuration files for *schroot* under
-     &#39;/etc/schroot/CONFIG/&#39; as explained in the &#39;FILES&#39; section under &#39;Setup
-     script configuration&#39; in schroot.conf(5) for &#39;/etc/schroot/default&#39;.
-
-       schroot-shell --config [CONFIG]
-
-  2. Customize the setup script configuration files for *schroot* at
-     &#39;/etc/schroot/CONFIG/fstab&#39; to list all mounted devices in your home
-     directory.
-
-  3. Create a chroot file system for &#39;DIST&#39; at
-     &#39;/srv/chroot/DIST-amd64-CONFIG&#39; using the setup script configuration
-     files in &#39;/etc/schroot/CONFIG&#39;.
-
-       schroot-shell --init [DIST [CONFIG]]
-
-    Here, &#39;DIST&#39; specifies base distribution of the chroot system.  &#39;DIST&#39;
-    can be &#39;unstable&#39; (default), &#39;testing&#39;, &#39;stable&#39;, &#39;oldstable&#39;, or
-    &#39;oldoldstable&#39;.  These can be shortened as &#39;u&#39;, &#39;t&#39;, &#39;s&#39;, &#39;o&#39;, or &#39;oo&#39;
-    in the command line.
-
-The &#39;DIST-amd64-CONFIG&#39; source chroot can be updated to the latest
-state by:
-
-   schroot-shell --update [DIST [CONFIG]]
-
-The &#39;DIST-amd64-CONFIG&#39; source chroot can be prepped up with a few
-pre-defined extra packages desirable for the shell activities by:
-
-   schroot-shell --prep [DIST [CONFIG]]
-
-For &#39;CONFIG&#39;, values &#39;default&#39;, &#39;minimal&#39;, &#39;buildd&#39;, and &#39;sbuild&#39;
-should be avoided unless you know what exactly happens since these setup
-scripts are already used by *sbuild* and *schroot*.
-
-The *schroot-shell* command offers a generarized and similar functionality of
-combined *sbuild-createchroot*, *sbuild-update*, and *sbuild-shell* for the
-persistent chroot shell environment instead of the session one.
-
-Parametrs:
-  TYPE    = &#39;source&#39;
-  DIST    = &#39;unstable&#39;
-  ARCH    = &#39;amd64&#39;
-  CONFIG  = &#39;desktop&#39;
-</code></pre><h3 id="customizing-etcschrootdesktopfstab">Customizing <code>/etc/schroot/desktop/fstab</code></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -h
+</span></span><span style="display:flex;"><span>NAME
+</span></span><span style="display:flex;"><span>    schroot-shell - start a shell in chroot with current home data.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>SYNOPSIS
+</span></span><span style="display:flex;"><span>    schroot-shell <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
+</span></span><span style="display:flex;"><span>    schroot-shell --config <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>    schroot-shell <span style="color:#f92672">[</span>--init|--prep|--upgrade<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>DESCRIPTION
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>This wrapper command of *schroot* offers a set of helper commands to work in
+</span></span><span style="display:flex;"><span>the persistent pre-loaded <span style="color:#f92672">(</span>source<span style="color:#f92672">)</span> chroot system environment <span style="color:#66d9ef">while</span> sharing the
+</span></span><span style="display:flex;"><span>user data from the user<span style="color:#e6db74">&#39;s home directory of the host system.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Here, if &#39;</span>CONFIG<span style="color:#e6db74">&#39; and &#39;</span>DIST<span style="color:#e6db74">&#39; are missing in the command line, &#39;</span>desktop<span style="color:#e6db74">&#39; for
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;</span>CONFIG<span style="color:#e6db74">&#39; and &#39;</span>unstable<span style="color:#e6db74">&#39; for &#39;</span>DIST<span style="color:#e6db74">&#39; are used as the default values.  Normally,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">you skip specifying &#39;</span>CONFIG<span style="color:#e6db74">&#39; to use its default value.  This command
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">automatically becomes root when needed.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">The *schroot-shell* command is normally invoked as:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   schroot-shell [DIST [CONFIG]]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">This starts an interactive shell in the &#39;</span>DIST-amd64-CONFIG<span style="color:#e6db74">&#39; source chroot
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">managed by the *schroot* command while bind mounting the user data from the
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">user&#39;</span>s home directory of the host system.  This is somewhat modeled after
+</span></span><span style="display:flex;"><span>*sbuild-shell*.  While *sbuild-shell* is designed to work with the session
+</span></span><span style="display:flex;"><span>chroot and the changes made from *sbuild-shell* to the chroot is discarded,
+</span></span><span style="display:flex;"><span>the changes made from *schroot-shell* to the chroot is persistent.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>In order <span style="color:#66d9ef">for</span> the *schroot-shell* command to <span style="color:#66d9ef">function</span>, you need to set up the
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;DIST-amd64-CONFIG&#39;</span> source chroot properly.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The <span style="color:#e6db74">&#39;DIST-amd64-CONFIG&#39;</span> source chroot can be initialized in <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>steps.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  1. Create the setup script configuration files <span style="color:#66d9ef">for</span> *schroot* under
+</span></span><span style="display:flex;"><span>     <span style="color:#e6db74">&#39;/etc/schroot/CONFIG/&#39;</span> as explained in the <span style="color:#e6db74">&#39;FILES&#39;</span> section under <span style="color:#e6db74">&#39;Setup
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     script configuration&#39;</span> in schroot.conf<span style="color:#f92672">(</span>5<span style="color:#f92672">)</span> <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;/etc/schroot/default&#39;</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       schroot-shell --config <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  2. Customize the setup script configuration files <span style="color:#66d9ef">for</span> *schroot* at
+</span></span><span style="display:flex;"><span>     <span style="color:#e6db74">&#39;/etc/schroot/CONFIG/fstab&#39;</span> to list all mounted devices in your home
+</span></span><span style="display:flex;"><span>     directory.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  3. Create a chroot file system <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;DIST&#39;</span> at
+</span></span><span style="display:flex;"><span>     <span style="color:#e6db74">&#39;/srv/chroot/DIST-amd64-CONFIG&#39;</span> using the setup script configuration
+</span></span><span style="display:flex;"><span>     files in <span style="color:#e6db74">&#39;/etc/schroot/CONFIG&#39;</span>.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>       schroot-shell --init <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    Here, <span style="color:#e6db74">&#39;DIST&#39;</span> specifies base distribution of the chroot system.  <span style="color:#e6db74">&#39;DIST&#39;</span>
+</span></span><span style="display:flex;"><span>    can be <span style="color:#e6db74">&#39;unstable&#39;</span> <span style="color:#f92672">(</span>default<span style="color:#f92672">)</span>, <span style="color:#e6db74">&#39;testing&#39;</span>, <span style="color:#e6db74">&#39;stable&#39;</span>, <span style="color:#e6db74">&#39;oldstable&#39;</span>, or
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;oldoldstable&#39;</span>.  These can be shortened as <span style="color:#e6db74">&#39;u&#39;</span>, <span style="color:#e6db74">&#39;t&#39;</span>, <span style="color:#e6db74">&#39;s&#39;</span>, <span style="color:#e6db74">&#39;o&#39;</span>, or <span style="color:#e6db74">&#39;oo&#39;</span>
+</span></span><span style="display:flex;"><span>    in the command line.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The <span style="color:#e6db74">&#39;DIST-amd64-CONFIG&#39;</span> source chroot can be updated to the latest
+</span></span><span style="display:flex;"><span>state by:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   schroot-shell --update <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The <span style="color:#e6db74">&#39;DIST-amd64-CONFIG&#39;</span> source chroot can be prepped up with a few
+</span></span><span style="display:flex;"><span>pre-defined extra packages desirable <span style="color:#66d9ef">for</span> the shell activities by:
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   schroot-shell --prep <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>For <span style="color:#e6db74">&#39;CONFIG&#39;</span>, values <span style="color:#e6db74">&#39;default&#39;</span>, <span style="color:#e6db74">&#39;minimal&#39;</span>, <span style="color:#e6db74">&#39;buildd&#39;</span>, and <span style="color:#e6db74">&#39;sbuild&#39;</span>
+</span></span><span style="display:flex;"><span>should be avoided unless you know what exactly happens since these setup
+</span></span><span style="display:flex;"><span>scripts are already used by *sbuild* and *schroot*.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>The *schroot-shell* command offers a generarized and similar functionality of
+</span></span><span style="display:flex;"><span>combined *sbuild-createchroot*, *sbuild-update*, and *sbuild-shell* <span style="color:#66d9ef">for</span> the
+</span></span><span style="display:flex;"><span>persistent chroot shell environment instead of the session one.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Parametrs:
+</span></span><span style="display:flex;"><span>  TYPE    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;source&#39;</span>
+</span></span><span style="display:flex;"><span>  DIST    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;unstable&#39;</span>
+</span></span><span style="display:flex;"><span>  ARCH    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;amd64&#39;</span>
+</span></span><span style="display:flex;"><span>  CONFIG  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;desktop&#39;</span>
+</span></span></code></pre></div><h3 id="customizing-etcschrootdesktopfstab">Customizing <code>/etc/schroot/desktop/fstab</code></h3>
 <p>I customized my desktop profile at <code>/etc/schroot/desktop/fstab</code> as follows:</p>
 <ul>
 <li>Explicitly bind mount subdirectories under my home directory which are on
@@ -372,25 +381,25 @@ different devices (including Btrfs subvolumes).</li>
 </ul>
 <h3 id="access-to-the-persistent-chroot-environment-as-user">Access to the persistent chroot environment as user</h3>
 <p>In order to access the pre-loaded unstable chroot environment, I simply type.</p>
-<pre tabindex="0"><code>$ schroot-shell
-</code></pre><p>In order to update the pre-loaded unstable chroot environment, I simply type.</p>
-<pre tabindex="0"><code>$ schroot-shell -u
-</code></pre><p>In order to access the pre-loaded oldstable chroot environment, I simply type.</p>
-<pre tabindex="0"><code>$ schroot-shell o
-</code></pre><p>In order to update the pre-loaded oldstable chroot environment, I simply type.</p>
-<pre tabindex="0"><code>$ schroot-shell -u o
-</code></pre><h2 id="chroot-update-optimization">Chroot update optimization</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell
+</span></span></code></pre></div><p>In order to update the pre-loaded unstable chroot environment, I simply type.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -u
+</span></span></code></pre></div><p>In order to access the pre-loaded oldstable chroot environment, I simply type.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell o
+</span></span></code></pre></div><p>In order to update the pre-loaded oldstable chroot environment, I simply type.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -u o
+</span></span></code></pre></div><h2 id="chroot-update-optimization">Chroot update optimization</h2>
 <p>Slow <code>fsync</code>(2) process problem caused by <code>dpkg</code> and SSD waring problem can be avoided.</p>
 <h3 id="via-eatmydata">Via <code>eatmydata</code></h3>
 <p>Add following line into <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> or similar to speed up the package installation process.</p>
-<pre tabindex="0"><code>command-prefix=eatmydata
-</code></pre><h3 id="via-tmpfs">Via <code>tmpfs</code></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>command-prefix<span style="color:#f92672">=</span>eatmydata
+</span></span></code></pre></div><h3 id="via-tmpfs">Via <code>tmpfs</code></h3>
 <p>Add following to my <code>/etc/fstab</code>:</p>
-<pre tabindex="0"><code># For speeding up sbuild/schroot and prevent SSD wear-out
-none /var/lib/schroot/session        tmpfs uid=root,gid=root,mode=0755 0 0
-none /var/lib/schroot/union/overlay  tmpfs uid=root,gid=root,mode=0755 0 0
-none /var/lib/sbuild/build           tmpfs uid=sbuild,gid=sbuild,mode=2770 0 0
-</code></pre><p>Here, I note a few notable directories:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># For speeding up sbuild/schroot and prevent SSD wear-out</span>
+</span></span><span style="display:flex;"><span>none /var/lib/schroot/session        tmpfs uid<span style="color:#f92672">=</span>root,gid<span style="color:#f92672">=</span>root,mode<span style="color:#f92672">=</span><span style="color:#ae81ff">0755</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>none /var/lib/schroot/union/overlay  tmpfs uid<span style="color:#f92672">=</span>root,gid<span style="color:#f92672">=</span>root,mode<span style="color:#f92672">=</span><span style="color:#ae81ff">0755</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>none /var/lib/sbuild/build           tmpfs uid<span style="color:#f92672">=</span>sbuild,gid<span style="color:#f92672">=</span>sbuild,mode<span style="color:#f92672">=</span><span style="color:#ae81ff">2770</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
+</span></span></code></pre></div><p>Here, I note a few notable directories:</p>
 <ul>
 <li><code>/srv/chroot</code>: directory containing whole initial chroot environment.</li>
 <li><code>/var/lib/schroot/union/overlay</code>: directory where additional packages are
@@ -576,17 +585,17 @@ complication due to version so I stop using it.)</li>
 <li>Execute: <code>apt install virt-manager gnome-boxes</code></li>
 <li>Read /usr/share/doc/libvirt-daemon/README.Debian.gz and follow it.</li>
 </ul>
-<pre tabindex="0"><code>$ sudo bash
-# virsh net-start default
-# virsh net-autostart default
-# mkdir /etc/dnsmasq.d
-# cat &lt;&lt;EOF &gt;/etc/dnsmasq.d/00_libvirtd.conf
-# only bind to loopback by default
-interface=lo
-bind-interfaces
-EOF
-# ^D
-</code></pre><h3 id="create-minimal-stable-vm">Create minimal stable VM</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo bash
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># virsh net-start default</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># virsh net-autostart default</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># mkdir /etc/dnsmasq.d</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># cat &lt;&lt;EOF &gt;/etc/dnsmasq.d/00_libvirtd.conf</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># only bind to loopback by default</span>
+</span></span><span style="display:flex;"><span>interface<span style="color:#f92672">=</span>lo
+</span></span><span style="display:flex;"><span>bind-interfaces
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ^D</span>
+</span></span></code></pre></div><h3 id="create-minimal-stable-vm">Create minimal stable VM</h3>
 <p>(This needs to be updated for &ldquo;bullseye&rdquo;.  It should be quite similar.  I primarily use gnome-boxes now.)</p>
 <ul>
 <li>Download the ISO for Debian stable. (netinst: 337MiB)</li>
@@ -640,9 +649,9 @@ repository and than try again.  (Don&rsquo;t use <code>--fix-missing</code>)</li
 <li>Clone from &ldquo;debian10&rdquo; to &ldquo;sid-dev&rdquo;</li>
 <li>Change <code>/etc/apt/sources.list</code></li>
 </ul>
-<pre tabindex="0"><code>deb http://deb.debian.org/debian/ sid main
-deb-src http://deb.debian.org/debian/ sid main
-</code></pre><ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>deb http://deb.debian.org/debian/ sid main
+</span></span><span style="display:flex;"><span>deb-src http://deb.debian.org/debian/ sid main
+</span></span></code></pre></div><ul>
 <li><code>apt-get update &amp;&amp; apt-get dist-upgrade &amp;&amp; apt autoremove</code></li>
 <li><code>apt-get install devscripts</code></li>
 </ul>
@@ -659,13 +668,13 @@ seen from other VMs and the host WS need reboot of the VM.)</p>
 <p>As long as the host WS and guest VMs are installed with <code>avahi-utils</code>, we can
 use each host name appended with &ldquo;<code>.local</code>&rdquo; to access using good old SSH.  For
 example between VMs.</p>
-<pre tabindex="0"><code>osamu@sid-dev:~$ ssh sid-GNOME.local
-</code></pre><p>SSH login directly to root account of a system are probably blocked.  In that
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>osamu@sid-dev:~$ ssh sid-GNOME.local
+</span></span></code></pre></div><p>SSH login directly to root account of a system are probably blocked.  In that
 case, you must SSH into user account first and sudo/su to root.</p>
 <p>Use of SSH key placed in user&rsquo;s home directory is a good idea.  Typical key
 generation goes:</p>
-<pre tabindex="0"><code>osamu@sid-dev:~$ ssh-keygen -t rsa
-</code></pre><p>This should create:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>osamu@sid-dev:~$ ssh-keygen -t rsa
+</span></span></code></pre></div><p>This should create:</p>
 <ul>
 <li><code>id_rsa</code> contains the private key</li>
 <li><code>id_rsa.pub</code> contains the public key</li>
@@ -674,19 +683,19 @@ generation goes:</p>
 account on <code>sid-GNOME</code>, you need to append the content of <code>id_rsa.pub</code> on
 <code>sid-dev</code> to <code>~/.ssh/authorized_keys</code> on the <code>sid-GNOME</code>.</p>
 <p>Please make sure to set proper permissions on the remote host:</p>
-<pre tabindex="0"><code>osamu@sid-GNOME $ chmod 700 ~/.ssh
-osamu@sid-GNOME $ chmod 600 ~/.ssh/authorized_keys
-</code></pre><h3 id="setting-up-sudo">Setting up <code>sudo</code></h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>osamu@sid-GNOME $ chmod <span style="color:#ae81ff">700</span> ~/.ssh
+</span></span><span style="display:flex;"><span>osamu@sid-GNOME $ chmod <span style="color:#ae81ff">600</span> ~/.ssh/authorized_keys
+</span></span></code></pre></div><h3 id="setting-up-sudo">Setting up <code>sudo</code></h3>
 <p>Following will configure <code>sudo</code> to allow user &ldquo;osamu&rdquo; for root privilege.</p>
-<pre tabindex="0"><code> $ su
-Password:
-root@sid-dev:/home/osamu# /sbin/adduser osamu sudo
-...
-root@sid-dev:/home/osamu# echo &gt;/etc/sudoers.d/passwordless &lt;&lt;EOF
-# NO password for the primary user
-%sudo ALL = (ALL) NOPASSWD: ALL
-EOF
-</code></pre><h3 id="vm-tools">VM tools</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ su
+</span></span><span style="display:flex;"><span>Password:
+</span></span><span style="display:flex;"><span>root@sid-dev:/home/osamu# /sbin/adduser osamu sudo
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>root@sid-dev:/home/osamu# echo &gt;/etc/sudoers.d/passwordless <span style="color:#e6db74">&lt;&lt;EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># NO password for the primary user
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">%sudo ALL = (ALL) NOPASSWD: ALL
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><h3 id="vm-tools">VM tools</h3>
 <p>I am not familiar with VM oriented tools yet.  Following packages seem
 something to learn.</p>
 <ul>
