@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/07/18 (last update)
+2023/07/21 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -104,6 +104,7 @@ en/note-00047.md
         <li><a href="#tip-checking-systemd-log">Tip: Checking systemd log</a></li>
       </ul>
     </li>
+    <li><a href="#special-character-entry">Special Character Entry</a></li>
   </ul>
 </nav>
 
@@ -404,6 +405,52 @@ boot as:</p>
 </span></span></code></pre></div><ul>
 <li>Use <code>-g gjs</code> for <code>prefs.js</code>.</li>
 <li>Use <code>-f</code> instead of <code>-b</code> to monitor continuously.</li>
+</ul>
+<h2 id="special-character-entry">Special Character Entry</h2>
+<p>There are 2 ways to enter special non-ASCII characters under en_US.UTF-8.</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Compose_key">Compose</a> &ndash; Unix/X legacy
+<ul>
+<li><a href="https://www.x.org/releases/current/doc/libX11/i18n/compose/en_US.UTF-8.html">Xlib Compose Keys for en_US.UTF-8</a></li>
+<li><a href="https://tstarling.com/stuff/ComposeKeys.html">Linux Compose Key Sequences</a></li>
+<li>This requires to assign a key to generate keysym=<code>KEY_Meta</code>.
+<ul>
+<li>Assign a key with keysym=<code>KEY_Multi_key</code> using: GNOME <code>Settings</code> -&gt; <code>Keyboard</code> -&gt; <code>Special Character Entry</code> -&gt; <code>Compose Key</code></li>
+<li>This key assignment may be done with xkb command.</li>
+</ul>
+</li>
+<li>This conversion functionality itself works without xkb support.  (This can be used even under xkb=<code>en</code>)</li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/AltGr_key">AltGr</a>
+<ul>
+<li>IBM/PC legacy offering 4 keysyms per each key (Normal/Shift/AltGr/Shift-AltGr)
+<ul>
+<li><code>KEY_ISO_LEVEL3_Shift</code> on Linux offfers AltGr=<code>KEY_Alt_R</code> functionality</li>
+<li>Assign a key with keysym=<code>KEY_ISO_LEVEL3_Shift</code> using: GNOME <code>Settings</code> -&gt; <code>Keyboard</code> -&gt; <code>Special Character Entry</code> -&gt; <code>Alternate Characters Key</code></li>
+</ul>
+</li>
+<li>US, intl., with AltGr <a href="https://en.wikipedia.org/wiki/Dead_key">dead keys</a>
+<ul>
+<li>Preferred variant on Linux</li>
+<li>dead keys require AltGr pressed together</li>
+<li>Compose-key like capability without loss of normal us key experience</li>
+<li>This functionality is also available on Windows from third parties. <a href="https://github.com/thomasfaingnaert/win-us-intl-altgr">1</a>, <a href="https://www.scottseverance.us/html/keyboard/win_intl_altgr/">2</a></li>
+</ul>
+</li>
+<li>US, intl., with <a href="https://en.wikipedia.org/wiki/Dead_key">dead keys</a>
+<ul>
+<li>Variant which functions exactly same as Windows &ldquo;United States (International)&rdquo; layout</li>
+<li>This interferes with entering some punctuation keys.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><a href="https://unix.stackexchange.com/questions/55076/what-is-the-mode-switch-modifier-for">The meaning of AltGr is discussed on stackexchane in details</a>.</p>
+<ul>
+<li>&ldquo;Mode_switch&rdquo; is the old-style (pre-XKB) name of the key that is called AltGr on many keyboard layouts.</li>
+<li>&ldquo;ISO_Level3_Shift&rdquo; is the XKB version of this key.</li>
 </ul>
 <!-- raw HTML omitted -->
 
