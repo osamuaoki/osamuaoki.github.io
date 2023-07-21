@@ -104,7 +104,12 @@ en/note-00047.md
         <li><a href="#tip-checking-systemd-log">Tip: Checking systemd log</a></li>
       </ul>
     </li>
-    <li><a href="#special-character-entry">Special Character Entry</a></li>
+    <li><a href="#special-character-entry">Special Character Entry</a>
+      <ul>
+        <li><a href="#options">Options</a></li>
+        <li><a href="#input-related-special-keys">Input related special keys</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -323,6 +328,10 @@ through the primary xkb before invoking any ibus.</p>
 </ul>
 <p>So adding feature to register Modifier-combos as shortcut was a bit tricky.</p>
 <p><img src="/img/pref-im-alt.png" alt="prefs-im-alt.js"></p>
+<p>(Including Alt and AltGr in combo was not the best idea since their keysym
+isn&rsquo;t stable.)</p>
+<p>So I use now:</p>
+<p><img src="/img/pref-im-alt.png" alt="prefs-im-alt2.js"></p>
 <h2 id="references">References</h2>
 <h3 id="learning-javascript-for-gjs">Learning JavaScript for GJS</h3>
 <p>When I started to write GJS JavaScript code for this extension, I had no idea
@@ -407,6 +416,9 @@ boot as:</p>
 <li>Use <code>-f</code> instead of <code>-b</code> to monitor continuously.</li>
 </ul>
 <h2 id="special-character-entry">Special Character Entry</h2>
+<h3 id="options">Options</h3>
+<p>Conclusion: Use &ldquo;US, intl., with AltGr dead keys&rdquo;</p>
+<p>Rationale:</p>
 <p>There are 2 ways to enter special non-ASCII characters under en_US.UTF-8.</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/Compose_key">Compose</a> &ndash; Unix/X legacy
@@ -432,7 +444,7 @@ boot as:</p>
 </li>
 <li>US, intl., with AltGr <a href="https://en.wikipedia.org/wiki/Dead_key">dead keys</a>
 <ul>
-<li>Preferred variant on Linux</li>
+<li><strong>Preferred variant</strong> on Linux</li>
 <li>dead keys require AltGr pressed together</li>
 <li>Compose-key like capability without loss of normal us key experience</li>
 <li>This functionality is also available on Windows from third parties. <a href="https://github.com/thomasfaingnaert/win-us-intl-altgr">1</a>, <a href="https://www.scottseverance.us/html/keyboard/win_intl_altgr/">2</a></li>
@@ -447,10 +459,32 @@ boot as:</p>
 </ul>
 </li>
 </ul>
-<p><a href="https://unix.stackexchange.com/questions/55076/what-is-the-mode-switch-modifier-for">The meaning of AltGr is discussed on stackexchane in details</a>.</p>
+<p><a href="https://unix.stackexchange.com/questions/55076/what-is-the-mode-switch-modifier-for">The meaning of AltGr is discussed on stackexchange in details</a>.</p>
 <ul>
 <li>&ldquo;Mode_switch&rdquo; is the old-style (pre-XKB) name of the key that is called AltGr on many keyboard layouts.</li>
 <li>&ldquo;ISO_Level3_Shift&rdquo; is the XKB version of this key.</li>
+</ul>
+<h3 id="input-related-special-keys">Input related special keys</h3>
+<ul>
+<li>Linux:
+<ul>
+<li>AltGr: default for generating <code>KEY_ISO_LEVEL3_Shift</code> effects.  This also
+changes keysym depending on its invocation situation.</li>
+<li>Super-space: default GNOME input source forward rotating</li>
+<li>Super-shift-space: default GNOME input source backward rotating</li>
+<li>Shift-space: switch input method on/off &mdash; old style</li>
+<li>Control-space: switch input method on/off &mdash; old style</li>
+</ul>
+</li>
+<li>Windows
+<ul>
+<li>Control-Shift: change input language/layout</li>
+<li>Shift-Alt:     change input language/layout</li>
+<li>Kanji: switch input method on/off &mdash; old style</li>
+<li>Windows-space: default input source forward rotating</li>
+<li>Windows-shift-space: default input source backward rotating</li>
+</ul>
+</li>
 </ul>
 <!-- raw HTML omitted -->
 
