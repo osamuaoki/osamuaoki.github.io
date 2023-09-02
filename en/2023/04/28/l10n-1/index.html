@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/04/28 (initial publish),
-2023/05/16 (last update)
+2023/09/02 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00042.md
@@ -68,7 +68,8 @@ en/note-00042.md
     <li><a href="#l10ned-execution-of-program-from-shell-prompt">L10Ned execution of program from shell prompt</a></li>
     <li><a href="#normal-way-to-change-l10n">Normal way to change L10N</a></li>
     <li><a href="#custom-l10ned-execution-without-logout-for-cli">Custom L10Ned execution without logout for CLI</a></li>
-    <li><a href="#custom-l10ned-execution-without-logout-for-gui">Custom L10Ned execution without logout for GUI</a></li>
+    <li><a href="#custom-l10ned-execution-without-logout-for-gui-via-desktop">Custom L10Ned execution without logout for GUI (via desktop)</a></li>
+    <li><a href="#custom-l10ned-execution-without-logout-for-gui-invasive">Custom L10Ned execution without logout for GUI (invasive)</a></li>
     <li><a href="#set-default-in-all-applications-of-libreoffice">Set default in all applications of Libreoffice</a></li>
     <li><a href="#set-default-page-size-in-libreoffice">Set default page size in Libreoffice</a></li>
     <li><a href="#l10n-for-displayed-page-of-web-content-by-the-browser">L10N for displayed page of web content by the browser</a></li>
@@ -183,6 +184,7 @@ desirable L10N setting</li>
 </ul>
 <p>The negative of this approach is this requires <strong>logout</strong>.</p>
 <h2 id="custom-l10ned-execution-without-logout-for-cli">Custom L10Ned execution without logout for CLI</h2>
+<p>This is least invasive and easy to manage from CLI.</p>
 <p>The use shell alias can be used to execute program under an arbitral L10N
 environment without <strong>logout</strong> and without changing the main system environment.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias jo<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANG=ja_JP.UTF-8 libreoffice&#34;</span>
@@ -194,8 +196,33 @@ environment without <strong>logout</strong> and without changing the main system
 font choice (No zh_CN oriented gliphs) and typing <code>jc</code> starts &ldquo;GNuCash&rdquo;
 under more or less desirable Japanese settings including JPY as currency and
 account entry names in Japanese.</p>
-<p>This is least invasive and easy to manage.</p>
-<h2 id="custom-l10ned-execution-without-logout-for-gui">Custom L10Ned execution without logout for GUI</h2>
+<h2 id="custom-l10ned-execution-without-logout-for-gui-via-desktop">Custom L10Ned execution without logout for GUI (via desktop)</h2>
+<p>This is least invasive and easy to manage from GUI.</p>
+<p>Create a <code>jgnucash.desktop</code> file as follows based on <code>/usr/share/applications/gnucash.desktop</code> with minor changes and place it in <code>~/local/share/applications/</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#f92672">[</span>Desktop Entry<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>Type<span style="color:#f92672">=</span>Application
+</span></span><span style="display:flex;"><span>MimeType<span style="color:#f92672">=</span>application/x-gnucash;
+</span></span><span style="display:flex;"><span>Version<span style="color:#f92672">=</span>0.9.4
+</span></span><span style="display:flex;"><span>Name<span style="color:#f92672">=</span>JGnuCash
+</span></span><span style="display:flex;"><span>GenericName<span style="color:#f92672">=</span>Finance Management <span style="color:#f92672">(</span>日本語環境<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>Comment<span style="color:#f92672">=</span>Manage your finances, accounts, and investments in Japanese
+</span></span><span style="display:flex;"><span>Exec<span style="color:#f92672">=</span>env LANG<span style="color:#f92672">=</span>ja_JP.UTF-8 LANGUAGE<span style="color:#f92672">=</span>ja gnucash %f
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Translators: Icon file name, do not translate unless you also provide a localized icon file. Alternatively use the English &#34;gnucash-icon&#34; as msgstr</span>
+</span></span><span style="display:flex;"><span>Icon<span style="color:#f92672">=</span>gnucash-icon
+</span></span><span style="display:flex;"><span>StartupNotify<span style="color:#f92672">=</span>true
+</span></span><span style="display:flex;"><span>Terminal<span style="color:#f92672">=</span>false
+</span></span><span style="display:flex;"><span>Categories<span style="color:#f92672">=</span>Office;Finance;
+</span></span><span style="display:flex;"><span>X-GNOME-Bugzilla-Bugzilla<span style="color:#f92672">=</span>gnucash.org
+</span></span><span style="display:flex;"><span>X-GNOME-Bugzilla-Product<span style="color:#f92672">=</span>GnuCash
+</span></span><span style="display:flex;"><span>X-GNOME-Bugzilla-Component<span style="color:#f92672">=</span>General
+</span></span><span style="display:flex;"><span>X-GNOME-Bugzilla-Version<span style="color:#f92672">=</span>4.13
+</span></span><span style="display:flex;"><span>X-GNOME-DocPath<span style="color:#f92672">=</span>gnucash-help/gnucash-help.xml
+</span></span><span style="display:flex;"><span>X-GNOME-FullName<span style="color:#f92672">=</span>GnuCash Finance Management
+</span></span></code></pre></div><p>Please note that if you use <code>gnucash.desktop</code> as the filename here, your normal
+English GnuCach desktop provided by <code>/usr/share/applications/gnucash.desktop</code>
+ecomes hidden from the GUI session.</p>
+<h2 id="custom-l10ned-execution-without-logout-for-gui-invasive">Custom L10Ned execution without logout for GUI (invasive)</h2>
+<p><strong>This is a deprecated approach for me since this is too invasive.</strong></p>
 <p>Let&rsquo;s make a GUI program <code>gnucash</code> started from GUI globally under Japanese
 environment <code>ja_JP.UTF-8</code> while keeping your system under <code>en_US.UTF-8</code>.</p>
 <p>Simple use of <code>sudo mv /usr/bin/gnucash /usr/bin/gnucash.orig</code> isn&rsquo;t robust
@@ -213,9 +240,7 @@ symlink.</p>
 <p>You can restore the original state as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ rm gnucash
 </span></span><span style="display:flex;"><span> $ sudo dpkg-divert --local --rename --remove /usr/bin/gnucash
-</span></span></code></pre></div><p>This is interesting configuration but a bit invasive.  So I am now staying out
-of this for now.</p>
-<h2 id="set-default-in-all-applications-of-libreoffice">Set default in all applications of Libreoffice</h2>
+</span></span></code></pre></div><h2 id="set-default-in-all-applications-of-libreoffice">Set default in all applications of Libreoffice</h2>
 <p>It took me a while to find a way to set default initial values in all
 applications of Libreoffice (7.4).  Here are how for each application:</p>
 <ul>
