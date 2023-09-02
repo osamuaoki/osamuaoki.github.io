@@ -220,7 +220,7 @@ account entry names in Japanese.</p>
 </span></span><span style="display:flex;"><span>X-GNOME-FullName<span style="color:#f92672">=</span>GnuCash Finance Management
 </span></span></code></pre></div><p>Please note that if you use <code>gnucash.desktop</code> as the filename here, your normal
 English GnuCach desktop provided by <code>/usr/share/applications/gnucash.desktop</code>
-ecomes hidden from the GUI session.</p>
+becomes hidden from the GUI session.</p>
 <h2 id="custom-l10ned-execution-without-logout-for-gui-invasive">Custom L10Ned execution without logout for GUI (invasive)</h2>
 <p><strong>This is a deprecated approach for me since this is too invasive.</strong></p>
 <p>Let&rsquo;s make a GUI program <code>gnucash</code> started from GUI globally under Japanese
@@ -229,7 +229,7 @@ environment <code>ja_JP.UTF-8</code> while keeping your system under <code>en_US
 against package update.  Here, <code>dpkg-divert</code> must be used, instead.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ cd /usr/bin
 </span></span><span style="display:flex;"><span> $ sudo tee gnucash.orig <span style="color:#e6db74">&lt;&lt; EOF
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LANG=&#34;ja_JP.UTF-8&#34; /usr/bin/gnucash.orig
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LANG=&#34;ja_JP.UTF-8&#34; LANGUAGE=ja /usr/bin/gnucash.orig
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
 </span></span><span style="display:flex;"><span> $ sudo chown <span style="color:#ae81ff">755</span> gnucash.ja
 </span></span><span style="display:flex;"><span> $ sudo dpkg-divert --local --rename --divert /usr/bin/gnucash.orig --add /usr/bin/gnucash
