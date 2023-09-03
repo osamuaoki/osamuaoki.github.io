@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/09/02 (last update)
+2023/09/03 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00039.md
@@ -84,6 +84,7 @@ en/note-00039.md
       </ul>
     </li>
     <li><a href="#caveat-of-deb-package-made-by-cmake">Caveat of DEB-package made by CMake</a></li>
+    <li><a href="#automating-nvim-build">Automating nvim build</a></li>
   </ul>
 </nav>
 
@@ -123,7 +124,9 @@ format without adding <code>debian/*</code> files.</p>
 <p>If <code>cpack</code> is invoked without <code>-G DEB</code>, this also builds TGZ-package.</p>
 <h2 id="prebuild-neovim-deb-package">Prebuild Neovim DEB-package</h2>
 <h3 id="debian-neovim-deb-package">Debian Neovim DEB-package</h3>
-<p><a href="https://tracker.debian.org/pkg/neovim">Debian ships Neovim</a> based on <a href="https://github.com/neovim/neovim">upstream Neovim</a> v0.7.2 version (released on 2022-06-27) for the upcoming bookworm release.</p>
+<p><a href="https://tracker.debian.org/pkg/neovim">Debian ships Neovim</a> based on
+<a href="https://github.com/neovim/neovim">upstream Neovim</a>
+v0.7.2 version (released on 2022-06-27) for the upcoming bookworm release.</p>
 <p>Please note this uses external libraries via shared library mechanism.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ldd /usr/bin/nvim
 </span></span><span style="display:flex;"><span>        linux-vdso.so.1 <span style="color:#f92672">(</span>0x00007ffec159e000<span style="color:#f92672">)</span>
@@ -284,6 +287,12 @@ commands needs some workaround such as the use of alias defined in <code>~/.bash
 </span></span><span style="display:flex;"><span>alias ex<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -e&#39;</span>
 </span></span><span style="display:flex;"><span>alias editor<span style="color:#f92672">=</span>nvim
 </span></span></code></pre></div><p>This should force to use Neovim as the backend of <code>vim</code>-related command.</p>
+<h2 id="automating-nvim-build">Automating nvim build</h2>
+<p>I made a simple script to build DEB-packages:</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/neovim-make">https://github.com/osamuaoki/osamu-utils/blob/main/neovim-make</a> (REV 0)</li>
+<li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/neovim-ninja">https://github.com/osamuaoki/osamu-utils/blob/main/neovim-ninja</a> (REV 1)</li>
+</ul>
 <!-- raw HTML omitted -->
 
 
