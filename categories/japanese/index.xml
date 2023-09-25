@@ -6,7 +6,21 @@
     <description>Recent content in japanese on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Thu, 18 May 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/japanese/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 23 Sep 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/japanese/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Waydroid</title>
+      <link>/jp/2023/09/23/waydroid-1/</link>
+      <pubDate>Sat, 23 Sep 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2023/09/23/waydroid-1/</guid>
+      <description>waydriod を使ったアンドロイドエミュレーター環境の導入 どうも現在もっとも使えそうなアンドロイドエミュレーター環境は、waydriodのようなので、試してみました。
+ウェッブサイトのDebian用のwaydroid導入方法では、スクリプトが何をするのか不安なので、一度ファイルに落としてから使いました。こうすると、コマンドラインオプション追加設定の話も意味が通ります。
+$ sudo apt install curl ca-certificates -y $ mkdir -p ~/tmp &amp;amp;&amp;amp; cd ~/temp $ curl https://repo.waydro.id &amp;gt; waydroid.sh $ chmod 755 waydroid.sh $ sudo ./waydroid.sh 自動設定されるAPTファイルの/etc/apt/sources.list.d/waydroid.listでも良いのですが、私は/etc/apt/sources.list.d/waydroid.sourcesに書き換えました。
+# This is wrtten in DEB822-STYLE FORMAT as described in sources.list (5) Types: deb URIs: https://repo.waydro.id/ Suites: bookworm Components: main Architectures: amd64 signed-by: /usr/share/keyrings/waydroid.gpg その後、waydroid導入マニュアル指示の手動スタート手順通りsudo waydroid container startだとエラーメッセージがでます。
+そのメッセージを参考に、Waydroid command line options に従って System type を GAPPS 対応とすべく以下を実行しました。(結構大きなファイルなので、ダウンロードに３０分ほど時間がかかりました。)
+$ sudo waydroid init -s GAPPS [23:03:28] Downloading https://sourceforge.</description>
+    </item>
+    
     <item>
       <title>PDFファイルの取り扱い</title>
       <link>/jp/2023/05/18/pdf-1/</link>
@@ -91,7 +105,9 @@ CSVファイルのencodingをJapanese(Shift-JIS)からUTF-8に変換したい場
 User-Agent Switcher and Manager &amp;ndash; Chrome/Chromium用 User-Agent Switcher and Manager &amp;ndash; firefox用 Chromeでこれを試してみました。Debian上のChromeでWindowsのふりの設定ができます。
 この設定をした後は、上記のようにユーザー・エージェントチェックに引っかかり前に進めなくなることはなく、どうも何事もなく前に進めていました。（最後までしたわけでは無いんですが…）
 医療費控除やふるさと納税のために来年度確定申告する際には、これを試します。
-NOTE: Chromiumでも、Googleアカウントにloginする必要はありますが、Chromeと同じextensionが導入できます。</description>
+NOTE: Chromiumでも、Googleアカウントにloginする必要はありますが、Chromeと同じextensionが導入できます。
+マイナポータル 2023-09-24現在、スマホのQRコード読み取り機能を使って、上記同等のUser-Agent Switcherを設定したPC(Linux)のフラウザー経由でWindows 10環境のふりをすると「マイナポータル」へのログインをしてのアクセスが可能です。ポイントは以下です。
+マイナポータル　← このサイトにUser-Agent Switcherを設定したPC(Linux)でつなぎ、「ログイン」をする。 スマホのマイナポータルのアプリを立ち上げる。 スマホのマイナポータルのアプリでは、「ログイン」しない。（これは、スマホでのログイン用） スマホ画面下の真ん中の薄い「読取り」と書かれた、QRコードアイコンを押す。 PC画面上のQRコードをスマホで読み込む。 言われたとおり、パスコードを入れたり、マイナンバーカードを読んだりする。 </description>
     </item>
     
     <item>

@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Waydroid | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Waydroid</span></h1>
+
+<h3 class="date">Date:
+2023/09/23 (initial publish),
+2023/09/25 (last update)
+</h3>
+<h3 class="source">Source:
+jp/note-00061.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2023/05/18/pdf-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#waydriod-を使ったアンドロイドエミュレーター環境の導入">waydriod を使ったアンドロイドエミュレーター環境の導入</a></li>
+    <li><a href="#waydroid-の設定">waydroid の設定</a></li>
+  </ul>
+</nav>
+
+<h2 id="waydriod-を使ったアンドロイドエミュレーター環境の導入">waydriod を使ったアンドロイドエミュレーター環境の導入</h2>
+<p>どうも現在もっとも使えそうなアンドロイドエミュレーター環境は、<a href="https://waydro.id/">waydriod</a>のようなので、試してみました。</p>
+<p><a href="https://docs.waydro.id/usage/install-on-desktops#ubuntu-debian-and-derivatives">ウェッブサイトのDebian用のwaydroid導入方法</a>では、スクリプトが何をするのか不安なので、一度ファイルに落としてから使いました。こうすると、コマンドラインオプション追加設定の話も意味が通ります。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo apt install curl ca-certificates -y
+</span></span><span style="display:flex;"><span>$ mkdir -p ~/tmp <span style="color:#f92672">&amp;&amp;</span> cd ~/temp
+</span></span><span style="display:flex;"><span>$ curl https://repo.waydro.id &gt; waydroid.sh
+</span></span><span style="display:flex;"><span>$ chmod <span style="color:#ae81ff">755</span> waydroid.sh
+</span></span><span style="display:flex;"><span>$ sudo ./waydroid.sh
+</span></span></code></pre></div><p>自動設定されるAPTファイルの<code>/etc/apt/sources.list.d/waydroid.list</code>でも良いのですが、私は<code>/etc/apt/sources.list.d/waydroid.sources</code>に書き換えました。</p>
+<pre tabindex="0"><code># This is wrtten in DEB822-STYLE FORMAT as described in sources.list (5)
+Types: deb
+URIs: https://repo.waydro.id/
+Suites: bookworm
+Components: main
+Architectures: amd64
+signed-by: /usr/share/keyrings/waydroid.gpg
+</code></pre><p>その後、<a href="https://docs.waydro.id/usage/install-on-desktops">waydroid導入マニュアル</a>指示の<a href="https://docs.waydro.id/usage/install-on-desktops#manually-starting-waydroid">手動スタート手順</a>通り<code>sudo waydroid container start</code>だとエラーメッセージがでます。</p>
+<p>そのメッセージを参考に、<a href="https://docs.waydro.id/usage/waydroid-command-line-options">Waydroid command line options</a> に従って System type を <a href="https://wiki.lineageos.org/gapps">GAPPS</a> 対応とすべく以下を実行しました。(結構大きなファイルなので、ダウンロードに３０分ほど時間がかかりました。)</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo waydroid init -s GAPPS
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>23:03:28<span style="color:#f92672">]</span> Downloading https://sourceforge.net/projects/waydroid/files/images/system/lineage/waydroid_x86_64/lineage-18.1-20230923-GAPPS-waydroid_x86_64-system.zip/download
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Downloading<span style="color:#f92672">]</span> 862.32 MB/862.36 MB    5875.47 kbps<span style="color:#f92672">(</span>approx.<span style="color:#f92672">)[</span>23:21:51<span style="color:#f92672">]</span> Validating system image
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>23:21:52<span style="color:#f92672">]</span> Extracting to /var/lib/waydroid/images
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>23:22:04<span style="color:#f92672">]</span> Downloading https://sourceforge.net/projects/waydroid/files/images/vendor/waydroid_x86_64/lineage-18.1-20230923-MAINLINE-waydroid_x86_64-vendor.zip/download
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Downloading<span style="color:#f92672">]</span> 174.98 MB/174.99 MB      89.26 kbps<span style="color:#f92672">(</span>approx.<span style="color:#f92672">)[</span>23:48:57<span style="color:#f92672">]</span> Validating vendor image
+</span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>23:48:57<span style="color:#f92672">]</span> Extracting to /var/lib/waydroid/images
+</span></span></code></pre></div><p>このあとも、<a href="https://waydro.id/#install">waydroidオープニングのページの導入コメント</a>の<code>systemctl</code>コマンドを使った手動コンテナー起動指示が気になります。上記の初期化プログラムやDebパッケージスクリプトが関連設定をちゃんとやってくれていればいいのですが。。。</p>
+<p>そこで、以下を実行してコンテナーが起動されているかを確認し安心しています。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo systemctl status waydroid-container
+</span></span><span style="display:flex;"><span>● waydroid-container.service - Waydroid Container
+</span></span><span style="display:flex;"><span>     Loaded: loaded <span style="color:#f92672">(</span>/lib/systemd/system/waydroid-container.service; enabled; preset: enabled<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>     Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Sun 2023-09-24 23:02:26 JST; 48min ago
+</span></span><span style="display:flex;"><span>   Main PID: <span style="color:#ae81ff">27299</span> <span style="color:#f92672">(</span>waydroid<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>      Tasks: <span style="color:#ae81ff">2</span> <span style="color:#f92672">(</span>limit: 37473<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>     Memory: 15.8M
+</span></span><span style="display:flex;"><span>        CPU: 138ms
+</span></span><span style="display:flex;"><span>     CGroup: /system.slice/waydroid-container.service
+</span></span><span style="display:flex;"><span>             └─27299 /usr/bin/python3 /usr/bin/waydroid -w container start
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>Sep <span style="color:#ae81ff">24</span> 23:02:26 goofy systemd<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>: Starting waydroid-container.service - Waydroid Container...
+</span></span><span style="display:flex;"><span>Sep <span style="color:#ae81ff">24</span> 23:02:26 goofy systemd<span style="color:#f92672">[</span>1<span style="color:#f92672">]</span>: Started waydroid-container.service - Waydroid Container.
+</span></span></code></pre></div><p>ちなみに、トラブッたら、システムの再インストールは、<a href="https://docs.waydro.id/usage/install-on-desktops#reinstalling-waydroid">Reinstalling Waydroid</a> を参考にします。</p>
+<p>単に、インストールタイプ（<code>-s</code> オプション）の変更なら、どうも以下のようなユーザーデーターの消去の後で、 <code>waydroid init</code> を適切なオプションで再実行すれば良いようです。</p>
+<pre tabindex="0"><code>$ sudo rm -rf /var/lib/waydroid
+$ sudo rm -r ~/.local/share/waydroid
+$ rm -r ~/.local/share/applications/Waydroid.desktop
+$ rm -r ~/.local/share/applications/waydroid.com.*.*.desktop
+</code></pre><h2 id="waydroid-の設定">waydroid の設定</h2>
+<p>まあ、当たり前かもしれませんがGoogleのアプリ導入には既存のアンドロイドシステムのバックアップか何かが必要なようです。</p>
+<p>（古いNexus5捨てたので、ここまでででやめました）</p>
+<ul>
+<li><a href="https://webzoit.net/hp/it/internet/homepage/env/os/bsd_unix_linux/debian/etc/lineageos_based_android_using_waydroid_on_debian_amd64.html#best_choice_using_google_play_store_aurora_store">DebianにWaydroidで爆速快適なAndroidを使ってみる</a> (2023-05-06)</li>
+<li><a href="https://pc-freedom.net/today_pc_story/waydroid-running-android-on-linux/">パソコンで Android アプリを動かす★驚きのツール Waydroid を試してみた！Linux で Android が動きます！</a> (2023-07-07)</li>
+<li><a href="https://togetter.com/li/2069021">Ubuntuに最新版WayDroidコンテナを入れてAndroid11環境を爆速で楽しんでみた。フルLineageOS環境スゲー。簡単インストール。</a> (2023-02-04) GAPPS問題</li>
+<li><a href="http://mochiuwiki.e2.valueserver.jp/index.php/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB_-_WayDroid">インストール - WayDroid</a> (2022-04-16) ネットワーク設定なども</li>
+<li><a href="https://ubunlog.com/ja/waydroid-un-conjunto-de-herramientas-para-tener-tus-apps-de-android-en-ubuntu/">Waydroid、UbuntuにAndroidアプリをインストールするためのツールセット</a> (????)</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2023/05/18/pdf-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
