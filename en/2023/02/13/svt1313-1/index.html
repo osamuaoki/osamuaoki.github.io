@@ -66,6 +66,7 @@ en/note-00036.md
   <ul>
     <li><a href="#how-to-access-bios-menu-of-sony-vaio-svt1313">How to access BIOS menu of Sony VAIO SVT1313</a></li>
     <li><a href="#why-boot-with-mbr-and-not-with-uefi">Why boot with MBR and not with UEFI</a></li>
+    <li><a href="#btrfs-as-root-filesystem-on-mbr-system">btrfs as root filesystem on MBR system</a></li>
     <li><a href="#touchpad-of-sony-vaio">Touchpad of Sony VAIO</a></li>
   </ul>
 </nav>
@@ -87,8 +88,12 @@ refuses to accommodate dual boot scenario with reasonable usability.</p>
 and &ldquo;Delete&rdquo; are fixed.)</li>
 <li>The card side contacts of SO-DDR DRAM needed to be rubbed by eraser to get it
 work right.</li>
-<li>For MBR, grub-pc is used.  This requires <code>/boot</code> to be on ext4 filesystem.</li>
-<li>If <code>/</code> is on btrfs filesystem via debian-installer, it uses <code>subvol=@rootfs</code>.</li>
+</ul>
+<h2 id="btrfs-as-root-filesystem-on-mbr-system">btrfs as root filesystem on MBR system</h2>
+<ul>
+<li>For MBR system, grub-pc is used.  This requires <code>/boot</code> to be on ext4 filesystem.</li>
+<li>If <code>/</code> is on btrfs filesystem via debian-installer, it uses <code>subvol=@rootfs</code>
+as installed.</li>
 </ul>
 <h2 id="touchpad-of-sony-vaio">Touchpad of Sony VAIO</h2>
 <p>Touch pad only functions as left-click button.  I verified it by opening its
