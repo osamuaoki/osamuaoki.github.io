@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/13 (initial publish),
-2023/05/02 (last update)
+2023/10/07 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00036.md
@@ -64,7 +64,8 @@ en/note-00036.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#hardware-of-sony-vaio">Hardware of Sony VAIO</a></li>
+    <li><a href="#how-to-access-bios-menu-of-sony-vaio-svt1313">How to access BIOS menu of Sony VAIO SVT1313</a></li>
+    <li><a href="#why-boot-with-mbr-and-not-with-uefi">Why boot with MBR and not with UEFI</a></li>
     <li><a href="#touchpad-of-sony-vaio">Touchpad of Sony VAIO</a></li>
   </ul>
 </nav>
@@ -73,18 +74,21 @@ en/note-00036.md
 (Intel i5) under Debian GNU/Linux.  This is a second hand used PC which costed
 me about $100 as total after fixing its keyboard.</p>
 <p>This is hardware specific tips.</p>
-<h2 id="hardware-of-sony-vaio">Hardware of Sony VAIO</h2>
+<h2 id="how-to-access-bios-menu-of-sony-vaio-svt1313">How to access BIOS menu of Sony VAIO SVT1313</h2>
 <p>Pressing <strong>ASSIST</strong> button instead of <strong>POWER</strong> button starts PC with boot
 device and BIOS setting selection menu.</p>
+<h2 id="why-boot-with-mbr-and-not-with-uefi">Why boot with MBR and not with UEFI</h2>
 <p>I got this machine as second hand. This PC came with <a href="https://wiki.debian.org/UEFI#Force_grub-efi_installation_manually">a buggy
 UEFI</a> which
 refuses to accommodate dual boot scenario with reasonable usability.</p>
 <ul>
-<li>I ended up selecting &ldquo;legacy&rdquo; mode to use MBR.  No more secure boot.</li>
+<li>I ended up selecting &ldquo;legacy&rdquo; mode to use MBR in BIOS.  No more secure boot.</li>
 <li>I replaced the internal keyboard.  (Missing key event problems on &ldquo;e&rdquo;, &ldquo;u&rdquo;
 and &ldquo;Delete&rdquo; are fixed.)</li>
 <li>The card side contacts of SO-DDR DRAM needed to be rubbed by eraser to get it
 work right.</li>
+<li>For MBR, grub-pc is used.  This requires <code>/boot</code> to be on ext4 filesystem.</li>
+<li>If <code>/</code> is on btrfs filesystem via debian-installer, it uses <code>subvol=@rootfs</code>.</li>
 </ul>
 <h2 id="touchpad-of-sony-vaio">Touchpad of Sony VAIO</h2>
 <p>Touch pad only functions as left-click button.  I verified it by opening its
