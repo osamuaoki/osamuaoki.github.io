@@ -163,15 +163,15 @@ primary user&rsquo;s password.</li>
 <li>Set-up sudo (see below)</li>
 <li>Set-up ssh server (optional)
 <ul>
-<li>Run <code>ssh-keygen</code> to generate ssh keys</li>
-<li>Copy ssh public keys of this machine into controlling machine&rsquo;s <code>~/.ssh/authorized_keys</code></li>
-<li>Disable password-based login via <code>sudo vi /etc/ssh/sshd_config</code> to set <code>PasswordAuthentication no</code>.</li>
-<li>Copy ssh public keys of the controlling machine into this machine&rsquo;s <code>~/.ssh/authorized_keys</code> (optional)</li>
+<li>Copy ssh public keys of the main machine into new machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access to the new machine from the main machine.</li>
+<li>Run <code>ssh-keygen</code> to generate ssh keys for the new machine</li>
+<li>Copy ssh public keys of the new machine into the main machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access from the new machine to the main machine. (optional)</li>
+<li>Disable password-based login via <code>sudo vi /etc/ssh/sshd_config</code> to set <code>PasswordAuthentication no</code> for all machines after setting passwordless SSH logins.</li>
 </ul>
 </li>
 <li>Set-up GNOME desktop (if not yet installed via debian-installer)</li>
 </ul>
-<p>For passwordless operation, configure <code>sudo</code> by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
+<p>For the passwordless <code>sudo</code> operation, configure <code>sudo</code> by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># No passowrd required for the user in sudo group</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># please note the last match wins configuration</span>
 </span></span><span style="display:flex;"><span>%sudo ALL <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ALL:ALL<span style="color:#f92672">)</span> NOPASSWD: ALL
