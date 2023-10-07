@@ -123,11 +123,12 @@ post-Debian Bookworm (12) GNU/Linux in testing.</p>
 <h3 id="initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></h3>
 <p>The initial installation by the <code>debian-installer</code> should skip &ldquo;Desktop environment&rdquo; task to make it light GUI-less install.</p>
 <p>This installs (mostly) packages with <code>Priority:</code> values in <code>required</code>, <code>important</code> and <code>standard</code>.</p>
-<p>I usually install non-Desktop system first to make it quick.  In this case,
-<code>task-desktop</code> is added via <code>aptitude</code> to support GNOME Desktop at the end of
-the following &ldquo;Initial setup (manual)&rdquo; section and the full control of network
-connections by the Network Manager is enabled by commenting out &ldquo;The primary
-network interface&rdquo; section in <code>/etc/network/interfaces</code> manually.</p>
+<p>I usually install non-Desktop system with SSH server first to make it quick.
+In this case, <code>task-desktop</code> is added via <code>aptitude</code> to support GNOME Desktop
+at the end of the following &ldquo;Initial setup (manual)&rdquo; section and the full
+control of network connections by the Network Manager is enabled by commenting
+out &ldquo;The primary network interface&rdquo; section in <code>/etc/network/interfaces</code>
+manually.</p>
 <h3 id="initial-setup-manual">Initial setup (manual)</h3>
 <p>I found running following provides convenient work environment for the normal
 installation.  (For the virtual environment installation, you may skip some
@@ -160,8 +161,15 @@ primary user&rsquo;s password.</li>
 </ul>
 </li>
 <li>Set-up sudo (see below)</li>
-<li>Set-up ssh server (optional)</li>
-<li>Set-up GNOME desktop (if not installed via installer)</li>
+<li>Set-up ssh server (optional)
+<ul>
+<li>Run <code>ssh-keygen</code> to generate ssh keys</li>
+<li>Copy ssh public keys of this machine into controlling machine&rsquo;s <code>~/.ssh/authorized_keys</code></li>
+<li>Disable password-based login via <code>sudo vi /etc/ssh/sshd_config</code> to set <code>PasswordAuthentication no</code>.</li>
+<li>Copy ssh public keys of the controlling machine into this machine&rsquo;s <code>~/.ssh/authorized_keys</code> (optional)</li>
+</ul>
+</li>
+<li>Set-up GNOME desktop (if not yet installed via debian-installer)</li>
 </ul>
 <p>For passwordless operation, configure <code>sudo</code> by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># No passowrd required for the user in sudo group</span>
