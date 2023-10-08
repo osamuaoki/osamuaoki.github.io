@@ -467,7 +467,37 @@ host. (This trick may be usable for any hosts such as salsa.debian.org etc.)</p>
 <h2 id="miscellaneous-tips">Miscellaneous tips</h2>
 <h2 id="migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</h2>
 <p>As installed, user&rsquo;s home directory is in the rootfs using subvolume <code>@rootfs</code>.
-Let me use subvolume <code>@osamu</code> for my user <code>osamu</code>.</p>
+Let me create and use subvolume <code>@osamu</code> for my user <code>osamu</code> and copy contents
+of original <code>/home/osamu</code> into <code>@osamu</code>.  Then update <code>/etc/fstab</code> to mount
+<code>@osamu</code> onto <code>/home/osamu</code></p>
+<pre tabindex="0"><code># mount /dev/sda6 on /mnt
+# cd /mnt
+$ ls -lai
+total 16
+256 drwxr-xr-x 1 root  root   26 Oct  8 17:11 .
+256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 ..
+256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 @rootfs
+# btrfs subvolume create @osamu
+# chmod 700 @osamu
+# chown osamu:osamu @osamu
+total 16
+256 drwxr-xr-x 1 root  root   26 Oct  8 17:11 .
+256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 ..
+256 drwx------ 1 osamu osamu 610 Oct  8 17:01 @osamu
+256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 @rootfs
+# cp -a /home/osamu/. @osamu
+# vi /etc/fstab
+# cat /etc/fstab
+# &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;
+# / was on /dev/sdb6 during installation
+UUID=01ec7a23-d2bd-4b27-a5e0-da88cfed58c1 /               btrfs   defaults,subvol=@rootfs 0       0
+# /home/osamu is on /dev/sdb6 where / is
+UUID=01ec7a23-d2bd-4b27-a5e0-da88cfed58c1 /home/osamu     btrfs   defaults,subvol=@osamu 0       0
+# /boot was on /dev/sdb5 during installation
+UUID=85827838-41ae-42e2-9081-a98ab7f819f5 /boot           ext4    defaults        0       2
+# swap was on /dev/sdb7 during installation
+UUID=31355cb6-e02f-4462-91a4-323dcc351ea9 none            swap    sw              0       0
+</code></pre><p>Then reboot this machine.</p>
 <h2 id="setting-group-membership">Setting group membership</h2>
 <p>Don&rsquo;t forget to setup group membership for the primary user (UID=1000).  Notable groups to watch out are:</p>
 <ul>
