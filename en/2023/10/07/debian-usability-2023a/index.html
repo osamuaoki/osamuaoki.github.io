@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Debian Workstation (usability) (v2023-10) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Debian Workstation (usability) (v2023-10)</span></h1>
+
+<h3 class="date">Date:
+2023/10/07 (initial publish),
+2023/10/08 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00049.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/07/01/systemd-shutdown/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#workstation-usability">Workstation usability</a></li>
+    <li><a href="#bare-metal-initial-system-installation">Bare metal initial system installation</a>
+      <ul>
+        <li><a href="#initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></a></li>
+        <li><a href="#initial-manual-setup-minimal-cli-commands">Initial manual setup (minimal CLI commands)</a></li>
+        <li><a href="#initial-manual-setup-sudo">Initial manual setup (SUDO)</a></li>
+        <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
+        <li><a href="#initial-manual-setup-ssh">Initial manual setup (SSH)</a></li>
+        <li><a href="#initial-manual-setup-gnome">Initial manual setup (GNOME)</a></li>
+        <li><a href="#wallpaper-for-grub">Wallpaper for GRUB</a></li>
+        <li><a href="#os-probing-for-grub">OS probing for GRUB</a></li>
+        <li><a href="#multi-boot-with-grub">Multi-boot with GRUB</a></li>
+      </ul>
+    </li>
+    <li><a href="#gnome-desktop-customization">GNOME desktop customization</a>
+      <ul>
+        <li><a href="#terminal-customization">Terminal customization</a></li>
+        <li><a href="#right-mouse-click-with-single-button">Right mouse click with single button</a></li>
+        <li><a href="#keyboard-customization-gnome-tweaks----capslock">Keyboard customization (GNOME Tweaks &ndash; CapsLock)</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-extension----im">Keyboard shortcut customization (GNOME Extension &ndash; IM)</a></li>
+        <li><a href="#keyboard-shortcut-customization-internal-im-configuration">Keyboard shortcut customization (Internal IM configuration)</a></li>
+        <li><a href="#non-usable-keyboard-shortcut-key-combos-for-super">Non-usable Keyboard shortcut key combos for super</a></li>
+        <li><a href="#web-browser">Web browser</a></li>
+      </ul>
+    </li>
+    <li><a href="#application-customization">Application customization</a>
+      <ul>
+        <li><a href="#shell-setups">Shell setups</a></li>
+        <li><a href="#shotwell">Shotwell</a></li>
+        <li><a href="#libreoffice">LibreOffice</a></li>
+        <li><a href="#mail-client">Mail client</a></li>
+        <li><a href="#gnome-desktop-wallpaper">GNOME desktop wallpaper</a></li>
+      </ul>
+    </li>
+    <li><a href="#command-line">Command line</a>
+      <ul>
+        <li><a href="#personal-packages">Personal packages</a></li>
+      </ul>
+    </li>
+    <li><a href="#post-installation-tips">Post installation tips</a>
+      <ul>
+        <li><a href="#re-install-and-uidgid-issues">Re-install and UID/GID issues</a></li>
+        <li><a href="#efi-based-firmware-updates">EFI-based firmware updates</a></li>
+      </ul>
+    </li>
+    <li><a href="#xxxxxxxxxxxxx-extras-xxxxxxxxxxxxxxxxxxxx">XXXXXXXXXXXXX EXTRAS XXXXXXXXXXXXXXXXXXXX</a></li>
+    <li><a href="#initial-setup-automatic">Initial setup (automatic)</a></li>
+    <li><a href="#test-accounts">Test accounts</a></li>
+  </ul>
+</nav>
+
+<h2 id="workstation-usability">Workstation usability</h2>
+<p>This is WIP.</p>
+<p>The <a href="/en/2023/02/25/debian-usability-2023/">older deprecated guide</a> was used as the base.</p>
+<p>Considering GNOME post-44 is going through major changes, I chose to use GNOME
+43 in Debian 12 <code>bookworm</code> stable release for my workstation as of 2023-10-07.</p>
+<p>I am trying to keep my workstation as clean <code>bookworm</code> installation as
+possible.</p>
+<p>This is non-hardware specific notes and tips. For the hardware specific notes
+and tips, see also:</p>
+<ul>
+<li><a href="/en/2021/01/07/thinkpad-t14-gen-1-amd/">Thinkpad T14 Gen 1</a> &ndash; <code>hostname=goofy</code></li>
+<li><a href="/en/2023/02/13/svt1313-1/">Sony Vaio SVT1313</a> &ndash; <code>hostname=casper</code></li>
+</ul>
+<h2 id="bare-metal-initial-system-installation">Bare metal initial system installation</h2>
+<h3 id="initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></h3>
+<p>The initial installation by the <code>debian-installer</code> should skip &ldquo;Desktop
+environment (<code>task-desktop</code>)&rdquo; task and select &ldquo;SSH server (<code>task-ssh-server</code>)&rdquo;
+to make it light, GUI-less, and SSH-ready.</p>
+<p>This process installs (mostly) packages with <code>Priority:</code> values in <code>required</code>,
+<code>important</code> and <code>standard</code>.</p>
+<p>For the rootfs for <code>/</code>, I use a partition formatted as btrfs.  The installer
+automatically use subvolume <code>@rootfs</code> within its partition for the rootfs.
+To make this system bootable with GRUB:</p>
+<ul>
+<li>For MBR system, you must create another partition set to be mounted at <code>/boot</code> and formatted as ext4fs.</li>
+<li>For UEFI system, you need no special action.  (You have a shared partition for &ldquo;EFI system partition&rdquo; automatically mounted at <code>/boot/efi</code> and formatted as FAT32.)</li>
+</ul>
+<p>I leave the domain name as blank. All hosts on the same local subnet can be
+accessed by adding <code>.local</code> at the end of each host name thanks to Avahi
+(<code>avahi-autoipd</code> package).</p>
+<h3 id="initial-manual-setup-minimal-cli-commands">Initial manual setup (minimal CLI commands)</h3>
+<p>If your system boot into the GUI console for any reason, use &ldquo;<code>CTRL-ALT-F?</code>&rdquo;
+(<code>?</code> can be 1-6) to access Linux virtual terminal login prompt. Otherwise, you
+are already at login prompt on Linux virtual terminal.</p>
+<p>Login to the root account and execute:</p>
+<pre tabindex="0"><code># apt-get update
+# apt-get install aptitude sudo vim mc wget nano-`
+</code></pre><h3 id="initial-manual-setup-sudo">Initial manual setup (SUDO)</h3>
+<p>For the passwordless <code>sudo</code> operation, configure <code>sudo</code> from root by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
+<pre tabindex="0"><code># No passowrd required for the user in sudo group
+# please note the last match wins configuration
+%sudo ALL = (ALL:ALL) NOPASSWD: ALL
+# No password for 8 hours
+#Defaults timestamp_timeout = 480
+#Defaults timestamp_type = global
+</code></pre><p>NOTE: Please note that the last matching configuration is the active one for <code>sudo</code>.</p>
+<h3 id="tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</h3>
+<p>I use <code>aptitude</code> as the primary package maintenance tool and identify
+intentionally installed packages as a scrollable list by typing in
+<code>~i!~M~poptional</code> in the <code>l</code> prompt of <code>aptitude</code>.</p>
+<p>Since <code>debian-installer</code> installed packages doesn&rsquo;t set the auto install flag
+(<code>M</code>), I usually tidy-up them up before installing GUI packages by setting
+missing <code>M</code> flags to groups of files:</p>
+<ul>
+<li>packages under <code>libs</code> section</li>
+<li>packages under <code>Depends</code> and <code>Recommends</code> for:
+<ul>
+<li><code>apt</code></li>
+<li><code>dpkg</code></li>
+<li><code>aptitude</code></li>
+<li><code>debconf</code></li>
+<li><code>task-desktop</code> etc. (if installed)</li>
+</ul>
+</li>
+</ul>
+<p>You can print list of intentionally installed packages as a plain text with:</p>
+<pre tabindex="0"><code>$ aptitude search &#39;~i!~M~poptional&#39;
+</code></pre><p>(This intensionally ignores some outdated packages with priority=extra packages.)</p>
+<h3 id="initial-manual-setup-ssh">Initial manual setup (SSH)</h3>
+<p>For paswordless <code>ssh</code> operation to the new system, configure ssh server as follows from the primary user:</p>
+<ul>
+<li>Copy ssh public keys of the main machine into new machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access to the new machine from the main machine.</li>
+<li>Run <code>ssh-keygen</code> to generate ssh keys for the new machine</li>
+<li>Copy ssh public keys of the new machine into the main machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access from the new machine to the main machine. (optional)</li>
+<li>Disable password-based login via <code>sudo vi /etc/ssh/sshd_config</code> to set <code>PasswordAuthentication no</code> for all machines after setting passwordless SSH logins.</li>
+</ul>
+<h3 id="initial-manual-setup-gnome">Initial manual setup (GNOME)</h3>
+<p>Install <code>task-desktop</code> package which pulls in <code>task-gnome-desktop</code> package to set up a decent GNOME GUI workstation with <code>aptitude</code>.</p>
+<h3 id="wallpaper-for-grub">Wallpaper for GRUB</h3>
+<p>Place your JPEG wallpaper graphics (JPEG) in <code>/boot/grub/</code> and update GRUB
+configuration using  one of the followings:</p>
+<ul>
+<li><code>sudo update-grub</code></li>
+<li><code>sudo dpkg-reconfigure grub-efi-amd64</code> # UEFI system</li>
+<li><code>sudo dpkg-reconfigure grub-pc</code> # MBR system</li>
+</ul>
+<h3 id="os-probing-for-grub">OS probing for GRUB</h3>
+<p>Somehow, the <code>GRUB_DISABLE_OS_PROBE</code> setting in <code>/etc/default/grub</code> seems to be
+<strong>unset</strong> during some automatic package reconfiguration steps involving
+<code>grub-efi-amd64</code> and <code>grub-pc</code>.</p>
+<p>Running <code>dpkg-reconfigure</code> interactively on them with <code>-plow</code> option and
+answering explicitly as &ldquo;Yes&rdquo; to the question &ldquo;Run os-prober automatically to
+detect and boot other OSes?&rdquo; will set <code>GRUB_DISABLE_OS_PROBE=false</code> and enable
+OS detection.  This manual step is required after kernel updates etc., to work
+around the <strong>unset</strong> problem.</p>
+<p><code>sudo update-grub</code> doesn&rsquo;t do unset as above but requires explicit setting of
+<code>GRUB_DISABLE_OS_PROBE=false</code> to do OS probing.</p>
+<h3 id="multi-boot-with-grub">Multi-boot with GRUB</h3>
+<p>For more robust multi-boot, I usually add following as <code>/etc/grub.d/40_fixed_linux</code>:</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>exec tail -n +3 $0
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This file provides an easy way to add custom menu entries.  Simply type the</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># menu entries you want to add after this comment.  Be careful not to change</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># the &#39;exec tail&#39; line above.</span>
+</span></span><span style="display:flex;"><span>menuentry <span style="color:#e6db74">&#39;Debian GNU/Linux --- main SSD&#39;</span> --class debian --class gnu-linux --class gnu --class os $menuentry_id_option <span style="color:#e6db74">&#39;gnulinux-fixed-fe3e1db5-6454-46d6-a14c-071208ebe4b1&#39;</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        load_video
+</span></span><span style="display:flex;"><span>        insmod gzio
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> x$grub_platform <span style="color:#f92672">=</span> xxen <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span> insmod xzio; insmod lzopio; <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>        insmod part_gpt
+</span></span><span style="display:flex;"><span>        insmod btrfs
+</span></span><span style="display:flex;"><span>        search --no-floppy --fs-uuid --set<span style="color:#f92672">=</span>root fe3e1db5-6454-46d6-a14c-071208ebe4b1
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading Linux from /dev/nvme0n1p5 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        linux   /@rootfs/vmlinuz root<span style="color:#f92672">=</span>UUID<span style="color:#f92672">=</span>fe3e1db5-6454-46d6-a14c-071208ebe4b1 ro rootflags<span style="color:#f92672">=</span>subvol<span style="color:#f92672">=</span>@rootfs  quiet
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading initial ramdisk from /dev/nvme0n1p5 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        initrd  /@rootfs/initrd.img
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>menuentry <span style="color:#e6db74">&#39;Debian GNU/Linux --- sub SSD&#39;</span> --class debian --class gnu-linux --class gnu --class os $menuentry_id_option <span style="color:#e6db74">&#39;gnulinux-fixed-51f9cd11-30b3-4d99-b2ed-fe411fa22ee6&#39;</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        load_video
+</span></span><span style="display:flex;"><span>        insmod gzio
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> x$grub_platform <span style="color:#f92672">=</span> xxen <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span> insmod xzio; insmod lzopio; <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>        insmod part_gpt
+</span></span><span style="display:flex;"><span>        insmod btrfs
+</span></span><span style="display:flex;"><span>        search --no-floppy --fs-uuid --set<span style="color:#f92672">=</span>root 51f9cd11-30b3-4d99-b2ed-fe411fa22ee6
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading Linux from /dev/nvme1n1p1 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        linux   /@rootfs/vmlinuz root<span style="color:#f92672">=</span>UUID<span style="color:#f92672">=</span>51f9cd11-30b3-4d99-b2ed-fe411fa22ee6 ro rootflags<span style="color:#f92672">=</span>subvol<span style="color:#f92672">=</span>@rootfs  quiet
+</span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading initial ramdisk from /dev/nvme1n1p1 ...&#39;</span>
+</span></span><span style="display:flex;"><span>        initrd  /@rootfs/initrd.img
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span></code></pre></div><p>If you have multiple Debian system installed, you should make a backup copy
+of <code>/boot/efi/EFI/debian/grub.cfg</code> to protect it gets overridden by installing
+the second Debian system.</p>
+<p>See <a href="https://wiki.debian.org/Btrfs%20migration">https://wiki.debian.org/Btrfs%20migration</a> .</p>
+<h2 id="gnome-desktop-customization">GNOME desktop customization</h2>
+<p>The <code>gnome-tweak</code> package installed as a dependency of <code>gnome</code> package helps to
+tweak the system via GUI application <code>Tweak</code>.</p>
+<p>The GNOME extension packages may not be robust for the update of GNOME.  So the
+extensive use of them should be limitted to system tracking the <code>stable</code>
+release.  They are available from <a href="https://extensions.gnome.org/local/">GNOME Extension web
+site</a> using browser with <a href="https://chrome.google.com/webstore/detail/gnome-shell-integration/gphhapmejobijbbhgpjhcjognlahblep">GNOME Shell
+integration</a>
+enabled.  They can be configured via GUI application <code>Extensions</code>.</p>
+<h3 id="terminal-customization">Terminal customization</h3>
+<ul>
+<li>Disable &ldquo;F10&rdquo;</li>
+<li>Use <code>MONO 14</code> or equivalent (HACK <a href="https://www.nerdfonts.com/font-downloads">NERD FONT</a> MONO)
+<ul>
+<li>Install <code>*.ttf</code> files into <code>~/.fonts/</code> for a single user or <code>/usr/local/share/fonts/</code> for system wide installation.</li>
+</ul>
+</li>
+<li>Add &ldquo;080x24&rdquo;, &ldquo;080x43&rdquo;, &ldquo;127x43&rdquo;</li>
+<li>Set shell as login shell if you want anything other than Bash.</li>
+</ul>
+<h3 id="right-mouse-click-with-single-button">Right mouse click with single button</h3>
+<p>For Mac or some Sony Vaio with single tap pad button, the following allows
+proper secondary-click (or even middle-click).</p>
+<ul>
+<li><code>Tweaks</code></li>
+<li>-&gt; &ldquo;Keyboard and Mouse&rdquo; tab</li>
+<li>-&gt; &ldquo;Mouse Click Emulation&rdquo; section
+<ul>
+<li>-&gt; Check on &ldquo;Area&rdquo;</li>
+</ul>
+</li>
+</ul>
+<h3 id="keyboard-customization-gnome-tweaks----capslock">Keyboard customization (GNOME Tweaks &ndash; CapsLock)</h3>
+<p>For Vim user, mapping CapsLock to Esc as follows may be interesting:</p>
+<ul>
+<li><code>Tweaks</code></li>
+<li>Click <code>Keyboard &amp; Mouse</code> tab</li>
+<li>Click <code>Keyboard</code> / <code>Overview Shortcut</code> / <code>Additional Layout Options</code> button</li>
+<li>Click to expand <code>Caps Lock behavior</code></li>
+<li>Enable <code>Make Caps Lock as additional Esc</code>.</li>
+</ul>
+<h3 id="keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</h3>
+<ul>
+<li><code>SUPER-C</code>: launch calculator</li>
+<li><code>SUPER-E</code>: launch email client</li>
+<li><code>SUPER-B</code>: launch web browser</li>
+</ul>
+<h3 id="keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</h3>
+<ul>
+<li><code>SUPER-\</code>: Open terminal</li>
+</ul>
+<pre tabindex="0"><code>Name     Terminal
+Command  gnome-terminal
+Shortcut SUPER-\
+</code></pre><p>(<code>SUPER-\</code> is easier to type than <code>SUPER-T</code>.)</p>
+<h3 id="keyboard-shortcut-customization-gnome-extension----im">Keyboard shortcut customization (GNOME Extension &ndash; IM)</h3>
+<ul>
+<li>Installed my GNOME extension: <a href="https://github.com/osamuaoki/inputmethod-shortcuts">Quick switching of input method and touchpad</a> &ndash; source
+<ul>
+<li><a href="https://extensions.gnome.org/extension/6066/shortcuts-to-activate-input-methods/">GNOME extension: Input method and touchpad shortcuts</a></li>
+</ul>
+</li>
+<li>Log out and log in to GNOME</li>
+<li>Enabled shortcuts from GNOME shell extension preference menu as:
+<ul>
+<li><code>CTRL-SUPER</code>: English (US)</li>
+<li><code>SHIFT-SUPER</code>: Mozc</li>
+<li><code>SUPER-CTRL</code>: English (international)</li>
+</ul>
+</li>
+</ul>
+<p>For other extensions I use, see <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a>.</p>
+<h3 id="keyboard-shortcut-customization-internal-im-configuration">Keyboard shortcut customization (Internal IM configuration)</h3>
+<p>For Japanese input with US keyboard, set IM (anthy etc.) configuration as:</p>
+<ul>
+<li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent</li>
+<li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent</li>
+</ul>
+<p>See my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> and its <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a>.</p>
+<h3 id="non-usable-keyboard-shortcut-key-combos-for-super">Non-usable Keyboard shortcut key combos for super</h3>
+<ul>
+<li>Any use of <code>SUPER</code>+<code>modifier</code>+<code>SPACE</code> or <code>SUPER</code>-<code>SPACE</code> breaks normal <code>SUPER</code>-<code>SPACE</code> for rotating input method and bad idea</li>
+<li><code>SUPER</code>-<code>P</code> seems to be unresponsive</li>
+<li><code>SUPER</code>-<code>O</code> seems to be unresponsive</li>
+</ul>
+<h3 id="web-browser">Web browser</h3>
+<p>Although <a href="https://tracker.debian.org/pkg/chromium">Chromium</a> exists in the
+official Debian repository, it lacks <a href="https://blog.chromium.org/2021/01/limiting-private-api-availability-in.html">account synchronization capability with
+other devices since
+2021</a>.
+Although there are <a href="https://stackoverflow.com/questions/67459316/enabling-chromium-to-sync-with-google-account">some workarounds tips posted on
+web</a>,
+installing <a href="https://www.google.com/chrome/">Chrome</a> can solve this situation
+for sure.</p>
+<p>The best solution seems to be adding APT repository by adding
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/etc/apt/sources.list.d/google.sources">/etc/apt/sources.d/google.sources</a>
+in DEB822-STYLE FORMAT and select the <code>google-chrome-stable</code> package.</p>
+<h2 id="application-customization">Application customization</h2>
+<h3 id="shell-setups">Shell setups</h3>
+<ul>
+<li><code>~/bin</code> scripts: <a href="https://github.com/osamuaoki/osamu-utils">https://github.com/osamuaoki/osamu-utils</a> (<code>hal</code>, <code>sendmail-p.d.o</code>)
+<ul>
+<li>Key dot files in <code>~/</code> and <code>~/.config</code> are stored in this <a href="https://github.com/osamuaoki/osamu-utils/tree/main/dot">osamu-utils repo under dot/</a>.</li>
+<li>These stored dot-files are updated by <code>hal conf update</code></li>
+<li>These stored dot-files are restored to active use by <code>hal conf install</code></li>
+</ul>
+</li>
+<li>Main <code>vi</code> editor: <code>nvim</code> with <code>~/.config/nvim</code>
+<ul>
+<li>NeoVim 0.10.  See <a href="/en/2023/03/05/nvim-build/">Building Neovim</a>.</li>
+<li>Configuration by <a href="https://github.com/osamuaoki/starter">forked LazyVim starter</a> in <code>~.config/nvim</code>.  See <a href="/en/2023/03/05/vim-learn-7/">Re-learning Vim (7)</a>.</li>
+</ul>
+</li>
+<li>Backup <code>vi</code> editor: <code>vim</code> with <code>~/.vim</code>
+<ul>
+<li>Configuration by <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a> in <code>~/.vim</code>.</li>
+<li>Custom package management of Vim 8 with native <code>packadd!</code>.</li>
+<li>See <a href="/en/2019/09/24/vim-learn-2/">Re-learning Vim (2)</a>.</li>
+</ul>
+</li>
+</ul>
+<p>Frequent commands to use:</p>
+<ul>
+<li><code>bash</code>: CLI command prompt</li>
+<li><code>mc</code>: file manager for shell</li>
+<li><code>fzf</code>: fuzzy finder for shell and vim.</li>
+<li><code>rg</code>: recursive code search</li>
+<li><code>bu</code>: local <code>~/bin/</code> script to backup data to USB drive using <code>bss</code> as its backend.  See <a href="/en/2021/11/02/backup-1/">Backup and snapshot</a>.</li>
+</ul>
+<h3 id="shotwell">Shotwell</h3>
+<p>Shotwell 0.30 in Debian/bookworm doesn&rsquo;t support HEIF image files.</p>
+<p>Install Shotwell 0.32.1 or newer <a href="https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling">flatpack package from Gnome upstream</a>.</p>
+<h3 id="libreoffice">LibreOffice</h3>
+<p>The version of LibreOffice available on Debian testing environment has some
+glitches more often than the version available on Debian stable environment.
+Issues for printing to Hagaki was the killer bug for me.</p>
+<p>I find that the installation of <a href="https://www.libreoffice.org/download/download/?type=deb-x86_64&amp;lang=en">LibreOffice Debian
+packages</a>
+available from <a href="https://www.libreoffice.org/">the upstream LibreOffice site</a> on
+Debian testing environment is the least effort solution for me.  For stability,
+I chose older stable 6.4.7.2-2 version aimed for business deployments (2021/12).
+This enabled me to print nicely to Hagaki.</p>
+<h3 id="mail-client">Mail client</h3>
+<p>For the GUI access to the remotely hosted IMAP4 mail services, use GNOME Online
+accounts and Evolution.  This approach works for Gmail etc. and compatible with
+using other devices such as smart phones.  Evolution can also be configured to
+read locally delivered mails to mbox too.  (send+receive).</p>
+<p>For the command line such as <code>reportbug</code> and daemon programs such as <code>cron</code> to
+send mails to external hosts and local accounts, use of <code>exim4</code> as the locally
+installed MTA is good idea.  With &ldquo;sudo dpkg-reconfigure exim4-config&rdquo;, Select
+&ldquo;mail sent by smarthost; received via SMTP or fetchmail&rdquo;.  Everything else can
+be default.</p>
+<p>To use Gmail for smarthost, set up &ldquo;Mail Server configuration&rdquo; as
+&ldquo;smtp.gmail.com::587&rdquo;.  It is irrelevant for us to worry &ldquo;Hide local mail name
+&hellip;&rdquo; since the smarthost service rewrites it anyway.  Edit
+<code>/etc/exim4/passwd.client</code> as:
+<code>smtp.gmail.com:foo.bar@gmail.com:application_password</code> (You need to create
+<code>application_password</code> in advance.)</p>
+<p>Whenever I wish to send out mails with &ldquo;@debian.org&rdquo; address, I use
+ssh+sendmail (created shell script <code>~/bin/sendmail-p.d.o</code>) to access a Debian
+host. (This trick may be usable for any hosts such as salsa.debian.org etc.)</p>
+<p>I have mail configuration for:</p>
+<ul>
+<li>Evolution</li>
+<li><code>devscripts</code> (add &ldquo;<code>BTS_SENDMAIL_COMMAND='/home/osamu/bin/sendmail-p.d.o'</code>&rdquo; to <code>~/.devscripts</code>)</li>
+<li><code>reportbug</code> (add &ldquo;<code>mta /home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.reportbugrc</code>)</li>
+</ul>
+<p>I usually don&rsquo;t bother with <code>fetchmail</code> these days.</p>
+<h3 id="gnome-desktop-wallpaper">GNOME desktop wallpaper</h3>
+<p>You can set wallpaper graphics from:</p>
+<ul>
+<li>
+<p>Desktop: <code>Settings</code> -&gt; <code>Background</code></p>
+</li>
+<li>
+<p>Desktop: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code></p>
+</li>
+<li>
+<p>Lock Screen: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Lock Screen</code></p>
+</li>
+<li>
+<p>GDM3: &mdash; Not so easy (leave this as is)</p>
+</li>
+</ul>
+<h2 id="command-line">Command line</h2>
+<h3 id="personal-packages">Personal packages</h3>
+<p>These are my personal packages to help my command line.  The source of these are published to
+my github repo and binary packages are published to my github web page.</p>
+<ul>
+<li>bss: Btrfs Subvolume Snapshot Utility
+<ul>
+<li><a href="https://github.com/osamuaoki/bss">https://github.com/osamuaoki/bss</a></li>
+<li>This helps me with easy backup and snapshot using btrfs.</li>
+</ul>
+</li>
+<li>osamu-task: Osamu&rsquo;s Task Packages
+<ul>
+<li><a href="https://github.com/osamuaoki/osamu-task">https://github.com/osamuaoki/osamu-task</a></li>
+<li>00-cli, 00-dev, 00-doc, 00-gui, 00-jpn, 00-min, 00-notex, 00-typ</li>
+<li>This helps me with installing packages as a group.</li>
+</ul>
+</li>
+<li>unzip: patched unzip (<code>-O</code> and <code>-I</code> options to support encoding of filenames)
+<ul>
+<li><a href="https://github.com/osamuaoki/unzip">https://github.com/osamuaoki/unzip</a></li>
+<li>provides unzip-i18n</li>
+<li>This replaces Debian unzip program which lacks <code>-I</code> and <code>-O</code> options to
+offer functionality available under other distribution.
+<ul>
+<li>Use <code>unzip -Osjis filename.zip</code> to unzip Japanese zip files.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Build script is <a href="https://github.com/osamuaoki/osamuaoki-hugo/blob/main/repository.sh">repository.sh</a>.</p>
+<ul>
+<li>Source is cloned first.</li>
+<li>Native packages are build with <code>debuild</code></li>
+<li>Non-native packages use gbp-style repo and <code>gbp extract-orig</code> is run before
+<code>debuild</code>.</li>
+<li><code>repropro</code> publishes build packages to github web pages.</li>
+</ul>
+<p>See <a href="/en/2022/08/20/deb-repo-1/">Personal DEB package repository</a> for the method to publish and their usage</p>
+<h2 id="post-installation-tips">Post installation tips</h2>
+<h3 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h3>
+<p>UID and GID used by some applications are not fixed.  So, if you reinstall the
+exact same packages in a different order, you end up assigning UID and GID for
+the application.</p>
+<p>UID in range between 101-999 such as ones for <code>avahi</code>, <code>saned</code>, <code>colord</code>,
+<code>_ssh</code>, &hellip;  are the most susceptible on this issue.</p>
+<p><code>apt-cacher-ng</code> needs special attention.</p>
+<h3 id="efi-based-firmware-updates">EFI-based firmware updates</h3>
+<p>Install <code>gnome-firmware</code> package and invoke GUI to update firmware on devices
+supported by <code>fwupd</code> using <a href="https://fwupd.org/">Linux Vendor Firmware Service</a>.</p>
+<p>Many firmware data can be updated using <code>gnome-firmware</code>.</p>
+<h4 id="workaround-for-some-firmware">Workaround for some firmware</h4>
+<p>Some firmware devices may experience some problem to be updated by
+<code>gnome-firmware</code>.</p>
+<p>Most notable one on my system was &ldquo;Lenovo System Firmware&rdquo;.  (I don&rsquo;t know if
+this was version dependent or not.) I used vendor&rsquo;s BIOS update offered as
+bootable CD and made USB key containing it image data:</p>
+<ul>
+<li><a href="https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue/downloads/driver-list/component?name=BIOS%2FUEFI">https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue/downloads/driver-list/component?name=BIOS%2FUEFI</a></li>
+</ul>
+<p>If the BIOS options <code>Security &gt; Secure Boot</code> is enabled, it may restrict booting
+up from the BIOS Update bootable CD image, you may need to disabled the Secure Boot option to use it.</p>
+<p>If Windows 10 or 11 is installed, you may need to reenable Secure Boot after
+this operation.</p>
+<h2 id="xxxxxxxxxxxxx-extras-xxxxxxxxxxxxxxxxxxxx">XXXXXXXXXXXXX EXTRAS XXXXXXXXXXXXXXXXXXXX</h2>
+<p>I found running following provides convenient work environment for the normal
+installation.  (For the virtual environment installation, you may skip some
+parts.)</p>
+<ul>
+<li>
+<p>Use &ldquo;CTRL-ALT-F?&rdquo; (<code>?</code> can be 1-6) to access Linux virtual terminal login
+prompt, if yor are at GUI prompt.  Otherwise, you are already at it.</p>
+<ul>
+<li>login to <code>root</code> account if you set the password for <code>root</code> during
+its installation.</li>
+<li>login to your primary user account if you didn&rsquo;t set password for <code>root</code>,
+and then execute <code>sudo bash -i</code> to login to <code>root</code> account using the
+primary user&rsquo;s password.</li>
+</ul>
+</li>
+<li>
+<p>Execute <code>apt-get update &amp;&amp; apt-get install aptitude sudo vim mc wget git nano-</code></p>
+</li>
+<li>
+<p>Add <a href="/en/2022/08/20/deb-repo-1/#setting-up-secure-apt-cliant">configuration file for personal DEB package repository</a>.</p>
+</li>
+<li>
+<p>Set-up user group for UID=1000 user by adding membership to additional groups:</p>
+<ul>
+<li><code>adm</code></li>
+<li><code>backup</code></li>
+<li><code>dialout</code></li>
+<li><code>dip</code></li>
+<li><code>games</code></li>
+<li><code>mail</code></li>
+<li><code>src</code></li>
+<li><code>staff</code></li>
+<li><code>sudo</code>  &ndash;  by adding this, you enable sudo with password</li>
+<li><code>www-data</code></li>
+<li><code>lxd</code></li>
+</ul>
+</li>
+<li>
+<p>Set-up sudo (see below)</p>
+</li>
+<li>
+<p>Set-up ssh server (optional)</p>
+<ul>
+<li>Copy ssh public keys of the main machine into new machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access to the new machine from the main machine.</li>
+<li>Run <code>ssh-keygen</code> to generate ssh keys for the new machine</li>
+<li>Copy ssh public keys of the new machine into the main machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access from the new machine to the main machine. (optional)</li>
+<li>Disable password-based login via <code>sudo vi /etc/ssh/sshd_config</code> to set <code>PasswordAuthentication no</code> for all machines after setting passwordless SSH logins.</li>
+</ul>
+</li>
+<li>
+<p>Set-up GNOME desktop (if not yet installed via debian-installer)</p>
+</li>
+</ul>
+<p>For network connections, the Network Manager is enabled for all interfaces by
+commenting out &ldquo;The primary network interface&rdquo; section in
+<code>/etc/network/interfaces</code> manually.</p>
+<h2 id="initial-setup-automatic">Initial setup (automatic)</h2>
+<p>Running <code>initial-setup</code> script found at my repository should set up the same as
+the above <a href="#initial-setup-manual">manual case</a>.</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup">https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup</a></li>
+</ul>
+<p>NOTE: See <a href="/en/2022/08/20/deb-repo-1/">Personal DEB package repository</a> for how personal repo
+is created and used.</p>
+<h2 id="test-accounts">Test accounts</h2>
+<p>Adding extra user name for <code>/etc/passwd</code> and <code>/etc/shadow</code> with the same
+UID=1000 enables to create useful test accounts.  Please make sure to create
+different home directory for each user name. GDM seems to get confused by this
+situation of single UID having multiple user names. So I gave up.</p>
+<p>I decided to create accounts, for example <code>u1</code> accessible by <code>osamu</code> as group, with:</p>
+<pre tabindex="0"><code>$ sudo adduser --comment &#34;&#34; u1
+$ sudo adduser osamu u1
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/07/01/systemd-shutdown/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

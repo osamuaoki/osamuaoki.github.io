@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/25 (initial publish),
-2023/10/07 (last update)
+2023/10/08 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00038.md
@@ -72,7 +72,7 @@ en/note-00038.md
         <li><a href="#initial-setup-automatic">Initial setup (automatic)</a></li>
         <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
         <li><a href="#install-typical-packages">Install typical packages</a></li>
-        <li><a href="#set-up-grub-optional">Set-up GRUB (optional)</a></li>
+        <li><a href="#set-up-grub">Set-up GRUB</a></li>
       </ul>
     </li>
     <li><a href="#re-install-and-uidgid-issues">Re-install and UID/GID issues</a></li>
@@ -109,7 +109,8 @@ en/note-00038.md
   </ul>
 </nav>
 
-<p>This is an updated guide for Debian 12 <code>bookworm</code>.  The <a href="/en/2021/01/15/debian-usability/">older deprecated guide</a> was used as its base.</p>
+<p>This is an deprecated guide.  See the <a href="/en/2023/10/07/debian-usability-2023a/">newer deprecated guide</a>.</p>
+<p>This is based on the <a href="/en/2021/01/15/debian-usability/">older deprecated guide</a>.</p>
 <h2 id="workstation-usability">Workstation usability</h2>
 <p>Let me update note on configuring and administrating my workstation under
 post-Debian Bookworm (12) GNU/Linux in testing.</p>
@@ -123,12 +124,6 @@ post-Debian Bookworm (12) GNU/Linux in testing.</p>
 <h3 id="initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></h3>
 <p>The initial installation by the <code>debian-installer</code> should skip &ldquo;Desktop environment&rdquo; task to make it light GUI-less install.</p>
 <p>This installs (mostly) packages with <code>Priority:</code> values in <code>required</code>, <code>important</code> and <code>standard</code>.</p>
-<p>I usually install non-Desktop system with SSH server first to make it quick.
-In this case, <code>task-desktop</code> is added via <code>aptitude</code> to support GNOME Desktop
-at the end of the following &ldquo;Initial setup (manual)&rdquo; section and the full
-control of network connections by the Network Manager is enabled by commenting
-out &ldquo;The primary network interface&rdquo; section in <code>/etc/network/interfaces</code>
-manually.</p>
 <h3 id="initial-setup-manual">Initial setup (manual)</h3>
 <p>I found running following provides convenient work environment for the normal
 installation.  (For the virtual environment installation, you may skip some
@@ -138,7 +133,7 @@ parts.)</p>
 prompt, if yor are at GUI prompt.  Otherwise, you are already at it.
 <ul>
 <li>login to <code>root</code> account if you set the password for <code>root</code> during
-its installation.</li>
+installation.</li>
 <li>login to your primary user account if you didn&rsquo;t set password for <code>root</code>,
 and then execute <code>sudo bash -i</code> to login to <code>root</code> account using the
 primary user&rsquo;s password.</li>
@@ -160,18 +155,8 @@ primary user&rsquo;s password.</li>
 <li><code>www-data</code></li>
 </ul>
 </li>
-<li>Set-up sudo (see below)</li>
-<li>Set-up ssh server (optional)
-<ul>
-<li>Copy ssh public keys of the main machine into new machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access to the new machine from the main machine.</li>
-<li>Run <code>ssh-keygen</code> to generate ssh keys for the new machine</li>
-<li>Copy ssh public keys of the new machine into the main machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access from the new machine to the main machine. (optional)</li>
-<li>Disable password-based login via <code>sudo vi /etc/ssh/sshd_config</code> to set <code>PasswordAuthentication no</code> for all machines after setting passwordless SSH logins.</li>
+<li>If passwordless operation is desired, configure <code>sudo</code> by adding <code>/etc/sudoers.d/passwordless</code> as:</li>
 </ul>
-</li>
-<li>Set-up GNOME desktop (if not yet installed via debian-installer)</li>
-</ul>
-<p>For the passwordless <code>sudo</code> operation, configure <code>sudo</code> by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># No passowrd required for the user in sudo group</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># please note the last match wins configuration</span>
 </span></span><span style="display:flex;"><span>%sudo ALL <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ALL:ALL<span style="color:#f92672">)</span> NOPASSWD: ALL
@@ -200,7 +185,7 @@ program, let them remove.</p>
 <h3 id="install-typical-packages">Install typical packages</h3>
 <p>Typically, installing <code>00-typ</code> and <code>00-notex</code> task packages from the
 <a href="/en/2022/08/20/deb-repo-1/">personal repo</a> sets up a decent workstation.</p>
-<h3 id="set-up-grub-optional">Set-up GRUB (optional)</h3>
+<h3 id="set-up-grub">Set-up GRUB</h3>
 <p>In order to probe OSs on other drives, add a following line to
 <code>/etc/default/grub</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>GRUB_DISABLE_OS_PROBER<span style="color:#f92672">=</span>false
@@ -283,7 +268,7 @@ site</a>.</p>
 </li>
 <li>Add &ldquo;080x24&rdquo;, &ldquo;080x43&rdquo;, &ldquo;127x43&rdquo;</li>
 <li>Disable &ldquo;F10&rdquo;</li>
-<li>Set shell as login shell if you want anything other than Bash.</li>
+<li>Shell as login shell if you want anything other than Bash.</li>
 </ul>
 <h3 id="right-mouse-click-with-single-button">Right mouse click with single button</h3>
 <p>For Mac or some Sony Vaio with single tap pad button, the following allows
