@@ -102,11 +102,11 @@ en/note-00049.md
         <li><a href="#mail-client">Mail client</a></li>
       </ul>
     </li>
-    <li><a href="#miscellaneous-tips">Miscellaneous tips</a></li>
-    <li><a href="#migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</a></li>
-    <li><a href="#setting-group-membership">Setting group membership</a></li>
-    <li><a href="#setting-lxd">Setting LXD</a>
+    <li><a href="#miscellaneous-tips">Miscellaneous tips</a>
       <ul>
+        <li><a href="#migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</a></li>
+        <li><a href="#setting-group-membership">Setting group membership</a></li>
+        <li><a href="#setting-lxd">Setting LXD</a></li>
         <li><a href="#re-install-and-uidgid-issues">Re-install and UID/GID issues</a></li>
         <li><a href="#efi-based-firmware-updates">EFI-based firmware updates</a></li>
       </ul>
@@ -465,7 +465,7 @@ host. (This trick may be usable for any hosts such as salsa.debian.org etc.)</p>
 </ul>
 <p>I usually don&rsquo;t bother with <code>fetchmail</code> these days.</p>
 <h2 id="miscellaneous-tips">Miscellaneous tips</h2>
-<h2 id="migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</h2>
+<h3 id="migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</h3>
 <p>As installed, user&rsquo;s home directory is in the rootfs using subvolume <code>@rootfs</code>.
 Let me create and use subvolume <code>@osamu</code> for my user <code>osamu</code> and copy contents
 of original <code>/home/osamu</code> into <code>@osamu</code>.  Then update <code>/etc/fstab</code> to mount
@@ -498,7 +498,7 @@ UUID=85827838-41ae-42e2-9081-a98ab7f819f5 /boot           ext4    defaults      
 # swap was on /dev/sdb7 during installation
 UUID=31355cb6-e02f-4462-91a4-323dcc351ea9 none            swap    sw              0       0
 </code></pre><p>Then reboot this machine.</p>
-<h2 id="setting-group-membership">Setting group membership</h2>
+<h3 id="setting-group-membership">Setting group membership</h3>
 <p>Don&rsquo;t forget to setup group membership for the primary user (UID=1000).  Notable groups to watch out are:</p>
 <ul>
 <li><code>adm</code></li>
@@ -510,7 +510,7 @@ UUID=31355cb6-e02f-4462-91a4-323dcc351ea9 none            swap    sw            
 <li><code>www-data</code> &ndash; for web server</li>
 </ul>
 <p>You need to re-login to enable them after setting them with e.g., `sudo adduser osamu lxd.</p>
-<h2 id="setting-lxd">Setting LXD</h2>
+<h3 id="setting-lxd">Setting LXD</h3>
 <pre tabindex="0"><code>$ sudo lxd init
 Would you like to use LXD clustering? (yes/no) [default=no]:
 Do you want to configure a new storage pool? (yes/no) [default=yes]:
