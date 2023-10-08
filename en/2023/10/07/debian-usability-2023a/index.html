@@ -72,6 +72,7 @@ en/note-00049.md
         <li><a href="#initial-manual-setup-sudo">Initial manual setup (SUDO)</a></li>
         <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
         <li><a href="#initial-manual-setup-ssh">Initial manual setup (SSH)</a></li>
+        <li><a href="#initial-manual-setup-gpg">Initial manual setup (GPG)</a></li>
         <li><a href="#initial-manual-setup-gnome">Initial manual setup (GNOME)</a></li>
         <li><a href="#wallpaper-for-grub">Wallpaper for GRUB</a></li>
         <li><a href="#os-probing-for-grub">OS probing for GRUB</a></li>
@@ -192,7 +193,10 @@ missing <code>M</code> flags to groups of files:</p>
 <li>Copy ssh public keys of the new machine into the main machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access from the new machine to the main machine. (optional)</li>
 <li>Disable password-based login via <code>sudo vi /etc/ssh/sshd_config</code> to set <code>PasswordAuthentication no</code> for all machines after setting passwordless SSH logins.</li>
 </ul>
-<h3 id="initial-manual-setup-gnome">Initial manual setup (GNOME)</h3>
+<h3 id="initial-manual-setup-gpg">Initial manual setup (GPG)</h3>
+<p>After configuring SSH as above, your GPG keys on <code>goofy</code> can be moved to <code>casper</code> by executing the following on <code>goofy</code>:</p>
+<pre tabindex="0"><code>$ scp -r .gnupg casper.local:.
+</code></pre><h3 id="initial-manual-setup-gnome">Initial manual setup (GNOME)</h3>
 <p>Install <code>task-desktop</code> package which pulls in <code>task-gnome-desktop</code> package to set up a decent GNOME GUI workstation with <code>aptitude</code>.</p>
 <h3 id="wallpaper-for-grub">Wallpaper for GRUB</h3>
 <p>Place your JPEG wallpaper graphics (JPEG) in <code>/boot/grub/</code> and update GRUB
@@ -357,11 +361,15 @@ Shortcut SUPER-\
 <li><code>~/bin</code> scripts: <a href="https://github.com/osamuaoki/osamu-utils">https://github.com/osamuaoki/osamu-utils</a> (<code>hal</code>, <code>sendmail-p.d.o</code>)
 <ul>
 <li>Key dot files in <code>~/</code> and <code>~/.config</code> are stored in this <a href="https://github.com/osamuaoki/osamu-utils/tree/main/dot">osamu-utils repo under dot/</a>.</li>
+<li>Key configuration files in <code>/etc/apt</code> are stored in this <a href="https://github.com/osamuaoki/osamu-utils/tree/main/etc/apt">osamu-utils repo under etc/apt/</a>.</li>
 <li>These stored dot-files are updated by <code>hal conf update</code></li>
+<li>These stored dot-files are inspected for their changes by <code>hal conf diff</code></li>
 <li>These stored dot-files are restored to active use by <code>hal conf install</code></li>
 </ul>
 </li>
 </ul>
+<p>For restoration, you may want to use manual restoration.  This script needs a
+bit more work.</p>
 <h3 id="editor-setups">Editor setups</h3>
 <ul>
 <li>Main <code>vi</code> editor: <code>nvim</code> with <code>~/.config/nvim</code>
