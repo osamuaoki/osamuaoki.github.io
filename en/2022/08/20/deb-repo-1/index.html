@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/08/20 (initial publish),
-2023/05/01 (last update)
+2023/10/08 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00033.md
@@ -64,7 +64,8 @@ en/note-00033.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#personal-deb-package-repo-on-github-page">Personal DEB-package repo on github page</a>
+    <li><a href="#my-github-page">My github page</a></li>
+    <li><a href="#personal-deb-package-repo-on-my-github-page">Personal DEB-package repo on my github page</a>
       <ul>
         <li><a href="#gnu-pg">GNU PG</a></li>
         <li><a href="#setting-up-secure-apt-cliant">Setting up secure-APT cliant</a></li>
@@ -75,7 +76,17 @@ en/note-00033.md
   </ul>
 </nav>
 
-<h2 id="personal-deb-package-repo-on-github-page">Personal DEB-package repo on github page</h2>
+<p>See <a href="/en/2023/10/07/debian-usability-2023a/">Debian Workstation (usability) (v2023-10)</a> for how I use personal DEB package repository.</p>
+<h2 id="my-github-page">My github page</h2>
+<p>It&rsquo;s source is at:</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamuaoki-hugo">https://github.com/osamuaoki/osamuaoki-hugo</a> (source repo)</li>
+</ul>
+<p>It&rsquo;s generated content is stored at:</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamuaoki.github.io">https://github.com/osamuaoki/osamuaoki.github.io</a> (published page repo)</li>
+</ul>
+<h2 id="personal-deb-package-repo-on-my-github-page">Personal DEB-package repo on my github page</h2>
 <p>Since Githubs offer nice web site hosting service, I decided to host my private
 build results there at <code>http://osamuaoki.github.io/debian</code> (Files on this URL
 aren&rsquo;t browsable.  This is for APT-line.)</p>
@@ -183,15 +194,17 @@ SignWith: FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
 basedir /path/to/osamuaoki-hugo/static/debian/
 ask-passphrase
 </code></pre><h2 id="adding-personal-binary-package-repository">Adding personal binary package repository</h2>
-<p>You create source Debian package source trees in <code>../packages/</code> relative to this web site
-source.</p>
-<p>You update repository in this web site source by running <code>./repository.sh</code> in this web site source.</p>
-<p>Then I can build hugo pages as usual with <code>./update.sh</code>.</p>
+<p>You create Debian package source trees in <code>../packages/</code> relative to
+<a href="https://github.com/osamuaoki/osamuaoki-hugo">my github page source</a></p>
+<p>The binary package repository build script is <a href="https://github.com/osamuaoki/osamuaoki-hugo/blob/main/repository.sh">repository.sh</a> in my gihub page source.</p>
 <ul>
-<li><a href="https://github.com/osamuaoki/osamuaoki-hugo">https://github.com/osamuaoki/osamuaoki-hugo</a> (source repo)</li>
-<li><a href="https://github.com/osamuaoki/osamuaoki.github.io">https://github.com/osamuaoki/osamuaoki.github.io</a> (published page repo)</li>
+<li>Source is cloned first.</li>
+<li>Native packages are build with <code>debuild</code></li>
+<li>Non-native packages use gbp-style repo and <code>gbp extract-orig</code> is run before
+<code>debuild</code>.</li>
+<li><code>repropro</code> publishes build packages to github web pages.</li>
 </ul>
-<p>See <a href="/en/2023/02/25/debian-usability-2023/">Debian Workstation (usability) (v2023)</a> for how I use this repo.</p>
+<p>Then publish this binary package repository as a part of static web pages with hugo as usual with <code>./update.sh</code>.</p>
 <!-- raw HTML omitted -->
 
 
