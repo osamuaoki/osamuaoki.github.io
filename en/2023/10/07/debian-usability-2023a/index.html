@@ -103,7 +103,9 @@ en/note-00049.md
       </ul>
     </li>
     <li><a href="#miscellaneous-tips">Miscellaneous tips</a></li>
-    <li><a href="#setting-group-membership">Setting group membership</a>
+    <li><a href="#migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</a></li>
+    <li><a href="#setting-group-membership">Setting group membership</a></li>
+    <li><a href="#setting-lxd">Setting LXD</a>
       <ul>
         <li><a href="#re-install-and-uidgid-issues">Re-install and UID/GID issues</a></li>
         <li><a href="#efi-based-firmware-updates">EFI-based firmware updates</a></li>
@@ -463,8 +465,11 @@ host. (This trick may be usable for any hosts such as salsa.debian.org etc.)</p>
 </ul>
 <p>I usually don&rsquo;t bother with <code>fetchmail</code> these days.</p>
 <h2 id="miscellaneous-tips">Miscellaneous tips</h2>
+<h2 id="migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</h2>
+<p>As installed, user&rsquo;s home directory is in the rootfs using subvolume <code>@rootfs</code>.
+Let me use subvolume <code>@osamu</code> for my user <code>osamu</code>.</p>
 <h2 id="setting-group-membership">Setting group membership</h2>
-<p>Don&rsquo;t forget to setup group membership for the primary user (UID=1000).  Notable groups are:</p>
+<p>Don&rsquo;t forget to setup group membership for the primary user (UID=1000).  Notable groups to watch out are:</p>
 <ul>
 <li><code>adm</code></li>
 <li><code>src</code></li>
@@ -474,8 +479,42 @@ host. (This trick may be usable for any hosts such as salsa.debian.org etc.)</p>
 <li><code>backup</code> &ndash; for backup operation</li>
 <li><code>www-data</code> &ndash; for web server</li>
 </ul>
-<p>You need to re-login to enable them.</p>
-<h3 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h3>
+<p>You need to re-login to enable them after setting them with e.g., `sudo adduser osamu lxd.</p>
+<h2 id="setting-lxd">Setting LXD</h2>
+<pre tabindex="0"><code>$ sudo lxd init
+Would you like to use LXD clustering? (yes/no) [default=no]:
+Do you want to configure a new storage pool? (yes/no) [default=yes]:
+Name of the new storage pool [default=default]:
+Name of the storage backend to use (dir, btrfs) [default=btrfs]:
+Would you like to create a new btrfs subvolume under /var/lib/lxd? (yes/no) [default=yes]:
+Would you like to connect to a MAAS server? (yes/no) [default=no]:
+Would you like to create a new local network bridge? (yes/no) [default=yes]:
+What should the new bridge be called? [default=lxdbr0]:
+What IPv4 address should be used? (CIDR subnet notation, “auto” or “none”) [default=auto]:
+What IPv6 address should be used? (CIDR subnet notation, “auto” or “none”) [default=auto]:
+Would you like the LXD server to be available over the network? (yes/no) [default=no]:
+Would you like stale cached images to be updated automatically? (yes/no) [default=yes]:
+Would you like a YAML &#34;lxd init&#34; preseed to be printed? (yes/no) [default=no]:
+</code></pre><p>Now on host <code>casper</code> with the primary user <code>osamu</code>:</p>
+<pre tabindex="0"><code>osamu@casper:~
+$ cd /etc
+osamu@casper:/etc
+$ cat subgid
+osamu:100000:65536
+_lxd:165536:10000001
+root:165536:10000001
+osamu@casper:/etc
+$ cat subuid
+osamu:100000:65536
+_lxd:165536:10000001
+root:165536:10000001
+osamu@casper:/etc
+$ grep _lxd passwd
+_lxd:x:103:111::/var/lib/lxd/:/bin/false
+osamu@casper:/etc
+$ grep lxd group
+lxd:x:111:osamu
+</code></pre><h3 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h3>
 <p>UID and GID used by some applications are not fixed.  So, if you reinstall the
 exact same packages in a different order, you end up assigning UID and GID for
 the application.</p>
