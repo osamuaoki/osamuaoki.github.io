@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/07 (initial publish),
-2023/10/08 (last update)
+2023/10/09 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00049.md
@@ -82,12 +82,11 @@ en/note-00049.md
     <li><a href="#gnome-desktop-customization">GNOME desktop customization</a>
       <ul>
         <li><a href="#terminal-customization">Terminal customization</a></li>
-        <li><a href="#right-mouse-click-with-single-button">Right mouse click with single button</a></li>
-        <li><a href="#wallpaper-for-gnome">Wallpaper for GNOME</a></li>
-        <li><a href="#keyboard-customization-gnome-tweaks----capslock">Keyboard customization (GNOME Tweaks &ndash; CapsLock)</a></li>
-        <li><a href="#keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</a></li>
-        <li><a href="#keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</a></li>
-        <li><a href="#keyboard-shortcut-customization-gnome-extension----im">Keyboard shortcut customization (GNOME Extension &ndash; IM)</a></li>
+        <li><a href="#wallpaper-for-gnome-settingstweaks">Wallpaper for GNOME (Settings+Tweaks)</a></li>
+        <li><a href="#keyboard-shortcut-customization-settings">Keyboard shortcut customization (Settings)</a></li>
+        <li><a href="#keyboard-customization-tweaks">Keyboard customization (Tweaks)</a></li>
+        <li><a href="#right-mouse-click-with-single-button-tweaks">Right mouse click with single button (Tweaks)</a></li>
+        <li><a href="#keyboard-and-touchpad-shortcut-customization-extension">Keyboard and touchpad shortcut customization (Extension)</a></li>
         <li><a href="#keyboard-shortcut-customization-internal-im-configuration">Keyboard shortcut customization (Internal IM configuration)</a></li>
         <li><a href="#non-usable-keyboard-shortcut-key-combos-with-super">Non-usable Keyboard shortcut key combos with super</a></li>
       </ul>
@@ -274,7 +273,61 @@ enabled.  They can be configured via GUI application <code>Extensions</code>.</p
 <li>Add &ldquo;080x24&rdquo;, &ldquo;080x43&rdquo;, &ldquo;127x43&rdquo;</li>
 <li>Set shell as login shell if you want anything other than Bash.</li>
 </ul>
-<h3 id="right-mouse-click-with-single-button">Right mouse click with single button</h3>
+<h3 id="wallpaper-for-gnome-settingstweaks">Wallpaper for GNOME (Settings+Tweaks)</h3>
+<p>You can set wallpaper graphics from:</p>
+<ul>
+<li>Desktop: <code>Settings</code> -&gt; <code>Background</code></li>
+<li>Desktop: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code></li>
+<li>Lock Screen: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Lock Screen</code></li>
+<li>GDM3: &mdash; Not so easy (leave this as is)</li>
+</ul>
+<h3 id="keyboard-shortcut-customization-settings">Keyboard shortcut customization (Settings)</h3>
+<ul>
+<li><code>Settings</code> -&gt; <code>Keyboard</code> tab
+<ul>
+<li><code>Keyboard Shortcuts</code> -&gt; <code>View and Customize Shortcuts</code>
+<ul>
+<li><code>Launchers</code>
+<ul>
+<li><code>SUPER-C</code>: launch calculator</li>
+<li><code>SUPER-E</code>: launch email client</li>
+<li><code>SUPER-B</code>: launch web browser</li>
+</ul>
+</li>
+<li><code>Sound and Media</code>
+<ul>
+<li><code>SUPER-.</code>: volume mute/unmute</li>
+</ul>
+</li>
+<li><code>Custom Shortcuts</code>
+<ul>
+<li><code>SUPER-\</code>: Name: Terminal, Command: <code>gnome-terminal</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>(<code>SUPER-\</code> is easier to type than <code>SUPER-T</code>.)</p>
+<h3 id="keyboard-customization-tweaks">Keyboard customization (Tweaks)</h3>
+<p>For Vim user, mapping CapsLock to Esc as follows may be interesting:</p>
+<ul>
+<li><code>Tweaks</code> -&gt;  <code>Keyboard &amp; Mouse</code> tab
+<ul>
+<li><code>Keyboard</code> / <code>Overview Shortcut</code> / <code>Additional Layout Options</code> button
+<ul>
+<li>Click to expand <code>Caps Lock behavior</code>
+<ul>
+<li>Enable <code>Make Caps Lock as additional Esc</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="right-mouse-click-with-single-button-tweaks">Right mouse click with single button (Tweaks)</h3>
 <p>For Mac or some Sony Vaio with single tap pad button, the following allows
 proper secondary-click (or even middle-click).</p>
 <ul>
@@ -286,46 +339,7 @@ proper secondary-click (or even middle-click).</p>
 </ul>
 </li>
 </ul>
-<h3 id="wallpaper-for-gnome">Wallpaper for GNOME</h3>
-<p>You can set wallpaper graphics from:</p>
-<ul>
-<li>
-<p>Desktop: <code>Settings</code> -&gt; <code>Background</code></p>
-</li>
-<li>
-<p>Desktop: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code></p>
-</li>
-<li>
-<p>Lock Screen: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Lock Screen</code></p>
-</li>
-<li>
-<p>GDM3: &mdash; Not so easy (leave this as is)</p>
-</li>
-</ul>
-<h3 id="keyboard-customization-gnome-tweaks----capslock">Keyboard customization (GNOME Tweaks &ndash; CapsLock)</h3>
-<p>For Vim user, mapping CapsLock to Esc as follows may be interesting:</p>
-<ul>
-<li><code>Tweaks</code></li>
-<li>Click <code>Keyboard &amp; Mouse</code> tab</li>
-<li>Click <code>Keyboard</code> / <code>Overview Shortcut</code> / <code>Additional Layout Options</code> button</li>
-<li>Click to expand <code>Caps Lock behavior</code></li>
-<li>Enable <code>Make Caps Lock as additional Esc</code>.</li>
-</ul>
-<h3 id="keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</h3>
-<ul>
-<li><code>SUPER-C</code>: launch calculator</li>
-<li><code>SUPER-E</code>: launch email client</li>
-<li><code>SUPER-B</code>: launch web browser</li>
-</ul>
-<h3 id="keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</h3>
-<ul>
-<li><code>SUPER-\</code>: Open terminal</li>
-</ul>
-<pre tabindex="0"><code>Name     Terminal
-Command  gnome-terminal
-Shortcut SUPER-\
-</code></pre><p>(<code>SUPER-\</code> is easier to type than <code>SUPER-T</code>.)</p>
-<h3 id="keyboard-shortcut-customization-gnome-extension----im">Keyboard shortcut customization (GNOME Extension &ndash; IM)</h3>
+<h3 id="keyboard-and-touchpad-shortcut-customization-extension">Keyboard and touchpad shortcut customization (Extension)</h3>
 <ul>
 <li>Installed my GNOME extension: <a href="https://github.com/osamuaoki/inputmethod-shortcuts">Quick switching of input method and touchpad</a> &ndash; source
 <ul>
@@ -335,13 +349,23 @@ Shortcut SUPER-\
 <li>Log out and log in to GNOME</li>
 <li>Enabled shortcuts from GNOME shell extension preference menu as:
 <ul>
+<li>Input Method Shortcuts
+<ul>
 <li><code>CTRL-SUPER</code>: English (US)</li>
 <li><code>SHIFT-SUPER</code>: Mozc</li>
 <li><code>SUPER-CTRL</code>: English (international)</li>
 </ul>
 </li>
+<li>Touchpad Shortcuts
+<ul>
+<li><code>SUPER-.</code>: Touchpad On</li>
+<li><code>SUPER-/</code>: Touchpad Off</li>
 </ul>
-<p>For other extensions I use, see <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a>.</p>
+</li>
+</ul>
+</li>
+</ul>
+<p>See <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a> how I get here.</p>
 <h3 id="keyboard-shortcut-customization-internal-im-configuration">Keyboard shortcut customization (Internal IM configuration)</h3>
 <p>For Japanese input with US keyboard, set IM (mozc etc.) configuration as:</p>
 <ul>
@@ -439,7 +463,8 @@ for sure.</p>
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/etc/apt/sources.list.d/google.sources">/etc/apt/sources.d/google.sources</a>
 in DEB822-STYLE FORMAT and select the <code>google-chrome-stable</code> package.</p>
 <h3 id="shotwell">Shotwell</h3>
-<p>Shotwell 0.30 in Debian/bookworm doesn&rsquo;t support HEIF image files.</p>
+<p>Shotwell 0.30 in Debian 12 <code>bookworm</code> doesn&rsquo;t support HEIF image files used by
+iPhone.</p>
 <p>I installed Shotwell 0.32.1 or newer <a href="https://wiki.gnome.org/Apps/Shotwell/BuildingAndInstalling">flatpack package from Gnome upstream</a>.</p>
 <p>See <a href="/en/2023/04/21/heif-1/">HEIF image files</a> on more HEFI tips.</p>
 <h3 id="libreoffice">LibreOffice</h3>
@@ -519,6 +544,17 @@ UUID=31355cb6-e02f-4462-91a4-323dcc351ea9 none            swap    sw            
 </ul>
 <p>You need to re-login to enable them after setting them with e.g., `sudo adduser osamu lxd.</p>
 <h3 id="setting-lxd">Setting LXD</h3>
+<ul>
+<li>Install:
+<ul>
+<li><code>lxd</code></li>
+<li><code>lxc</code></li>
+<li><code>lxd-tools</code></li>
+</ul>
+</li>
+<li>Add the primary user to <code>lxd</code> group.</li>
+<li>Initialize LXD use environment</li>
+</ul>
 <pre tabindex="0"><code>$ sudo lxd init
 Would you like to use LXD clustering? (yes/no) [default=no]:
 Do you want to configure a new storage pool? (yes/no) [default=yes]:
@@ -533,25 +569,43 @@ What IPv6 address should be used? (CIDR subnet notation, “auto” or “none�
 Would you like the LXD server to be available over the network? (yes/no) [default=no]:
 Would you like stale cached images to be updated automatically? (yes/no) [default=yes]:
 Would you like a YAML &#34;lxd init&#34; preseed to be printed? (yes/no) [default=no]:
-</code></pre><p>Now on host <code>casper</code> with the primary user <code>osamu</code>:</p>
-<pre tabindex="0"><code>osamu@casper:~
+</code></pre><p>If this is on host <code>casper</code> with the primary user <code>osamu</code>:</p>
+<pre tabindex="0"><code>$ sysctl kernel.unprivileged_userns_clone
+kernel.unprivileged_userns_clone = 1
 $ cd /etc
-osamu@casper:/etc
 $ cat subgid
 osamu:100000:65536
 _lxd:165536:10000001
 root:165536:10000001
-osamu@casper:/etc
 $ cat subuid
 osamu:100000:65536
 _lxd:165536:10000001
 root:165536:10000001
-osamu@casper:/etc
 $ grep _lxd passwd
 _lxd:x:103:111::/var/lib/lxd/:/bin/false
-osamu@casper:/etc
 $ grep lxd group
 lxd:x:111:osamu
+$ sudo ls -la /var/lib/lxd
+total 8
+drwx--x--x 1 _lxd lxd  336 Oct  9 08:38 .
+drwxr-xr-x 1 root root 856 Oct  8 14:41 ..
+drwx------ 1 root root  30 Oct  8 14:49 backups
+drwx--x--x 1 root root   0 Oct  8 14:49 containers
+drwx------ 1 root root  28 Oct  8 14:49 database
+drwx--x--x 1 root root   0 Oct  8 14:49 devices
+drwxr-xr-x 1 root root   0 Oct  8 14:49 devlxd
+drwx------ 1 root root   0 Oct  8 14:49 disks
+drwx------ 1 root root   0 Oct  8 14:49 images
+drwx--x--x 1 root root  12 Oct  8 14:50 networks
+drwx------ 1 root root  30 Oct  8 14:49 security
+-rw-r--r-- 1 root root 757 Oct  8 14:49 server.crt
+-rw------- 1 root root 288 Oct  8 14:49 server.key
+drwx--x--x 1 root root   0 Oct  8 14:49 shmounts
+drwx------ 1 root root   0 Oct  8 14:49 snapshots
+drwx--x--x 1 root root  14 Oct  8 14:50 storage-pools
+srw-rw---- 1 root lxd    0 Oct  9 08:38 unix.socket
+drwx--x--x 1 root root   0 Oct  8 14:49 virtual-machines
+drwx------ 1 root root   0 Oct  8 14:49 virtual-machines-snapshots
 </code></pre><h3 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h3>
 <p>UID and GID used by some applications are not fixed.  So, if you reinstall the
 exact same packages in a different order, you end up assigning UID and GID for
