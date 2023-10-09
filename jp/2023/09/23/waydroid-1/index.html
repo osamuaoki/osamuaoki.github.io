@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/09/23 (initial publish),
-2023/10/08 (last update)
+2023/10/09 (last update)
 </h3>
 <h3 class="source">Source:
 jp/note-00061.md
@@ -77,7 +77,9 @@ jp/note-00061.md
 </span></span><span style="display:flex;"><span>$ curl https://repo.waydro.id &gt; waydroid.sh
 </span></span><span style="display:flex;"><span>$ chmod <span style="color:#ae81ff">755</span> waydroid.sh
 </span></span><span style="display:flex;"><span>$ sudo ./waydroid.sh
-</span></span></code></pre></div><p>自動設定されるAPTファイルの<code>/etc/apt/sources.list.d/waydroid.list</code>でも良いのですが、私は<code>/etc/apt/sources.list.d/waydroid.sources</code>に書き換えました。</p>
+</span></span></code></pre></div><p>これで自動設定されるAPTファイルの<code>/etc/apt/sources.list.d/waydroid.list</code>は以下です。</p>
+<pre tabindex="0"><code>deb [signed-by=/usr/share/keyrings/waydroid.gpg] https://repo.waydro.id/ bookworm main
+</code></pre><p>このままでも良いのですが、私は<code>/etc/apt/sources.list.d/waydroid.sources</code>に書き換えました。</p>
 <pre tabindex="0"><code># This is wrtten in DEB822-STYLE FORMAT as described in sources.list (5)
 Types: deb
 URIs: https://repo.waydro.id/
@@ -115,7 +117,7 @@ signed-by: /usr/share/keyrings/waydroid.gpg
 $ sudo rm -r ~/.local/share/waydroid
 $ rm -r ~/.local/share/applications/Waydroid.desktop
 $ rm -r ~/.local/share/applications/waydroid.com.*.*.desktop
-</code></pre><p>完全にインストールの痕跡を消すには、上記に加えて<code>aptitude</code>を使って<code>waydroid</code> パッケージと依存でインストールされているパッケージの除去が必要です。</p>
+</code></pre><p>完全にインストールの痕跡を消すには、上記に加えて<code>aptitude</code>を使って<code>waydroid</code>パッケージと依存でインストールされているパッケージの除去をした後、WAYDROID関連のAPTレポ設定（URL定義のAPTファイル＋GPGキーファイル）の消去が必要です。</p>
 <h2 id="waydroid-の設定">waydroid の設定</h2>
 <p>まあ、当たり前かもしれませんがGoogleのアプリ導入には既存のアンドロイドシステムのバックアップか何かが必要なようです。</p>
 <p>（古いNexus5捨てたので、ここまでででやめました）</p>

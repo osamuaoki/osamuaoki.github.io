@@ -15,10 +15,10 @@
       <guid>/jp/2023/09/23/waydroid-1/</guid>
       <description>waydriod を使ったアンドロイドエミュレーター環境の導入 どうも現在もっとも使えそうなアンドロイドエミュレーター環境は、waydriodのようなので、試してみました。
 ウェッブサイトのDebian用のwaydroid導入方法では、スクリプトが何をするのか不安なので、一度ファイルに落としてから使いました。こうすると、コマンドラインオプション追加設定の話も意味が通ります。
-$ sudo apt install curl ca-certificates -y $ mkdir -p ~/tmp &amp;amp;&amp;amp; cd ~/temp $ curl https://repo.waydro.id &amp;gt; waydroid.sh $ chmod 755 waydroid.sh $ sudo ./waydroid.sh 自動設定されるAPTファイルの/etc/apt/sources.list.d/waydroid.listでも良いのですが、私は/etc/apt/sources.list.d/waydroid.sourcesに書き換えました。
+$ sudo apt install curl ca-certificates -y $ mkdir -p ~/tmp &amp;amp;&amp;amp; cd ~/temp $ curl https://repo.waydro.id &amp;gt; waydroid.sh $ chmod 755 waydroid.sh $ sudo ./waydroid.sh これで自動設定されるAPTファイルの/etc/apt/sources.list.d/waydroid.listは以下です。
+deb [signed-by=/usr/share/keyrings/waydroid.gpg] https://repo.waydro.id/ bookworm main このままでも良いのですが、私は/etc/apt/sources.list.d/waydroid.sourcesに書き換えました。
 # This is wrtten in DEB822-STYLE FORMAT as described in sources.list (5) Types: deb URIs: https://repo.waydro.id/ Suites: bookworm Components: main Architectures: amd64 signed-by: /usr/share/keyrings/waydroid.gpg その後、waydroid導入マニュアル指示の手動スタート手順通りsudo waydroid container startだとエラーメッセージがでます。
-そのメッセージを参考に、Waydroid command line options に従って System type を GAPPS 対応とすべく以下を実行しました。(結構大きなファイルなので、ダウンロードに３０分ほど時間がかかりました。)
-$ sudo waydroid init -s GAPPS [23:03:28] Downloading https://sourceforge.</description>
+そのメッセージを参考に、Waydroid command line options に従って System type を GAPPS 対応とすべく以下を実行しました。(結構大きなファイルなので、ダウンロードに３０分ほど時間がかかりました。)</description>
     </item>
     
   </channel>
