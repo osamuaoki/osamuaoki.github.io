@@ -640,16 +640,17 @@ root:231072:10000001
 <p>I also realized that <code>/etc/passwd</code> files inside of the above mentioned
 container images and instances don&rsquo;t have the normal <code>uid=1000</code> user.</p>
 <h3 id="more-operations-on-instances">More operations on instances</h3>
-<p>I followed &ldquo;First steps with LXD&rdquo; and see following commands in action.</p>
+<p>I followed more in &ldquo;First steps with LXD&rdquo; and saw following commands in action.</p>
 <ul>
-<li><code>lxc copy ...</code> to duplicate instance.</li>
-<li><code>lxc delete ...</code> to delete instance.</li>
+<li><code>lxc copy ...</code> to duplicate a container instance.</li>
+<li><code>lxc delete ...</code> to delete a container instance.</li>
 <li><code>lxc exec ...</code> to execute a command as root within the instance</li>
 <li><code>lxc config ...</code> to configure container instances with <a href="https://documentation.ubuntu.com/lxd/en/latest/reference/instance_options/#instance-options">instance options</a>
 <ul>
 <li>This can provide <a href="https://documentation.ubuntu.com/lxd/en/latest/reference/instance_options/#instance-options-cloud-init">cloud-init configuration</a>.</li>
 </ul>
 </li>
+<li><code>lxc restart ...</code> to stop and start a container instance to reload the updated configuration.</li>
 <li><code>lxc pull ...</code> to copy a file from a container instance.</li>
 <li><code>lxc push ...</code> to copy a file to a container instance.</li>
 <li><code>lxc snapshot ...</code> to make snapshot of a container instance.</li>
