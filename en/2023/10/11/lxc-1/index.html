@@ -1,0 +1,686 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Container with LXC/LXD | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Container with LXC/LXD</span></h1>
+
+<h3 class="date">Date:
+2023/10/11 (initial publish),
+2023/10/12 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00050.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/10/07/debian-usability-2023a/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-is-lxc">What is LXC</a></li>
+    <li><a href="#what-is-lxd-and-incus">What is LXD and Incus</a></li>
+    <li><a href="#installation-of-lxd-to-debian-12">Installation of LXD to Debian 12</a></li>
+    <li><a href="#lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</a></li>
+    <li><a href="#tracing-first-steps-with-lxd">Tracing &ldquo;First steps with LXD&rdquo;</a>
+      <ul>
+        <li><a href="#getting-system-images-for-lxd">Getting system images for LXD</a></li>
+        <li><a href="#inspect-instances">Inspect instances</a></li>
+        <li><a href="#inspect-images">Inspect images</a></li>
+        <li><a href="#inspect-filesystem">Inspect filesystem</a></li>
+        <li><a href="#more-operations-on-instances">More operations on instances</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>Here is a memo of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
+<h2 id="what-is-lxc">What is LXC</h2>
+<p><a href="https://linuxcontainers.org/lxc/introduction/">LXC is a well-known Linux container runtime that consists of tools, templates,
+and library and language bindings. It&rsquo;s pretty low level, very flexible and
+covers just about every containment feature supported by the upstream
+kernel.</a></p>
+<h2 id="what-is-lxd-and-incus">What is LXD and Incus</h2>
+<ul>
+<li>Upstream LXD (5.18 released 2023-09-20) is at <a href="https://github.com/canonical/lxd">https://github.com/canonical/lxd</a> by Canonical
+<ul>
+<li><a href="https://documentation.ubuntu.com/lxd/en/latest/">LXD is a modern, secure and powerful system container and virtual machine manager.</a></li>
+<li><a href="https://documentation.ubuntu.com/lxd/en/latest/tutorial/first_steps/">LXD Tutorial</a></li>
+</ul>
+</li>
+<li>Upstream Incus (0.1 released 2023-10-07) is at <a href="https://github.com/lxc/incus">https://github.com/lxc/incus</a> by linuxcontainers.org (LXC)
+<ul>
+<li><a href="https://linuxcontainers.org/incus/docs/main/">Incus is a modern, secure and powerful system container and virtual machine manager.</a></li>
+<li><a href="https://linuxcontainers.org/incus/docs/main/tutorial/first_steps/">Incus Tutorial</a></li>
+<li><a href="https://linuxcontainers.org/incus/">Incus was created (2023-08-07) from LXD</a> as a fork of LXD 5.16 (released 2023-07-20).</li>
+<li>&ldquo;<a href="https://discuss.linuxcontainers.org/t/incus-0-1-has-been-released/18036">Incus 0.1 has been released</a>&rdquo; announcement gives explanations on technical changes.
+<ul>
+<li>The command name has been changed to <code>incus</code>.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Debian 12 LXD (5.0.2-5, packaged 2023-05-05) was created before LXD moving to Canonical and LXC staring Incus as a LXD fork.
+<ul>
+<li>Debian LXD documentaion: Under <code>/usr/share/doc/lxd/</code>, especially <code>README.Debian</code>.</li>
+<li>The command name is still <code>lxd</code> on Debian.</li>
+</ul>
+</li>
+</ul>
+<p>On Debian 12, there is no need to use snap package mentioned in LXD documentation from Ubuntu/Canonical since it is fairly new one.</p>
+<p>Future Debian may migrate to Incus.  So for the future proof, I should interact with instances only through <code>/1.0/instances</code> as in Incus when using Debian LXD.</p>
+<p>For now, I will focus on <em>container</em> usages on Debian 12.</p>
+<h2 id="installation-of-lxd-to-debian-12">Installation of LXD to Debian 12</h2>
+<pre tabindex="0"><code>$ sudo aptitude install lxc lxd lxd-tools
+$ sudo adduser osamu lxd
+$ sudo newusers group
+$ sudo lxd init
+  ... go with defaults
+</code></pre><p>This seems to create the <code>/var/lib/lxd/images/</code> directory.</p>
+<h2 id="lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</h2>
+<p>Here is a bit confusing situation of LXC and LXD commands on Debian 12.</p>
+<ul>
+<li>The <code>lxc</code> package offers many hyphenated <code>lxc-*</code> commands for Linux Containers userspace tools.  This doesn&rsquo;t include <code>lxc</code> command.
+<ul>
+<li><code>lxc-attach</code>(1)</li>
+<li><code>lxc-autostart</code>(1)</li>
+<li><code>lxc-cgroup</code>(1)</li>
+<li><code>lxc-checkconfig</code>(1)</li>
+<li><code>lxc-checkpoint</code>(1)</li>
+<li><code>lxc-config</code>(1)</li>
+<li><code>lxc-console</code>(1)</li>
+<li><code>lxc-copy</code>(1)</li>
+<li><code>lxc-create</code>(1)</li>
+<li><code>lxc-destroy</code>(1)</li>
+<li><code>lxc-device</code>(1)</li>
+<li><code>lxc-execute</code>(1)</li>
+<li><code>lxc-freeze</code>(1)</li>
+<li><code>lxc-info</code>(1)</li>
+<li><code>lxc-ls</code>(1)</li>
+<li><code>lxc-monitor</code>(1)</li>
+<li><code>lxc-snapshot</code>(1)</li>
+<li><code>lxc-start</code>(1)</li>
+<li><code>lxc-stop</code>(1)</li>
+<li><code>lxc-top</code>(1)</li>
+<li><code>lxc-unfreeze</code>(1)</li>
+<li><code>lxc-unpriv-attach</code>(1)</li>
+<li><code>lxc-unpriv-start</code>(1)</li>
+<li><code>lxc-unshare</code>(1)</li>
+<li><code>lxc-update-config</code>(1)</li>
+<li><code>lxc-usernsexec</code>(1)</li>
+<li><code>lxc-wait</code>(1)</li>
+<li><code>lxc-usernet</code>(5)</li>
+<li><code>lxc.conf</code>(5)</li>
+<li><code>lxc.container.conf</code>(5)</li>
+<li><code>lxc.system.conf</code>(5)</li>
+<li><code>lxc</code>(7)</li>
+<li><code>pam_cgfs</code>(8)</li>
+</ul>
+</li>
+<li>The <code>lxd-client</code> package pulled in by <code>lxd</code> offers <code>lxc</code> command with many subcommands.  Auto-generated manpages tends on Debian 12 are mostly useless. Use <code>-h</code> with command to see reasonable command usage syntax.
+<ul>
+<li><code>lxc</code>(1)</li>
+<li><code>lxc.alias</code>(1)</li>
+<li><code>lxc.alias.add</code>(1)</li>
+<li><code>lxc.alias.list</code>(1)</li>
+<li><code>lxc.alias.remove</code>(1)</li>
+<li><code>lxc.alias.rename</code>(1)</li>
+<li><code>lxc.cluster</code>(1)q</li>
+<li><code>lxc.cluster.add</code>(1)</li>
+<li><code>lxc.cluster.edit</code>(1)</li>
+<li><code>lxc.cluster.enable</code>(1)</li>
+<li><code>lxc.cluster.evacuate</code>(1)</li>
+<li><code>lxc.cluster.get</code>(1)</li>
+<li><code>lxc.cluster.group</code>(1)</li>
+<li><code>lxc.cluster.group.assign</code>(1)</li>
+<li><code>lxc.cluster.group.create</code>(1)</li>
+<li><code>lxc.cluster.group.delete</code>(1)</li>
+<li><code>lxc.cluster.group.edit</code>(1)</li>
+<li><code>lxc.cluster.group.list</code>(1)</li>
+<li><code>lxc.cluster.group.remove</code>(1)</li>
+<li><code>lxc.cluster.group.rename</code>(1)</li>
+<li><code>lxc.cluster.group.show</code>(1)</li>
+<li><code>lxc.cluster.list-tokens</code>(1)</li>
+<li><code>lxc.cluster.list</code>(1)</li>
+<li><code>lxc.cluster.remove</code>(1)</li>
+<li><code>lxc.cluster.rename</code>(1)</li>
+<li><code>lxc.cluster.restore</code>(1)</li>
+<li><code>lxc.cluster.revoke-token</code>(1)</li>
+<li><code>lxc.cluster.role</code>(1)</li>
+<li><code>lxc.cluster.role.add</code>(1)</li>
+<li><code>lxc.cluster.role.remove</code>(1)</li>
+<li><code>lxc.cluster.set</code>(1)</li>
+<li><code>lxc.cluster.show</code>(1)</li>
+<li><code>lxc.cluster.unset</code>(1)</li>
+<li><code>lxc.cluster.update-certificate</code>(1)</li>
+<li><code>lxc.config</code>(1)</li>
+<li><code>lxc.config.device</code>(1)</li>
+<li><code>lxc.config.device.add</code>(1)</li>
+<li><code>lxc.config.device.get</code>(1)</li>
+<li><code>lxc.config.device.list</code>(1)</li>
+<li><code>lxc.config.device.override</code>(1)</li>
+<li><code>lxc.config.device.remove</code>(1)</li>
+<li><code>lxc.config.device.set</code>(1)</li>
+<li><code>lxc.config.device.show</code>(1)</li>
+<li><code>lxc.config.device.unset</code>(1)</li>
+<li><code>lxc.config.edit</code>(1)</li>
+<li><code>lxc.config.get</code>(1)</li>
+<li><code>lxc.config.metadata</code>(1)</li>
+<li><code>lxc.config.metadata.edit</code>(1)</li>
+<li><code>lxc.config.metadata.show</code>(1)</li>
+<li><code>lxc.config.set</code>(1)</li>
+<li><code>lxc.config.show</code>(1)</li>
+<li><code>lxc.config.template</code>(1)</li>
+<li><code>lxc.config.template.create</code>(1)</li>
+<li><code>lxc.config.template.delete</code>(1)</li>
+<li><code>lxc.config.template.edit</code>(1)</li>
+<li><code>lxc.config.template.list</code>(1)</li>
+<li><code>lxc.config.template.show</code>(1)</li>
+<li><code>lxc.config.trust</code>(1)</li>
+<li><code>lxc.config.trust.add</code>(1)</li>
+<li><code>lxc.config.trust.edit</code>(1)</li>
+<li><code>lxc.config.trust.list-tokens</code>(1)</li>
+<li><code>lxc.config.trust.list</code>(1)</li>
+<li><code>lxc.config.trust.remove</code>(1)</li>
+<li><code>lxc.config.trust.revoke-token</code>(1)</li>
+<li><code>lxc.config.trust.show</code>(1)</li>
+<li><code>lxc.config.unset</code>(1)</li>
+<li><code>lxc.console</code>(1)</li>
+<li><code>lxc.copy</code>(1)</li>
+<li><code>lxc.delete</code>(1)</li>
+<li><code>lxc.exec</code>(1)</li>
+<li><code>lxc.export</code>(1)</li>
+<li><code>lxc.file</code>(1)</li>
+<li><code>lxc.file.delete</code>(1)</li>
+<li><code>lxc.file.edit</code>(1)</li>
+<li><code>lxc.file.mount</code>(1)</li>
+<li><code>lxc.file.pull</code>(1)</li>
+<li><code>lxc.file.push</code>(1)</li>
+<li><code>lxc.image</code>(1)</li>
+<li><code>lxc.image.alias</code>(1)</li>
+<li><code>lxc.image.alias.create</code>(1)</li>
+<li><code>lxc.image.alias.delete</code>(1)</li>
+<li><code>lxc.image.alias.list</code>(1)</li>
+<li><code>lxc.image.alias.rename</code>(1)</li>
+<li><code>lxc.image.copy</code>(1)</li>
+<li><code>lxc.image.delete</code>(1)</li>
+<li><code>lxc.image.edit</code>(1)</li>
+<li><code>lxc.image.export</code>(1)</li>
+<li><code>lxc.image.get-property</code>(1)</li>
+<li><code>lxc.image.import</code>(1)</li>
+<li><code>lxc.image.info</code>(1)</li>
+<li><code>lxc.image.list</code>(1)</li>
+<li><code>lxc.image.refresh</code>(1)</li>
+<li><code>lxc.image.set-property</code>(1)</li>
+<li><code>lxc.image.show</code>(1)</li>
+<li><code>lxc.image.unset-property</code>(1)</li>
+<li><code>lxc.import</code>(1)</li>
+<li><code>lxc.info</code>(1)</li>
+<li><code>lxc.launch</code>(1)</li>
+<li><code>lxc.list</code>(1)</li>
+<li><code>lxc.move</code>(1)</li>
+<li><code>lxc.network</code>(1)</li>
+<li><code>lxc.network.acl</code>(1)</li>
+<li><code>lxc.network.acl.create</code>(1)</li>
+<li><code>lxc.network.acl.delete</code>(1)</li>
+<li><code>lxc.network.acl.edit</code>(1)</li>
+<li><code>lxc.network.acl.get</code>(1)</li>
+<li><code>lxc.network.acl.list</code>(1)</li>
+<li><code>lxc.network.acl.rename</code>(1)</li>
+<li><code>lxc.network.acl.rule</code>(1)</li>
+<li><code>lxc.network.acl.rule.add</code>(1)</li>
+<li><code>lxc.network.acl.rule.remove</code>(1)</li>
+<li><code>lxc.network.acl.set</code>(1)</li>
+<li><code>lxc.network.acl.show-log</code>(1)</li>
+<li><code>lxc.network.acl.show</code>(1)</li>
+<li><code>lxc.network.acl.unset</code>(1)</li>
+<li><code>lxc.network.attach-profile</code>(1)</li>
+<li><code>lxc.network.attach</code>(1)</li>
+<li><code>lxc.network.create</code>(1)</li>
+<li><code>lxc.network.delete</code>(1)</li>
+<li><code>lxc.network.detach-profile</code>(1)</li>
+<li><code>lxc.network.detach</code>(1)</li>
+<li><code>lxc.network.edit</code>(1)</li>
+<li><code>lxc.network.forward</code>(1)</li>
+<li><code>lxc.network.forward.create</code>(1)</li>
+<li><code>lxc.network.forward.delete</code>(1)</li>
+<li><code>lxc.network.forward.edit</code>(1)</li>
+<li><code>lxc.network.forward.get</code>(1)</li>
+<li><code>lxc.network.forward.list</code>(1)</li>
+<li><code>lxc.network.forward.port</code>(1)</li>
+<li><code>lxc.network.forward.port.add</code>(1)</li>
+<li><code>lxc.network.forward.port.remove</code>(1)</li>
+<li><code>lxc.network.forward.set</code>(1)</li>
+<li><code>lxc.network.forward.show</code>(1)</li>
+<li><code>lxc.network.forward.unset</code>(1)</li>
+<li><code>lxc.network.get</code>(1)</li>
+<li><code>lxc.network.info</code>(1)</li>
+<li><code>lxc.network.list-leases</code>(1)</li>
+<li><code>lxc.network.list</code>(1)</li>
+<li><code>lxc.network.peer</code>(1)</li>
+<li><code>lxc.network.peer.create</code>(1)</li>
+<li><code>lxc.network.peer.delete</code>(1)</li>
+<li><code>lxc.network.peer.edit</code>(1)</li>
+<li><code>lxc.network.peer.get</code>(1)</li>
+<li><code>lxc.network.peer.list</code>(1)</li>
+<li><code>lxc.network.peer.set</code>(1)</li>
+<li><code>lxc.network.peer.show</code>(1)</li>
+<li><code>lxc.network.peer.unset</code>(1)</li>
+<li><code>lxc.network.rename</code>(1)</li>
+<li><code>lxc.network.set</code>(1)</li>
+<li><code>lxc.network.show</code>(1)</li>
+<li><code>lxc.network.unset</code>(1)</li>
+<li><code>lxc.network.zone</code>(1)</li>
+<li><code>lxc.network.zone.create</code>(1)</li>
+<li><code>lxc.network.zone.delete</code>(1)</li>
+<li><code>lxc.network.zone.edit</code>(1)</li>
+<li><code>lxc.network.zone.get</code>(1)</li>
+<li><code>lxc.network.zone.list</code>(1)</li>
+<li><code>lxc.network.zone.record</code>(1)</li>
+<li><code>lxc.network.zone.record.create</code>(1)</li>
+<li><code>lxc.network.zone.record.delete</code>(1)</li>
+<li><code>lxc.network.zone.record.edit</code>(1)</li>
+<li><code>lxc.network.zone.record.entry</code>(1)</li>
+<li><code>lxc.network.zone.record.entry.add</code>(1)</li>
+<li><code>lxc.network.zone.record.entry.remove</code>(1)</li>
+<li><code>lxc.network.zone.record.get</code>(1)</li>
+<li><code>lxc.network.zone.record.list</code>(1)</li>
+<li><code>lxc.network.zone.record.set</code>(1)</li>
+<li><code>lxc.network.zone.record.show</code>(1)</li>
+<li><code>lxc.network.zone.record.unset</code>(1)</li>
+<li><code>lxc.network.zone.set</code>(1)</li>
+<li><code>lxc.network.zone.show</code>(1)</li>
+<li><code>lxc.network.zone.unset</code>(1)</li>
+<li><code>lxc.operation</code>(1)</li>
+<li><code>lxc.operation.delete</code>(1)</li>
+<li><code>lxc.operation.list</code>(1)</li>
+<li><code>lxc.operation.show</code>(1)</li>
+<li><code>lxc.profile</code>(1)</li>
+<li><code>lxc.profile.add</code>(1)</li>
+<li><code>lxc.profile.assign</code>(1)</li>
+<li><code>lxc.profile.copy</code>(1)</li>
+<li><code>lxc.profile.create</code>(1)</li>
+<li><code>lxc.profile.delete</code>(1)</li>
+<li><code>lxc.profile.device</code>(1)</li>
+<li><code>lxc.profile.device.add</code>(1)</li>
+<li><code>lxc.profile.device.get</code>(1)</li>
+<li><code>lxc.profile.device.list</code>(1)</li>
+<li><code>lxc.profile.device.remove</code>(1)</li>
+<li><code>lxc.profile.device.set</code>(1)</li>
+<li><code>lxc.profile.device.show</code>(1)</li>
+<li><code>lxc.profile.device.unset</code>(1)</li>
+<li><code>lxc.profile.edit</code>(1)</li>
+<li><code>lxc.profile.get</code>(1)</li>
+<li><code>lxc.profile.list</code>(1)</li>
+<li><code>lxc.profile.remove</code>(1)</li>
+<li><code>lxc.profile.rename</code>(1)</li>
+<li><code>lxc.profile.set</code>(1)</li>
+<li><code>lxc.profile.show</code>(1)</li>
+<li><code>lxc.profile.unset</code>(1)</li>
+<li><code>lxc.project</code>(1)</li>
+<li><code>lxc.project.create</code>(1)</li>
+<li><code>lxc.project.delete</code>(1)</li>
+<li><code>lxc.project.edit</code>(1)</li>
+<li><code>lxc.project.get</code>(1)</li>
+<li><code>lxc.project.info</code>(1)</li>
+<li><code>lxc.project.list</code>(1)</li>
+<li><code>lxc.project.rename</code>(1)</li>
+<li><code>lxc.project.set</code>(1)</li>
+<li><code>lxc.project.show</code>(1)</li>
+<li><code>lxc.project.switch</code>(1)</li>
+<li><code>lxc.project.unset</code>(1)</li>
+<li><code>lxc.publish</code>(1)</li>
+<li><code>lxc.remote</code>(1)</li>
+<li><code>lxc.remote.add</code>(1)</li>
+<li><code>lxc.remote.get-default</code>(1)</li>
+<li><code>lxc.remote.list</code>(1)</li>
+<li><code>lxc.remote.remove</code>(1)</li>
+<li><code>lxc.remote.rename</code>(1)</li>
+<li><code>lxc.remote.set-url</code>(1)</li>
+<li><code>lxc.remote.switch</code>(1)</li>
+<li><code>lxc.rename</code>(1)</li>
+<li><code>lxc.restart</code>(1)</li>
+<li><code>lxc.restore</code>(1)</li>
+<li><code>lxc.snapshot</code>(1)</li>
+<li><code>lxc.start</code>(1)</li>
+<li><code>lxc.stop</code>(1)</li>
+<li><code>lxc.storage</code>(1)</li>
+<li><code>lxc.storage.create</code>(1)</li>
+<li><code>lxc.storage.delete</code>(1)</li>
+<li><code>lxc.storage.edit</code>(1)</li>
+<li><code>lxc.storage.get</code>(1)</li>
+<li><code>lxc.storage.info</code>(1)</li>
+<li><code>lxc.storage.list</code>(1)</li>
+<li><code>lxc.storage.set</code>(1)</li>
+<li><code>lxc.storage.show</code>(1)</li>
+<li><code>lxc.storage.unset</code>(1)</li>
+<li><code>lxc.storage.volume</code>(1)</li>
+<li><code>lxc.storage.volume.attach-profile</code>(1)</li>
+<li><code>lxc.storage.volume.attach</code>(1)</li>
+<li><code>lxc.storage.volume.copy</code>(1)</li>
+<li><code>lxc.storage.volume.create</code>(1)</li>
+<li><code>lxc.storage.volume.delete</code>(1)</li>
+<li><code>lxc.storage.volume.detach-profile</code>(1)</li>
+<li><code>lxc.storage.volume.detach</code>(1)</li>
+<li><code>lxc.storage.volume.edit</code>(1)</li>
+<li><code>lxc.storage.volume.export</code>(1)</li>
+<li><code>lxc.storage.volume.get</code>(1)</li>
+<li><code>lxc.storage.volume.import</code>(1)</li>
+<li><code>lxc.storage.volume.info</code>(1)</li>
+<li><code>lxc.storage.volume.list</code>(1)</li>
+<li><code>lxc.storage.volume.move</code>(1)</li>
+<li><code>lxc.storage.volume.rename</code>(1)</li>
+<li><code>lxc.storage.volume.restore</code>(1)</li>
+<li><code>lxc.storage.volume.set</code>(1)</li>
+<li><code>lxc.storage.volume.show</code>(1)</li>
+<li><code>lxc.storage.volume.snapshot</code>(1)</li>
+<li><code>lxc.storage.volume.unset</code>(1)</li>
+<li><code>lxc.version</code>(1)</li>
+<li><code>lxc.warning</code>(1)</li>
+<li><code>lxc.warning.acknowledge</code>(1)</li>
+<li><code>lxc.warning.delete</code>(1)</li>
+<li><code>lxc.warning.list</code>(1)</li>
+<li><code>lxc.warning.show</code>(1)</li>
+</ul>
+</li>
+<li>The <code>lxd</code> package offers <code>lxd</code> and <code>lxd-user</code> daemons with many subcommands for <code>lxd</code>.  Subcommand tool description tends to include &ldquo;low-level&rdquo;.
+<ul>
+<li><code>lxd-user</code>(1)</li>
+<li><code>lxd</code>(1)</li>
+<li><code>lxd.activateifneeded</code>(1)</li>
+<li><code>lxd.cluster</code>(1)</li>
+<li><code>lxd.cluster.edit</code>(1)</li>
+<li><code>lxd.cluster.list-database</code>(1)</li>
+<li><code>lxd.cluster.recover-from-quorum-loss</code>(1)</li>
+<li><code>lxd.cluster.remove-raft-node</code>(1)</li>
+<li><code>lxd.cluster.show</code>(1)</li>
+<li><code>lxd.import</code>(1)</li>
+<li><code>lxd.init</code>(1)</li>
+<li><code>lxd.recover</code>(1)</li>
+<li><code>lxd.shutdown</code>(1)</li>
+<li><code>lxd.version</code>(1)</li>
+<li><code>lxd.waitready</code>(1)</li>
+</ul>
+</li>
+<li>The <code>lxd-tools</code> package offers extra tools for <code>lxd</code>.
+<ul>
+<li><code>fuidshift</code>(1)</li>
+<li><code>lxc-to-lxd</code>(1)</li>
+<li><code>lxd-benchmark</code>(1)</li>
+</ul>
+</li>
+</ul>
+<p>When migration to Incus happens, the <code>lxc</code> command in <code>lxd-client</code> seems to be
+renamed to <code>incus</code>.</p>
+<h2 id="tracing-first-steps-with-lxd">Tracing &ldquo;First steps with LXD&rdquo;</h2>
+<p>I traced &ldquo;First steps with LXD&rdquo; with some extra operations to check what is
+really happening.</p>
+<h3 id="getting-system-images-for-lxd">Getting system images for LXD</h3>
+<p>Since manpage for <code>lxc-launch</code> on Debian 12 is useless, let&rsquo;s see:</p>
+<pre tabindex="0"><code>$ lxc launch -h
+Description:
+  Create and start instances from images
+
+Usage:
+  lxc launch [&lt;remote&gt;:]&lt;image&gt; [&lt;remote&gt;:][&lt;name&gt;] [flags]
+...
+</code></pre><p>Full list of <code>remote</code> is available by issuing <code>lxc remote list</code>.  Notable ones
+are:</p>
+<ul>
+<li><code>images</code> for all images at <a href="https://images.linuxcontainers.org/">https://images.linuxcontainers.org/</a></li>
+<li><code>ubuntu</code> for specifically Ubuntu images at <a href="https://cloud-images.ubuntu.com/releases">https://cloud-images.ubuntu.com/releases</a></li>
+</ul>
+<p>Let me create and start instances from images for &ldquo;Ubuntu 22.04&rdquo; and &ldquo;Debian 12&rdquo;.</p>
+<pre tabindex="0"><code>$ lxc launch images:debian/12 debian-12
+$ lxc launch ubuntu:22.04 ubuntu-2204
+</code></pre><p>System images specified as <code>ubuntu:22.04</code> or <code>images:debian/12</code> are downloaded
+to <code>/var/lib/lxd/images/</code>.  Each of these seems to be made of 2 files.  One for
+rootfs and another for templates(?) sharing the same hash value as a part of
+their file name. These images seems to be offered in a squashfs. The hash
+values are listed by <code>lxc images ls</code>.  The same hash values are used for the
+directory name under <code>/var/lib/lxd/storage-pools/default/images/</code> too.</p>
+<p>The first invocation of <code>lxc launch</code> for an image seems to download it while
+its subsequent invocations seems to use the previously downloaded corresponding
+image.</p>
+<p>Local instance names are <code>ubuntu-2204</code> and <code>debian-12</code>.   They seem to be
+created under <code>/var/lib/lxd/containers/</code>.  These instance names are listed by
+<code>lxc ls</code> and also used for the directory name under
+<code>/var/lib/lxd/storage-pools/default/containers</code></p>
+<h3 id="inspect-instances">Inspect instances</h3>
+<p>Let me inspect instances while stop and start them</p>
+<pre tabindex="0"><code>$ lxc list
++-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+|    NAME     |  STATE  |         IPV4         |                    IPV6                     |   TYPE    | SNAPSHOTS |
++-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+| debian-12   | RUNNING | 10.30.104.128 (eth0) | fd42:2b6:d45:cc06:216:3eff:febf:4ec6 (eth0) | CONTAINER | 0         |
++-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+| ubuntu-2204 | RUNNING | 10.30.104.155 (eth0) | fd42:2b6:d45:cc06:216:3eff:fecc:8b51 (eth0) | CONTAINER | 0         |
++-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+$ lxc stop debian-12
+$ lxc stop ubuntu-2204
+$ lxc list
++-------------+---------+------+------+-----------+-----------+
+|    NAME     |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
++-------------+---------+------+------+-----------+-----------+
+| debian-12   | STOPPED |      |      | CONTAINER | 0         |
++-------------+---------+------+------+-----------+-----------+
+| ubuntu-2204 | STOPPED |      |      | CONTAINER | 0         |
++-------------+---------+------+------+-----------+-----------+
+$ lxc info debian-12
+Name: debian-12
+Status: STOPPED
+Type: container
+Architecture: x86_64
+Created: 2023/10/11 10:59 JST
+Last Used: 2023/10/12 05:08 JST
+$ lxc start debian-12
+$ lxc list
++-------------+---------+------+------+-----------+-----------+
+|    NAME     |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
++-------------+---------+------+------+-----------+-----------+
+| debian-12   | RUNNING |      |      | CONTAINER | 0         |
++-------------+---------+------+------+-----------+-----------+
+| ubuntu-2204 | STOPPED |      |      | CONTAINER | 0         |
++-------------+---------+------+------+-----------+-----------+
+$ lxc list
++-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+|    NAME     |  STATE  |         IPV4         |                    IPV6                     |   TYPE    | SNAPSHOTS |
++-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+| debian-12   | RUNNING | 10.30.104.128 (eth0) | fd42:2b6:d45:cc06:216:3eff:febf:4ec6 (eth0) | CONTAINER | 0         |
++-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+| ubuntu-2204 | STOPPED |                      |                                             | CONTAINER | 0         |
++-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</code></pre><p>The fact of changing results for repeated last 2 commands indicate that establishment of network address takes time.</p>
+<h3 id="inspect-images">Inspect images</h3>
+<p>Let me inspect images</p>
+<pre tabindex="0"><code>$ lxc image ls
++-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
+| ALIAS | FINGERPRINT  | PUBLIC |                 DESCRIPTION                 | ARCHITECTURE |   TYPE    |   SIZE   |          UPLOAD DATE          |
++-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
+|       | 80496135241f | no     | Debian bookworm amd64 (20231012_05:24)      | x86_64       | CONTAINER | 94.20MB  | Oct 12, 2023 at 8:07am (UTC)  |
++-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
+|       | b948dd91cd5a | no     | ubuntu 22.04 LTS amd64 (release) (20231010) | x86_64       | CONTAINER | 435.08MB | Oct 10, 2023 at 10:20am (UTC) |
++-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
+</code></pre><h3 id="inspect-filesystem">Inspect filesystem</h3>
+<p>Let&rsquo;s see how all these images and instances are stored under <code>/var/lib/lxd</code></p>
+<pre tabindex="0"><code>$ sudo btrfs subvolume list /var/lib/lxd|grep &#34;var/lib/lxd&#34;
+ID 42668 gen 1952301 top level 22924 path var/lib/lxd/storage-pools/default
+ID 43251 gen 1951314 top level 42668 path var/lib/lxd/storage-pools/default/images/b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
+ID 43284 gen 1952313 top level 42668 path var/lib/lxd/storage-pools/default/containers/debian-12
+ID 43315 gen 1951563 top level 42668 path var/lib/lxd/storage-pools/default/containers/ubuntu-2204
+ID 43369 gen 1952233 top level 42668 path var/lib/lxd/storage-pools/default/images/80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
+$ sudo ls -li /var/lib/lxd/storage-pools/default/images
+total 0
+256 drwx--x--x 1 root root 56 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
+256 drwx--x--x 1 root root 56 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
+$ sudo ls -li /var/lib/lxd/storage-pools/default/containers
+total 0
+256 d--x------ 1 231072 root 78 Oct 11 10:59 debian-12
+256 d--x------ 1 root   root 78 Oct 11 21:53 ubuntu-2204
+</code></pre><p>I see btrfs subvolume is generated here.  <code>inode=256</code> means the root of btrfs subvolume.</p>
+<pre tabindex="0"><code>$ sudo ls -l /var/lib/lxd/images
+total 541992
+-rw-r--r-- 1 root root       680 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
+-rw-r--r-- 1 root root  98775040 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678.rootfs
+-rw-r--r-- 1 root root       412 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
+-rw-r--r-- 1 root root 456216576 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf.rootfs
+</code></pre><p>These seem to be downloaded squashfs files</p>
+<pre tabindex="0"><code>$ sudo bash -c &#34;ls -il /var/lib/lxd/storage-pools/default/images/80496135241f*&#34;
+total 4
+257 -rw-r--r-- 1 root root 535 Oct 12 14:29 metadata.yaml
+261 drwxr-xr-x 1 root root 154 Oct 12 14:29 rootfs
+258 drwxr-xr-x 1 root root  42 Oct 12 14:29 templates
+$ sudo bash -c &#34;ls -l /var/lib/lxd/storage-pools/default/images/80496135241f*/rootfs&#34;
+total 24
+lrwxrwxrwx 1 root root    7 Oct 12 14:25 bin -&gt; usr/bin
+drwxr-xr-x 1 root root    0 Sep 30 05:04 boot
+drwxr-xr-x 1 root root    0 Oct 12 14:29 dev
+drwxr-xr-x 1 root root 1570 Oct 12 14:29 etc
+drwxr-xr-x 1 root root    0 Sep 30 05:04 home
+lrwxrwxrwx 1 root root    7 Oct 12 14:25 lib -&gt; usr/lib
+lrwxrwxrwx 1 root root    9 Oct 12 14:25 lib32 -&gt; usr/lib32
+lrwxrwxrwx 1 root root    9 Oct 12 14:25 lib64 -&gt; usr/lib64
+lrwxrwxrwx 1 root root   10 Oct 12 14:25 libx32 -&gt; usr/libx32
+drwxr-xr-x 1 root root    0 Oct 12 14:25 media
+drwxr-xr-x 1 root root    0 Oct 12 14:25 mnt
+drwxr-xr-x 1 root root    0 Oct 12 14:25 opt
+drwxr-xr-x 1 root root    0 Sep 30 05:04 proc
+drwx------ 1 root root   38 Oct 12 14:25 root
+drwxr-xr-x 1 root root    0 Oct 12 14:25 run
+lrwxrwxrwx 1 root root    8 Oct 12 14:25 sbin -&gt; usr/sbin
+drwxr-xr-x 1 root root    0 Oct 12 14:25 srv
+drwxr-xr-x 1 root root    0 Sep 30 05:04 sys
+drwxrwxrwt 1 root root    0 Oct 12 14:25 tmp
+drwxr-xr-x 1 root root  116 Oct 12 14:25 usr
+drwxr-xr-x 1 root root   90 Oct 12 14:25 var
+$ sudo ls -l /var/lib/lxd/storage-pools/default/containers/debian-12
+total 8
+-r-------- 1 root root 3136 Oct 12 19:38 backup.yaml
+-rw-r--r-- 1 root root  535 Oct 10 14:28 metadata.yaml
+drwxr-xr-x 1 root root  154 Oct 10 14:28 rootfs
+drwxr-xr-x 1 root root   42 Oct 10 14:28 templates
+$ sudo ls -l /var/lib/lxd/storage-pools/default/containers/debian-12/rootfs
+total 24
+lrwxrwxrwx 1 root root    7 Oct 10 14:25 bin -&gt; usr/bin
+drwxr-xr-x 1 root root    0 Sep 30 05:04 boot
+drwxr-xr-x 1 root root    0 Oct 10 14:28 dev
+drwxr-xr-x 1 root root 1570 Oct 10 14:28 etc
+drwxr-xr-x 1 root root    0 Sep 30 05:04 home
+lrwxrwxrwx 1 root root    7 Oct 10 14:25 lib -&gt; usr/lib
+lrwxrwxrwx 1 root root    9 Oct 10 14:25 lib32 -&gt; usr/lib32
+lrwxrwxrwx 1 root root    9 Oct 10 14:25 lib64 -&gt; usr/lib64
+lrwxrwxrwx 1 root root   10 Oct 10 14:25 libx32 -&gt; usr/libx32
+drwxr-xr-x 1 root root    0 Oct 10 14:25 media
+drwxr-xr-x 1 root root    0 Oct 10 14:25 mnt
+drwxr-xr-x 1 root root    0 Oct 10 14:25 opt
+drwxr-xr-x 1 root root    0 Sep 30 05:04 proc
+drwx------ 1 root root   38 Oct 10 14:25 root
+drwxr-xr-x 1 root root    0 Oct 10 14:25 run
+lrwxrwxrwx 1 root root    8 Oct 10 14:25 sbin -&gt; usr/sbin
+drwxr-xr-x 1 root root    0 Oct 10 14:25 srv
+drwxr-xr-x 1 root root    0 Sep 30 05:04 sys
+drwxrwxrwt 1 root root   74 Oct 12 19:44 tmp
+drwxr-xr-x 1 root root  116 Oct 10 14:25 usr
+drwxr-xr-x 1 root root   90 Oct 10 14:25 var
+</code></pre><p>I see btrfs subvolume is used for each file tree based on images and instances.</p>
+<p>Hmmm&hellip;. <code>debian-12</code> is owned by <code>231072</code> while <code>ubuntu-2204</code> is owned by <code>root</code> for directory under <code>/var/lib/lxd/storage-pools/default/containers</code>. The uid=<code>231072</code> is found in <code>/etc/subuid</code> as:</p>
+<pre tabindex="0"><code>_lxd:231072:10000001
+root:231072:10000001
+</code></pre><p>This directory ownership changes:</p>
+<ul>
+<li>from <code>root</code> to <code>231072</code> when container state is changed from <code>STOPPED</code> to <code>RUNNING</code>.</li>
+<li>from <code>231072</code> to <code>root</code> when container state is changed from <code>RUNNING</code> to <code>STOPPED</code>.</li>
+</ul>
+<p>I also realized that <code>/etc/passwd</code> files inside of the above mentioned
+container images and instances don&rsquo;t have the normal <code>uid=1000</code> user.</p>
+<h3 id="more-operations-on-instances">More operations on instances</h3>
+<p>I followed &ldquo;First steps with LXD&rdquo; and see following commands in action.</p>
+<ul>
+<li><code>lxc copy ...</code> to duplicate instance.</li>
+<li><code>lxc delete ...</code> to delete instance.</li>
+<li><code>lxc exec ...</code> to execute a command as root within the instance</li>
+<li><code>lxc config ...</code> to configure container instances with <a href="https://documentation.ubuntu.com/lxd/en/latest/reference/instance_options/#instance-options">instance options</a>
+<ul>
+<li>This can provide <a href="https://documentation.ubuntu.com/lxd/en/latest/reference/instance_options/#instance-options-cloud-init">cloud-init configuration</a>.</li>
+</ul>
+</li>
+<li><code>lxc pull ...</code> to copy a file from a container instance.</li>
+<li><code>lxc push ...</code> to copy a file to a container instance.</li>
+<li><code>lxc snapshot ...</code> to make snapshot of a container instance.</li>
+</ul>
+<p>I got a glimpse of LXC/LXD now.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/10/07/debian-usability-2023a/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
