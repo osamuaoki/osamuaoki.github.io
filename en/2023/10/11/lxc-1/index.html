@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/10/14 (last update)
+2023/10/15 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -172,7 +172,7 @@ created under <code>/var/lib/lxd/containers/</code>.  These instance names are l
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
 | ubuntu-2204 | RUNNING | 10.30.104.155 (eth0) | fd42:2b6:d45:cc06:216:3eff:fecc:8b51 (eth0) | CONTAINER | 0         |
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-</code></pre><p>Let me inspect instances again after stopping them</p>
+</code></pre><p>Let me stop these instances and inspect them:</p>
 <pre tabindex="0"><code>$ lxc stop debian-12
 $ lxc stop ubuntu-2204
 $ lxc list
@@ -191,7 +191,7 @@ Type: container
 Architecture: x86_64
 Created: 2023/10/11 10:59 JST
 Last Used: 2023/10/12 05:08 JST
-</code></pre><p>Let me turn-on again and quickly inspect twice.</p>
+</code></pre><p>Let me turn-on <code>debian-12</code> and quickly inspect it twice in the row.</p>
 <pre tabindex="0"><code>$ lxc start debian-12
 $ lxc list
 +-------------+---------+------+------+-----------+-----------+
@@ -209,12 +209,12 @@ $ lxc list
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
 | ubuntu-2204 | STOPPED |                      |                                             | CONTAINER | 0         |
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-</code></pre><p>This change is because of slow network activation.</p>
-<p>Let me turn-off IPV6 connection service for LXD.  One need to restart it to
-activate this change.</p>
+</code></pre><p>This changed results are because of slow network activation.</p>
+<p>Let me set IPV6 network configuration to be disabled.  I need to restart it
+to activate this network configuration change.</p>
 <pre tabindex="0"><code>$ lxc network set lxdbr0 ipv6.address none
 $ lxc restart debian-12
-$ lxc ls
+$ lxc list
 +-------------+---------+----------------------+------+-----------+-----------+
 |    NAME     |  STATE  |        IPV4          | IPV6 |   TYPE    | SNAPSHOTS |
 +-------------+---------+----------------------+------+-----------+-----------+
@@ -225,7 +225,7 @@ $ lxc ls
 </code></pre><p>The fact of changing results for repeated last 2 commands indicate that establishment of network address takes time.</p>
 <h3 id="inspect-images">Inspect images</h3>
 <p>Let me inspect images</p>
-<pre tabindex="0"><code>$ lxc image ls
+<pre tabindex="0"><code>$ lxc image list
 +-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
 | ALIAS | FINGERPRINT  | PUBLIC |                 DESCRIPTION                 | ARCHITECTURE |   TYPE    |   SIZE   |          UPLOAD DATE          |
 +-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
