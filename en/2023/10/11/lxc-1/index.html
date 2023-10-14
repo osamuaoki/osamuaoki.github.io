@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/10/13 (last update)
+2023/10/14 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -76,6 +76,7 @@ en/note-00050.md
         <li><a href="#more-operations-on-instances">More operations on instances</a></li>
       </ul>
     </li>
+    <li><a href="#gui-for-lxd-management-tool">GUI for LXD management tool</a></li>
     <li><a href="#lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</a></li>
   </ul>
 </nav>
@@ -117,6 +118,8 @@ kernel.</a></p>
 <p>Future Debian may migrate to Incus.  So for the future proof, I should interact with instances only through <code>/1.0/instances</code> as in Incus when using Debian LXD.</p>
 <p>For now, I will focus on <em>container</em> usages on Debian 12.</p>
 <h2 id="installation-of-lxd-to-debian-12">Installation of LXD to Debian 12</h2>
+<p>On a Debian 12 system with its <code>/var/lib</code> on btrfs, I run following commands to
+install LXD.</p>
 <pre tabindex="0"><code>$ sudo aptitude install lxc lxd lxd-tools
 $ sudo adduser osamu lxd
 $ sudo newusers group
@@ -304,8 +307,10 @@ root:231072:10000001
 </ul>
 <p>I also realized that <code>/etc/passwd</code> files inside of the above mentioned
 container images and instances don&rsquo;t have the normal <code>uid=1000</code> user.</p>
+<p>As I checked the Debian image, I realize that it is a minimalistic one and
+doesn&rsquo;t include <code>cloud-init</code> nor <code>netplan.io</code> packages.</p>
 <h3 id="more-operations-on-instances">More operations on instances</h3>
-<p>I followed more in &ldquo;First steps with LXD&rdquo; and saw following commands in action.</p>
+<p>I followed more in &ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/tutorial/first_steps/">First steps with LXD</a>&rdquo; and &ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/instances/">Instances</a>&rdquo; to see following commands in action.</p>
 <ul>
 <li><code>lxc copy ...</code> to duplicate a container instance.</li>
 <li><code>lxc delete ...</code> to delete a container instance.</li>
@@ -316,11 +321,25 @@ container images and instances don&rsquo;t have the normal <code>uid=1000</code>
 </ul>
 </li>
 <li><code>lxc restart ...</code> to stop and start a container instance to reload the updated configuration.</li>
-<li><code>lxc pull ...</code> to copy a file from a container instance.</li>
-<li><code>lxc push ...</code> to copy a file to a container instance.</li>
+<li><code>lxc file edit ...</code> to edit a file in a container instance.</li>
+<li><code>lxc file push ...</code> to copy a file to a container instance.</li>
+<li><code>lxc file pull ...</code> to copy a file from a container instance.</li>
 <li><code>lxc snapshot ...</code> to make snapshot of a container instance.</li>
 </ul>
+<p>Issues of different UID between outside and inside of the container can be taken care nicely with above commands.</p>
 <p>I got a glimpse of LXC/LXD now.</p>
+<h2 id="gui-for-lxd-management-tool">GUI for LXD management tool</h2>
+<p>Debian 12 doesn&rsquo;t ship any GUI tools for LXD.</p>
+<p>Canonical provides snap package for lxd containing <a href="https://github.com/canonical/lxd-ui">lxd-ui</a> which is based on TypeScript and JavaScript (actively updated).  This offers easy and accessible container and virtual machine management with a browser interface for LXD.  But adding lxd-ui to Debian lxd is non-trivial.</p>
+<p>I searched available GUI UIs but &hellip;:</p>
+<ul>
+<li><a href="https://github.com/AdaptiveScale/lxdui">lxdui</a> by AdaptiveScale (py, sh, 2 years) &ndash; <a href="https://github.com/AdaptiveScale/lxdui/wiki/Installing-LXDUI-2.0">installation guide</a> &ndash; Fails to install even if I use <a href="https://github.com/AdaptiveScale/lxdui/pull/364">PR364</a> &hellip; too many un-applied PRs</li>
+<li><a href="https://github.com/Miso-K/lxdmanager-vue-dashboard">lxdmanager-vue-dashboard</a> and <a href="https://github.com/Miso-K/lxd-api-gateway">lxd-api-gateway</a> by Miso-K (vue, js, 2 year)</li>
+<li><a href="https://lxdware.com/">LXD dashboard</a> by lxdware (PHP, last year)</li>
+<li><a href="https://github.com/nuber-io/nuber">nuber</a> (PHP, 2022-07-11)</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h2 id="lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</h2>
 <p>Here is a bit confusing situation of LXC and LXD commands on Debian 12.</p>
 <p>The <code>lxc</code> command with many subcommands in <code>lxd-client</code> seems to be the primary tool to use LXC/LXD.</p>
