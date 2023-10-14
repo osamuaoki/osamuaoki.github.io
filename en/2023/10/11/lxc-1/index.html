@@ -75,6 +75,7 @@ en/note-00050.md
         <li><a href="#inspect-filesystem">Inspect filesystem</a></li>
         <li><a href="#introduction-to-operations-on-instances">Introduction to operations on instances</a></li>
         <li><a href="#example-of-operations-on-instances">Example of operations on instances</a></li>
+        <li><a href="#running-gui-application-in-container">Running GUI application in container</a></li>
       </ul>
     </li>
     <li><a href="#gui-for-lxd-management-tool">GUI for LXD management tool</a></li>
@@ -358,7 +359,32 @@ osamu@debian-12-ephemerical:~$
 To detach from the console, press: &lt;ctrl&gt;+a q
 
 osamu@debian-12-ephemerical:~$
-</code></pre><p>I got a glimpse of LXC/LXD now.</p>
+</code></pre><p>You can stop and delete this instance from the console on the host machine as:</p>
+<pre tabindex="0"><code>$ lxc stop debian-12-ephemerical
+$ lxc delete debian-12-ephemerical
+</code></pre><p>I think I got some glimpses of LXC/LXD now.</p>
+<h3 id="running-gui-application-in-container">Running GUI application in container</h3>
+<p>Unlike console applications, running GUI applications in container is a bit complicate.  For now, I found some HOWTOs:</p>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/LXD#Use_Wayland_and_Xorg_applications">Use Wayland and Xorg applications</a> (updated 2023-10-07) &ndash; ARCHLINUX wiki</li>
+<li><a href="https://blog.swwomm.com/2022/08/lxd-containers-for-wayland-gui-apps.html">LXD Containers for Wayland GUI Apps</a> (2022-08-28)</li>
+<li><a href="https://dev.to/amabe_dev/how-to-run-gui-apps-in-lxd-containers-882">How to run GUI apps in LXD containers</a> (2022-08-04)</li>
+<li>HOWTO: <a href="https://discuss.linuxcontainers.org/t/howto-use-the-hosts-wayland-and-xwayland-servers-inside-containers/8765">Use the Host’s Wayland and XWayland Servers inside containers</a> (updated 2022-03-18) &ndash; LinuxContainers.org wiki</li>
+<li>Overview: <a href="https://discuss.linuxcontainers.org/t/overview-gui-inside-containers/8767">GUI inside Containers</a> (2020-08-22) &ndash; LinuxContainers.org discuss</li>
+<li><a href="https://www.janhouse.lv/blog/linux/running-gui-apps-from-linux-containers/">Running GUI apps from Linux containers</a> (2020-03-28)</li>
+<li><a href="https://gist.github.com/stueja/447bd3bc0d510a0a7e50f9f1ef58ad75">GUI application via Wayland from Ubuntu LXD container on Arch Linux host</a> (2018-01-01)</li>
+<li><a href="https://blog.simos.info/how-to-run-graphics-accelerated-gui-apps-in-lxd-containers-on-your-ubuntu-desktop/">How to run graphics-accelerated GUI apps in LXD containers on your Ubuntu
+desktop</a> (2017-05-03)</li>
+</ul>
+<p>Here are ones in Japanese:</p>
+<ul>
+<li><a href="https://gihyo.jp/admin/serial/01/ubuntu-recipe/0738">リモートのLXDインスタンスの画面をローカルから操作してVDI環境を構築する</a> (2022-11-09)</li>
+<li><a href="https://qiita.com/yoshi10ryu1/items/a720f9e664e5948c4e31">LXD で作る仮想化 GUI 環境 - Ubuntu 22.04 LTS 版</a> (2022-09-23)</li>
+<li><a href="https://broken-engineer.opensource.ryukyu/archives/14442464.html">lxd_gui_container - Run GUI applications in LXD containers. Separate display server.</a> (2022-05-02)</li>
+<li><a href="https://note.com/koya0316/n/n4a0f6e095047">開発日誌：LXD デスクトップRDP</a>
+(2021-07-30)</li>
+<li><a href="https://qiita.com/330k/items/3fc42431d4d08b925541">LXD + Ubuntu 18.04 + MATE + xrdpでリモートデスクトップ環境を作る</a> (2021-03-09)</li>
+</ul>
 <h2 id="gui-for-lxd-management-tool">GUI for LXD management tool</h2>
 <p>Debian 12 doesn&rsquo;t ship any GUI tools for LXD.</p>
 <p>Canonical provides snap package for lxd containing <a href="https://github.com/canonical/lxd-ui">lxd-ui</a> which is based on TypeScript and JavaScript (actively updated).  This offers easy and accessible container and virtual machine management with a browser interface for LXD.  But adding lxd-ui to Debian lxd is non-trivial.</p>
@@ -369,8 +395,6 @@ osamu@debian-12-ephemerical:~$
 <li><a href="https://lxdware.com/">LXD dashboard</a> by lxdware (PHP, last year)</li>
 <li><a href="https://github.com/nuber-io/nuber">nuber</a> (PHP, 2022-07-11)</li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h2 id="lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</h2>
 <p>&ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/explanation/lxd_lxc/">About lxd and lxc</a>&rdquo; explains a bit confusing situation of LXC and LXD.</p>
 <p>The <code>lxc</code> command with many subcommands in the <code>lxd-client</code> package seems to be the primary tool to use LXC/LXD.  Many hyphenated <code>lxc-*</code> commands in the <code>lxc</code> package are not the primary tools for the administrator.</p>
