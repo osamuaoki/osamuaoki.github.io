@@ -73,7 +73,8 @@ en/note-00050.md
         <li><a href="#inspect-instances">Inspect instances</a></li>
         <li><a href="#inspect-images">Inspect images</a></li>
         <li><a href="#inspect-filesystem">Inspect filesystem</a></li>
-        <li><a href="#more-operations-on-instances">More operations on instances</a></li>
+        <li><a href="#introduction-to-operations-on-instances">Introduction to operations on instances</a></li>
+        <li><a href="#example-of-operations-on-instances">Example of operations on instances</a></li>
       </ul>
     </li>
     <li><a href="#gui-for-lxd-management-tool">GUI for LXD management tool</a></li>
@@ -307,10 +308,9 @@ root:231072:10000001
 </ul>
 <p>I also realized that <code>/etc/passwd</code> files inside of the above mentioned
 container images and instances don&rsquo;t have the normal <code>uid=1000</code> user.</p>
-<p>As I checked the Debian image, I realize that it is a minimalistic one and
-doesn&rsquo;t include <code>cloud-init</code> nor <code>netplan.io</code> packages.</p>
-<h3 id="more-operations-on-instances">More operations on instances</h3>
-<p>I followed more in &ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/tutorial/first_steps/">First steps with LXD</a>&rdquo; and &ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/instances/">Instances</a>&rdquo; to see following commands in action.</p>
+<p>As I checked this Debian image, I realize that this is a minimalistic one and doesn&rsquo;t include <code>cloud-init</code> nor <code>netplan.io</code> packages.  This was because I didn&rsquo;t specify the <code>/cloud</code> suffix when <code>lxc lauch ...</code> was used.  See <a href="https://documentation.ubuntu.com/lxd/en/latest/cloud-init/#cloud-init-support-in-images">cloud-init support in images</a>.</p>
+<h3 id="introduction-to-operations-on-instances">Introduction to operations on instances</h3>
+<p>I followed more in &ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/tutorial/first_steps/">First steps with LXD</a>&rdquo; and &ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/howto/">How-to guides</a>&rdquo; (Especially around &ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/instances/">Instances</a>&rdquo; section) to learn operations on container instances.</p>
 <ul>
 <li><code>lxc copy ...</code> to duplicate a container instance.</li>
 <li><code>lxc delete ...</code> to delete a container instance.</li>
@@ -327,11 +327,42 @@ doesn&rsquo;t include <code>cloud-init</code> nor <code>netplan.io</code> packag
 <li><code>lxc snapshot ...</code> to make snapshot of a container instance.</li>
 </ul>
 <p>Issues of different UID between outside and inside of the container can be taken care nicely with above commands.</p>
-<p>I got a glimpse of LXC/LXD now.</p>
+<h3 id="example-of-operations-on-instances">Example of operations on instances</h3>
+<p>Here is an example of basic operations on instances.</p>
+<pre tabindex="0"><code>$ lxc copy debian-12 debian-12-ephemerical
+$ lxc exec debian-12-ephemerical -- adduser osamu
+Adding user `osamu&#39; ...
+...
+$ lxc start  debian-12-ephemerical --console
+To detach from the console, press: &lt;ctrl&gt;+a q
+Queued start job for default target graphical.target.
+[  OK  ] Created slice system-getty.slice - Slice /system/getty.
+...
+[  OK  ] Finished systemd-update-utmp-runlev… - Record Runlevel Change in UTMP.
+
+Debian GNU/Linux 12 debian-12-ephemerical console
+
+debian-12-ephemerical login: osamu
+Password:
+Linux debian-12-ephemerical 6.4.0-0.deb12.2-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.4.4-3~bpo12+1 (2023-08-08) x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+osamu@debian-12-ephemerical:~$
+</code></pre><p>One can detach from the console for the container instance with <code>CTRL-A+q</code> and gain console for the host machine.  One can regain access to the console for the container instance by:</p>
+<pre tabindex="0"><code>$ lxc console debian-12-ephemerical
+To detach from the console, press: &lt;ctrl&gt;+a q
+
+osamu@debian-12-ephemerical:~$
+</code></pre><p>I got a glimpse of LXC/LXD now.</p>
 <h2 id="gui-for-lxd-management-tool">GUI for LXD management tool</h2>
 <p>Debian 12 doesn&rsquo;t ship any GUI tools for LXD.</p>
 <p>Canonical provides snap package for lxd containing <a href="https://github.com/canonical/lxd-ui">lxd-ui</a> which is based on TypeScript and JavaScript (actively updated).  This offers easy and accessible container and virtual machine management with a browser interface for LXD.  But adding lxd-ui to Debian lxd is non-trivial.</p>
-<p>I searched available GUI UIs but &hellip;:</p>
+<p>I searched available GUI UIs but no luck &hellip;:</p>
 <ul>
 <li><a href="https://github.com/AdaptiveScale/lxdui">lxdui</a> by AdaptiveScale (py, sh, 2 years) &ndash; <a href="https://github.com/AdaptiveScale/lxdui/wiki/Installing-LXDUI-2.0">installation guide</a> &ndash; Fails to install even if I use <a href="https://github.com/AdaptiveScale/lxdui/pull/364">PR364</a> &hellip; too many un-applied PRs</li>
 <li><a href="https://github.com/Miso-K/lxdmanager-vue-dashboard">lxdmanager-vue-dashboard</a> and <a href="https://github.com/Miso-K/lxd-api-gateway">lxd-api-gateway</a> by Miso-K (vue, js, 2 year)</li>
@@ -341,8 +372,8 @@ doesn&rsquo;t include <code>cloud-init</code> nor <code>netplan.io</code> packag
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</h2>
-<p>Here is a bit confusing situation of LXC and LXD commands on Debian 12.</p>
-<p>The <code>lxc</code> command with many subcommands in <code>lxd-client</code> seems to be the primary tool to use LXC/LXD.</p>
+<p>&ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/explanation/lxd_lxc/">About lxd and lxc</a>&rdquo; explains a bit confusing situation of LXC and LXD.</p>
+<p>The <code>lxc</code> command with many subcommands in the <code>lxd-client</code> package seems to be the primary tool to use LXC/LXD.  Many hyphenated <code>lxc-*</code> commands in the <code>lxc</code> package are not the primary tools for the administrator.</p>
 <p>When migration to Incus happens, the <code>lxc</code> command in <code>lxd-client</code> seems to be renamed to <code>incus</code>.</p>
 <ul>
 <li>The <code>lxd-client</code> package pulled in by <code>lxd</code> offers <code>lxc</code> command with many subcommands.  Auto-generated manpages on Debian 12 are mostly useless. Use <code>-h</code> with command to see reasonable command usage syntax.
