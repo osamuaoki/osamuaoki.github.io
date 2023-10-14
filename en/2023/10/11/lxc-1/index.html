@@ -163,7 +163,7 @@ created under <code>/var/lib/lxd/containers/</code>.  These instance names are l
 <code>lxc ls</code> and also used for the directory name under
 <code>/var/lib/lxd/storage-pools/default/containers</code></p>
 <h3 id="inspect-instances">Inspect instances</h3>
-<p>Let me inspect instances while stop and start them</p>
+<p>Let me inspect instances.</p>
 <pre tabindex="0"><code>$ lxc list
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
 |    NAME     |  STATE  |         IPV4         |                    IPV6                     |   TYPE    | SNAPSHOTS |
@@ -172,7 +172,8 @@ created under <code>/var/lib/lxd/containers/</code>.  These instance names are l
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
 | ubuntu-2204 | RUNNING | 10.30.104.155 (eth0) | fd42:2b6:d45:cc06:216:3eff:fecc:8b51 (eth0) | CONTAINER | 0         |
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-$ lxc stop debian-12
+</code></pre><p>Let me inspect instances again after stopping them</p>
+<pre tabindex="0"><code>$ lxc stop debian-12
 $ lxc stop ubuntu-2204
 $ lxc list
 +-------------+---------+------+------+-----------+-----------+
@@ -182,14 +183,16 @@ $ lxc list
 +-------------+---------+------+------+-----------+-----------+
 | ubuntu-2204 | STOPPED |      |      | CONTAINER | 0         |
 +-------------+---------+------+------+-----------+-----------+
-$ lxc info debian-12
+</code></pre><p>More detailed information can be obtained:</p>
+<pre tabindex="0"><code>$ lxc info debian-12
 Name: debian-12
 Status: STOPPED
 Type: container
 Architecture: x86_64
 Created: 2023/10/11 10:59 JST
 Last Used: 2023/10/12 05:08 JST
-$ lxc start debian-12
+</code></pre><p>Let me turn-on again and quickly inspect twice.</p>
+<pre tabindex="0"><code>$ lxc start debian-12
 $ lxc list
 +-------------+---------+------+------+-----------+-----------+
 |    NAME     |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
@@ -206,6 +209,19 @@ $ lxc list
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
 | ubuntu-2204 | STOPPED |                      |                                             | CONTAINER | 0         |
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</code></pre><p>This change is because of slow network activation.</p>
+<p>Let me turn-off IPV6 connection service for LXD.  One need to restart it to
+activate this change.</p>
+<pre tabindex="0"><code>$ lxc network set lxdbr0 ipv6.address none
+$ lxc restart debian-12
+$ lxc ls
++-------------+---------+----------------------+------+-----------+-----------+
+|    NAME     |  STATE  |        IPV4          | IPV6 |   TYPE    | SNAPSHOTS |
++-------------+---------+----------------------+------+-----------+-----------+
+| debian-12   | RUNNING | 10.30.104.128 (eth0) |      | CONTAINER | 0         |
++-------------+---------+----------------------+------+-----------+-----------+
+| ubuntu-2204 | STOPPED |                      |      | CONTAINER | 0         |
++-------------+---------+----------------------+------+-----------+-----------+
 </code></pre><p>The fact of changing results for repeated last 2 commands indicate that establishment of network address takes time.</p>
 <h3 id="inspect-images">Inspect images</h3>
 <p>Let me inspect images</p>
