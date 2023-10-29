@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/10/15 (last update)
+2023/10/29 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -91,13 +91,13 @@ covers just about every containment feature supported by the upstream
 kernel.</a></p>
 <h2 id="what-is-lxd-and-incus">What is LXD and Incus</h2>
 <ul>
-<li>Upstream LXD (5.18 released 2023-09-20) is at <a href="https://github.com/canonical/lxd">https://github.com/canonical/lxd</a> by Canonical
+<li>Upstream <a href="https://ubuntu.com/lxd">LXD</a> (5.18 released 2023-09-20) is at <a href="https://github.com/canonical/lxd">https://github.com/canonical/lxd</a> by Canonical
 <ul>
 <li><a href="https://documentation.ubuntu.com/lxd/en/latest/">LXD is a modern, secure and powerful system container and virtual machine manager.</a></li>
 <li><a href="https://documentation.ubuntu.com/lxd/en/latest/tutorial/first_steps/">LXD Tutorial</a></li>
 </ul>
 </li>
-<li>Upstream Incus (0.1 released 2023-10-07) is at <a href="https://github.com/lxc/incus">https://github.com/lxc/incus</a> by linuxcontainers.org (LXC)
+<li>Upstream <a href="https://linuxcontainers.org/incus/">Incus</a> (0.1 released 2023-10-07) is at <a href="https://github.com/lxc/incus">https://github.com/lxc/incus</a> by linuxcontainers.org
 <ul>
 <li><a href="https://linuxcontainers.org/incus/docs/main/">Incus is a modern, secure and powerful system container and virtual machine manager.</a></li>
 <li><a href="https://linuxcontainers.org/incus/docs/main/tutorial/first_steps/">Incus Tutorial</a></li>
@@ -109,15 +109,16 @@ kernel.</a></p>
 </li>
 </ul>
 </li>
-<li>Debian 12 LXD (5.0.2-5, packaged 2023-05-05) was created before LXD moving to Canonical and LXC staring Incus as a LXD fork.
+<li>Debian 12 LXD (5.0.2-5, packaged 2023-05-05) was created before LXD moving to Canonical and linuxcontainers.org staring <a href="https://linuxcontainers.org/incus/">Incus</a> as a LXD fork.
 <ul>
 <li>Debian LXD documentaion: Under <code>/usr/share/doc/lxd/</code>, especially <code>README.Debian</code>.</li>
-<li>The command name is still <code>lxd</code> on Debian.</li>
+<li>The command name is <code>lxd</code> for on Debian <code>lxd</code> package.</li>
+<li>The command name is <code>lxc</code> for on Debian <code>lxd-client</code> package.</li>
 </ul>
 </li>
 </ul>
 <p>On Debian 12, there is no need to use snap package mentioned in LXD documentation from Ubuntu/Canonical since it is fairly new one.</p>
-<p>Future Debian may migrate to Incus.  So for the future proof, I should interact with instances only through <code>/1.0/instances</code> as in Incus when using Debian LXD.</p>
+<p>Future Debian may migrate to Incus.  So for the future proof, I should interact with instances only through <code>/1.0/instances</code> as in Incus when using Debian 12 LXD.</p>
 <p>For now, I will focus on <em>container</em> usages on Debian 12.</p>
 <h2 id="installation-of-lxd-to-debian-12">Installation of LXD to Debian 12</h2>
 <p>On a Debian 12 system with its <code>/var/lib</code> on btrfs, I run following commands to
@@ -414,7 +415,7 @@ desktop</a> (2017-05-03)</li>
 <h2 id="lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</h2>
 <p>&ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/explanation/lxd_lxc/">About lxd and lxc</a>&rdquo; explains a bit confusing situation of LXC and LXD.</p>
 <p>The <code>lxc</code> command with many subcommands in the <code>lxd-client</code> package seems to be the primary tool to use LXC/LXD.  Many hyphenated <code>lxc-*</code> commands in the <code>lxc</code> package are not the primary tools for the administrator.</p>
-<p>When migration to Incus happens, the <code>lxc</code> command in <code>lxd-client</code> seems to be renamed to <code>incus</code>.</p>
+<p>When migration to <a href="https://linuxcontainers.org/incus/">Incus</a> happens, the <code>lxc</code> command in <code>lxd-client</code> seems to be renamed to <code>incus</code>.</p>
 <ul>
 <li>The <code>lxd-client</code> package pulled in by <code>lxd</code> offers <code>lxc</code> command with many subcommands.  Auto-generated manpages on Debian 12 are mostly useless. Use <code>-h</code> with command to see reasonable command usage syntax.
 <ul>
