@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IPv4 and IPv6 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">IPv4 and IPv6</span></h1>
+
+<h3 class="date">Date:
+2023/10/20 (initial publish),
+2023/10/29 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00051.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/10/11/lxc-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#corresponding-binary-hexadecimal-and-decimal-numbers">Corresponding binary, hexadecimal, and decimal numbers</a></li>
+    <li><a href="#loopback-ip-address">Loopback IP address</a></li>
+    <li><a href="#link-local-addresses">Link-local addresses</a></li>
+    <li><a href="#private-network--unique-local-address">Private network / Unique local address</a></li>
+  </ul>
+</nav>
+
+<p>Here is a memo of me trying to understand typical IP address usages on typical
+desktop systems.</p>
+<h2 id="corresponding-binary-hexadecimal-and-decimal-numbers">Corresponding binary, hexadecimal, and decimal numbers</h2>
+<ul>
+<li><code>0b00010000 = 0x10 = 16</code></li>
+<li><code>0b01111111 = 0x7f = 127</code></li>
+<li><code>0b10101000 = 0xa8 = 168</code></li>
+<li><code>0b10101001 = 0xa9 = 169</code></li>
+<li><code>0b10101100 = 0xac = 172</code></li>
+<li><code>0b11000000 = 0xc0 = 192</code></li>
+<li><code>0b11111100 = 0xfc = 252</code></li>
+<li><code>0b11111101 = 0xfd = 253</code></li>
+<li><code>0b11111110 = 0xfe = 254</code></li>
+<li><code>0b11111111 = 0xff = 255</code></li>
+</ul>
+<h2 id="loopback-ip-address">Loopback IP address</h2>
+<p>IP address for <code>localhost</code></p>
+<ul>
+<li>In IPv4, the name <code>localhost</code> normally resolves to the loopback IP address <code>127.0.0.1</code>.
+<ul>
+<li>The entire IPv4 address block <code>127.0.0.0/8</code> = <code>127.xx.xx.xx</code> is reserved for loopback purposes.</li>
+</ul>
+</li>
+<li>In IPv6, the name <code>localhost</code> resolves to a loopback IP address:
+<ul>
+<li><code>::1</code> = <code>0000:0000:0000:0000:0000:0000:0000:0001</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="link-local-addresses">Link-local addresses</h2>
+<p>For <a href="https://en.wikipedia.org/wiki/Zero-configuration_networking">zero-configuration networking</a>, Link-local addresses are used.</p>
+<ul>
+<li>In IPv4, <code>169.254.0.0/16</code>
+<ul>
+<li><code>169.254.xx.xx</code></li>
+</ul>
+</li>
+<li>In IPv6, <code>fe80::/64</code>.
+<ul>
+<li><code>fe80:0000:0000:0000:xxxx:xxxx:xxxx:xxxx</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="private-network--unique-local-address">Private network / Unique local address</h2>
+<ul>
+<li>In IPv4 (32 bits), private network addresses are:
+<ul>
+<li><code>10.0.0.0/8</code> &ndash; <code>1</code> x Class A network with <code>2**24=16777216</code> addresses
+<ul>
+<li><code>10.xx.xx.xx</code></li>
+</ul>
+</li>
+<li><code>172.16.0.0/12</code> &ndash; <code>2**4=16</code> x Class B networks, each with <code>2**16=65536</code> addresses
+<ul>
+<li><code>172.16.xx.xx</code></li>
+<li><code>172.17.xx.xx</code></li>
+<li>&hellip;</li>
+<li><code>172.31.xx.xx</code></li>
+</ul>
+</li>
+<li><code>192.168.0.0/16</code> &ndash; <code>2**8=256</code> x Class C networks, each with <code>2**8=256</code> addresses
+<ul>
+<li><code>192.168.0.xx</code></li>
+<li><code>192.168.1.xx</code></li>
+<li>&hellip;</li>
+<li><code>192.168.255.xx</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>In IPv6 (128 bits), unique local address is <code>fc00::/7</code>
+<ul>
+<li><code>fc00:0000:0000:0000:xxxx:xxxx:xxxx:xxxx</code> = <code>fc00::xxxx:xxxx:xxxx:xxxx</code></li>
+<li><code>fd00:0000:0000:0000:xxxx:xxxx:xxxx:xxxx</code> = <code>fd00::xxxx:xxxx:xxxx:xxxx</code></li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/10/11/lxc-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
