@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/10/29 (last update)
+2023/11/04 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -64,6 +64,7 @@ en/note-00050.md
 
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#container-landscape-essays">Container landscape essays</a></li>
     <li><a href="#what-is-lxc">What is LXC</a></li>
     <li><a href="#what-is-lxd-and-incus">What is LXD and Incus</a></li>
     <li><a href="#installation-of-lxd-to-debian-12">Installation of LXD to Debian 12</a></li>
@@ -84,6 +85,21 @@ en/note-00050.md
 </nav>
 
 <p>Here is a memo of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
+<h2 id="container-landscape-essays">Container landscape essays</h2>
+<ul>
+<li><a href="https://lwn.net/Articles/531114/">Namespaces in operation</a> January 4, 2013 &ndash; series index up to June 15, 2016</li>
+<li><a href="https://discuss.linuxcontainers.org/t/lxc-5-0-lts-has-been-released/14381">LXC 5.0 LTS has been released</a> June, 2022</li>
+<li><a href="https://lwn.net/Articles/902049/">Docker and the OCI container ecosystem</a> July 26, 2022</li>
+<li><a href="https://lwn.net/Articles/905164/">The container orchestrator landscape</a> August 23, 2022</li>
+<li><a href="https://lwn.net/Articles/907613/">LXC and LXD: a different container story</a> September 13, 2022</li>
+<li><a href="https://lwn.net/Articles/909627/">Progress for unprivileged containers</a> September 28, 2022</li>
+<li><a href="https://linuxcontainers.org/lxd/">LXD is now under Canonical</a> July 4, 2023</li>
+<li><a href="https://linuxcontainers.org/incus/">What is Incus?</a>
+<ul>
+<li><a href="https://linuxcontainers.org/incus/announcement/">Introducing Incus</a> August 7, 2023</li>
+</ul>
+</li>
+</ul>
 <h2 id="what-is-lxc">What is LXC</h2>
 <p><a href="https://linuxcontainers.org/lxc/introduction/">LXC is a well-known Linux container runtime that consists of tools, templates,
 and library and language bindings. It&rsquo;s pretty low level, very flexible and
@@ -163,7 +179,9 @@ image.</p>
 created under <code>/var/lib/lxd/containers/</code>.  These instance names are listed by
 <code>lxc ls</code> and also used for the directory name under
 <code>/var/lib/lxd/storage-pools/default/containers</code></p>
-<h3 id="inspect-instances">Inspect instances</h3>
+<p>Here:</p>
+<pre tabindex="0"><code>lxc launch ... = lxc init ... + lxc start ...
+</code></pre><h3 id="inspect-instances">Inspect instances</h3>
 <p>Let me inspect instances.</p>
 <pre tabindex="0"><code>$ lxc list
 +-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
@@ -404,8 +422,9 @@ desktop</a> (2017-05-03)</li>
 </ul>
 <h2 id="gui-for-lxd-management-tool">GUI for LXD management tool</h2>
 <p>Debian 12 doesn&rsquo;t ship any GUI tools for LXD.</p>
+<p>I decided to give up on finding good GUI tools for LXD after my cursory research as below.</p>
 <p>Canonical provides snap package for lxd containing <a href="https://github.com/canonical/lxd-ui">lxd-ui</a> which is based on TypeScript and JavaScript (actively updated).  This offers easy and accessible container and virtual machine management with a browser interface for LXD.  But adding lxd-ui to Debian lxd is non-trivial.</p>
-<p>I searched available GUI UIs but no luck &hellip;:</p>
+<p>Mw web search finds GUI UI candidates but no luck on their usability &hellip;:</p>
 <ul>
 <li><a href="https://github.com/AdaptiveScale/lxdui">lxdui</a> by AdaptiveScale (py, sh, 2 years) &ndash; <a href="https://github.com/AdaptiveScale/lxdui/wiki/Installing-LXDUI-2.0">installation guide</a> &ndash; Fails to install even if I use <a href="https://github.com/AdaptiveScale/lxdui/pull/364">PR364</a> &hellip; too many un-applied PRs</li>
 <li><a href="https://github.com/Miso-K/lxdmanager-vue-dashboard">lxdmanager-vue-dashboard</a> and <a href="https://github.com/Miso-K/lxd-api-gateway">lxd-api-gateway</a> by Miso-K (vue, js, 2 year)</li>
