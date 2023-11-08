@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/11/04 (last update)
+2023/11/09 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -455,291 +455,395 @@ desktop</a> (2017-05-03)</li>
 <p>The <code>lxc</code> command with many subcommands in the <code>lxd-client</code> package seems to be the primary tool to use LXC/LXD.  Many hyphenated <code>lxc-*</code> commands in the <code>lxc</code> package are not the primary tools for the administrator.</p>
 <p>When migration to <a href="https://linuxcontainers.org/incus/">Incus</a> happens, the <code>lxc</code> command in <code>lxd-client</code> seems to be renamed to <code>incus</code>.</p>
 <ul>
-<li>The <code>lxd-client</code> package pulled in by <code>lxd</code> offers <code>lxc</code> command with many subcommands.  Auto-generated manpages on Debian 12 are mostly useless. Use <code>-h</code> with command to see reasonable command usage syntax.
-<ul>
-<li><code>lxc</code>(1)</li>
-<li><code>lxc.alias</code>(1)</li>
-<li><code>lxc.alias.add</code>(1)</li>
-<li><code>lxc.alias.list</code>(1)</li>
-<li><code>lxc.alias.remove</code>(1)</li>
-<li><code>lxc.alias.rename</code>(1)</li>
-<li><code>lxc.cluster</code>(1)q</li>
-<li><code>lxc.cluster.add</code>(1)</li>
-<li><code>lxc.cluster.edit</code>(1)</li>
-<li><code>lxc.cluster.enable</code>(1)</li>
-<li><code>lxc.cluster.evacuate</code>(1)</li>
-<li><code>lxc.cluster.get</code>(1)</li>
-<li><code>lxc.cluster.group</code>(1)</li>
-<li><code>lxc.cluster.group.assign</code>(1)</li>
-<li><code>lxc.cluster.group.create</code>(1)</li>
-<li><code>lxc.cluster.group.delete</code>(1)</li>
-<li><code>lxc.cluster.group.edit</code>(1)</li>
-<li><code>lxc.cluster.group.list</code>(1)</li>
-<li><code>lxc.cluster.group.remove</code>(1)</li>
-<li><code>lxc.cluster.group.rename</code>(1)</li>
-<li><code>lxc.cluster.group.show</code>(1)</li>
-<li><code>lxc.cluster.list-tokens</code>(1)</li>
-<li><code>lxc.cluster.list</code>(1)</li>
-<li><code>lxc.cluster.remove</code>(1)</li>
-<li><code>lxc.cluster.rename</code>(1)</li>
-<li><code>lxc.cluster.restore</code>(1)</li>
-<li><code>lxc.cluster.revoke-token</code>(1)</li>
-<li><code>lxc.cluster.role</code>(1)</li>
-<li><code>lxc.cluster.role.add</code>(1)</li>
-<li><code>lxc.cluster.role.remove</code>(1)</li>
-<li><code>lxc.cluster.set</code>(1)</li>
-<li><code>lxc.cluster.show</code>(1)</li>
-<li><code>lxc.cluster.unset</code>(1)</li>
-<li><code>lxc.cluster.update-certificate</code>(1)</li>
-<li><code>lxc.config</code>(1)</li>
-<li><code>lxc.config.device</code>(1)</li>
-<li><code>lxc.config.device.add</code>(1)</li>
-<li><code>lxc.config.device.get</code>(1)</li>
-<li><code>lxc.config.device.list</code>(1)</li>
-<li><code>lxc.config.device.override</code>(1)</li>
-<li><code>lxc.config.device.remove</code>(1)</li>
-<li><code>lxc.config.device.set</code>(1)</li>
-<li><code>lxc.config.device.show</code>(1)</li>
-<li><code>lxc.config.device.unset</code>(1)</li>
-<li><code>lxc.config.edit</code>(1)</li>
-<li><code>lxc.config.get</code>(1)</li>
-<li><code>lxc.config.metadata</code>(1)</li>
-<li><code>lxc.config.metadata.edit</code>(1)</li>
-<li><code>lxc.config.metadata.show</code>(1)</li>
-<li><code>lxc.config.set</code>(1)</li>
-<li><code>lxc.config.show</code>(1)</li>
-<li><code>lxc.config.template</code>(1)</li>
-<li><code>lxc.config.template.create</code>(1)</li>
-<li><code>lxc.config.template.delete</code>(1)</li>
-<li><code>lxc.config.template.edit</code>(1)</li>
-<li><code>lxc.config.template.list</code>(1)</li>
-<li><code>lxc.config.template.show</code>(1)</li>
-<li><code>lxc.config.trust</code>(1)</li>
-<li><code>lxc.config.trust.add</code>(1)</li>
-<li><code>lxc.config.trust.edit</code>(1)</li>
-<li><code>lxc.config.trust.list-tokens</code>(1)</li>
-<li><code>lxc.config.trust.list</code>(1)</li>
-<li><code>lxc.config.trust.remove</code>(1)</li>
-<li><code>lxc.config.trust.revoke-token</code>(1)</li>
-<li><code>lxc.config.trust.show</code>(1)</li>
-<li><code>lxc.config.unset</code>(1)</li>
-<li><code>lxc.console</code>(1)</li>
-<li><code>lxc.copy</code>(1)</li>
-<li><code>lxc.delete</code>(1)</li>
-<li><code>lxc.exec</code>(1)</li>
-<li><code>lxc.export</code>(1)</li>
-<li><code>lxc.file</code>(1)</li>
-<li><code>lxc.file.delete</code>(1)</li>
-<li><code>lxc.file.edit</code>(1)</li>
-<li><code>lxc.file.mount</code>(1)</li>
-<li><code>lxc.file.pull</code>(1)</li>
-<li><code>lxc.file.push</code>(1)</li>
-<li><code>lxc.image</code>(1)</li>
-<li><code>lxc.image.alias</code>(1)</li>
-<li><code>lxc.image.alias.create</code>(1)</li>
-<li><code>lxc.image.alias.delete</code>(1)</li>
-<li><code>lxc.image.alias.list</code>(1)</li>
-<li><code>lxc.image.alias.rename</code>(1)</li>
-<li><code>lxc.image.copy</code>(1)</li>
-<li><code>lxc.image.delete</code>(1)</li>
-<li><code>lxc.image.edit</code>(1)</li>
-<li><code>lxc.image.export</code>(1)</li>
-<li><code>lxc.image.get-property</code>(1)</li>
-<li><code>lxc.image.import</code>(1)</li>
-<li><code>lxc.image.info</code>(1)</li>
-<li><code>lxc.image.list</code>(1)</li>
-<li><code>lxc.image.refresh</code>(1)</li>
-<li><code>lxc.image.set-property</code>(1)</li>
-<li><code>lxc.image.show</code>(1)</li>
-<li><code>lxc.image.unset-property</code>(1)</li>
-<li><code>lxc.import</code>(1)</li>
-<li><code>lxc.info</code>(1)</li>
-<li><code>lxc.launch</code>(1)</li>
-<li><code>lxc.list</code>(1)</li>
-<li><code>lxc.move</code>(1)</li>
-<li><code>lxc.network</code>(1)</li>
-<li><code>lxc.network.acl</code>(1)</li>
-<li><code>lxc.network.acl.create</code>(1)</li>
-<li><code>lxc.network.acl.delete</code>(1)</li>
-<li><code>lxc.network.acl.edit</code>(1)</li>
-<li><code>lxc.network.acl.get</code>(1)</li>
-<li><code>lxc.network.acl.list</code>(1)</li>
-<li><code>lxc.network.acl.rename</code>(1)</li>
-<li><code>lxc.network.acl.rule</code>(1)</li>
-<li><code>lxc.network.acl.rule.add</code>(1)</li>
-<li><code>lxc.network.acl.rule.remove</code>(1)</li>
-<li><code>lxc.network.acl.set</code>(1)</li>
-<li><code>lxc.network.acl.show-log</code>(1)</li>
-<li><code>lxc.network.acl.show</code>(1)</li>
-<li><code>lxc.network.acl.unset</code>(1)</li>
-<li><code>lxc.network.attach-profile</code>(1)</li>
-<li><code>lxc.network.attach</code>(1)</li>
-<li><code>lxc.network.create</code>(1)</li>
-<li><code>lxc.network.delete</code>(1)</li>
-<li><code>lxc.network.detach-profile</code>(1)</li>
-<li><code>lxc.network.detach</code>(1)</li>
-<li><code>lxc.network.edit</code>(1)</li>
-<li><code>lxc.network.forward</code>(1)</li>
-<li><code>lxc.network.forward.create</code>(1)</li>
-<li><code>lxc.network.forward.delete</code>(1)</li>
-<li><code>lxc.network.forward.edit</code>(1)</li>
-<li><code>lxc.network.forward.get</code>(1)</li>
-<li><code>lxc.network.forward.list</code>(1)</li>
-<li><code>lxc.network.forward.port</code>(1)</li>
-<li><code>lxc.network.forward.port.add</code>(1)</li>
-<li><code>lxc.network.forward.port.remove</code>(1)</li>
-<li><code>lxc.network.forward.set</code>(1)</li>
-<li><code>lxc.network.forward.show</code>(1)</li>
-<li><code>lxc.network.forward.unset</code>(1)</li>
-<li><code>lxc.network.get</code>(1)</li>
-<li><code>lxc.network.info</code>(1)</li>
-<li><code>lxc.network.list-leases</code>(1)</li>
-<li><code>lxc.network.list</code>(1)</li>
-<li><code>lxc.network.peer</code>(1)</li>
-<li><code>lxc.network.peer.create</code>(1)</li>
-<li><code>lxc.network.peer.delete</code>(1)</li>
-<li><code>lxc.network.peer.edit</code>(1)</li>
-<li><code>lxc.network.peer.get</code>(1)</li>
-<li><code>lxc.network.peer.list</code>(1)</li>
-<li><code>lxc.network.peer.set</code>(1)</li>
-<li><code>lxc.network.peer.show</code>(1)</li>
-<li><code>lxc.network.peer.unset</code>(1)</li>
-<li><code>lxc.network.rename</code>(1)</li>
-<li><code>lxc.network.set</code>(1)</li>
-<li><code>lxc.network.show</code>(1)</li>
-<li><code>lxc.network.unset</code>(1)</li>
-<li><code>lxc.network.zone</code>(1)</li>
-<li><code>lxc.network.zone.create</code>(1)</li>
-<li><code>lxc.network.zone.delete</code>(1)</li>
-<li><code>lxc.network.zone.edit</code>(1)</li>
-<li><code>lxc.network.zone.get</code>(1)</li>
-<li><code>lxc.network.zone.list</code>(1)</li>
-<li><code>lxc.network.zone.record</code>(1)</li>
-<li><code>lxc.network.zone.record.create</code>(1)</li>
-<li><code>lxc.network.zone.record.delete</code>(1)</li>
-<li><code>lxc.network.zone.record.edit</code>(1)</li>
-<li><code>lxc.network.zone.record.entry</code>(1)</li>
-<li><code>lxc.network.zone.record.entry.add</code>(1)</li>
-<li><code>lxc.network.zone.record.entry.remove</code>(1)</li>
-<li><code>lxc.network.zone.record.get</code>(1)</li>
-<li><code>lxc.network.zone.record.list</code>(1)</li>
-<li><code>lxc.network.zone.record.set</code>(1)</li>
-<li><code>lxc.network.zone.record.show</code>(1)</li>
-<li><code>lxc.network.zone.record.unset</code>(1)</li>
-<li><code>lxc.network.zone.set</code>(1)</li>
-<li><code>lxc.network.zone.show</code>(1)</li>
-<li><code>lxc.network.zone.unset</code>(1)</li>
-<li><code>lxc.operation</code>(1)</li>
-<li><code>lxc.operation.delete</code>(1)</li>
-<li><code>lxc.operation.list</code>(1)</li>
-<li><code>lxc.operation.show</code>(1)</li>
-<li><code>lxc.profile</code>(1)</li>
-<li><code>lxc.profile.add</code>(1)</li>
-<li><code>lxc.profile.assign</code>(1)</li>
-<li><code>lxc.profile.copy</code>(1)</li>
-<li><code>lxc.profile.create</code>(1)</li>
-<li><code>lxc.profile.delete</code>(1)</li>
-<li><code>lxc.profile.device</code>(1)</li>
-<li><code>lxc.profile.device.add</code>(1)</li>
-<li><code>lxc.profile.device.get</code>(1)</li>
-<li><code>lxc.profile.device.list</code>(1)</li>
-<li><code>lxc.profile.device.remove</code>(1)</li>
-<li><code>lxc.profile.device.set</code>(1)</li>
-<li><code>lxc.profile.device.show</code>(1)</li>
-<li><code>lxc.profile.device.unset</code>(1)</li>
-<li><code>lxc.profile.edit</code>(1)</li>
-<li><code>lxc.profile.get</code>(1)</li>
-<li><code>lxc.profile.list</code>(1)</li>
-<li><code>lxc.profile.remove</code>(1)</li>
-<li><code>lxc.profile.rename</code>(1)</li>
-<li><code>lxc.profile.set</code>(1)</li>
-<li><code>lxc.profile.show</code>(1)</li>
-<li><code>lxc.profile.unset</code>(1)</li>
-<li><code>lxc.project</code>(1)</li>
-<li><code>lxc.project.create</code>(1)</li>
-<li><code>lxc.project.delete</code>(1)</li>
-<li><code>lxc.project.edit</code>(1)</li>
-<li><code>lxc.project.get</code>(1)</li>
-<li><code>lxc.project.info</code>(1)</li>
-<li><code>lxc.project.list</code>(1)</li>
-<li><code>lxc.project.rename</code>(1)</li>
-<li><code>lxc.project.set</code>(1)</li>
-<li><code>lxc.project.show</code>(1)</li>
-<li><code>lxc.project.switch</code>(1)</li>
-<li><code>lxc.project.unset</code>(1)</li>
-<li><code>lxc.publish</code>(1)</li>
-<li><code>lxc.remote</code>(1)</li>
-<li><code>lxc.remote.add</code>(1)</li>
-<li><code>lxc.remote.get-default</code>(1)</li>
-<li><code>lxc.remote.list</code>(1)</li>
-<li><code>lxc.remote.remove</code>(1)</li>
-<li><code>lxc.remote.rename</code>(1)</li>
-<li><code>lxc.remote.set-url</code>(1)</li>
-<li><code>lxc.remote.switch</code>(1)</li>
-<li><code>lxc.rename</code>(1)</li>
-<li><code>lxc.restart</code>(1)</li>
-<li><code>lxc.restore</code>(1)</li>
-<li><code>lxc.snapshot</code>(1)</li>
-<li><code>lxc.start</code>(1)</li>
-<li><code>lxc.stop</code>(1)</li>
-<li><code>lxc.storage</code>(1)</li>
-<li><code>lxc.storage.create</code>(1)</li>
-<li><code>lxc.storage.delete</code>(1)</li>
-<li><code>lxc.storage.edit</code>(1)</li>
-<li><code>lxc.storage.get</code>(1)</li>
-<li><code>lxc.storage.info</code>(1)</li>
-<li><code>lxc.storage.list</code>(1)</li>
-<li><code>lxc.storage.set</code>(1)</li>
-<li><code>lxc.storage.show</code>(1)</li>
-<li><code>lxc.storage.unset</code>(1)</li>
-<li><code>lxc.storage.volume</code>(1)</li>
-<li><code>lxc.storage.volume.attach-profile</code>(1)</li>
-<li><code>lxc.storage.volume.attach</code>(1)</li>
-<li><code>lxc.storage.volume.copy</code>(1)</li>
-<li><code>lxc.storage.volume.create</code>(1)</li>
-<li><code>lxc.storage.volume.delete</code>(1)</li>
-<li><code>lxc.storage.volume.detach-profile</code>(1)</li>
-<li><code>lxc.storage.volume.detach</code>(1)</li>
-<li><code>lxc.storage.volume.edit</code>(1)</li>
-<li><code>lxc.storage.volume.export</code>(1)</li>
-<li><code>lxc.storage.volume.get</code>(1)</li>
-<li><code>lxc.storage.volume.import</code>(1)</li>
-<li><code>lxc.storage.volume.info</code>(1)</li>
-<li><code>lxc.storage.volume.list</code>(1)</li>
-<li><code>lxc.storage.volume.move</code>(1)</li>
-<li><code>lxc.storage.volume.rename</code>(1)</li>
-<li><code>lxc.storage.volume.restore</code>(1)</li>
-<li><code>lxc.storage.volume.set</code>(1)</li>
-<li><code>lxc.storage.volume.show</code>(1)</li>
-<li><code>lxc.storage.volume.snapshot</code>(1)</li>
-<li><code>lxc.storage.volume.unset</code>(1)</li>
-<li><code>lxc.version</code>(1)</li>
-<li><code>lxc.warning</code>(1)</li>
-<li><code>lxc.warning.acknowledge</code>(1)</li>
-<li><code>lxc.warning.delete</code>(1)</li>
-<li><code>lxc.warning.list</code>(1)</li>
-<li><code>lxc.warning.show</code>(1)</li>
+<li>The <code>lxd-client</code> package pulled in by <code>lxd</code> offers <code>lxc</code> command with many subcommands.  Auto-generated manpages on Debian 12 are mostly useless. Use <code>-h</code> with command to see reasonable command usage syntax.</li>
 </ul>
-</li>
-<li>The <code>lxd</code> package offers <code>lxd</code> and <code>lxd-user</code> daemons with many subcommands for <code>lxd</code>.  Subcommand tool description tends to include &ldquo;low-level&rdquo;.
+<pre tabindex="0"><code>$ lxc -h --all --sub-commands
+
+Description:
+  Command line client for LXD
+
+  All of LXD&#39;s features can be driven through the various commands below.
+  For help with any of those, simply call them with --help.
+
+Usage:
+  lxc [command]
+
+Available Commands:
+  alias        Manage command aliases
+    add          Add new aliases
+    list         List aliases
+    remove       Remove aliases
+    rename       Rename aliases
+  cluster      Manage cluster members
+    add                 Request a join token for adding a cluster member
+    edit                Edit cluster member configurations as YAML
+    enable              Enable clustering on a single non-clustered LXD server
+    evacuate            Evacuate cluster member
+    get                 Get values for cluster member configuration keys
+    group               Manage cluster groups
+      assign       Assign sets of groups to cluster members
+      create       Create a cluster group
+      delete       Delete a cluster group
+      edit         Edit a cluster group
+      list         List all the cluster groups
+      remove       Remove member from group
+      rename       Rename a cluster group
+      show         Show cluster group configurations
+    list                List all the cluster members
+    list-tokens         List all active cluster member join tokens
+    remove              Remove a member from the cluster
+    rename              Rename a cluster member
+    restore             Restore cluster member
+    revoke-token        Revoke cluster member join token
+    role                Manage cluster roles
+      add          Add roles to a cluster member
+      remove       Remove roles from a cluster member
+    set                 Set a cluster member&#39;s configuration keys
+    show                Show details of a cluster member
+    unset               Unset a cluster member&#39;s configuration keys
+    update-certificate  Update cluster certificate
+  config       Manage instance and server configuration options
+    device       Manage devices
+      add          Add instance devices
+      get          Get values for device configuration keys
+      list         List instance devices
+      override     Copy profile inherited devices and override configuration keys
+      remove       Remove instance devices
+      set          Set device configuration keys
+      show         Show full device configuration
+      unset        Unset device configuration keys
+    edit         Edit instance or server configurations as YAML
+    get          Get values for instance or server configuration keys
+    metadata     Manage instance metadata files
+      edit         Edit instance metadata files
+      show         Show instance metadata files
+    set          Set instance or server configuration keys
+    show         Show instance or server configurations
+    template     Manage instance file templates
+      create       Create new instance file templates
+      delete       Delete instance file templates
+      edit         Edit instance file templates
+      list         List instance file templates
+      show         Show content of instance file templates
+    trust        Manage trusted clients
+      add           Add new trusted client
+      edit          Edit trust configurations as YAML
+      list          List trusted clients
+      list-tokens   List all active certificate add tokens
+      remove        Remove trusted client
+      revoke-token  Revoke certificate add token
+      show          Show trust configurations
+    unset        Unset instance or server configuration keys
+  console      Attach to instance consoles
+  copy         Copy instances within or in between LXD servers
+  delete       Delete instances and snapshots
+  exec         Execute commands in instances
+  export       Export instance backups
+  file         Manage files in instances
+    delete       Delete files in instances
+    edit         Edit files in instances
+    mount        Mount files from instances
+    pull         Pull files from instances
+    push         Push files into instances
+  help         Help about any command
+  image        Manage images
+    alias           Manage image aliases
+      create       Create aliases for existing images
+      delete       Delete image aliases
+      list         List image aliases
+      rename       Rename aliases
+    copy            Copy images between servers
+    delete          Delete images
+    edit            Edit image properties
+    export          Export and download images
+    get-property    Get image properties
+    import          Import images into the image store
+    info            Show useful information about images
+    list            List images
+    refresh         Refresh images
+    set-property    Set image properties
+    show            Show image properties
+    unset-property  Unset image properties
+  import       Import instance backups
+  info         Show instance or server information
+  init         Create instances from images
+  launch       Create and start instances from images
+  list         List instances
+  manpage      Generate manpages for all commands
+  monitor      Monitor a local or remote LXD server
+  move         Move instances within or in between LXD servers
+  network      Manage and attach instances to networks
+    acl             Manage network ACLs
+      create       Create new network ACLs
+      delete       Delete network ACLs
+      edit         Edit network ACL configurations as YAML
+      get          Get values for network ACL configuration keys
+      list         List available network ACLS
+      rename       Rename network ACLs
+      rule         Manage network ACL rules
+        add          Add rules to an ACL
+        remove       Remove rules from an ACL
+      set          Set network ACL configuration keys
+      show         Show network ACL configurations
+      show-log     Show network ACL log
+      unset        Unset network ACL configuration keys
+    attach          Attach network interfaces to instances
+    attach-profile  Attach network interfaces to profiles
+    create          Create new networks
+    delete          Delete networks
+    detach          Detach network interfaces from instances
+    detach-profile  Detach network interfaces from profiles
+    edit            Edit network configurations as YAML
+    forward         Manage network forwards
+      create       Create new network forwards
+      delete       Delete network forwards
+      edit         Edit network forward configurations as YAML
+      get          Get values for network forward configuration keys
+      list         List available network forwards
+      port         Manage network forward ports
+        add          Add ports to a forward
+        remove       Remove ports from a forward
+      set          Set network forward keys
+      show         Show network forward configurations
+      unset        Unset network forward configuration keys
+    get             Get values for network configuration keys
+    info            Get runtime information on networks
+    list            List available networks
+    list-leases     List DHCP leases
+    peer            Manage network peerings
+      create       Create new network peering
+      delete       Delete network peerings
+      edit         Edit network peer configurations as YAML
+      get          Get values for network peer configuration keys
+      list         List available network peers
+      set          Set network peer keys
+      show         Show network peer configurations
+      unset        Unset network peer configuration keys
+    rename          Rename networks
+    set             Set network configuration keys
+    show            Show network configurations
+    unset           Unset network configuration keys
+    zone            Manage network zones
+      create       Create new network zones
+      delete       Delete network zones
+      edit         Edit network zone configurations as YAML
+      get          Get values for network zone configuration keys
+      list         List available network zoneS
+      record       Manage network zone records
+        create       Create new network zone record
+        delete       Delete network zone record
+        edit         Edit network zone record configurations as YAML
+        entry        Manage network zone record entries
+        get          Get values for network zone record configuration keys
+        list         List available network zone records
+        set          Set network zone record configuration keys
+        show         Show network zone record configuration
+        unset        Unset network zone record configuration keys
+      set          Set network zone configuration keys
+      show         Show network zone configurations
+      unset        Unset network zone configuration keys
+  operation    List, show and delete background operations
+    delete       Delete a background operation (will attempt to cancel)
+    list         List background operations
+    show         Show details on a background operation
+  pause        Pause instances
+  profile      Manage profiles
+    add          Add profiles to instances
+    assign       Assign sets of profiles to instances
+    copy         Copy profiles
+    create       Create profiles
+    delete       Delete profiles
+    device       Manage devices
+      add          Add instance devices
+      get          Get values for device configuration keys
+      list         List instance devices
+      remove       Remove instance devices
+      set          Set device configuration keys
+      show         Show full device configuration
+      unset        Unset device configuration keys
+    edit         Edit profile configurations as YAML
+    get          Get values for profile configuration keys
+    list         List profiles
+    remove       Remove profiles from instances
+    rename       Rename profiles
+    set          Set profile configuration keys
+    show         Show profile configurations
+    unset        Unset profile configuration keys
+  project      Manage projects
+    create       Create projects
+    delete       Delete projects
+    edit         Edit project configurations as YAML
+    get          Get values for project configuration keys
+    info         Get a summary of resource allocations
+    list         List projects
+    rename       Rename projects
+    set          Set project configuration keys
+    show         Show project options
+    switch       Switch the current project
+    unset        Unset project configuration keys
+  publish      Publish instances as images
+  query        Send a raw query to LXD
+  remote       Manage the list of remote servers
+    add          Add new remote servers
+    get-default  Show the default remote
+    list         List the available remotes
+    remove       Remove remotes
+    rename       Rename remotes
+    set-url      Set the URL for the remote
+    switch       Switch the default remote
+  rename       Rename instances and snapshots
+  restart      Restart instances
+  restore      Restore instances from snapshots
+  snapshot     Create instance snapshots
+  start        Start instances
+  stop         Stop instances
+  storage      Manage storage pools and volumes
+    create       Create storage pools
+    delete       Delete storage pools
+    edit         Edit storage pool configurations as YAML
+    get          Get values for storage pool configuration keys
+    info         Show useful information about storage pools
+    list         List available storage pools
+    set          Set storage pool configuration keys
+    show         Show storage pool configurations and resources
+    unset        Unset storage pool configuration keys
+    volume       Manage storage volumes
+      attach          Attach new storage volumes to instances
+      attach-profile  Attach new storage volumes to profiles
+      copy            Copy storage volumes
+      create          Create new custom storage volumes
+      delete          Delete storage volumes
+      detach          Detach storage volumes from instances
+      detach-profile  Detach storage volumes from profiles
+      edit            Edit storage volume configurations as YAML
+      export          Export custom storage volume
+      get             Get values for storage volume configuration keys
+      import          Import custom storage volumes
+      info            Show storage volume state information
+      list            List storage volumes
+      move            Move storage volumes between pools
+      rename          Rename storage volumes and storage volume snapshots
+      restore         Restore storage volume snapshots
+      set             Set storage volume configuration keys
+      show            Show storage volume configurations
+      snapshot        Snapshot storage volumes
+      unset           Unset storage volume configuration keys
+  version      Show local and remote versions
+  warning      Manage warnings
+    acknowledge  Acknowledge warning
+    delete       Delete warning
+    list         List warnings
+    show         Show warning
+
+Flags:
+      --all            Show less common commands
+      --debug          Show all debug messages
+      --force-local    Force using the local unix socket
+  -h, --help           Print help
+      --project        Override the source project
+  -q, --quiet          Don&#39;t show progress information
+      --sub-commands   Use with help or --help to view sub-commands
+  -v, --verbose        Show all information messages
+      --version        Print version number
+
+Use &#34;lxc [command] --help&#34; for more information about a command.
+</code></pre><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <ul>
-<li><code>lxd-user</code>(1)</li>
-<li><code>lxd</code>(1)</li>
-<li><code>lxd.activateifneeded</code>(1)</li>
-<li><code>lxd.cluster</code>(1)</li>
-<li><code>lxd.cluster.edit</code>(1)</li>
-<li><code>lxd.cluster.list-database</code>(1)</li>
-<li><code>lxd.cluster.recover-from-quorum-loss</code>(1)</li>
-<li><code>lxd.cluster.remove-raft-node</code>(1)</li>
-<li><code>lxd.cluster.show</code>(1)</li>
-<li><code>lxd.import</code>(1)</li>
-<li><code>lxd.init</code>(1)</li>
-<li><code>lxd.recover</code>(1)</li>
-<li><code>lxd.shutdown</code>(1)</li>
-<li><code>lxd.version</code>(1)</li>
-<li><code>lxd.waitready</code>(1)</li>
+<li>The <code>lxd</code> package offers <code>lxd</code> and <code>lxd-user</code> daemons with many subcommands for <code>lxd</code>.  Subcommand tool description tends to include &ldquo;low-level&rdquo;.</li>
 </ul>
-</li>
+<pre tabindex="0"><code> $ lxd -h
+Description:
+  The LXD container manager (daemon)
+
+  This is the LXD daemon command line. It&#39;s typically started directly by your
+  init system and interacted with through a tool like `lxc`.
+
+  There are however a number of subcommands that let you interact directly with
+  the local LXD daemon and which may not be performed through the REST API alone.
+
+Usage:
+  lxd [flags]
+  lxd [command]
+
+Available Commands:
+  activateifneeded   Check if LXD should be started
+  cluster            Low-level cluster administration commands
+  help               Help about any command
+  import             Command has been replaced with &#34;lxd recover&#34;
+  init               Configure the LXD daemon
+  recover            Recover missing instances and volumes from existing and unknown storage pools
+  shutdown           Tell LXD to shutdown all containers and exit
+  version            Show the server version
+  waitready          Wait for LXD to be ready to process requests
+
+Flags:
+  -d, --debug     Show all debug messages
+      --group     The group of users that will be allowed to talk to LXD
+  -h, --help      Print help
+      --logfile   Path to the log file
+      --syslog    Log to syslog
+      --trace     Log tracing targets
+  -v, --verbose   Show all information messages
+      --version   Print version number
+
+Use &#34;lxd [command] --help&#34; for more information about a command.
+</code></pre><p>Since I used this <code>init</code> subcommand, let&rsquo;s see:</p>
+<pre tabindex="0"><code> $ lxd init -h
+Description:
+  Configure the LXD daemon
+
+Usage:
+  lxd init [flags]
+
+Examples:
+  init --minimal
+  init --auto [--network-address=IP] [--network-port=8443] [--storage-backend=dir]
+              [--storage-create-device=DEVICE] [--storage-create-loop=SIZE]
+              [--storage-pool=POOL] [--trust-password=PASSWORD]
+  init --preseed
+  init --dump
+
+
+Flags:
+      --auto                    Automatic (non-interactive) mode
+      --dump                    Dump YAML config to stdout
+      --minimal                 Minimal configuration (non-interactive)
+      --network-address         Address to bind LXD to (default: none)
+      --network-port            Port to bind LXD to (default: 8443) (default -1)
+      --preseed                 Pre-seed mode, expects YAML config from stdin
+      --storage-backend         Storage backend to use (btrfs, dir, lvm or zfs, default: dir)
+      --storage-create-device   Setup device based storage using DEVICE
+      --storage-create-loop     Setup loop based storage with SIZE in GB (default -1)
+      --storage-pool            Storage pool to use or create
+      --trust-password          Password required to add new clients
+
+Global Flags:
+  -d, --debug     Show all debug messages
+  -h, --help      Print help
+      --logfile   Path to the log file
+      --syslog    Log to syslog
+      --trace     Log tracing targets
+  -v, --verbose   Show all information messages
+      --version   Print version number
+</code></pre><p>I also see another command in this package.</p>
+<pre tabindex="0"><code> $ lxd-user -h
+Description:
+  LXD user project daemon
+
+  This daemon is used to allow users that aren&#39;t considered to be LXD
+  administrators access to a personal LXD project with suitable
+  restrictions.
+
+Usage:
+  lxd-user [flags]
+
+Flags:
+  -h, --help      Print help
+      --version   Print version number
+</code></pre><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<ul>
 <li>The <code>lxd-tools</code> package offers extra tools for <code>lxd</code>.
 <ul>
 <li><code>fuidshift</code>(1)</li>
@@ -747,44 +851,15 @@ desktop</a> (2017-05-03)</li>
 <li><code>lxd-benchmark</code>(1)</li>
 </ul>
 </li>
-<li>The <code>lxc</code> package offers many hyphenated <code>lxc-*</code> commands for low-level Linux Containers userspace tools.  This doesn&rsquo;t include <code>lxc</code> command.
+<li>The <code>lxc</code> package offers many hyphenated <code>lxc-*</code> commands for low-level Linux Containers userspace tools.
 <ul>
-<li><code>lxc-attach</code>(1)</li>
-<li><code>lxc-autostart</code>(1)</li>
-<li><code>lxc-cgroup</code>(1)</li>
-<li><code>lxc-checkconfig</code>(1)</li>
-<li><code>lxc-checkpoint</code>(1)</li>
-<li><code>lxc-config</code>(1)</li>
-<li><code>lxc-console</code>(1)</li>
-<li><code>lxc-copy</code>(1)</li>
-<li><code>lxc-create</code>(1)</li>
-<li><code>lxc-destroy</code>(1)</li>
-<li><code>lxc-device</code>(1)</li>
-<li><code>lxc-execute</code>(1)</li>
-<li><code>lxc-freeze</code>(1)</li>
-<li><code>lxc-info</code>(1)</li>
-<li><code>lxc-ls</code>(1)</li>
-<li><code>lxc-monitor</code>(1)</li>
-<li><code>lxc-snapshot</code>(1)</li>
-<li><code>lxc-start</code>(1)</li>
-<li><code>lxc-stop</code>(1)</li>
-<li><code>lxc-top</code>(1)</li>
-<li><code>lxc-unfreeze</code>(1)</li>
-<li><code>lxc-unpriv-attach</code>(1)</li>
-<li><code>lxc-unpriv-start</code>(1)</li>
-<li><code>lxc-unshare</code>(1)</li>
-<li><code>lxc-update-config</code>(1)</li>
-<li><code>lxc-usernsexec</code>(1)</li>
-<li><code>lxc-wait</code>(1)</li>
-<li><code>lxc-usernet</code>(5)</li>
-<li><code>lxc.conf</code>(5)</li>
-<li><code>lxc.container.conf</code>(5)</li>
-<li><code>lxc.system.conf</code>(5)</li>
-<li><code>lxc</code>(7)</li>
-<li><code>pam_cgfs</code>(8)</li>
+<li>This doesn&rsquo;t include <code>lxc</code> command.</li>
+<li>It looks like we should indirectly access these functionalities using <code>lxc</code> commands which seems to take care some other things.</li>
 </ul>
 </li>
 </ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
