@@ -77,6 +77,7 @@ en/note-00050.md
         <li><a href="#introduction-to-operations-on-instances">Introduction to operations on instances</a></li>
         <li><a href="#example-of-operations-on-instances">Example of operations on instances</a></li>
         <li><a href="#more-example-of-operations-on-instances-and-images">More example of operations on instances and images</a></li>
+        <li><a href="#tweaking-image-content-before-starting-an-instance">Tweaking image content before starting an instance</a></li>
       </ul>
     </li>
     <li><a href="#running-gui-application-in-container">Running GUI application in container</a></li>
@@ -530,6 +531,22 @@ no.</p>
 </ul>
 </li>
 </ul>
+<h3 id="tweaking-image-content-before-starting-an-instance">Tweaking image content before starting an instance</h3>
+<p>I realized current Debian bookworm has <code>cloud-init</code> with a
+<a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1055786">bug #1055786</a>.</p>
+<p>Here is how I get around this problem by removing toxic <code>netdev</code> out of
+installed file <code>/etc/cloud/cloud.cfg</code>:</p>
+<pre tabindex="0"><code> $ cd path/to
+ $ lxc init images:debian/bookworm/cloud dbc0
+ $ lxc file pull dbc0/etc/cloud/cloud.cfg .
+ $ sed -i -e &#39;s/ netdev,//&#39; cloud.cfg
+ $ lxc file push cloud.cfg dbc0/etc/cloud/
+ $ lxc publish dbc0 --alias dbc
+Instance published with fingerprint: 379e858cc15808dbdf6a27a028a8b0098213656c0b4565bbc1b64b90b61d9dbd
+ $ lxc start dbc0
+ $ lxc launch dbc dbc1
+</code></pre><p>Now I have a fixed image <code>379e858cc15808dbdf6a27a028a8b0098213656c0b4565bbc1b64b90b61d9dbd</code> with its alias <code>dbc</code> as a local image.</p>
+<p>2 fixed instances<code>dbc0</code> and <code>dbc1</code> running.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <p>I think I got some glimpses of LXC/LXD now.</p>
