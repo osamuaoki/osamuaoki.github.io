@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/11/12 (last update)
+2023/11/13 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -547,6 +547,18 @@ Instance published with fingerprint: 379e858cc15808dbdf6a27a028a8b0098213656c0b4
  $ lxc launch dbc dbc1
 </code></pre><p>Now I have a fixed image <code>379e858cc15808dbdf6a27a028a8b0098213656c0b4565bbc1b64b90b61d9dbd</code> with its alias <code>dbc</code> as a local image.</p>
 <p>2 fixed instances<code>dbc0</code> and <code>dbc1</code> running.</p>
+<p>I needed <code>lxc pull ...</code> + substitution + <code>lxc push ...</code> combination in the
+above commmand sequence since I wanted these file modification to happen before
+starting instance. (<code>lxc exec ... -- command ...</code> requires running instance)</p>
+<p>You can see this behavior as:</p>
+<pre tabindex="0"><code>$ lxc stop dbc0
+$ lxc exec dbc0 -- echo &#34;Hello&#34;
+Error: Instance is not running
+$ lxc start dbc0
+$ lxc exec dbc0 -- echo &#34;Hello&#34;
+Hello
+</code></pre><p>For interactive modification, <code>lxc pull ...</code> + substitution + <code>lxc push ...</code>
+combination here can be replaced with <code>lxc file edit dbc0/etc/cloud/cloud.cfg</code>.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <p>I think I got some glimpses of LXC/LXD now.</p>
