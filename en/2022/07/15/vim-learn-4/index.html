@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/07/15 (initial publish),
-2022/12/23 (last update)
+2023/11/12 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00031.md
@@ -284,7 +284,7 @@ end of the nvim start up.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- load ~/.config/astrovim/lua/usr/init.lua and return &#34;polish&#34; as</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- user_settings with some tricks</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> default <span style="color:#f92672">=</span> func_or_extend(user_settings, {} , <span style="color:#66d9ef">false</span>) <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- update default by user_settings in polish </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- update default by user_settings in polish</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
 </span></span></code></pre></div><p>So essentially, if <code>lua/core/utils/init.lua</code> is given, its <code>polish</code> function
 seems to be executed. with some tricks.  (Of courese, 3 local functions used by
@@ -395,7 +395,7 @@ they don&rsquo;t use <code>polish</code> but has actual module name found under
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> user_settings <span style="color:#f92672">=</span> user_setting_table(<span style="color:#e6db74">&#34;polish&#34;</span>) <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- skip this</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> user_settings <span style="color:#f92672">~=</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> default <span style="color:#f92672">=</span> func_or_extend(user_settings, { ...}, <span style="color:#66d9ef">nil</span>) <span style="color:#66d9ef">end</span>
-</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- replace default by user_settings in  ~/.config/astrovim/lua/usr/plugins/packer.lua </span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">-- replace default by user_settings in  ~/.config/astrovim/lua/usr/plugins/packer.lua</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> default
 </span></span></code></pre></div><p>In some sense, this is simple replacement of the upstream setting by user
 module.  Now I see where all maulti-file user configuration is coming from.</p>
@@ -516,16 +516,19 @@ $ go install github.com/jesseduffield/lazygit@latest
 $ cd ~/bin
 $ ln -sf ~/go/bin/lazygit lazygit
 </code></pre><h2 id="multiple-nvim-configuration-setups">Multiple Nvim configuration setups</h2>
-<p>I also installed LunarVim and NvChad.</p>
-<p>LunarNvim creates the <code>lvim</code> command which doesn&rsquo;t interfere with the normal
+<p>Now (2023-11-12), Neovim supports
+<a href="https://neovim.io/doc/user/starting.html#%24NVIM_APPNAME">NVIM_APPNAME</a>.  Use
+this to support multiple Nvim configuration setups.</p>
+<p><del>I also installed LunarVim and NvChad.</del></p>
+<p><del>LunarNvim creates the <code>lvim</code> command which doesn&rsquo;t interfere with the normal
 <code>nvim</code> execution.  LunarNvim can co-exist with the normal Nvim setup without
-extra work.</p>
-<p>Since Nvim supports <a href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG Base Directory
+extra work.</del></p>
+<p><del>Since Nvim supports <a href="https://specifications.freedesktop.org/basedir-spec/basedir-spec-latest.html">XDG Base Directory
 Specification</a>,
 I decided to use it to create alternative nvim commands with multiple
 configuration settings using
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/xdg-install">xdg-install</a>
-script.  I installed multiple configuration setups for AstroNvim and NvChad.</p>
+script.  I installed multiple configuration setups for AstroNvim and NvChad.</del></p>
 <h2 id="modifier-keys">Modifier keys</h2>
 <p>Neovim 0.7 now correctly distinguishes modifier key combos in its own
 input processing, so users can now map e.g. <code>&lt;Tab&gt;</code> and <code>&lt;C-I&gt;</code> separately.</p>
