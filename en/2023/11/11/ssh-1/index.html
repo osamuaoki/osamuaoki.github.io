@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SSH ED25519 key setup | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">SSH ED25519 key setup</span></h1>
+
+<h3 class="date">Date:
+2023/11/11 (initial publish),
+2023/11/16 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00052.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/10/20/network-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/11/12/lxc-2/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#generate-new-ed25519-key">Generate new ED25519 key</a></li>
+    <li><a href="#ssh-public-key-on-github">SSH public key on github</a></li>
+  </ul>
+</nav>
+
+<p>Here is a memo of me trying to update my SSH setting on Debian 12 (<code>bookworm</code>).</p>
+<p>Several articles motivated me to move away from old 2048 RSA key to new
+<a href="https://en.wikipedia.org/wiki/EdDSA#Ed25519">ed25519</a>.</p>
+<ul>
+<li><code>ssh-keygen</code>(1) default = 3072 bits as of 2023</li>
+<li><a href="https://en.wikipedia.org/wiki/Ssh-keygen">Wikipedia: ssh-keygen</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Key_size">Wikipedia: key size</a></li>
+<li><a href="https://security.stackexchange.com/questions/115295/ssh-key-strength">stackexchange: SSH key strength</a></li>
+<li><a href="https://security.stackexchange.com/questions/90077/ssh-key-ed25519-vs-rsa">stackexchange: SSH Key: Ed25519 vs RSA</a></li>
+</ul>
+<h2 id="generate-new-ed25519-key">Generate new ED25519 key</h2>
+<pre tabindex="0"><code> $ ssh-keygen -t ed25519 -C &#34;osamu@goofy&#34;
+Generatingublic/private ed25519 keyair.
+Enter file in which to save the key (/home/osamu/.ssh/id_ed25519):
+ $ ssh-keygen -lf id_ed25519.pub
+256 SHA256:i*****************************************I osamu@goofy (ED25519)
+$ cat id_ed25519.pub
+ssh-ed25519 A******************************************************************C osamu@goofy
+</code></pre><p>I uploaded this to my remote hosts</p>
+<ul>
+<li>github.com via web interface - DONE</li>
+<li>salsa.debian.org via web interface - DONE</li>
+<li><a href="https://www.rsync.net/resources/howto/ssh_keys.html">rsync.net</a> - DONE over scp
+<ul>
+<li>If my user name is <code>xx1234</code>, use <code>xx1234@xx1234.rsync.net</code> to access this over ssh.</li>
+<li><code>scp ~/.ssh/id_ed25519.pub xx1234@xx1234.rsync.net:.ssh/authorized_keys</code></li>
+<li><code>ssh xx1234@xx1234.rsync.net cat .ssh/authorized_keys</code> to check result</li>
+</ul>
+</li>
+<li><a href="https://www.debian.org/devel/passwordlessssh">debian.org</a>
+<ul>
+<li><code>cat .ssh/id_ed25519.pub | gpg --clearsign | mail changes@db.debian.org</code></li>
+</ul>
+</li>
+</ul>
+<h2 id="ssh-public-key-on-github">SSH public key on github</h2>
+<p>I realize my public key to access my github account <code>osamuaoki</code> is available at
+<!-- raw HTML omitted --><a href="https://github.com/osamuaoki.keys">https://github.com/osamuaoki.keys</a><!-- raw HTML omitted -->.</p>
+<p>Hmmm&hellip; I see my SSH public key is as public as it can be.</p>
+<pre tabindex="0"><code> $ wget -q -O - https://github.com/osamuaoki.keys
+ssh-rsa A**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************t
+ssh-ed25519 A******************************************************************C
+</code></pre><p>ED25519 key string is much smaller.</p>
+<p>After removing old SSH key</p>
+<pre tabindex="0"><code>$ wget -q -O - https://github.com/osamuaoki.keys
+ssh-ed25519 A******************************************************************C
+</code></pre><p>If I trust this data and service, I can set SSH-PUBLIC-KEY to a system by running <code>ssh-import-id</code>(1) (package: <code>ssh-import-id</code>) command.</p>
+<pre tabindex="0"><code> $ ssh-import-id gh:osamuaoki
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/10/20/network-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="/en/2023/11/12/lxc-2/">Next Post</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>IPv4 and IPv6 | Goofing Osamu</title>
+    <title>IPv4 and IPv6 basics | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,11 +32,11 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">IPv4 and IPv6</span></h1>
+<h1><span class="title">IPv4 and IPv6 basics</span></h1>
 
 <h3 class="date">Date:
 2023/10/20 (initial publish),
-2023/10/29 (last update)
+2023/11/16 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00051.md
@@ -54,7 +54,7 @@ en/note-00051.md
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2023/11/11/ssh-1/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -64,16 +64,64 @@ en/note-00051.md
 
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#ipv4-and-ipv6-basics">IPv4 and IPv6 basics</a></li>
     <li><a href="#corresponding-binary-hexadecimal-and-decimal-numbers">Corresponding binary, hexadecimal, and decimal numbers</a></li>
-    <li><a href="#loopback-ip-address">Loopback IP address</a></li>
-    <li><a href="#link-local-addresses">Link-local addresses</a></li>
-    <li><a href="#private-network--unique-local-address">Private network / Unique local address</a></li>
   </ul>
 </nav>
 
 <p>Here is a memo of me trying to understand typical IP address usages on typical
 desktop systems.</p>
-<h2 id="corresponding-binary-hexadecimal-and-decimal-numbers">Corresponding binary, hexadecimal, and decimal numbers</h2>
+<h2 id="ipv4-and-ipv6-basics">IPv4 and IPv6 basics</h2>
+<ul>
+<li>
+<p>IPv4</p>
+<ul>
+<li>8 bit * 4 = 32 bit address space (2^32 addresses)</li>
+<li><a href="https://en.wikipedia.org/wiki/Loopback">Loopback</a>: IP block=<code>127.0.0.0/8</code> (2^24 addresses) for <a href="https://en.wikipedia.org/wiki/Localhost">localhost</a>.</li>
+<li><a href="https://en.wikipedia.org/wiki/Internet_Protocol_version_4#Special-use_addresses">Multicast IPv4 address</a> block = <code>224.0.0.0/4</code>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Multicast_DNS">mDNS</a>: IP=<code>224.0.0.251</code>, UDP, port=5353</li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/Link-local_address">Link-local address</a>: IP block=<code>169.254.0.0/16</code> (2^16 addresses)</li>
+<li><a href="https://en.wikipedia.org/wiki/Private_network#Private_IPv4_addresses">Private IPv4 network</a>
+<ul>
+<li><code>10.0.0.0/8</code> &ndash; <code>1</code> x Class A network with <code>2^24=16777216</code> addresses</li>
+<li><code>172.16.0.0/12</code> &ndash; <code>2**4=16</code> x Class B networks, each with <code>2^16=65536</code> addresses</li>
+<li><code>192.168.0.0/16</code> &ndash; <code>2**8=256</code> x Class C networks, each with <code>2^8=256</code> addresses</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>
+<p>IPv6</p>
+<ul>
+<li>16 bit * 8 = 128 bit address space (2^128 addresses)</li>
+<li><a href="https://en.wikipedia.org/wiki/Loopback">Loopback</a>: IP=<code>::1</code> for <a href="https://en.wikipedia.org/wiki/Localhost">localhost</a>.</li>
+<li><a href="https://en.wikipedia.org/wiki/IPv6_address#Special_addresses">Multicast IPv6 address</a> block = <code>ff00::/8</code>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Multicast_DNS">mDNS</a>: IP=<code>ff02::fb</code>, UDP, port=<code>5353</code></li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/Link-local_address">Link-local address</a>: IP block=<code>fe80::/10</code> (high 10 bits are IANA global ID, mid 54 bits are 0, low 64 bits are interface ID)</li>
+<li><a href="https://en.wikipedia.org/wiki/Private_network#Private_IPv6_addresses">Private IPv6 network</a>
+<ul>
+<li><code>fc00::/7</code> &ndash; <code>2^16</code> bits for subnet ID x subnet with <code>2^64</code> addresses</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>For more, read <a href="https://en.wikipedia.org/wiki/Zero-configuration_networking">zero-configuration networking</a>.</p>
+<p>My <code>/etc/hosts</code> on hostname <code>goofy</code> has:</p>
+<pre tabindex="0"><code>127.0.0.1	localhost
+127.0.1.1	goofy
+
+# The following lines are desirable for IPv6 capable hosts
+::1     localhost ip6-localhost ip6-loopback
+ff02::1 ip6-allnodes
+ff02::2 ip6-allrouters
+</code></pre><h2 id="corresponding-binary-hexadecimal-and-decimal-numbers">Corresponding binary, hexadecimal, and decimal numbers</h2>
 <ul>
 <li>Notable even numbers
 <ul>
@@ -107,68 +155,6 @@ desktop systems.</p>
 </ul>
 </li>
 </ul>
-<h2 id="loopback-ip-address">Loopback IP address</h2>
-<p>IP address for <code>localhost</code></p>
-<ul>
-<li>In IPv4, the name <code>localhost</code> normally resolves to the loopback IP address <code>127.0.0.1</code>.
-<ul>
-<li>The entire IPv4 address block <code>127.0.0.0/8</code> = <code>127.xx.xx.xx</code> is reserved for loopback purposes.</li>
-</ul>
-</li>
-<li>In IPv6, the name <code>localhost</code> resolves to a loopback IP address:
-<ul>
-<li><code>::1</code> = <code>0000:0000:0000:0000:0000:0000:0000:0001</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="link-local-addresses">Link-local addresses</h2>
-<p>For <a href="https://en.wikipedia.org/wiki/Zero-configuration_networking">zero-configuration networking</a>, Link-local addresses are used.</p>
-<ul>
-<li>In IPv4, <code>169.254.0.0/16</code>
-<ul>
-<li><code>169.254.xx.xx</code></li>
-</ul>
-</li>
-<li>In IPv6, <code>fe80::/64</code>.
-<ul>
-<li><code>fe80:0000:0000:0000:xxxx:xxxx:xxxx:xxxx</code></li>
-</ul>
-</li>
-</ul>
-<h2 id="private-network--unique-local-address">Private network / Unique local address</h2>
-<ul>
-<li>In IPv4 (32 bits), private network addresses are:
-<ul>
-<li><code>10.0.0.0/8</code> &ndash; <code>1</code> x Class A network with <code>2**24=16777216</code> addresses
-<ul>
-<li><code>10.xx.xx.xx</code></li>
-</ul>
-</li>
-<li><code>172.16.0.0/12</code> &ndash; <code>2**4=16</code> x Class B networks, each with <code>2**16=65536</code> addresses
-<ul>
-<li><code>172.16.xx.xx</code></li>
-<li><code>172.17.xx.xx</code></li>
-<li>&hellip;</li>
-<li><code>172.31.xx.xx</code></li>
-</ul>
-</li>
-<li><code>192.168.0.0/16</code> &ndash; <code>2**8=256</code> x Class C networks, each with <code>2**8=256</code> addresses
-<ul>
-<li><code>192.168.0.xx</code></li>
-<li><code>192.168.1.xx</code></li>
-<li>&hellip;</li>
-<li><code>192.168.255.xx</code></li>
-</ul>
-</li>
-</ul>
-</li>
-<li>In IPv6 (128 bits), unique local address is <code>fc00::/7</code>
-<ul>
-<li><code>fc00:0000:0000:0000:xxxx:xxxx:xxxx:xxxx</code> = <code>fc00::xxxx:xxxx:xxxx:xxxx</code></li>
-<li><code>fd00:0000:0000:0000:xxxx:xxxx:xxxx:xxxx</code> = <code>fd00::xxxx:xxxx:xxxx:xxxx</code></li>
-</ul>
-</li>
-</ul>
 <!-- raw HTML omitted -->
 
 
@@ -180,7 +166,7 @@ desktop systems.</p>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2023/11/11/ssh-1/">Next Post</a></td>
   
   </tr>
   </tbody>

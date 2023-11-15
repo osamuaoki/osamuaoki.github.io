@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Container with LXC/LXD (3) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Container with LXC/LXD (3)</span></h1>
+
+<h3 class="date">Date:
+2023/11/13 (initial publish),
+2023/11/16 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00054.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/12/lxc-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#configuration-of-lxd-instance">Configuration of LXD instance</a></li>
+    <li><a href="#yaml-setting-for-profiledefault">YAML setting for profile=default</a></li>
+    <li><a href="#user-specific-sockets-used-by-ipc">User specific sockets used by IPC</a></li>
+    <li><a href="#prepare-dbz-image-with-matching-user-name-as-the-host">Prepare &ldquo;dbz&rdquo;-image with matching user name as the host.</a></li>
+    <li><a href="#yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</a></li>
+  </ul>
+</nav>
+
+<p>Here is a memo of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
+<p>This is follow-up to <a href="/en/2023/11/12/lxc-2/">Container with LXC/LXD (2)</a>.</p>
+<h2 id="configuration-of-lxd-instance">Configuration of LXD instance</h2>
+<p>We can configure an instance in 3 ways with YAML setting data <code>wayland.yaml</code>.</p>
+<ul>
+<li>Configure when instance is started directly with YAML
+<ul>
+<li>create <code>wayland.yaml</code></li>
+<li><code>lxc init dbz dbz0 &lt;wayland.yaml</code></li>
+</ul>
+</li>
+<li>Configure after instance is created</li>
+<li><code>lxc init dbz dbz0</code></li>
+<li><code>lxc config edit dbz0 &lt;wayland.yaml</code></li>
+<li>Configure when instance is started with profile
+<ul>
+<li>create <code>wayland.yaml</code></li>
+<li>create profile <code>lxc profile edit wayland &lt; wayland.yaml</code></li>
+<li><code>lxc init dbz dbz0 --profile wayland</code></li>
+</ul>
+</li>
+</ul>
+<p>The last style provides me with an organized environment.</p>
+<h2 id="yaml-setting-for-profiledefault">YAML setting for profile=default</h2>
+<p>Here is my default LXD profile:</p>
+<pre tabindex="0"><code>$ lxc profile show default
+config: {}
+description: Default LXD profile
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  root:
+    path: /
+    pool: default
+    type: disk
+name: default
+used_by:
+- /1.0/instances/dbz0
+- /1.0/instances/dbz1
+- /1.0/instances/dbz2
+</code></pre><p>The last list for key=<code>used_by</code> changes as I use this profile.</p>
+<h2 id="user-specific-sockets-used-by-ipc">User specific sockets used by IPC</h2>
+<p>For my primary user (name=osamu, UID=1000), I see following user specific
+sockets in my Debian 12 bookworm running GNOME on wayland as:</p>
+<pre tabindex="0"><code>$ ls -l /run/user/1000/ |grep ^s
+srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 bus
+srwxrwxr-x 1 osamu osamu   0 Nov 14 12:56 nvim.28543.0
+srw------- 1 osamu osamu   0 Nov 14 08:05 openssh_agent
+srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 pipewire-0
+srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 pk-debconf-socket
+srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 snapd-session-agent.socket
+srwxr-xr-x 1 osamu osamu   0 Nov 14 08:05 wayland-0
+</code></pre><p>So wayland for monitor screen is accessed as <code>/run/user/1000/wayland-0</code>.</p>
+<p>If sound needs to be accessed, its <code>/run/user/1000/pipewire-0</code>.</p>
+<h2 id="prepare-dbz-image-with-matching-user-name-as-the-host">Prepare &ldquo;dbz&rdquo;-image with matching user name as the host.</h2>
+<p>I created local image with primary user name set to &ldquo;osamu&rdquo; and without
+&ldquo;netdev&rdquo; in groups-list as &ldquo;dbz&rdquo;-image:</p>
+<pre tabindex="0"><code> $ lxc file edit dbc0/etc/cloud/cloud.cfg
+ $ lxc publish dbc0 --alias dbz
+</code></pre><h2 id="yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</h2>
+<p>Here is a simple YAML data example (<code>wayland.yaml</code>) to set profile to wayland.</p>
+<pre tabindex="0"><code> $ cd path/to/
+ $ cat wayland.yaml
+config:
+  boot.autostart: false
+  user.user-data: |
+    #cloud-config
+    write_files:
+    - path: /usr/local/bin/mystartup.sh
+      permissions: 0755
+      content: |
+        #!/bin/sh
+        uid=$(id -u)
+        run_dir=/run/user/$uid
+        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
+        ln -sf /mnt/wayland-socket $run_dir/wayland-0
+    - path: /usr/local/etc/mystartup.service
+      content: |
+        [Unit]
+        After=local-fs.target
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/local/bin/mystartup.sh
+        [Install]
+        WantedBy=default.target
+    runcmd:
+    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
+    - chown -R osamu:osamu /home/osamu
+    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
+description: Wayland LXD profile
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  root:
+    path: /
+    pool: default
+    type: disk
+  wayland-socket:
+    bind: container
+    connect: unix:/run/user/1000/wayland-0
+    listen: unix:/mnt/wayland-socket
+    uid: 1000
+    gid: 1000
+    type: proxy
+</code></pre><p>The <code>mystartup.sh</code> script in <code>user.user-data</code> is generated and applied when
+<code>cloud-init</code> applies <code>user.user-data</code> at the first boot of the instance to set
+up systemd startup script. This startup script links the Wayland socket to its
+usual location in the container (/run/user/1000/wayland-0) every time when the
+primary user <code>osamu</code> logs in.</p>
+<p>Let me create profile <code>wayland</code> and start an instance <code>dbz0</code> with it:</p>
+<pre tabindex="0"><code> $ lxc profile edit wayland &lt; wayland.yaml
+ $ lxc init dbz dbz0 --profile wayland
+ $ lxc profile ls
++---------+---------------------+---------+
+|  NAME   |     DESCRIPTION     | USED BY |
++---------+---------------------+---------+
+| default | Default LXD profile | 3       |
++---------+---------------------+---------+
+| wayland | Wayland LXD profile | 0       |
++---------+---------------------+---------+
+ $ lxc start dbz0
+</code></pre><p>Let me inspect instance <code>dbz0</code> running with profile=wayland .</p>
+<pre tabindex="0"><code>$ lxc config show dbz0
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (cloud) osamu (20231112_05:24)
+  image.name: debian-bookworm-amd64-cloud-osamu-20231112_05:24
+  image.os: debian
+  image.release: bookworm
+  image.serial: &#34;20231112_05:24&#34;
+  image.variant: cloud
+  volatile.base_image: 9e089ab69eddbf4d998703e925970e9883c0530a05360b8c4d2b25c272b53921
+  volatile.cloud-init.instance-id: b8982bad-5e07-44ec-a93f-4c0c0f144704
+  volatile.eth0.host_name: veth3a47d107
+  volatile.eth0.hwaddr: 00:16:3e:88:00:65
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: 08d50183-09e6-4854-8800-f618bd2cd935
+devices: {}
+ephemeral: false
+profiles:
+- wayland
+stateful: false
+description: &#34;&#34;
+</code></pre><p>Since this only say to use <code>profiles=wayland</code>, let&rsquo;s expand it:</p>
+<pre tabindex="0"><code>$ lxc config show dbz0 -e
+architecture: x86_64
+config:
+  boot.autostart: &#34;false&#34;
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (cloud) osamu (20231112_05:24)
+  image.name: debian-bookworm-amd64-cloud-osamu-20231112_05:24
+  image.os: debian
+  image.release: bookworm
+  image.serial: &#34;20231112_05:24&#34;
+  image.variant: cloud
+  user.user-data: |
+    #cloud-config
+    write_files:
+    - path: /usr/local/bin/mystartup.sh
+      permissions: 0755
+      content: |
+        #!/bin/sh
+        uid=$(id -u)
+        run_dir=/run/user/$uid
+        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
+        ln -sf /mnt/wayland-socket $run_dir/wayland-0
+    - path: /usr/local/etc/mystartup.service
+      content: |
+        [Unit]
+        After=local-fs.target
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/local/bin/mystartup.sh
+        [Install]
+        WantedBy=default.target
+    runcmd:
+    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
+    - chown -R osamu:osamu /home/osamu
+    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
+  volatile.base_image: 9e089ab69eddbf4d998703e925970e9883c0530a05360b8c4d2b25c272b53921
+  volatile.cloud-init.instance-id: b8982bad-5e07-44ec-a93f-4c0c0f144704
+  volatile.eth0.host_name: veth3a47d107
+  volatile.eth0.hwaddr: 00:16:3e:88:00:65
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: 08d50183-09e6-4854-8800-f618bd2cd935
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  root:
+    path: /
+    pool: default
+    type: disk
+  wayland-socket:
+    bind: container
+    connect: unix:/run/user/1000/wayland-0
+    gid: &#34;1000&#34;
+    listen: unix:/mnt/wayland-socket
+    type: proxy
+    uid: &#34;1000&#34;
+ephemeral: false
+profiles:
+- wayland
+stateful: false
+description: &#34;&#34;
+</code></pre><p>Now, we can see <code>user.user_data:</code> and <code>devices:</code>.</p>
+<p>This <code>user.user_data:</code> YAML data is passed to <code>cloud-init</code> to create files and
+execute commands as the container starts.</p>
+<p>This container environment allowed me to run wayland GUI program <code>eog</code> in
+container and displaying it to the host GNOME Desktop.  Nice.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/12/lxc-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

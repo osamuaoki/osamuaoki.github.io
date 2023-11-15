@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/11/13 (last update)
+2023/11/16 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -559,9 +559,17 @@ $ lxc exec dbc0 -- echo &#34;Hello&#34;
 Hello
 </code></pre><p>For interactive modification, <code>lxc pull ...</code> + substitution + <code>lxc push ...</code>
 combination here can be replaced with <code>lxc file edit dbc0/etc/cloud/cloud.cfg</code>.</p>
+<p>This allows me easily change other values such as the primary account name <code>debian</code>.</p>
+<p>If you wish to also change <code>image.description</code> and <code>image.name</code>, use
+<code>lxc config metadata edit dbz0</code> before publishing.  Then the published image file in
+<code>/var/lib/lxd/images/</code> and corresponding <code>/var/lib/lxd/storage-pools/default/images/</code> has updated names.
+Editing with published image like <code>lxc image edit dbc</code> doesn&rsquo;t change image
+data in these directory nor hash value used for the image name but updates
+description displayed by <code>lxc image ls dbc</code>.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
-<p>I think I got some glimpses of LXC/LXD now.</p>
+<p>I think I got some glimpses of LXC/LXD up to how to get an instance started
+with default configuration.</p>
 <h2 id="running-gui-application-in-container">Running GUI application in container</h2>
 <p>Unlike console applications, running GUI applications in container is a bit complicate.  For now, I found some HOWTOs:</p>
 <ul>
@@ -1005,6 +1013,7 @@ Flags:
 </ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
+<p>See more in <a href="/en/2023/11/12/lxc-2/">Container with LXC/LXD (2)</a>.</p>
 <!-- raw HTML omitted -->
 
 
