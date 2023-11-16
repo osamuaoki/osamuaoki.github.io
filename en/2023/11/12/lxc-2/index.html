@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/12 (initial publish),
-2023/11/16 (last update)
+2023/11/17 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00053.md
@@ -66,7 +66,6 @@ en/note-00053.md
   <ul>
     <li><a href="#subuid-and-subgid">subuid and subgid</a></li>
     <li><a href="#id-mapping">ID Mapping</a></li>
-    <li><a href="#lxd-one-liners">LXD one liners</a></li>
   </ul>
 </nav>
 
@@ -169,16 +168,8 @@ root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
 <li>*2: <code>0::/user.slice/user-0.slice/session-11.scope</code></li>
 </ul>
 <p>See more in <a href="/en/2023/11/13/lxc-3/">Container with LXC/LXD (3)</a>.</p>
-<h2 id="lxd-one-liners">LXD one liners</h2>
-<p>Delete all instances:</p>
-<pre tabindex="0"><code> $ for f in $(lxc ls -cn -fcsv) ; do lxc delete $f; done
-</code></pre><p>Delete all images:</p>
-<pre tabindex="0"><code> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
-</code></pre><p>Download and fix image: <a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a></p>
-<ul>
-<li>This removes <code>netdev</code> group and changes the primary user to <code>osamu</code> for
-cloud-init.</li>
-</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 

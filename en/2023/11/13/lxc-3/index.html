@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/13 (initial publish),
-2023/11/16 (last update)
+2023/11/17 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00054.md
@@ -69,6 +69,7 @@ en/note-00054.md
     <li><a href="#user-specific-sockets-used-by-ipc">User specific sockets used by IPC</a></li>
     <li><a href="#prepare-dbz-image-with-matching-user-name-as-the-host">Prepare &ldquo;dbz&rdquo;-image with matching user name as the host.</a></li>
     <li><a href="#yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</a></li>
+    <li><a href="#lxd-one-liners">LXD one liners</a></li>
   </ul>
 </nav>
 
@@ -136,6 +137,12 @@ srwxr-xr-x 1 osamu osamu   0 Nov 14 08:05 wayland-0
 </code></pre><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
 data is implemented by <code>cloud-config</code> in rather later part of its process.  So
 trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> doesn&rsquo;t work.</p>
+<p>Later, in order to automate this, I created a script to fix its image:
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a></p>
+<ul>
+<li>This removes <code>netdev</code> group and changes the primary user to <code>osamu</code> for
+cloud-init.</li>
+</ul>
 <h2 id="yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</h2>
 <p>Here is a simple YAML data example (<code>wayland.yaml</code>) to set profile to wayland.</p>
 <pre tabindex="0"><code> $ cd path/to/
@@ -303,7 +310,12 @@ description: &#34;&#34;
 execute commands as the container starts.</p>
 <p>This container environment allowed me to run wayland GUI program <code>eog</code> in
 container and displaying it to the host GNOME Desktop.  Nice.</p>
-<!-- raw HTML omitted -->
+<h2 id="lxd-one-liners">LXD one liners</h2>
+<p>Delete all instances:</p>
+<pre tabindex="0"><code> $ for f in $(lxc ls -cn -fcsv) ; do lxc delete $f; done
+</code></pre><p>Delete all images:</p>
+<pre tabindex="0"><code> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
+</code></pre><!-- raw HTML omitted -->
 
 
 <table width="100%">
