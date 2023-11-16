@@ -133,7 +133,10 @@ srwxr-xr-x 1 osamu osamu   0 Nov 14 08:05 wayland-0
 &ldquo;netdev&rdquo; in groups-list as &ldquo;dbz&rdquo;-image:</p>
 <pre tabindex="0"><code> $ lxc file edit dbc0/etc/cloud/cloud.cfg
  $ lxc publish dbc0 --alias dbz
-</code></pre><h2 id="yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</h2>
+</code></pre><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
+data is implemented by <code>cloud-config</code> in rather later part of its process.  So
+trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> doesn&rsquo;t work.</p>
+<h2 id="yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</h2>
 <p>Here is a simple YAML data example (<code>wayland.yaml</code>) to set profile to wayland.</p>
 <pre tabindex="0"><code> $ cd path/to/
  $ cat wayland.yaml
