@@ -26,7 +26,7 @@ Configure when instance is started directly with YAML create wayland.yaml lxc in
       <guid>/en/2023/11/12/lxc-2/</guid>
       <description>Here is a memo of me trying to use LXC/LXD on Debian 12 (bookworm).
 This is follow-up to Container with LXC/LXD (1).
-subuid and subgid UID and GID:
+subuid and subgid on Debian with LXD UID and GID:
 POSIX requires to cover: 0 - 2^16-1 = 65,535 65,534 == nobody 64-bit Linux allows: 0 = 2^64-1 = 18,446,744,073,709,551,615 For Debian with 2 normal UID/GID, /etc/subuid and /etc/subgid are:
 osamu:100000:65536 zzz:165536:65536 _lxd:231072:10000001 root:231072:10000001 This means:
 UID=0 in LXD container is mapped to UID=231072 on host.</description>

@@ -64,14 +64,15 @@ en/note-00053.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#subuid-and-subgid">subuid and subgid</a></li>
-    <li><a href="#id-mapping">ID Mapping</a></li>
+    <li><a href="#subuid-and-subgid-on-debian-with-lxd">subuid and subgid on Debian with LXD</a></li>
+    <li><a href="#basic-id-mapping-of-lxd">Basic ID Mapping of LXD</a></li>
+    <li><a href="#customized-id-maps-for-lxd-instances">Customized ID maps for LXD instances</a></li>
   </ul>
 </nav>
 
 <p>Here is a memo of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
 <p>This is follow-up to <a href="/en/2023/10/11/lxc-1/">Container with LXC/LXD (1)</a>.</p>
-<h2 id="subuid-and-subgid">subuid and subgid</h2>
+<h2 id="subuid-and-subgid-on-debian-with-lxd">subuid and subgid on Debian with LXD</h2>
 <p>UID and GID:</p>
 <ul>
 <li>POSIX requires to cover: 0 - 2^16-1 = 65,535
@@ -99,7 +100,7 @@ other distribution seems to use <code>lxd</code> for both user and group name fo
 _lxd:x:129:138::/var/lib/lxd/:/bin/false
  $ grep lxd /etc/group
 lxd:x:138:osamu
-</code></pre><h2 id="id-mapping">ID Mapping</h2>
+</code></pre><h2 id="basic-id-mapping-of-lxd">Basic ID Mapping of LXD</h2>
 <p>I started one root (UID=0) shell, and one primary user (UID=1000) shell in a
 lxd instance <code>dbc0</code>.</p>
 <p>Then I started one primary user (UID=1000)shell, and one root (UID=0) shell on
@@ -167,9 +168,11 @@ root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
 <li>*1: <code>0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-15e39553-cc20-4c70-bfd5-f8b95e2c6b5a.scope</code></li>
 <li>*2: <code>0::/user.slice/user-0.slice/session-11.scope</code></li>
 </ul>
+<h2 id="customized-id-maps-for-lxd-instances">Customized ID maps for LXD instances</h2>
+<p>TBD</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <p>See more in <a href="/en/2023/11/13/lxc-3/">Container with LXC/LXD (3)</a>.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
