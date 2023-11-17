@@ -80,7 +80,6 @@ en/note-00050.md
         <li><a href="#tweaking-image-content-before-starting-an-instance">Tweaking image content before starting an instance</a></li>
       </ul>
     </li>
-    <li><a href="#prepare-dbz-image-with-matching-user-name-as-the-host">Prepare &ldquo;dbz&rdquo;-image with matching user name as the host.</a></li>
     <li><a href="#lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</a></li>
     <li><a href="#lxd-one-liners">LXD one liners</a></li>
     <li><a href="#gui-for-lxd-management-tool">GUI for LXD management tool</a></li>
@@ -568,15 +567,16 @@ combination here can be replaced with <code>lxc file edit dbc0/etc/cloud/cloud.c
 Editing with published image like <code>lxc image edit dbc</code> doesn&rsquo;t change image
 data in these directory nor hash value used for the image name but updates
 description displayed by <code>lxc image ls dbc</code>.</p>
-<h2 id="prepare-dbz-image-with-matching-user-name-as-the-host">Prepare &ldquo;dbz&rdquo;-image with matching user name as the host.</h2>
-<p>I created local image with primary user name set to &ldquo;osamu&rdquo; and without
+<p>I think I got some glimpses of LXC/LXD up to how to get an instance started
+with default configuration.</p>
+<h2 id="lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</h2>
+<p>I first created local image with primary user name set to &ldquo;osamu&rdquo; and without
 &ldquo;netdev&rdquo; in groups-list as &ldquo;dbc&rdquo;-image:</p>
 <pre tabindex="0"><code> $ lxc file edit dbc0/etc/cloud/cloud.cfg
  $ lxc publish dbc0 --alias dbz
 </code></pre><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
 data is implemented by <code>cloud-config</code> in rather later part of its process.  So
 trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> doesn&rsquo;t work.</p>
-<h2 id="lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</h2>
 <p>Later, in order to automate this, I created a script to fix its image:
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a>.  This
 removes <code>netdev</code> group and optionally changes the primary user to <code>osamu</code> for
@@ -619,8 +619,6 @@ OPTIONS: (only the first character matters)
 <pre tabindex="0"><code> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,$/s/,//p&#34;) ; do lxc image delete $f; done
 </code></pre><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
-<p>I think I got some glimpses of LXC/LXD up to how to get an instance started
-with default configuration.</p>
 <h2 id="gui-for-lxd-management-tool">GUI for LXD management tool</h2>
 <p>Debian 12 doesn&rsquo;t ship any GUI tools for LXD.</p>
 <p>I decided to give up on finding good GUI tools for LXD after my cursory research as below.</p>
