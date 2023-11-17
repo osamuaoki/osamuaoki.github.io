@@ -96,27 +96,33 @@ desktop</a> (2017-05-03)</li>
 (2021-07-30)</li>
 <li><a href="https://qiita.com/330k/items/3fc42431d4d08b925541">LXD + Ubuntu 18.04 + MATE + xrdpでリモートデスクトップ環境を作る</a> (2021-03-09)</li>
 </ul>
+<p>All these looks interesting references but they are not always using GNOME
+wayland under the Debian bookworm environment.</p>
+<p>I will try similar things using GNOME wayland under the Debian bookworm
+environment in the followings.</p>
 <h2 id="configuration-of-lxd-instance">Configuration of LXD instance</h2>
-<p>We can configure an instance in 3 ways with YAML setting data <code>wayland.yaml</code>.</p>
+<p>I created and used the baseline <code>deb-12</code> image using <code>lxcinit -d -p 12</code></p>
+<p>We can configure an instance created from <code>deb-12</code> image in 3 ways with YAML
+setting data <code>wayland.yaml</code>.</p>
 <ul>
 <li>Configure when instance is started directly with YAML
 <ul>
 <li>create <code>wayland.yaml</code></li>
-<li><code>lxc init dbz dbz0 &lt;wayland.yaml</code></li>
+<li><code>lxc init deb-12 d0 &lt;wayland.yaml</code></li>
 </ul>
 </li>
 <li>Configure after instance is created</li>
-<li><code>lxc init dbz dbz0</code></li>
-<li><code>lxc config edit dbz0 &lt;wayland.yaml</code></li>
+<li><code>lxc init deb-12 d0</code></li>
+<li><code>lxc config edit d0 &lt;wayland.yaml</code></li>
 <li>Configure when instance is started with profile
 <ul>
 <li>create <code>wayland.yaml</code></li>
 <li>create profile <code>lxc profile edit wayland &lt; wayland.yaml</code></li>
-<li><code>lxc init dbz dbz0 --profile wayland</code></li>
+<li><code>lxc init deb-12 d0 --profile wayland</code></li>
 </ul>
 </li>
 </ul>
-<p>The last style provides me with an organized environment.</p>
+<p>The last style provides me with an organized working environment.</p>
 <h2 id="yaml-setting-for-profiledefault">YAML setting for profile=default</h2>
 <p>Here is my default LXD profile:</p>
 <pre tabindex="0"><code>$ lxc profile show default
@@ -133,9 +139,9 @@ devices:
     type: disk
 name: default
 used_by:
-- /1.0/instances/dbz0
-- /1.0/instances/dbz1
-- /1.0/instances/dbz2
+- /1.0/instances/d0
+- /1.0/instances/d1
+- /1.0/instances/d2
 </code></pre><p>The last list for key=<code>used_by</code> changes as I use this profile.</p>
 <h2 id="user-specific-sockets-used-by-ipc">User specific sockets used by IPC</h2>
 <p>For my primary user (name=osamu, UID=1000), I see following user specific
@@ -148,8 +154,10 @@ srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 pipewire-0
 srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 pk-debconf-socket
 srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 snapd-session-agent.socket
 srwxr-xr-x 1 osamu osamu   0 Nov 14 08:05 wayland-0
-</code></pre><p>So wayland for monitor screen is accessed as <code>/run/user/1000/wayland-0</code>.</p>
-<p>If sound needs to be accessed, its <code>/run/user/1000/pipewire-0</code>.</p>
+</code></pre><p>So wayland for monitor screen is accessed as <code>/run/user/1000/wayland-0</code> on my
+GNOME wayland environment.</p>
+<p>If sound needs to be accessed, its <code>/run/user/1000/pipewire-0</code>.  I will address
+this later.  For now, let me focus on to use <code>wayland-o</code> socket.</p>
 <h2 id="yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</h2>
 <p>Here is a simple YAML data example (<code>wayland.yaml</code>) to set profile to wayland.</p>
 <pre tabindex="0"><code> $ cd path/to/
@@ -204,7 +212,7 @@ devices:
 up systemd startup script. This startup script links the Wayland socket to its
 usual location in the container (/run/user/1000/wayland-0) every time when the
 primary user <code>osamu</code> logs in.</p>
-<p>Let me create profile <code>wayland</code> and start an instance <code>dbz0</code> with it:</p>
+<p>Let me create profile <code>wayland</code> and start an instance <code>d0</code> with it:</p>
 <pre tabindex="0"><code> $ lxc profile edit wayland &lt; wayland.yaml
  $ lxc init dbz dbz0 --profile wayland
  $ lxc profile ls
@@ -216,7 +224,7 @@ primary user <code>osamu</code> logs in.</p>
 | wayland | Wayland LXD profile | 0       |
 +---------+---------------------+---------+
  $ lxc start dbz0
-</code></pre><p>Let me inspect instance <code>dbz0</code> running with profile=wayland .</p>
+</code></pre><p>Let me inspect instance <code>d0</code> running with profile=wayland .</p>
 <pre tabindex="0"><code>$ lxc config show dbz0
 architecture: x86_64
 config:
@@ -316,7 +324,7 @@ description: &#34;&#34;
 <p>This <code>user.user_data:</code> YAML data is passed to <code>cloud-init</code> to create files and
 execute commands as the container starts.</p>
 <p>This container environment allowed me to run wayland GUI program <code>eog</code> in
-container and displaying it to the host GNOME Desktop.  Nice.</p>
+container and displaying its result to the host GNOME Desktop.  Nice.</p>
 <!-- raw HTML omitted -->
 
 
