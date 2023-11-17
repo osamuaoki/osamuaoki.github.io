@@ -101,10 +101,13 @@ _lxd:x:129:138::/var/lib/lxd/:/bin/false
  $ grep lxd /etc/group
 lxd:x:138:osamu
 </code></pre><h2 id="basic-id-mapping-of-lxd">Basic ID Mapping of LXD</h2>
-<p>I started one root (UID=0) shell, and one primary user (UID=1000) shell in a
-lxd instance <code>dbc0</code>.</p>
-<p>Then I started one primary user (UID=1000)shell, and one root (UID=0) shell on
-tty3 on the host system.</p>
+<p>I created and used the baseline <code>deb-12</code> image using <code>lxcinit -d -p 12</code>.</p>
+<p>Then I started an instance <code>d0</code> with <code>lxc launch deb-12 d0</code>.</p>
+<p>I started one root (UID=0) shell with <code>lxc exec d0 -- bash -i</code>, and one primary
+user (UID=1000) shell with <code>lxc exec d0 -- sudo -u osamu bash -i</code> in a lxd
+instance <code>d0</code>.</p>
+<p>Then I started one primary user (UID=1000) shell on the host Gnome terminal,
+and one root (UID=0) shell on the Linux terminal tty3 on the host system.</p>
 <pre tabindex="0"><code> $ ps aux
 ...
 231072     18801  0.0  0.0   7588  3584 pts/1    Ss+  07:07   0:00 bash -i
@@ -143,8 +146,8 @@ root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
 </tr>
 <tr>
 <td>cgroup</td>
-<td><code>0::/lxc.payload.dbc0/.lxc</code></td>
-<td><code>0::/lxc.payload.dbc0/.lxc</code></td>
+<td><code>0::/lxc.payload.d0/.lxc</code></td>
+<td><code>0::/lxc.payload.d0/.lxc</code></td>
 <td>*1</td>
 <td>*2</td>
 </tr>
