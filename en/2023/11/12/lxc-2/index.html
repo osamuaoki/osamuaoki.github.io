@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/12 (initial publish),
-2023/11/17 (last update)
+2023/11/18 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00053.md
@@ -66,7 +66,8 @@ en/note-00053.md
   <ul>
     <li><a href="#subuid-and-subgid-on-debian-with-lxd">subuid and subgid on Debian with LXD</a></li>
     <li><a href="#basic-id-mapping-of-lxd">Basic ID Mapping of LXD</a></li>
-    <li><a href="#customized-id-maps-for-lxd-instances">Customized ID maps for LXD instances</a></li>
+    <li><a href="#mounting-file-ro">Mounting file (RO)</a></li>
+    <li><a href="#mounting-file-rw">Mounting file (RW)</a></li>
   </ul>
 </nav>
 
@@ -100,7 +101,9 @@ other distribution seems to use <code>lxd</code> for both user and group name fo
 _lxd:x:129:138::/var/lib/lxd/:/bin/false
  $ grep lxd /etc/group
 lxd:x:138:osamu
-</code></pre><h2 id="basic-id-mapping-of-lxd">Basic ID Mapping of LXD</h2>
+</code></pre><p>NOTE: If you change <code>/etc/subuid</code> and <code>/etc/subgid</code>, you need to execute
+<code>systemctl restart lxd</code> or reboot the system to get system updated.</p>
+<h2 id="basic-id-mapping-of-lxd">Basic ID Mapping of LXD</h2>
 <p>I created and used the baseline <code>deb-12</code> image using <code>lxcinit -d -p 12</code>.</p>
 <p>Then I started an instance <code>d0</code> with <code>lxc launch deb-12 d0</code>.</p>
 <p>I started one root (UID=0) shell with <code>lxc exec d0 -- bash -i</code>, and one primary
@@ -171,44 +174,108 @@ root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
 <li>*1: <code>0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-15e39553-cc20-4c70-bfd5-f8b95e2c6b5a.scope</code></li>
 <li>*2: <code>0::/user.slice/user-0.slice/session-11.scope</code></li>
 </ul>
-<h2 id="customized-id-maps-for-lxd-instances">Customized ID maps for LXD instances</h2>
+<h2 id="mounting-file-ro">Mounting file (RO)</h2>
 <p>Let&rsquo;s remove old running container and start fresh.</p>
 <pre tabindex="0"><code> $ lxc stop d0
  $ lxc delete d0
  $ lxcinit -d -u -p 12
  $ lxc launch deb-12 d0
- $ mkdir -p ~/shared
- $ lxc config set d0 raw.idmap &#34;both 1000 1000&#34;
- $ lxc config show d0
-architecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (cloud) (20231116_05:24)
-  image.name: debian-bookworm-amd64-cloud-20231116_05:24
-  image.os: debian
-  image.release: bookworm
-  image.serial: &#34;20231116_05:24&#34;
-  image.variant: cloud
-  raw.idmap: both 1000 1000
-  volatile.base_image: d4df99a65c9df23e3c487a9ed7b51cfe9b13dc3da098b36f3bcd399837d4b27e
-  volatile.cloud-init.instance-id: 2fc990c8-4846-477b-89c2-20d8f130ce86
-  volatile.eth0.host_name: vethe6a419ae
-  volatile.eth0.hwaddr: 00:16:3e:32:aa:6b
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: c79ed4c4-dfef-48f5-9eeb-bbd86f20886a
-devices: {}
-ephemeral: false
-profiles:
-- default
-stateful: false
-description: &#34;&#34;
-</code></pre><p>TBD</p>
+</code></pre><p>Let&rsquo;s think about sharing the directory <code>~/</code> of the primary user <code>osamu</code> in the
+host as a directory <code>~/shared</code> of the primary user <code>osamu</code> in the container by
+mounting it.</p>
+<pre tabindex="0"><code> $ echo $HOME
+/home/osamu
+ $ lxc config device add d0 homedir disk source=/home/osamu path=/home/osamu/host
+ $ lxc config device show d0
+homedir:
+  path: /home/osamu/host
+  source: /home/osamu
+  type: disk
+ $ lxc start d0
+ $ lxc exec do -- sudo -u osamu -i
+osamu@d0:\~$ ls -la
+total 16
+drwxr-xr-x 1 osamu  osamu    146 Nov 17 12:53 .
+drwxr-xr-x 1 root   root      10 Nov 17 05:09 ..
+-rw------- 1 osamu  osamu      7 Nov 17 09:04 .bash_history
+-rw-r--r-- 1 osamu  osamu    220 Apr 23  2023 .bash_logout
+-rw-r--r-- 1 osamu  osamu   3526 Apr 23  2023 .bashrc
+-rw-r--r-- 1 osamu  osamu    807 Apr 23  2023 .profile
+drwx------ 1 osamu  osamu     30 Nov 17 05:09 .ssh
+-rw-r--r-- 1 osamu  osamu      0 Nov 17 12:52 .sudo_as_admin_successful
+drwxr-xr-x 1 nobody nogroup 2132 Nov 17 08:54 host
+osamu@d0:\~$ ls -lani
+total 16
+21804 drwxr-xr-x 1  1000  1000  146 Nov 17 12:53 .
+  992 drwxr-xr-x 1     0     0   10 Nov 17 05:09 ..
+21916 -rw------- 1  1000  1000   62 Nov 17 12:57 .bash_history
+21805 -rw-r--r-- 1  1000  1000  220 Apr 23  2023 .bash_logout
+21806 -rw-r--r-- 1  1000  1000 3526 Apr 23  2023 .bashrc
+21807 -rw-r--r-- 1  1000  1000  807 Apr 23  2023 .profile
+21820 drwx------ 1  1000  1000   30 Nov 17 05:09 .ssh
+21990 -rw-r--r-- 1  1000  1000    0 Nov 17 12:52 .sudo_as_admin_successful
+  256 drwxr-xr-x 1 65534 65534 2132 Nov 17 08:54 host
+</code></pre><p>Here, a few interesting points.</p>
+<ul>
+<li><code>/home/osamu</code> on the host is mounted to <code>/home/osamu/host</code> in the container.</li>
+<li><code>/home/osamu/host</code> in the container is btrfs subvolume root (inode=256)</li>
+<li><code>/home/osamu/host</code> in the container is owned by <code>nobody:nogroup</code> due to we use unprivileged container</li>
+</ul>
+<h2 id="mounting-file-rw">Mounting file (RW)</h2>
+<p>Let me use <code>raw.idmap</code>.</p>
+<pre tabindex="0"><code>$ lxc config set d0 raw.idmap=&#39;both 1000 1000&#39;
+$ lxc start d0
+Error: Failed to run: /usr/bin/lxd forkstart d0 /var/lib/lxd/containers /var/log/lxd/d0/lxc.conf: exit status 1
+Try `lxc info --show-log d0` for more info
+$ lxc info --show-log d0
+Name: d0
+Status: STOPPED
+Type: container
+Architecture: x86_64
+Created: 2023/11/17 14:09 JST
+Last Used: 2023/11/17 22:11 JST
+
+Log:
+
+lxc d0 20231117131132.970 ERROR    conf - ../src/lxc/conf.c:lxc_map_ids:3701 - newuidmap failed to write mapping &#34;newuidmap: uid range [1000-1001) -&gt; [1000-1001) not allowed&#34;: newuidmap 40760 0 231072 1000 1000 1000 1 1001 232073 9999000
+...
+</code></pre><p>Oops, it failed!  Googling lead me to read tips:</p>
+<ul>
+<li><a href="https://stgraber.org/2017/06/15/custom-user-mappings-in-lxd-containers/">Custom user mappings in LXD containers</a></li>
+<li><a href="https://www.cyberciti.biz/faq/how-to-add-or-mount-directory-in-lxd-linux-container/">How to add or mount directory in LXD (Linux container)</a></li>
+</ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
+<pre tabindex="0"><code> $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subuid
+ $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subgid
+ $ cat /etc/subuid
+osamu:100000:65536
+zzz:165536:65536
+_lxd:231072:10000001
+root:231072:10000001
+root:1000:1
+ $ cat /etc/subgid
+osamu:100000:65536
+zzz:165536:65536
+_lxd:231072:10000001
+root:231072:10000001
+root:1000:1
+ $ sudo systemctl restart lxd
+</code></pre><p>This updates LXD and fixes situation.  Now.</p>
+<pre tabindex="0"><code>
+ $ lxc start d0
+ $ lxc exec d0 -- sudo -u osamu -i ls -la
+total 16
+drwxr-xr-x 1 osamu osamu  146 Nov 17 12:53 .
+drwxr-xr-x 1 root  root    10 Nov 17 05:09 ..
+-rw------- 1 osamu osamu   79 Nov 17 13:05 .bash_history
+-rw-r--r-- 1 osamu osamu  220 Apr 23  2023 .bash_logout
+-rw-r--r-- 1 osamu osamu 3526 Apr 23  2023 .bashrc
+-rw-r--r-- 1 osamu osamu  807 Apr 23  2023 .profile
+drwx------ 1 osamu osamu   30 Nov 17 05:09 .ssh
+-rw-r--r-- 1 osamu osamu    0 Nov 17 12:52 .sudo_as_admin_successful
+drwxr-xr-x 1 osamu osamu 2132 Nov 17 15:13 host
+</code></pre><p>No more error and RW access with matching UID/GID!</p>
 <p>See more in <a href="/en/2023/11/13/lxc-3/">Container with LXC/LXD (3)</a>.</p>
 <!-- raw HTML omitted -->
 
