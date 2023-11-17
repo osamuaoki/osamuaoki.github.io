@@ -64,17 +64,38 @@ en/note-00054.md
 
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#running-gui-application-in-container">Running GUI application in container</a></li>
     <li><a href="#configuration-of-lxd-instance">Configuration of LXD instance</a></li>
     <li><a href="#yaml-setting-for-profiledefault">YAML setting for profile=default</a></li>
     <li><a href="#user-specific-sockets-used-by-ipc">User specific sockets used by IPC</a></li>
-    <li><a href="#prepare-dbz-image-with-matching-user-name-as-the-host">Prepare &ldquo;dbz&rdquo;-image with matching user name as the host.</a></li>
     <li><a href="#yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</a></li>
-    <li><a href="#lxd-one-liners">LXD one liners</a></li>
   </ul>
 </nav>
 
 <p>Here is a memo of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
 <p>This is follow-up to <a href="/en/2023/11/12/lxc-2/">Container with LXC/LXD (2)</a>.</p>
+<h2 id="running-gui-application-in-container">Running GUI application in container</h2>
+<p>Unlike console applications, running GUI applications in container is a bit complicate.  For now, I found some HOWTOs:</p>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/LXD#Use_Wayland_and_Xorg_applications">Use Wayland and Xorg applications</a> (updated 2023-10-07) &ndash; ARCHLINUX wiki</li>
+<li><a href="https://blog.swwomm.com/2022/08/lxd-containers-for-wayland-gui-apps.html">LXD Containers for Wayland GUI Apps</a> (2022-08-28)</li>
+<li><a href="https://dev.to/amabe_dev/how-to-run-gui-apps-in-lxd-containers-882">How to run GUI apps in LXD containers</a> (2022-08-04)</li>
+<li>HOWTO: <a href="https://discuss.linuxcontainers.org/t/howto-use-the-hosts-wayland-and-xwayland-servers-inside-containers/8765">Use the Host’s Wayland and XWayland Servers inside containers</a> (updated 2022-03-18) &ndash; LinuxContainers.org wiki</li>
+<li>Overview: <a href="https://discuss.linuxcontainers.org/t/overview-gui-inside-containers/8767">GUI inside Containers</a> (2020-08-22) &ndash; LinuxContainers.org discuss</li>
+<li><a href="https://www.janhouse.lv/blog/linux/running-gui-apps-from-linux-containers/">Running GUI apps from Linux containers</a> (2020-03-28)</li>
+<li><a href="https://gist.github.com/stueja/447bd3bc0d510a0a7e50f9f1ef58ad75">GUI application via Wayland from Ubuntu LXD container on Arch Linux host</a> (2018-01-01)</li>
+<li><a href="https://blog.simos.info/how-to-run-graphics-accelerated-gui-apps-in-lxd-containers-on-your-ubuntu-desktop/">How to run graphics-accelerated GUI apps in LXD containers on your Ubuntu
+desktop</a> (2017-05-03)</li>
+</ul>
+<p>Here are ones in Japanese:</p>
+<ul>
+<li><a href="https://gihyo.jp/admin/serial/01/ubuntu-recipe/0738">リモートのLXDインスタンスの画面をローカルから操作してVDI環境を構築する</a> (2022-11-09)</li>
+<li><a href="https://qiita.com/yoshi10ryu1/items/a720f9e664e5948c4e31">LXD で作る仮想化 GUI 環境 - Ubuntu 22.04 LTS 版</a> (2022-09-23)</li>
+<li><a href="https://broken-engineer.opensource.ryukyu/archives/14442464.html">lxd_gui_container - Run GUI applications in LXD containers. Separate display server.</a> (2022-05-02)</li>
+<li><a href="https://note.com/koya0316/n/n4a0f6e095047">開発日誌：LXD デスクトップRDP</a>
+(2021-07-30)</li>
+<li><a href="https://qiita.com/330k/items/3fc42431d4d08b925541">LXD + Ubuntu 18.04 + MATE + xrdpでリモートデスクトップ環境を作る</a> (2021-03-09)</li>
+</ul>
 <h2 id="configuration-of-lxd-instance">Configuration of LXD instance</h2>
 <p>We can configure an instance in 3 ways with YAML setting data <code>wayland.yaml</code>.</p>
 <ul>
@@ -129,20 +150,6 @@ srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 snapd-session-agent.socket
 srwxr-xr-x 1 osamu osamu   0 Nov 14 08:05 wayland-0
 </code></pre><p>So wayland for monitor screen is accessed as <code>/run/user/1000/wayland-0</code>.</p>
 <p>If sound needs to be accessed, its <code>/run/user/1000/pipewire-0</code>.</p>
-<h2 id="prepare-dbz-image-with-matching-user-name-as-the-host">Prepare &ldquo;dbz&rdquo;-image with matching user name as the host.</h2>
-<p>I created local image with primary user name set to &ldquo;osamu&rdquo; and without
-&ldquo;netdev&rdquo; in groups-list as &ldquo;dbz&rdquo;-image:</p>
-<pre tabindex="0"><code> $ lxc file edit dbc0/etc/cloud/cloud.cfg
- $ lxc publish dbc0 --alias dbz
-</code></pre><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
-data is implemented by <code>cloud-config</code> in rather later part of its process.  So
-trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> doesn&rsquo;t work.</p>
-<p>Later, in order to automate this, I created a script to fix its image:
-<a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a></p>
-<ul>
-<li>This removes <code>netdev</code> group and changes the primary user to <code>osamu</code> for
-cloud-init.</li>
-</ul>
 <h2 id="yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</h2>
 <p>Here is a simple YAML data example (<code>wayland.yaml</code>) to set profile to wayland.</p>
 <pre tabindex="0"><code> $ cd path/to/
@@ -310,12 +317,7 @@ description: &#34;&#34;
 execute commands as the container starts.</p>
 <p>This container environment allowed me to run wayland GUI program <code>eog</code> in
 container and displaying it to the host GNOME Desktop.  Nice.</p>
-<h2 id="lxd-one-liners">LXD one liners</h2>
-<p>Delete all instances:</p>
-<pre tabindex="0"><code> $ for f in $(lxc ls -cn -fcsv) ; do lxc delete $f; done
-</code></pre><p>Delete all images:</p>
-<pre tabindex="0"><code> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
-</code></pre><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 
 
 <table width="100%">

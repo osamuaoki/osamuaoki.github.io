@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/11/16 (last update)
+2023/11/17 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -80,7 +80,9 @@ en/note-00050.md
         <li><a href="#tweaking-image-content-before-starting-an-instance">Tweaking image content before starting an instance</a></li>
       </ul>
     </li>
-    <li><a href="#running-gui-application-in-container">Running GUI application in container</a></li>
+    <li><a href="#prepare-dbz-image-with-matching-user-name-as-the-host">Prepare &ldquo;dbz&rdquo;-image with matching user name as the host.</a></li>
+    <li><a href="#lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</a></li>
+    <li><a href="#lxd-one-liners">LXD one liners</a></li>
     <li><a href="#gui-for-lxd-management-tool">GUI for LXD management tool</a></li>
     <li><a href="#lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</a></li>
   </ul>
@@ -566,32 +568,59 @@ combination here can be replaced with <code>lxc file edit dbc0/etc/cloud/cloud.c
 Editing with published image like <code>lxc image edit dbc</code> doesn&rsquo;t change image
 data in these directory nor hash value used for the image name but updates
 description displayed by <code>lxc image ls dbc</code>.</p>
-<!-- raw HTML omitted -->
+<h2 id="prepare-dbz-image-with-matching-user-name-as-the-host">Prepare &ldquo;dbz&rdquo;-image with matching user name as the host.</h2>
+<p>I created local image with primary user name set to &ldquo;osamu&rdquo; and without
+&ldquo;netdev&rdquo; in groups-list as &ldquo;dbc&rdquo;-image:</p>
+<pre tabindex="0"><code> $ lxc file edit dbc0/etc/cloud/cloud.cfg
+ $ lxc publish dbc0 --alias dbz
+</code></pre><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
+data is implemented by <code>cloud-config</code> in rather later part of its process.  So
+trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> doesn&rsquo;t work.</p>
+<h2 id="lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</h2>
+<p>Later, in order to automate this, I created a script to fix its image:
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a>.  This
+removes <code>netdev</code> group and optionally changes the primary user to <code>osamu</code> for
+cloud-init.</p>
+<pre tabindex="0"><code> $ lxcinit -h
+=============================================================================
+NAME:
+  lxcinit -- download lxd Debian cloud image and make local fixed image
+             &#34;deb-&lt;name&gt;&#34;
+
+SYNOPSIS:
+  lxcinit [-b|-d|-h|-p|-u|--] [&lt;name&gt;]
+
+DESCRIPTION:
+  lxcinit creates a local un-previlidged LXD image &#34;deb-&lt;name&gt;&#34; just like
+  the following but with some fix-ups on /etc/cloud/cloud.cfg:
+
+  $ lxc init images:debian/&lt;name&gt;/cloud deb-&lt;name&gt;
+  $ lxc publish deb-&lt;name&gt; --alias=deb-&lt;name&gt;
+
+  The default &lt;name&gt; is &#34;sid&#34;.  The &lt;name&gt; consists of the release name.
+  E.g., 13, &#34;trixie&#34;, 12, &#34;bookworm&#34;, 11, &#34;buster&#34;, ...
+
+  You can&#39;t use instance name such as deb-&lt;name&gt;.
+
+OPTIONS: (only the first character matters)
+  -base BASE  set base name as BASE (&#34;deb-&#34;)
+  -delete     delete unmodified instance deb-&lt;name&gt;
+  -help       print this help message and exit
+  -primary    match primary user name in container with the current user
+  -update     update the local image deb-&lt;name&gt; after removing it first.
+
+=============================================================================
+</code></pre><h2 id="lxd-one-liners">LXD one liners</h2>
+<p>Delete all instances:</p>
+<pre tabindex="0"><code> $ for f in $(lxc ls -cn -fcsv) ; do lxc delete $f; done
+</code></pre><p>Delete all images:</p>
+<pre tabindex="0"><code> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
+</code></pre><p>Delete all images without alias:</p>
+<pre tabindex="0"><code> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,$/s/,//p&#34;) ; do lxc image delete $f; done
+</code></pre><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <p>I think I got some glimpses of LXC/LXD up to how to get an instance started
 with default configuration.</p>
-<h2 id="running-gui-application-in-container">Running GUI application in container</h2>
-<p>Unlike console applications, running GUI applications in container is a bit complicate.  For now, I found some HOWTOs:</p>
-<ul>
-<li><a href="https://wiki.archlinux.org/title/LXD#Use_Wayland_and_Xorg_applications">Use Wayland and Xorg applications</a> (updated 2023-10-07) &ndash; ARCHLINUX wiki</li>
-<li><a href="https://blog.swwomm.com/2022/08/lxd-containers-for-wayland-gui-apps.html">LXD Containers for Wayland GUI Apps</a> (2022-08-28)</li>
-<li><a href="https://dev.to/amabe_dev/how-to-run-gui-apps-in-lxd-containers-882">How to run GUI apps in LXD containers</a> (2022-08-04)</li>
-<li>HOWTO: <a href="https://discuss.linuxcontainers.org/t/howto-use-the-hosts-wayland-and-xwayland-servers-inside-containers/8765">Use the Host’s Wayland and XWayland Servers inside containers</a> (updated 2022-03-18) &ndash; LinuxContainers.org wiki</li>
-<li>Overview: <a href="https://discuss.linuxcontainers.org/t/overview-gui-inside-containers/8767">GUI inside Containers</a> (2020-08-22) &ndash; LinuxContainers.org discuss</li>
-<li><a href="https://www.janhouse.lv/blog/linux/running-gui-apps-from-linux-containers/">Running GUI apps from Linux containers</a> (2020-03-28)</li>
-<li><a href="https://gist.github.com/stueja/447bd3bc0d510a0a7e50f9f1ef58ad75">GUI application via Wayland from Ubuntu LXD container on Arch Linux host</a> (2018-01-01)</li>
-<li><a href="https://blog.simos.info/how-to-run-graphics-accelerated-gui-apps-in-lxd-containers-on-your-ubuntu-desktop/">How to run graphics-accelerated GUI apps in LXD containers on your Ubuntu
-desktop</a> (2017-05-03)</li>
-</ul>
-<p>Here are ones in Japanese:</p>
-<ul>
-<li><a href="https://gihyo.jp/admin/serial/01/ubuntu-recipe/0738">リモートのLXDインスタンスの画面をローカルから操作してVDI環境を構築する</a> (2022-11-09)</li>
-<li><a href="https://qiita.com/yoshi10ryu1/items/a720f9e664e5948c4e31">LXD で作る仮想化 GUI 環境 - Ubuntu 22.04 LTS 版</a> (2022-09-23)</li>
-<li><a href="https://broken-engineer.opensource.ryukyu/archives/14442464.html">lxd_gui_container - Run GUI applications in LXD containers. Separate display server.</a> (2022-05-02)</li>
-<li><a href="https://note.com/koya0316/n/n4a0f6e095047">開発日誌：LXD デスクトップRDP</a>
-(2021-07-30)</li>
-<li><a href="https://qiita.com/330k/items/3fc42431d4d08b925541">LXD + Ubuntu 18.04 + MATE + xrdpでリモートデスクトップ環境を作る</a> (2021-03-09)</li>
-</ul>
 <h2 id="gui-for-lxd-management-tool">GUI for LXD management tool</h2>
 <p>Debian 12 doesn&rsquo;t ship any GUI tools for LXD.</p>
 <p>I decided to give up on finding good GUI tools for LXD after my cursory research as below.</p>
