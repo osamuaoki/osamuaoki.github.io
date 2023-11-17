@@ -172,7 +172,12 @@ root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
 <li>*2: <code>0::/user.slice/user-0.slice/session-11.scope</code></li>
 </ul>
 <h2 id="customized-id-maps-for-lxd-instances">Customized ID maps for LXD instances</h2>
-<pre tabindex="0"><code> $ mkdir -p ~/shared
+<p>Let&rsquo;s remove old running container and start fresh.</p>
+<pre tabindex="0"><code> $ lxc stop d0
+ $ lxc delete d0
+ $ lxcinit -d -u -p 12
+ $ lxc launch deb-12 d0
+ $ mkdir -p ~/shared
  $ lxc config set d0 raw.idmap &#34;both 1000 1000&#34;
  $ lxc config show d0
 architecture: x86_64
