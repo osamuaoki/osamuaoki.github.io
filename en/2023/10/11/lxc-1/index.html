@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/11/17 (last update)
+2023/11/18 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -581,7 +581,8 @@ trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> does
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a>.  This
 removes <code>netdev</code> group and optionally changes the primary user to <code>osamu</code> for
 cloud-init.</p>
-<pre tabindex="0"><code> $ lxcinit -h
+<pre tabindex="0"><code>$ lxcinit -h
+
 =============================================================================
 NAME:
   lxcinit -- download lxd Debian cloud image and make local fixed image
@@ -597,10 +598,12 @@ DESCRIPTION:
   $ lxc init images:debian/&lt;name&gt;/cloud deb-&lt;name&gt;
   $ lxc publish deb-&lt;name&gt; --alias=deb-&lt;name&gt;
 
-  The default &lt;name&gt; is &#34;sid&#34;.  The &lt;name&gt; consists of the release name.
-  E.g., 13, &#34;trixie&#34;, 12, &#34;bookworm&#34;, 11, &#34;buster&#34;, ...
+  The default &lt;name&gt; is &#34;sid&#34;.  The &lt;name&gt; consists of the codename or the
+  release version:
+    - &#34;sid&#34;, &#34;trixie&#34;, &#34;bookworm&#34;, &#34;bullseye&#34;, &#34;buster&#34;, 12, 11, 10
 
-  You can&#39;t use instance name such as deb-&lt;name&gt;.
+  You can&#39;t have an existing instance name such as deb-&lt;name&gt; for this
+  command to function.
 
 OPTIONS: (only the first character matters)
   -base BASE  set base name as BASE (&#34;deb-&#34;)
@@ -617,6 +620,8 @@ OPTIONS: (only the first character matters)
 <pre tabindex="0"><code> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
 </code></pre><p>Delete all images without alias:</p>
 <pre tabindex="0"><code> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,$/s/,//p&#34;) ; do lxc image delete $f; done
+</code></pre><p>Delete all images with alias:</p>
+<pre tabindex="0"><code> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,..*$/s/,.*$//p&#34;) ; do lxc image delete $f; done
 </code></pre><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="gui-for-lxd-management-tool">GUI for LXD management tool</h2>

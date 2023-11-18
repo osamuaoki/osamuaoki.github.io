@@ -217,9 +217,11 @@ total 16
   256 drwxr-xr-x 1 65534 65534 2132 Nov 17 08:54 host
 </code></pre><p>Here, a few interesting points.</p>
 <ul>
+<li>The directory assigned to <code>path=</code> doesn&rsquo;t need to exist in advance.  It is created automatically.</li>
 <li><code>/home/osamu</code> on the host is mounted to <code>/home/osamu/host</code> in the container.</li>
-<li><code>/home/osamu/host</code> in the container is btrfs subvolume root (inode=256)</li>
-<li><code>/home/osamu/host</code> in the container is owned by <code>nobody:nogroup</code> due to we use unprivileged container</li>
+<li><code>/home/osamu/host</code> in the container is btrfs subvolume root (inode=256) since
+<code>/home/osamu</code> on the host is btrfs subvolume root.</li>
+<li><code>/home/osamu/host</code> in the container is owned by <code>nobody:nogroup</code> due to we use unprivileged container without <code>raw.idmap</code>.</li>
 </ul>
 <h2 id="mounting-file-rw">Mounting file (RW)</h2>
 <p>Let me use <code>raw.idmap</code>.</p>

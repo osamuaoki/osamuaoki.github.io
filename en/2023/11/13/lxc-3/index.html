@@ -145,7 +145,7 @@ used_by:
 - /1.0/instances/d2
 </code></pre><p>The last list for key=<code>used_by</code> changes as I use this profile.</p>
 <h2 id="user-specific-sockets-used-by-ipc">User specific sockets used by IPC</h2>
-<p>For my primary user (name=osamu, UID=1000), I see following user specific
+<p>For my primary user (name=<code>osamu</code>, UID=<code>1000</code>), I see following user specific
 sockets in my Debian 12 bookworm running GNOME on wayland as:</p>
 <pre tabindex="0"><code>$ ls -l /run/user/1000/ |grep ^s
 srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 bus
@@ -215,7 +215,7 @@ usual location in the container (/run/user/1000/wayland-0) every time when the
 primary user <code>osamu</code> logs in.</p>
 <p>Let me create profile <code>wayland</code> and start an instance <code>d0</code> with it:</p>
 <pre tabindex="0"><code> $ lxc profile edit wayland &lt; wayland.yaml
- $ lxc init dbz dbz0 --profile wayland
+ $ lxc init deb-12 d0 --profile wayland
  $ lxc profile ls
 +---------+---------------------+---------+
 |  NAME   |     DESCRIPTION     | USED BY |
@@ -224,9 +224,9 @@ primary user <code>osamu</code> logs in.</p>
 +---------+---------------------+---------+
 | wayland | Wayland LXD profile | 0       |
 +---------+---------------------+---------+
- $ lxc start dbz0
+ $ lxc start d0
 </code></pre><p>Let me inspect instance <code>d0</code> running with profile=wayland .</p>
-<pre tabindex="0"><code>$ lxc config show dbz0
+<pre tabindex="0"><code>$ lxc config show d0
 architecture: x86_64
 config:
   image.architecture: amd64
@@ -253,7 +253,7 @@ profiles:
 stateful: false
 description: &#34;&#34;
 </code></pre><p>Since this only say to use <code>profiles=wayland</code>, let&rsquo;s expand it:</p>
-<pre tabindex="0"><code>$ lxc config show dbz0 -e
+<pre tabindex="0"><code>$ lxc config show d0 -e
 architecture: x86_64
 config:
   boot.autostart: &#34;false&#34;
