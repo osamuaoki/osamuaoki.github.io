@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Container with LXC/LXD (4) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Container with LXC/LXD (4)</span></h1>
+
+<h3 class="date">Date:
+2023/11/14 (initial publish),
+2023/11/21 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00055.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/13/lxc-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#running-gui-application-in-container">Running GUI application in container</a></li>
+    <li><a href="#yaml-setting-for-profiledefault">YAML setting for profile=default</a></li>
+    <li><a href="#user-specific-sockets-used-by-ipc">User specific sockets used by IPC</a></li>
+    <li><a href="#running-gui-application-eog-in-container-using-proxy-device">Running GUI application <code>eog</code> in container using proxy device</a></li>
+    <li><a href="#running-gui-application-firefox-in-container-using-proxy-device">Running GUI application <code>firefox</code> in container using proxy device</a></li>
+    <li><a href="#running-gui-application-chromium-in-container-using-proxy-device">Running GUI application <code>chromium</code> in container using proxy device</a></li>
+  </ul>
+</nav>
+
+<p>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
+<h2 id="running-gui-application-in-container">Running GUI application in container</h2>
+<p>Unlike console applications, running GUI applications in container is a bit complicate.  For now, I found some HOWTOs:</p>
+<ul>
+<li><a href="https://discuss.linuxcontainers.org/t/incus-lxd-profile-for-gui-apps-wayland-x11-and-pulseaudio/18295">Incus / LXD profile for GUI apps: Wayland, X11 and Pulseaudio</a> (2023-11-17)</li>
+<li><a href="https://wiki.archlinux.org/title/LXD#Use_Wayland_and_Xorg_applications">Use Wayland and Xorg applications</a> (updated 2023-10-07) &ndash; ARCHLINUX wiki</li>
+<li><a href="https://blog.swwomm.com/2022/08/lxd-containers-for-wayland-gui-apps.html">LXD Containers for Wayland GUI Apps</a> (2022-08-28)</li>
+<li><a href="https://dev.to/amabe_dev/how-to-run-gui-apps-in-lxd-containers-882">How to run GUI apps in LXD containers</a> (2022-08-04)</li>
+<li>HOWTO: <a href="https://discuss.linuxcontainers.org/t/howto-use-the-hosts-wayland-and-xwayland-servers-inside-containers/8765">Use the Host’s Wayland and XWayland Servers inside containers</a> (updated 2022-03-18) &ndash; LinuxContainers.org wiki</li>
+<li>Overview: <a href="https://discuss.linuxcontainers.org/t/overview-gui-inside-containers/8767">GUI inside Containers</a> (2020-08-22) &ndash; LinuxContainers.org discuss</li>
+<li><a href="https://www.janhouse.lv/blog/linux/running-gui-apps-from-linux-containers/">Running GUI apps from Linux containers</a> (2020-03-28)</li>
+<li><a href="https://gist.github.com/stueja/447bd3bc0d510a0a7e50f9f1ef58ad75">GUI application via Wayland from Ubuntu LXD container on Arch Linux host</a> (2018-01-01)</li>
+<li><a href="https://blog.simos.info/how-to-run-graphics-accelerated-gui-apps-in-lxd-containers-on-your-ubuntu-desktop/">How to run graphics-accelerated GUI apps in LXD containers on your Ubuntu
+desktop</a> (2017-05-03)</li>
+</ul>
+<p>Here are ones in Japanese:</p>
+<ul>
+<li><a href="https://gihyo.jp/admin/serial/01/ubuntu-recipe/0738">リモートのLXDインスタンスの画面をローカルから操作してVDI環境を構築する</a> (2022-11-09)</li>
+<li><a href="https://qiita.com/yoshi10ryu1/items/a720f9e664e5948c4e31">LXD で作る仮想化 GUI 環境 - Ubuntu 22.04 LTS 版</a> (2022-09-23)</li>
+<li><a href="https://broken-engineer.opensource.ryukyu/archives/14442464.html">lxd_gui_container - Run GUI applications in LXD containers. Separate display server.</a> (2022-05-02)</li>
+<li><a href="https://note.com/koya0316/n/n4a0f6e095047">開発日誌：LXD デスクトップRDP</a>
+(2021-07-30)</li>
+<li><a href="https://qiita.com/330k/items/3fc42431d4d08b925541">LXD + Ubuntu 18.04 + MATE + xrdpでリモートデスクトップ環境を作る</a> (2021-03-09)</li>
+</ul>
+<p>All these looks interesting references but they are not always using GNOME
+wayland under the Debian bookworm environment.</p>
+<p>I will try similar things using GNOME wayland under the Debian bookworm
+environment in the followings.</p>
+<h2 id="yaml-setting-for-profiledefault">YAML setting for profile=default</h2>
+<p>Let&rsquo;s see the default LXD profile:</p>
+<pre tabindex="0"><code>$ lxc profile show default
+config: {}
+description: Default LXD profile
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  root:
+    path: /
+    pool: default
+    type: disk
+name: default
+used_by:
+- /1.0/instances/d0
+- /1.0/instances/d1
+- /1.0/instances/d2
+</code></pre><p>The last list for key=<code>used_by</code> changes as I use this profile.</p>
+<p>Unless this list is empty, profile can&rsquo;t be deleted.</p>
+<h2 id="user-specific-sockets-used-by-ipc">User specific sockets used by IPC</h2>
+<p>For my primary user (name=<code>osamu</code>, UID=<code>1000</code>) on the host system running
+Debian 12 bookworm with GNOME wayland, I see following user specific sockets:</p>
+<pre tabindex="0"><code> $ find /run/user/1000 -type s
+/run/user/1000/wayland-0
+/run/user/1000/at-spi/bus
+/run/user/1000/openssh_agent
+/run/user/1000/snapd-session-agent.socket
+/run/user/1000/pk-debconf-socket
+/run/user/1000/pipewire-0
+/run/user/1000/pulse/native
+/run/user/1000/keyring/.ssh
+/run/user/1000/keyring/ssh
+/run/user/1000/keyring/pkcs11
+/run/user/1000/keyring/control
+/run/user/1000/gcr/ssh
+/run/user/1000/gnupg/S.gpg-agent
+/run/user/1000/gnupg/S.gpg-agent.ssh
+/run/user/1000/gnupg/S.gpg-agent.extra
+/run/user/1000/gnupg/S.gpg-agent.browser
+/run/user/1000/gnupg/S.dirmngr
+/run/user/1000/bus
+/run/user/1000/systemd/private
+/run/user/1000/systemd/notify
+/run/user/1000/systemd/inaccessible/sock
+find: ‘/run/user/1000/systemd/inaccessible/dir’: Permission denied
+ $ sudo find /run/user/1000/systemd  -type s
+/run/user/1000/systemd/private
+/run/user/1000/systemd/notify
+/run/user/1000/systemd/inaccessible/sock
+</code></pre><p>So the monitor screen is accessed as <code>/run/user/1000/wayland-0</code> from Wayland on
+my environment.</p>
+<p>If sound needs to be accessed, sockets such as <code>/run/user/1000/pipewire-0</code> may
+be needed.  I will address this more complex case later.  For now, let me focus
+on to use <code>wayland-o</code> socket.</p>
+<h2 id="running-gui-application-eog-in-container-using-proxy-device">Running GUI application <code>eog</code> in container using proxy device</h2>
+<p>Here is a simple YAML data example (<code>wayland.yaml</code>) to add <code>proxy</code> device for
+the Wayland socket.</p>
+<pre tabindex="0"><code> $ cd path/to/
+ $ cat wayland.yaml
+config:
+  boot.autostart: false
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+    write_files:
+    - path: /usr/local/bin/mystartup.sh
+      permissions: 0755
+      content: |
+        #!/bin/sh
+        uid=$(id -u)
+        run_dir=/run/user/$uid
+        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
+        ln -sf /mnt/wayland-socket $run_dir/wayland-0
+    - path: /usr/local/etc/mystartup.service
+      content: |
+        [Unit]
+        After=local-fs.target
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/local/bin/mystartup.sh
+        [Install]
+        WantedBy=default.target
+    runcmd:
+    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
+    - chown -R osamu:osamu /home/osamu
+    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
+description: Wayland LXD profile
+devices:
+  wayland-socket:
+    bind: container
+    connect: unix:/run/user/1000/wayland-0
+    listen: unix:/mnt/wayland-socket
+    uid: 1000
+    gid: 1000
+    type: proxy
+</code></pre><p>The <code>mystartup.sh</code> script in <code>user.user-data</code> is generated and applied when
+<code>cloud-init</code> applies <code>user.user-data</code> at the first boot of the instance to set
+up systemd startup script. This startup script links the Wayland socket to its
+usual location in the container (/run/user/1000/wayland-0) every time when the
+primary user <code>osamu</code> logs in.</p>
+<p>Let me first create a profile <code>wayland</code> and start an instance <code>d0</code> with it:</p>
+<pre tabindex="0"><code> $ lxc profile edit wayland &lt; wayland.yaml
+ $ lxc profile ls
++---------+---------------------+---------+
+|  NAME   |     DESCRIPTION     | USED BY |
++---------+---------------------+---------+
+| default | Default LXD profile | 3       |
++---------+---------------------+---------+
+| wayland | Wayland LXD profile | 0       |
++---------+---------------------+---------+
+</code></pre><p>Let me start <code>d0</code> instance with wayland profile</p>
+<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud d0 --profile wayland
+</code></pre><p>Let me inspect instance <code>d0</code> running with profile=wayland .</p>
+<pre tabindex="0"><code> $ lxc config show d0
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (20231118_05:24)
+  image.os: Debian
+  image.release: bookworm
+  image.serial: &#34;20231118_05:24&#34;
+  image.type: squashfs
+  image.variant: cloud
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
+  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
+  volatile.eth0.host_name: vethf053a734
+  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
+devices:
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+ephemeral: false
+profiles:
+- default
+stateful: false
+description: &#34;&#34;
+</code></pre><p>Since this only say to use <code>profiles=wayland</code>, let&rsquo;s expand it:</p>
+<pre tabindex="0"><code> $ lxc config show d0 -e
+rchitecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (20231118_05:24)
+  image.os: Debian
+  image.release: bookworm
+  image.serial: &#34;20231118_05:24&#34;
+  image.type: squashfs
+  image.variant: cloud
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
+  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
+  volatile.eth0.host_name: vethf053a734
+  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+  root:
+    path: /
+    pool: default
+    type: disk
+ephemeral: false
+profiles:
+- default
+stateful: false
+description: &#34;&#34;
+</code></pre><p>Now, we can see full contents of <code>user.user_data:</code> and <code>devices:</code>.</p>
+<p>This <code>user.user_data:</code> YAML data is passed to <code>cloud-init</code> to create files and
+execute commands as the container starts.</p>
+<p>This container environment allowed me to run wayland GUI program <code>eog</code> in
+container and displaying its result to the host GNOME Desktop.  Nice.</p>
+<h2 id="running-gui-application-firefox-in-container-using-proxy-device">Running GUI application <code>firefox</code> in container using proxy device</h2>
+<p>I  installed and tried the <code>firefox-esr</code> package.</p>
+<p>Then started <code>firefox</code>:</p>
+<pre tabindex="0"><code>osamu@wayland:~$ firefox
+[GFX1-]: glxtest: libpci missing
+</code></pre><p>This can be fixed by installing <code>libpci3</code> package (<a href="https://askubuntu.com/questions/1334192/glxtest-libpci-missing-although-i-made-an-apt-install">some web
+article</a>
+implies to install <code>libpci-dev</code> which installs more packages in addition to
+<code>libpci3</code> as a cure.):</p>
+<pre tabindex="0"><code>osamu@wayland:~$ sudo apt install libpci3
+...
+osamu@wayland:~$ firefox
+osamu@wayland:~$
+</code></pre><p>Normally, <code>pciutils</code> package which has &ldquo;priority: standard&rdquo; is installed and
+pulls in <code>libpci3</code>.  But <code>firefox-esr</code> doesn&rsquo;t list <code>libpci3</code> explicitly as
+<code>Depends:</code> nor <code>Recommends:</code>.  I suppose this is a
+<a href="https://bugs.debian.org/993308">bug</a>.</p>
+<h2 id="running-gui-application-chromium-in-container-using-proxy-device">Running GUI application <code>chromium</code> in container using proxy device</h2>
+<p>I installed and tried the <code>chromium</code> package.</p>
+<p>Then started <code>chromium</code>:</p>
+<pre tabindex="0"><code>osamu@wayland:~$ chromium
+[5034:5034:1120/002732.356244:ERROR:ozone_platform_x11.cc(239)] Missing X server or $DISPLAY
+[5034:5034:1120/002732.356284:ERROR:env.cc(255)] The platform failed to initialize.  Exiting.
+</code></pre><p>TBC</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/13/lxc-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

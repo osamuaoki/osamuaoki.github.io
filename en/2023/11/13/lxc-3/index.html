@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/13 (initial publish),
-2023/11/18 (last update)
+2023/11/21 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00054.md
@@ -54,7 +54,7 @@ en/note-00054.md
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2023/11/14/lxc-4/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -64,242 +64,516 @@ en/note-00054.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#running-gui-application-in-container">Running GUI application in container</a></li>
-    <li><a href="#configuration-of-lxd-instance">Configuration of LXD instance</a></li>
-    <li><a href="#yaml-setting-for-profiledefault">YAML setting for profile=default</a></li>
-    <li><a href="#user-specific-sockets-used-by-ipc">User specific sockets used by IPC</a></li>
-    <li><a href="#yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</a></li>
+    <li><a href="#clean-up-d0-instance-for-experiment">Clean up <code>d0</code> instance for experiment</a></li>
+    <li><a href="#merging-yaml-settings">Merging YAML settings</a></li>
+    <li><a href="#subuid-and-subgid-on-debian-with-lxd">subuid and subgid on Debian with LXD</a></li>
+    <li><a href="#basic-id-mapping-of-lxd">Basic ID Mapping of LXD</a></li>
+    <li><a href="#mounting-file-ro----lxc-config-">Mounting file (RO) &ndash; <code>lxc config ...</code></a></li>
+    <li><a href="#mounting-file-rw----lxc-config-">Mounting file (RW) &ndash; <code>lxc config ...</code></a></li>
+    <li><a href="#mounting-file-rw----profiledefault--sharedyaml">Mounting file (RW) &ndash; profile=default + <code>shared.yaml</code></a></li>
+    <li><a href="#mounting-file-rw----profileshared">Mounting file (RW) &ndash; profile=shared</a></li>
+    <li><a href="#mounting-file-rw----profilesharedx">Mounting file (RW) &ndash; profile=sharedx</a></li>
   </ul>
 </nav>
 
-<p>Here is a memo of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
-<p>This is follow-up to <a href="/en/2023/11/12/lxc-2/">Container with LXC/LXD (2)</a>.</p>
-<h2 id="running-gui-application-in-container">Running GUI application in container</h2>
-<p>Unlike console applications, running GUI applications in container is a bit complicate.  For now, I found some HOWTOs:</p>
+<p>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
+<h2 id="clean-up-d0-instance-for-experiment">Clean up <code>d0</code> instance for experiment</h2>
+<p>In following examples, the instance <code>d0</code> is always deleted in advance without
+mentions by:</p>
+<pre tabindex="0"><code> $ lxc stop d0
+ $ lxc delete d0
+</code></pre><p>or simply:</p>
+<pre tabindex="0"><code> $ lxc delete d0 -f
+</code></pre><h2 id="merging-yaml-settings">Merging YAML settings</h2>
+<p>As seen in following examples, YAML settings of <code>lxc</code> are merged by key for dictionary.</p>
+<h2 id="subuid-and-subgid-on-debian-with-lxd">subuid and subgid on Debian with LXD</h2>
+<p>UID and GID:</p>
 <ul>
-<li><a href="https://discuss.linuxcontainers.org/t/incus-lxd-profile-for-gui-apps-wayland-x11-and-pulseaudio/18295">Incus / LXD profile for GUI apps: Wayland, X11 and Pulseaudio</a> (2023-11-17)</li>
-<li><a href="https://wiki.archlinux.org/title/LXD#Use_Wayland_and_Xorg_applications">Use Wayland and Xorg applications</a> (updated 2023-10-07) &ndash; ARCHLINUX wiki</li>
-<li><a href="https://blog.swwomm.com/2022/08/lxd-containers-for-wayland-gui-apps.html">LXD Containers for Wayland GUI Apps</a> (2022-08-28)</li>
-<li><a href="https://dev.to/amabe_dev/how-to-run-gui-apps-in-lxd-containers-882">How to run GUI apps in LXD containers</a> (2022-08-04)</li>
-<li>HOWTO: <a href="https://discuss.linuxcontainers.org/t/howto-use-the-hosts-wayland-and-xwayland-servers-inside-containers/8765">Use the Host’s Wayland and XWayland Servers inside containers</a> (updated 2022-03-18) &ndash; LinuxContainers.org wiki</li>
-<li>Overview: <a href="https://discuss.linuxcontainers.org/t/overview-gui-inside-containers/8767">GUI inside Containers</a> (2020-08-22) &ndash; LinuxContainers.org discuss</li>
-<li><a href="https://www.janhouse.lv/blog/linux/running-gui-apps-from-linux-containers/">Running GUI apps from Linux containers</a> (2020-03-28)</li>
-<li><a href="https://gist.github.com/stueja/447bd3bc0d510a0a7e50f9f1ef58ad75">GUI application via Wayland from Ubuntu LXD container on Arch Linux host</a> (2018-01-01)</li>
-<li><a href="https://blog.simos.info/how-to-run-graphics-accelerated-gui-apps-in-lxd-containers-on-your-ubuntu-desktop/">How to run graphics-accelerated GUI apps in LXD containers on your Ubuntu
-desktop</a> (2017-05-03)</li>
-</ul>
-<p>Here are ones in Japanese:</p>
+<li>POSIX requires to cover: 0 - 2^16-1 = 65,535
 <ul>
-<li><a href="https://gihyo.jp/admin/serial/01/ubuntu-recipe/0738">リモートのLXDインスタンスの画面をローカルから操作してVDI環境を構築する</a> (2022-11-09)</li>
-<li><a href="https://qiita.com/yoshi10ryu1/items/a720f9e664e5948c4e31">LXD で作る仮想化 GUI 環境 - Ubuntu 22.04 LTS 版</a> (2022-09-23)</li>
-<li><a href="https://broken-engineer.opensource.ryukyu/archives/14442464.html">lxd_gui_container - Run GUI applications in LXD containers. Separate display server.</a> (2022-05-02)</li>
-<li><a href="https://note.com/koya0316/n/n4a0f6e095047">開発日誌：LXD デスクトップRDP</a>
-(2021-07-30)</li>
-<li><a href="https://qiita.com/330k/items/3fc42431d4d08b925541">LXD + Ubuntu 18.04 + MATE + xrdpでリモートデスクトップ環境を作る</a> (2021-03-09)</li>
-</ul>
-<p>All these looks interesting references but they are not always using GNOME
-wayland under the Debian bookworm environment.</p>
-<p>I will try similar things using GNOME wayland under the Debian bookworm
-environment in the followings.</p>
-<h2 id="configuration-of-lxd-instance">Configuration of LXD instance</h2>
-<p>I created and used the baseline <code>deb-12</code> image using <code>lxcinit -d -p 12</code></p>
-<p>We can configure an instance created from <code>deb-12</code> image in 3 ways with YAML
-setting data <code>wayland.yaml</code>.</p>
-<ul>
-<li>Configure when instance is started directly with YAML
-<ul>
-<li>create <code>wayland.yaml</code></li>
-<li><code>lxc init deb-12 d0 &lt;wayland.yaml</code></li>
+<li>65,534 == nobody</li>
 </ul>
 </li>
-<li>Configure after instance is created</li>
-<li><code>lxc init deb-12 d0</code></li>
-<li><code>lxc config edit d0 &lt;wayland.yaml</code></li>
-<li>Configure when instance is started with profile
+<li>64-bit Linux allows: 0 = 2^64-1 = 18,446,744,073,709,551,615</li>
+</ul>
+<p>For Debian with 2 normal UID/GID, <code>/etc/subuid</code> and <code>/etc/subgid</code> are:</p>
+<pre tabindex="0"><code>osamu:100000:65536
+zzz:165536:65536
+_lxd:231072:10000001
+root:231072:10000001
+</code></pre><p>This means:</p>
 <ul>
-<li>create <code>wayland.yaml</code></li>
-<li>create profile <code>lxc profile edit wayland &lt; wayland.yaml</code></li>
-<li><code>lxc init deb-12 d0 --profile wayland</code></li>
+<li>UID=0 in LXD container is mapped to UID=231072 on host.</li>
+<li>UID=1000 in LXD container is mapped to UID=232072 on host.</li>
 </ul>
-</li>
+<p>Please note, 165536 = (100000 + 65536) and 231072 = (165536 + 65536).</p>
+<p>It seems that the values in these files changes with distributions and install
+condition.  Debian uses <code>lxd</code> for user name and <code>_lxd</code> for group name while
+other distribution seems to use <code>lxd</code> for both user and group name for LXD.</p>
+<pre tabindex="0"><code> $ grep lxd /etc/passwd
+_lxd:x:129:138::/var/lib/lxd/:/bin/false
+ $ grep lxd /etc/group
+lxd:x:138:osamu
+</code></pre><p>NOTE: If you change <code>/etc/subuid</code> and <code>/etc/subgid</code>, you need to execute
+<code>systemctl restart lxd</code> or reboot the system to get system updated.</p>
+<h2 id="basic-id-mapping-of-lxd">Basic ID Mapping of LXD</h2>
+<p>I created and used the baseline <code>deb-12</code> image using <code>lxcinit -d -p 12</code>.</p>
+<p>Then I started an instance <code>d0</code> with <code>lxc launch deb-12 d0</code>.</p>
+<p>I started one root (UID=0) shell with <code>lxc exec d0 -- bash -i</code>, and one primary
+user (UID=1000) shell with <code>lxc exec d0 -- sudo -u osamu bash -i</code> in a lxd
+instance <code>d0</code>.</p>
+<p>Then I started one primary user (UID=1000) shell on the host Gnome terminal,
+and one root (UID=0) shell on the Linux terminal tty3 on the host system.</p>
+<pre tabindex="0"><code> $ ps aux
+...
+231072     18801  0.0  0.0   7588  3584 pts/1    Ss+  07:07   0:00 bash -i
+...
+232072     19122  0.0  0.0   7588  3584 pts/3    S+   07:08   0:00 bash -i
+...
+osamu      21311  1.2  0.0   8600  5376 pts/7    Ss   07:25   0:00 bash
+...
+root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
+...
+</code></pre><p>Let&rsquo;s see <code>/proc/18801</code>, <code>/proc/19122</code>, <code>proc/21311</code>, and <code>proc/22686</code>.</p>
+<table>
+<thead>
+<tr>
+<th>PID</th>
+<th>18801</th>
+<th>19122</th>
+<th>21311</th>
+<th>22686</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>UID (global)</td>
+<td>231072</td>
+<td>232072</td>
+<td>1000</td>
+<td>0</td>
+</tr>
+<tr>
+<td>UID in container</td>
+<td>0</td>
+<td>1000</td>
+<td>N/A</td>
+<td>N/A</td>
+</tr>
+<tr>
+<td>cgroup</td>
+<td><code>0::/lxc.payload.d0/.lxc</code></td>
+<td><code>0::/lxc.payload.d0/.lxc</code></td>
+<td>*1</td>
+<td>*2</td>
+</tr>
+<tr>
+<td>gid_map</td>
+<td><code>0 231072 10000001</code></td>
+<td><code>0 231072 10000001</code></td>
+<td><code>0 0 4294967295</code></td>
+<td><code>0 0 4294967295</code></td>
+</tr>
+<tr>
+<td>uid_map</td>
+<td><code>0 231072 10000001</code></td>
+<td><code>0 231072 10000001</code></td>
+<td><code>0 0 4294967295</code></td>
+<td><code>0 0 4294967295</code></td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>*1: <code>0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-15e39553-cc20-4c70-bfd5-f8b95e2c6b5a.scope</code></li>
+<li>*2: <code>0::/user.slice/user-0.slice/session-11.scope</code></li>
 </ul>
-<p>The last style provides me with an organized working environment.</p>
-<h2 id="yaml-setting-for-profiledefault">YAML setting for profile=default</h2>
-<p>Here is my default LXD profile:</p>
-<pre tabindex="0"><code>$ lxc profile show default
-config: {}
-description: Default LXD profile
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  root:
-    path: /
-    pool: default
-    type: disk
-name: default
-used_by:
-- /1.0/instances/d0
-- /1.0/instances/d1
-- /1.0/instances/d2
-</code></pre><p>The last list for key=<code>used_by</code> changes as I use this profile.</p>
-<h2 id="user-specific-sockets-used-by-ipc">User specific sockets used by IPC</h2>
-<p>For my primary user (name=<code>osamu</code>, UID=<code>1000</code>), I see following user specific
-sockets in my Debian 12 bookworm running GNOME on wayland as:</p>
-<pre tabindex="0"><code>$ ls -l /run/user/1000/ |grep ^s
-srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 bus
-srwxrwxr-x 1 osamu osamu   0 Nov 14 12:56 nvim.28543.0
-srw------- 1 osamu osamu   0 Nov 14 08:05 openssh_agent
-srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 pipewire-0
-srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 pk-debconf-socket
-srw-rw-rw- 1 osamu osamu   0 Nov 14 08:05 snapd-session-agent.socket
-srwxr-xr-x 1 osamu osamu   0 Nov 14 08:05 wayland-0
-</code></pre><p>So wayland for monitor screen is accessed as <code>/run/user/1000/wayland-0</code> on my
-GNOME wayland environment.</p>
-<p>If sound needs to be accessed, its <code>/run/user/1000/pipewire-0</code>.  I will address
-this later.  For now, let me focus on to use <code>wayland-o</code> socket.</p>
-<h2 id="yaml-data-example-to-set-profilewayland">YAML data example to set profile=wayland</h2>
-<p>Here is a simple YAML data example (<code>wayland.yaml</code>) to set profile to wayland.</p>
-<pre tabindex="0"><code> $ cd path/to/
- $ cat wayland.yaml
-config:
-  boot.autostart: false
-  user.user-data: |
-    #cloud-config
-    write_files:
-    - path: /usr/local/bin/mystartup.sh
-      permissions: 0755
-      content: |
-        #!/bin/sh
-        uid=$(id -u)
-        run_dir=/run/user/$uid
-        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
-        ln -sf /mnt/wayland-socket $run_dir/wayland-0
-    - path: /usr/local/etc/mystartup.service
-      content: |
-        [Unit]
-        After=local-fs.target
-        [Service]
-        Type=oneshot
-        ExecStart=/usr/local/bin/mystartup.sh
-        [Install]
-        WantedBy=default.target
-    runcmd:
-    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
-    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
-    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
-    - chown -R osamu:osamu /home/osamu
-    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
-description: Wayland LXD profile
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  root:
-    path: /
-    pool: default
-    type: disk
-  wayland-socket:
-    bind: container
-    connect: unix:/run/user/1000/wayland-0
-    listen: unix:/mnt/wayland-socket
-    uid: 1000
-    gid: 1000
-    type: proxy
-</code></pre><p>The <code>mystartup.sh</code> script in <code>user.user-data</code> is generated and applied when
-<code>cloud-init</code> applies <code>user.user-data</code> at the first boot of the instance to set
-up systemd startup script. This startup script links the Wayland socket to its
-usual location in the container (/run/user/1000/wayland-0) every time when the
-primary user <code>osamu</code> logs in.</p>
-<p>Let me create profile <code>wayland</code> and start an instance <code>d0</code> with it:</p>
-<pre tabindex="0"><code> $ lxc profile edit wayland &lt; wayland.yaml
- $ lxc init deb-12 d0 --profile wayland
- $ lxc profile ls
-+---------+---------------------+---------+
-|  NAME   |     DESCRIPTION     | USED BY |
-+---------+---------------------+---------+
-| default | Default LXD profile | 3       |
-+---------+---------------------+---------+
-| wayland | Wayland LXD profile | 0       |
-+---------+---------------------+---------+
+<h2 id="mounting-file-ro----lxc-config-">Mounting file (RO) &ndash; <code>lxc config ...</code></h2>
+<p>Let&rsquo;s start an instance <code>d0</code> with the primary user in the container being
+<code>osamu</code>.  (<code>user1.yaml</code> is from &ldquo;<a href="/en/2023/11/12/lxc-2//#override-default_user-settings-2">Override default_user settings (2)</a>&rdquo;)</p>
+<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud d0 &lt;user1.yaml
+</code></pre><p>Let&rsquo;s think about sharing the directory <code>~/</code> of the primary user <code>osamu</code> in the
+host as a directory <code>~/shared</code> of the primary user <code>osamu</code> in the container by
+mounting it.</p>
+<pre tabindex="0"><code> $ echo $HOME
+/home/osamu
+ $ lxc config device add d0 homedir disk source=/home/osamu path=/home/osamu/host
+ $ lxc config device show d0
+homedir:
+  path: /home/osamu/host
+  source: /home/osamu
+  type: disk
  $ lxc start d0
-</code></pre><p>Let me inspect instance <code>d0</code> running with profile=wayland .</p>
-<pre tabindex="0"><code>$ lxc config show d0
+ $ lxc exec do -- sudo -u osamu -i
+osamu@d0:\~$ ls -la
+total 16
+drwxr-xr-x 1 osamu  osamu    146 Nov 17 12:53 .
+drwxr-xr-x 1 root   root      10 Nov 17 05:09 ..
+-rw------- 1 osamu  osamu      7 Nov 17 09:04 .bash_history
+-rw-r--r-- 1 osamu  osamu    220 Apr 23  2023 .bash_logout
+-rw-r--r-- 1 osamu  osamu   3526 Apr 23  2023 .bashrc
+-rw-r--r-- 1 osamu  osamu    807 Apr 23  2023 .profile
+drwx------ 1 osamu  osamu     30 Nov 17 05:09 .ssh
+-rw-r--r-- 1 osamu  osamu      0 Nov 17 12:52 .sudo_as_admin_successful
+drwxr-xr-x 1 nobody nogroup 2132 Nov 17 08:54 host
+osamu@d0:\~$ ls -lani
+total 16
+21804 drwxr-xr-x 1  1000  1000  146 Nov 17 12:53 .
+  992 drwxr-xr-x 1     0     0   10 Nov 17 05:09 ..
+21916 -rw------- 1  1000  1000   62 Nov 17 12:57 .bash_history
+21805 -rw-r--r-- 1  1000  1000  220 Apr 23  2023 .bash_logout
+21806 -rw-r--r-- 1  1000  1000 3526 Apr 23  2023 .bashrc
+21807 -rw-r--r-- 1  1000  1000  807 Apr 23  2023 .profile
+21820 drwx------ 1  1000  1000   30 Nov 17 05:09 .ssh
+21990 -rw-r--r-- 1  1000  1000    0 Nov 17 12:52 .sudo_as_admin_successful
+  256 drwxr-xr-x 1 65534 65534 2132 Nov 17 08:54 host
+</code></pre><p>Here, a few interesting points.</p>
+<ul>
+<li>The directory assigned to <code>path=</code> doesn&rsquo;t need to exist in advance.  It is created automatically.</li>
+<li><code>/home/osamu</code> on the host is mounted to <code>/home/osamu/host</code> in the container.</li>
+<li><code>/home/osamu/host</code> in the container is btrfs subvolume root (inode=256) since
+<code>/home/osamu</code> on the host is btrfs subvolume root.</li>
+<li><code>/home/osamu/host</code> in the container is owned by <code>nobody:nogroup</code> due to we use unprivileged container without <code>raw.idmap</code>.</li>
+</ul>
+<h2 id="mounting-file-rw----lxc-config-">Mounting file (RW) &ndash; <code>lxc config ...</code></h2>
+<p>Let me use <code>raw.idmap</code>.</p>
+<pre tabindex="0"><code>$ lxc config set d0 raw.idmap=&#39;both 1000 1000&#39;
+$ lxc start d0
+Error: Failed to run: /usr/bin/lxd forkstart d0 /var/lib/lxd/containers /var/log/lxd/d0/lxc.conf: exit status 1
+Try `lxc info --show-log d0` for more info
+$ lxc info --show-log d0
+Name: d0
+Status: STOPPED
+Type: container
+Architecture: x86_64
+Created: 2023/11/17 14:09 JST
+Last Used: 2023/11/17 22:11 JST
+
+Log:
+
+lxc d0 20231117131132.970 ERROR    conf - ../src/lxc/conf.c:lxc_map_ids:3701 - newuidmap failed to write mapping &#34;newuidmap: uid range [1000-1001) -&gt; [1000-1001) not allowed&#34;: newuidmap 40760 0 231072 1000 1000 1000 1 1001 232073 9999000
+...
+</code></pre><p>Oops, it failed!  Googling lead me to read tips:</p>
+<ul>
+<li><a href="https://stgraber.org/2017/06/15/custom-user-mappings-in-lxd-containers/">Custom user mappings in LXD containers</a></li>
+<li><a href="https://www.cyberciti.biz/faq/how-to-add-or-mount-directory-in-lxd-linux-container/">How to add or mount directory in LXD (Linux container)</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<pre tabindex="0"><code> $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subuid
+ $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subgid
+ $ cat /etc/subuid
+osamu:100000:65536
+zzz:165536:65536
+_lxd:231072:10000001
+root:231072:10000001
+root:1000:1
+ $ cat /etc/subgid
+osamu:100000:65536
+zzz:165536:65536
+_lxd:231072:10000001
+root:231072:10000001
+root:1000:1
+ $ sudo systemctl restart lxd
+</code></pre><p>This updates LXD and fixes situation.  Now.</p>
+<pre tabindex="0"><code>
+ $ lxc start d0
+ $ lxc exec d0 -- sudo -u osamu -i ls -la
+total 16
+drwxr-xr-x 1 osamu osamu  146 Nov 17 12:53 .
+drwxr-xr-x 1 root  root    10 Nov 17 05:09 ..
+-rw------- 1 osamu osamu   79 Nov 17 13:05 .bash_history
+-rw-r--r-- 1 osamu osamu  220 Apr 23  2023 .bash_logout
+-rw-r--r-- 1 osamu osamu 3526 Apr 23  2023 .bashrc
+-rw-r--r-- 1 osamu osamu  807 Apr 23  2023 .profile
+drwx------ 1 osamu osamu   30 Nov 17 05:09 .ssh
+-rw-r--r-- 1 osamu osamu    0 Nov 17 12:52 .sudo_as_admin_successful
+drwxr-xr-x 1 osamu osamu 2132 Nov 17 15:13 host
+</code></pre><p>No more error and RW access with matching UID/GID!</p>
+<p>Let me check configuration of instance <code>d0</code>.</p>
+<pre tabindex="0"><code> $ lxc config show d0
 architecture: x86_64
 config:
   image.architecture: amd64
-  image.description: Debian bookworm amd64 (cloud) osamu (20231112_05:24)
-  image.name: debian-bookworm-amd64-cloud-osamu-20231112_05:24
-  image.os: debian
+  image.description: Debian bookworm amd64 (20231119_05:24)
+  image.os: Debian
   image.release: bookworm
-  image.serial: &#34;20231112_05:24&#34;
+  image.serial: &#34;20231119_05:24&#34;
+  image.type: squashfs
   image.variant: cloud
-  volatile.base_image: 9e089ab69eddbf4d998703e925970e9883c0530a05360b8c4d2b25c272b53921
-  volatile.cloud-init.instance-id: b8982bad-5e07-44ec-a93f-4c0c0f144704
-  volatile.eth0.host_name: veth3a47d107
-  volatile.eth0.hwaddr: 00:16:3e:88:00:65
+  raw.idmap: both 1000 1000
+  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+  volatile.cloud-init.instance-id: c858bc54-89fb-401a-859f-9be2be0baf3c
+  volatile.eth0.host_name: veth659389ff
+  volatile.eth0.hwaddr: 00:16:3e:93:1b:3c
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: 11479146-4515-4491-811a-9ee9d56760c1
+devices:
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+ephemeral: false
+profiles:
+- default
+stateful: false
+description: &#34;&#34;
+ $ lxc config show d0 -e
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (20231119_05:24)
+  image.os: Debian
+  image.release: bookworm
+  image.serial: &#34;20231119_05:24&#34;
+  image.type: squashfs
+  image.variant: cloud
+  raw.idmap: both 1000 1000
+  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+  volatile.cloud-init.instance-id: c858bc54-89fb-401a-859f-9be2be0baf3c
+  volatile.eth0.host_name: veth659389ff
+  volatile.eth0.hwaddr: 00:16:3e:93:1b:3c
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: 11479146-4515-4491-811a-9ee9d56760c1
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+  root:
+    path: /
+    pool: default
+    type: disk
+ephemeral: false
+profiles:
+- default
+stateful: false
+description: &#34;&#34;
+</code></pre><h2 id="mounting-file-rw----profiledefault--sharedyaml">Mounting file (RW) &ndash; profile=default + <code>shared.yaml</code></h2>
+<p>Instead of configuring via <code>lxc config ...</code> command line, here is a YAML
+configuration <code>shared.yaml</code> to get an equivalent settings.</p>
+<ul>
+<li>container with clean set of group ID</li>
+<li>the primary user name <code>osamu</code></li>
+<li><code>/home/osamu/host</code> sharing contents with the home directory of <code>osamu</code>.</li>
+</ul>
+<pre tabindex="0"><code>config:
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+  raw.idmap: both 1000 1000
+devices:
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+</code></pre><p>Then launch <code>d0</code> with:</p>
+<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud d0 &lt;shared.yaml
+</code></pre><p>The resulting configuration is:</p>
+<pre tabindex="0"><code> $ lxc config show d0
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (20231118_05:24)
+  image.os: Debian
+  image.release: bookworm
+  image.serial: &#34;20231118_05:24&#34;
+  image.type: squashfs
+  image.variant: cloud
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
+  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
+  volatile.eth0.host_name: vethf053a734
+  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
   volatile.idmap.base: &#34;0&#34;
   volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
   volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
   volatile.last_state.idmap: &#39;[]&#39;
   volatile.last_state.power: RUNNING
-  volatile.uuid: 08d50183-09e6-4854-8800-f618bd2cd935
+  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
+devices:
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+ephemeral: false
+profiles:
+- default
+stateful: false
+description: &#34;&#34;
+</code></pre><p>It looks good but I wasn&rsquo;t sure if ethernet bridge device is created.  So I
+expand this configuration as:</p>
+<pre tabindex="0"><code> $ lxc config show d0 -e
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (20231118_05:24)
+  image.os: Debian
+  image.release: bookworm
+  image.serial: &#34;20231118_05:24&#34;
+  image.type: squashfs
+  image.variant: cloud
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
+  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
+  volatile.eth0.host_name: vethf053a734
+  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+  root:
+    path: /
+    pool: default
+    type: disk
+ephemeral: false
+profiles:
+- default
+stateful: false
+</code></pre><p>It looks good to me.</p>
+<h2 id="mounting-file-rw----profileshared">Mounting file (RW) &ndash; profile=shared</h2>
+<p>I used <code>shared.yaml</code> to make profile <code>shared</code> as:</p>
+<pre tabindex="0"><code> $ lxc profile create shared
+ $ lxc profile edit sharedx &lt;shared.yaml
+ $ $ lxc profile edit shared
+Profile shared created
+ $ lxc profile edit shared &lt;shared.yaml
+ $ lxc launch images:debian/12/cloud d0 --profile=shared
+Creating d0
+Error: Failed instance creation: Failed creating instance record: Failed initialising instance: Invalid devices: Failed detecting root disk device: No root device could be found
+</code></pre><p>Hmmmm.. root device which was defined in <code>profile=default</code> is missing.  So I also specified <code>--profile=default</code> as:</p>
+<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud d0 --profile=default --profile=shared
+Creating d0
+Starting d0
+ $ lxc config show d0
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (20231119_05:24)
+  image.os: Debian
+  image.release: bookworm
+  image.serial: &#34;20231119_05:24&#34;
+  image.type: squashfs
+  image.variant: cloud
+  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+  volatile.cloud-init.instance-id: 0b8eac4b-f530-4628-a615-8f3b995b5680
+  volatile.eth0.host_name: veth3abc0116
+  volatile.eth0.hwaddr: 00:16:3e:fa:e7:a5
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: 3387ffc3-8640-4173-9f22-398bd0484dcd
 devices: {}
 ephemeral: false
 profiles:
-- wayland
+- default
+- shared
 stateful: false
 description: &#34;&#34;
-</code></pre><p>Since this only say to use <code>profiles=wayland</code>, let&rsquo;s expand it:</p>
-<pre tabindex="0"><code>$ lxc config show d0 -e
+ $  lxc config show d0 -e
 architecture: x86_64
 config:
-  boot.autostart: &#34;false&#34;
   image.architecture: amd64
-  image.description: Debian bookworm amd64 (cloud) osamu (20231112_05:24)
-  image.name: debian-bookworm-amd64-cloud-osamu-20231112_05:24
-  image.os: debian
+  image.description: Debian bookworm amd64 (20231119_05:24)
+  image.os: Debian
   image.release: bookworm
-  image.serial: &#34;20231112_05:24&#34;
+  image.serial: &#34;20231119_05:24&#34;
+  image.type: squashfs
   image.variant: cloud
+  raw.idmap: both 1000 1000
   user.user-data: |
     #cloud-config
-    write_files:
-    - path: /usr/local/bin/mystartup.sh
-      permissions: 0755
-      content: |
-        #!/bin/sh
-        uid=$(id -u)
-        run_dir=/run/user/$uid
-        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
-        ln -sf /mnt/wayland-socket $run_dir/wayland-0
-    - path: /usr/local/etc/mystartup.service
-      content: |
-        [Unit]
-        After=local-fs.target
-        [Service]
-        Type=oneshot
-        ExecStart=/usr/local/bin/mystartup.sh
-        [Install]
-        WantedBy=default.target
-    runcmd:
-    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
-    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
-    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
-    - chown -R osamu:osamu /home/osamu
-    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
-  volatile.base_image: 9e089ab69eddbf4d998703e925970e9883c0530a05360b8c4d2b25c272b53921
-  volatile.cloud-init.instance-id: b8982bad-5e07-44ec-a93f-4c0c0f144704
-  volatile.eth0.host_name: veth3a47d107
-  volatile.eth0.hwaddr: 00:16:3e:88:00:65
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+  volatile.cloud-init.instance-id: 0b8eac4b-f530-4628-a615-8f3b995b5680
+  volatile.eth0.host_name: veth3abc0116
+  volatile.eth0.hwaddr: 00:16:3e:fa:e7:a5
   volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
   volatile.last_state.idmap: &#39;[]&#39;
   volatile.last_state.power: RUNNING
-  volatile.uuid: 08d50183-09e6-4854-8800-f618bd2cd935
+  volatile.uuid: 3387ffc3-8640-4173-9f22-398bd0484dcd
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+  root:
+    path: /
+    pool: default
+    type: disk
+ephemeral: false
+profiles:
+- default
+- shared
+stateful: false
+</code></pre><p>Unless expanded, settings set by each profile listed under <code>profiles:</code> as list
+can&rsquo;s be seen.</p>
+<h2 id="mounting-file-rw----profilesharedx">Mounting file (RW) &ndash; profile=sharedx</h2>
+<p>Since specifying 2 profiles are cumbersome, I made <code>sharedx.yaml</code> as:</p>
+<pre tabindex="0"><code>config:
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+  raw.idmap: both 1000 1000
 devices:
   eth0:
     name: eth0
@@ -309,24 +583,97 @@ devices:
     path: /
     pool: default
     type: disk
-  wayland-socket:
-    bind: container
-    connect: unix:/run/user/1000/wayland-0
-    gid: &#34;1000&#34;
-    listen: unix:/mnt/wayland-socket
-    type: proxy
-    uid: &#34;1000&#34;
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+ $ lxc profile create sharedx
+Profile sharedx created
+ $ lxc profile edit sharedx &lt;sharedx.yaml
+ $ lxc launch images:debian/12/cloud d0 --profile=sharedx
+Creating d0
+Starting d0
+ $ lxc exec d0 -- ls -la /home/osamu
+total 0
+drwxr-xr-x 1 root  root    16 Nov 19 14:10 .
+drwxr-xr-x 1 root  root    10 Nov 19 14:10 ..
+drwx------ 1 osamu osamu   30 Nov 19 14:10 .ssh
+drwxr-xr-x 1 osamu osamu 2254 Nov 19 13:40 host
+</code></pre><p>Now, I got my intended instance <code>d0</code>.</p>
+<p>Let me double check its configuration.</p>
+<pre tabindex="0"><code> $ lxc config show d0
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (20231119_05:24)
+  image.os: Debian
+  image.release: bookworm
+  image.serial: &#34;20231119_05:24&#34;
+  image.type: squashfs
+  image.variant: cloud
+  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+  volatile.cloud-init.instance-id: b618beef-9f19-4b0c-a9b7-f8b7cabca484
+  volatile.eth0.host_name: vetha0f3aa40
+  volatile.eth0.hwaddr: 00:16:3e:1f:70:1f
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: 7c6b708c-0645-4faf-b68c-2472da6c7596
+devices: {}
 ephemeral: false
 profiles:
-- wayland
+- sharedx
 stateful: false
 description: &#34;&#34;
-</code></pre><p>Now, we can see <code>user.user_data:</code> and <code>devices:</code>.</p>
-<p>This <code>user.user_data:</code> YAML data is passed to <code>cloud-init</code> to create files and
-execute commands as the container starts.</p>
-<p>This container environment allowed me to run wayland GUI program <code>eog</code> in
-container and displaying its result to the host GNOME Desktop.  Nice.</p>
-<!-- raw HTML omitted -->
+ $ lxc config show d0 -e
+architecture: x86_64
+config:
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (20231119_05:24)
+  image.os: Debian
+  image.release: bookworm
+  image.serial: &#34;20231119_05:24&#34;
+  image.type: squashfs
+  image.variant: cloud
+  raw.idmap: both 1000 1000
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+  volatile.cloud-init.instance-id: b618beef-9f19-4b0c-a9b7-f8b7cabca484
+  volatile.eth0.host_name: vetha0f3aa40
+  volatile.eth0.hwaddr: 00:16:3e:1f:70:1f
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: 7c6b708c-0645-4faf-b68c-2472da6c7596
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  homedir:
+    path: /home/osamu/host
+    source: /home/osamu
+    type: disk
+  root:
+    path: /
+    pool: default
+    type: disk
+ephemeral: false
+profiles:
+- sharedx
+stateful: false
+</code></pre><!-- raw HTML omitted -->
 
 
 <table width="100%">
@@ -337,7 +684,7 @@ container and displaying its result to the host GNOME Desktop.  Nice.</p>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2023/11/14/lxc-4/">Next Post</a></td>
   
   </tr>
   </tbody>

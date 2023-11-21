@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/11/18 (last update)
+2023/11/21 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -64,7 +64,6 @@ en/note-00050.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#container-landscape-essays">Container landscape essays</a></li>
     <li><a href="#what-is-lxc">What is LXC</a></li>
     <li><a href="#what-is-lxd-and-incus">What is LXD and Incus</a></li>
     <li><a href="#installation-of-lxd-to-debian-12">Installation of LXD to Debian 12</a></li>
@@ -78,50 +77,17 @@ en/note-00050.md
         <li><a href="#example-of-operations-on-instances">Example of operations on instances</a></li>
         <li><a href="#more-example-of-operations-on-instances-and-images">More example of operations on instances and images</a></li>
         <li><a href="#tweaking-image-content-before-starting-an-instance">Tweaking image content before starting an instance</a></li>
+        <li><a href="#tweaking-metadata-of-an-image">Tweaking metadata of an image</a></li>
+        <li><a href="#lxd-one-liners">LXD one liners</a></li>
       </ul>
     </li>
-    <li><a href="#lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</a></li>
-    <li><a href="#lxd-one-liners">LXD one liners</a></li>
-    <li><a href="#gui-for-lxd-management-tool">GUI for LXD management tool</a></li>
-    <li><a href="#lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</a></li>
+    <li><a href="#review-gui-tools-to-support-lxd-management">Review: GUI tools to support LXD management</a></li>
+    <li><a href="#reference-lxc-and-lxd-related-commands-on-debian-12">Reference: LXC and LXD related commands on Debian 12</a></li>
+    <li><a href="#references-container-landscape-essays">References: Container landscape essays</a></li>
   </ul>
 </nav>
 
-<p>Here is a memo of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
-<h2 id="container-landscape-essays">Container landscape essays</h2>
-<ul>
-<li><a href="https://lwn.net/Articles/531114/">Namespaces in operation</a> January 4, 2013 &ndash; series index up to June 15, 2016</li>
-<li><a href="https://lwn.net/Articles/679786/">Understanding the new control groups API</a> March 23, 2016</li>
-<li><a href="https://www.sokube.io/blog/the-kubernetes-containers-runtime-jungle">The Kubernetes Containers runtime jungle</a> November 9, 2019</li>
-<li><a href="https://discuss.linuxcontainers.org/t/lxc-5-0-lts-has-been-released/14381">LXC 5.0 LTS has been released</a> June, 2022</li>
-<li><a href="https://lwn.net/Articles/902049/">Docker and the OCI container ecosystem</a> July 26, 2022</li>
-<li><a href="https://lwn.net/Articles/905164/">The container orchestrator landscape</a> August 23, 2022</li>
-<li><a href="https://lwn.net/Articles/907613/">LXC and LXD: a different container story</a> September 13, 2022</li>
-<li><a href="https://lwn.net/Articles/909627/">Progress for unprivileged containers</a> September 28, 2022</li>
-<li><a href="https://www.ionos.com/digitalguide/server/know-how/podman-vs-docker/">Summary: Podman vs. Docker – will Podman fill Docker’s shoes?</a> 11/30/2022</li>
-<li><a href="https://linuxcontainers.org/lxd/">LXD is now under Canonical</a> July 4, 2023</li>
-<li><a href="https://linuxcontainers.org/incus/">What is Incus?</a>
-<ul>
-<li><a href="https://linuxcontainers.org/incus/announcement/">Introducing Incus</a> August 7, 2023</li>
-</ul>
-</li>
-<li><a href="https://zenn.dev/ttnt_1013/articles/f36e251a0cd24e">Docker一強の終焉にあたり、押さえるべきContainer事情</a> 2023/04/03 (rev.2023/05/01)
-<ul>
-<li><a href="https://mkdev.me/posts/dockerless-part-1-which-tools-to-replace-docker-with-and-why">Series &ldquo;Dockerless&rdquo; by mkdev</a> (2023?)</li>
-</ul>
-</li>
-<li><a href="https://news.ycombinator.com/item?id=36595183#:~:text=Podman%20is%20meant%20to%20run%20'application%20containers'%2C%20where%20each,and%20(possibly)%20multiple%20daemons.">Hacker News: LXD isn&rsquo;t an alternative to podman</a> 2023-07-05
-<ul>
-<li>Podman is meant to run &lsquo;application containers&rsquo;, where each container has just one running process.</li>
-<li>LXD is meant to run &lsquo;system containers&rsquo; where each container is a full Linux distribution with an init system and (possibly) multiple daemons.
-<ul>
-<li>LXD containers are like light-weight VMs. Unlike VMs, LXD containers share the host kernel.</li>
-</ul>
-</li>
-<li>You could run podman or other OCI containers inside LXD. I use LXD to test multi node K8s (K3s) on my desktop system.</li>
-</ul>
-</li>
-</ul>
+<p>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
 <h2 id="what-is-lxc">What is LXC</h2>
 <p><a href="https://linuxcontainers.org/lxc/introduction/">LXC is a well-known Linux container runtime that consists of tools, templates,
 and library and language bindings. It&rsquo;s pretty low level, very flexible and
@@ -561,60 +527,27 @@ Hello
 </code></pre><p>For interactive modification, <code>lxc pull ...</code> + substitution + <code>lxc push ...</code>
 combination here can be replaced with <code>lxc file edit dbc0/etc/cloud/cloud.cfg</code>.</p>
 <p>This allows me easily change other values such as the primary account name <code>debian</code>.</p>
-<p>If you wish to also change <code>image.description</code> and <code>image.name</code>, use
-<code>lxc config metadata edit dbz0</code> before publishing.  Then the published image file in
-<code>/var/lib/lxd/images/</code> and corresponding <code>/var/lib/lxd/storage-pools/default/images/</code> has updated names.
-Editing with published image like <code>lxc image edit dbc</code> doesn&rsquo;t change image
+<h3 id="tweaking-metadata-of-an-image">Tweaking metadata of an image</h3>
+<p>If you wish to also change <code>image.description</code> and <code>image.name</code> of an image,
+use <code>lxc config metadata edit dbz0</code> to the instance before publishing.  Then
+the published image file in <code>/var/lib/lxd/images/</code> and corresponding
+<code>/var/lib/lxd/storage-pools/default/images/</code> has updated names.</p>
+<p>Editing with published image like <code>lxc image edit dbc</code> doesn&rsquo;t change image
 data in these directory nor hash value used for the image name but updates
 description displayed by <code>lxc image ls dbc</code>.</p>
-<p>I think I got some glimpses of LXC/LXD up to how to get an instance started
-with default configuration.</p>
-<h2 id="lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</h2>
-<p>I first created local image with primary user name set to &ldquo;osamu&rdquo; and without
-&ldquo;netdev&rdquo; in groups-list as &ldquo;dbc&rdquo;-image:</p>
-<pre tabindex="0"><code> $ lxc file edit dbc0/etc/cloud/cloud.cfg
- $ lxc publish dbc0 --alias dbz
-</code></pre><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
-data is implemented by <code>cloud-config</code> in rather later part of its process.  So
-trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> doesn&rsquo;t work.</p>
-<p>Later, in order to automate this, I created a script to fix its image:
-<a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a>.  This
-removes <code>netdev</code> group and optionally changes the primary user to <code>osamu</code> for
-cloud-init.</p>
-<pre tabindex="0"><code>$ lxcinit -h
-
-=============================================================================
-NAME:
-  lxcinit -- download lxd Debian cloud image and make local fixed image
-             &#34;deb-&lt;name&gt;&#34;
-
-SYNOPSIS:
-  lxcinit [-b|-d|-h|-p|-u|--] [&lt;name&gt;]
-
-DESCRIPTION:
-  lxcinit creates a local un-previlidged LXD image &#34;deb-&lt;name&gt;&#34; just like
-  the following but with some fix-ups on /etc/cloud/cloud.cfg:
-
-  $ lxc init images:debian/&lt;name&gt;/cloud deb-&lt;name&gt;
-  $ lxc publish deb-&lt;name&gt; --alias=deb-&lt;name&gt;
-
-  The default &lt;name&gt; is &#34;sid&#34;.  The &lt;name&gt; consists of the codename or the
-  release version:
-    - &#34;sid&#34;, &#34;trixie&#34;, &#34;bookworm&#34;, &#34;bullseye&#34;, &#34;buster&#34;, 12, 11, 10
-
-  You can&#39;t have an existing instance name such as deb-&lt;name&gt; for this
-  command to function.
-
-OPTIONS: (only the first character matters)
-  -base BASE  set base name as BASE (&#34;deb-&#34;)
-  -delete     delete unmodified instance deb-&lt;name&gt;
-  -help       print this help message and exit
-  -primary    match primary user name in container with the current user
-  -update     update the local image deb-&lt;name&gt; after removing it first.
-
-=============================================================================
-</code></pre><h2 id="lxd-one-liners">LXD one liners</h2>
-<p>Delete all instances:</p>
+<p>Although there seem to be only interactive editor available to modify metadata, you can do more with this by changing actual program for editor via exported environment variables <code>EDITOR</code> and <code>VISUAL</code> (<code>VISUAL</code> supersedes <code>EDITOR</code>).</p>
+<p>To get a copy of <code>metadata.yaml</code> as the <code>copy_metadata.yaml</code> on the host</p>
+<pre tabindex="0"><code> $ unset VISUAL
+ $ export EDITOR=cat
+ $ lxc config metadata edit d0 &gt;copy_metadata.yaml
+</code></pre><p>To update the <code>metadata.yaml</code> with the <code>copy_metadata.yaml</code> on the host</p>
+<pre tabindex="0"><code> $ unset VISUAL
+ $ export EDITOR=&#34;tee&#34;
+ $ lxc config metadata edit d0 &lt;copy_metadata.yaml
+</code></pre><h3 id="lxd-one-liners">LXD one liners</h3>
+<p>Stop all instances:</p>
+<pre tabindex="0"><code> $ for f in $(lxc ls -cn -fcsv) ; do lxc stop $f; done
+</code></pre><p>Delete all instances:</p>
 <pre tabindex="0"><code> $ for f in $(lxc ls -cn -fcsv) ; do lxc delete $f; done
 </code></pre><p>Delete all images:</p>
 <pre tabindex="0"><code> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
@@ -622,9 +555,10 @@ OPTIONS: (only the first character matters)
 <pre tabindex="0"><code> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,$/s/,//p&#34;) ; do lxc image delete $f; done
 </code></pre><p>Delete all images with alias:</p>
 <pre tabindex="0"><code> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,..*$/s/,.*$//p&#34;) ; do lxc image delete $f; done
-</code></pre><!-- raw HTML omitted -->
+</code></pre><p>I think I got some glimpses of LXC/LXD commmands.</p>
 <!-- raw HTML omitted -->
-<h2 id="gui-for-lxd-management-tool">GUI for LXD management tool</h2>
+<!-- raw HTML omitted -->
+<h2 id="review-gui-tools-to-support-lxd-management">Review: GUI tools to support LXD management</h2>
 <p>Debian 12 doesn&rsquo;t ship any GUI tools for LXD.</p>
 <p>I decided to give up on finding good GUI tools for LXD after my cursory research as below.</p>
 <p>Canonical provides snap package for lxd containing <a href="https://github.com/canonical/lxd-ui">lxd-ui</a> which is based on TypeScript and JavaScript (actively updated).  This offers easy and accessible container and virtual machine management with a browser interface for LXD.  But adding lxd-ui to Debian lxd is non-trivial.</p>
@@ -635,7 +569,7 @@ OPTIONS: (only the first character matters)
 <li><a href="https://lxdware.com/">LXD dashboard</a> by lxdware (PHP, last year)</li>
 <li><a href="https://github.com/nuber-io/nuber">nuber</a> (PHP, 2022-07-11)</li>
 </ul>
-<h2 id="lxc-and-lxd-related-commands-on-debian-12">LXC and LXD related commands on Debian 12</h2>
+<h2 id="reference-lxc-and-lxd-related-commands-on-debian-12">Reference: LXC and LXD related commands on Debian 12</h2>
 <p>&ldquo;<a href="https://documentation.ubuntu.com/lxd/en/latest/explanation/lxd_lxc/">About lxd and lxc</a>&rdquo; explains a bit confusing situation of LXC and LXD.</p>
 <p>The <code>lxc</code> command with many subcommands in the <code>lxd-client</code> package seems to be the primary tool to use LXC/LXD.  Many hyphenated <code>lxc-*</code> commands in the <code>lxc</code> package are not the primary tools for the administrator.</p>
 <p>When migration to <a href="https://linuxcontainers.org/incus/">Incus</a> happens, the <code>lxc</code> command in <code>lxd-client</code> seems to be renamed to <code>incus</code>.</p>
@@ -1045,7 +979,40 @@ Flags:
 </ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
-<p>See more in <a href="/en/2023/11/12/lxc-2/">Container with LXC/LXD (2)</a>.</p>
+<h2 id="references-container-landscape-essays">References: Container landscape essays</h2>
+<ul>
+<li><a href="https://lwn.net/Articles/531114/">Namespaces in operation</a> January 4, 2013 &ndash; series index up to June 15, 2016</li>
+<li><a href="https://lwn.net/Articles/679786/">Understanding the new control groups API</a> March 23, 2016</li>
+<li><a href="https://www.sokube.io/blog/the-kubernetes-containers-runtime-jungle">The Kubernetes Containers runtime jungle</a> November 9, 2019</li>
+<li><a href="https://discuss.linuxcontainers.org/t/lxc-5-0-lts-has-been-released/14381">LXC 5.0 LTS has been released</a> June, 2022</li>
+<li><a href="https://lwn.net/Articles/902049/">Docker and the OCI container ecosystem</a> July 26, 2022</li>
+<li><a href="https://lwn.net/Articles/905164/">The container orchestrator landscape</a> August 23, 2022</li>
+<li><a href="https://lwn.net/Articles/907613/">LXC and LXD: a different container story</a> September 13, 2022</li>
+<li><a href="https://lwn.net/Articles/909627/">Progress for unprivileged containers</a> September 28, 2022</li>
+<li><a href="https://www.ionos.com/digitalguide/server/know-how/podman-vs-docker/">Summary: Podman vs. Docker – will Podman fill Docker’s shoes?</a> 11/30/2022</li>
+<li><a href="https://linuxcontainers.org/lxd/">LXD is now under Canonical</a> July 4, 2023</li>
+<li><a href="https://linuxcontainers.org/incus/">What is Incus?</a>
+<ul>
+<li><a href="https://linuxcontainers.org/incus/announcement/">Introducing Incus</a> August 7, 2023</li>
+</ul>
+</li>
+<li><a href="https://zenn.dev/ttnt_1013/articles/f36e251a0cd24e">Docker一強の終焉にあたり、押さえるべきContainer事情</a> 2023/04/03 (rev.2023/05/01)
+<ul>
+<li><a href="https://mkdev.me/posts/dockerless-part-1-which-tools-to-replace-docker-with-and-why">Series &ldquo;Dockerless&rdquo; by mkdev</a> (2023?)</li>
+</ul>
+</li>
+<li><a href="https://news.ycombinator.com/item?id=36595183#:~:text=Podman%20is%20meant%20to%20run%20'application%20containers'%2C%20where%20each,and%20(possibly)%20multiple%20daemons.">Hacker News: LXD isn&rsquo;t an alternative to podman</a> 2023-07-05
+<ul>
+<li>Podman is meant to run &lsquo;application containers&rsquo;, where each container has just one running process.</li>
+<li>LXD is meant to run &lsquo;system containers&rsquo; where each container is a full Linux distribution with an init system and (possibly) multiple daemons.
+<ul>
+<li>LXD containers are like light-weight VMs. Unlike VMs, LXD containers share the host kernel.</li>
+</ul>
+</li>
+<li>You could run podman or other OCI containers inside LXD. I use LXD to test multi node K8s (K3s) on my desktop system.</li>
+</ul>
+</li>
+</ul>
 <!-- raw HTML omitted -->
 
 

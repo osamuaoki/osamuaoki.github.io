@@ -6,17 +6,29 @@
     <description>Recent content in english on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 13 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/english/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 14 Nov 2023 00:00:00 +0000</lastBuildDate><atom:link href="/categories/english/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Container with LXC/LXD (4)</title>
+      <link>/en/2023/11/14/lxc-4/</link>
+      <pubDate>Tue, 14 Nov 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2023/11/14/lxc-4/</guid>
+      <description>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (bookworm).
+Running GUI application in container Unlike console applications, running GUI applications in container is a bit complicate. For now, I found some HOWTOs:
+Incus / LXD profile for GUI apps: Wayland, X11 and Pulseaudio (2023-11-17) Use Wayland and Xorg applications (updated 2023-10-07) &amp;ndash; ARCHLINUX wiki LXD Containers for Wayland GUI Apps (2022-08-28) How to run GUI apps in LXD containers (2022-08-04) HOWTO: Use the Host’s Wayland and XWayland Servers inside containers (updated 2022-03-18) &amp;ndash; LinuxContainers.</description>
+    </item>
+    
     <item>
       <title>Container with LXC/LXD (3)</title>
       <link>/en/2023/11/13/lxc-3/</link>
       <pubDate>Mon, 13 Nov 2023 00:00:00 +0000</pubDate>
       
       <guid>/en/2023/11/13/lxc-3/</guid>
-      <description>Here is a memo of me trying to use LXC/LXD on Debian 12 (bookworm).
-This is follow-up to Container with LXC/LXD (2).
-Running GUI application in container Unlike console applications, running GUI applications in container is a bit complicate. For now, I found some HOWTOs:
-Incus / LXD profile for GUI apps: Wayland, X11 and Pulseaudio (2023-11-17) Use Wayland and Xorg applications (updated 2023-10-07) &amp;ndash; ARCHLINUX wiki LXD Containers for Wayland GUI Apps (2022-08-28) How to run GUI apps in LXD containers (2022-08-04) HOWTO: Use the Host’s Wayland and XWayland Servers inside containers (updated 2022-03-18) &amp;ndash; LinuxContainers.</description>
+      <description>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (bookworm).
+Clean up d0 instance for experiment In following examples, the instance d0 is always deleted in advance without mentions by:
+$ lxc stop d0 $ lxc delete d0 or simply:
+$ lxc delete d0 -f Merging YAML settings As seen in following examples, YAML settings of lxc are merged by key for dictionary.
+subuid and subgid on Debian with LXD UID and GID:</description>
     </item>
     
     <item>
@@ -25,20 +37,18 @@ Incus / LXD profile for GUI apps: Wayland, X11 and Pulseaudio (2023-11-17) Use W
       <pubDate>Sun, 12 Nov 2023 00:00:00 +0000</pubDate>
       
       <guid>/en/2023/11/12/lxc-2/</guid>
-      <description>Here is a memo of me trying to use LXC/LXD on Debian 12 (bookworm).
-This is follow-up to Container with LXC/LXD (1).
-subuid and subgid on Debian with LXD UID and GID:
-POSIX requires to cover: 0 - 2^16-1 = 65,535 65,534 == nobody 64-bit Linux allows: 0 = 2^64-1 = 18,446,744,073,709,551,615 For Debian with 2 normal UID/GID, /etc/subuid and /etc/subgid are:
-osamu:100000:65536 zzz:165536:65536 _lxd:231072:10000001 root:231072:10000001 This means:
-UID=0 in LXD container is mapped to UID=231072 on host.</description>
+      <description>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (bookworm).
+Default LXD Debian image issues Let me simply use the default LXD Debian image to launch d0 instance with:
+$ lxd launch images:debian/12/cloud d0 Then, the resulting d0 image has a few glitches to my taste:
+The primary user in the container is always debian having UID=1000, GID=1001 The netdev group is generated as GID=1000 (this is system group and should have GID somewhere between 100 and 999.</description>
     </item>
     
     <item>
       <title>SSH ED25519 key setup</title>
-      <link>/en/2023/11/11/ssh-1/</link>
-      <pubDate>Sat, 11 Nov 2023 00:00:00 +0000</pubDate>
+      <link>/en/2023/11/01/ssh-1/</link>
+      <pubDate>Wed, 01 Nov 2023 00:00:00 +0000</pubDate>
       
-      <guid>/en/2023/11/11/ssh-1/</guid>
+      <guid>/en/2023/11/01/ssh-1/</guid>
       <description>Here is a memo of me trying to update my SSH setting on Debian 12 (bookworm).
 Several articles motivated me to move away from old 2048 RSA key to new ed25519.
 ssh-keygen(1) default = 3072 bits as of 2023 Wikipedia: ssh-keygen Wikipedia: key size stackexchange: SSH key strength stackexchange: SSH Key: Ed25519 vs RSA Generate new ED25519 key $ ssh-keygen -t ed25519 -C &amp;#34;osamu@goofy&amp;#34; Generatingublic/private ed25519 keyair. Enter file in which to save the key (/home/osamu/.</description>
@@ -61,8 +71,9 @@ IPv4 and IPv6 basics IPv4
       <pubDate>Wed, 11 Oct 2023 00:00:00 +0000</pubDate>
       
       <guid>/en/2023/10/11/lxc-1/</guid>
-      <description>Here is a memo of me trying to use LXC/LXD on Debian 12 (bookworm).
-Container landscape essays Namespaces in operation January 4, 2013 &amp;ndash; series index up to June 15, 2016 Understanding the new control groups API March 23, 2016 The Kubernetes Containers runtime jungle November 9, 2019 LXC 5.0 LTS has been released June, 2022 Docker and the OCI container ecosystem July 26, 2022 The container orchestrator landscape August 23, 2022 LXC and LXD: a different container story September 13, 2022 Progress for unprivileged containers September 28, 2022 Summary: Podman vs.</description>
+      <description>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (bookworm).
+What is LXC LXC is a well-known Linux container runtime that consists of tools, templates, and library and language bindings. It&amp;rsquo;s pretty low level, very flexible and covers just about every containment feature supported by the upstream kernel.
+What is LXD and Incus Upstream LXD (5.18 released 2023-09-20) is at https://github.com/canonical/lxd by Canonical LXD is a modern, secure and powerful system container and virtual machine manager.</description>
     </item>
     
     <item>

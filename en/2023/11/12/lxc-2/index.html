@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/12 (initial publish),
-2023/11/18 (last update)
+2023/11/21 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00053.md
@@ -50,7 +50,7 @@ en/note-00053.md
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2023/11/11/ssh-1/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2023/11/01/ssh-1/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
@@ -64,221 +64,191 @@ en/note-00053.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#subuid-and-subgid-on-debian-with-lxd">subuid and subgid on Debian with LXD</a></li>
-    <li><a href="#basic-id-mapping-of-lxd">Basic ID Mapping of LXD</a></li>
-    <li><a href="#mounting-file-ro">Mounting file (RO)</a></li>
-    <li><a href="#mounting-file-rw">Mounting file (RW)</a></li>
+    <li><a href="#default-lxd-debian-image-issues">Default LXD Debian image issues</a></li>
+    <li><a href="#lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</a></li>
+    <li><a href="#configuration-of-lxd-instance">Configuration of LXD instance</a></li>
+    <li><a href="#overriding-default_user-of-cloud-init-with-profile">Overriding <code>default_user</code> of cloud-init with profile</a>
+      <ul>
+        <li><a href="#test-script-userssh">Test script <code>users.sh</code></a></li>
+        <li><a href="#override-default_user-settings-1">Override <code>default_user</code> settings (1)</a></li>
+        <li><a href="#override-default_user-settings-2">Override <code>default_user</code> settings (2)</a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
-<p>Here is a memo of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
-<p>This is follow-up to <a href="/en/2023/10/11/lxc-1/">Container with LXC/LXD (1)</a>.</p>
-<h2 id="subuid-and-subgid-on-debian-with-lxd">subuid and subgid on Debian with LXD</h2>
-<p>UID and GID:</p>
+<p>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
+<h2 id="default-lxd-debian-image-issues">Default LXD Debian image issues</h2>
+<p>Let me simply use the default LXD Debian image to launch <code>d0</code> instance with:</p>
+<pre tabindex="0"><code> $ lxd launch images:debian/12/cloud d0
+</code></pre><p>Then, the resulting <code>d0</code> image has a few glitches to my taste:</p>
 <ul>
-<li>POSIX requires to cover: 0 - 2^16-1 = 65,535
+<li>The primary user in the container is always <code>debian</code> having UID=1000, GID=1001</li>
+<li>The <code>netdev</code> group is generated as GID=1000 (this is system group and should have
+GID somewhere between 100 and 999.)</li>
+</ul>
+<p>Here are my efforts to get a sane instance generated.</p>
+<h2 id="lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</h2>
+<p>I first created local image with primary user name set to <code>osamu</code> and without
+<code>netdev</code> in groups-list as <code>deb-12</code>-image:</p>
+<pre tabindex="0"><code> $ lxc init images:debian/12/cloud d0
+ $ lxc file edit d0/etc/cloud/cloud.cfg
+ $ lxc publish d0 --alias deb-12
+</code></pre><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
+data is implemented by <code>cloud-config</code> in rather later part of its process.  So
+trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> doesn&rsquo;t work.</p>
+<p>Later, in order to automate this, I created a script to fix its image:
+<a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a>.  This
+removes <code>netdev</code> group and optionally changes the primary user to <code>osamu</code> for
+cloud-init.</p>
+<pre tabindex="0"><code>$ lxcinit -h
+
+=============================================================================
+NAME:
+  lxcinit -- download lxd Debian cloud image and make local fixed image
+             &#34;deb-&lt;name&gt;&#34;
+
+SYNOPSIS:
+  lxcinit [-b|-d|-h|-p|-u|--] [&lt;name&gt;]
+
+DESCRIPTION:
+  lxcinit creates a local un-previlidged LXD image &#34;deb-&lt;name&gt;&#34; just like
+  the following but with some fix-ups on /etc/cloud/cloud.cfg:
+
+  $ lxc init images:debian/&lt;name&gt;/cloud deb-&lt;name&gt;
+  $ lxc publish deb-&lt;name&gt; --alias=deb-&lt;name&gt;
+
+  The default &lt;name&gt; is &#34;sid&#34;.  The &lt;name&gt; consists of the codename or the
+  release version:
+    - &#34;sid&#34;, &#34;trixie&#34;, &#34;bookworm&#34;, &#34;bullseye&#34;, &#34;buster&#34;, 12, 11, 10
+
+  You can&#39;t have an existing instance name such as deb-&lt;name&gt; for this
+  command to function.
+
+OPTIONS: (only the first character matters)
+  -base BASE  set base name as BASE (&#34;deb-&#34;)
+  -delete     delete unmodified instance deb-&lt;name&gt;
+  -help       print this help message and exit
+  -primary    match primary user name in container with the current user
+  -update     update the local image deb-&lt;name&gt; after removing it first.
+
+=============================================================================
+</code></pre><p>This was an interesting practice for me to get familiar with <code>lxc publish ...</code>.
+But TBH, this is a bit cumbersome to use.  So I don&rsquo;t use this much.</p>
+<h2 id="configuration-of-lxd-instance">Configuration of LXD instance</h2>
+<p>Instead of fixing the image itself, I tried to generate properly configured
+instance with the existing configuration to minimize overhead.</p>
+<p>We can launch a LXD instance in 2 ways using YAML data <code>user.yaml</code>.</p>
 <ul>
-<li>65,534 == nobody</li>
+<li>Configure directly with YAML
+<ul>
+<li><code>lxc launch images:debian/12/cloud d0 &lt;user.yaml</code></li>
+<li><code>user.yaml</code> is merged with the <code>default</code> profile</li>
 </ul>
 </li>
-<li>64-bit Linux allows: 0 = 2^64-1 = 18,446,744,073,709,551,615</li>
-</ul>
-<p>For Debian with 2 normal UID/GID, <code>/etc/subuid</code> and <code>/etc/subgid</code> are:</p>
-<pre tabindex="0"><code>osamu:100000:65536
-zzz:165536:65536
-_lxd:231072:10000001
-root:231072:10000001
-</code></pre><p>This means:</p>
+<li>Configure indirectly with profile
 <ul>
-<li>UID=0 in LXD container is mapped to UID=231072 on host.</li>
-<li>UID=1000 in LXD container is mapped to UID=232072 on host.</li>
+<li>create profile <code>lxc profile edit user &lt; user.yaml</code></li>
+<li><code>lxc launch images:debian/12/cloud d0 --profile user</code></li>
+<li>the <code>user</code> profile replaces the <code>default</code> profile</li>
 </ul>
-<p>Please note, 165536 = (100000 + 65536) and 231072 = (165536 + 65536).</p>
-<p>It seems that the values in these files changes with distributions and install
-condition.  Debian uses <code>lxd</code> for user name and <code>_lxd</code> for group name while
-other distribution seems to use <code>lxd</code> for both user and group name for LXD.</p>
-<pre tabindex="0"><code> $ grep lxd /etc/passwd
-_lxd:x:129:138::/var/lib/lxd/:/bin/false
- $ grep lxd /etc/group
-lxd:x:138:osamu
-</code></pre><p>NOTE: If you change <code>/etc/subuid</code> and <code>/etc/subgid</code>, you need to execute
-<code>systemctl restart lxd</code> or reboot the system to get system updated.</p>
-<h2 id="basic-id-mapping-of-lxd">Basic ID Mapping of LXD</h2>
-<p>I created and used the baseline <code>deb-12</code> image using <code>lxcinit -d -p 12</code>.</p>
-<p>Then I started an instance <code>d0</code> with <code>lxc launch deb-12 d0</code>.</p>
-<p>I started one root (UID=0) shell with <code>lxc exec d0 -- bash -i</code>, and one primary
-user (UID=1000) shell with <code>lxc exec d0 -- sudo -u osamu bash -i</code> in a lxd
-instance <code>d0</code>.</p>
-<p>Then I started one primary user (UID=1000) shell on the host Gnome terminal,
-and one root (UID=0) shell on the Linux terminal tty3 on the host system.</p>
-<pre tabindex="0"><code> $ ps aux
-...
-231072     18801  0.0  0.0   7588  3584 pts/1    Ss+  07:07   0:00 bash -i
-...
-232072     19122  0.0  0.0   7588  3584 pts/3    S+   07:08   0:00 bash -i
-...
-osamu      21311  1.2  0.0   8600  5376 pts/7    Ss   07:25   0:00 bash
-...
-root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
-...
-</code></pre><p>Let&rsquo;s see <code>/proc/18801</code>, <code>/proc/19122</code>, <code>proc/21311</code>, and <code>proc/22686</code>.</p>
-<table>
-<thead>
-<tr>
-<th>PID</th>
-<th>18801</th>
-<th>19122</th>
-<th>21311</th>
-<th>22686</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>UID (global)</td>
-<td>231072</td>
-<td>232072</td>
-<td>1000</td>
-<td>0</td>
-</tr>
-<tr>
-<td>UID in container</td>
-<td>0</td>
-<td>1000</td>
-<td>N/A</td>
-<td>N/A</td>
-</tr>
-<tr>
-<td>cgroup</td>
-<td><code>0::/lxc.payload.d0/.lxc</code></td>
-<td><code>0::/lxc.payload.d0/.lxc</code></td>
-<td>*1</td>
-<td>*2</td>
-</tr>
-<tr>
-<td>gid_map</td>
-<td><code>0 231072 10000001</code></td>
-<td><code>0 231072 10000001</code></td>
-<td><code>0 0 4294967295</code></td>
-<td><code>0 0 4294967295</code></td>
-</tr>
-<tr>
-<td>uid_map</td>
-<td><code>0 231072 10000001</code></td>
-<td><code>0 231072 10000001</code></td>
-<td><code>0 0 4294967295</code></td>
-<td><code>0 0 4294967295</code></td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>*1: <code>0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-15e39553-cc20-4c70-bfd5-f8b95e2c6b5a.scope</code></li>
-<li>*2: <code>0::/user.slice/user-0.slice/session-11.scope</code></li>
+</li>
 </ul>
-<h2 id="mounting-file-ro">Mounting file (RO)</h2>
-<p>Let&rsquo;s remove old running container and start fresh.</p>
-<pre tabindex="0"><code> $ lxc stop d0
- $ lxc delete d0
- $ lxcinit -d -u -p 12
- $ lxc launch deb-12 d0
-</code></pre><p>Let&rsquo;s think about sharing the directory <code>~/</code> of the primary user <code>osamu</code> in the
-host as a directory <code>~/shared</code> of the primary user <code>osamu</code> in the container by
-mounting it.</p>
-<pre tabindex="0"><code> $ echo $HOME
-/home/osamu
- $ lxc config device add d0 homedir disk source=/home/osamu path=/home/osamu/host
- $ lxc config device show d0
-homedir:
-  path: /home/osamu/host
-  source: /home/osamu
-  type: disk
- $ lxc start d0
- $ lxc exec do -- sudo -u osamu -i
-osamu@d0:\~$ ls -la
-total 16
-drwxr-xr-x 1 osamu  osamu    146 Nov 17 12:53 .
-drwxr-xr-x 1 root   root      10 Nov 17 05:09 ..
--rw------- 1 osamu  osamu      7 Nov 17 09:04 .bash_history
--rw-r--r-- 1 osamu  osamu    220 Apr 23  2023 .bash_logout
--rw-r--r-- 1 osamu  osamu   3526 Apr 23  2023 .bashrc
--rw-r--r-- 1 osamu  osamu    807 Apr 23  2023 .profile
-drwx------ 1 osamu  osamu     30 Nov 17 05:09 .ssh
--rw-r--r-- 1 osamu  osamu      0 Nov 17 12:52 .sudo_as_admin_successful
-drwxr-xr-x 1 nobody nogroup 2132 Nov 17 08:54 host
-osamu@d0:\~$ ls -lani
-total 16
-21804 drwxr-xr-x 1  1000  1000  146 Nov 17 12:53 .
-  992 drwxr-xr-x 1     0     0   10 Nov 17 05:09 ..
-21916 -rw------- 1  1000  1000   62 Nov 17 12:57 .bash_history
-21805 -rw-r--r-- 1  1000  1000  220 Apr 23  2023 .bash_logout
-21806 -rw-r--r-- 1  1000  1000 3526 Apr 23  2023 .bashrc
-21807 -rw-r--r-- 1  1000  1000  807 Apr 23  2023 .profile
-21820 drwx------ 1  1000  1000   30 Nov 17 05:09 .ssh
-21990 -rw-r--r-- 1  1000  1000    0 Nov 17 12:52 .sudo_as_admin_successful
-  256 drwxr-xr-x 1 65534 65534 2132 Nov 17 08:54 host
-</code></pre><p>Here, a few interesting points.</p>
-<ul>
-<li>The directory assigned to <code>path=</code> doesn&rsquo;t need to exist in advance.  It is created automatically.</li>
-<li><code>/home/osamu</code> on the host is mounted to <code>/home/osamu/host</code> in the container.</li>
-<li><code>/home/osamu/host</code> in the container is btrfs subvolume root (inode=256) since
-<code>/home/osamu</code> on the host is btrfs subvolume root.</li>
-<li><code>/home/osamu/host</code> in the container is owned by <code>nobody:nogroup</code> due to we use unprivileged container without <code>raw.idmap</code>.</li>
-</ul>
-<h2 id="mounting-file-rw">Mounting file (RW)</h2>
-<p>Let me use <code>raw.idmap</code>.</p>
-<pre tabindex="0"><code>$ lxc config set d0 raw.idmap=&#39;both 1000 1000&#39;
-$ lxc start d0
-Error: Failed to run: /usr/bin/lxd forkstart d0 /var/lib/lxd/containers /var/log/lxd/d0/lxc.conf: exit status 1
-Try `lxc info --show-log d0` for more info
-$ lxc info --show-log d0
-Name: d0
-Status: STOPPED
-Type: container
-Architecture: x86_64
-Created: 2023/11/17 14:09 JST
-Last Used: 2023/11/17 22:11 JST
-
-Log:
-
-lxc d0 20231117131132.970 ERROR    conf - ../src/lxc/conf.c:lxc_map_ids:3701 - newuidmap failed to write mapping &#34;newuidmap: uid range [1000-1001) -&gt; [1000-1001) not allowed&#34;: newuidmap 40760 0 231072 1000 1000 1000 1 1001 232073 9999000
-...
-</code></pre><p>Oops, it failed!  Googling lead me to read tips:</p>
-<ul>
-<li><a href="https://stgraber.org/2017/06/15/custom-user-mappings-in-lxd-containers/">Custom user mappings in LXD containers</a></li>
-<li><a href="https://www.cyberciti.biz/faq/how-to-add-or-mount-directory-in-lxd-linux-container/">How to add or mount directory in LXD (Linux container)</a></li>
-</ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<pre tabindex="0"><code> $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subuid
- $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subgid
- $ cat /etc/subuid
-osamu:100000:65536
-zzz:165536:65536
-_lxd:231072:10000001
-root:231072:10000001
-root:1000:1
- $ cat /etc/subgid
-osamu:100000:65536
-zzz:165536:65536
-_lxd:231072:10000001
-root:231072:10000001
-root:1000:1
- $ sudo systemctl restart lxd
-</code></pre><p>This updates LXD and fixes situation.  Now.</p>
-<pre tabindex="0"><code>
- $ lxc start d0
- $ lxc exec d0 -- sudo -u osamu -i ls -la
-total 16
-drwxr-xr-x 1 osamu osamu  146 Nov 17 12:53 .
-drwxr-xr-x 1 root  root    10 Nov 17 05:09 ..
--rw------- 1 osamu osamu   79 Nov 17 13:05 .bash_history
--rw-r--r-- 1 osamu osamu  220 Apr 23  2023 .bash_logout
--rw-r--r-- 1 osamu osamu 3526 Apr 23  2023 .bashrc
--rw-r--r-- 1 osamu osamu  807 Apr 23  2023 .profile
-drwx------ 1 osamu osamu   30 Nov 17 05:09 .ssh
--rw-r--r-- 1 osamu osamu    0 Nov 17 12:52 .sudo_as_admin_successful
-drwxr-xr-x 1 osamu osamu 2132 Nov 17 15:13 host
-</code></pre><p>No more error and RW access with matching UID/GID!</p>
-<p>See more in <a href="/en/2023/11/13/lxc-3/">Container with LXC/LXD (3)</a>.</p>
+<p>The latter style using profile provides me with an organized working environment.</p>
+<h2 id="overriding-default_user-of-cloud-init-with-profile">Overriding <code>default_user</code> of cloud-init with profile</h2>
+<p>The root cause of issue is <code>default_user</code> data provided as the default cloud-init setting and cloud-init automatically creates normal group if it finds missing group name in <code>groups</code> list.  These can be seen in <code>/etc/cloud/cloud.cfg</code> as:</p>
+<pre tabindex="0"><code>...
+   default_user:
+     name: debian
+     lock_passwd: True
+     gecos: Debian
+     groups: [adm, audio, cdrom, dialout, dip, floppy, netdev, plugdev, sudo, video]
+     sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+     shell: /bin/bash
+</code></pre><p>I found out <a href="https://github.com/canonical/cloud-init/issues/4603">this feature is the intended feature</a>, I needed to find an easy way
+to override this default setting.</p>
+<p>I eventually found &ldquo;<a href="https://cloudinit.readthedocs.io/en/latest/reference/modules.html#users-and-groups">Users and Groups</a>&rdquo; on cloud-init reference document. The &ldquo;Summary&rdquo; explanation was confusing for me.  So I tried &ldquo;Examples&rdquo; to see how thisfeature can be used.</p>
+<h3 id="test-script-userssh">Test script <code>users.sh</code></h3>
+<p>I created a simple shell script <code>users.sh</code> to test configuration.</p>
+<pre tabindex="0"><code>#!/bin/sh -e
+lxc stop d0 &gt;/dev/null 2&gt;&amp;1 || true
+lxc delete d0 &gt;/dev/null 2&gt;&amp;1 || true
+lxc ls -f compact | grep d0 || true
+echo &#34;I: ===== YAML data $1 ===========&#34;
+cat $1
+echo &#34;I: ===== launch d0 ==============&#34;
+lxc launch images:debian/12/cloud d0 &lt;$1
+echo &#34;I: ===== wait 3 sec ===&#34;
+sleep 3
+echo &#34;I: ===== check home directory ===&#34;
+lxc exec d0 -- ls -la /home
+echo &#34;I: ===== check /etc/passwd ======&#34;
+lxc exec d0 -- tail -n5 /etc/passwd
+echo &#34;I: ===== check /etc/group =======&#34;
+lxc exec d0 -- egrep -e &#34;(adm|plugdev|netdev|osamu|debian)&#34; /etc/group
+</code></pre><h3 id="override-default_user-settings-1">Override <code>default_user</code> settings (1)</h3>
+<p>The following simply sets <code>users:</code> to an empty list overrides <code>default_user</code>
+settings.</p>
+<pre tabindex="0"><code>$ ./users.sh users0.yaml
+I: ===== YAML data users0.yaml ===========
+config:
+  user.user-data: |
+    #cloud-config
+    users: []
+I: ===== launch d0 ==============
+Creating d0
+Starting d0
+I: ===== wait 3 sec ===
+I: ===== check home directory ===
+total 0
+drwxr-xr-x 1 root root   0 Sep 29 20:04 .
+drwxr-xr-x 1 root root 154 Nov 18 05:29 ..
+I: ===== check /etc/passwd ======
+_apt:x:42:65534::/nonexistent:/usr/sbin/nologin
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+messagebus:x:100:101::/nonexistent:/usr/sbin/nologin
+systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+systemd-resolve:x:997:997:systemd Resolver:/:/usr/sbin/nologin
+I: ===== check /etc/group =======
+adm:x:4:
+plugdev:x:46:
+</code></pre><p>This can avoid setting <code>netdev</code> to GID=1000 but can&rsquo;t have the primary user.</p>
+<h3 id="override-default_user-settings-2">Override <code>default_user</code> settings (2)</h3>
+<p>The following sets <code>users:</code> to a list with updated <code>name:</code> and <code>groups:</code> list
+overrides <code>default_user</code> settings.</p>
+<pre tabindex="0"><code>$ ./users.sh users1.yaml
+I: ===== YAML data users1.yaml ===========
+config:
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      groups: [adm, mail]
+I: ===== launch d0 ==============
+Creating d0
+Starting d0
+I: ===== wait 3 sec ===
+I: ===== check home directory ===
+total 0
+drwxr-xr-x 1 root  root   10 Nov 19 03:32 .
+drwxr-xr-x 1 root  root  154 Nov 18 05:29 ..
+drwxr-xr-x 1 osamu osamu  62 Nov 19 03:33 osamu
+I: ===== check /etc/passwd ======
+nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+messagebus:x:100:101::/nonexistent:/usr/sbin/nologin
+systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+systemd-resolve:x:997:997:systemd Resolver:/:/usr/sbin/nologin
+osamu:x:1000:1000::/home/osamu:/bin/sh
+I: ===== check /etc/group =======
+adm:x:4:osamu
+mail:x:8:osamu
+plugdev:x:46:
+osamu:x:1000:
+</code></pre><p>This can avoid setting <code>netdev</code> to GID=1000 and sets the primary user to
+<code>osamu</code> with reasonable UID/GID..</p>
+<p>In order this to add &ldquo;osamu&rdquo; to all groups (excluding <code>netdev</code>) as the initial
+list, <code>groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]</code>
+should be used in <code>user0.yaml</code> instead.</p>
 <!-- raw HTML omitted -->
 
 
@@ -286,7 +256,7 @@ drwxr-xr-x 1 osamu osamu 2132 Nov 17 15:13 host
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2023/11/11/ssh-1/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2023/11/01/ssh-1/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
