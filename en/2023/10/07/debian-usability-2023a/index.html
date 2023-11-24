@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/07 (initial publish),
-2023/10/10 (last update)
+2023/11/24 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00049.md
@@ -500,31 +500,34 @@ iPhone.</p>
 is in good shape.</p>
 <p>If any issues arise, I may switch to upstream flatpack package offering LibreOffice 7.6. (2023-10-08)</p>
 <h3 id="mail-client">Mail client</h3>
+<p><strong>Updated in 2023-11-24</strong></p>
 <p>For the GUI access to the remotely hosted IMAP4 mail services, use GNOME Online
 accounts and Evolution.  This approach works for Gmail etc. and compatible with
 using other devices such as smart phones.  Evolution can also be configured to
 read locally delivered mails to mbox too.  (send+receive).</p>
-<p>For the command line such as <code>reportbug</code> and daemon programs such as <code>cron</code> to
-send mails to external hosts and local accounts, use of <code>exim4</code> as the locally
-installed MTA is good idea.  With &ldquo;sudo dpkg-reconfigure exim4-config&rdquo;, Select
-&ldquo;mail sent by smarthost; received via SMTP or fetchmail&rdquo;.  Everything else can
-be default.</p>
-<p>To use Gmail for smarthost, set up &ldquo;Mail Server configuration&rdquo; as
-&ldquo;smtp.gmail.com::587&rdquo;.  It is irrelevant for us to worry &ldquo;Hide local mail name
-&hellip;&rdquo; since the smarthost service rewrites it anyway.  Edit
-<code>/etc/exim4/passwd.client</code> as:
-<code>smtp.gmail.com:foo.bar@gmail.com:application_password</code> (You need to create
-<code>application_password</code> in advance.)</p>
-<p>Whenever I wish to send out mails with &ldquo;@debian.org&rdquo; address, I use
-ssh+sendmail (created shell script <code>~/bin/sendmail-p.d.o</code>) to access a Debian
-host. (This trick may be usable for any hosts such as salsa.debian.org etc.)</p>
+<p>I decided to configure MTA as simple as possible with &ldquo;sudo dpkg-reconfigure
+exim4-config&rdquo; to select &ldquo;local delivery only; not on a network&rdquo;. Everything
+else can be default.  I have no more smartsost things nor <code>fetchmail</code>.</p>
+<p>When I need to send mail from shell prompt for Debian BTS or Debian mail
+gateway services, I use my &ldquo;@debian.org&rdquo; address and use ssh+sendmail (created
+shell script <code>~/bin/sendmail-p.d.o</code>) to access a Debian host. (The similar
+trick may be usable for any shell access hosts such as salsa.debian.org etc.)</p>
 <p>I have mail configuration for:</p>
 <ul>
-<li>Evolution</li>
+<li>GUI:
+<ul>
+<li>Evolution (GNOME online account)</li>
+</ul>
+</li>
+<li>CLI:
+<ul>
 <li><code>devscripts</code> (add &ldquo;<code>BTS_SENDMAIL_COMMAND='/home/osamu/bin/sendmail-p.d.o'</code>&rdquo; to <code>~/.devscripts</code>)</li>
 <li><code>reportbug</code> (add &ldquo;<code>mta /home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.reportbugrc</code>)</li>
+<li><code>mail</code> (add &ldquo;<code>set sendmail=/home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.mailrc</code>)</li>
+<li><code>mutt</code> (add &ldquo;<code>set sendmail = '/home/osamu/bin/sendmail-p.d.o'</code>&rdquo; to <code>~/.muttrc</code>)</li>
 </ul>
-<p>I usually don&rsquo;t bother with <code>fetchmail</code> these days.</p>
+</li>
+</ul>
 <h2 id="miscellaneous-tips">Miscellaneous tips</h2>
 <h3 id="migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</h3>
 <p>As installed, user&rsquo;s home directory is in the rootfs using subvolume <code>@rootfs</code>.
