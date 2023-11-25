@@ -69,7 +69,6 @@ en/note-00055.md
     <li><a href="#user-specific-sockets-used-by-ipc">User specific sockets used by IPC</a></li>
     <li><a href="#yaml-to-allow-display-to-wayland-using-extra-disk-device">YAML to allow display to Wayland using extra disk device</a></li>
     <li><a href="#running-wayland-gui-application-eog-in-container">Running Wayland GUI application <code>eog</code> in container</a></li>
-    <li><a href="#running-wayland-gui-application-eog-in-container-1">Running Wayland GUI application <code>eog</code> in container</a></li>
     <li><a href="#running-wayland-gui-application-firefox-in-container-using-disk-device">Running Wayland GUI application <code>firefox</code> in container using disk device</a></li>
   </ul>
 </nav>
@@ -402,7 +401,6 @@ description: &#34;&#34;
 </code></pre><p>Now, we can see full contents of <code>user.user_data:</code> and <code>devices:</code>.</p>
 <p>This <code>user.user_data:</code> YAML data is passed to <code>cloud-init</code> to create files and
 execute commands as the container starts.</p>
-<h2 id="running-wayland-gui-application-eog-in-container-1">Running Wayland GUI application <code>eog</code> in container</h2>
 <pre tabindex="0"><code> $ lxc exec wayland -- apt install eog
  $ lxc exec wayland -- sudo -u osamu -i eog
 </code></pre><p>This container environment allowed me to run an Wayland GUI program <code>eog</code> in
