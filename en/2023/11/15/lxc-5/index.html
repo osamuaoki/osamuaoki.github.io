@@ -66,7 +66,6 @@ en/note-00056.md
   <ul>
     <li><a href="#yaml-to-allow-ipcs-for-wayland--x--sounds">YAML to allow IPCs for Wayland + X + sounds</a></li>
     <li><a href="#running-xwayland-gui-application-xeyes-in-container">Running Xwayland GUI application <code>xeyes</code> in container</a></li>
-    <li><a href="#running-x-gui-application-xeys-in-container">Running X GUI application <code>xeys</code> in container</a></li>
     <li><a href="#running-mesa-utils-gui-application-in-container">Running mesa-utils GUI application in container</a></li>
     <li><a href="#running-wayland-gui-application-firefox-in-container">Running Wayland GUI application <code>firefox</code> in container</a></li>
     <li><a href="#running-x-gui-application-chromium-in-container">Running X GUI application <code>chromium</code> in container</a></li>
@@ -259,8 +258,7 @@ ephemeral: false
 profiles:
 - waylandx
 stateful: false
-</code></pre><h2 id="running-x-gui-application-xeys-in-container">Running X GUI application <code>xeys</code> in container</h2>
-<p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
+</code></pre><p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
 <pre tabindex="0"><code> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
  $ lxc exec waylandx -- apt install x11-apps
  ...
