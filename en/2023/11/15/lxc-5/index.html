@@ -261,6 +261,7 @@ profiles:
 stateful: false
 </code></pre><p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
 <pre tabindex="0"><code> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+ $ lxc start waylandx
  $ lxc exec waylandx -- apt install x11-apps
  ...
  $ lxc exec waylandx -- sudo -u osamu -i xeyes
@@ -268,6 +269,7 @@ stateful: false
 <h2 id="running-mesa-utils-gui-application-in-container">Running mesa-utils GUI application in container</h2>
 <p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
 <pre tabindex="0"><code> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+ $ lxc start waylandx
  $ lxc exec waylandx -- apt install mesa-utils
  ...
  $ lxc exec waylandx -- sudo -u osamu -i glxgears
@@ -313,6 +315,7 @@ X connection to :0 broken (explicit kill or server shutdown).
 <h2 id="running-wayland-gui-application-firefox-in-container">Running Wayland GUI application <code>firefox</code> in container</h2>
 <p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
 <pre tabindex="0"><code> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+ $ lxc start waylandx
  $ lxc exec waylandx -- apt install firefox-esr
  ...
  $ lxc exec waylandx -- sudo -u osamu -i firefox
@@ -330,6 +333,7 @@ Browser works well with sound capability.</p>
 <h2 id="running-x-gui-application-chromium-in-container">Running X GUI application <code>chromium</code> in container</h2>
 <p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
 <pre tabindex="0"><code> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+ $ lxc start waylandx
  $ lxc exec waylandx -- apt install chromium
  ...
  $ lxc exec waylandx -- sudo -u osamu -i chromium
