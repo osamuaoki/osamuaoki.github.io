@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/14 (initial publish),
-2023/11/24 (last update)
+2023/11/25 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00055.md
@@ -54,7 +54,7 @@ en/note-00055.md
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2023/11/15/lxc-5/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -67,40 +67,121 @@ en/note-00055.md
     <li><a href="#running-gui-application-in-container">Running GUI application in container</a></li>
     <li><a href="#yaml-setting-for-profiledefault">YAML setting for profile=default</a></li>
     <li><a href="#user-specific-sockets-used-by-ipc">User specific sockets used by IPC</a></li>
-    <li><a href="#running-gui-application-eog-in-container-using-proxy-device">Running GUI application <code>eog</code> in container using proxy device</a></li>
-    <li><a href="#running-gui-application-firefox-in-container-using-proxy-device">Running GUI application <code>firefox</code> in container using proxy device</a></li>
-    <li><a href="#running-gui-application-chromium-in-container-using-proxy-device">Running GUI application <code>chromium</code> in container using proxy device</a></li>
+    <li><a href="#yaml-to-allow-display-to-wayland-using-extra-disk-device">YAML to allow display to Wayland using extra disk device</a></li>
+    <li><a href="#running-wayland-gui-application-eog-in-container">Running Wayland GUI application <code>eog</code> in container</a></li>
+    <li><a href="#running-wayland-gui-application-eog-in-container-1">Running Wayland GUI application <code>eog</code> in container</a></li>
+    <li><a href="#running-wayland-gui-application-firefox-in-container-using-disk-device">Running Wayland GUI application <code>firefox</code> in container using disk device</a></li>
   </ul>
 </nav>
 
 <p>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
 <h2 id="running-gui-application-in-container">Running GUI application in container</h2>
 <p>Unlike console applications, running GUI applications in container is a bit complicate.  For now, I found some HOWTOs:</p>
-<ul>
-<li><a href="https://discuss.linuxcontainers.org/t/incus-lxd-profile-for-gui-apps-wayland-x11-and-pulseaudio/18295">Incus / LXD profile for GUI apps: Wayland, X11 and Pulseaudio</a> (2023-11-17) &ndash; disk</li>
-<li><a href="https://wiki.archlinux.org/title/LXD#Use_Wayland_and_Xorg_applications">Use Wayland and Xorg applications</a> (updated 2023-10-07) &ndash; ARCHLINUX wiki &ndash;</li>
+<ol>
+<li><a href="https://discuss.linuxcontainers.org/t/incus-lxd-profile-for-gui-apps-wayland-x11-and-pulseaudio/18295">Incus / LXD profile for GUI apps: Wayland, X11 and Pulseaudio</a> (2023-11-17)</li>
+<li><a href="https://wiki.archlinux.org/title/LXD#Use_Wayland_and_Xorg_applications">Use Wayland and Xorg applications</a> (updated 2023-10-07)</li>
 <li><a href="https://blog.swwomm.com/2022/08/lxd-containers-for-wayland-gui-apps.html">LXD Containers for Wayland GUI Apps</a> (2022-08-28)</li>
 <li><a href="https://dev.to/amabe_dev/how-to-run-gui-apps-in-lxd-containers-882">How to run GUI apps in LXD containers</a> (2022-08-04)</li>
-<li>HOWTO: <a href="https://discuss.linuxcontainers.org/t/howto-use-the-hosts-wayland-and-xwayland-servers-inside-containers/8765">Use the Host’s Wayland and XWayland Servers inside containers</a> (updated 2022-03-18) &ndash; LinuxContainers.org wiki</li>
-<li>Overview: <a href="https://discuss.linuxcontainers.org/t/overview-gui-inside-containers/8767">GUI inside Containers</a> (2020-08-22) &ndash; LinuxContainers.org discuss</li>
-<li><a href="https://www.janhouse.lv/blog/linux/running-gui-apps-from-linux-containers/">Running GUI apps from Linux containers</a> (2020-03-28)</li>
+<li>HOWTO: <a href="https://discuss.linuxcontainers.org/t/howto-use-the-hosts-wayland-and-xwayland-servers-inside-containers/8765">Use the Host’s Wayland and XWayland Servers inside containers</a> (updated 2022-03-18)</li>
 <li><a href="https://gist.github.com/stueja/447bd3bc0d510a0a7e50f9f1ef58ad75">GUI application via Wayland from Ubuntu LXD container on Arch Linux host</a> (2018-01-01)</li>
-<li><a href="https://blog.simos.info/how-to-run-graphics-accelerated-gui-apps-in-lxd-containers-on-your-ubuntu-desktop/">How to run graphics-accelerated GUI apps in LXD containers on your Ubuntu
-desktop</a> (2017-05-03)</li>
-</ul>
-<p>Here are ones in Japanese:</p>
-<ul>
-<li><a href="https://gihyo.jp/admin/serial/01/ubuntu-recipe/0738">リモートのLXDインスタンスの画面をローカルから操作してVDI環境を構築する</a> (2022-11-09)</li>
-<li><a href="https://qiita.com/yoshi10ryu1/items/a720f9e664e5948c4e31">LXD で作る仮想化 GUI 環境 - Ubuntu 22.04 LTS 版</a> (2022-09-23)</li>
-<li><a href="https://broken-engineer.opensource.ryukyu/archives/14442464.html">lxd_gui_container - Run GUI applications in LXD containers. Separate display server.</a> (2022-05-02)</li>
-<li><a href="https://note.com/koya0316/n/n4a0f6e095047">開発日誌：LXD デスクトップRDP</a>
-(2021-07-30)</li>
-<li><a href="https://qiita.com/330k/items/3fc42431d4d08b925541">LXD + Ubuntu 18.04 + MATE + xrdpでリモートデスクトップ環境を作る</a> (2021-03-09)</li>
-</ul>
-<p>All these looks interesting references but they are not always using GNOME
+</ol>
+<p>All these interesting references are not always using GNOME
 wayland under the Debian bookworm environment.</p>
-<p>I will try similar things using GNOME wayland under the Debian bookworm
-environment in the followings.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Also, there are subtle differences.</p>
+<table>
+<thead>
+<tr>
+<th>#</th>
+<th>Wayland</th>
+<th>X11</th>
+<th>PulseA</th>
+<th>PipeW</th>
+<th>GPU</th>
+<th>Note</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>disk</td>
+<td>disk</td>
+<td>disk</td>
+<td>&mdash;</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>2</td>
+<td>proxy</td>
+<td>proxy</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>Yes</td>
+<td></td>
+</tr>
+<tr>
+<td>3.1</td>
+<td>proxy</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>basic</td>
+</tr>
+<tr>
+<td>3.2</td>
+<td>disk</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>for browsers</td>
+</tr>
+<tr>
+<td>3.3</td>
+<td>disk</td>
+<td>&mdash;</td>
+<td>proxy</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>for audio</td>
+</tr>
+<tr>
+<td>4</td>
+<td>proxy</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td></td>
+</tr>
+<tr>
+<td>5</td>
+<td>proxy</td>
+<td>proxy</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>Yes</td>
+<td>Xwayland</td>
+</tr>
+<tr>
+<td>6</td>
+<td>disk</td>
+<td>disk</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>Yes</td>
+<td>share <code>/run/user/1000</code></td>
+</tr>
+</tbody>
+</table>
+<p>It seems that the use of the <code>disk</code> device has some advantages.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>I will try similar things as above references using GNOME Wayland under the
+Debian bookworm environment in the followings.</p>
 <h2 id="yaml-setting-for-profiledefault">YAML setting for profile=default</h2>
 <p>Let&rsquo;s see the default LXD profile:</p>
 <pre tabindex="0"><code>$ lxc profile show default
@@ -124,46 +205,58 @@ used_by:
 <p>Unless this list is empty, profile can&rsquo;t be deleted.</p>
 <h2 id="user-specific-sockets-used-by-ipc">User specific sockets used by IPC</h2>
 <p>For my primary user (name=<code>osamu</code>, UID=<code>1000</code>) on the host system running
-Debian 12 bookworm with GNOME wayland, I see following user specific sockets:</p>
-<pre tabindex="0"><code> $ find /run/user/1000 -type s
-/run/user/1000/wayland-0
-/run/user/1000/at-spi/bus
-/run/user/1000/openssh_agent
-/run/user/1000/snapd-session-agent.socket
-/run/user/1000/pk-debconf-socket
-/run/user/1000/pipewire-0
-/run/user/1000/pulse/native
-/run/user/1000/keyring/.ssh
-/run/user/1000/keyring/ssh
-/run/user/1000/keyring/pkcs11
-/run/user/1000/keyring/control
-/run/user/1000/gcr/ssh
-/run/user/1000/gnupg/S.gpg-agent
-/run/user/1000/gnupg/S.gpg-agent.ssh
-/run/user/1000/gnupg/S.gpg-agent.extra
-/run/user/1000/gnupg/S.gpg-agent.browser
-/run/user/1000/gnupg/S.dirmngr
-/run/user/1000/bus
-/run/user/1000/systemd/private
-/run/user/1000/systemd/notify
-/run/user/1000/systemd/inaccessible/sock
-find: ‘/run/user/1000/systemd/inaccessible/dir’: Permission denied
- $ sudo find /run/user/1000/systemd  -type s
-/run/user/1000/systemd/private
-/run/user/1000/systemd/notify
-/run/user/1000/systemd/inaccessible/sock
+Debian 12 bookworm with GNOME wayland, I see following user accessible sockets under <code>/run/user/</code> and <code>/tmp</code>:</p>
+<pre tabindex="0"><code> $ ls -l $(find /run/user -type s 2&gt;/dev/null)
+srwxrwxrwx 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/at-spi/bus
+srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/bus
+srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gcr/ssh
+srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.dirmngr
+srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent
+srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent.browser
+srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent.extra
+srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent.ssh
+srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/keyring/control
+srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/keyring/pkcs11
+srw------- 1 osamu osamu 0 Nov 25 07:14 /run/user/1000/keyring/.ssh
+srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/keyring/ssh
+srwxrwxr-x 1 osamu osamu 0 Nov 25 07:47 /run/user/1000/nvim.11027.0
+srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/openssh_agent
+srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/pipewire-0
+srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/pk-debconf-socket
+srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/pulse/native
+srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/snapd-session-agent.socket
+s--------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/systemd/inaccessible/sock
+srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/systemd/notify
+srwx------ 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/systemd/private
+srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/wayland-0
+ $ ls -l $(find /tmp -type s 2&gt;/dev/null)
+srwxr-xr-x 1 osamu      osamu      0 Nov 25 07:15 /tmp/.com.google.Chrome.0JD6Mr/SingletonSocket
+srwxrwxrwx 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.ICE-unix/1847
+srwxrwxrwx 1 osamu      osamu      0 Nov 25 07:13 /tmp/.ICE-unix/2702
+srwxr-xr-x 1 osamu      osamu      0 Nov 25 07:13 /tmp/.X11-unix/X0
+srwxr-xr-x 1 osamu      osamu      0 Nov 25 07:13 /tmp/.X11-unix/X1
+srwxr-xr-x 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.X11-unix/X1024
+srwxr-xr-x 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.X11-unix/X1025
+</code></pre><p>Let me check further who uses X sockets while running GNOME desktop on Wayland.</p>
+<pre tabindex="0"><code> $ lsof -U |grep -e &#39;[^@]/tmp/\.X11-unix/&#39;
+gnome-she 2733 osamu   45u  unix 0x0000000061b9b072      0t0 38083 /tmp/.X11-unix/X1 type=STREAM (LISTEN)
+Xwayland  3244 osamu    5u  unix 0x000000005899b02d      0t0 38081 /tmp/.X11-unix/X0 type=STREAM (LISTEN)
+ $ ps aux |grep &#39;\(273[3]\|324[4]\)&#39;
+osamu       2733  3.1  0.9 5187384 299252 ?      Ssl  07:12   1:04 /usr/bin/gnome-shell
+osamu       3244  0.3  0.3 788556 123388 ?       Sl   07:12   0:07 /usr/bin/Xwayland :0 -rootless -noreset -accessx -core -auth /run/user/1000/.mutter-Xwaylandauth.VC1EF2 -listenfd 4 -listenfd 5 -displayfd 6 -initfd 7
 </code></pre><p>So the monitor screen is accessed as <code>/run/user/1000/wayland-0</code> from Wayland on
 my environment.</p>
 <p>If sound needs to be accessed, sockets such as <code>/run/user/1000/pipewire-0</code> may
-be needed.  I will address this more complex case later.  For now, let me focus
-on to use <code>wayland-o</code> socket.</p>
-<h2 id="running-gui-application-eog-in-container-using-proxy-device">Running GUI application <code>eog</code> in container using proxy device</h2>
-<p>Here is a simple YAML data example (<code>wayland.yaml</code>) to add <code>proxy</code> device for
+be needed.  If X program needs to be accessed, sockets such as
+<code>/tmp/.X11-unix/X0</code> may be needed.</p>
+<p>I will address these more complex cases later.  For now, let me focus on to use
+<code>wayland-0</code> socket.</p>
+<h2 id="yaml-to-allow-display-to-wayland-using-extra-disk-device">YAML to allow display to Wayland using extra disk device</h2>
+<p>Here is a simple YAML data example (<code>wayland.yaml</code>) to add <code>disk</code> device for
 the Wayland socket.</p>
-<pre tabindex="0"><code> $ cd path/to/
- $ cat wayland.yaml
-config:
+<pre tabindex="0"><code>config:
   boot.autostart: false
+  raw.idmap: both 1000 1000
   user.user-data: |
     #cloud-config
     users:
@@ -180,7 +273,7 @@ config:
         uid=$(id -u)
         run_dir=/run/user/$uid
         mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
-        ln -sf /mnt/wayland-socket $run_dir/wayland-0
+        ln -sf /mnt/runuser/wayland-0 $run_dir/wayland-0
     - path: /usr/local/etc/mystartup.service
       content: |
         [Unit]
@@ -198,20 +291,30 @@ config:
     - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
 description: Wayland LXD profile
 devices:
-  wayland-socket:
-    bind: container
-    connect: unix:/run/user/1000/wayland-0
-    listen: unix:/mnt/wayland-socket
-    uid: 1000
-    gid: 1000
-    type: proxy
-</code></pre><p>The <code>mystartup.sh</code> script in <code>user.user-data</code> is generated and applied when
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  root:
+    path: /
+    pool: default
+    type: disk
+  wayland-0:
+    source: /run/user/1000/wayland-0
+    path: /mnt/runuser/wayland-0
+    type: disk
+</code></pre><p>Here, <code>raw.idmap: both 1000 1000</code> ensures permissions of
+<code>/mnt/runuser/wayland-0</code> is matches with the host to offer R/W access from
+<code>osamu</code> <code>UID=1000</code>.</p>
+<p>The <code>mystartup.sh</code> script in <code>user.user-data</code> is generated and applied when
 <code>cloud-init</code> applies <code>user.user-data</code> at the first boot of the instance to set
 up systemd startup script. This startup script links the Wayland socket to its
-usual location in the container (/run/user/1000/wayland-0) every time when the
+usual location in the container (<code>/run/user/1000/wayland-0</code>) every time when the
 primary user <code>osamu</code> logs in.</p>
-<p>Let me first create a profile <code>wayland</code> and start an instance <code>d0</code> with it:</p>
-<pre tabindex="0"><code> $ lxc profile edit wayland &lt; wayland.yaml
+<h2 id="running-wayland-gui-application-eog-in-container">Running Wayland GUI application <code>eog</code> in container</h2>
+<p>Let me first create a profile <code>wayland</code>:</p>
+<pre tabindex="0"><code> $ lxc profile create wayland
+ $ lxc profile edit wayland &lt; wayland.yaml
  $ lxc profile ls
 +---------+---------------------+---------+
 |  NAME   |     DESCRIPTION     | USED BY |
@@ -220,19 +323,22 @@ primary user <code>osamu</code> logs in.</p>
 +---------+---------------------+---------+
 | wayland | Wayland LXD profile | 0       |
 +---------+---------------------+---------+
-</code></pre><p>Let me start <code>d0</code> instance with wayland profile</p>
-<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud d0 --profile wayland
-</code></pre><p>Let me inspect instance <code>d0</code> running with profile=wayland .</p>
-<pre tabindex="0"><code> $ lxc config show d0
+</code></pre><p>Let me start <code>wayland</code> instance with <code>wayland</code> profile</p>
+<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud wayland --profile wayland
+</code></pre><p>Let me inspect this instance. (We need to expand to see effective configuration
+settings.)</p>
+<pre tabindex="0"><code> $ lxc config show wayland -e
 architecture: x86_64
 config:
+  boot.autostart: &#34;false&#34;
   image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231118_05:24)
+  image.description: Debian bookworm amd64 (20231124_05:24)
   image.os: Debian
   image.release: bookworm
-  image.serial: &#34;20231118_05:24&#34;
+  image.serial: &#34;20231124_05:24&#34;
   image.type: squashfs
   image.variant: cloud
+  raw.idmap: both 1000 1000
   user.user-data: |
     #cloud-config
     users:
@@ -241,104 +347,82 @@ config:
       groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
       sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
       shell: /bin/bash
-  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
-  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
-  volatile.eth0.host_name: vethf053a734
-  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
+    write_files:
+    - path: /usr/local/bin/mystartup.sh
+      permissions: 0755
+      content: |
+        #!/bin/sh
+        uid=$(id -u)
+        run_dir=/run/user/$uid
+        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
+        ln -sf /mnt/runuser/wayland-0 $run_dir/wayland-0
+    - path: /usr/local/etc/mystartup.service
+      content: |
+        [Unit]
+        After=local-fs.target
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/local/bin/mystartup.sh
+        [Install]
+        WantedBy=default.target
+    runcmd:
+    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
+    - chown -R osamu:osamu /home/osamu
+    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
+  volatile.base_image: 03e51acc22a673de40cf411923bebc3215bea394cf828cafabb6b61925fd722f
+  volatile.cloud-init.instance-id: 731cdfd7-9f7e-4e76-a900-9c53b6caf3ba
+  volatile.eth0.host_name: veth1db326cc
+  volatile.eth0.hwaddr: 00:16:3e:d9:a7:2a
   volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
   volatile.last_state.idmap: &#39;[]&#39;
   volatile.last_state.power: RUNNING
-  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
-devices:
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
-ephemeral: false
-profiles:
-- default
-stateful: false
-description: &#34;&#34;
-</code></pre><p>Since this only say to use <code>profiles=wayland</code>, let&rsquo;s expand it:</p>
-<pre tabindex="0"><code> $ lxc config show d0 -e
-rchitecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231118_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231118_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      lock_passwd: True
-      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
-      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-      shell: /bin/bash
-  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
-  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
-  volatile.eth0.host_name: vethf053a734
-  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
+  volatile.uuid: 514a4bb8-aa7d-4b33-b76e-feb8d9d3f3c8
 devices:
   eth0:
     name: eth0
     network: lxdbr0
     type: nic
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
   root:
     path: /
     pool: default
     type: disk
+  wayland-0:
+    path: /mnt/runuser/wayland-0
+    source: /run/user/1000/wayland-0
+    type: disk
 ephemeral: false
 profiles:
-- default
+- wayland
 stateful: false
 description: &#34;&#34;
 </code></pre><p>Now, we can see full contents of <code>user.user_data:</code> and <code>devices:</code>.</p>
 <p>This <code>user.user_data:</code> YAML data is passed to <code>cloud-init</code> to create files and
 execute commands as the container starts.</p>
-<p>This container environment allowed me to run wayland GUI program <code>eog</code> in
+<h2 id="running-wayland-gui-application-eog-in-container-1">Running Wayland GUI application <code>eog</code> in container</h2>
+<pre tabindex="0"><code> $ lxc exec wayland -- apt install eog
+ $ lxc exec wayland -- sudo -u osamu -i eog
+</code></pre><p>This container environment allowed me to run an Wayland GUI program <code>eog</code> in
 container and displaying its result to the host GNOME Desktop.  Nice.</p>
-<h2 id="running-gui-application-firefox-in-container-using-proxy-device">Running GUI application <code>firefox</code> in container using proxy device</h2>
+<h2 id="running-wayland-gui-application-firefox-in-container-using-disk-device">Running Wayland GUI application <code>firefox</code> in container using disk device</h2>
 <p>I  installed and tried the <code>firefox-esr</code> package.</p>
 <p>Then started <code>firefox</code>:</p>
-<pre tabindex="0"><code>osamu@wayland:~$ firefox
+<pre tabindex="0"><code> $ lxc exec wayland -- apt install firefox-esr
+ $ lxc exec wayland -- sudo -u osamu -i firefox
 [GFX1-]: glxtest: libpci missing
 </code></pre><p>This can be fixed by installing <code>libpci3</code> package (<a href="https://askubuntu.com/questions/1334192/glxtest-libpci-missing-although-i-made-an-apt-install">some web
 article</a>
 implies to install <code>libpci-dev</code> which installs more packages in addition to
 <code>libpci3</code> as a cure.):</p>
-<pre tabindex="0"><code>osamu@wayland:~$ sudo apt install libpci3
-...
-osamu@wayland:~$ firefox
-osamu@wayland:~$
+<pre tabindex="0"><code> $ lxc exec wayland -- apt install libpci3
+ $ lxc exec wayland -- sudo -u osamu -i firefox
 </code></pre><p>Normally, <code>pciutils</code> package which has &ldquo;priority: standard&rdquo; is installed and
 pulls in <code>libpci3</code>.  But <code>firefox-esr</code> doesn&rsquo;t list <code>libpci3</code> explicitly as
 <code>Depends:</code> nor <code>Recommends:</code>.  I suppose this is a
 <a href="https://bugs.debian.org/993308">bug</a>.</p>
-<h2 id="running-gui-application-chromium-in-container-using-proxy-device">Running GUI application <code>chromium</code> in container using proxy device</h2>
-<p>I installed and tried the <code>chromium</code> package.</p>
-<p>Then started <code>chromium</code>:</p>
-<pre tabindex="0"><code>osamu@wayland:~$ chromium
-[5034:5034:1120/002732.356244:ERROR:ozone_platform_x11.cc(239)] Missing X server or $DISPLAY
-[5034:5034:1120/002732.356284:ERROR:env.cc(255)] The platform failed to initialize.  Exiting.
-</code></pre><p>TBC</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
@@ -350,7 +434,7 @@ pulls in <code>libpci3</code>.  But <code>firefox-esr</code> doesn&rsquo;t list 
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2023/11/15/lxc-5/">Next Post</a></td>
   
   </tr>
   </tbody>

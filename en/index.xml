@@ -7,6 +7,17 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/en/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Container with LXC/LXD (5)</title>
+      <link>/en/2023/11/15/lxc-5/</link>
+      <pubDate>Wed, 15 Nov 2023 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2023/11/15/lxc-5/</guid>
+      <description>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (bookworm).
+YAML to allow IPCs for Wayland + X + sounds Here is a YAML data example (wayland.yaml) to add disk device for many IPC sockets supporting Wayland + X + sounds.
+config: boot.autostart: false raw.idmap: both 1000 1000 security.nesting: &amp;#34;true&amp;#34; user.user-data: | #cloud-config users: - name: osamu lock_passwd: True groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video] sudo: [&amp;#34;ALL=(ALL) NOPASSWD:ALL&amp;#34;] shell: /bin/bash write_files: - path: /usr/local/bin/mystartup.</description>
+    </item>
+    
+    <item>
       <title>Container with LXC/LXD (4)</title>
       <link>/en/2023/11/14/lxc-4/</link>
       <pubDate>Tue, 14 Nov 2023 00:00:00 +0000</pubDate>
@@ -14,7 +25,7 @@
       <guid>/en/2023/11/14/lxc-4/</guid>
       <description>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (bookworm).
 Running GUI application in container Unlike console applications, running GUI applications in container is a bit complicate. For now, I found some HOWTOs:
-Incus / LXD profile for GUI apps: Wayland, X11 and Pulseaudio (2023-11-17) &amp;ndash; disk Use Wayland and Xorg applications (updated 2023-10-07) &amp;ndash; ARCHLINUX wiki &amp;ndash; LXD Containers for Wayland GUI Apps (2022-08-28) How to run GUI apps in LXD containers (2022-08-04) HOWTO: Use the Host’s Wayland and XWayland Servers inside containers (updated 2022-03-18) &amp;ndash; LinuxContainers.</description>
+Incus / LXD profile for GUI apps: Wayland, X11 and Pulseaudio (2023-11-17) Use Wayland and Xorg applications (updated 2023-10-07) LXD Containers for Wayland GUI Apps (2022-08-28) How to run GUI apps in LXD containers (2022-08-04) HOWTO: Use the Host’s Wayland and XWayland Servers inside containers (updated 2022-03-18) GUI application via Wayland from Ubuntu LXD container on Arch Linux host (2018-01-01) All these interesting references are not always using GNOME wayland under the Debian bookworm environment.</description>
     </item>
     
     <item>

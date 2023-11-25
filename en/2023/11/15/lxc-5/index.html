@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Container with LXC/LXD (5) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Container with LXC/LXD (5)</span></h1>
+
+<h3 class="date">Date:
+2023/11/15 (initial publish),
+2023/11/25 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00056.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/14/lxc-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#yaml-to-allow-ipcs-for-wayland--x--sounds">YAML to allow IPCs for Wayland + X + sounds</a></li>
+    <li><a href="#running-xwayland-gui-application-xeyes-in-container">Running Xwayland GUI application <code>xeyes</code> in container</a></li>
+    <li><a href="#running-x-gui-application-xeys-in-container">Running X GUI application <code>xeys</code> in container</a></li>
+    <li><a href="#running-mesa-utils-gui-application-in-container">Running mesa-utils GUI application in container</a></li>
+    <li><a href="#running-wayland-gui-application-firefox-in-container">Running Wayland GUI application <code>firefox</code> in container</a></li>
+    <li><a href="#running-x-gui-application-chromium-in-container">Running X GUI application <code>chromium</code> in container</a></li>
+  </ul>
+</nav>
+
+<p>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
+<h2 id="yaml-to-allow-ipcs-for-wayland--x--sounds">YAML to allow IPCs for Wayland + X + sounds</h2>
+<p>Here is a YAML data example (<code>wayland.yaml</code>) to add <code>disk</code> device for
+many IPC sockets supporting Wayland + X + sounds.</p>
+<pre tabindex="0"><code>config:
+  boot.autostart: false
+  raw.idmap: both 1000 1000
+  security.nesting: &#34;true&#34;
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+    write_files:
+    - path: /usr/local/bin/mystartup.sh
+      permissions: 0755
+      content: |
+        #!/bin/sh
+        uid=$(id -u)
+        run_dir=/run/user/$uid
+        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
+        mkdir -p $run_dir/pulse &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
+        mkdir -p /tmp/.X11-unix &amp;&amp; chmod 700 /tmp/.X11-unix &amp;&amp; chown $uid:$uid /tmp/.X11-unix
+        for f in \
+          wayland-0 wayland-0.lock \
+          pipewire-0 pipewire-0.lock \
+          pulse/native \
+          ; \
+        do
+          ln -sf /mnt/runuser/$f $run_dir/$f
+        done
+        ln -sf /mnt/tmp/.X11-unix/X0 /tmp/.X11-unix/X0
+    - path: /usr/local/etc/mystartup.service
+      content: |
+        [Unit]
+        After=local-fs.target
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/local/bin/mystartup.sh
+        [Install]
+        WantedBy=default.target
+    runcmd:
+    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
+    - chown -R osamu:osamu /home/osamu
+    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
+    - echo &#39;export XDG_SESSION_TYPE=wayland&#39;  &gt;&gt; /home/osamu/.profile
+    - echo &#39;export QT_QPA_PLATFORM=wayland&#39;   &gt;&gt; /home/osamu/.profile
+    - echo &#39;export DISPLAY=:0&#39;                &gt;&gt; /home/osamu/.profile
+    - echo &#39;export XAUTHORITY=$(echo /mnt/runuser/.mutter-Xwaylandauth.*)&#39; &gt;&gt; /home/osamu/.profile
+description: Wayland+X+sound LXD profile
+devices:
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  root:
+    path: /
+    pool: default
+    type: disk
+  gpu:
+    type: gpu
+    gid: 44
+  runuser:
+    source: /run/user/1000
+    path: /mnt/runuser/
+    type: disk
+  X0:
+    source: /tmp/.X11-unix/X0
+    path: /mnt/tmp/.X11-unix/X0
+    type: disk
+</code></pre><p>NOTE: I don&rsquo;t know if lock file as above works well or not.</p>
+<p>Here, I used information on my host system as below.</p>
+<pre tabindex="0"><code> $ echo $XAUTHORITY
+/run/user/1000/.mutter-Xwaylandauth.VC1EF2
+$ getent group video
+video:x:44:osamu
+</code></pre><h2 id="running-xwayland-gui-application-xeyes-in-container">Running Xwayland GUI application <code>xeyes</code> in container</h2>
+<pre tabindex="0"><code> $ lxc profile create waylandx
+ $ lxc profile edit waylandx &lt; waylandx.yaml
+ $ lxc profile ls
++----------+-----------------------------+---------+
+|   NAME   |         DESCRIPTION         | USED BY |
++----------+-----------------------------+---------+
+| default  | Default LXD profile         | 3       |
++----------+-----------------------------+---------+
+| wayland  | Wayland LXD profile         | 1       |
++----------+-----------------------------+---------+
+| waylandx | Wayland+X+sound LXD profile | 0       |
++----------+-----------------------------+---------+
+</code></pre><p>Let me create template <code>waylandx0</code> instance with <code>waylandx</code> profile</p>
+<pre tabindex="0"><code> $ lxc init images:debian/12/cloud waylandx0 --profile waylandx
+</code></pre><p>Let me inspect this instance. (We need to expand to see effective configuration
+settings.)</p>
+<pre tabindex="0"><code> $ lxc config waylandx0 -e
+architecture: x86_64
+config:
+  boot.autostart: &#34;false&#34;
+  image.architecture: amd64
+  image.description: Debian bookworm amd64 (20231124_05:24)
+  image.os: Debian
+  image.release: bookworm
+  image.serial: &#34;20231124_05:24&#34;
+  image.type: squashfs
+  image.variant: cloud
+  raw.idmap: both 1000 1000
+  security.nesting: &#34;true&#34;
+  user.user-data: |
+    #cloud-config
+    users:
+    - name: osamu
+      lock_passwd: True
+      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+      shell: /bin/bash
+    write_files:
+    - path: /usr/local/bin/mystartup.sh
+      permissions: 0755
+      content: |
+        #!/bin/sh
+        uid=$(id -u)
+        run_dir=/run/user/$uid
+        mkdir -p $run_dir/pulse &amp;&amp; chmod -R 700 $run_dir &amp;&amp; chown -R $uid:$uid $run_dir
+        mkdir -p /tmp/.X11-unix &amp;&amp; chmod 700 /tmp/.X11-unix &amp;&amp; chown $uid:$uid /tmp/.X11-unix
+        ln -sf /mnt/runuser/wayland-0 $run_dir/wayland-0
+        ln -sf /mnt/runuser/pipewire-0 $run_dir/pipewire-0
+        #ln -sf /mnt/runuser/.mutter-Xwaylandauth.VC1EF2 $run_dir/.mutter-Xwaylandauth.VC1EF2
+        ln -sf /mnt/runuser/pulse/native $run_dir/pulse/native
+        ln -sf /mnt/tmp/.X11-unix/X0 /tmp/.X11-unix/X0
+    - path: /usr/local/etc/mystartup.service
+      content: |
+        [Unit]
+        After=local-fs.target
+        [Service]
+        Type=oneshot
+        ExecStart=/usr/local/bin/mystartup.sh
+        [Install]
+        WantedBy=default.target
+    runcmd:
+    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
+    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
+    - chown -R osamu:osamu /home/osamu
+    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
+    - echo &#39;export XDG_SESSION_TYPE=wayland&#39;  &gt;&gt; /home/osamu/.profile
+    - echo &#39;export QT_QPA_PLATFORM=wayland&#39;   &gt;&gt; /home/osamu/.profile
+    - echo &#39;export DISPLAY=:0&#39;                &gt;&gt; /home/osamu/.profile
+    - echo &#39;export XAUTHORITY=$(echo /mnt/runuser/.mutter-Xwaylandauth.*)&#39; &gt;&gt; /home/osamu/.profile
+  volatile.base_image: 03e51acc22a673de40cf411923bebc3215bea394cf828cafabb6b61925fd722f
+  volatile.cloud-init.instance-id: 0370e577-15a0-4eed-a6b8-04932fa98f84
+  volatile.eth0.host_name: veth2db8d385
+  volatile.eth0.hwaddr: 00:16:3e:6e:bf:b7
+  volatile.idmap.base: &#34;0&#34;
+  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+  volatile.last_state.idmap: &#39;[]&#39;
+  volatile.last_state.power: RUNNING
+  volatile.uuid: 9071439f-ceaa-4350-8137-7537b2991d50
+devices:
+  X0:
+    path: /mnt/tmp/.X11-unix/X0
+    source: /tmp/.X11-unix/X0
+    type: disk
+  eth0:
+    name: eth0
+    network: lxdbr0
+    type: nic
+  gpu:
+    gid: &#34;44&#34;
+    type: gpu
+  root:
+    path: /
+    pool: default
+    type: disk
+  runuser:
+    path: /mnt/runuser/
+    source: /run/user/1000
+    type: disk
+ephemeral: false
+profiles:
+- waylandx
+stateful: false
+</code></pre><h2 id="running-x-gui-application-xeys-in-container">Running X GUI application <code>xeys</code> in container</h2>
+<p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
+<pre tabindex="0"><code> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+ $ lxc exec waylandx -- apt install x11-apps
+ ...
+ $ lxc exec waylandx -- sudo -u osamu -i xeyes
+</code></pre><p>Now <code>xeyes</code> works.</p>
+<h2 id="running-mesa-utils-gui-application-in-container">Running mesa-utils GUI application in container</h2>
+<p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
+<pre tabindex="0"><code> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+ $ lxc exec waylandx -- apt install mesa-utils
+ ...
+ $ lxc exec waylandx -- sudo -u osamu -i glxgears
+Running synchronized to the vertical refresh.  The framerate should be
+approximately the same as the monitor refresh rate.
+301 frames in 5.0 seconds = 60.105 FPS
+296 frames in 5.0 seconds = 59.122 FPS
+299 frames in 5.0 seconds = 59.661 FPS
+296 frames in 5.0 seconds = 59.025 FPS
+X connection to :0 broken (explicit kill or server shutdown).
+ $ lxc exec waylandx -- sudo -u osamu -i glxheads
+glxheads: exercise multiple GLX connections (any key = exit)
+Usage:
+  glxheads xdisplayname ...
+Example:
+  glxheads :0 mars:0 venus:1
+Name: :0
+  Display:     0x555b946171b0
+  Window:      0x1600002
+  Context:     0x555b94633370
+  GL_VERSION:  4.6 (Compatibility Profile) Mesa 22.3.6
+  GL_VENDOR:   AMD
+  GL_RENDERER: AMD Radeon Graphics (renoir, LLVM 15.0.6, DRM 3.54, 6.5.0-0.deb12.1-amd64)
+ $ lxc exec waylandx4 -- sudo -u osamu -i es2gears_wayland
+EGLUT: failed to initialize native display
+ $ lxc exec waylandx -- sudo -u osamu -i es2gears_x11
+EGL_VERSION = 1.5
+vertex shader info:
+fragment shader info:
+info:
+302 frames in 5.0 seconds = 60.159 FPS
+X connection to :0 broken (explicit kill or server shutdown).
+ $ lxc exec waylandx -- sudo -u osamu -i es2tri
+EGL_VERSION = 1.5
+EGL_VENDOR = Mesa Project
+EGL_EXTENSIONS = EGL_ANDROID_blob_cache EGL_ANDROID_native_fence_sync EGL_CHROMIUM_sync_control EGL_ANGLE_sync_control_rate EGL_EXT_buffer_age EGL_EXT_create_context_robustness EGL_EXT_image_dma_buf_import EGL_EXT_image_dma_buf_import_modifiers EGL_EXT_protected_surface EGL_EXT_swap_buffers_with_damage EGL_IMG_context_priority EGL_KHR_cl_event2 EGL_KHR_config_attribs EGL_KHR_context_flush_control EGL_KHR_create_context EGL_KHR_create_context_no_error EGL_KHR_fence_sync EGL_KHR_get_all_proc_addresses EGL_KHR_gl_colorspace EGL_KHR_gl_renderbuffer_image EGL_KHR_gl_texture_2D_image EGL_KHR_gl_texture_3D_image EGL_KHR_gl_texture_cubemap_image EGL_KHR_image EGL_KHR_image_base EGL_KHR_image_pixmap EGL_KHR_no_config_context EGL_KHR_reusable_sync EGL_KHR_surfaceless_context EGL_KHR_swap_buffers_with_damage EGL_EXT_pixel_format_float EGL_KHR_wait_sync EGL_MESA_configless_context EGL_MESA_drm_image EGL_MESA_image_dma_buf_export EGL_MESA_query_driver EGL_NOK_texture_from_pixmap EGL_WL_bind_wayland_display
+EGL_CLIENT_APIS = OpenGL OpenGL_ES
+Uniform modelviewProjection at 0
+Attrib pos at 0
+Attrib color at 1
+X connection to :0 broken (explicit kill or server shutdown).
+</code></pre><p>Now GL/EGL/ES2 programs work.  (except <code>es2gears_wayland</code>)</p>
+<h2 id="running-wayland-gui-application-firefox-in-container">Running Wayland GUI application <code>firefox</code> in container</h2>
+<p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
+<pre tabindex="0"><code> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+ $ lxc exec waylandx -- apt install firefox-esr
+ ...
+ $ lxc exec waylandx -- sudo -u osamu -i firefox
+Gtk-Message: 06:01:42.367: Failed to load module &#34;canberra-gtk-module&#34;
+Gtk-Message: 06:01:42.369: Failed to load module &#34;canberra-gtk-module&#34;
+[GFX1-]: glxtest: libpci missing
+[GFX1-]: glxtest: libEGL missing
+ $ lxc exec waylandx -- apt install libpci3 libegl1 libcanberra-gtk3-0
+ ...
+ $ lxc exec waylandx -- sudo -u osamu -i firefox
+ATTENTION: default value of option mesa_glthread overridden by environment.
+ATTENTION: default value of option mesa_glthread overridden by environment.
+</code></pre><p>Works even without some library but by installing them reduces warnings.
+Browser works well with sound capability.</p>
+<h2 id="running-x-gui-application-chromium-in-container">Running X GUI application <code>chromium</code> in container</h2>
+<p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
+<pre tabindex="0"><code> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+ $ lxc exec waylandx -- apt install chromium
+ ...
+ $ lxc exec waylandx -- sudo -u osamu -i chromium
+Gtk-Message: 06:15:48.971: Failed to load module &#34;canberra-gtk-module&#34;
+Gtk-Message: 06:15:48.975: Failed to load module &#34;canberra-gtk-module&#34;
+[4167:4167:1125/061549.053769:ERROR:policy_logger.cc(157)] :components/enterprise/browser/controller/chrome_browser_cloud_management_controller.cc(163) Cloud management controller initialization aborted as CBCM is not enabled.
+ $ lxc exec waylandx -- apt install libcanberra-gtk3-0
+ ...
+ $ lxc exec waylandx -- sudo -u osamu -i chromium
+[4442:4442:1125/064117.418688:ERROR:policy_logger.cc(157)] :components/enterprise/browser/controller/chrome_browser_cloud_management_controller.cc(163) Cloud management controller initialization aborted as CBCM is not enabled.
+</code></pre><p>Works even without some library but by installing them reduces warnings.
+Browser works well with sound capability.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/14/lxc-4/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
