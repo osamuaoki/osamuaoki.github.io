@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/12 (initial publish),
-2023/11/21 (last update)
+2023/11/25 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00053.md
@@ -186,7 +186,10 @@ echo &#34;I: ===== check /etc/passwd ======&#34;
 lxc exec d0 -- tail -n5 /etc/passwd
 echo &#34;I: ===== check /etc/group =======&#34;
 lxc exec d0 -- egrep -e &#34;(adm|plugdev|netdev|osamu|debian)&#34; /etc/group
-</code></pre><h3 id="override-default_user-settings-1">Override <code>default_user</code> settings (1)</h3>
+</code></pre><p>NOTE: Instead of waiting for 3 seconds with <code>sleep 3</code> and hoping for the start
+up process is finished, <code>lxc exec d0 -- cloud-init status --wait</code> may address
+this requirement better.</p>
+<h3 id="override-default_user-settings-1">Override <code>default_user</code> settings (1)</h3>
 <p>The following simply sets <code>users:</code> to an empty list overrides <code>default_user</code>
 settings.</p>
 <pre tabindex="0"><code>$ ./users.sh users0.yaml
