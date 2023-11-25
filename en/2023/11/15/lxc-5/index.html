@@ -147,13 +147,14 @@ devices:
     source: /tmp/.X11-unix/X0
     path: /mnt/tmp/.X11-unix/X0
     type: disk
-</code></pre><p>NOTE: I don&rsquo;t know if lock file as above works well or not.</p>
+</code></pre><p>NOTE: I don&rsquo;t know if lock files as above work well or not.</p>
 <p>Here, I used information on my host system as below.</p>
 <pre tabindex="0"><code> $ echo $XAUTHORITY
 /run/user/1000/.mutter-Xwaylandauth.VC1EF2
-$ getent group video
+ $ getent group video
 video:x:44:osamu
-</code></pre><h2 id="running-x-gui-application-xeyes-in-container">Running X GUI application <code>xeyes</code> in container</h2>
+</code></pre><p>I am using the primary user name <code>osamu</code> in the container.</p>
+<h2 id="running-x-gui-application-xeyes-in-container">Running X GUI application <code>xeyes</code> in container</h2>
 <pre tabindex="0"><code> $ lxc profile create waylandx
  $ lxc profile edit waylandx &lt; waylandx.yaml
  $ lxc profile ls
