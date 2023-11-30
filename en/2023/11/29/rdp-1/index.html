@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>RDP/VNC (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">RDP/VNC (1)</span></h1>
+
+<h3 class="date">Date:
+2023/11/29 (initial publish),
+2023/11/30 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00057.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/15/lxc-5/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#gui-remote-access-client">GUI remote access client</a></li>
+    <li><a href="#rdpvnc-server">RDP/VNC server</a></li>
+  </ul>
+</nav>
+
+<p>I researched on the current tool choices for RDP/VNC.</p>
+<h2 id="gui-remote-access-client">GUI remote access client</h2>
+<table>
+<thead>
+<tr>
+<th>Package name</th>
+<th>RDP</th>
+<th>VNC</th>
+<th>SSH</th>
+<th>SPICE</th>
+<th>command (menu)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>vinagre</code></td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td><code>vinagre</code> (remote desktop viewer) archived upstream</td>
+</tr>
+<tr>
+<td><code>remmina</code></td>
+<td>YES</td>
+<td>YES</td>
+<td>YES</td>
+<td>&mdash;</td>
+<td><code>remmina</code></td>
+</tr>
+<tr>
+<td><code>virt-viewer</code></td>
+<td>&mdash;</td>
+<td>YES</td>
+<td>&mdash;</td>
+<td>YES</td>
+<td><code>remote-viewer</code></td>
+</tr>
+<tr>
+<td><code>gnome-connections</code></td>
+<td>YES</td>
+<td>YES</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td>(connections)</td>
+</tr>
+<tr>
+<td><code>krdc</code></td>
+<td>YES</td>
+<td>YES</td>
+<td>&mdash;</td>
+<td>&mdash;</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<p>BASICS:</p>
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Remote_Desktop_Protocol">RDP (Remote Desktop Protocol)</a>: originally Windows focused</li>
+<li><a href="https://en.wikipedia.org/wiki/Virtual_Network_Computing">VNC (Virtual Network Computing)</a>: originally Linux focused, uses <a href="https://en.wikipedia.org/wiki/RFB_protocol">RFB protocol</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Simple_Protocol_for_Independent_Computing_Environments">SPICE (Simple Protocol for Independent Computing Environments)</a>: QEMU focused.  See <a href="https://www.spice-space.org/spice-for-newbies.html">Spice for Newbies</a></li>
+</ul>
+<p>NOTE:</p>
+<ul>
+<li><code>gnome-connections</code> was split out from <code>gnome-boxes</code> and is the choice for RDP and VNC on GNOME</li>
+<li><code>remote-viewer</code> is the choice for SPICE on GNOME</li>
+<li><code>vinagre</code> and <code>remmina</code> are reasonable choice on non-GNOME platform</li>
+<li>Keep away from very outdated <code>rdesktop</code> and <code>grdesktop</code>.</li>
+<li>All modern RDP clients are based on freerdp library as their backend</li>
+<li><a href="https://qa.debian.org/popcon-graph.php?packages=vinagre+remmina+virt-viewer+gnome-connections+krdc&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=2020-01-01&amp;to_date=2023-12-31&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">popcon stats</a></li>
+</ul>
+<h2 id="rdpvnc-server">RDP/VNC server</h2>
+<ul>
+<li>GNOME has moved from <code>vino</code> package (VNC) to <code>gnome-remote-desktop</code> package (RDP).
+<ul>
+<li>Enable RDP feature from CLI using <code>grdctl</code>(1) on GNOME.</li>
+</ul>
+</li>
+<li>If RDP server is needed for non-GNOME platform, use <code>xrdp</code> package.
+<ul>
+<li>Use <code>xrdp</code>(8) to run RDP server.</li>
+</ul>
+</li>
+<li>If VNC server is needed, <code>tigervnc</code> seems to be a reasonable choice. (<code>x11vnc</code> is archived)</li>
+<li><a href="https://qa.debian.org/popcon-graph.php?packages=gnome-remote-desktop+vino+xrdp+tigervnc-common&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=2020-01-01&amp;to_date=2023-12-31&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">popcon stats</a></li>
+</ul>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/15/lxc-5/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
