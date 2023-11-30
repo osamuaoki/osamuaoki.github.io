@@ -66,6 +66,7 @@ en/note-00057.md
   <ul>
     <li><a href="#gui-remote-access-client">GUI remote access client</a></li>
     <li><a href="#rdpvnc-server">RDP/VNC server</a></li>
+    <li><a href="#conclusion">Conclusion</a></li>
   </ul>
 </nav>
 
@@ -134,8 +135,8 @@ en/note-00057.md
 <p>NOTE:</p>
 <ul>
 <li><code>gnome-connections</code> was split out from <code>gnome-boxes</code> and is the choice for RDP and VNC on GNOME</li>
-<li><code>remote-viewer</code> is the choice for SPICE on GNOME</li>
-<li><code>vinagre</code> and <code>remmina</code> are reasonable choice on non-GNOME platform</li>
+<li><code>vinagre</code> and <code>remmina</code> are reasonable choices for RDP and VNC on non-GNOME platforms</li>
+<li><code>remote-viewer</code> is the choice for SPICE on GNOME and others</li>
 <li>Keep away from very outdated <code>rdesktop</code> and <code>grdesktop</code>.</li>
 <li>All modern RDP clients are based on freerdp library as their backend</li>
 <li><a href="https://qa.debian.org/popcon-graph.php?packages=vinagre+remmina+virt-viewer+gnome-connections+krdc&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=2020-01-01&amp;to_date=2023-12-31&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">popcon stats</a></li>
@@ -145,6 +146,7 @@ en/note-00057.md
 <li>GNOME has moved from <code>vino</code> package (VNC) to <code>gnome-remote-desktop</code> package (RDP).
 <ul>
 <li>Enable RDP feature from CLI using <code>grdctl</code>(1) on GNOME.</li>
+<li><code>vino</code> is without maintainer</li>
 </ul>
 </li>
 <li>If RDP server is needed for non-GNOME platform, use <code>xrdp</code> package.
@@ -154,6 +156,11 @@ en/note-00057.md
 </li>
 <li>If VNC server is needed, <code>tigervnc</code> seems to be a reasonable choice. (<code>x11vnc</code> is archived)</li>
 <li><a href="https://qa.debian.org/popcon-graph.php?packages=gnome-remote-desktop+vino+xrdp+tigervnc-common&amp;show_installed=on&amp;want_legend=on&amp;want_ticks=on&amp;from_date=2020-01-01&amp;to_date=2023-12-31&amp;hlght_date=&amp;date_fmt=%25Y-%25m&amp;beenhere=1">popcon stats</a></li>
+</ul>
+<h2 id="conclusion">Conclusion</h2>
+<ul>
+<li>Use RDP over VNC for container and remote hosts</li>
+<li>Use SPICE for qemu/kvm and xen</li>
 </ul>
 <!-- raw HTML omitted -->
 
