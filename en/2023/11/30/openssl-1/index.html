@@ -111,6 +111,11 @@ Organization Name (eg, company) [Internet Widgits Pty Ltd]:FOOBAR
 Organizational Unit Name (eg, section) []:
 Common Name (e.g. server FQDN or YOUR name) []:
 Email Address []:foo@example.org
+</code></pre><p>Alternatively, we can split this step into creating the public key and signing
+it with private key to create the self-signed certificate as follows:</p>
+<pre tabindex="0"><code> $ openssl req -new -key rsa_private_key.pem -out rsa_public.pem
+ ...
+ $ openssl x509 -req -days 3000 -signkey rsa_private_key.pem -in rsa_public.pem -out rsa_public_certificate.pem
 </code></pre><h3 id="step3">Step3</h3>
 <pre tabindex="0"><code> $ openssl x509 -in rsa_public_certificate.pem  -noout -text
 Certificate:
