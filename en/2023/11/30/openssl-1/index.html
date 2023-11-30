@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Self-Signed TLS certificate (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Self-Signed TLS certificate (1)</span></h1>
+
+<h3 class="date">Date:
+2023/11/30 (initial publish),
+2023/11/30 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00058.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/29/rdp-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#rsa-2048bit-algorhism">RSA (2048bit) algorhism</a>
+      <ul>
+        <li><a href="#step1">Step1</a></li>
+        <li><a href="#step2">Step2</a></li>
+        <li><a href="#step3">Step3</a></li>
+      </ul>
+    </li>
+    <li><a href="#ed25519-algorhism">ED25519 algorhism</a>
+      <ul>
+        <li><a href="#step1-1">Step1</a></li>
+        <li><a href="#step2-1">Step2</a></li>
+        <li><a href="#step3-1">Step3</a></li>
+      </ul>
+    </li>
+    <li><a href="#comparison">Comparison</a></li>
+  </ul>
+</nav>
+
+<p>I researched on creating self-signed certificates in
+<a href="https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail">Privacy-Enhanced Mail (PEM) format</a>
+for TLS with OpenSSL.</p>
+<p>Here, I do things in 3 steps:</p>
+<ul>
+<li>Step1: create the private key</li>
+<li>Step2: create the self-signed public certificate</li>
+<li>Step3: print out the content of the self-signed public certificate</li>
+</ul>
+<h2 id="rsa-2048bit-algorhism">RSA (2048bit) algorhism</h2>
+<h3 id="step1">Step1</h3>
+<pre tabindex="0"><code> $ openssl genpkey -algorithm rsa   -out rsa_private_key.pem
+ ...
+</code></pre><h3 id="step2">Step2</h3>
+<pre tabindex="0"><code> $ openssl req -new -key rsa_private_key.pem -x509 -days 3000 -out rsa_public_certificate.pem
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter &#39;.&#39;, the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:JA
+State or Province Name (full name) [Some-State]:TOKYO
+Locality Name (eg, city) []:TOKYO
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:FOOBAR
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:
+Email Address []:foo@example.org
+</code></pre><h3 id="step3">Step3</h3>
+<pre tabindex="0"><code> $ openssl x509 -in rsa_public_certificate.pem  -noout -text
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            24:eb:e1:75:1e:1f:28:e9:df:51:6e:37:3c:55:2e:7e:ab:4a:1f:d6
+        Signature Algorithm: sha256WithRSAEncryption
+        Issuer: C = JA, ST = TOKYO, L = TOKYO, O = FOOBAR, emailAddress = foo@example.org
+        Validity
+            Not Before: Nov 30 08:49:55 2023 GMT
+            Not After : Feb 16 08:49:55 2032 GMT
+        Subject: C = JA, ST = TOKYO, L = TOKYO, O = FOOBAR, emailAddress = foo@example.org
+        Subject Public Key Info:
+            Public Key Algorithm: rsaEncryption
+                Public-Key: (2048 bit)
+                Modulus:
+                    00:a9:75:a3:45:d0:56:10:6e:90:e1:f5:4c:ea:ad:
+                    85:30:46:17:86:fe:bb:fe:24:55:e8:4d:96:ad:f1:
+                    04:7d:60:65:ca:9a:ca:04:7c:db:95:18:64:9a:fd:
+                    c7:c1:6e:a7:0f:ae:f4:a7:95:7a:d8:d1:aa:a5:bd:
+                    32:0f:36:7b:85:da:fc:d5:1f:34:ec:15:fc:78:e6:
+                    89:39:37:57:da:ff:fd:91:fb:e4:21:35:be:43:57:
+                    b6:dd:5e:8c:a3:03:46:0e:c3:69:d4:33:b8:c2:41:
+                    91:ab:36:b3:08:89:aa:91:51:e1:f2:8e:c2:ce:59:
+                    9c:98:ac:bf:50:47:e1:b9:22:37:0a:e6:93:76:ca:
+                    1c:16:23:d8:71:2a:f4:71:e3:99:74:f4:e0:c7:ae:
+                    cc:54:ac:ce:ad:fc:23:c1:c9:db:ca:98:ad:9d:e6:
+                    f3:e0:ab:1a:79:15:d6:ae:e3:9d:99:ba:06:32:20:
+                    8c:f4:b8:5f:00:37:b5:d5:ac:b7:9d:df:d2:6a:24:
+                    73:7d:0c:46:8b:9e:18:c9:c0:47:5a:71:89:81:84:
+                    11:8f:42:e7:b3:9a:a6:9a:ec:a5:17:98:e5:13:b8:
+                    41:00:2a:97:4e:f9:4f:6d:20:59:4d:88:3f:ca:0e:
+                    d3:af:88:c6:40:fc:13:69:61:92:a5:e1:ca:5e:2d:
+                    ab:a5
+                Exponent: 65537 (0x10001)
+        X509v3 extensions:
+            X509v3 Subject Key Identifier:
+                E5:C8:0E:DE:1A:32:75:A8:CD:B6:E2:40:AC:C8:90:2E:68:DA:75:81
+            X509v3 Authority Key Identifier:
+                E5:C8:0E:DE:1A:32:75:A8:CD:B6:E2:40:AC:C8:90:2E:68:DA:75:81
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+    Signature Algorithm: sha256WithRSAEncryption
+    Signature Value:
+        03:8d:ed:80:42:41:f7:9a:cc:51:da:90:e6:50:e8:af:82:6c:
+        04:9f:8b:5b:af:24:f5:e3:d5:93:78:63:6d:0e:5b:06:ac:8e:
+        49:ed:e5:50:b2:da:ca:79:1b:c8:19:8b:ba:1d:1e:ff:b7:55:
+        d2:4b:29:f2:62:1d:f5:01:46:df:8d:36:28:ae:bb:ef:ef:ef:
+        1c:76:1f:34:c4:e3:20:29:f5:ea:fc:86:7a:34:57:de:f4:b4:
+        3e:fd:fd:43:c7:74:04:53:5e:79:e5:f0:81:c3:05:ae:d6:71:
+        f7:a8:5c:1c:b6:19:19:81:d5:07:0b:69:6a:50:ba:dd:83:cf:
+        3a:d4:c5:d7:89:04:ea:98:b1:91:60:51:97:a3:cc:8d:10:cd:
+        3e:47:44:fd:fa:ab:29:a1:dc:40:d6:91:36:48:cd:e2:8f:4c:
+        76:c2:c3:cd:7a:f5:ac:08:66:b7:3b:ad:86:3b:e0:5f:24:07:
+        11:46:03:c4:1f:87:5c:cf:18:94:d8:c4:c6:80:7a:ee:a8:57:
+        c1:ce:45:b9:6c:44:9d:1f:08:3a:27:5f:d5:ec:35:e4:50:cf:
+        1a:c2:6b:8a:36:2b:f6:6a:af:d8:02:dd:9a:30:fe:5c:c0:5a:
+        8a:d7:e7:1a:ac:2d:6a:0a:f3:ba:ed:d0:86:25:d7:17:df:cd:
+        18:8f:78:0c
+</code></pre><h2 id="ed25519-algorhism">ED25519 algorhism</h2>
+<h3 id="step1-1">Step1</h3>
+<pre tabindex="0"><code> $ openssl genpkey -algorithm ED25519   -out ed25519_private_key.pem
+</code></pre><h3 id="step2-1">Step2</h3>
+<pre tabindex="0"><code> $ openssl req -new -key ed25519_private_key.pem -x509 -days 3000 -out ed25519_public_certificate.pem
+You are about to be asked to enter information that will be incorporated
+into your certificate request.
+What you are about to enter is what is called a Distinguished Name or a DN.
+There are quite a few fields but you can leave some blank
+For some fields there will be a default value,
+If you enter &#39;.&#39;, the field will be left blank.
+-----
+Country Name (2 letter code) [AU]:JA
+State or Province Name (full name) [Some-State]:TOKYO
+Locality Name (eg, city) []:TOKYO
+Organization Name (eg, company) [Internet Widgits Pty Ltd]:FOOBAR
+Organizational Unit Name (eg, section) []:
+Common Name (e.g. server FQDN or YOUR name) []:
+Email Address []:foo@example.org
+</code></pre><h3 id="step3-1">Step3</h3>
+<pre tabindex="0"><code> $ openssl x509 -in ed25519_public_certificate.pem  -noout -text
+Certificate:
+    Data:
+        Version: 3 (0x2)
+        Serial Number:
+            23:31:a9:bf:79:43:7c:3f:42:72:47:19:14:1d:08:ae:40:58:da:6e
+        Signature Algorithm: ED25519
+        Issuer: C = JA, ST = TOKYO, L = TOKYO, O = FOOBAR, emailAddress = foo@example.org
+        Validity
+            Not Before: Nov 30 08:52:06 2023 GMT
+            Not After : Feb 16 08:52:06 2032 GMT
+        Subject: C = JA, ST = TOKYO, L = TOKYO, O = FOOBAR, emailAddress = foo@example.org
+        Subject Public Key Info:
+            Public Key Algorithm: ED25519
+                ED25519 Public-Key:
+                pub:
+                    ad:67:c6:2b:40:1f:02:ea:36:8c:82:c6:e5:d0:0a:
+                    d7:6e:d5:c1:f5:bb:b1:c9:e2:5a:4a:9f:93:ec:cb:
+                    07:45
+        X509v3 extensions:
+            X509v3 Subject Key Identifier:
+                2F:E0:05:FC:D4:31:D5:43:0C:2C:88:20:D5:1A:37:5E:3A:F7:F5:D1
+            X509v3 Authority Key Identifier:
+                2F:E0:05:FC:D4:31:D5:43:0C:2C:88:20:D5:1A:37:5E:3A:F7:F5:D1
+            X509v3 Basic Constraints: critical
+                CA:TRUE
+    Signature Algorithm: ED25519
+    Signature Value:
+        35:e2:d2:44:69:45:eb:70:f1:22:56:a2:07:1c:15:33:7f:8e:
+        72:a4:4a:9e:ec:ad:57:0c:7d:8c:35:1d:34:b6:7d:c0:49:73:
+        56:ca:6e:01:4f:1a:39:84:8a:b6:a6:7c:f2:16:62:c8:4d:cc:
+        9c:16:ce:d8:86:b3:05:74:ce:0f
+</code></pre><h2 id="comparison">Comparison</h2>
+<p>ED25519 creates much smaller files.</p>
+<pre tabindex="0"><code> $ ls -l
+-rw------- 1 osamu osamu   119 Nov 30 17:51 ed25519_private_key.pem
+-rw-rw-r-- 1 osamu osamu   692 Nov 30 17:52 ed25519_public_certificate.pem
+-rw------- 1 osamu osamu  1704 Nov 30 17:48 rsa_private_key.pem
+-rw-rw-r-- 1 osamu osamu  1314 Nov 30 17:49 rsa_public_certificate.pem
+</code></pre><!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/29/rdp-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
