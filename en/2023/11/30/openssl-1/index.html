@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/30 (initial publish),
-2023/11/30 (last update)
+2023/12/01 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00058.md
@@ -64,21 +64,22 @@ en/note-00058.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#rsa-2048bit-algorhism">RSA (2048bit) algorhism</a>
+    <li><a href="#rsa-2048bit-algorithm">RSA (2048bit) algorithm</a>
       <ul>
-        <li><a href="#step1">Step1</a></li>
-        <li><a href="#step2">Step2</a></li>
-        <li><a href="#step3">Step3</a></li>
+        <li><a href="#step-1-create-private-key">Step 1 (create private key)</a></li>
+        <li><a href="#step-2-create-public-certificate">Step 2 (create public certificate)</a></li>
+        <li><a href="#step-3-print-out-the-certificate-in-text-form">Step 3 (print out the certificate in text form)</a></li>
       </ul>
     </li>
-    <li><a href="#ed25519-algorhism">ED25519 algorhism</a>
+    <li><a href="#ed25519-algorithm">ED25519 algorithm</a>
       <ul>
-        <li><a href="#step1-1">Step1</a></li>
-        <li><a href="#step2-1">Step2</a></li>
-        <li><a href="#step3-1">Step3</a></li>
+        <li><a href="#step-1-create-private-key-1">Step 1 (create private key)</a></li>
+        <li><a href="#step-2-create-public-certificate-1">Step 2 (create public certificate)</a></li>
+        <li><a href="#step-3-print-out-the-certificate-in-text-form-1">Step 3 (print out the certificate in text form)</a></li>
       </ul>
     </li>
-    <li><a href="#comparison">Comparison</a></li>
+    <li><a href="#comparison-of-algorithm">Comparison of algorithm</a></li>
+    <li><a href="#notable-keywords-for-pki">Notable keywords for PKI</a></li>
   </ul>
 </nav>
 
@@ -87,15 +88,15 @@ en/note-00058.md
 for TLS with OpenSSL.</p>
 <p>Here, I do things in 3 steps:</p>
 <ul>
-<li>Step1: create the private key</li>
-<li>Step2: create the self-signed public certificate</li>
-<li>Step3: print out the content of the self-signed public certificate</li>
+<li>Step 1: create the private key</li>
+<li>Step 2: create the self-signed public certificate</li>
+<li>Step 3: print out the content of the self-signed public certificate</li>
 </ul>
-<h2 id="rsa-2048bit-algorhism">RSA (2048bit) algorhism</h2>
-<h3 id="step1">Step1</h3>
+<h2 id="rsa-2048bit-algorithm">RSA (2048bit) algorithm</h2>
+<h3 id="step-1-create-private-key">Step 1 (create private key)</h3>
 <pre tabindex="0"><code> $ openssl genpkey -algorithm rsa   -out rsa_private_key.pem
  ...
-</code></pre><h3 id="step2">Step2</h3>
+</code></pre><h3 id="step-2-create-public-certificate">Step 2 (create public certificate)</h3>
 <pre tabindex="0"><code> $ openssl req -new -key rsa_private_key.pem -x509 -days 3000 -out rsa_public_certificate.pem
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
@@ -116,7 +117,7 @@ it with private key to create the self-signed certificate as follows:</p>
 <pre tabindex="0"><code> $ openssl req -new -key rsa_private_key.pem -out rsa_public.pem
  ...
  $ openssl x509 -req -days 3000 -signkey rsa_private_key.pem -in rsa_public.pem -out rsa_public_certificate.pem
-</code></pre><h3 id="step3">Step3</h3>
+</code></pre><h3 id="step-3-print-out-the-certificate-in-text-form">Step 3 (print out the certificate in text form)</h3>
 <pre tabindex="0"><code> $ openssl x509 -in rsa_public_certificate.pem  -noout -text
 Certificate:
     Data:
@@ -176,10 +177,10 @@ Certificate:
         1a:c2:6b:8a:36:2b:f6:6a:af:d8:02:dd:9a:30:fe:5c:c0:5a:
         8a:d7:e7:1a:ac:2d:6a:0a:f3:ba:ed:d0:86:25:d7:17:df:cd:
         18:8f:78:0c
-</code></pre><h2 id="ed25519-algorhism">ED25519 algorhism</h2>
-<h3 id="step1-1">Step1</h3>
+</code></pre><h2 id="ed25519-algorithm">ED25519 algorithm</h2>
+<h3 id="step-1-create-private-key-1">Step 1 (create private key)</h3>
 <pre tabindex="0"><code> $ openssl genpkey -algorithm ED25519   -out ed25519_private_key.pem
-</code></pre><h3 id="step2-1">Step2</h3>
+</code></pre><h3 id="step-2-create-public-certificate-1">Step 2 (create public certificate)</h3>
 <pre tabindex="0"><code> $ openssl req -new -key ed25519_private_key.pem -x509 -days 3000 -out ed25519_public_certificate.pem
 You are about to be asked to enter information that will be incorporated
 into your certificate request.
@@ -195,7 +196,7 @@ Organization Name (eg, company) [Internet Widgits Pty Ltd]:FOOBAR
 Organizational Unit Name (eg, section) []:
 Common Name (e.g. server FQDN or YOUR name) []:
 Email Address []:foo@example.org
-</code></pre><h3 id="step3-1">Step3</h3>
+</code></pre><h3 id="step-3-print-out-the-certificate-in-text-form-1">Step 3 (print out the certificate in text form)</h3>
 <pre tabindex="0"><code> $ openssl x509 -in ed25519_public_certificate.pem  -noout -text
 Certificate:
     Data:
@@ -228,14 +229,42 @@ Certificate:
         72:a4:4a:9e:ec:ad:57:0c:7d:8c:35:1d:34:b6:7d:c0:49:73:
         56:ca:6e:01:4f:1a:39:84:8a:b6:a6:7c:f2:16:62:c8:4d:cc:
         9c:16:ce:d8:86:b3:05:74:ce:0f
-</code></pre><h2 id="comparison">Comparison</h2>
+</code></pre><h2 id="comparison-of-algorithm">Comparison of algorithm</h2>
 <p>ED25519 creates much smaller files.</p>
 <pre tabindex="0"><code> $ ls -l
 -rw------- 1 osamu osamu   119 Nov 30 17:51 ed25519_private_key.pem
 -rw-rw-r-- 1 osamu osamu   692 Nov 30 17:52 ed25519_public_certificate.pem
 -rw------- 1 osamu osamu  1704 Nov 30 17:48 rsa_private_key.pem
 -rw-rw-r-- 1 osamu osamu  1314 Nov 30 17:49 rsa_public_certificate.pem
-</code></pre><!-- raw HTML omitted -->
+</code></pre><h2 id="notable-keywords-for-pki">Notable keywords for PKI</h2>
+<p>Here are some notable keywords used for <a href="https://en.wikipedia.org/wiki/Public_key_infrastructure">public key infrastructure (PKI)</a>.</p>
+<ul>
+<li>&ldquo;<a href="https://en.wikipedia.org/wiki/Base64">Base64</a>&rdquo; encodes binary data using 64 ASCII characters (<code>A-Z</code>, <code>a-z</code>, <code>0-9</code>, <code>+</code>, <code>/</code>) and padding <code>=</code> character.
+<ul>
+<li>URL and filename safe <a href="https://datatracker.ietf.org/doc/html/rfc4648#section-5">Base64URL</a> encoding uses <code>-</code> and <code>_</code> instead of <code>+</code> and <code>/</code> respectively.</li>
+</ul>
+</li>
+<li>&ldquo;<a href="https://en.wikipedia.org/wiki/MIME">Multipurpose Internet Mail Extensions (MIME)</a>&rdquo; can use base64 as &ldquo;Content-Transfer-Encoding&rdquo;.</li>
+<li>&ldquo;<a href="https://en.wikipedia.org/wiki/S/MIME">Secure/Multipurpose Internet Mail Extensions (S/MIME)</a>&rdquo; is a standard for public-key encryption and signing of MIME data.</li>
+<li>&ldquo;<a href="https://en.wikipedia.org/wiki/PKCS">PKCS (Public Key Cryptography Standards)</a>&rdquo; are a group of public key cryptography standards.
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/PKCS_1">PKCS #1</a>: RSA cryptography standard</li>
+<li><a href="https://en.wikipedia.org/wiki/PKCS_7">PKCS #7</a>: cryptographic message syntax standard</li>
+<li>PKCS #10: <a href="https://en.wikipedia.org/wiki/Certificate_signing_request">certificate signing request</a> standard</li>
+<li><a href="https://en.wikipedia.org/wiki/PKCS_11">PKCS #11</a>: a platform-independent API standard to cryptographic tokens</li>
+<li><a href="https://en.wikipedia.org/wiki/PKCS_12">PKCS #12</a>: an archive file format standard for storing many cryptography objects as a single file</li>
+</ul>
+</li>
+<li><a href="https://en.wikipedia.org/wiki/ASN.1">ASN.1 (Abstract Syntax Notation One)</a></li>
+<li>&ldquo;<a href="https://en.wikipedia.org/wiki/X.509">X.509</a>&rdquo; defines the format of public key certificates used in many Internet protocols, including <a href="https://en.wikipedia.org/wiki/Transport_Layer_Security">TLS/SSL</a>, which is the basis for <a href="https://en.wikipedia.org/wiki/HTTPS">HTTPS</a>.
+<ul>
+<li>&ldquo;<a href="https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail">PEM (Privacy-Enhanced Mail)</a>&rdquo;: ASCII text format storing and sending cryptographic keys, certificates, and other data using base64 encoded data sandwiched between labeled lines.</li>
+<li>&ldquo;DER (Distinguished Encoding Rules)&rdquo;: binary format</li>
+<li>PKCS #7</li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
