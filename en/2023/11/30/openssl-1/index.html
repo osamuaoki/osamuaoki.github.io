@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/30 (initial publish),
-2023/12/01 (last update)
+2023/12/02 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00058.md
@@ -64,6 +64,7 @@ en/note-00058.md
 
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#ca-certificates">CA certificates</a></li>
     <li><a href="#rsa-2048bit-algorithm">RSA (2048bit) algorithm</a>
       <ul>
         <li><a href="#step-1-create-private-key">Step 1 (create private key)</a></li>
@@ -85,17 +86,42 @@ en/note-00058.md
 
 <p>I researched on creating self-signed certificates in
 <a href="https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail">Privacy-Enhanced Mail (PEM) format</a>
-for TLS with OpenSSL.</p>
-<p>Here, I do things in 3 steps:</p>
+for use in testing HTTPS server and RDP connections.</p>
+<h2 id="ca-certificates">CA certificates</h2>
+<p>As I checked CA certificates in <code>/etc/ssl/certs</code> for accessing HTTPS (TLS) web pages,
+I see <code>Signature Algorith</code> as:</p>
+<ul>
+<li><code>ecdsa-with-SHA256</code></li>
+<li><code>ecdsa-with-SHA384</code></li>
+<li><code>sha1WithRSAEncryption</code></li>
+<li><code>sha256WithRSAEncryption</code></li>
+<li><code>sha384WithRSAEncryption</code></li>
+<li><code>sha512WithRSAEncryption</code></li>
+</ul>
+<p>Here, I used <code>openssl x509 -in &lt;filename&gt; -noout -text</code> to check content of
+certificates.</p>
+<h2 id="rsa-2048bit-algorithm">RSA (2048bit) algorithm</h2>
+<p>Since <code>sha256WithRSAEncryption</code> is most popular for CA certificates, I tried to
+create self-signed one in 3 steps:</p>
 <ul>
 <li>Step 1: create the private key</li>
 <li>Step 2: create the self-signed public certificate</li>
 <li>Step 3: print out the content of the self-signed public certificate</li>
 </ul>
-<h2 id="rsa-2048bit-algorithm">RSA (2048bit) algorithm</h2>
+<p>Although many examples on the web use <code>openssl genrsa ...</code>, I used <code>openssl genpkey ...</code> here.  This is because <code>openssl-genpkey</code>(1ssl) states</p>
+<blockquote>
+<p>NOTES</p>
+<p>The use of the genpkey program is encouraged over the algorithm
+specific utilities because additional algorithm options and
+ENGINE provided algorithms can be used.</p>
+</blockquote>
 <h3 id="step-1-create-private-key">Step 1 (create private key)</h3>
 <pre tabindex="0"><code> $ openssl genpkey -algorithm rsa   -out rsa_private_key.pem
  ...
+</code></pre><p>This creates key in PKCS #8 format:</p>
+<pre tabindex="0"><code> $ head -2 rsa_private_key.pem
+-----BEGIN PRIVATE KEY-----
+MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCpdaNF0FYQbpDh
 </code></pre><h3 id="step-2-create-public-certificate">Step 2 (create public certificate)</h3>
 <pre tabindex="0"><code> $ openssl req -new -key rsa_private_key.pem -x509 -days 3000 -out rsa_public_certificate.pem
 You are about to be asked to enter information that will be incorporated
@@ -178,6 +204,8 @@ Certificate:
         8a:d7:e7:1a:ac:2d:6a:0a:f3:ba:ed:d0:86:25:d7:17:df:cd:
         18:8f:78:0c
 </code></pre><h2 id="ed25519-algorithm">ED25519 algorithm</h2>
+<p>Although I don&rsquo;t see <code>ED25519</code> is in use for CA certificates, I created
+a self-signed certificate using <code>ED25519</code>, here.</p>
 <h3 id="step-1-create-private-key-1">Step 1 (create private key)</h3>
 <pre tabindex="0"><code> $ openssl genpkey -algorithm ED25519   -out ed25519_private_key.pem
 </code></pre><h3 id="step-2-create-public-certificate-1">Step 2 (create public certificate)</h3>
@@ -230,7 +258,7 @@ Certificate:
         56:ca:6e:01:4f:1a:39:84:8a:b6:a6:7c:f2:16:62:c8:4d:cc:
         9c:16:ce:d8:86:b3:05:74:ce:0f
 </code></pre><h2 id="comparison-of-algorithm">Comparison of algorithm</h2>
-<p>ED25519 creates much smaller files.</p>
+<p><code>ED25519</code> creates much smaller files.</p>
 <pre tabindex="0"><code> $ ls -l
 -rw------- 1 osamu osamu   119 Nov 30 17:51 ed25519_private_key.pem
 -rw-rw-r-- 1 osamu osamu   692 Nov 30 17:52 ed25519_public_certificate.pem
@@ -248,8 +276,9 @@ Certificate:
 <li>&ldquo;<a href="https://en.wikipedia.org/wiki/S/MIME">Secure/Multipurpose Internet Mail Extensions (S/MIME)</a>&rdquo; is a standard for public-key encryption and signing of MIME data.</li>
 <li>&ldquo;<a href="https://en.wikipedia.org/wiki/PKCS">PKCS (Public Key Cryptography Standards)</a>&rdquo; are a group of public key cryptography standards.
 <ul>
-<li><a href="https://en.wikipedia.org/wiki/PKCS_1">PKCS #1</a>: RSA cryptography standard</li>
+<li><a href="https://en.wikipedia.org/wiki/PKCS_1">PKCS #1</a>: RSA cryptography standard (This uses <code>BEGIN RSA PRIVATE KEY</code> for private key) &ndash; legacy</li>
 <li><a href="https://en.wikipedia.org/wiki/PKCS_7">PKCS #7</a>: cryptographic message syntax standard</li>
+<li><a href="https://en.wikipedia.org/wiki/PKCS_8">PKCS #8</a>: Private-Key Information Syntax Standard (This uses <code>BEGIN PRIVATE KEY</code> for private key)</li>
 <li>PKCS #10: <a href="https://en.wikipedia.org/wiki/Certificate_signing_request">certificate signing request</a> standard</li>
 <li><a href="https://en.wikipedia.org/wiki/PKCS_11">PKCS #11</a>: a platform-independent API standard to cryptographic tokens</li>
 <li><a href="https://en.wikipedia.org/wiki/PKCS_12">PKCS #12</a>: an archive file format standard for storing many cryptography objects as a single file</li>
@@ -260,10 +289,12 @@ Certificate:
 <ul>
 <li>&ldquo;<a href="https://en.wikipedia.org/wiki/Privacy-Enhanced_Mail">PEM (Privacy-Enhanced Mail)</a>&rdquo;: ASCII text format storing and sending cryptographic keys, certificates, and other data using base64 encoded data sandwiched between labeled lines.</li>
 <li>&ldquo;DER (Distinguished Encoding Rules)&rdquo;: binary format</li>
-<li>PKCS #7</li>
+<li>PKCS #7: see &ldquo;<a href="https://security.stackexchange.com/questions/73156/whats-the-difference-between-x-509-and-pkcs7-certificate">What&rsquo;s the difference between X.509 and PKCS#7 Certificate?</a>&rdquo;.</li>
 </ul>
 </li>
 </ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 

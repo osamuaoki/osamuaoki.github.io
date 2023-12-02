@@ -13,9 +13,10 @@
       <pubDate>Thu, 30 Nov 2023 00:00:00 +0000</pubDate>
       
       <guid>/en/2023/11/30/openssl-1/</guid>
-      <description>I researched on creating self-signed certificates in Privacy-Enhanced Mail (PEM) format for TLS with OpenSSL.
-Here, I do things in 3 steps:
-Step 1: create the private key Step 2: create the self-signed public certificate Step 3: print out the content of the self-signed public certificate RSA (2048bit) algorithm Step 1 (create private key) $ openssl genpkey -algorithm rsa -out rsa_private_key.pem ... Step 2 (create public certificate) $ openssl req -new -key rsa_private_key.</description>
+      <description>I researched on creating self-signed certificates in Privacy-Enhanced Mail (PEM) format for use in testing HTTPS server and RDP connections.
+CA certificates As I checked CA certificates in /etc/ssl/certs for accessing HTTPS (TLS) web pages, I see Signature Algorith as:
+ecdsa-with-SHA256 ecdsa-with-SHA384 sha1WithRSAEncryption sha256WithRSAEncryption sha384WithRSAEncryption sha512WithRSAEncryption Here, I used openssl x509 -in &amp;lt;filename&amp;gt; -noout -text to check content of certificates.
+RSA (2048bit) algorithm Since sha256WithRSAEncryption is most popular for CA certificates, I tried to create self-signed one in 3 steps:</description>
     </item>
     
   </channel>
