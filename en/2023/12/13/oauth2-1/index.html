@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>IMAP/POP/SMTP proxy to add OAuth 2.0 | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">IMAP/POP/SMTP proxy to add OAuth 2.0</span></h1>
+
+<h3 class="date">Date:
+2023/12/13 (initial publish),
+2023/12/14 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00059.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/30/openssl-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#notable-oauth-20-proxy-programs">Notable OAuth 2.0 proxy programs</a></li>
+    <li><a href="#howto--references">HOWTO / References</a></li>
+  </ul>
+</nav>
+
+<p>I researched on IMAP/POP/SMTP proxy programs that transparently add OAuth 2.0 authentication for email clients that don&rsquo;t support this method.</p>
+<p>For now, I only leave links here.  (Maybe, I will try some of them with mutt, postfix, exim4, etc.)</p>
+<h2 id="notable-oauth-20-proxy-programs">Notable OAuth 2.0 proxy programs</h2>
+<p>As I checked 2023-12:</p>
+<table>
+<thead>
+<tr>
+<th>Project (source)</th>
+<th>star</th>
+<th>GUI</th>
+<th>Platform</th>
+<th>size</th>
+<th>updated</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="https://github.com/simonrob/email-oauth2-proxy">email-oauth2-proxy</a></td>
+<td>446</td>
+<td>YES</td>
+<td>python web</td>
+<td>260K</td>
+<td>2023-11</td>
+</tr>
+<tr>
+<td><a href="https://github.com/murataya/o2popper">o2popper</a></td>
+<td>8</td>
+<td>YES</td>
+<td>python + wx</td>
+<td>128K</td>
+<td>2022-12</td>
+</tr>
+<tr>
+<td><a href="https://gitlab.com/muttmua/mutt/-/blob/master/contrib/mutt_oauth2.py">mutt_oauth2.py</a></td>
+<td>N/A</td>
+<td>No</td>
+<td>python</td>
+<td>20K</td>
+<td>2023-12</td>
+</tr>
+<tr>
+<td><a href="https://github.com/tarickb/sasl-xoauth2">sasl-xoauth2</a></td>
+<td>59</td>
+<td>No</td>
+<td>C++</td>
+<td>188K</td>
+<td>2023-11</td>
+</tr>
+</tbody>
+</table>
+<p>Size = <code>du -hs --exclude=&quot;.git&quot; &lt;path&gt;</code></p>
+<h2 id="howto--references">HOWTO / References</h2>
+<ul>
+<li>email-oauth2-proxy (Apache-2.0 license)
+<ul>
+<li>An IMAP/POP/SMTP proxy that transparently adds OAuth 2.0 authentication for email clients that don&rsquo;t support this method.</li>
+<li><a href="https://depts.washington.edu/bitblog/2022/08/imapsync-oauth2-google-office365/">https://depts.washington.edu/bitblog/2022/08/imapsync-oauth2-google-office365/</a></li>
+<li><a href="https://movementarian.org/blog/posts/a-headless-office-365-proxy/">https://movementarian.org/blog/posts/a-headless-office-365-proxy/</a></li>
+</ul>
+</li>
+<li>o2popper (MIT)
+<ul>
+<li>O2Popper is a mail proxy application that enables continuous use of mail software and systems that do not support Gmail&rsquo;s OAuth2. There are also erroneous transmission prevention functions.</li>
+<li><a href="https://www.nips.ac.jp/~murata/o2popper/">https://www.nips.ac.jp/~murata/o2popper/</a></li>
+<li><a href="https://www.nips.ac.jp/~murata/o2popper/news/2.0.0-release-en.html">https://www.nips.ac.jp/~murata/o2popper/news/2.0.0-release-en.html</a></li>
+<li><a href="https://www.nips.ac.jp/~murata/o2popper/doc/o2popper-3.0.1-guide-mac-ja.pdf">https://www.nips.ac.jp/~murata/o2popper/doc/o2popper-3.0.1-guide-mac-ja.pdf</a></li>
+<li><a href="https://www.nips.ac.jp/~murata/o2popper/doc/o2popper-3.0.1-guide-mac-en.pdf">https://www.nips.ac.jp/~murata/o2popper/doc/o2popper-3.0.1-guide-mac-en.pdf</a></li>
+<li><a href="https://www.nips.ac.jp/~murata/o2popper/doc/get-client-secret-en.pdf">https://www.nips.ac.jp/~murata/o2popper/doc/get-client-secret-en.pdf</a></li>
+<li><a href="https://github.com/murataya/o2popper/issues/1">https://github.com/murataya/o2popper/issues/1</a></li>
+</ul>
+</li>
+<li>mutt_oauth2.py (GPL2+)
+<ul>
+<li>Mutt OAuth2 token management script</li>
+<li><a href="https://github.com/muttmua/mutt/blob/master/contrib/mutt_oauth2.py.README">https://github.com/muttmua/mutt/blob/master/contrib/mutt_oauth2.py.README</a></li>
+</ul>
+</li>
+<li>sasl-xauth2 (Apache-2.0 license)
+<ul>
+<li>SASL plugin for XOAUTH2</li>
+</ul>
+</li>
+<li><a href="https://github.com/moriyoshi/cyrus-sasl-xoauth2">cyrus-sasl-xoauth</a>
+<ul>
+<li>XOAUTH2 mechanism plugin for cyrus-sasl</li>
+</ul>
+</li>
+<li><a href="https://mmogilvi.users.sourceforge.net/software/oauthbearer.html">Setting Up OAUTH2 Support for Fetchmail and Postfix</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/11/30/openssl-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
