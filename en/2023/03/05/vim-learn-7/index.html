@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/12/23 (last update)
+2023/12/24 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00040.md
@@ -118,10 +118,25 @@ most features as <strong>opt-in</strong>.</p>
 &#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
 &#34;&#34;&#34; sane mode
 set nocompatible
+set encoding=utf-8          &#34; encoding within editor
 set backspace=indent,eol,start
 &#34;&#34;&#34; Unicode display
 set laststatus=2
-set statusline=%&lt;%f%m%r%h%w%=%y[U+%04B]%2l/%2L=%P,%2c%V &#34; Unicode display
+set statusline=%&lt;%f%m%r%h%w%=%y[U+%04B]%2l/%2L=%P,%2c%V
+set list
+set listchars=eol:¶,tab:⇄\ ,extends:↦,precedes:↤,nbsp:␣
+colorscheme industry
+syntax enable
+set hidden                     &#34; open another file without saving
+set smartcase   &#34; case insensitive search, except when using capital letters
+set smartindent                &#34; More than autoindent (Drop/Pop after {/})
+set nowrap                     &#34; Don&#39;t wrap line
+set noerrorbells               &#34; Disable audible bells
+set novisualbell               &#34; Disable visual bells
+set t_vb=                      &#34; Disable visual bells (termcap)
+&#34;set spell                      &#34; Enable spell check
+set spelllang=en_us            &#34; Spell check language as en_us
+&#34;set number                    &#34; add linenumber
 &#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
 &#34;&#34;&#34; Retain cursor position
 if has(&#34;autocmd&#34;)
@@ -149,21 +164,7 @@ tnoremap &lt;ESC&gt;&lt;ESC&gt; &lt;C-\&gt;&lt;C-N&gt;
 tnoremap jkjk &lt;C-\&gt;&lt;C-N&gt;
 &#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
 let mapleader = &#39; &#39;   &#34; Use &lt;SPACE&gt; as leader instead of &#39;\&#39;
-set encoding=utf-8          &#34; encoding within editor
 set viminfo=!,&#39;100,&lt;5000,s100,h &#34; Bigger copy buffer etc. Default &#39;100,&lt;50,s10,h
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-set noerrorbells               &#34; Disable audible bells
-set novisualbell               &#34; Disable visual bells
-set t_vb=                      &#34; Disable visual bells (termcap)
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-set hidden                     &#34; open another file without saving
-set smartcase   &#34; case insensitive search, except when using capital letters
-set smartindent                &#34; More than autoindent (Drop/Pop after {/})
-set nowrap                     &#34; Don&#39;t wrap line
-&#34;set spell                      &#34; Enable spell check
-set spelllang=en_us            &#34; Spell check language as en_us
-&#34;set number                    &#34; add linenumber
-
 &#34; vim: set sw=2 sts=2 et ft=vim :
 </code></pre><p>I also created bash aliases in <code>~/.bashrc</code> as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#=============================================================================</span>
