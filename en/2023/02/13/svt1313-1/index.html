@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/13 (initial publish),
-2023/10/07 (last update)
+2023/12/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00036.md
@@ -66,7 +66,7 @@ en/note-00036.md
   <ul>
     <li><a href="#how-to-access-bios-menu-of-sony-vaio-svt1313">How to access BIOS menu of Sony VAIO SVT1313</a></li>
     <li><a href="#why-boot-with-mbr-and-not-with-uefi">Why boot with MBR and not with UEFI</a></li>
-    <li><a href="#btrfs-as-root-filesystem-on-mbr-system">Btrfs as root filesystem on MBR system</a></li>
+    <li><a href="#use-of-btrfs-with-luks-on-mbr-system">Use of Btrfs with LUKS on MBR system</a></li>
     <li><a href="#touchpad-of-sony-vaio">Touchpad of Sony VAIO</a></li>
   </ul>
 </nav>
@@ -89,12 +89,20 @@ and &ldquo;Delete&rdquo; are fixed.)</li>
 <li>The card side contacts of SO-DDR DRAM needed to be rubbed by eraser to get it
 work right.</li>
 </ul>
-<h2 id="btrfs-as-root-filesystem-on-mbr-system">Btrfs as root filesystem on MBR system</h2>
-<ul>
-<li>For MBR system, grub-pc is used.  This requires <code>/boot</code> to be on ext4 filesystem.</li>
-<li>If <code>/</code> is on btrfs filesystem via debian-installer, it uses <code>subvol=@rootfs</code>
-as installed (Debian 12 bookworm).</li>
-</ul>
+<h2 id="use-of-btrfs-with-luks-on-mbr-system">Use of Btrfs with LUKS on MBR system</h2>
+<p><code>grub-pc</code> <a href="https://bugs.debian.org/1059244">has a bug which needs to be worked around.  See the procedure
+described there.</a>.  This is the essential
+step.</p>
+<p>I want to setup simple robust grub configuration entries to enable dual
+boot without mentioning kernel version.  To enable this, <code>/</code> must be on ext4
+accessible directly by <code>grub-pc</code> which lacks capabilities to handle BTRFS and
+LUKS encrypted volume.</p>
+<p>I put <code>/</code> on ext4 filesystem on non-encrypted partition.</p>
+<p>Since I wanted to keep all user data on encrypted disk, I set up system by
+mounting all <code>/usr</code>, <code>/var</code>, <code>/home/&lt;name&gt;</code>, etc. from the BTRFS subvolume
+under LUKS encrypted volume .</p>
+<p>This way, /vlmliniz etc. is stably available while user data are securely
+stored on encrypted volume using Btrfs allowing to make snapshots.</p>
 <h2 id="touchpad-of-sony-vaio">Touchpad of Sony VAIO</h2>
 <p>Touch pad only functions as left-click button.  I verified it by opening its
 touch pad to see one button switch under it.  So realizing left/right click needs some driver
