@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/09/03 (last update)
+2023/12/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00040.md
@@ -65,6 +65,7 @@ en/note-00040.md
 <nav id="TableOfContents">
   <ul>
     <li><a href="#nvim-configuration-retrospective">Nvim configuration retrospective</a></li>
+    <li><a href="#vi">Vi</a></li>
     <li><a href="#lazyvim">LazyVim</a>
       <ul>
         <li><a href="#terminal-emulator">Terminal emulator</a></li>
@@ -98,6 +99,89 @@ packages.</p>
 customization mechanism, they were still a bit overwhelming and sometimes too
 much.  I needed a simpler baseline Neovim configuration platform which offers
 most features as <strong>opt-in</strong>.</p>
+<h2 id="vi">Vi</h2>
+<p>Since nvim may not available, I created locale shell executable <code>~/bin/vi</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh -e
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -e ~/.vimin <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  VIRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;~/.vimin&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  VIRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;NORC&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> type nvim &gt;/dev/null; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  nvim -u $VIRC <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>  vim -u $VIRC <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><p>Here, I created simple generic <code>~/.vimin</code> as:</p>
+<pre tabindex="0"><code>&#34; Simple generic Vim/Neovim configuration
+&#34; SYNTAX: (n)vim -u ~/.vimin [filenme]
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+&#34;&#34;&#34; sane mode
+set nocompatible
+set backspace=indent,eol,start
+&#34;&#34;&#34; Unicode display
+set laststatus=2
+set statusline=%&lt;%f%m%r%h%w%=%y[U+%04B]%2l/%2L=%P,%2c%V &#34; Unicode display
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+&#34;&#34;&#34; Retain cursor position
+if has(&#34;autocmd&#34;)
+  autocmd BufReadPost * if line(&#34;&#39;\&#34;&#34;) &gt; 0 &amp;&amp; line (&#34;&#39;\&#34;&#34;) &lt;= line(&#34;$&#34;) |
+  \ exe &#34;normal! g&#39;\&#34;&#34; | endif
+endif
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+&#34;&#34;&#34; Use faster &#39;rg&#39; (ripgrep package) for :grep
+if executable(&#34;rg&#34;)
+  &#34; port https://www.vi-improved.org/recommendations/ to rg
+  set grepprg=rg\ --no-heading\ --color=never\ --ignore-case\ --column
+  set grepformat=%f:%l:%c:%m,%f:%l:%m
+endif
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+&#34;&#34;&#34; Window moves without using CTRL-W which is dangerous in INSERT mode
+nnoremap &lt;C-H&gt; &lt;C-W&gt;h
+nnoremap &lt;C-J&gt; &lt;C-W&gt;j
+nnoremap &lt;C-K&gt; &lt;C-W&gt;k
+nnoremap &lt;C-L&gt; &lt;C-W&gt;l
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+&#34;&#34;&#34; jk to get out of INSERT mode (&lt;ESC&gt;)
+inoremap  jk        &lt;ESC&gt;
+&#34; &lt;ESC&gt; &lt;ESC&gt; to get out of TERM mode (CTRL-\ CTRL-N)
+tnoremap &lt;ESC&gt;&lt;ESC&gt; &lt;C-\&gt;&lt;C-N&gt;
+tnoremap jkjk &lt;C-\&gt;&lt;C-N&gt;
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+let mapleader = &#39; &#39;   &#34; Use &lt;SPACE&gt; as leader instead of &#39;\&#39;
+set encoding=utf-8          &#34; encoding within editor
+set viminfo=!,&#39;100,&lt;5000,s100,h &#34; Bigger copy buffer etc. Default &#39;100,&lt;50,s10,h
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+set noerrorbells               &#34; Disable audible bells
+set novisualbell               &#34; Disable visual bells
+set t_vb=                      &#34; Disable visual bells (termcap)
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+set hidden                     &#34; open another file without saving
+set smartcase   &#34; case insensitive search, except when using capital letters
+set smartindent                &#34; More than autoindent (Drop/Pop after {/})
+set nowrap                     &#34; Don&#39;t wrap line
+&#34;set spell                      &#34; Enable spell check
+set spelllang=en_us            &#34; Spell check language as en_us
+&#34;set number                    &#34; add linenumber
+
+&#34; vim: set sw=2 sts=2 et ft=vim :
+</code></pre><p>I also created bash aliases in <code>~/.bashrc</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#=============================================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># GOOD OLDE VI as baseline editor (minimum resource file)</span>
+</span></span><span style="display:flex;"><span>export EDITOR<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi&#39;</span>
+</span></span><span style="display:flex;"><span>export VISUAL<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># `v` as neovim without resource file</span>
+</span></span><span style="display:flex;"><span>alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim  -u NORC&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># `nv` as neovim with standard resources (currently LazyVim)</span>
+</span></span><span style="display:flex;"><span>alias nv<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># sudoedit to use nvim w/o resource file</span>
+</span></span><span style="display:flex;"><span>alias sv<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SUDO_EDITOR=&#39;/usr/bin/nvim -u NORC&#39; /usr/bin/sudoedit&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># vim alias</span>
+</span></span><span style="display:flex;"><span>alias vimdiff<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -d&#39;</span>
+</span></span><span style="display:flex;"><span>alias view<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -R&#39;</span>
+</span></span><span style="display:flex;"><span>alias ex<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -e&#39;</span>
+</span></span></code></pre></div><p>Now that <code>$NVIM_APPNAME</code> environment variable is supported, I should think
+about using this, soon.</p>
 <h2 id="lazyvim">LazyVim</h2>
 <p>A new baseline Neovim setup system
 <a href="https://github.com/LazyVim/LazyVim">LazyVim</a> is published by the upstream of
@@ -210,15 +294,6 @@ prompt, I have modifies <code>~/.profile</code> to include the following:</p>
 </span></span></code></pre></div><p>I also added
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/dot/.editorconfig">~/.editorconfig</a>
 to cope with sources using <a href="https://editorconfig.org/">editorconfig</a>.</p>
-<p>I also create bash aliases:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim  -u NORC&#39;</span>
-</span></span><span style="display:flex;"><span>alias v0<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -u ~/.nvim&#39;</span>
-</span></span><span style="display:flex;"><span>alias vi<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim&#39;</span>
-</span></span><span style="display:flex;"><span>alias view<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -R&#39;</span>
-</span></span><span style="display:flex;"><span>alias vimdiff<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -d&#39;</span>
-</span></span></code></pre></div><p>Here, <code>~/.nvim</code> contains very simple setting.</p>
-<p>Now that <code>$NVIM_APPNAME</code> environment variable is supported, I should think
-about using this, soon.</p>
 <h2 id="lazyvim-customization">LazyVim customization</h2>
 <p>I created <a href="https://github.com/osamuaoki/starter">folked LazyVim starter</a> with
 my changes in <code>osamu</code> branch to keep backup of my local configuration.  I
