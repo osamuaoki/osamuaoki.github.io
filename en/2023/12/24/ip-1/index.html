@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Logging Global IP address | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Logging Global IP address</span></h1>
+
+<h3 class="date">Date:
+2023/12/24 (initial publish),
+2023/12/25 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00060.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/12/13/oauth2-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#local-ip-address">Local IP address</a></li>
+    <li><a href="#global-ip-address">Global IP address</a></li>
+    <li><a href="#logging-ip-address-with-systemd-timer">Logging IP address with systemd timer</a>
+      <ul>
+        <li><a href="#configsystemdusermyipservice"><code>~/.config/systemd/user/myip.service</code></a></li>
+        <li><a href="#configsystemdusermyiptimer"><code>~/.config/systemd/user/myip.timer</code>:</a></li>
+        <li><a href="#activating-timer-service">Activating timer service</a></li>
+        <li><a href="#checking-logged-ips">Checking logged IPs</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>Here is a memo over IP address and its logging.</p>
+<h2 id="local-ip-address">Local IP address</h2>
+<p>Local IP address can be obtained by using <code>ip addr</code>.</p>
+<pre tabindex="0"><code> $ ip addr
+</code></pre><p>For processing this output with script, use of <code>-o</code> option is handy.</p>
+<h2 id="global-ip-address">Global IP address</h2>
+<p>If a workstation is behind the firewall, Global IP address is that for the
+gateway device.</p>
+<p>Googling &ldquo;what is my IP&rdquo; gives lots of sites offering Global IP verification.</p>
+<p>Here are interesting articles on this topic.</p>
+<ul>
+<li><a href="https://serverfault.com/questions/1007184/how-to-check-ipv6-address-via-command-line">How to check IPv6 address via command line?</a> &ndash; good starting point</li>
+<li><a href="https://ifconfig.co/">ifconfig.co — What is my IP address?</a> &ndash; good for script processing</li>
+<li><a href="https://whatismyipaddress.com/">what is my ip address</a> &ndash; IPv4, IPv6 address</li>
+<li><a href="https://whatismyip.com/">what is my ip</a> &ndash; IPv4, IPv6 address</li>
+<li><a href="https://nordvpn.com/ja/what-is-my-ip/">NordVPN &ndash; IPアドレスを変更するべき理由</a> &ndash; This sometimes gives better geo location than ISP address (IPv4 only)</li>
+</ul>
+<p>As I checked my IP connection situation:</p>
+<ul>
+<li>Residential shared broadband service (Tsunagu net)
+<ul>
+<li>100BaseT connection to home</li>
+<li>10BaseT home Wifi router to PC (wlpxxx)
+<ul>
+<li>IPv4 only service</li>
+<li>Global IPv4: 113.xxx.xxx.xxx (Tokyo)</li>
+<li>(Local IPv4: 192.168.0.xxx) &ndash; Class C LAN address (RFC1918)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Mobile network service (IIJ)
+<ul>
+<li>G4 to iPhone</li>
+<li>USB ethernet connection to PC (enxba5dxxxxxxxx)
+<ul>
+<li>Global IPv4: 163.49.xxx.xxx (Kyoto)</li>
+<li>(Local IPv4: 172.20.xxx.xxx) &ndash; Class B LAN address (RFC1918)</li>
+<li>Global IPv6: 2001:240:2412:fa46:209b:xxxx:xxxx:xxxx (Shizuoka)</li>
+<li>(Local IPv6: 2001:240:2412:fa46:209b:xxxx:xxxx:xxxx &ndash; match global IP)</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>So I don&rsquo;t get global IP with IPv4 but have global IP with IPv6.</p>
+<h2 id="logging-ip-address-with-systemd-timer">Logging IP address with systemd timer</h2>
+<h3 id="configsystemdusermyipservice"><code>~/.config/systemd/user/myip.service</code></h3>
+<pre tabindex="0"><code>[Unit]
+Description=Check external IP address
+Documentation=man:myip(1)
+# journalctl -a -b -t myip
+
+[Service]
+Type=oneshot
+Nice=15
+# ifconfig.co can be other IP servicing similar functionality.
+# See https://serverfault.com/questions/1007184/how-to-check-ipv6-address-via-command-line
+ExecStart=systemd-cat -p 5 -t &#34;myip&#34; sh -c &#39;echo &#34;External IP: IPv4=$(curl -4 https://ifconfig.co 2&gt;/dev/null)&#34;&#39;
+ExecStart=systemd-cat -p 5 -t &#34;myip&#34; sh -c &#39;echo &#34;External IP: IPv6=$(curl -6 https://ifconfig.co 2&gt;/dev/null)&#34;&#39;
+IOSchedulingClass=idle
+CPUSchedulingPolicy=idle
+StandardInput=null
+StandardOutput=null
+StandardError=null
+</code></pre><h3 id="configsystemdusermyiptimer"><code>~/.config/systemd/user/myip.timer</code>:</h3>
+<pre tabindex="0"><code># activate by: systemctl --user enable myip.timer
+[Unit]
+Description=Check external IP address
+Documentation=man:myip(1)
+
+[Timer]
+# 90 sec min is enough for connecting to new Wifi service
+OnStartupSec=90
+
+[Install]
+WantedBy=timers.target
+</code></pre><h3 id="activating-timer-service">Activating timer service</h3>
+<pre tabindex="0"><code> $ systemctl --user enable myip.timer
+</code></pre><p>This creates a symlink <code>~/.config/systemd/user/timers.target.wants/myip.timer</code> pointing to <code>~/.config/systemd/user/myip.timer</code></p>
+<h3 id="checking-logged-ips">Checking logged IPs</h3>
+<p>IP address as I powered-on this time.</p>
+<pre tabindex="0"><code> $ journalctl -a -b -t myip
+</code></pre><p>IP address as I powered-on recently.</p>
+<pre tabindex="0"><code> $ journalctl -a -t myip
+</code></pre><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2023/12/13/oauth2-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

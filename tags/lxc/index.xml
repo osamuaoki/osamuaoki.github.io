@@ -72,6 +72,7 @@ What is LXD and Incus Upstream LXD (5.18 released 2023-09-20) is at https://gith
       
       <guid>/jp/2021/02/13/virt-06/</guid>
       <description>Linux Namespaces の雰囲気が分かったところで、非特権ユーザー権限から立ち 上げられたLXC仮想環境を作ってみます。
+NOTE: (2023-12-25) LXDを使い出したら、カス環境管理が便利なので以下のシェル操作ベースのコンテナ管理手法は休眠です。
 非特権LXC実行環境整備 LXC (1:4.0.6-1) をBulleseye環境で/usr/share/doc/lxc/README.Debianの &amp;ldquo;Unprivileged containers&amp;quot;に従って設定していきます。(2021/02)
 まずKERNELがunprivileged user namespacesを有効にしていることを確認します。
 $ sudo uname -a Linux **** 5.10.0-3-amd64 #1 SMP Debian 5.10.13-1 (2021-02-06) x86_64 GNU/Linux $ sudo sysctl kernel.unprivileged_userns_clone kernel.unprivileged_userns_clone = 1 ユーザーアカウント設定の/etc/subuidと/etc/subgidはすでに設定されていました。 これらは親システムのUIDやGIDからLXCコンテナ内から見えるUIDやGIDへの対応関係定義 しています。
