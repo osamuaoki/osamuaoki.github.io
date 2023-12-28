@@ -285,18 +285,18 @@ the second Debian system.</p>
 <p><code>grub-pc</code> <a href="https://bugs.debian.org/1059244">has a bug which needs to be worked around.  See the procedure
 described there.</a>.  This is the essential
 step.</p>
-<p>Since GRUB MBR can&rsquo;t access data on btrfs, &lsquo;/&rsquo; is placed on ext4 filesystem on
+<p>Since GRUB MBR can&rsquo;t access data on btrfs, <code>/</code> is placed on ext4 filesystem on
 non-encrypted partition.</p>
 <p>I still wanted to keep all user data on encrypted disk, I set up system by
 mounting all <code>/usr</code>, <code>/var</code>, <code>/home/&lt;name&gt;</code>, etc. from the BTRFS subvolume
 under LUKS encrypted volume .</p>
-<p>This way, /vlmliniz etc. is stably available while user data are securely
+<p>This way, <code>/vlmliniz</code> and <code>/initrd.img</code>, etc. are stably available while user data are securely
 stored on encrypted volume using Btrfs allowing to make snapshots.</p>
 <h2 id="gnome-desktop-customization">GNOME desktop customization</h2>
 <p>The <code>gnome-tweak</code> package installed as a dependency of <code>gnome</code> package helps to
 tweak the system via GUI application <code>Tweak</code>.</p>
 <p>The GNOME extension packages may not be robust for the update of GNOME.  So the
-extensive use of them should be limitted to system tracking the <code>stable</code>
+extensive use of them should be limited to system tracking the <code>stable</code>
 release.  They are available from <a href="https://extensions.gnome.org/local/">GNOME Extension web
 site</a> using browser with <a href="https://chrome.google.com/webstore/detail/gnome-shell-integration/gphhapmejobijbbhgpjhcjognlahblep">GNOME Shell
 integration</a>
@@ -335,7 +335,7 @@ enabled.  They can be configured via GUI application <code>Extensions</code>.</p
 </li>
 <li><code>Sound and Media</code>
 <ul>
-<li><code>SUPER-.</code>: volume mute/unmute</li>
+<li><code>SUPER-,</code>: volume mute/unmute</li>
 </ul>
 </li>
 <li><code>Custom Shortcuts</code>
