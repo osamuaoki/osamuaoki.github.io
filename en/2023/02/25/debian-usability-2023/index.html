@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/02/25 (initial publish),
-2023/10/08 (last update)
+2023/12/28 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00038.md
@@ -89,8 +89,8 @@ en/note-00038.md
         <li><a href="#keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</a></li>
         <li><a href="#keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</a></li>
         <li><a href="#keyboard-shortcut-customization-input-method">Keyboard shortcut customization (Input Method)</a></li>
-        <li><a href="#note-on-non-usable-shortcut-key-combos-for-super">Note on non usable shortcut key combos for super</a></li>
         <li><a href="#keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</a></li>
+        <li><a href="#note-on-non-usable-shortcut-key-combos-for-super">Note on non usable shortcut key combos for super</a></li>
         <li><a href="#keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</a></li>
         <li><a href="#web-browser">Web browser</a></li>
         <li><a href="#mail-client">Mail client</a></li>
@@ -118,7 +118,7 @@ post-Debian Bookworm (12) GNU/Linux in testing.</p>
 <p>For the hardware specific notes and tips, see:</p>
 <ul>
 <li><a href="/en/2021/01/07/thinkpad-t14-gen-1-amd/">Thinkpad T14 Gen 1</a> &ndash; <code>hostname=goofy</code></li>
-<li><a href="/en/2023/02/13/svt1313-1/">Sony Vaio SVT1313</a> &ndash; <code>hostname=casper</code></li>
+<li><a href="/en/2023/02/13/svt1313-1/">Sony Vaio SVT1313</a> &ndash; <del><code>hostname=casper</code></del> <code>hostname=mickey</code></li>
 </ul>
 <h2 id="system-installation">System installation</h2>
 <h3 id="initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></h3>
@@ -298,6 +298,7 @@ proper secondary-click (or even middle-click).</p>
 </span></span></span></code></pre></div><p>(<code>SUPER-\</code> is easier to type than <code>SUPER-T</code>.)</p>
 <h3 id="keyboard-shortcut-customization-input-method">Keyboard shortcut customization (Input Method)</h3>
 <h4 id="new-better-way-with-gnome-extension">New better way with GNOME extension</h4>
+<p>(The older method is recorded in <a href="/en/2023/06/16/gnome-shell-1/">GNOME shell changes</a>.)</p>
 <ul>
 <li>Installed my GNOME extension: <a href="https://github.com/osamuaoki/inputmethod-shortcuts">Quick switching of input method and touchpad</a> &ndash; source
 <ul>
@@ -305,58 +306,48 @@ proper secondary-click (or even middle-click).</p>
 </ul>
 </li>
 <li>Log out and log in to GNOME</li>
-<li>Disabled normal <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts in &ldquo;Settings&rdquo; -&gt; &ldquo;Keyboard&rdquo; -&gt; &ldquo;Keyboard Shortcuts&rdquo; -&gt; &ldquo;Typing&rdquo;.
-<ul>
-<li>If you don&rsquo;t intend to use <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts in below, this is not required.</li>
-</ul>
-</li>
 <li>Enabled shortcuts from GNOME shell extension preference menu as:
 <ul>
 <li><code>SUPER-SPACE</code>: English (US)</li>
 <li><code>SUPER-SHIFT-SPACE</code>: Mozc</li>
 <li><code>SUPER-CTRL-SPACE</code>: English (international)</li>
-<li><code>SUPER-ALT-SPACE</code>: Anthy</li>
+<li><del><code>SUPER-ALT-SPACE</code>: Anthy</del> (not used any more)</li>
 </ul>
 </li>
 </ul>
 <p><img src="/img/InputMethods.png" alt="prefs.js"></p>
+<p>Since I don&rsquo;t intend to use <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts, I don&rsquo;t bother to disabled normal <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts in &ldquo;Settings&rdquo; -&gt; &ldquo;Keyboard&rdquo; -&gt; &ldquo;Keyboard Shortcuts&rdquo; -&gt; &ldquo;Typing&rdquo;.</p>
 <p>For other extensions I use, see <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a>.</p>
-<h4 id="old-hackish-way-with-gdbus">Old hackish way with <code>gdbus</code></h4>
-<p><strong>This is for historical record.</strong></p>
-<p>For selecting IM deterministically (instead of Super-SPACE toggles), bind
-javascript MACRO to keys by <code>Keyboard Shortcuts</code>.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h3 id="keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</h3>
+<p>For Japanese input with US keyboard, set IM (<code>mozc</code> etc.) configuration as:</p>
 <ul>
-<li><code>SUPER-ENTER</code>: English (US)</li>
-<li><code>SUPER-SHIFT-ENTER</code>: Mozc</li>
-<li><code>SUPER-CTRL-ENTER</code>: English (international)</li>
-<li><code>SUPER-ALT_ENTER</code>: Anthy</li>
+<li>On a system where Control-SPACE` is usable (My Thinkpad.)
+<ul>
+<li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent (activate IM)</li>
+<li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent (deactivate IM)</li>
 </ul>
-<p>(I use &ldquo;ENTER&rdquo;-combos for shortcuts to enter easily with both hands.)</p>
-<p>For example, <code>inputSources[0]</code> (the first selection item in the GNOME input source menu) is English (US) and if you want to use SUPER-ENTER to switch to US, you need to set as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     IM_0
-</span></span><span style="display:flex;"><span>Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  <span style="color:#e6db74">&#34;imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()&#34;</span>
-</span></span><span style="display:flex;"><span>Shortcut SUPER-ENTER
-</span></span></code></pre></div><p>Please make sure to enter the above <strong>Command</strong> in a single line.</p>
-<p>Since 2022, we must install
-<a href="https://github.com/linushdot/unsafe-mode-menu">Unsafe Mode Menu</a> extension locally as instructed by the upstream.</p>
-<p>This local extension can be activated using &ldquo;GNOME extensions&rdquo; (in <code>gnome-shell-extensions</code> deb package).</p>
-<p><img src="/img/extensions.png" alt="extension screen"></p>
-<p>This &ldquo;Unsafe mode&rdquo; can be enabled via GNOME right top corner dialog.</p>
-<p><img src="/img/unsafe-mode.png" alt="unsafe mode screen"></p>
-<p>The history of how I came to the above is recorded in <a href="/en/2023/06/16/gnome-shell-1/">GNOME shell changes</a>.</p>
+</li>
+<li>On a system where Control-SPACE` is not usable (My Sony Vaio.)
+<ul>
+<li>SHIFT-SPACE:  漢字 (kanji mode) キー equivalent (toggle IM)
+<ul>
+<li>Set to activate in DirectInput</li>
+<li>Set to deactivate in PreComposition</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Since Windows-E style Alt-` is grubbed by Gnome Desktop, this can&rsquo;t be used to toggle IM for Mozc.</p>
+<p>See my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> and its <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a>.</p>
 <h3 id="note-on-non-usable-shortcut-key-combos-for-super">Note on non usable shortcut key combos for super</h3>
 <ul>
 <li>Any use of <code>SUPER</code>+<code>modifier</code>+<code>SPACE</code> or <code>SUPER</code>-<code>SPACE</code> breaks normal <code>SUPER</code>-<code>SPACE</code> for rotating input method and bad idea</li>
 <li><code>SUPER</code>-<code>P</code> seems to be unresponsive</li>
 <li><code>SUPER</code>-<code>O</code> seems to be unresponsive</li>
 </ul>
-<h3 id="keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</h3>
-<p>For Japanese input with US keyboard, set IM (anthy etc.) configuration as:</p>
-<ul>
-<li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent</li>
-<li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent</li>
-</ul>
-<p>See my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> and its <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a>.</p>
 <h3 id="keyboard-shortcut-customization-gnome-tweaks">Keyboard shortcut customization (GNOME Tweaks)</h3>
 <p>For Vim use:</p>
 <ul>
