@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/07 (initial publish),
-2023/11/24 (last update)
+2023/12/28 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00049.md
@@ -76,9 +76,10 @@ en/note-00049.md
         <li><a href="#initial-manual-setup-gnome">Initial manual setup (GNOME)</a></li>
         <li><a href="#wallpaper-for-grub">Wallpaper for GRUB</a></li>
         <li><a href="#os-probing-for-grub">OS probing for GRUB</a></li>
-        <li><a href="#multi-boot-with-grub">Multi-boot with GRUB</a></li>
+        <li><a href="#multi-boot-with-grub-on-uefi-system">Multi-boot with GRUB on UEFI system</a></li>
       </ul>
     </li>
+    <li><a href="#use-of-btrfs-with-luks-on-mbr-system">Use of Btrfs with LUKS on MBR system</a></li>
     <li><a href="#gnome-desktop-customization">GNOME desktop customization</a>
       <ul>
         <li><a href="#terminal-customization">Terminal customization</a></li>
@@ -124,7 +125,7 @@ possible.</p>
 and tips, see also:</p>
 <ul>
 <li><a href="/en/2021/01/07/thinkpad-t14-gen-1-amd/">Thinkpad T14 Gen 1</a> &ndash; <code>hostname=goofy</code></li>
-<li><a href="/en/2023/02/13/svt1313-1/">Sony Vaio SVT1313</a> &ndash; <code>hostname=casper</code></li>
+<li><a href="/en/2023/02/13/svt1313-1/">Sony Vaio SVT1313</a> &ndash; <del><code>hostname=casper</code></del> <code>hostname=mickey</code></li>
 </ul>
 <h2 id="bare-metal-initial-system-installation">Bare metal initial system installation</h2>
 <h3 id="initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></h3>
@@ -244,10 +245,8 @@ OS detection.  This manual step is required after kernel updates etc., to work
 around the <strong>unset</strong> problem.</p>
 <p><code>sudo update-grub</code> doesn&rsquo;t do unset as above but requires explicit setting of
 <code>GRUB_DISABLE_OS_PROBE=false</code> to do OS probing.</p>
-<h3 id="multi-boot-with-grub">Multi-boot with GRUB</h3>
+<h3 id="multi-boot-with-grub-on-uefi-system">Multi-boot with GRUB on UEFI system</h3>
 <p>For more robust multi-boot, I usually add following as <code>/etc/grub.d/40_fixed_linux</code>:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
 </span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>exec tail -n +3 $0
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># This file provides an easy way to add custom menu entries.  Simply type the</span>
@@ -277,10 +276,22 @@ around the <strong>unset</strong> problem.</p>
 </span></span><span style="display:flex;"><span>        echo    <span style="color:#e6db74">&#39;Loading initial ramdisk from /dev/nvme1n1p1 ...&#39;</span>
 </span></span><span style="display:flex;"><span>        initrd  /@rootfs/initrd.img
 </span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
-</span></span></code></pre></div><p>If you have multiple Debian system installed, you should make a backup copy
+</span></span></code></pre></div><p>Since GRUB UEFI, root filesystem on btrfs data is readable and used.</p>
+<p>If you have multiple Debian system installed, you should make a backup copy
 of <code>/boot/efi/EFI/debian/grub.cfg</code> to protect it gets overridden by installing
 the second Debian system.</p>
 <p>See <a href="https://wiki.debian.org/Btrfs%20migration">https://wiki.debian.org/Btrfs%20migration</a> .</p>
+<h2 id="use-of-btrfs-with-luks-on-mbr-system">Use of Btrfs with LUKS on MBR system</h2>
+<p><code>grub-pc</code> <a href="https://bugs.debian.org/1059244">has a bug which needs to be worked around.  See the procedure
+described there.</a>.  This is the essential
+step.</p>
+<p>Since GRUB MBR can&rsquo;t access data on btrfs, &lsquo;/&rsquo; is placed on ext4 filesystem on
+non-encrypted partition.</p>
+<p>I still wanted to keep all user data on encrypted disk, I set up system by
+mounting all <code>/usr</code>, <code>/var</code>, <code>/home/&lt;name&gt;</code>, etc. from the BTRFS subvolume
+under LUKS encrypted volume .</p>
+<p>This way, /vlmliniz etc. is stably available while user data are securely
+stored on encrypted volume using Btrfs allowing to make snapshots.</p>
 <h2 id="gnome-desktop-customization">GNOME desktop customization</h2>
 <p>The <code>gnome-tweak</code> package installed as a dependency of <code>gnome</code> package helps to
 tweak the system via GUI application <code>Tweak</code>.</p>
@@ -395,11 +406,26 @@ proper secondary-click (or even middle-click).</p>
 </ul>
 <p>See <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a> how I get here.</p>
 <h3 id="keyboard-shortcut-customization-internal-im-configuration">Keyboard shortcut customization (Internal IM configuration)</h3>
-<p>For Japanese input with US keyboard, set IM (mozc etc.) configuration as:</p>
+<p>For Japanese input with US keyboard, set IM (<code>mozc</code> etc.) configuration as:</p>
 <ul>
-<li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent</li>
-<li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent</li>
+<li>On a system where Control-SPACE` is usable (My Thinkpad.)
+<ul>
+<li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent (activate IM)</li>
+<li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent (deactivate IM)</li>
 </ul>
+</li>
+<li>On a system where Control-SPACE` is not usable (My Sony Vaio.)
+<ul>
+<li>SHIFT-SPACE:  漢字 (kanji mode) キー equivalent (toggle IM)
+<ul>
+<li>Set to activate in DirectInput</li>
+<li>Set to deactivate in PreComposition</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Since Windows-E style Alt-` is grubbed by Gnome Desktop, this can&rsquo;t be used to toggle IM for Mozc.</p>
 <p>See my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> and its <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a>.</p>
 <h3 id="non-usable-keyboard-shortcut-key-combos-with-super">Non-usable Keyboard shortcut key combos with super</h3>
 <ul>
