@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/07 (initial publish),
-2023/12/28 (last update)
+2023/12/29 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00049.md
@@ -134,12 +134,37 @@ environment (<code>task-desktop</code>)&rdquo; task and select &ldquo;SSH server
 to make it light, GUI-less, and SSH-ready.</p>
 <p>This process installs (mostly) packages with <code>Priority:</code> values in <code>required</code>,
 <code>important</code> and <code>standard</code>.</p>
-<p>For the rootfs for <code>/</code>, I use a partition formatted as btrfs.  The installer
-automatically use subvolume <code>@rootfs</code> within its partition for the rootfs.
-To make this system bootable with GRUB:</p>
+<p>In order to place most system data and all user data eventually on btrfs while
+keeping this system bootable with GRUB, I install as follows:</p>
 <ul>
-<li>For MBR system, you must create another partition set to be mounted at <code>/boot</code> and formatted as ext4fs.</li>
-<li>For UEFI system, you need no special action.  (You have a shared partition for &ldquo;EFI system partition&rdquo; automatically mounted at <code>/boot/efi</code> and formatted as FAT32.)</li>
+<li>For encrypted MBR system:
+<ul>
+<li>Create a large encrypted PV which holds large LV formatted to btrfs (dont
+mount nor use this) and small LV formatted to swap (assigned to be used for
+swap).</li>
+<li>Create a small (10GB+) ext4 partition and install a minimum system to it.</li>
+<li>Using rescue disk, <a href="https://bugs.debian.org/1059244">perform procedure to workaround bug as described in #1059244</a>.</li>
+<li>Verify correct installation.</li>
+<li>Using rescue disk:
+<ul>
+<li>Create subvolumes in btrfs for <code>/usr</code>, <code>/var</code>, <code>/home/osamu</code>.</li>
+<li>Migrate data from ext4 to these subvolumes</li>
+<li>Update /etc/fstab to mount these subvolumes</li>
+</ul>
+</li>
+<li>Verify correct installation (Now a dedicated ext4 partition holds only <code>/vmlinuz</code>, <code>/initrd.img</code>, <code>/etc</code> and <code>/boot</code>.)</li>
+</ul>
+</li>
+<li>For non-encrypted UEFI system:
+<ul>
+<li>No special action is needed.
+<ul>
+<li>Create and select btrfs for <code>/</code>.  (The installer automatically use subvolume <code>@rootfs</code> within its partition for the rootfs.)</li>
+<li>Shared partition for &ldquo;EFI system partition&rdquo; is automatically mounted at <code>/boot/efi</code> and formatted as FAT32.</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 <p>I leave the domain name as blank. All hosts on the same local subnet can be
 accessed by adding <code>.local</code> at the end of each host name thanks to Avahi
@@ -282,9 +307,6 @@ of <code>/boot/efi/EFI/debian/grub.cfg</code> to protect it gets overridden by i
 the second Debian system.</p>
 <p>See <a href="https://wiki.debian.org/Btrfs%20migration">https://wiki.debian.org/Btrfs%20migration</a> .</p>
 <h2 id="use-of-btrfs-with-luks-on-mbr-system">Use of Btrfs with LUKS on MBR system</h2>
-<p><code>grub-pc</code> <a href="https://bugs.debian.org/1059244">has a bug which needs to be worked around.  See the procedure
-described there.</a>.  This is the essential
-step.</p>
 <p>Since GRUB MBR can&rsquo;t access data on btrfs, <code>/</code> is placed on ext4 filesystem on
 non-encrypted partition.</p>
 <p>I still wanted to keep all user data on encrypted disk, I set up system by
