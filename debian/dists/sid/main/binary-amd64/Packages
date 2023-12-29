@@ -1,3 +1,304 @@
+Package: 00-min
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: aptitude, locales-all, sudo, task-english, task-laptop, task-ssh-server
+Recommends: btrfs-progs, cryptsetup, discover, firmware-atheros, firmware-linux, firmware-realtek, git, gnupg, grub-pc | grub-efi-amd64, installation-report, linux-image-amd64, mc, screen, usbutils, vim, wget
+Replaces: nano
+Provides: nano
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/00-min_0.6_all.deb
+Size: 2036
+SHA256: c2be5a545b2e4787dc873ea92c6e92c9949465faf2ef7d0672adbbedc3332089
+SHA1: 6123ce874264d9502046a440de1f3e56fc8e524d
+MD5sum: dba1d6d47ed0af06d863e87d649c4a09
+Description: Task for the minimal non-GUI system
+ This is a task package installing minimal system without GUI.
+ .
+ This is meant to be used for creating the initial image for the minimal chroot
+ and virtual system.
+ .
+ Installer installed packages are included
+
+Package: 01-cli
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 00-min
+Recommends: bsd-mailx, bzip2, cups, dislocker, dmsetup, e2fsprogs, eject, exfatprogs, fdisk, fzf, gdisk, gdu, gpart, hardinfo, hdparm, htop, hwinfo, info, iproute2, iptables, kpartx, less, liblz4-tool, libsecret-tools, lxc, lxd, lxd-tools, moreutils, mtools, mutt, ntfs-3g, nvme-cli, openssh-client, openssh-server, parted, pinentry-curses, printer-driver-escpr, python3-pip, python3-virtualenv, rsync, scdaemon, smartmontools, systemd-container, task-english, task-laptop, testdisk, time, tmux, tree, udftools, w3m, xfsprogs, xorriso, xxd, xz-utils, zip, zstd
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/01-cli_0.6_all.deb
+Size: 2200
+SHA256: b79fe5a882d8203aa46edc112cf5d6583afa30ab50fb2ba831e567ea7a0a89e5
+SHA1: 52c99a59991e7bf830f497deb5240faf66866121
+MD5sum: a2a5bf9b321942c130fbc222bde6b3ac
+Description: Task for the baseline CLI system
+ This is a task package installing the baseline CLI system without GUI.
+ .
+ This contains:
+  * File system CLI tools
+  * Compression CLI tools
+  * Network CLI tools
+ .
+ This doesn't contain:
+  * Tools to compile and run programs
+  * Tools to install external programs not packaged by Debian
+
+Package: 02-gui
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 01-cli, task-desktop
+Recommends: adwaita-qt, btrfs-heatmap, chromium, gitk, gnome-software-plugin-flatpak, gnome-software-plugin-snap, gparted, pinentry-gnome3, smart-notifier, ssh-askpass, tkinfo, wl-clipboard, xclip, xdg-desktop-portal, xdu, xsel
+Provides: gnome-shell-extensions
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/02-gui_0.6_all.deb
+Size: 2032
+SHA256: 69d724bcb2029e44310c495f72b64b2b85dc408c024eb89d1a1f892747a2cb63
+SHA1: 176651319c7b7bc07bcb1db3eb9634b8c5599726
+MD5sum: 5a47a8705ab7e9cee8ad6a4f0928b3bf
+Description: Task for the baseline GUI system
+ This is a task package installing the baseline GUI system.
+ .
+ This contains:
+  * Desktop GUI tools
+  * Network GUI tools
+ .
+ This doesn't contain:
+  * Tools to compile and run programs
+  * Tools to install external programs not packaged by Debian
+
+Package: 03-jpn
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 02-gui
+Recommends: fontmatrix, fonts-noto, fonts-takao, fonts-vlgothic, ibus-gtk, ibus-gtk3, ibus-gtk4, ibus-mozc, ibus-wayland, libqt5gui5, lv, nkf
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/03-jpn_0.6_all.deb
+Size: 1900
+SHA256: c5f3fb29d878fb55e3bce1170a9b8997c18ad64350bce470a3cccf9e45a9ce3a
+SHA1: 4afda5dc663e7935eba4417534f375661d7a2f30
+MD5sum: 12188bd0ca99e6e5048c11aff9274b2c
+Description: Task for the baseline Japanese GUI system
+ This is a task package installing the baseline Japanese GUI system.
+ .
+ This contain:
+  * Input methods
+  * Fonts
+  * Encoding filter
+
+Package: 04-dev
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 01-cli, build-essential, debhelper, devscripts
+Recommends: apt-file, ben, black, cargo, ccache, cgdb, clang-format, cmake, curl, debmake, dgit, dh-python, docbook-xml, docbook-xsl, eatmydata, faketime, gdb, gdebi, gettext, git-buildpackage, gitk, golang, golang-any, graphicsmagick-imagemagick-compat, hugo, imediff, libreply-perl, libterm-readline-gnu-perl, libxml2-utils, lsof, ltrace, luarocks, meld, nodejs, npm, perl, pipx, po4a, python3, python3-distutils-extra, python3-gi, python3-pil, python3-venv, quilt, reprepro, rlwrap, rpm2cpio, rustc, sbuild, shellcheck, shunit2, signing-party, strace, texinfo, xsltproc, xtrace
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/04-dev_0.6_all.deb
+Size: 2284
+SHA256: 48cd222a1f909a7fd75f7eb0f3ed51f0343e3072981d7d48fdfe14dead458add
+SHA1: 87d6b108af7d433b962a4804b3a7c2d06c80626a
+MD5sum: a0651a8749d3cdb3a6a9d7b064f3ee26
+Description: Task for the baseline development system
+ This is a task package installing the baseline development system.
+ .
+ This contains:
+  * Tools to compile, run and debug programs
+  * Tools to execute interpreters with their support libraries
+  * Tools to develop Debian packages
+  * Tools to create web pages
+  * Tools to create deb package repository
+  * Tools to install external programs not packaged by Debian
+ This doesn't contain:
+  * Tools to pull-in TeX programs
+
+Package: 05-doc
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 11
+Recommends: cpp-doc, debian-policy, debian-reference, debmake-doc, developers-reference, doc-base, gcc-doc, gccintro, gdb-doc, git-doc, ibus-doc, iproute2-doc, maint-guide, make-doc, perl-doc, python3-doc
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/05-doc_0.6_all.deb
+Size: 2048
+SHA256: ba2faac55e101359fc0dc7230ada2823433cf93fa2eb3b4ad99aa105252c2ca4
+SHA1: 957b7032ce110e827306bbb6a0055b015fd4bee9
+MD5sum: 23a22706da509d680d0d0188ebe807a8
+Description: Task to add documentation support
+ This is a task package to add documentation support for the baseline
+ development system.
+ .
+ This may pull in some non-free GFDL packages.
+
+Package: 06-typ
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 02-gui
+Recommends: 01-cli, 03-jpn, 04-dev, 05-doc
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/06-typ_0.6_all.deb
+Size: 1832
+SHA256: a164a4f64873a9e85c02835f16458f4cf3fb2c7d55d06402d5a0152a5accefab
+SHA1: 11191432f11a303e238ad889f818f3c47db04977
+MD5sum: 5181c05aa805c9ddad722fc69e01355c
+Description: Task for the typical desktop system
+ This is a task package installing the typical desktop system.
+ .
+ This is for the default Desktop installation.
+
+Package: 12-virt
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 02-gui
+Recommends: gnome-boxes, lxc, vde2, virt-manager, virt-viewer
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/12-virt_0.6_all.deb
+Size: 1852
+SHA256: fff26e118776458b2462f7be9644b33b12812a8ed0deedc24beb2114cf94797d
+SHA1: beba5b98e2f53a50279cf5ef4914dc10c16464f9
+MD5sum: 0e825192cfdef4ef4304272c5aca56e9
+Description: Task to add virtual OS environment support
+ This is a task package to add virtual OS environment support.
+ .
+ This is here to easily add and remove relevant packages.
+
+Package: 14-iot
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 04-dev
+Recommends: arduino, arduino-mk, avra, avrdude, avrp, binutils-avr, freecad, fritzing, gcc-avr, gdb-avr, kicad, librecad, openscad, simavr
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/14-iot_0.6_all.deb
+Size: 1908
+SHA256: 873e28eb9d0d325ac576796d9e52082179f62f14cb7533f75166ddb1404fde7e
+SHA1: b5864b053daddd5918ca519f14bc69aa40736d22
+MD5sum: b1ba0dac7bcb368315c06d83a5c7eb9e
+Description: Task to add IoT development support
+ This is a task package to add IoT development support.
+ .
+ This is here to easily add and remove relevant packages for hardware and
+ firmware developments.
+
+Package: 14-tex
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 04-dev
+Recommends: dblatex, fonts-arphic-bsmi00lp, fonts-arphic-gbsn00lp, fonts-wqy-zenhei, texlive-full, xmlto
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/14-tex_0.6_all.deb
+Size: 1876
+SHA256: 1ed283b87de75ecc5d1fa6024fb16292b3c4600e4f187bbb470546b5f80757d1
+SHA1: 843aec81bafdc62f08ac02c9ec1041563b621faa
+MD5sum: 8653c4228d2b98a6a530ff5ecd06ce08
+Description: Task to add TeX support
+ This is a task package to add TeX support.
+ .
+ This is here to easily add and remove relevant packages to build PDF files.
+
+Package: 16-extra
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Depends: 06-typ
+Recommends: asciidoc, asciidoctor, fail2ban, git-svn, knockd, linux-cpupower, memtest86+, parallel, rclone, rename, shellinabox, subversion
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/16-extra_0.6_all.deb
+Size: 1940
+SHA256: 6784ffd06be86bb365ea7a00bcb5a41db4425292fc4879685b2e9eed42cf43e1
+SHA1: 9e877234d7a58cdf4fc19324ee89d66bbe720add
+MD5sum: de42a8b329d4fa189cfa82584a59bebf
+Description: Task to add extra utilities
+ This is a task package to add extra utilities.  Anything which doesn't fit in
+ the existing tasks are moved to here.
+ .
+ This is here to easily add and remove relevant packages.
+
+Package: 99-notex
+Source: osamu-task
+Version: 0.6
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 8
+Conflicts: dblatex, dvipng, texlive, texlive-base, texlive-binaries, texlive-full, texlive-latex-base, texlive-lualatex, texlive-xetex
+Provides: dblatex, dvipng, texlive, texlive-base, texlive-binaries, texlive-full, texlive-latex-base, texlive-lualatex, texlive-xetex
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/osamu-task
+Priority: optional
+Section: tasks
+Filename: pool/main/o/osamu-task/99-notex_0.6_all.deb
+Size: 1980
+SHA256: 6112c315dbb8d9d3474d218db2fcf047f50dc4136760215eee0e8261dfaa15b3
+SHA1: 24923ffb1413920e162b39dc4e4696034130140b
+MD5sum: 81b468e9c2250a2335dee3576fc16588
+Description: Task to avoid adding TeX related packages
+ This is a task package to avoid adding TeX support.
+ .
+ This is here to easily skip installing TeX packages to avoid huge package
+ installation due to their dependencies.
+ .
+ Installing this package doesn't prevent installing texinfo package and
+ it to generate info pages.  But installing this will break its PDF generating
+ capability.
+
 Package: bss
 Version: 1.4.0
 Architecture: all
@@ -9,10 +310,10 @@ Homepage: https://github.com/osamuaoki/bss
 Priority: optional
 Section: utils
 Filename: pool/main/b/bss/bss_1.4.0_all.deb
-Size: 37776
-SHA256: bf8d1593ed3def5f45e8cad8220801dda15943bfed477125b9b4f30f8878ee70
-SHA1: e778e361760508558e9ea902bd25aa37265efcc2
-MD5sum: c8ac302b726ca21ab5400f16f79405d6
+Size: 37772
+SHA256: 68ffb6a6c1286babac820ee8660016464721c39891241634c6bf9cc3d1589768
+SHA1: 17732de4fa7367d74175629c1f5527e3dc640eeb
+MD5sum: 4784c81e0e67e346bcbc0fe58b648827
 Description: Btrfs Subvolume Snapshot Utility
  "bss" is basically a "btrfs subvolume ..." command wrapper to create and age
  historical snapshots with the intuitive snapshot subvolume name and flexible
@@ -34,4 +335,54 @@ Description: Btrfs Subvolume Snapshot Utility
        operations on Debian/Ubuntu system.
      * Systemd timer to snapshot on boot and hourly
      * Systemd timer to age snapshots on boot and daily.
+
+Package: unzip-i18n
+Source: unzip
+Version: 6.0-28.2
+Architecture: amd64
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 379
+Depends: libbz2-1.0, libc6 (>= 2.34)
+Suggests: zip
+Conflicts: unzip
+Replaces: unzip
+Provides: unzip
+Multi-Arch: foreign
+Homepage: https://infozip.sourceforge.net/UnZip.html
+Priority: optional
+Section: utils
+Filename: pool/main/u/unzip/unzip-i18n_6.0-28.2_amd64.deb
+Size: 168048
+SHA256: 13d107ae792a9ee97b168645d61e19954c691f385fb049e506f0ca9aa05dc280
+SHA1: 3da144c052b1fa9986a9bf37a8b62e12c684ff61
+MD5sum: 957e849beda103dd042131ed43101fb2
+Description: De-archiver for .zip files with i18n supports
+ InfoZIP's unzip program. With the exception of multi-volume archives
+ (ie, .ZIP files that are split across several disks using PKZIP's /& option),
+ this can handle any file produced either by PKZIP, or the corresponding
+ InfoZIP zip program.
+ .
+ This version supports encryption.
+ .
+ This unzip-i18n supports file name encoding conversion with -O and -I options.
+Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
+Package: unzip-i18n-dbgsym
+Source: unzip
+Version: 6.0-28.2
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 330
+Depends: unzip-i18n (= 6.0-28.2)
+Priority: optional
+Section: debug
+Filename: pool/main/u/unzip/unzip-i18n-dbgsym_6.0-28.2_amd64.deb
+Size: 280248
+SHA256: 22087781255fe204ca01b57e56bfdab170b43f3ec195ee9fb6794af49ca652ee
+SHA1: 69b273298efaaf085b1cfdc18c89429b50ed0c62
+MD5sum: c10d5121748b539a7c8d245e18157ac7
+Description: debug symbols for unzip-i18n
+Build-Ids: 7f1f4eac8d4d39a1243de85ef700572cee4d991e c85f585cd7a5e936ccf6861721c34356e681ffbc d6c589583781e28107b4db5e15e1bb974dfe3275
+Original-Maintainer: Santiago Vila <sanvila@debian.org>
 

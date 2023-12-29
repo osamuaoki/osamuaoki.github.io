@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/11/02 (initial publish),
-2023/05/02 (last update)
+2023/12/29 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00028.md
@@ -65,8 +65,8 @@ en/note-00028.md
 <nav id="TableOfContents">
   <ul>
     <li><a href="#backup-and-snapshot">Backup and snapshot</a></li>
-    <li><a href="#setup-usb-storage-backup">Setup USB storage backup</a></li>
-    <li><a href="#setup-remote-secure-backup">Setup remote secure backup</a>
+    <li><a href="#setup-backup-to-plug-in-usb-storage">Setup backup to plug-in USB storage</a></li>
+    <li><a href="#setup-backup-to-remote-system">Setup backup to remote system</a>
       <ul>
         <li><a href="#create-and-format-an-encrypted-filesystem-in-a-disk-image">Create and format an encrypted filesystem in a disk image</a></li>
         <li><a href="#mount-and-use-an-encrypted-filesystem-in-a-disk-image">Mount and use an encrypted filesystem in a disk image</a></li>
@@ -85,7 +85,7 @@ is my choice to do this.</p>
 and its examples contain key parts of the settings.</p>
 <p>This <a href="https://github.com/osamuaoki/bss">bss</a> is designed for flexibility with
 choice of many options, commands and arguments.</p>
-<h2 id="setup-usb-storage-backup">Setup USB storage backup</h2>
+<h2 id="setup-backup-to-plug-in-usb-storage">Setup backup to plug-in USB storage</h2>
 <p>I have a USB Serial-ATA HDD/SSD external case with USB connector.  I put an SSD
 in it.  I configured this with the MBR partition table holding a single Btrfs
 partition with GUI operations using the <code>gparted</code> package.  This Btrfs was
@@ -103,7 +103,7 @@ subvolume directory name <code>Documents</code> as:</p>
 <pre tabindex="0"><code>backup BKUP_USB Documents
 </code></pre><p>When <code>bu</code> is executed while USB drive volume with label <code>BKUP_USB</code> is
 connected, <code>bu</code> backs up the <code>Documents</code> directory which is a btrfs subvolume.</p>
-<h2 id="setup-remote-secure-backup">Setup remote secure backup</h2>
+<h2 id="setup-backup-to-remote-system">Setup backup to remote system</h2>
 <p>NOTE: This section needs to be updated.</p>
 <p>Remote backup with rsync can be secured by storing data in encrypted format.</p>
 <p>Here are the basic tricks used in the <a href="https://github.com/osamuaoki/bss">bss</a>
