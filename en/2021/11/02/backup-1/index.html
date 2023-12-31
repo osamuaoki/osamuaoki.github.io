@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/11/02 (initial publish),
-2023/12/30 (last update)
+2023/12/31 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00028.md
@@ -92,20 +92,29 @@ choice of many options, commands and arguments.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ bss snapshot
 </span></span></code></pre></div><h2 id="setup-snapshot-batch">Setup snapshot (batch)</h2>
 <p>With <code>\~/.config/bss/default</code>:</p>
-<pre tabindex="0"><code>!export BSS_TYPE=hour
-snapshot ~
+<pre tabindex="0"><code># use &#34;hour&#34; for BSS_TYPE (snapshot extension)
+!export BSS_TYPE=hour
+# make new snapshots with &#34;btrfs subvolume snapshot&#34;
+snapshot ~/
 snapshot ~/Documents
 snapshot ~/github
 snapshot ~/salsa
 snapshot ~/tmp
-</code></pre><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ bss batch
-</span></span><span style="display:flex;"><span>SH: export BSS_TYPE<span style="color:#f92672">=</span>hour
-</span></span><span style="display:flex;"><span>N: Make snapshot <span style="color:#f92672">(</span>user mode<span style="color:#f92672">)</span>: BASE<span style="color:#f92672">=</span>/home/osamu TIME<span style="color:#f92672">=</span>2023-12-30T13:06:00+00:00 TYPE<span style="color:#f92672">=</span>hour
-</span></span><span style="display:flex;"><span>N: Make snapshot <span style="color:#f92672">(</span>user mode<span style="color:#f92672">)</span>: BASE<span style="color:#f92672">=</span>/home/osamu/Documents TIME<span style="color:#f92672">=</span>2023-12-30T13:06:00+00:00 TYPE<span style="color:#f92672">=</span>hour
-</span></span><span style="display:flex;"><span>N: Make snapshot <span style="color:#f92672">(</span>user mode<span style="color:#f92672">)</span>: BASE<span style="color:#f92672">=</span>/home/osamu/github TIME<span style="color:#f92672">=</span>2023-12-30T13:06:01+00:00 TYPE<span style="color:#f92672">=</span>hour
-</span></span><span style="display:flex;"><span>N: Make snapshot <span style="color:#f92672">(</span>user mode<span style="color:#f92672">)</span>: BASE<span style="color:#f92672">=</span>/home/osamu/salsa TIME<span style="color:#f92672">=</span>2023-12-30T13:06:01+00:00 TYPE<span style="color:#f92672">=</span>hour
-</span></span><span style="display:flex;"><span>N: Make snapshot <span style="color:#f92672">(</span>user mode<span style="color:#f92672">)</span>: BASE<span style="color:#f92672">=</span>/home/osamu/tmp TIME<span style="color:#f92672">=</span>2023-12-30T13:06:01+00:00 TYPE<span style="color:#f92672">=</span>hour
-</span></span></code></pre></div><h2 id="setup-backup-to-plug-in-usb-storage">Setup backup to plug-in USB storage</h2>
+# prune redundant snapshots
+process ~/
+process ~/Documents
+process ~/github
+process ~/salsa
+process ~/tmp
+# gather files to &#34;rsync&#34;
+gather ~/rsync
+# make new copy from &#34;rsync&#34; to remote site
+copy ~/rsync
+# prune redundant snapshots
+process ~/rsync
+</code></pre><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="setup-backup-to-plug-in-usb-storage">Setup backup to plug-in USB storage</h2>
 <p>I have a USB Serial-ATA HDD/SSD external case with USB connector.  I put an SSD
 in it.  I configured this with the MBR partition table holding a single Btrfs
 partition with GUI operations using the <code>gparted</code> package.  This Btrfs was
