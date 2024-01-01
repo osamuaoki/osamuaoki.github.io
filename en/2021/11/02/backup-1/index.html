@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2021/11/02 (initial publish),
-2023/12/31 (last update)
+2024/01/01 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00028.md
@@ -91,30 +91,78 @@ choice of many options, commands and arguments.</p>
 <p>Just execute following in btrfs:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ bss snapshot
 </span></span></code></pre></div><h2 id="setup-snapshot-batch">Setup snapshot (batch)</h2>
-<p>With <code>\~/.config/bss/default</code>:</p>
-<pre tabindex="0"><code># use &#34;hour&#34; for BSS_TYPE (snapshot extension)
+<p>I set up 3 configuration files.</p>
+<ul>
+<li><code>\~/.config/bss/frequent</code>:</li>
+</ul>
+<pre tabindex="0"><code># ---------------- bss batch frequent start &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;
+# use &#34;hour&#34; for BSS_TYPE (snapshot extension)
 !export BSS_TYPE=hour
 # make new snapshots with &#34;btrfs subvolume snapshot&#34;
-snapshot ~/
-snapshot ~/Documents
-snapshot ~/github
-snapshot ~/salsa
-snapshot ~/tmp
+-snapshot ~/
+-gather   ~/Documents
+-snapshot ~/Documents
+-snapshot ~/github
+-snapshot ~/salsa
+-snapshot ~/tmp
 # prune redundant snapshots
-process ~/
-process ~/Documents
-process ~/github
-process ~/salsa
-process ~/tmp
-# gather files to &#34;rsync&#34;
-gather ~/rsync
-# make new copy from &#34;rsync&#34; to remote site
-copy ~/rsync
-# prune redundant snapshots
-process ~/rsync
-</code></pre><!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<h2 id="setup-backup-to-plug-in-usb-storage">Setup backup to plug-in USB storage</h2>
+-process ~/
+-process ~/Documents
+-process ~/github
+-process ~/salsa
+-process ~/tmp
+# ---------------- bss batch frequent end   &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;
+</code></pre><ul>
+<li><code>\~/.config/systemd/user/bss-snap.service</code>:</li>
+</ul>
+<pre tabindex="0"><code>[Unit]
+Description=Run bss commands frequently
+Documentation=man:bss(1)
+# journalctl -a -b -t bss
+
+[Service]
+Type=oneshot
+Nice=15
+# make snapshot of user&#39;s home directory ~/ (in one FS)
+ExecStart=bss batch frequent
+IOSchedulingClass=idle
+CPUSchedulingPolicy=idle
+StandardInput=null
+# No logging (use systemd logging)
+StandardOutput=null
+StandardError=null
+#StandardOutput=append:%h/.cache/systemd-bss.log
+#StandardError=append:%h/.cache/systemd-bss.log
+</code></pre><ul>
+<li><code>~/.config/systemd/user/bss-snap.timer</code></li>
+</ul>
+<pre tabindex="0"><code># activate by: systemctl --user enable bss-snap.timer
+[Unit]
+Description=Run bss commands hourly
+Documentation=man:bss(1)
+
+[Timer]
+OnStartupSec=30
+OnUnitInactiveSec=900
+
+[Install]
+WantedBy=timers.target
+</code></pre><p>Then I activate timer with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ systemctl --user enable bss-snap.timer
+</span></span></code></pre></div><p>I can see state of running bss with <code>bss jobs</code>.  Its output is as follows:</p>
+<pre tabindex="0"><code> $ systemctl --system --all list-timers &#39;bss-*&#39;
+NEXT LEFT LAST PASSED UNIT ACTIVATES
+
+0 timers listed.
+
+ $ systemctl --user --all list-timers &#39;bss-*&#39;
+NEXT                        LEFT      LAST                        PASSED   UNIT           ACTIVATES
+Mon 2024-01-01 11:57:11 JST 6min left Mon 2024-01-01 11:42:07 JST 8min ago bss-snap.timer bss-snap.service
+
+1 timers listed.
+
+# See journal with &#34;journalctl -a -b -t bss&#34; or &#34;journalctl -f -t bss&#34;
+</code></pre><h2 id="setup-backup-to-plug-in-usb-storage">Setup backup to plug-in USB storage</h2>
 <p>I have a USB Serial-ATA HDD/SSD external case with USB connector.  I put an SSD
 in it.  I configured this with the MBR partition table holding a single Btrfs
 partition with GUI operations using the <code>gparted</code> package.  This Btrfs was
