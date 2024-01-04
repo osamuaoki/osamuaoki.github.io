@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2023/12/24 (last update)
+2024/01/04 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00040.md
@@ -108,9 +108,9 @@ with lua based lazyVim (v10.15.1) as my primary editor invoked by
 <p>I decided to use <code>vi</code> to start Vim or Nvim with a single file configuration
 with very minimal customization.</p>
 <h2 id="vi-as-an-baseline-simple-editor">Vi as an baseline simple editor</h2>
-<p>Here, I created <a href="https://github.com/osamuaoki/dot-vim">a single generic configuration file for Vim and NeoVim <code>~/.vim</code></a>.</p>
-<pre tabindex="0"><code>&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vim)
-&#34;&#34;&#34;   - For NeoVim, use &#34;nvim -u ~/.vim [filename]&#34;
+<p>Here, I created <a href="https://github.com/osamuaoki/dot-vim">a single generic configuration file for Vim and NeoVim <code>~/.vimrc</code></a>.</p>
+<pre tabindex="0"><code>&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vimrc)
+&#34;&#34;&#34;   - For NeoVim, use &#34;nvim -u ~/.vimrc [filename]&#34;
 &#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
 set nocompatible                &#34; :h &#39;cp -- sensible (n)vim mode
 syntax on                       &#34; :h :syn-on
@@ -189,33 +189,33 @@ augroup SpellUnderline
     \   gui=Undercurl
 augroup END
 &#34; vim: set sw=2 sts=2 et ft=vim :
-</code></pre><p>Since nvim may not available, I created locale shell executable <code>~/bin/vi</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh -e
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -e ~/.vim <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
-</span></span><span style="display:flex;"><span>  VIRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;~/.vim&#34;</span>
+</code></pre><p>Since nvim may not available, I created bash alias for <code>vi</code> in <code>~/.bashrc</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># GOOD OLDE VI as baseline editor (minimum resource file)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -r <span style="color:#e6db74">&#34;~/.vimrc&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  VIMRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;~/.vimrc&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
-</span></span><span style="display:flex;"><span>  VIRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;NORC&#34;</span>
+</span></span><span style="display:flex;"><span>  VIMRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;NONE&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> type nvim &gt;/dev/null; <span style="color:#66d9ef">then</span>
-</span></span><span style="display:flex;"><span>  nvim -u $VIRC <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> type nvim &gt;/dev/null ; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  alias nv<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim&#39;</span>
+</span></span><span style="display:flex;"><span>  alias vi<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -u $VIMRC&#39;</span>
+</span></span><span style="display:flex;"><span>  alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -u NORC&#39;</span>
+</span></span><span style="display:flex;"><span>  alias sv<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SUDO_EDITOR=&#39;/usr/bin/nvim -u NORC&#39; /usr/bin/sudoedit&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">elif</span> type vim &gt;/dev/null ; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  alias vi<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vim -N -u $VIMRC&#39;</span>
+</span></span><span style="display:flex;"><span>  alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vim -N -u NORC&#39;</span>
+</span></span><span style="display:flex;"><span>  alias sv<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SUDO_EDITOR=&#39;/usr/bin/vim -N -u NORC&#39; /usr/bin/sudoedit&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
-</span></span><span style="display:flex;"><span>  vim -N <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>  unalias vi
+</span></span><span style="display:flex;"><span>  unset VIMRC
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
-</span></span></code></pre></div><p>I also created bash aliases in <code>~/.bashrc</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#=============================================================================</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># GOOD OLDE VI as baseline editor (minimum resource file)</span>
-</span></span><span style="display:flex;"><span>export EDITOR<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi&#39;</span>
-</span></span><span style="display:flex;"><span>export VISUAL<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># `v` as neovim without resource file</span>
-</span></span><span style="display:flex;"><span>alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim  -u NORC&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># `nv` as neovim with standard resources (currently LazyVim)</span>
-</span></span><span style="display:flex;"><span>alias nv<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># sudoedit to use nvim w/o resource file</span>
-</span></span><span style="display:flex;"><span>alias sv<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SUDO_EDITOR=&#39;/usr/bin/nvim -u NORC&#39; /usr/bin/sudoedit&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#75715e"># vim alias</span>
-</span></span><span style="display:flex;"><span>alias vimdiff<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -d&#39;</span>
-</span></span><span style="display:flex;"><span>alias view<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -R&#39;</span>
-</span></span><span style="display:flex;"><span>alias ex<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -e&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -n <span style="color:#e6db74">&#34;</span>$VIMRC<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  export EDITOR<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi&#39;</span>
+</span></span><span style="display:flex;"><span>  export VISUAL<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi&#39;</span>
+</span></span><span style="display:flex;"><span>  alias vimdiff<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi -d&#39;</span>
+</span></span><span style="display:flex;"><span>  alias view<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi -R&#39;</span>
+</span></span><span style="display:flex;"><span>  alias ex<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi -e&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
 </span></span></code></pre></div><p>Now that <code>$NVIM_APPNAME</code> environment variable is supported, I should think
 about using this, soon.</p>
 <h2 id="lazyvim">LazyVim</h2>
