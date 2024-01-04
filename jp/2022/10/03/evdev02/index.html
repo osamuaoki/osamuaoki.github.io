@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>内蔵キーボードのキーマップ改変 | Goofing Osamu</title>
+    <title>内蔵キーボードのキーマップ改変(不発) | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,11 +32,11 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">内蔵キーボードのキーマップ改変</span></h1>
+<h1><span class="title">内蔵キーボードのキーマップ改変(不発)</span></h1>
 
 <h3 class="date">Date:
-2022/06/03 (initial publish),
-2022/12/23 (last update)
+2022/10/03 (initial publish),
+2024/01/04 (last update)
 </h3>
 <h3 class="source">Source:
 jp/note-00056.md
@@ -50,11 +50,11 @@ jp/note-00056.md
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/jp/2022/06/03/evdev01/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/jp/2022/09/09/home-mt2/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/jp/2022/09/01/blackpill-4/">Next Post</a></td>
+  <td align="right" width="33%"><a href="/jp/2023/02/28/etax2022/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -70,6 +70,7 @@ jp/note-00056.md
       </ul>
     </li>
     <li><a href="#フィルター-evmk">フィルター <code>evmk</code></a></li>
+    <li><a href="#結果">結果</a></li>
   </ul>
 </nav>
 
@@ -102,18 +103,24 @@ jp/note-00056.md
 <pre tabindex="0"><code>- JOB: intercept -g $DEVNODE | /usr/local/bin/evmk | uinput -d $DEVNODE
   DEVICE:
     LINK: /dev/input/by-path/platform-i8042-serio-0-event-kbd
-</code></pre><!-- raw HTML omitted -->
+</code></pre><h2 id="結果">結果</h2>
+<p>キーボードのマッピングは一様できることは確認しました。</p>
+<p>だた、キーボードのデバイスノード（R/W）を、データー一方向（Rオンリー）のみの
+パイプに繋ぐという基本デザイン由来の問題がCapsLock等であることに気づきました。</p>
+<p>GNOMEのキーマッピングで実用上問題ないので、これは止めました。
+基本デザイン</p>
+<!-- raw HTML omitted -->
 
 
 <table width="100%">
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/jp/2022/06/03/evdev01/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/jp/2022/09/09/home-mt2/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/jp/">Top</a></td>
   
-  <td align="right" width="33%"><a href="/jp/2022/09/01/blackpill-4/">Next Post</a></td>
+  <td align="right" width="33%"><a href="/jp/2023/02/28/etax2022/">Next Post</a></td>
   
   </tr>
   </tbody>

@@ -6,7 +6,27 @@
     <description>Recent content in iot on Goofing Osamu</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/iot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 03 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/iot/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>内蔵キーボードのキーマップ改変(不発)</title>
+      <link>/jp/2022/10/03/evdev02/</link>
+      <pubDate>Mon, 03 Oct 2022 00:00:00 +0000</pubDate>
+      
+      <guid>/jp/2022/10/03/evdev02/</guid>
+      <description>実験準備 内蔵キーボードのキーマップ改変準備の結果を生かす環境をつくるべく、とりあえずDebianの正式パッケージinterception-toolsをアップロードしました。
+アップストリームはシェルからの直接起動方法の基本として以下を例示してます。
+$ sudo nice -n -20 udevmon -c udevmon.yaml &amp;gt;udevmon.log 2&amp;gt;udevmon.err &amp;amp; Interception plugin for vimproved inputの作者が示している、テスト時のトラブル防止策が参考になります。
+# sleep 1 &amp;amp;&amp;amp; sudo nice -n -20 timeout 10 udevmon -c /etc/udevmon.yml sleepで１秒待つことで、ターミナルから離れて実験環境に移動できます。 timeoutでキーボード入力ができなくなったままになる事を回避しています。 (わたしは、追加の外付けUSBキーボードをつないでおくことも考えています。)
+また、使用するフィルタープログラムは、起動時に入出力バッファをクリアーすることも推奨されるようです。
+アップストリーム作成のudevmon.serviceファイルは、-3 Debian revision 以降はバイナリーパッケージに同梱されています。
+udevmonをudevmon.serviceファイルを使ってSystemdによりudevmonを自動起動させるよう、このファイルをとりあえず/etc/systemd/system/に置きます。 (もちろん、パッケージとしては/lib/systemd/system/にでもこのファイルをインストールして、そこに/etc/systemd/system/からsymlinkをはるようするのでしょう。)
+この自動起動設定の有効化と起動実験は以下となります。（これだと、シェルからの直接起動の様にsleepすることはない模様）
+$ sudo systemctl enable --now udevmon.service また、フィルターを書く際に気になるのはclearing bufferですが、そえは後ほど。。。。
+本体付属キーボード(i8042)用の設定 内蔵キーボードは/dev/input/by-path/platform-i8042-serio-0-event-kbdということがわかっているので、/etc/interception/udevmon.d/ディレクトリーを作成し、テスト用のダミーのint-kbd.yamlファイルを以下の内容で作成しました。
+- JOB: intercept -g $DEVNODE | cat - | uinput -d $DEVNODE DEVICE: LINK: /dev/input/by-path/platform-i8042-serio-0-event-kbd 上記の様にして起動実験して問題無しです。
+フィルター evmk 今度はsystemdのjournalへのログ出力ができるようにした、改良版のフィルター・ログ用のプログラムevmkを使うように、int-kbd.</description>
+    </item>
+    
     <item>
       <title>QMK (7) -- キーマップ改善(続)</title>
       <link>/jp/2022/09/09/home-mt2/</link>
@@ -39,26 +59,6 @@ PIN接続 (cgs58) canterを参考にピン配置を決めました。
 C6xとC7xは、C6とC7の内側のMCUボード横の穴にいれたキー向けの追加のカラムです。
 LTは左手側、RTは右手側です。
 Blackpill (TOP VIEW) LT RT RT LT USB-C +---+-----+---+ R0 R0 ------- B12 |* | | *|5V ----- R1 R1 ------- B13 |* | | *|GND -----------------+ R2 R2 ------- B14 |* | | *|3V3 z 10 K-ohm R3 R3 ------- B15 |* +-----+ *|B10 Open --+ C0 ------- A8 |* B N @|B2 ------ *** BOOT1 [USB] ------- A9 |* O R @|B1 ------ XX [USB] ------- A10 |* O S @|B0 ------ XX [USB] ------- A11 |* T T *|A7 ------ [USB] ------- A12 |* 0 *|A6 ------ C7x C3 ------- A15 |* *|A5 ------ C11 C2 ------- B3 |* *|A4 ------ C10 C5 ------- B4 |* *|A3 ------ C7 C6 ------- B5 |* *|A2 ------ C8 TX==\ /=TX ------- B6 |* *|A1 ------ C9 RX==/ \=RX ------- B7 |* *|A0 ------ *** USR C1 ------- B8 |* K *|R ------ *** NRST (/RST, ~RST) C4 ------- B9 |* E *|C15 ----- C12 **==5V==** ------- 5V |* Y *|C14 ----- C13 C6x **==GND=** ------- GND |* *|C13 ------*** BLUE LED 3V3 |* @ @ @ @ *|VB +-------------+ ^ ^ ^ ^ | | | | 3V3 ---------------+ | | | SWDIO -----------PA13--+ | | SWSCK -----------PA14----+ | GND ---------------------+ テスト用ファームウエアーで左右別々に配線と動作確認 実際には、連結以外の配線をして、qmkを書き込み配線確認をします。</description>
-    </item>
-    
-    <item>
-      <title>内蔵キーボードのキーマップ改変</title>
-      <link>/jp/2022/06/03/evdev02/</link>
-      <pubDate>Fri, 03 Jun 2022 00:00:00 +0000</pubDate>
-      
-      <guid>/jp/2022/06/03/evdev02/</guid>
-      <description>実験準備 内蔵キーボードのキーマップ改変準備の結果を生かす環境をつくるべく、とりあえずDebianの正式パッケージinterception-toolsをアップロードしました。
-アップストリームはシェルからの直接起動方法の基本として以下を例示してます。
-$ sudo nice -n -20 udevmon -c udevmon.yaml &amp;gt;udevmon.log 2&amp;gt;udevmon.err &amp;amp; Interception plugin for vimproved inputの作者が示している、テスト時のトラブル防止策が参考になります。
-# sleep 1 &amp;amp;&amp;amp; sudo nice -n -20 timeout 10 udevmon -c /etc/udevmon.yml sleepで１秒待つことで、ターミナルから離れて実験環境に移動できます。 timeoutでキーボード入力ができなくなったままになる事を回避しています。 (わたしは、追加の外付けUSBキーボードをつないでおくことも考えています。)
-また、使用するフィルタープログラムは、起動時に入出力バッファをクリアーすることも推奨されるようです。
-アップストリーム作成のudevmon.serviceファイルは、-3 Debian revision 以降はバイナリーパッケージに同梱されています。
-udevmonをudevmon.serviceファイルを使ってSystemdによりudevmonを自動起動させるよう、このファイルをとりあえず/etc/systemd/system/に置きます。 (もちろん、パッケージとしては/lib/systemd/system/にでもこのファイルをインストールして、そこに/etc/systemd/system/からsymlinkをはるようするのでしょう。)
-この自動起動設定の有効化と起動実験は以下となります。（これだと、シェルからの直接起動の様にsleepすることはない模様）
-$ sudo systemctl enable --now udevmon.service また、フィルターを書く際に気になるのはclearing bufferですが、そえは後ほど。。。。
-本体付属キーボード(i8042)用の設定 内蔵キーボードは/dev/input/by-path/platform-i8042-serio-0-event-kbdということがわかっているので、/etc/interception/udevmon.d/ディレクトリーを作成し、テスト用のダミーのint-kbd.yamlファイルを以下の内容で作成しました。
-- JOB: intercept -g $DEVNODE | cat - | uinput -d $DEVNODE DEVICE: LINK: /dev/input/by-path/platform-i8042-serio-0-event-kbd 上記の様にして起動実験して問題無しです。
-フィルター evmk 今度はsystemdのjournalへのログ出力ができるようにした、改良版のフィルター・ログ用のプログラムevmkを使うように、int-kbd.</description>
     </item>
     
     <item>
