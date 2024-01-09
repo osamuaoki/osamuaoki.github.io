@@ -300,20 +300,20 @@ Description: Task to avoid adding TeX related packages
  capability.
 
 Package: bss
-Version: 1.4.1
+Version: 2.0.0
 Architecture: all
 Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 141
+Installed-Size: 163
 Depends: btrfs-progs, e2fsprogs, libsecret-tools, rsync, sudo, systemd
 Multi-Arch: foreign
 Homepage: https://github.com/osamuaoki/bss
 Priority: optional
 Section: utils
-Filename: pool/main/b/bss/bss_1.4.1_all.deb
-Size: 38916
-SHA256: f6c5b022ca3452acaff60fba3e9981dc861a4eb0a4d8dfa0211a55e01b6651b2
-SHA1: 0b15bb000119453334a752263fc0b0d667dbca70
-MD5sum: b9be5a17bc5cb7f2232f9d6320b9c847
+Filename: pool/main/b/bss/bss_2.0.0_all.deb
+Size: 38100
+SHA256: dba86307169c3f25be18b1d0b23c888d3eb89a6cfb29b93a3075c69de4d9baca
+SHA1: e14fe03504818ac1fb74ee5c019207b88a618b07
+MD5sum: 36952f66681c33200519f5ddf944edf0
 Description: Btrfs Subvolume Snapshot Utility
  "bss" is basically a "btrfs subvolume ..." command wrapper to create and age
  historical snapshots with the intuitive snapshot subvolume name and flexible
@@ -333,8 +333,9 @@ Description: Btrfs Subvolume Snapshot Utility
    * Examples for:
      * Automatic pre and post package installation snapshots of / via APT
        operations on Debian/Ubuntu system.
-     * Systemd timer to snapshot on boot and hourly
-     * Systemd timer to age snapshots on boot and daily.
+     * Systemd timer event to snapshot on boot and time intervals.
+     * Systemd timer event to age snapshots on boot.
+     * Systemd mount event to backup a snapshot to USB storage.
 
 Package: unzip-i18n
 Source: unzip

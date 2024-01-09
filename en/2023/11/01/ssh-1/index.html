@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/01 (initial publish),
-2023/11/21 (last update)
+2024/01/10 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00052.md
@@ -66,6 +66,7 @@ en/note-00052.md
   <ul>
     <li><a href="#generate-new-ed25519-key">Generate new ED25519 key</a></li>
     <li><a href="#ssh-public-key-on-github">SSH public key on github</a></li>
+    <li><a href="#gnupg-new-key">GnuPG (new key)</a></li>
   </ul>
 </nav>
 
@@ -117,6 +118,105 @@ ssh-ed25519 A******************************************************************C
 ssh-ed25519 A******************************************************************C
 </code></pre><p>If I trust this data and service, I can set SSH-PUBLIC-KEY to a system by running <code>ssh-import-id</code>(1) (package: <code>ssh-import-id</code>) command.</p>
 <pre tabindex="0"><code> $ ssh-import-id gh:osamuaoki
+</code></pre><h2 id="gnupg-new-key">GnuPG (new key)</h2>
+<p>Let&rsquo;s see my old key:</p>
+<pre tabindex="0"><code> $ gpg --list-keys --fingerprint --keyid-format LONG osamu
+pub   rsa4096/1E1356881DD8D791 2010-09-23 [SC]
+      Key fingerprint = 3133 724D 6207 8815 79E9  5D62 1E13 5688 1DD8 D791
+uid                 [ultimate] Osamu Aoki &lt;osamu@debian.org&gt;
+sub   rsa4096/A04CBCEEF08BEFAD 2010-09-23 [E]
+</code></pre><p>Let&rsquo;s make a new key with newer algo:</p>
+<pre tabindex="0"><code> $ gpg --generate-key --default-new-key-algo=&#34;ed25519/cert,sign+cv25519/encr&#34;
+ ...
+ $ gpg --edit-key D89E6B09B42098CEAF081AB16D6D3809215F720D
+  ... add uid
+  ... set expiration
+  ... set primary uid
+</code></pre><p>Now let&rsquo;s see my keys (I happen to pickup older key of mine by removing <code>.gpg-v21-migrated</code>):</p>
+<pre tabindex="0"><code>osamu@goofy:~/.gnupg/private-keys-v1.d 21:22:48
+$ gpg --list-keys  --with-subkey --with-keygrip  --keyid-format long  osamu
+pub   rsa4096/1E1356881DD8D791 2010-09-23 [SC]
+      3133724D6207881579E95D621E1356881DD8D791
+      Keygrip = B20FCDB27DF54AFD0177AA666DD743F876A737D5
+uid                 [ultimate] Osamu Aoki &lt;osamu@debian.org&gt;
+sub   rsa4096/A04CBCEEF08BEFAD 2010-09-23 [E]
+      FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
+      Keygrip = B94F91E2FC0B861EAB1144DE3FDAC204347F66EB
+
+pub   ed25519/6D6D3809215F720D 2024-01-07 [SC]
+      D89E6B09B42098CEAF081AB16D6D3809215F720D
+      Keygrip = FB290BFC4B3A02AA471B4AB6FFE506D55A0BC1FB
+uid                 [ultimate] Osamu Aoki &lt;osamu@debian.org&gt;
+uid                 [ultimate] Osamu Aoki &lt;osamu.aoki@gmail.com&gt;
+sub   cv25519/15021D9E0E61D985 2024-01-07 [E]
+      F2B600DA9D34FA48B346EFED15021D9E0E61D985
+      Keygrip = F3F6241DB23FBF9A676EAEE4D3B37749B11157A6
+
+pub   dsa1024/E80FC4C1A8061F32 2002-05-07 [SC]
+      253A40766A3BCCE2A426DEF5E80FC4C1A8061F32
+      Keygrip = 644078C16C0A81049F0C0526AD1EDB894357223D
+uid                 [ unknown] Osamu Aoki &lt;osamu@debian.org&gt;
+uid                 [ unknown] Osamu Aoki &lt;debian@aokiconsulting.com&gt;
+sub   elg1024/7DD3826901A117C2 2002-05-07 [E]
+      A811884929A5E4011B4D07A77DD3826901A117C2
+      Keygrip = 9B6B38725ABB160D45A201CD10B8D8D8CC2107D0
+</code></pre><p>Here, keygrip is the name used for the filename in
+<code>~/.gnupg//private-keys-v1.d/</code>.</p>
+<p>Then, I signed this with my old RSA4096 key (keyid=<code>1E1356881DD8D791</code>).</p>
+<pre tabindex="0"><code>$ gpg --list-sigs D89E6B09B42098CEAF081AB16D6D3809215F720D
+pub   ed25519 2024-01-07 [SC]
+      D89E6B09B42098CEAF081AB16D6D3809215F720D
+uid           [ultimate] Osamu Aoki &lt;osamu@debian.org&gt;
+sig 3        6D6D3809215F720D 2024-01-07  Osamu Aoki &lt;osamu@debian.org&gt;
+sig        2 1E1356881DD8D791 2024-01-07  Osamu Aoki &lt;osamu@debian.org&gt;
+uid           [ultimate] Osamu Aoki &lt;osamu.aoki@gmail.com&gt;
+sig 3        6D6D3809215F720D 2024-01-07  Osamu Aoki &lt;osamu@debian.org&gt;
+sig          1E1356881DD8D791 2024-01-07  Osamu Aoki &lt;osamu@debian.org&gt;
+sub   cv25519 2024-01-07 [E]
+sig          6D6D3809215F720D 2024-01-07  Osamu Aoki &lt;osamu@debian.org&gt;
+</code></pre><p>Now I can publish public key in ASCII format as:</p>
+<pre tabindex="0"><code>$ gpg -a --export D89E6B09B42098CEAF081AB16D6D3809215F720D
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+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
+L65JipPuCsH1vTsxbEE14mEs2Ag=
+=7Kpk
+-----END PGP PUBLIC KEY BLOCK-----
 </code></pre><!-- raw HTML omitted -->
 
 
