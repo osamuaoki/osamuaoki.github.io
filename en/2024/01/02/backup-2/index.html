@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/01/02 (initial publish),
-2024/01/03 (last update)
+2024/01/10 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00061.md
@@ -65,11 +65,12 @@ en/note-00061.md
 <nav id="TableOfContents">
   <ul>
     <li><a href="#find-out-systemd-service-name-of-auto-mounted-usb-disk">Find out systemd service name of auto mounted USB disk</a></li>
-    <li><a href="#backup-script">Backup script</a></li>
+    <li><a href="#backup-upon-each-mount-event">Backup upon each mount event</a></li>
   </ul>
 </nav>
 
 <p>Here is a memo over automatic USB backup.</p>
+<p>(This uses the latest <code>batch</code> subcommand of <code>bss</code>)</p>
 <p><code>udev</code>(7) under &ldquo;RUN&rdquo; clearly states &ldquo;This can only be used for very
 short-running foreground tasks.&rdquo;.</p>
 <p>We still see old tips such as <a href="https://blog.deadlypenguin.com/2009/09/25/automatic-backups-with-udev/">Automatic backups with
@@ -80,7 +81,6 @@ be followed.</p>
 service file with &ldquo;wants&rdquo;
 mechanism</a>.
 (2015-2020)</p>
-<p>Followings are WIP:</p>
 <h2 id="find-out-systemd-service-name-of-auto-mounted-usb-disk">Find out systemd service name of auto mounted USB disk</h2>
 <p>Let&rsquo;s suppose my backup USB drive is (auto)mounted as
 <code>/media/osamu/BKUP_USB</code>.  Then, I can use <code>systemctl list-units -t mount|grep BKUP_USB</code> to find systemd service name corresponding to
@@ -93,22 +93,46 @@ $ systemctl status media-osamu-BKUP_USB.mount
      Active: active (mounted) since Wed 2024-01-03 20:32:41 JST; 14min ago
       Where: /media/osamu/BKUP_USB
        What: /dev/sda1
-</code></pre><h2 id="backup-script">Backup script</h2>
-<p>I want to run <code>/home/osamu/bin/backup.sh</code> as <code>osamu</code> using
-<code>~/.config/systemd/USB_drive_backup.service</code>:</p>
+</code></pre><h2 id="backup-upon-each-mount-event">Backup upon each mount event</h2>
+<p>Create <code>~/.config/systemd/user/bss-BKUP_USB.service</code> as:</p>
 <pre tabindex="0"><code>[Unit]
-Description=USB drive backup
-Requires=media-osamu-BKUP_USB.mount
-After=media-osamu-BKUP_USB.mount
+Description=USB Disk backup
+Requires=media-penguin-BKUP_USB.mount
+After=media-penguin-BKUP_USB.mount
 
 [Service]
-ExecStart=/home/osamu/bin/backup.sh
+ExecStart=bss --may --type usb batch BKUP_USB
 
 [Install]
-WantedBy=media-osamu-BKUP_USB.mount
-</code></pre><p>This is enabled by:</p>
-<pre tabindex="0"><code> $ systemdctl --user enable USB_drive_backup.service
-</code></pre><!-- raw HTML omitted -->
+WantedBy=media-penguin-BKUP_USB.mount
+</code></pre><p>Create <code>~/.config/bss/BKUP_USB</code></p>
+<pre tabindex="0"><code>########################################################################
+# make new backup copy (path are relative from $HOME)
+# * source is a btrfs subvolume at ~/SRC_SUBVOL
+#   * always ignore error from gather
+# * destination is auto-mountable partition on a USB drive:
+#   * formatted as btrfs and
+#   * labeled as &#39;DST_LABEL&#39;
+########################################################################
+bss_usb_backup () {
+  # $1: SRC_SUBVOL
+  # $2: DST_LABEL
+  bss gather &#34;$1&#34; || true
+  bss copy   &#34;$1&#34; &#34;/media/$(id -un)/$2/$1&#34; || $BSS_MAY
+  bss snap        &#34;/media/$(id -un)/$2/$1&#34; || $BSS_MAY
+  bss process     &#34;/media/$(id -un)/$2/$1&#34; || $BSS_MAY
+}
+
+# Backup to BKUP_USB (high frequency backup SSD device)
+bss_usb_backup Documents BKUP_USB
+
+# vim:se sw=2 ts=2 sts=2 et ai tw=78:
+</code></pre><p>Then, activate this service unit as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ systemctl --user enable bss-BKUP_USB.service
+</span></span></code></pre></div><p>Somehow, I get the following unexpected spurious yellow warning.</p>
+<pre tabindex="0"><code>Unit /home/penguin/.config/systemd/user/bss-BKUP_USB.service is added as a dependency to a non-existent unit media-penguin-BKUP_USB.mount.
+</code></pre><p>Despite this warning, USB storage seems to be getting backup data when my workstation is powered up with USB drive plugged-in or when it get plugged-in.</p>
+<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
