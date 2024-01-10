@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2022/08/20 (initial publish),
-2023/10/08 (last update)
+2024/01/10 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00033.md
@@ -77,6 +77,7 @@ en/note-00033.md
 </nav>
 
 <p>See <a href="/en/2023/10/07/debian-usability-2023a/">Debian Workstation (usability) (v2023-10)</a> for how I use personal DEB package repository.</p>
+<p><strong>Since my initial write in 2022, I have changed my GPG key in 2024 and used it for signing repository.</strong></p>
 <h2 id="my-github-page">My github page</h2>
 <p>It&rsquo;s source is at:</p>
 <ul>
@@ -100,79 +101,76 @@ idea to do this on Salsa.</p>
 <h3 id="gnu-pg">GNU PG</h3>
 <p>Since I will use sub-key for this purpose, let me check:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ gpg --list-secret-keys  --with-subkey-fingerprint
-</span></span><span style="display:flex;"><span>pub   rsa4096 2010-09-23 <span style="color:#f92672">[</span>SC<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>/home/osamu/.gnupg/pubring.gpg
+</span></span><span style="display:flex;"><span>------------------------------
+</span></span><span style="display:flex;"><span>sec   rsa4096 2010-09-23 <span style="color:#f92672">[</span>SC<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>      3133724D6207881579E95D621E1356881DD8D791
 </span></span><span style="display:flex;"><span>uid           <span style="color:#f92672">[</span>ultimate<span style="color:#f92672">]</span> Osamu Aoki &lt;osamu@debian.org&gt;
-</span></span><span style="display:flex;"><span>sub   rsa4096 2010-09-23 <span style="color:#f92672">[</span>E<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>ssb   rsa4096 2010-09-23 <span style="color:#f92672">[</span>E<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>      FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
-</span></span></code></pre></div><p>Now we know hash for subkey.</p>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sec   ed25519 2024-01-07 <span style="color:#f92672">[</span>SC<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      D89E6B09B42098CEAF081AB16D6D3809215F720D
+</span></span><span style="display:flex;"><span>uid           <span style="color:#f92672">[</span>ultimate<span style="color:#f92672">]</span> Osamu Aoki &lt;osamu@debian.org&gt;
+</span></span><span style="display:flex;"><span>uid           <span style="color:#f92672">[</span>ultimate<span style="color:#f92672">]</span> Osamu Aoki &lt;osamu.aoki@gmail.com&gt;
+</span></span><span style="display:flex;"><span>ssb   cv25519 2024-01-07 <span style="color:#f92672">[</span>E<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      F2B600DA9D34FA48B346EFED15021D9E0E61D985
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sec   dsa1024 2002-05-07 <span style="color:#f92672">[</span>SC<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      253A40766A3BCCE2A426DEF5E80FC4C1A8061F32
+</span></span><span style="display:flex;"><span>uid           <span style="color:#f92672">[</span> unknown<span style="color:#f92672">]</span> Osamu Aoki &lt;osamu@debian.org&gt;
+</span></span><span style="display:flex;"><span>uid           <span style="color:#f92672">[</span> unknown<span style="color:#f92672">]</span> Osamu Aoki &lt;debian@aokiconsulting.com&gt;
+</span></span><span style="display:flex;"><span>ssb   elg1024 2002-05-07 <span style="color:#f92672">[</span>E<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>      A811884929A5E4011B4D07A77DD3826901A117C2
+</span></span></code></pre></div><p>There are 3 keys.  (2002, 2010, 2024)</p>
+<p>Now we know keyid (Let me use 2024 one).</p>
 <p>For getting a compact public key:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ gpg --export -a --export-options export-minimal <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  3133724D6207881579E95D621E1356881DD8D791
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  D89E6B09B42098CEAF081AB16D6D3809215F720D
 </span></span><span style="display:flex;"><span>-----BEGIN PGP PUBLIC KEY BLOCK-----
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>mQINBEya74YBEADDpLTJCmyS97kZ6JvlpUEoSoVbqEkyQVfrV7C7VqlBGWO0bTKI
-</span></span><span style="display:flex;"><span>... snip ...
+</span></span><span style="display:flex;"><span>mDMEZZpSFhYJKwYBBAHaRw8BAQdA9T6mXRx7Zc64kQC+dKB2RgxNHK0+KFlCT8b/
+</span></span><span style="display:flex;"><span>JtFAWRu0HU9zYW11IEFva2kgPG9zYW11QGRlYmlhbi5vcmc+iJIEExYIADsCGwMF
+</span></span><span style="display:flex;"><span>CwkIBwIGFQoJCAsCBBYCAwECHgECF4AWIQTYnmsJtCCYzq8IGrFtbTgJIV9yDQUC
+</span></span><span style="display:flex;"><span>ZZpXMAIZAQAKCRBtbTgJIV9yDc+YAQDhuq/q76qobfHKi8C2MT83u1qZkg2eCpEF
+</span></span><span style="display:flex;"><span>UkyvrE59fwD4+d+IbCls19F3MCRuEmyvYQr+sghC82lnUiFOxUq/DbQhT3NhbXUg
+</span></span><span style="display:flex;"><span>QW9raSA8b3NhbXUuYW9raUBnbWFpbC5jb20+iJAEExYIADgWIQTYnmsJtCCYzq8I
+</span></span><span style="display:flex;"><span>GrFtbTgJIV9yDQUCZZpVVQIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRBt
+</span></span><span style="display:flex;"><span>bTgJIV9yDehWAP9lG8DUBwUPl0kCTezQItOxQfDXgJ0Lyhv8dv4B1iWxjgEA8YBv
+</span></span><span style="display:flex;"><span>gCgDGby+pQmRX/STM7fu5LG62785oIj17HuMaQG4OARlmlIWEgorBgEEAZdVAQUB
+</span></span><span style="display:flex;"><span>AQdA+q2tgbmHC7MQv5bTHyawYrITRw7Gdg7M0p0+oSRtzS8DAQgHiHgEGBYIACAC
+</span></span><span style="display:flex;"><span>GwwWIQTYnmsJtCCYzq8IGrFtbTgJIV9yDQUCZZpU3QAKCRBtbTgJIV9yDdz6AQC8
+</span></span><span style="display:flex;"><span>yC8mQnwkj9D2x84oSdEpAckJ/e47kLDN3y/HIOwXbAD/ZCv2Ek1Exh/7SrxNL65J
+</span></span><span style="display:flex;"><span>ipPuCsH1vTsxbEE14mEs2Ag<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">=</span>IDSM
 </span></span><span style="display:flex;"><span>-----END PGP PUBLIC KEY BLOCK-----
-</span></span></code></pre></div><h3 id="setting-up-secure-apt-cliant">Setting up secure-APT cliant</h3>
+</span></span></code></pre></div><p>Thanks to the new algo, key is much smaller.</p>
+<h3 id="setting-up-secure-apt-cliant">Setting up secure-APT cliant</h3>
 <p>Let&rsquo;s use DEB822-STYLE FORMAT as explained in sources.list(5) and avoid using
 deprecated apt-key mechanism.</p>
 <p>I add <code>/etc/apt/sources.d/osamuaoki.sources</code> to the client as follows:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cat &gt;/etc/apt/sources.list.d/osamuaoki.sources  &lt;&lt;<span style="color:#e6db74">&#34;EOF&#34;</span>
 </span></span><span style="display:flex;"><span>Types: deb
-</span></span><span style="display:flex;"><span>URIs: http://osamuaoki.github.io/debian/
+</span></span><span style="display:flex;"><span>URIs: https://osamuaoki.github.io/debian/
 </span></span><span style="display:flex;"><span>Suites: sid
 </span></span><span style="display:flex;"><span>Components: main
 </span></span><span style="display:flex;"><span>Signed-By:
 </span></span><span style="display:flex;"><span> -----BEGIN PGP PUBLIC KEY BLOCK-----
 </span></span><span style="display:flex;"><span> .
-</span></span><span style="display:flex;"><span> mQINBEya74YBEADDpLTJCmyS97kZ6JvlpUEoSoVbqEkyQVfrV7C7VqlBGWO0bTKI
-</span></span><span style="display:flex;"><span> z0QAOkzF47HIDTez+ISLRd84Dyh/BPpSTF2CP3HnLo21UxotvQFeVVs87EKTgrM5
-</span></span><span style="display:flex;"><span> MsRgmEU4o28be0Uz0ix0U5ahaOqX6TI1+faZ8Bn2Q9MnhYoSaS0DyRrEAIU0xrSk
-</span></span><span style="display:flex;"><span> VDrN3GrjUYli2GwF/GgKCKT92rxPvcaJIbtMqNWkm9QJVqyTLNw/kY1ywU5weehE
-</span></span><span style="display:flex;"><span> tIK0IU2ib5dakYubUfdCv54UXAB30sryMpgbi60ELEtEG1t6icKBOta+kCHkDggl
-</span></span><span style="display:flex;"><span> Ts9YIAOMQvRy1qwiySuv1P+4AOSoC7yS/WlGBoGOhThSnGcdjoXXGixmkeSw3MO5
-</span></span><span style="display:flex;"><span> F/2e3vd7BWDDygyxJldtf8p6OmD6bj7FLoPB97Qvilpt2JQ27Sn9zVOC4/wCKaqx
-</span></span><span style="display:flex;"><span> 628GXsKx4gyoieSCKxHJuGTuD7nyAnqn/E04IyhJ5TAjai39x+ZUwWnT84dSOnEm
-</span></span><span style="display:flex;"><span> 0+3lORr9Iwkrbrom5BFZ9vrgEQ1Dp52v5anfjlPPiPdUMF/66H9nFrhjS26LLodA
-</span></span><span style="display:flex;"><span> WUEWAoc4u2vjAOD2LGjCs1XKdVMgFci2rVLSVYlj2aWjU3dPUvqvGo0IReiJx9RY
-</span></span><span style="display:flex;"><span> MEBZnc9CHEdWFZjVUFFKc/pjrgwIcq6LDRIPdd2n8bYy0y8TxFwyax9bPQARAQAB
-</span></span><span style="display:flex;"><span> tB1Pc2FtdSBBb2tpIDxvc2FtdUBkZWJpYW4ub3JnPokCOAQTAQIAIgUCTJrvhgIb
-</span></span><span style="display:flex;"><span> AwYLCQgHAwIGFQgCCQoLBBYCAwECHgECF4AACgkQHhNWiB3Y15FJNRAAuKkCIxJO
-</span></span><span style="display:flex;"><span> 3QrcscEPwS0n/gXBPYlAkxNMJOT3Iju8D7aweIjEeEm4YN8wZWNvqD1npkFHcDXl
-</span></span><span style="display:flex;"><span> LlNpcsIoQOoyyT4XIJ2bC8z80pxGTUdNd/FcmmJi8QMrg8+xf/cGvA3FdM9vdWOQ
-</span></span><span style="display:flex;"><span> lai5m5HyAdz/kvxD5KXw6GUOybzxVSg/MKK+Ugcwl/sHU9FT9zgy5myeNSiChn1J
-</span></span><span style="display:flex;"><span> DntBsKh3TWQd3uXKdFS0vaMvDDm3HeSwXBcV0tT8tMuaxOu2gdxv0br+SoFytsN+
-</span></span><span style="display:flex;"><span> PSjTTr8Tu6n/EkwMugUmXTqoNRS726nt4fVzbKYIQ9QEz2O8udC5PumHvTIOKcTn
-</span></span><span style="display:flex;"><span> ExuMy+M9cZhr5q5YOIIST3A04PtT6oUA5yJPtlQMGpE2642CwebWpXAhz+STWVJ7
-</span></span><span style="display:flex;"><span> 9mziN9Spd1TQ7r5wAukvYSRalO67WeONzntyX9KEzL2397ExKvO8FBpSpzms0S2F
-</span></span><span style="display:flex;"><span> 34CrZW2MfhrbOb3gh9phUXRLd2anU6k3cTiAMnMmLK+j8y3PDV2AApfhtaHQ7PPB
-</span></span><span style="display:flex;"><span> EYCvtsiDj28kpTX2gh9rqhJFG/vQbHBDQQvb8C4eoIYCIwVrZ8GGXZTz+CSLsTax
-</span></span><span style="display:flex;"><span> auCjBlLpV1I3n7jAddpHE4nsAA6FkQK63jhQg+maiiIOmdEQa00P+0Re4txOqlJR
-</span></span><span style="display:flex;"><span> Kyao3TFRmJY/Z4Qbl3bfDfmzNZ0lZRHGZ+K5Ag0ETJrvhgEQANuySzxnEDcSFToN
-</span></span><span style="display:flex;"><span> biGiotoRfCJvKdHjPWLke7Vji+ro4BR151wSjhv7lsVIiGhEmIp/bRO8mY3rwgiG
-</span></span><span style="display:flex;"><span> 1RUNI8cqDlzI0PtYJrrhcmi3ppB5y3frkJilFgQijhDHnTTId1d3ntwwzzBrAxh8
-</span></span><span style="display:flex;"><span> Bvx7BNbD9cN6ChIUJ6B6ISQpgw7EKnOTfYYc+EA/EppYcNsXKgm77W7/PC5Ss1Q0
-</span></span><span style="display:flex;"><span> 1EQ2O9GDQxiF8OEbJANSO4wExAWK5LN4Kuod4vt7hoGzgfKo1woviuephAUxnqqK
-</span></span><span style="display:flex;"><span> hK/WG0YB/nPFdGLn+mYWomMTe4ayrCIsHxS70gIt36DUAA1SDCTp8Fb34s9AB6YY
-</span></span><span style="display:flex;"><span> EK83g4NW09e/Czoxl3W8Kej1uPwt62MVxjc8HzQ3wPCriXbye5Lc74NARj+N6lor
-</span></span><span style="display:flex;"><span> t5CwyPRiy5iBaygZVOw+pBA4kRdi5sGUvbSZ4tTvtCHMcg1zpSHs/P/qSUGsO+wG
-</span></span><span style="display:flex;"><span> m9nWCB4i4zsDZ9GlEpneqSVtWgXKEbTzymC/Z0tvORAOvamCkt06nnsbJqNdI7g8
-</span></span><span style="display:flex;"><span> 2oCL/rkKCxNG/675kPHJGw/f1GyWuJz/6U1Zv6QFpKzVID9Wj5+pow8uDLxywEWH
-</span></span><span style="display:flex;"><span> XmFjMEfg8E0FO4UStCo+qsIUdd6jQHh/VuFsGPQS0lH1FnR+jYljyrxUFcUFlrVz
-</span></span><span style="display:flex;"><span> G5YtDrXFILFbEVUkbKrGbsfYUU2BABEBAAGJAh8EGAECAAkFAkya74YCGwwACgkQ
-</span></span><span style="display:flex;"><span> HhNWiB3Y15HN0A//QAKmdXv7nuddbe0kWb27779e0HXKpuhj9DyuKU7lXIMqSwtD
-</span></span><span style="display:flex;"><span> +/yo4vbb1nGVnPO/+xTF6ecUjnDrEMe/Q2fqHbm3bglwlkii9flvwORjxxBfghdJ
-</span></span><span style="display:flex;"><span> ipFuloL3C28VuQgx2kNeYtbvyLP6roZxR80c2+NQTHtkL2Ba2dtiptwsB4vKk+a0
-</span></span><span style="display:flex;"><span> vi9g+MjbPknSkoZ6TbZVog7ia0HcbS+QstfXCQUPi1ccKK9oNFVdTTBLamnq4Ts6
-</span></span><span style="display:flex;"><span> TAPRmRt7y4ob2dBm4R0Hpb9qIhTsI0+YKL7rtXHX2bFcMgg0OHz/Vn8LGT+euEgc
-</span></span><span style="display:flex;"><span> Zi9CQp8C6mrO+mFybBSWhndBra8NPTSY4iLYz/MlHq6vvtFsmeCpO2BpfI5vUSWl
-</span></span><span style="display:flex;"><span> tSI7whA5B2wAEJ6oEWHfdxvWSzRDQ+BORk6I4QQZpulQRqjHpeDSiMLCZHXqikdo
-</span></span><span style="display:flex;"><span> oYlQr2hin9CBKPECAqNdqVSYjooOJlyEYfRbz/hqsOcfqigqKKJx3vqKSxkta6bi
-</span></span><span style="display:flex;"><span> eHjRE+iyP1usPbzY4bLj4gMP/CpDC8+mkNmNluFKFRHmCu+Jzlg+lcYH1tVUqVYe
-</span></span><span style="display:flex;"><span> 9wlS6op6YDVVwPWT9vU3sviry81ADb25Dg8TBQz5UCZvF8iHEpTS7KcmWKLW8oNY
-</span></span><span style="display:flex;"><span> 2y9kyyQKjvp2s5m59LrAy3gunqEqMS3oxqPj8/NMvWK8mJoL07R52TxDk6k<span style="color:#f92672">=</span>
-</span></span><span style="display:flex;"><span> <span style="color:#f92672">=</span>Ao1Z
+</span></span><span style="display:flex;"><span> mDMEZZpSFhYJKwYBBAHaRw8BAQdA9T6mXRx7Zc64kQC+dKB2RgxNHK0+KFlCT8b/
+</span></span><span style="display:flex;"><span> JtFAWRu0HU9zYW11IEFva2kgPG9zYW11QGRlYmlhbi5vcmc+iJIEExYIADsCGwMF
+</span></span><span style="display:flex;"><span> CwkIBwIGFQoJCAsCBBYCAwECHgECF4AWIQTYnmsJtCCYzq8IGrFtbTgJIV9yDQUC
+</span></span><span style="display:flex;"><span> ZZpXMAIZAQAKCRBtbTgJIV9yDc+YAQDhuq/q76qobfHKi8C2MT83u1qZkg2eCpEF
+</span></span><span style="display:flex;"><span> UkyvrE59fwD4+d+IbCls19F3MCRuEmyvYQr+sghC82lnUiFOxUq/DbQhT3NhbXUg
+</span></span><span style="display:flex;"><span> QW9raSA8b3NhbXUuYW9raUBnbWFpbC5jb20+iJAEExYIADgWIQTYnmsJtCCYzq8I
+</span></span><span style="display:flex;"><span> GrFtbTgJIV9yDQUCZZpVVQIbAwULCQgHAgYVCgkICwIEFgIDAQIeAQIXgAAKCRBt
+</span></span><span style="display:flex;"><span> bTgJIV9yDehWAP9lG8DUBwUPl0kCTezQItOxQfDXgJ0Lyhv8dv4B1iWxjgEA8YBv
+</span></span><span style="display:flex;"><span> gCgDGby+pQmRX/STM7fu5LG62785oIj17HuMaQG4OARlmlIWEgorBgEEAZdVAQUB
+</span></span><span style="display:flex;"><span> AQdA+q2tgbmHC7MQv5bTHyawYrITRw7Gdg7M0p0+oSRtzS8DAQgHiHgEGBYIACAC
+</span></span><span style="display:flex;"><span> GwwWIQTYnmsJtCCYzq8IGrFtbTgJIV9yDQUCZZpU3QAKCRBtbTgJIV9yDdz6AQC8
+</span></span><span style="display:flex;"><span> yC8mQnwkj9D2x84oSdEpAckJ/e47kLDN3y/HIOwXbAD/ZCv2Ek1Exh/7SrxNL65J
+</span></span><span style="display:flex;"><span> ipPuCsH1vTsxbEE14mEs2Ag<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span> <span style="color:#f92672">=</span>IDSM
 </span></span><span style="display:flex;"><span> -----END PGP PUBLIC KEY BLOCK-----
 </span></span><span style="display:flex;"><span>EOF
 </span></span></code></pre></div><p>Please note a leading space added to each line and for the blank line, it
@@ -188,7 +186,7 @@ Codename: sid
 Architectures: amd64 source
 Components: main
 Description: APT repository for Osamu&#39;s infrastructure
-SignWith: FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
+SignWith: D89E6B09B42098CEAF081AB16D6D3809215F720D
 </code></pre><p>And <code>options</code> as:</p>
 <pre tabindex="0"><code>verbose
 basedir /path/to/osamuaoki-hugo/static/debian/
