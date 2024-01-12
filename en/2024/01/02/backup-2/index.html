@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/01/02 (initial publish),
-2024/01/11 (last update)
+2024/01/12 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00061.md
@@ -124,10 +124,13 @@ bss_usb_backup () {
 }
 
 # Backup to BKUP_USB (high frequency backup SSD device)
+MSGID=$(notify-send -p &#34;bss: BKUP_USB&#34; &#34;backup in progress ...&#34;)
 bss_usb_backup Documents BKUP_USB
+notify-send -r &#34;$MSGID&#34; &#34;bss: BKUP_USB&#34; &#34;backup finished!&#34;
 
 # vim:se sw=2 ts=2 sts=2 et ai tw=78:
-</code></pre><p>Then, activate this service unit as:</p>
+</code></pre><p>Please note use of <code>notify-send</code> in this script.</p>
+<p>Then, activate this service unit as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ systemctl --user enable bss-BKUP_USB.service
 </span></span></code></pre></div><p>Somehow, I get the following unexpected spurious yellow warning.</p>
 <pre tabindex="0"><code>Unit /home/penguin/.config/systemd/user/bss-BKUP_USB.service is added as a dependency to a non-existent unit media-penguin-BKUP_USB.mount.
