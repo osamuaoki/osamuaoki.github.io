@@ -156,7 +156,7 @@ modifications went flawlessly.</p>
 <li><a href="https://test.pypi.org/">test.pypi.org</a> &ndash; test site</li>
 </ul>
 <p>In retrospective, I found
-<a href="https://xebia.com/blog/an-updated-guide-to-setuptools-and-pyproject-toml/">An Updated Guide to Setuptools and Pyproject.toml</a>
+&ldquo;<a href="https://xebia.com/blog/an-updated-guide-to-setuptools-and-pyproject-toml/">An Updated Guide to Setuptools and Pyproject.toml</a> (2023-12-19)&rdquo; which
 documents this very concisely.</p>
 <h3 id="note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</h3>
 <p>Initially, Packaging Python Projects didn&rsquo;t give me easy path to package shell command <code>git-ime</code>, manpages, &hellip;
@@ -164,6 +164,7 @@ into pipy.org compatible wheel package, I looked around how others do.</p>
 <ul>
 <li><a href="https://discuss.python.org/t/are-python-package-developers-just-not-supposed-to-package-shell-scripts-as-a-general-practice/25665">Are python package developers just not supposed to package shell scripts as a general practice?</a></li>
 </ul>
+<p>My reading of this thread is:</p>
 <p>The Python packaging standards are focused on packaging Python code in a
 portable way - shell scripts are inherently platform-specific, and as such the
 current thinking is that they should be shipped using platform-specific
@@ -171,8 +172,7 @@ mechanisms (.deb/.rpm files or similar) rather than Python wheels.</p>
 <p>But, nothing stopping you from shipping a wheel (with a custom build backend, or
 manually put together) with the <a href="https://packaging.python.org/en/latest/specifications/binary-distribution-format/#the-data-directory">shell script in the .data/scripts
 directory</a>.</p>
-<p>I realize I can have a manually run additional script as a post-installer</p>
-<p>Create an entrypoint using the scripts section:</p>
+<p>I realize I can have a manually run additional script as my post-installer by creating an entrypoint as something like:</p>
 <pre tabindex="0"><code>[project.scripts]
 imediff_post_installer = &#34;imediff.__main__:installer&#34;
 </code></pre><h3 id="todo">TODO</h3>
