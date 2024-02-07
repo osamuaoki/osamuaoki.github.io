@@ -54,7 +54,7 @@ en/note-00062.md
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/02/03/python-pypi/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -65,23 +65,6 @@ en/note-00062.md
 <nav id="TableOfContents">
   <ul>
     <li><a href="#python-virtual-environment">Python virtual environment</a></li>
-    <li><a href="#setup-keyring">Setup keyring</a></li>
-    <li><a href="#setup-twine">Setup Twine</a></li>
-    <li><a href="#get-api-token-to-keyring">Get API token to keyring</a></li>
-    <li><a href="#failed-test-upload-with-imediff">Failed test upload with <code>imediff</code></a></li>
-    <li><a href="#test-upload-of-known-good-package">Test upload of known-good-package</a></li>
-    <li><a href="#packaging-of-imediff-with-projecttoml">Packaging of <code>imediff</code> with <code>project.toml</code></a>
-      <ul>
-        <li><a href="#note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</a></li>
-        <li><a href="#todo">TODO</a></li>
-      </ul>
-    </li>
-    <li><a href="#interesting-programs">Interesting programs</a>
-      <ul>
-        <li><a href="#cibuildwheelhttpsgithubcompypacibuildwheel"><a href="https://github.com/pypa/cibuildwheel">cibuildwheel</a></a></li>
-        <li><a href="#shhttpsgithubcomamoffatshtreedevelop"><a href="https://github.com/amoffat/sh/tree/develop">sh</a></a></li>
-      </ul>
-    </li>
   </ul>
 </nav>
 
@@ -101,106 +84,6 @@ created under <code>~/.venv/</code>. (I wanted to upload a package to pypi.org)<
 <code>Found existing installation: pip 23.0.1</code>,
 etc. and no new packages were installed in <code>~/.venv</code>.</p>
 <p>Anyway, I now know how to activate and deactivate python virtual environment.</p>
-<h2 id="setup-keyring">Setup keyring</h2>
-<p>We need to set up access to the keyring tool <code>keyring</code> (backend <code>secret-tool</code>):</p>
-<ul>
-<li>deb:<code>apt install python3-keyring</code></li>
-<li>venv: <code>pip install --upgrade keyring</code></li>
-</ul>
-<h2 id="setup-twine">Setup Twine</h2>
-<p>We need to set up access to the upload tool <code>twine</code>:</p>
-<ul>
-<li>deb: <code>apt install twine</code></li>
-<li>venv: <code>pip install --upgrade twine</code></li>
-</ul>
-<h2 id="get-api-token-to-keyring">Get API token to keyring</h2>
-<p>I got API tokens following their instructions:</p>
-<ul>
-<li><a href="https://test.pypi.org/help/#apitoken">test.pypi.org API token</a></li>
-<li><a href="https://pypi.org/help/#apitoken">pypi.org API token</a></li>
-</ul>
-<p>I followed <a href="https://twine.readthedocs.io/en/stable/#keyring-support">Twine: Keyring Support</a> to store API tokens into keyring.</p>
-<p>For test pypi:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ keyring set https://test.pypi.org/legacy/ __token__
-</span></span><span style="display:flex;"><span>Password <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;__token__&#39;</span> in <span style="color:#e6db74">&#39;https://test.pypi.org/legacy/&#39;</span>: pypi-token-value
-</span></span></code></pre></div><p>For real pypi:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ keyring set https://upload.pypi.org/legacy/ __token__
-</span></span><span style="display:flex;"><span>Password <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;__token__&#39;</span> in <span style="color:#e6db74">&#39;https://upload.pypi.org/legacy/&#39;</span>: pypi-token-value
-</span></span></code></pre></div><h2 id="failed-test-upload-with-imediff">Failed test upload with <code>imediff</code></h2>
-<p>I followed <a href="https://twine.readthedocs.io/">Twine documentation</a> to build
-package for <code>imefiff</code> and upload to test.pypi.org.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ cd path/to/imediff
-</span></span><span style="display:flex;"><span> $ python3 -m build
-</span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span> Successfully built imediff-2.8.tar.gz and imediff-2.8-py3-none-any.whl
-</span></span><span style="display:flex;"><span> $ twine upload --verbose --repository testpypi dist/*
-</span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>ERROR    HTTPError: <span style="color:#ae81ff">400</span> Bad Request from https://test.pypi.org/legacy/
-</span></span><span style="display:flex;"><span>         The description failed to render in the default format of reStructuredText. See https://test.pypi.org/help/#description-content-type <span style="color:#66d9ef">for</span> more information.
-</span></span></code></pre></div><p>You may use <code>pyproject-build</code> for <code>python3 -m build</code> if deb is installed.</p>
-<p>Since keyring is properly setup, this didn&rsquo;t ask password.</p>
-<p>I suppose I am doing something wrong: <a href="https://test.pypi.org/help/#description-content-type">Linked site for content-type</a>.</p>
-<p>I added <code>README.rst</code>.  No sucess.</p>
-<h2 id="test-upload-of-known-good-package">Test upload of known-good-package</h2>
-<p>I went back to the <a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Packaging Python
-Projects</a>
-and a test upload of the example
-<a href="https://github.com/pypa/sampleproject">sampleproject</a> after required
-modifications went flawlessly.</p>
-<p>I realized the main stream packaging practice now uses  <code>project.toml</code> instead of <code>setup.cfg</code> or <code>setup.py</code>.</p>
-<h2 id="packaging-of-imediff-with-projecttoml">Packaging of <code>imediff</code> with <code>project.toml</code></h2>
-<p>Instead of revising <code>setup.cfg</code> used in <code>imediff</code>, I decided to migrate this package to
-<code>project.toml</code>.</p>
-<p>It took me a while to do this by reading various documents:</p>
-<ul>
-<li><a href="https://pypi.org/">pypi.org</a> &ndash; real site
-<ul>
-<li><a href="https://pip.pypa.io/en/stable/">pip documentation</a>
-<ul>
-<li><a href="https://pip.pypa.io/en/stable/getting-started/">Getting Started</a></li>
-</ul>
-</li>
-<li><a href="https://packaging.python.org/en/latest/">Python Packaging User Guide</a>
-<ul>
-<li><a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Packaging Python Projects</a></li>
-<li><a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/#uploading-the-distribution-archivesa">Uploading the distribution archives</a></li>
-</ul>
-</li>
-</ul>
-</li>
-<li><a href="https://test.pypi.org/">test.pypi.org</a> &ndash; test site</li>
-</ul>
-<p>In retrospective, I found
-<a href="https://xebia.com/blog/an-updated-guide-to-setuptools-and-pyproject-toml/">An Updated Guide to Setuptools and Pyproject.toml</a>
-documents this very concisely.</p>
-<h3 id="note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</h3>
-<p>Initially, Packaging Python Projects didn&rsquo;t give me easy path to package shell command <code>git-ime</code>, manpages, &hellip;
-into pipy.org compatible wheel package, I looked around how others do.</p>
-<ul>
-<li><a href="https://discuss.python.org/t/are-python-package-developers-just-not-supposed-to-package-shell-scripts-as-a-general-practice/25665">Are python package developers just not supposed to package shell scripts as a general practice?</a></li>
-</ul>
-<p>The Python packaging standards are focused on packaging Python code in a
-portable way - shell scripts are inherently platform-specific, and as such the
-current thinking is that they should be shipped using platform-specific
-mechanisms (.deb/.rpm files or similar) rather than Python wheels.</p>
-<p>But, nothing stopping you from shipping a wheel (with a custom build backend, or
-manually put together) with the <a href="https://packaging.python.org/en/latest/specifications/binary-distribution-format/#the-data-directory">shell script in the .data/scripts
-directory</a>.</p>
-<p>I realize I can have a manually run additional script as a post-installer</p>
-<p>Create an entrypoint using the scripts section:</p>
-<pre tabindex="0"><code>[project.scripts]
-imediff_post_installer = &#34;imediff.__main__:installer&#34;
-</code></pre><h3 id="todo">TODO</h3>
-<p>I need to verify the above approach.</p>
-<p>(TODO: There may be better automated way to run the post installation script.)</p>
-<h2 id="interesting-programs">Interesting programs</h2>
-<h3 id="cibuildwheelhttpsgithubcompypacibuildwheel"><a href="https://github.com/pypa/cibuildwheel">cibuildwheel</a></h3>
-<p>cibuildwheel runs on your CI server - currently it supports GitHub Actions,
-Azure Pipelines, Travis CI, AppVeyor, CircleCI, and GitLab CI - and it builds
-and tests your wheels across all of your platforms.</p>
-<h3 id="shhttpsgithubcomamoffatshtreedevelop"><a href="https://github.com/amoffat/sh/tree/develop">sh</a></h3>
-<p>sh is a full-fledged subprocess replacement for Python 3.8 - 3.11, and PyPy
-that allows you to call any program as if it were a function.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
@@ -213,7 +96,7 @@ that allows you to call any program as if it were a function.</p>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/02/03/python-pypi/">Next Post</a></td>
   
   </tr>
   </tbody>
