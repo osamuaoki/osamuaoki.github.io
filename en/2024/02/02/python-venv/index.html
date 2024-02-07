@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/02 (initial publish),
-2024/02/04 (last update)
+2024/02/07 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00062.md
@@ -70,7 +70,18 @@ en/note-00062.md
     <li><a href="#get-api-token-to-keyring">Get API token to keyring</a></li>
     <li><a href="#failed-test-upload-with-imediff">Failed test upload with <code>imediff</code></a></li>
     <li><a href="#test-upload-of-known-good-package">Test upload of known-good-package</a></li>
-    <li><a href="#references">References</a></li>
+    <li><a href="#packaging-of-imediff-with-projecttoml">Packaging of <code>imediff</code> with <code>project.toml</code></a>
+      <ul>
+        <li><a href="#note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</a></li>
+        <li><a href="#todo">TODO</a></li>
+      </ul>
+    </li>
+    <li><a href="#interesting-programs">Interesting programs</a>
+      <ul>
+        <li><a href="#cibuildwheelhttpsgithubcompypacibuildwheel"><a href="https://github.com/pypa/cibuildwheel">cibuildwheel</a></a></li>
+        <li><a href="#shhttpsgithubcomamoffatshtreedevelop"><a href="https://github.com/amoffat/sh/tree/develop">sh</a></a></li>
+      </ul>
+    </li>
   </ul>
 </nav>
 
@@ -131,14 +142,24 @@ package for <code>imefiff</code> and upload to test.pypi.org.</p>
 <p>I suppose I am doing something wrong: <a href="https://test.pypi.org/help/#description-content-type">Linked site for content-type</a>.</p>
 <p>I added <code>README.rst</code>.  No sucess.</p>
 <h2 id="test-upload-of-known-good-package">Test upload of known-good-package</h2>
-<p>TBD.</p>
-<h2 id="references">References</h2>
+<p>I went back to the <a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Packaging Python
+Projects</a>
+and a test upload of the example
+<a href="https://github.com/pypa/sampleproject">sampleproject</a> after required
+modifications went flawlessly.</p>
+<p>I realized the main stream packaging practice now uses  <code>project.toml</code> instead of <code>setup.cfg</code> or <code>setup.py</code>.</p>
+<h2 id="packaging-of-imediff-with-projecttoml">Packaging of <code>imediff</code> with <code>project.toml</code></h2>
+<p>Instead of revising <code>setup.cfg</code> used in <code>imediff</code>, I decided to migrate this package to
+<code>project.toml</code>.</p>
+<p>It took me a while to do this by reading various documents:</p>
 <ul>
 <li><a href="https://pypi.org/">pypi.org</a> &ndash; real site
 <ul>
 <li><a href="https://pip.pypa.io/en/stable/">pip documentation</a>
 <ul>
 <li><a href="https://pip.pypa.io/en/stable/getting-started/">Getting Started</a></li>
+</ul>
+</li>
 <li><a href="https://packaging.python.org/en/latest/">Python Packaging User Guide</a>
 <ul>
 <li><a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Packaging Python Projects</a></li>
@@ -147,10 +168,39 @@ package for <code>imefiff</code> and upload to test.pypi.org.</p>
 </li>
 </ul>
 </li>
-</ul>
-</li>
 <li><a href="https://test.pypi.org/">test.pypi.org</a> &ndash; test site</li>
 </ul>
+<p>In retrospective, I found
+<a href="https://xebia.com/blog/an-updated-guide-to-setuptools-and-pyproject-toml/">An Updated Guide to Setuptools and Pyproject.toml</a>
+documents this very concisely.</p>
+<h3 id="note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</h3>
+<p>Initially, Packaging Python Projects didn&rsquo;t give me easy path to package shell command <code>git-ime</code>, manpages, &hellip;
+into pipy.org compatible wheel package, I looked around how others do.</p>
+<ul>
+<li><a href="https://discuss.python.org/t/are-python-package-developers-just-not-supposed-to-package-shell-scripts-as-a-general-practice/25665">Are python package developers just not supposed to package shell scripts as a general practice?</a></li>
+</ul>
+<p>The Python packaging standards are focused on packaging Python code in a
+portable way - shell scripts are inherently platform-specific, and as such the
+current thinking is that they should be shipped using platform-specific
+mechanisms (.deb/.rpm files or similar) rather than Python wheels.</p>
+<p>But, nothing stopping you from shipping a wheel (with a custom build backend, or
+manually put together) with the <a href="https://packaging.python.org/en/latest/specifications/binary-distribution-format/#the-data-directory">shell script in the .data/scripts
+directory</a>.</p>
+<p>I realize I can have a manually run additional script as a post-installer</p>
+<p>Create an entrypoint using the scripts section:</p>
+<pre tabindex="0"><code>[project.scripts]
+imediff_post_installer = &#34;imediff.__main__:installer&#34;
+</code></pre><h3 id="todo">TODO</h3>
+<p>I need to verify the above approach.</p>
+<p>(TODO: There may be better automated way to run the post installation script.)</p>
+<h2 id="interesting-programs">Interesting programs</h2>
+<h3 id="cibuildwheelhttpsgithubcompypacibuildwheel"><a href="https://github.com/pypa/cibuildwheel">cibuildwheel</a></h3>
+<p>cibuildwheel runs on your CI server - currently it supports GitHub Actions,
+Azure Pipelines, Travis CI, AppVeyor, CircleCI, and GitLab CI - and it builds
+and tests your wheels across all of your platforms.</p>
+<h3 id="shhttpsgithubcomamoffatshtreedevelop"><a href="https://github.com/amoffat/sh/tree/develop">sh</a></h3>
+<p>sh is a full-fledged subprocess replacement for Python 3.8 - 3.11, and PyPy
+that allows you to call any program as if it were a function.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
