@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/03 (initial publish),
-2024/02/12 (last update)
+2024/02/13 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00063.md
@@ -64,17 +64,24 @@ en/note-00063.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#setup-keyring">Setup keyring</a></li>
-    <li><a href="#setup-twine">Setup Twine</a></li>
-    <li><a href="#get-api-token-to-keyring">Get API token to keyring</a></li>
-    <li><a href="#failed-test-upload-with-imediff">Failed test upload with <code>imediff</code></a></li>
-    <li><a href="#test-upload-of-known-good-package">Test upload of known-good-package</a></li>
-    <li><a href="#packaging-of-imediff-with-pyprojecttoml">Packaging of <code>imediff</code> with <code>pyproject.toml</code></a>
+    <li><a href="#key-point-for-successful-upload">Key point for successful upload</a></li>
+    <li><a href="#pypiorg-package-upload-procedures">Pypi.org package upload procedures</a>
       <ul>
-        <li><a href="#note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</a></li>
-        <li><a href="#tips">Tips</a></li>
+        <li><a href="#python-virtual-environment">Python virtual environment</a></li>
+        <li><a href="#pip">pip</a></li>
+        <li><a href="#build-package-1">Build package</a></li>
+        <li><a href="#get-api-token-to-the-keyring">Get API token to the keyring</a></li>
+        <li><a href="#upload-of-a-python-package">Upload of a python package</a></li>
+        <li><a href="#leave-python-virtual-environment">Leave python virtual environment</a></li>
       </ul>
     </li>
+    <li><a href="#retrospective-on-the-upload-trials">Retrospective on the upload trials</a>
+      <ul>
+        <li><a href="#failed-test-upload-example-with-imediff">Failed test upload example with <code>imediff</code></a></li>
+        <li><a href="#test-buildupload-of-known-good-package-and-its-variants">Test build/upload of known-good-package and its variants</a></li>
+      </ul>
+    </li>
+    <li><a href="#note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</a></li>
     <li><a href="#interesting-programs">Interesting programs</a>
       <ul>
         <li><a href="#cibuildwheelhttpsgithubcompypacibuildwheel"><a href="https://github.com/pypa/cibuildwheel">cibuildwheel</a></a></li>
@@ -84,59 +91,13 @@ en/note-00063.md
   </ul>
 </nav>
 
-<p>I wanted to upload a package <code>imediff</code> to pipy.org repository.  Here is how I
-am trying to do it.</p>
-<h2 id="setup-keyring">Setup keyring</h2>
-<p>We need to set up access to the keyring tool <code>keyring</code> (backend <code>secret-tool</code>):</p>
-<ul>
-<li>deb:<code>apt install python3-keyring</code></li>
-<li>venv: <code>pip install --upgrade keyring</code></li>
-</ul>
-<h2 id="setup-twine">Setup Twine</h2>
-<p>We need to set up access to the upload tool <code>twine</code>:</p>
-<ul>
-<li>deb: <code>apt install twine</code></li>
-<li>venv: <code>pip install --upgrade twine</code></li>
-</ul>
-<h2 id="get-api-token-to-keyring">Get API token to keyring</h2>
-<p>I got API tokens following their instructions:</p>
-<ul>
-<li><a href="https://test.pypi.org/help/#apitoken">test.pypi.org API token</a></li>
-<li><a href="https://pypi.org/help/#apitoken">pypi.org API token</a></li>
-</ul>
-<p>I followed <a href="https://twine.readthedocs.io/en/stable/#keyring-support">Twine: Keyring Support</a> to store API tokens into keyring.</p>
-<p>For test pypi:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ keyring set https://test.pypi.org/legacy/ __token__
-</span></span><span style="display:flex;"><span>Password <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;__token__&#39;</span> in <span style="color:#e6db74">&#39;https://test.pypi.org/legacy/&#39;</span>: pypi-token-value
-</span></span></code></pre></div><p>For real pypi:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ keyring set https://upload.pypi.org/legacy/ __token__
-</span></span><span style="display:flex;"><span>Password <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;__token__&#39;</span> in <span style="color:#e6db74">&#39;https://upload.pypi.org/legacy/&#39;</span>: pypi-token-value
-</span></span></code></pre></div><h2 id="failed-test-upload-with-imediff">Failed test upload with <code>imediff</code></h2>
-<p>I followed <a href="https://twine.readthedocs.io/">Twine documentation</a> to build
-package for <code>imefiff</code> and upload to test.pypi.org.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ cd path/to/imediff
-</span></span><span style="display:flex;"><span> $ python3 -m build
-</span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span> Successfully built imediff-2.8.tar.gz and imediff-2.8-py3-none-any.whl
-</span></span><span style="display:flex;"><span> $ twine upload --verbose --repository testpypi dist/*
-</span></span><span style="display:flex;"><span>...
-</span></span><span style="display:flex;"><span>ERROR    HTTPError: <span style="color:#ae81ff">400</span> Bad Request from https://test.pypi.org/legacy/
-</span></span><span style="display:flex;"><span>         The description failed to render in the default format of reStructuredText. See https://test.pypi.org/help/#description-content-type <span style="color:#66d9ef">for</span> more information.
-</span></span></code></pre></div><p>You may use <code>pyproject-build</code> for <code>python3 -m build</code> if deb is installed.</p>
-<p>Since keyring is properly setup, this didn&rsquo;t ask password.</p>
-<p>I suppose I am doing something wrong: <a href="https://test.pypi.org/help/#description-content-type">Linked site for content-type</a>.</p>
-<p>I added <code>README.rst</code>.  No sucess.</p>
-<h2 id="test-upload-of-known-good-package">Test upload of known-good-package</h2>
-<p>I went back to the <a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Packaging Python
-Projects</a>
-and a test upload of the example
-<a href="https://github.com/pypa/sampleproject">sampleproject</a> after required
-modifications went flawlessly.</p>
-<p>I realized the main stream packaging practice now uses  <code>pyproject.toml</code> instead of <code>setup.cfg</code> or <code>setup.py</code>.</p>
-<h2 id="packaging-of-imediff-with-pyprojecttoml">Packaging of <code>imediff</code> with <code>pyproject.toml</code></h2>
-<p>Instead of revising <code>setup.cfg</code> used in <code>imediff</code>, I decided to migrate this package to
-<code>pyproject.toml</code>.</p>
-<p>It took me a while to do this by reading various documents:</p>
+<p>I realized the main stream packaging practice now uses  <code>pyproject.toml</code>
+instead of <code>setup.cfg</code> or <code>setup.py</code>.</p>
+<p>I wanted to upload a package <code>imediff</code> to pipy.org repository while converting
+it to use <code>pyproject.toml</code>.  Getting confused by the documentation sites which
+are still actively updated to catch up with the new style to use
+<code>pyproject.toml</code> etc., I managed to upload a package to pypi.org.</p>
+<p>Here are the list of sites which I visited:</p>
 <ul>
 <li><a href="https://pypi.org/">pypi.org</a> &ndash; real site
 <ul>
@@ -156,11 +117,154 @@ modifications went flawlessly.</p>
 <li><a href="https://test.pypi.org/">test.pypi.org</a> &ndash; test site</li>
 </ul>
 <p>In retrospective, I found
-&ldquo;<a href="https://xebia.com/blog/an-updated-guide-to-setuptools-and-pyproject-toml/">An Updated Guide to Setuptools and Pyproject.toml</a> (2023-12-19)&rdquo; which
-documents this very concisely.</p>
-<h3 id="note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</h3>
-<p>Initially, Packaging Python Projects didn&rsquo;t give me easy path to package shell command <code>git-ime</code>, manpages, &hellip;
-into pipy.org compatible wheel package, I looked around how others do.</p>
+&ldquo;<a href="https://xebia.com/blog/an-updated-guide-to-setuptools-and-pyproject-toml/">An Updated Guide to Setuptools and Pyproject.toml</a>
+(2023-12-19)&rdquo; which documents this very concisely.</p>
+<p>These documents and the example as the following lead me to sucess:</p>
+<ul>
+<li><a href="https://github.com/pypa/sampleproject">https://github.com/pypa/sampleproject</a></li>
+</ul>
+<p>The end result of my <code>imediff</code> package is available as version 2.8 at:</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/imediff">https://github.com/osamuaoki/imediff</a> (<code>main</code> branch)</li>
+</ul>
+<p>The source for the debian deb-package is at <code>debian</code> branch.</p>
+<h2 id="key-point-for-successful-upload">Key point for successful upload</h2>
+<p>Use of <code>twine check dist/*</code> was good way to get it acceptable to pypi.org .</p>
+<p>Please note <code>pyproject.toml</code> needed to do the following:</p>
+<pre tabindex="0"><code>...
+## The following needed to be commented out to work with &#34;twine check&#34;
+#license = {file = &#34;LICENSE&#34;}
+...
+</code></pre><h2 id="pypiorg-package-upload-procedures">Pypi.org package upload procedures</h2>
+<h3 id="python-virtual-environment">Python virtual environment</h3>
+<p>Create and start virtual environment in <code>~/.venv</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m venv ~/.venv
+</span></span><span style="display:flex;"><span> $ . ~/.venv/bin/activate
+</span></span></code></pre></div><p>Please note <code>.</code> is significant here.</p>
+<h3 id="pip">pip</h3>
+<p>Install a pip package <code>&lt;package_name&gt;</code> with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ pip install -U &lt;package_name&gt;
+</span></span></code></pre></div><h4 id="build-package"><code>build</code> package</h4>
+<p>We need to set up access to the upload tool <code>twine</code>:</p>
+<ul>
+<li>deb: <code>apt install python3-build</code></li>
+<li>venv: <code>pip install --upgrade build</code></li>
+</ul>
+<h4 id="keyring-package"><code>keyring</code> package</h4>
+<p>We need to set up access to the keyring tool <code>keyring</code> (backend <code>secret-tool</code>):</p>
+<ul>
+<li>deb:<code>apt install python3-keyring</code></li>
+<li>venv: <code>pip install --upgrade keyring</code></li>
+</ul>
+<h4 id="twine-package"><code>twine</code> package</h4>
+<p>We need to set up access to the upload tool <code>twine</code>:</p>
+<ul>
+<li>deb: <code>apt install twine</code></li>
+<li>venv: <code>pip install --upgrade twine</code></li>
+</ul>
+<h4 id="update-all-packages-to-the-latest">Update all packages to the latest</h4>
+<p>Update all packages in virtual environment:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ pip list --outdated |tail -n +3|cut -d &#39; &#39; -f 1|xargs -n1 pip install -U
+</span></span></code></pre></div><p>(I used this to avoid issues of using older tool chain while facing failed
+upload as described below.  It seems the root cause was not the older tool chain.)</p>
+<h3 id="build-package-1">Build package</h3>
+<p>Build a python package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd path/to/project_root
+</span></span><span style="display:flex;"><span> $ python3 -m build
+</span></span><span style="display:flex;"><span> $ twine check dist/*
+</span></span></code></pre></div><h3 id="get-api-token-to-the-keyring">Get API token to the keyring</h3>
+<p>I got API tokens following their instructions:</p>
+<ul>
+<li><a href="https://test.pypi.org/help/#apitoken">test.pypi.org API token</a></li>
+<li><a href="https://pypi.org/help/#apitoken">pypi.org API token</a></li>
+</ul>
+<p>I followed <a href="https://twine.readthedocs.io/en/stable/#keyring-support">Twine: Keyring Support</a> to store API tokens into keyring.</p>
+<p>For test pypi:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ keyring set https://test.pypi.org/legacy/ __token__
+</span></span><span style="display:flex;"><span>Password for &#39;__token__&#39; in &#39;https://test.pypi.org/legacy/&#39;: pypi-token-value
+</span></span></code></pre></div><p>For real pypi:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ keyring set https://upload.pypi.org/legacy/ __token__
+</span></span><span style="display:flex;"><span>Password for &#39;__token__&#39; in &#39;https://upload.pypi.org/legacy/&#39;: pypi-token-value
+</span></span></code></pre></div><p>These are essential steps to make smooth uploads of packages without prompted
+by <code>twine</code> as mentioned in
+&ldquo;Python Packaging User Guide: <a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/#uploading-the-distribution-archives">Uploading the distribution archives</a>&rdquo;.</p>
+<p>Use of <code>~/pypirc</code> to avoid being prompted for your username and password every
+time as mentioned in
+<a href="https://packaging.python.org/en/latest/guides/using-testpypi/#setting-up-testpypi-in-pypirc">Setting up TestPyPI in .pypirc</a>
+doesn&rsquo;t work on my Debian system.  So use of <code>keyring</code> mentioned here is
+needed.</p>
+<h3 id="upload-of-a-python-package">Upload of a python package</h3>
+<p>Test upload of a python package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ twine upload --verbose --repository testpypi dist/*
+</span></span></code></pre></div><p>Official upload of a python package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ twine upload --verbose --repository pypi dist/*
+</span></span></code></pre></div><h3 id="leave-python-virtual-environment">Leave python virtual environment</h3>
+<p>Deactivate virtual environment:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ deactivate
+</span></span></code></pre></div><h2 id="retrospective-on-the-upload-trials">Retrospective on the upload trials</h2>
+<h3 id="failed-test-upload-example-with-imediff">Failed test upload example with <code>imediff</code></h3>
+<p>I followed <a href="https://twine.readthedocs.io/">Twine documentation</a> to build
+package for <code>imefiff</code> and itried to upload to test.pypi.org.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd path/to/imediff
+</span></span><span style="display:flex;"><span> $ python3 -m build
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span> Successfully built imediff-2.8.tar.gz and imediff-2.8-py3-none-any.whl
+</span></span><span style="display:flex;"><span> $ twine upload --verbose --repository testpypi dist/*
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>ERROR    HTTPError: 400 Bad Request from https://test.pypi.org/legacy/
+</span></span><span style="display:flex;"><span>         The description failed to render in the default format of reStructuredText. See https://test.pypi.org/help/#description-content-type for more information.
+</span></span></code></pre></div><p>You may use <code>pyproject-build</code> for <code>python3 -m build</code> if deb is installed.</p>
+<p>Since keyring is properly setup, this didn&rsquo;t ask password.</p>
+<p>I suppose I am doing something wrong: <a href="https://test.pypi.org/help/#description-content-type">Linked site for content-type</a>.</p>
+<p>I added <code>README.rst</code>.  No success.  Something other than use of <code>README.md</code> is causing this failure.</p>
+<h3 id="test-buildupload-of-known-good-package-and-its-variants">Test build/upload of known-good-package and its variants</h3>
+<p>I went back to the <a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Packaging Python
+Projects</a>
+and a test upload of the example
+<a href="https://github.com/pypa/sampleproject">sampleproject</a> after required
+modifications went flawlessly.</p>
+<p>I replaced <code>LICENSE.txt</code> with GPL LICENSE file content from <code>imediff</code> a,d test
+build it and failed as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m build;twine check dist/*
+</span></span><span style="display:flex;"><span> ...
+</span></span><span style="display:flex;"><span>Successfully built sampleproject_osamu_debian_org-3.2.0.tar.gz and sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl: FAILED
+</span></span><span style="display:flex;"><span>ERROR    `long_description` has syntax errors in markup and would not be rendered on PyPI.                                                                                   
+</span></span><span style="display:flex;"><span>         line 2: Warning: Block quote ends without a blank line; unexpected unindent.                                                                                        
+</span></span><span style="display:flex;"><span>WARNING  `long_description_content_type` missing. defaulting to `text/x-rst`.                                                                                                
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0.tar.gz: PASSED
+</span></span></code></pre></div><p>I looked around <a href="https://github.com/pypa">https://github.com/pypa</a> site and see packages such as
+<a href="https://github.com/pypa/build">build</a> comes with <code>README.md</code> without problem.
+So long description source <code>README.md</code> may not be the source of problem.  It
+has odd <code>license.file = &quot;LICENSE&quot;</code> in <code>pyproject.toml</code> and doesn&rsquo;t include it
+in <code>METADATA</code> in wheel.  This <code>license.file</code> seems equivalent of official style
+but this lack of inclusion gave me a hint.</p>
+<p>This lead me to skip official <code>license = &quot;LICENSE&quot;</code> line in <code>pyproject.toml</code>
+for GPL-replaced <code>sampleproject</code>.  It works.  So I decided to do this as
+the workaround for <code>imediff</code> upload and worked.  <code>METADATA</code> in wheel doesn&rsquo;t
+contain license file as in the <code>build</code> package.</p>
+<p>For further investigation, I become suspicious about TeX style quotations in
+GPL license text: <code>\</code>&hellip;&rsquo;` and removed them but that didn&rsquo;t improve situation.</p>
+<p>I also removed indentation of leading spaces and tabs and got:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m build;twine check dist/*
+</span></span><span style="display:flex;"><span> ...
+</span></span><span style="display:flex;"><span>Successfully built sampleproject_osamu_debian_org-3.2.0.tar.gz and sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl: PASSED with warnings
+</span></span><span style="display:flex;"><span>WARNING  `long_description_content_type` missing. defaulting to `text/x-rst`.                                                                                                
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0.tar.gz: PASSED
+</span></span></code></pre></div><p>Removing leading spaces and tabs only was not good enough.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m build;twine check dist/*
+</span></span><span style="display:flex;"><span> ...
+</span></span><span style="display:flex;"><span>Successfully built sampleproject_osamu_debian_org-3.2.0.tar.gz and sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl: FAILED
+</span></span><span style="display:flex;"><span>ERROR    `long_description` has syntax errors in markup and would not be rendered on PyPI.                                                                                   
+</span></span><span style="display:flex;"><span>         line 262: Warning: Inline interpreted text or phrase reference start-string without end-string.                                                                     
+</span></span><span style="display:flex;"><span>WARNING  `long_description_content_type` missing. defaulting to `text/x-rst`.                                                                                                
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0.tar.gz: PASSED
+</span></span></code></pre></div><h2 id="note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</h2>
+<p>Initially, Packaging Python Projects didn&rsquo;t give me easy path to package shell
+command <code>git-ime</code>, manpages, &hellip;  into pipy.org compatible wheel package, I
+looked around how others do.</p>
 <ul>
 <li><a href="https://discuss.python.org/t/are-python-package-developers-just-not-supposed-to-package-shell-scripts-as-a-general-practice/25665">Are python package developers just not supposed to package shell scripts as a general practice?</a></li>
 </ul>
@@ -172,29 +276,12 @@ mechanisms (.deb/.rpm files or similar) rather than Python wheels.</p>
 <p>But, nothing stopping you from shipping a wheel (with a custom build backend, or
 manually put together) with the <a href="https://packaging.python.org/en/latest/specifications/binary-distribution-format/#the-data-directory">shell script in the .data/scripts
 directory</a>.</p>
-<p>I realize I can have a manually run additional script as my post-installer by creating an entrypoint as something like:</p>
-<pre tabindex="0"><code>[project.scripts]
-imediff_post_installer = &#34;imediff.__main__:installer&#34;
-</code></pre><h3 id="tips">Tips</h3>
-<p>I basically followed example at:</p>
-<ul>
-<li><a href="https://github.com/pypa/sampleproject">https://github.com/pypa/sampleproject</a></li>
-</ul>
-<p>Use of <code>twine check dist/*</code> was good way to get it acceptable to pypi.org .</p>
-<p>The end result is available as version 2.8 at:</p>
-<ul>
-<li><a href="https://github.com/osamuaoki/imediff">https://github.com/osamuaoki/imediff</a></li>
-</ul>
-<p>Please note <code>pyproject.toml</code> needed to do the following:</p>
-<pre tabindex="0"><code>...
-## The following needed to be commented out to work with &#34;twine check&#34;
-#license = {file = &#34;LICENSE&#34;}
-...
-</code></pre><p>The wheel package is available at:</p>
-<ul>
-<li><a href="https://pypi.org/project/imediff/">https://pypi.org/project/imediff/</a></li>
-</ul>
-<h2 id="interesting-programs">Interesting programs</h2>
+<p>I realize I can have a manually run additional script as my post-installer by
+creating an entry point <code>imediff_install</code> in addition to the main <code>imediff</code> as:</p>
+<pre tabindex="0"><code>[project.scripts]  # Optional
+imediff = &#34;imediff:main&#34;
+imediff_install = &#34;imediff:install&#34;
+</code></pre><h2 id="interesting-programs">Interesting programs</h2>
 <h3 id="cibuildwheelhttpsgithubcompypacibuildwheel"><a href="https://github.com/pypa/cibuildwheel">cibuildwheel</a></h3>
 <p>cibuildwheel runs on your CI server - currently it supports GitHub Actions,
 Azure Pipelines, Travis CI, AppVeyor, CircleCI, and GitLab CI - and it builds
