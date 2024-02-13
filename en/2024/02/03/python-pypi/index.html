@@ -233,7 +233,8 @@ build it and failed as:</p>
 </span></span><span style="display:flex;"><span>         line 2: Warning: Block quote ends without a blank line; unexpected unindent.                                                                                        
 </span></span><span style="display:flex;"><span>WARNING  `long_description_content_type` missing. defaulting to `text/x-rst`.                                                                                                
 </span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0.tar.gz: PASSED
-</span></span></code></pre></div><p>I looked around <a href="https://github.com/pypa">https://github.com/pypa</a> site and see packages such as
+</span></span></code></pre></div><p>This is ERROR on <code>unexpected unindent</code> and WARNING.</p>
+<p>I looked around <a href="https://github.com/pypa">https://github.com/pypa</a> site and see packages such as
 <a href="https://github.com/pypa/build">build</a> comes with <code>README.md</code> without problem.
 So long description source <code>README.md</code> may not be the source of problem.  It
 has odd <code>license.file = &quot;LICENSE&quot;</code> in <code>pyproject.toml</code> and doesn&rsquo;t include it
@@ -243,16 +244,26 @@ but this lack of inclusion gave me a hint.</p>
 for GPL-replaced <code>sampleproject</code>.  It works.  So I decided to do this as
 the workaround for <code>imediff</code> upload and worked.  <code>METADATA</code> in wheel doesn&rsquo;t
 contain license file as in the <code>build</code> package.</p>
-<p>For further investigation, I become suspicious about TeX style quotations in
-GPL license text: <code>\</code>&hellip;&rsquo;` and removed them but that didn&rsquo;t improve situation.</p>
-<p>I also removed indentation of leading spaces and tabs and got:</p>
+<p>I was suspicious about TeX style quotations in GPL license text: <code>\</code>&hellip;&rsquo;`
+and removed them as first check.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m build;twine check dist/*
+</span></span><span style="display:flex;"><span> ...
+</span></span><span style="display:flex;"><span>Successfully built sampleproject_osamu_debian_org-3.2.0.tar.gz and sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl: FAILED
+</span></span><span style="display:flex;"><span>ERROR    `long_description` has syntax errors in markup and would not be rendered on PyPI.                                                                                   
+</span></span><span style="display:flex;"><span>         line 2: Warning: Block quote ends without a blank line; unexpected unindent.                                                                                        
+</span></span><span style="display:flex;"><span>WARNING  `long_description_content_type` missing. defaulting to `text/x-rst`.                                                                                                
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0.tar.gz: PASSED
+</span></span></code></pre></div><p>Still, this is ERROR on <code>unexpected unindent</code> and WARNING.</p>
+<p>Following ERROR message, I removed indentation of leading spaces and tabs and got:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m build;twine check dist/*
 </span></span><span style="display:flex;"><span> ...
 </span></span><span style="display:flex;"><span>Successfully built sampleproject_osamu_debian_org-3.2.0.tar.gz and sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl
 </span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl: PASSED with warnings
 </span></span><span style="display:flex;"><span>WARNING  `long_description_content_type` missing. defaulting to `text/x-rst`.                                                                                                
 </span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0.tar.gz: PASSED
-</span></span></code></pre></div><p>Removing leading spaces and tabs only was not good enough.</p>
+</span></span></code></pre></div><p>Now this has no ERROR (just WARNING).  Good enough.</p>
+<p>Removing leading spaces and tabs only was not good enough.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m build;twine check dist/*
 </span></span><span style="display:flex;"><span> ...
 </span></span><span style="display:flex;"><span>Successfully built sampleproject_osamu_debian_org-3.2.0.tar.gz and sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl
@@ -261,7 +272,8 @@ GPL license text: <code>\</code>&hellip;&rsquo;` and removed them but that didn&
 </span></span><span style="display:flex;"><span>         line 262: Warning: Inline interpreted text or phrase reference start-string without end-string.                                                                     
 </span></span><span style="display:flex;"><span>WARNING  `long_description_content_type` missing. defaulting to `text/x-rst`.                                                                                                
 </span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0.tar.gz: PASSED
-</span></span></code></pre></div><h2 id="note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</h2>
+</span></span></code></pre></div><p>This is again ERROR on different type <code> start-string without end-string</code> and WARNING.</p>
+<h2 id="note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</h2>
 <p>Initially, Packaging Python Projects didn&rsquo;t give me easy path to package shell
 command <code>git-ime</code>, manpages, &hellip;  into pipy.org compatible wheel package, I
 looked around how others do.</p>
