@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/03 (initial publish),
-2024/02/13 (last update)
+2024/02/14 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00063.md
@@ -130,12 +130,15 @@ are still actively updated to catch up with the new style to use
 <p>The source for the debian deb-package is at <code>debian</code> branch.</p>
 <h2 id="key-point-for-successful-upload">Key point for successful upload</h2>
 <p>Use of <code>twine check dist/*</code> was good way to get it acceptable to pypi.org .</p>
-<p>Please note <code>pyproject.toml</code> needed to do the following:</p>
-<pre tabindex="0"><code>...
-## The following needed to be commented out to work with &#34;twine check&#34;
-#license = {file = &#34;LICENSE&#34;}
-...
-</code></pre><h2 id="pypiorg-package-upload-procedures">Pypi.org package upload procedures</h2>
+<p>Please note that the LICENSE file needs to be not only a clean UTF-8 file but
+also remove some ASCII control characters (TAB, LF, CR are OK to be there But
+no FF = ^L like GPL2).</p>
+<ul>
+<li><a href="https://github.com/pypa/sampleproject/issues/209">https://github.com/pypa/sampleproject/issues/209</a></li>
+<li><a href="https://github.com/pypa/setuptools/issues/4033">https://github.com/pypa/setuptools/issues/4033</a></li>
+<li><a href="https://github.com/pypa/distutils/pull/213">https://github.com/pypa/distutils/pull/213</a></li>
+</ul>
+<h2 id="pypiorg-package-upload-procedures">Pypi.org package upload procedures</h2>
 <h3 id="python-virtual-environment">Python virtual environment</h3>
 <p>Create and start virtual environment in <code>~/.venv</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m venv ~/.venv
@@ -218,12 +221,15 @@ package for <code>imefiff</code> and itried to upload to test.pypi.org.</p>
 <p>I suppose I am doing something wrong: <a href="https://test.pypi.org/help/#description-content-type">Linked site for content-type</a>.</p>
 <p>I added <code>README.rst</code>.  No success.  Something other than use of <code>README.md</code> is causing this failure.</p>
 <h3 id="test-buildupload-of-known-good-package-and-its-variants">Test build/upload of known-good-package and its variants</h3>
+<p>NOTE: The real root cause of issue was the existance of FF codes in the GPL2 LICENSE file.
+See <a href="https://github.com/pypa/sampleproject/issues/209">https://github.com/pypa/sampleproject/issues/209</a></p>
+<p>&ndash; HISTORICAL INFO &ndash;</p>
 <p>I went back to the <a href="https://packaging.python.org/en/latest/tutorials/packaging-projects/">Packaging Python
 Projects</a>
 and a test upload of the example
 <a href="https://github.com/pypa/sampleproject">sampleproject</a> after required
 modifications went flawlessly.</p>
-<p>I replaced <code>LICENSE.txt</code> with GPL LICENSE file content from <code>imediff</code> a,d test
+<p>I replaced <code>LICENSE.txt</code> with GPL LICENSE file content from <code>imediff</code> and test
 build it and failed as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m build;twine check dist/*
 </span></span><span style="display:flex;"><span> ...
