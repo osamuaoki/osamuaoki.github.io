@@ -272,7 +272,15 @@ and removed them as first check.</p>
 </span></span><span style="display:flex;"><span>         line 262: Warning: Inline interpreted text or phrase reference start-string without end-string.                                                                     
 </span></span><span style="display:flex;"><span>WARNING  `long_description_content_type` missing. defaulting to `text/x-rst`.                                                                                                
 </span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0.tar.gz: PASSED
-</span></span></code></pre></div><p>This is again ERROR on different type <code> start-string without end-string</code> and WARNING.</p>
+</span></span></code></pre></div><p>This is again ERROR on different type <code>start-string without end-string</code> and WARNING.</p>
+<p>Simply commenting out <code>license = &quot;LICENSE.txt&quot;</code> line in <code>pyproject.toml</code>
+cleanly fixes as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ python3 -m build;twine check dist/*
+</span></span><span style="display:flex;"><span> ...
+</span></span><span style="display:flex;"><span>Successfully built sampleproject_osamu_debian_org-3.2.0.tar.gz and sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0-py3-none-any.whl: PASSED
+</span></span><span style="display:flex;"><span>Checking dist/sampleproject_osamu_debian_org-3.2.0.tar.gz: PASSED
+</span></span></code></pre></div><p>Resulting <code>METADATA</code> doesn&rsquo;t contain copy of &ldquo;LICENSE.txt&rdquo;, of course.</p>
 <h2 id="note-on-packaging-shell-command-git-ime-manpages-">Note on packaging shell command <code>git-ime</code>, manpages, &hellip;</h2>
 <p>Initially, Packaging Python Projects didn&rsquo;t give me easy path to package shell
 command <code>git-ime</code>, manpages, &hellip;  into pipy.org compatible wheel package, I
