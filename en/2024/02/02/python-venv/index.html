@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/02 (initial publish),
-2024/02/11 (last update)
+2024/02/14 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00062.md
@@ -65,6 +65,7 @@ en/note-00062.md
 <nav id="TableOfContents">
   <ul>
     <li><a href="#python-virtual-environment">Python virtual environment</a></li>
+    <li><a href="#helper">Helper</a></li>
   </ul>
 </nav>
 
@@ -86,6 +87,23 @@ etc. and no new packages were installed in <code>~/.venv</code>.</p>
 <p>Anyway, I now know how to activate and deactivate python virtual environment.</p>
 <p>My motivation to use <code>venv</code> was to get the latest <code>twine</code> for pypi.org upload.
 It turned out that the system <code>twine</code> was new enough for pypi.org.</p>
+<h2 id="helper">Helper</h2>
+<p>I added followings to my <code>~/.bashrc</code> for the moment:</p>
+<pre tabindex="0"><code># create python venv @ $1
+venv-create () {
+  python3 -m venv $1
+}
+
+# activate python venv @ $1
+venv-activate() {
+  source $1/bin/activate
+}
+
+# update python venv
+venv-update () {
+  pip list --outdated |tail -n +3|cut -d &#39; &#39; -f 1|xargs -n1 pip install -U
+}
+</code></pre><p>Let me see if they are useful.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
