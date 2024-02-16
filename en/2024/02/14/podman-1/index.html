@@ -65,7 +65,7 @@ en/note-00064.md
 <nav id="TableOfContents">
   <ul>
     <li><a href="#podman-and-docker-cli"><code>podman</code> and <code>docker</code> CLI</a></li>
-    <li><a href="#padman-cli-basics"><code>padman</code> CLI basics</a>
+    <li><a href="#podman-cli-basics"><code>podman</code> CLI basics</a>
       <ul>
         <li><a href="#run-command-in-container-and-exit">Run command in container and exit</a></li>
         <li><a href="#run-command-in-container-with-redirect-and-exit">Run command in container with redirect and exit</a></li>
@@ -74,17 +74,30 @@ en/note-00064.md
         <li><a href="#remove-exited-container-images">Remove exited container images</a></li>
         <li><a href="#remove-all-container-images-2">Remove all container images (2)</a></li>
         <li><a href="#use-case-1">Use case (1)</a></li>
+        <li><a href="#use-case-2">Use case (2)</a></li>
       </ul>
     </li>
+    <li><a href="#dockerfile"><code>Dockerfile</code></a></li>
+    <li><a href="#docker-tutorial-resources">Docker tutorial resources</a></li>
   </ul>
 </nav>
 
 <p>Here is a series of memos of me trying to use <code>podman</code> on Debian 12 (<code>bookworm</code>).</p>
+<p>LXD (Incus) is a good platform for the system container as I tried in:</p>
+<ul>
+<li><a href="/en/2023/10/11/lxc-1/">Container with LXC/LXD (1)</a></li>
+<li><a href="/en/2023/11/12/lxc-2/">Container with LXC/LXD (2)</a></li>
+<li><a href="/en/2023/11/13/lxc-3/">Container with LXC/LXD (3)</a></li>
+<li><a href="/en/2023/11/14/lxc-4/">Container with LXC/LXD (4)</a></li>
+<li><a href="/en/2023/11/15/lxc-5/">Container with LXC/LXD (5)</a></li>
+</ul>
+<p>The <code>docker</code> command still is the de facto standard for the application
+container.  This lead me to try <code>podman</code>.</p>
 <h2 id="podman-and-docker-cli"><code>podman</code> and <code>docker</code> CLI</h2>
-<p>Basically <code>podman</code> CLI syntax is exactly the same as the <code>docker</code> one except
-for the command name itself from user&rsquo;s perspective.  By installing
-<code>podman-docker</code> package, you can even use the <code>docker</code> as the command to start
-<code>podman</code> command.</p>
+<p>Basically <code>podman</code> CLI syntax and its functionalities are exactly the same as
+the <code>docker</code> ones except for the command name itself from user&rsquo;s perspective.
+By installing <code>podman-docker</code> package, you can even use the <code>docker</code> as the
+command to start <code>podman</code> command.</p>
 <p>Here, you need to make 2 subtle adjustments:</p>
 <ul>
 <li>Install <code>docker-compose</code> to manage <code>docker</code> containers using the YAML file.</li>
@@ -101,7 +114,7 @@ situation as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ zcat /usr/share/man/man1/docker.1.gz
 </span></span><span style="display:flex;"><span>.so man1/podman.1
 </span></span></code></pre></div><p>So many tutorial resources for <code>docker</code> can be used for <code>podman</code>.</p>
-<h2 id="padman-cli-basics"><code>padman</code> CLI basics</h2>
+<h2 id="podman-cli-basics"><code>podman</code> CLI basics</h2>
 <h3 id="run-command-in-container-and-exit">Run command in container and exit</h3>
 <p>A docker image with its alias <code>debian</code> is used.</p>
 <p>Many aliases are defined in <code>/etc/containers/registries.conf.d/shortnames.conf</code></p>
@@ -157,9 +170,11 @@ situation as:</p>
 </span></span><span style="display:flex;"><span> $ docker rm -a -f
 </span></span><span style="display:flex;"><span>6d39687d03a39fac31ccfd1b9d0e0860145a3d22115918ca318544705726adb2
 </span></span></code></pre></div><h3 id="use-case-1">Use case (1)</h3>
-<p>Let&rsquo;s see the <a href="https://github.com/pypa/sampleproject/issues/209#issuecomment-1941301342"><code>docker</code> use case in #209 #</a>.</p>
+<p>Let&rsquo;s see the <a href="https://github.com/pypa/sampleproject/issues/209#issuecomment-1941301342"><code>docker</code> use case in issue #209</a>.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ docker run --rm -it python:3.12-bookworm /bin/bash
-</span></span></code></pre></div><ul>
+</span></span><span style="display:flex;"><span> ...
+</span></span></code></pre></div><p>Here:</p>
+<ul>
 <li><code>--rm</code>:  Automatically remove the container when it exits.</li>
 <li><code>-t</code>, <code>--tty</code>: Allocate a pseudo-TTY
 <ul>
@@ -169,8 +184,62 @@ situation as:</p>
 <li><code>3.12-bookworm</code>: docker-reference
 <a href="https://hub.docker.com/layers/library/python/3.12/images/sha256-cfc49784f7560a8f47b5456020b32182e45fa300e5b22bd3a84c5baac8e53a86?context=explore&amp;tab=vulnerabilities">3.12-bookworm</a></li>
 </ul>
+<p>This is interesting way to have exact same working environment among different people.</p>
+<h3 id="use-case-2">Use case (2)</h3>
+<p>Let&rsquo;s share data on disk between inside and outside of the container.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ touch file1
+</span></span><span style="display:flex;"><span> $ date -u &gt;date-file
+</span></span><span style="display:flex;"><span> $ ls -l
+</span></span><span style="display:flex;"><span>total 4
+</span></span><span style="display:flex;"><span>-rw-rw-r-- 1 osamu osamu 32 Feb 16 16:52 date-file
+</span></span><span style="display:flex;"><span>-rw-rw-r-- 1 osamu osamu  0 Feb 16 16:51 file1
+</span></span><span style="display:flex;"><span> $ docker run -it --rm -w /root -v .:/root/cwd -e FOOBAR=foobar debian bash
+</span></span><span style="display:flex;"><span>root@9304d84d2e7a:~# pwd
+</span></span><span style="display:flex;"><span>/root
+</span></span><span style="display:flex;"><span>root@9304d84d2e7a:~# echo $FOOBAR
+</span></span><span style="display:flex;"><span>foobar
+</span></span><span style="display:flex;"><span>root@9304d84d2e7a:~# ls -la
+</span></span><span style="display:flex;"><span>total 8
+</span></span><span style="display:flex;"><span>drwx------ 1 root root  36 Feb 16 08:23 .
+</span></span><span style="display:flex;"><span>dr-xr-xr-x 1 root root 132 Feb 15 07:50 ..
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 571 Apr 10  2021 .bashrc
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 161 Jul  9  2019 .profile
+</span></span><span style="display:flex;"><span>drwxrwxr-x 1 root root  50 Feb 16 08:03 cwd
+</span></span><span style="display:flex;"><span>root@9304d84d2e7a:~# cd cwd
+</span></span><span style="display:flex;"><span>root@9304d84d2e7a:~/cwd# ls -l
+</span></span><span style="display:flex;"><span>total 4
+</span></span><span style="display:flex;"><span>-rw-rw-r-- 1 root root 32 Feb 16 07:52 date-file
+</span></span><span style="display:flex;"><span>-rw-rw-r-- 1 root root  0 Feb 16 07:51 file1
+</span></span><span style="display:flex;"><span>root@9304d84d2e7a:~/cwd# date -u &gt;&gt;date-file
+</span></span><span style="display:flex;"><span>root@9304d84d2e7a:~/cwd# touch file2
+</span></span><span style="display:flex;"><span>root@9304d84d2e7a:~/cwd# (Control-D pressed)
+</span></span><span style="display:flex;"><span>exit
+</span></span><span style="display:flex;"><span> $ ls -l
+</span></span><span style="display:flex;"><span>total 4
+</span></span><span style="display:flex;"><span>-rw-rw-r-- 1 osamu osamu 61 Feb 16 16:55 date-file
+</span></span><span style="display:flex;"><span>-rw-rw-r-- 1 osamu osamu  0 Feb 16 16:51 file1
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 osamu osamu  0 Feb 16 16:55 file2
+</span></span><span style="display:flex;"><span> $ cat date-file
+</span></span><span style="display:flex;"><span>Fri Feb 16 07:52:16 AM UTC 2024
+</span></span><span style="display:flex;"><span>Fri Feb 16 07:55:11 UTC 2024
+</span></span></code></pre></div><p>Here:</p>
+<ul>
+<li><code>-w=/root</code>: set working directory inside the container to <code>/root</code> (without this, working directory is <code>/</code>.).</li>
+<li><code>-v /HOST-DIR:/CONTAINER-DIR</code>: bind-mount <code>/HOST-DIR</code> from the host into <code>/CONTAINER-DIR</code> in the  container.</li>
+<li><code>-e var=value</code>: set environment variable <code>var</code> to <code>value</code>.</li>
+</ul>
+<h2 id="dockerfile"><code>Dockerfile</code></h2>
+<p>Somehow, <code>man Dockerfile</code> doesn&rsquo;t provide anything in my setup.
+<code>Containerfile</code>(5) and <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile reference</a> need to be consulted.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="docker-tutorial-resources">Docker tutorial resources</h2>
+<ul>
+<li><a href="https://awesome-docker.netlify.app/">Awesome-docker</a> &ndash; A curated list of Docker resources and projects</li>
+<li><a href="https://docker-curriculum.com/">Docker for beginners</a> &ndash; Build and deploy example of a simple Webapps</li>
+</ul>
 <!-- raw HTML omitted -->
 
 
