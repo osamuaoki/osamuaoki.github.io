@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/14 (initial publish),
-2024/02/15 (last update)
+2024/02/16 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00064.md
@@ -50,7 +50,7 @@ en/note-00064.md
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2024/02/02/python-venv/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2024/02/03/python-pypi/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
@@ -69,10 +69,11 @@ en/note-00064.md
       <ul>
         <li><a href="#run-command-in-container-and-exit">Run command in container and exit</a></li>
         <li><a href="#run-command-in-container-with-redirect-and-exit">Run command in container with redirect and exit</a></li>
-        <li><a href="#remove-all-images-1">Remove all images (1)</a></li>
+        <li><a href="#remove-all-container-images-1">Remove all container images (1)</a></li>
         <li><a href="#run-daemon-in-container-and-access-from-host">Run daemon in container and access from host</a></li>
         <li><a href="#remove-exited-container-images">Remove exited container images</a></li>
         <li><a href="#remove-all-container-images-2">Remove all container images (2)</a></li>
+        <li><a href="#use-case-1">Use case (1)</a></li>
       </ul>
     </li>
   </ul>
@@ -126,7 +127,7 @@ situation as:</p>
 </span></span><span style="display:flex;"><span>CONTAINER ID  IMAGE                            COMMAND               CREATED         STATUS                     PORTS       NAMES
 </span></span><span style="display:flex;"><span>5d8751ada416  docker.io/library/debian:latest  cat /etc/os-relea...  54 seconds ago  Exited (0) 54 seconds ago              inspiring_dhawan
 </span></span><span style="display:flex;"><span>f760a3bbe471  docker.io/library/debian:latest  sed -e s/o/e/g        5 seconds ago   Exited (0) 5 seconds ago               bar
-</span></span></code></pre></div><h3 id="remove-all-images-1">Remove all images (1)</h3>
+</span></span></code></pre></div><h3 id="remove-all-container-images-1">Remove all container images (1)</h3>
 <p>Let&rsquo;s remove all containers.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ podman rm -a
 </span></span><span style="display:flex;"><span>...
@@ -143,34 +144,41 @@ situation as:</p>
 </span></span></code></pre></div><p>Now, pointing a browser on the host to <code>http://127.0.0.1:8080/</code> displays
 &ldquo;Welcome to nginx!&rdquo;.</p>
 <h3 id="remove-exited-container-images">Remove exited container images</h3>
-<pre tabindex="0"><code> $ docker ps -a
-CONTAINER ID  IMAGE                            COMMAND               CREATED         STATUS                     PORTS                 NAMES
-6d39687d03a3  docker.io/library/nginx:latest   nginx -g daemon o...  43 minutes ago  Up 43 minutes ago          0.0.0.0:8080-&gt;80/tcp  nginx
-419631630b1c  docker.io/library/debian:latest  cat /etc/hostname     7 seconds ago   Exited (0) 6 seconds ago                         zen_jepsen
- $ docker rm $(docker ps -a -q -f status=exited)
-419631630b1c
-</code></pre><h3 id="remove-all-container-images-2">Remove all container images (2)</h3>
-<pre tabindex="0"><code> $ docker rm -a
-Error: cannot remove container 6d39687d03a39fac31ccfd1b9d0e0860145a3d22115918ca318544705726adb2 as it is running - running or paused containers cannot be removed without force: container state improper
-osamu@goofy:/etc/containers/registries.conf.d 23:44:40
- $ docker rm -a -f
-6d39687d03a39fac31ccfd1b9d0e0860145a3d22115918ca318544705726adb2
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ docker ps -a
+</span></span><span style="display:flex;"><span>CONTAINER ID  IMAGE                            COMMAND               CREATED         STATUS                     PORTS                 NAMES
+</span></span><span style="display:flex;"><span>6d39687d03a3  docker.io/library/nginx:latest   nginx -g daemon o...  43 minutes ago  Up 43 minutes ago          0.0.0.0:8080-&gt;80/tcp  nginx
+</span></span><span style="display:flex;"><span>419631630b1c  docker.io/library/debian:latest  cat /etc/hostname     7 seconds ago   Exited (0) 6 seconds ago                         zen_jepsen
+</span></span><span style="display:flex;"><span> $ docker rm $(docker ps -a -q -f status=exited)
+</span></span><span style="display:flex;"><span>419631630b1c
+</span></span></code></pre></div><h3 id="remove-all-container-images-2">Remove all container images (2)</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ docker rm -a
+</span></span><span style="display:flex;"><span>Error: cannot remove container 6d39687d03a39fac31ccfd1b9d0e0860145a3d22115918ca318544705726adb2 as it is running - running or paused containers cannot be removed without force: container state improper
+</span></span><span style="display:flex;"><span>osamu@goofy:/etc/containers/registries.conf.d 23:44:40
+</span></span><span style="display:flex;"><span> $ docker rm -a -f
+</span></span><span style="display:flex;"><span>6d39687d03a39fac31ccfd1b9d0e0860145a3d22115918ca318544705726adb2
+</span></span></code></pre></div><h3 id="use-case-1">Use case (1)</h3>
+<p>Let&rsquo;s see the <a href="https://github.com/pypa/sampleproject/issues/209#issuecomment-1941301342"><code>docker</code> use case in #209 #</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ docker run --rm -it python:3.12-bookworm /bin/bash
+</span></span></code></pre></div><ul>
+<li><code>--rm</code>:  Automatically remove the container when it exits.</li>
+<li><code>-t</code>, <code>--tty</code>: Allocate a pseudo-TTY
+<ul>
+<li>The  <code>--tty</code> flag prevents redirection of standard output.</li>
+</ul>
+</li>
+<li><code>3.12-bookworm</code>: docker-reference
+<a href="https://hub.docker.com/layers/library/python/3.12/images/sha256-cfc49784f7560a8f47b5456020b32182e45fa300e5b22bd3a84c5baac8e53a86?context=explore&amp;tab=vulnerabilities">3.12-bookworm</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 
-
-&lt;!--
- https://docker-curriculum.com/#static-sites
- https://www.server-world.info/en/note?os=Debian_12&amp;p=podman&amp;f=1
- https://www.rosehosting.com/blog/how-to-install-podman-on-debian-12/
- --&gt;
-
-&lt;!-- vim:set sw=4 sts=4 nosi et tw=79 ft=markdown: --&gt;
-</code></pre>
 
 <table width="100%">
   <tbody>
   <tr>
   
-  <td align="left" width="33%"><a href="/en/2024/02/02/python-venv/">Previous Post</a></td>
+  <td align="left" width="33%"><a href="/en/2024/02/03/python-pypi/">Previous Post</a></td>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
