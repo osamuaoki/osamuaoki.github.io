@@ -78,7 +78,8 @@ en/note-00064.md
       </ul>
     </li>
     <li><a href="#dockerfile"><code>Dockerfile</code></a></li>
-    <li><a href="#docker-tutorial-resources">Docker tutorial resources</a></li>
+    <li><a href="#references">References</a></li>
+    <li><a href="#note-on-directory-usage-of-podman">Note on directory usage of <code>podman</code></a></li>
   </ul>
 </nav>
 
@@ -102,7 +103,8 @@ container.</p>
 <li>lxc: 1</li>
 <li>lxd: 1</li>
 </ul>
-<p>Despite this, I decided to try <a href="https://docs.podman.io/en/latest/">podman</a>.</p>
+<p>Despite this, I decided to try <a href="https://docs.podman.io/en/latest/">podman</a> as
+the next tool to play with.</p>
 <h2 id="podman-and-docker-cli"><code>podman</code> and <code>docker</code> CLI</h2>
 <p>Basically <code>podman</code> CLI syntax and its functionalities are exactly the same as
 the <code>docker</code> ones except for the command name itself from user&rsquo;s perspective.
@@ -240,16 +242,34 @@ situation as:</p>
 </ul>
 <h2 id="dockerfile"><code>Dockerfile</code></h2>
 <p>Somehow, <code>man Dockerfile</code> doesn&rsquo;t provide anything in my setup.
-<code>Containerfile</code>(5) and <a href="https://docs.docker.com/engine/reference/builder/">Dockerfile reference</a> need to be consulted.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<h2 id="docker-tutorial-resources">Docker tutorial resources</h2>
+<code>podman-build</code>(1), <code>Containerfile</code>(5) and
+<a href="https://docs.docker.com/engine/reference/builder/">Dockerfile reference</a> need to be consulted.</p>
+<h2 id="references">References</h2>
 <ul>
+<li><a href="https://podman.io/docs">Getting Started with Podman</a></li>
+<li><a href="https://docs.podman.io/en/latest/index.html">What is Podman</a>
+<ul>
+<li><a href="https://docs.podman.io/en/latest/Introduction.html">Introduction</a></li>
+<li><a href="https://docs.podman.io/en/latest/Tutorials.html">Tutorials</a></li>
+</ul>
+</li>
 <li><a href="https://awesome-docker.netlify.app/">Awesome-docker</a> &ndash; A curated list of Docker resources and projects</li>
 <li><a href="https://docker-curriculum.com/">Docker for beginners</a> &ndash; Build and deploy example of a simple Webapps</li>
 </ul>
+<h2 id="note-on-directory-usage-of-podman">Note on directory usage of <code>podman</code></h2>
+<p>Directory name under <code>~/.local/share/containers/storage/</code> directory:</p>
+<ul>
+<li><code>vfs-images/</code>: directory listed by <code>podman image list -a</code></li>
+<li><code>vfs-containers/</code>: directory listed by <code>podman container list -a</code></li>
+<li><code>volumes/</code>: directory listed by <code>podman volume list</code></li>
+<li><code>vfs/</code>: ? (FS for overlay)</li>
+<li><code>vfs-layers/</code>: ? (<code>tar-split.gz</code> containing data such as
+<code>{&quot;type&quot;:1,&quot;name&quot;:&quot;var/log/apt/&quot;,&quot;payload&quot;:null,&quot;position&quot;:7007}</code>)</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
