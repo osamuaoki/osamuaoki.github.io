@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>ansible (1) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">ansible (1)</span></h1>
+
+<h3 class="date">Date:
+2024/02/17 (initial publish),
+2024/02/19 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00065.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/02/14/podman-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#installation-of-ansible">Installation of Ansible</a></li>
+    <li><a href="#what-is-ansible">What is Ansible</a>
+      <ul>
+        <li><a href="#ansible1-and-ansible-playbook1-cli"><code>ansible</code>(1) and <code>ansible-playbook</code>(1) CLI</a></li>
+      </ul>
+    </li>
+    <li><a href="#create-template-ansiblecfg">Create template <code>ansible.cfg</code></a></li>
+    <li><a href="#create-inventory-with-localhost">Create inventory with <code>localhost</code></a></li>
+    <li><a href="#learn-to-use-playbook">Learn to use Playbook</a>
+      <ul>
+        <li><a href="#playbook-to-install-screen">Playbook to install &ldquo;screen&rdquo;</a></li>
+        <li><a href="#playbook-to-install-screen-again">Playbook to install &ldquo;screen&rdquo; again</a></li>
+        <li><a href="#why-not-to-use-latest">Why not to use &ldquo;latest&rdquo;</a></li>
+        <li><a href="#playbook-to-install-multiple-packages-1">Playbook to install multiple packages (1)</a></li>
+        <li><a href="#playbook-to-install-multiple-packages-2">Playbook to install multiple packages (2)</a></li>
+      </ul>
+    </li>
+    <li><a href="#ansible-roles-and-tags">Ansible roles and tags</a></li>
+  </ul>
+</nav>
+
+<p>I realize that it is about time to getting organized for my system setup in a
+way better than making notes and writing shell scripts.</p>
+<p>I decided to deploy <a href="https://docs.ansible.com/">Ansible</a> for localhost only
+with CLI to help me get organized and learn Ansible.</p>
+<p>Since upstream <a href="https://docs.ansible.com/">Ansible documentation</a> address more
+generic remote host usages and is too much to digest, this memo should be a
+good minimal use case to get me started.  (Somehow, it is sometimes easier to
+look into the Python module directory to understand how to use <code>ansible</code>.)</p>
+<h2 id="installation-of-ansible">Installation of Ansible</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sudo apt update
+</span></span><span style="display:flex;"><span>$ sudo apt install ansible ansible-lint
+</span></span></code></pre></div><h2 id="what-is-ansible">What is Ansible</h2>
+<p>Ansible is an IT Automation Platform which uses declarative configuration file
+called Playbooks.</p>
+<p>Ansible Playbooks are lists of tasks that automatically execute for your
+specified inventory.</p>
+<p>Here:</p>
+<ul>
+<li>Inventory &ndash; groups of hosts</li>
+<li>Playbook &ndash; ordered list of play</li>
+<li>Play &ndash; ordered list of tasks</li>
+<li>Task &ndash; executed by associated modules written in Python</li>
+</ul>
+<p>Ansible Playbook can also be a
+<a href="https://www.redhat.com/en/topics/automation/what-is-an-ansible-role">Roles—bundles of tasks</a>.
+That is addressed later.</p>
+<h3 id="ansible1-and-ansible-playbook1-cli"><code>ansible</code>(1) and <code>ansible-playbook</code>(1) CLI</h3>
+<p>Key difference of <code>ansible</code>(1) and <code>ansible-playbook</code>(1) is their target.</p>
+<p>The <code>ansible</code>(1) command operates on <code>host_name_pattern</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible host_name_pattern
+</span></span><span style="display:flex;"><span> ...
+</span></span></code></pre></div><p>The <code>ansible-playbook</code>(1) command operates on one or more Playbook as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible-playbook playbook1 <span style="color:#f92672">[</span>playbook2 ...<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span> ...
+</span></span></code></pre></div><h2 id="create-template-ansiblecfg">Create template <code>ansible.cfg</code></h2>
+<p>Let me create template <code>ansible.cfg</code> with
+<a href="https://docs.ansible.com/ansible/latest/cli/ansible-config.html">ansible-config</a>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ cd /path/to/ansible-config-data/
+</span></span><span style="display:flex;"><span>$ ansible-config init &gt;ansible.cfg
+</span></span></code></pre></div><p>Let&rsquo;s keep the working directory placed on <code>/path/to/ansible-config-data/</code> from
+here on.</p>
+<h2 id="create-inventory-with-localhost">Create inventory with <code>localhost</code></h2>
+<p>Update <code>ansible.cfg</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sed -i -e <span style="color:#e6db74">&#39;/^;inventory/s/^*$/inventory=inventory.yml&#39;</span> ansible.cfg
+</span></span></code></pre></div><p>Let&rsquo;s create simplest possible <code>inventory.yml</code> to define groups of hosts
+on which <code>ansible</code> operates as:</p>
+<pre tabindex="0"><code>---
+all:
+  hosts:
+    localhost:
+</code></pre><p>(This is <code>localhost</code> only.)</p>
+<p>This helps to quiet &ldquo;[WARNING]&rdquo; when you execute following playbook examples.
+It&rsquo;s content requirement is found in
+<code>/usr/lib/python3/dist-packages/ansible/plugins/inventory/yaml.py</code> as:</p>
+<ul>
+<li>&ldquo;YAML-based inventory, should start with the C(all) group and contain hosts/vars/children entries.&rdquo;</li>
+<li>Host entries can have sub-entries defined, which will be treated as variables.</li>
+<li>Vars entries are normal group vars.</li>
+<li>&ldquo;Children are &lsquo;child groups&rsquo;, which can also have their own vars/hosts/children and so on.&rdquo;</li>
+<li>File MUST have a valid extension, defined in configuration.</li>
+</ul>
+<h2 id="learn-to-use-playbook">Learn to use Playbook</h2>
+<p>Let&rsquo;s learn playbook first with APT operation.</p>
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html">ansible.builtin.apt module</a></li>
+</ul>
+<h3 id="playbook-to-install-screen">Playbook to install &ldquo;screen&rdquo;</h3>
+<p>Here is an example playbook <code>pb_screen.yml</code> to install &ldquo;screen&rdquo; package.</p>
+<pre tabindex="0"><code>---
+- name: Example for ansible.builtin.apt with screen
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Install &#34;screen&#34; package
+      ansible.builtin.apt:
+        name: screen
+        state: present
+</code></pre><p>This playbook consists of 1 play and contains a single task definition which
+uses <code>ansible.builtin.apt</code> module.</p>
+<p>The module executable itself is written in Python.</p>
+<p>Let&rsquo;s run this playbook on the localhost without &ldquo;screen&rdquo; package:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible-playbook pb_screen.yml
+</span></span><span style="display:flex;"><span>PLAY [Example for ansible.builtin.apt with screen] *******************************
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Install &#34;screen&#34; package] **************************************************
+</span></span><span style="display:flex;"><span>changed: [localhost]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY RECAP ***********************************************************************
+</span></span><span style="display:flex;"><span>localhost                  : ok=1    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+</span></span></code></pre></div><p>So package is installed and system is changed.</p>
+<h3 id="playbook-to-install-screen-again">Playbook to install &ldquo;screen&rdquo; again</h3>
+<p>Let&rsquo;s run the same playbook again:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible-playbook pb_screen.yml
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY [Example for ansible.builtin.apt with screen] *******************************
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Install &#34;screen&#34; package] **************************************************
+</span></span><span style="display:flex;"><span>ok: [localhost]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY RECAP ***********************************************************************
+</span></span><span style="display:flex;"><span>localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
+</span></span></code></pre></div><p>Package is not installed and system is unchanged. This behavior is what its
+<a href="https://docs.ansible.com/ansible/latest/reference_appendices/glossary.html#term-Idempotency">idempotency</a>
+guarantee.</p>
+<h3 id="why-not-to-use-latest">Why not to use &ldquo;latest&rdquo;</h3>
+<p>It&rsquo;s tempting to change from &ldquo;present&rdquo; to &ldquo;latest&rdquo; in this example playbook to
+ensure updated version for &ldquo;screen&rdquo;.  But it is not a good idea.  It can be
+verified with <a href="https://ansible.readthedocs.io/projects/lint/">ansible-lint</a>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sed -i <span style="color:#e6db74">&#39;s/present/latest/&#39;</span> pb_screen.yml
+</span></span><span style="display:flex;"><span>$ ansible-lint pb_screen.yml
+</span></span><span style="display:flex;"><span>WARNING  Listing 1 violation(s) that are fatal
+</span></span><span style="display:flex;"><span>package-latest: Package installs should not use latest.
+</span></span><span style="display:flex;"><span>pb_screen.yml:8 Task/Handler: Install &#34;screen&#34; package
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Read documentation for instructions on how to ignore specific rule violations.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>              Rule Violation Summary
+</span></span><span style="display:flex;"><span> count tag            profile rule associated tags
+</span></span><span style="display:flex;"><span>     1 package-latest safety  idempotency
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Failed after moderate profile, 2/5 star rating: 1 failure(s), 0 warning(s) on 1 files.
+</span></span></code></pre></div><p>The key word is its tag &ldquo;package-latest&rdquo;.  Its long explanation can be found
+under its module directory <code>/usr/lib/python3/dist-packages/ansiblelint/rules</code>
+as markdown files or on
+<a href="https://ansible.readthedocs.io/projects/lint/rules/">Ansible Lint Documentation: Rules</a>.</p>
+<h3 id="playbook-to-install-multiple-packages-1">Playbook to install multiple packages (1)</h3>
+<p>Here is another example playbook <code>pb_many.yml</code> to upgrade, install, and remove packages.</p>
+<pre tabindex="0"><code>---
+- name: Example for ansible.builtin.apt with many packages
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Update the whole system
+      ansible.builtin.apt:
+        upgrade: safe
+    - name: Install packages
+      ansible.builtin.apt:
+        name: [&#34;screen&#34;, &#34;sudo&#34;]
+        state: present
+    - name: Install more packages
+      ansible.builtin.apt:
+        name:
+          - mc
+          - aptitude
+          - vim
+        state: present
+    - name: Remove packages
+      ansible.builtin.apt:
+        name: [&#34;nano&#34;]
+        state: absent
+</code></pre><p>This playbook consists of 1 play and contains 3 task definitions all of which
+use <code>ansible.builtin.apt</code> module.</p>
+<p>Here, 2 style of YAML lists are used.  Both works fine.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible-playbook pb_many.yml 
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY [Example for ansible.builtin.apt with many packages] **********************
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Update the whole system] *************************************************
+</span></span><span style="display:flex;"><span>ok: [localhost]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Install packages] ********************************************************
+</span></span><span style="display:flex;"><span>ok: [localhost]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Install more packages] ***************************************************
+</span></span><span style="display:flex;"><span>ok: [localhost]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Remove packages] *********************************************************
+</span></span><span style="display:flex;"><span>ok: [localhost]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY RECAP *********************************************************************
+</span></span><span style="display:flex;"><span>localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+</span></span></code></pre></div><h3 id="playbook-to-install-multiple-packages-2">Playbook to install multiple packages (2)</h3>
+<p>Here is another example playbook <code>pb_many_vars.yml</code> to upgrade, install, and remove packages.</p>
+<pre tabindex="0"><code>---
+- name: Example for ansible.builtin.apt with many packages
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  become: true
+  vars:
+    package_name:
+      - screen
+      - sudo
+      - mc
+      - aptitude
+      - vim
+  tasks:
+    - name: Update the whole system
+      ansible.builtin.apt:
+        upgrade: safe
+    - name: Install packages listed in package_name
+      ansible.builtin.apt:
+        name: &#34;{{ package_name }}&#34;
+        state: present
+    - name: Remove packages
+      ansible.builtin.apt:
+        name: [&#34;nano&#34;]
+        state: absent
+</code></pre><p>This playbook consists of 1 play and contains 1 list variable definition for
+<code>package_name</code> and 3 task definitions all of which use <code>ansible.builtin.apt</code>
+module.</p>
+<p>Here,
+<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html">playbook variable</a>
+substitution.  Be careful for the use of quotation marks.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible-playbook pb_many_vars.yml 
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY [Example for ansible.builtin.apt with many packages] **********************
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Update the whole system] *************************************************
+</span></span><span style="display:flex;"><span>ok: [localhost]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Install packages listed in package_name] *********************************
+</span></span><span style="display:flex;"><span>ok: [localhost]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Remove packages] *********************************************************
+</span></span><span style="display:flex;"><span>ok: [localhost]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY RECAP *********************************************************************
+</span></span><span style="display:flex;"><span>localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+</span></span></code></pre></div><!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<h2 id="ansible-roles-and-tags">Ansible roles and tags</h2>
+<p>Writing one big playbook in the base directory is messy.</p>
+<p>The <a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks.html">playbook</a> can be organized using:</p>
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html">Blocks</a> &ndash; logical groups of tasks</li>
+<li><a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html">Roles</a> &ndash; let you automatically load related vars, files, tasks, handlers, and other Ansible artifacts based on a known file structure.</li>
+<li><a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html">Tags</a> &ndash; let you execute or skip selected tasks</li>
+</ul>
+<p>Using these, the <a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks.html">playbook</a> can be split into 4 types of independent files:</p>
+<ul>
+<li>variables files</li>
+<li>task files</li>
+<li>playbooks files</li>
+<li>roles files</li>
+</ul>
+<p>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse.html">Creating reusable files and roles</a>&rdquo; explains how to use these.</p>
+<p>** TBD **</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/02/14/podman-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
