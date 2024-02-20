@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ansible (2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Ansible (2)</span></h1>
+
+<h3 class="date">Date:
+2024/02/19 (initial publish),
+2024/02/20 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00066.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/02/17/ansible-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#searching-roles-in-ansible-galaxy-and-ansible-galaxy">Searching roles in Ansible Galaxy and <code>ansible-galaxy</code></a></li>
+    <li><a href="#creating-an-initial-system-setup-playbook">Creating an initial system setup playbook</a>
+      <ul>
+        <li><a href="#creating-a-full-project-template-with-ansible-galaxy">Creating a full project template with <code>ansible-galaxy</code></a></li>
+        <li><a href="#execute-shell-script">Execute shell script</a></li>
+        <li><a href="#copy-configuration-file">Copy configuration file</a></li>
+        <li><a href="#create-directory-with-file-module">Create directory with file module</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>Here is a series of memos of me trying to use ansible on Debian 12 (<code>bookworm</code>).</p>
+<h2 id="searching-roles-in-ansible-galaxy-and-ansible-galaxy">Searching roles in Ansible Galaxy and <code>ansible-galaxy</code></h2>
+<p><a href="https://galaxy.ansible.com/ui/">Ansible Galaxy</a> is a curation site for Ansible
+scripts.  They are offered in 2 formats:</p>
+<ul>
+<li><a href="https://galaxy.ansible.com/ui/standalone/roles/">Roles</a> &ndash; data downloaded as &ldquo;<code>git clone ...</code>&rdquo;.</li>
+<li><a href="https://galaxy.ansible.com/ui/collections/">Collections</a> &ndash; data downloaded in &ldquo;<code>*.tar.gz</code>&rdquo; format.</li>
+</ul>
+<p>Actual data seems to be comming from github.repository.</p>
+<p>They tend to address generic administration tasks on remote hosts and a bit
+complicated.  Let me use them as examples to learn Ansible.</p>
+<h2 id="creating-an-initial-system-setup-playbook">Creating an initial system setup playbook</h2>
+<p>Let me expand
+<a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a>
+to create an initial system setup playbook.
+.</p>
+<h3 id="creating-a-full-project-template-with-ansible-galaxy">Creating a full project template with <code>ansible-galaxy</code></h3>
+<p>Let&rsquo;s create a full project template with <code>ansible-galaxy</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd /path/to/ansible-config-data/
+</span></span><span style="display:flex;"><span> $ ansible-config init --disabled &gt;ansible.cfg
+</span></span><span style="display:flex;"><span> $ sed -i -e &#39;/^;inventory/s/^*$/inventory=inventory.yml/&#39; ansible.cfg
+</span></span><span style="display:flex;"><span> $ cat &gt;inventory.yml &lt;&lt; EOF
+</span></span><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>all:
+</span></span><span style="display:flex;"><span>  hosts:
+</span></span><span style="display:flex;"><span>    localhost:
+</span></span><span style="display:flex;"><span>      ansible_connection: local
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span> $ ansible-galaxy init roles/base
+</span></span></code></pre></div><p>This creates a source template.  Let&rsquo;s merge what was presented in
+<a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a> to this.</p>
+<pre tabindex="0"><code> $ tree
+.
+├── README.md
+├── ansible.cfg
+├── inventory.yml
+├── pb_main.yml
+└── roles
+    └── base
+        ├── README.md
+        ├── defaults
+        │   └── main.yml
+        ├── files
+        ├── handlers
+        │   └── main.yml
+        ├── meta
+        │   └── main.yml
+        ├── tasks
+        │   ├── install.yml
+        │   ├── main.yml
+        │   ├── remove.yml
+        │   └── upgrade.yml
+        ├── templates
+        ├── tests
+        │   ├── inventory
+        │   └── test.yml
+        └── vars
+            └── main.yml
+</code></pre><p>There are</p>
+<ul>
+<li>good old keys:<code>tasks</code>, <code>vars</code></li>
+<li>some new keys: <code>defaults</code>, <code>handlers</code>, and <code>meta</code></li>
+<li>some data file paths: <code>files</code>, <code>templates</code></li>
+<li>test project path: <code>tests</code></li>
+</ul>
+<h3 id="execute-shell-script">Execute shell script</h3>
+<p>** TBD **</p>
+<h3 id="copy-configuration-file">Copy configuration file</h3>
+<p>** TBD **</p>
+<h3 id="create-directory-with-file-module">Create directory with file module</h3>
+<p>** TBD **</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/02/17/ansible-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
