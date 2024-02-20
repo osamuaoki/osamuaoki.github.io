@@ -68,6 +68,7 @@ en/note-00066.md
     <li><a href="#creating-an-initial-system-setup-playbook">Creating an initial system setup playbook</a>
       <ul>
         <li><a href="#creating-a-full-project-template-with-ansible-galaxy">Creating a full project template with <code>ansible-galaxy</code></a></li>
+        <li><a href="#setup-apt-repository">Setup APT repository</a></li>
         <li><a href="#execute-shell-script">Execute shell script</a></li>
         <li><a href="#copy-configuration-file">Copy configuration file</a></li>
         <li><a href="#create-directory-with-file-module">Create directory with file module</a></li>
@@ -141,7 +142,51 @@ to create an initial system setup playbook.
 <li>some data file paths: <code>files</code>, <code>templates</code></li>
 <li>test project path: <code>tests</code></li>
 </ul>
-<h3 id="execute-shell-script">Execute shell script</h3>
+<h3 id="setup-apt-repository">Setup APT repository</h3>
+<p>Let&rsquo;s setup APT repository using deb822 format using:</p>
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/deb822_repository_module.html#ansible-collections-ansible-builtin-deb822-repository-module">ansible.builtin.deb822_repository module</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html#ansible-collections-ansible-builtin-file-module">ansible.builtin.file module</a></li>
+</ul>
+<p><code>apt_setup.yml</code>:</p>
+<pre tabindex="0"><code>---
+- name: Remove /etc/apt/sources.list
+  ansible.builtin.file:
+    path: /etc/apt/sources.list
+    state: absent
+
+- name: Set APT repository (debian)
+  ansible.builtin.deb822_repository:
+    name: debian
+    types:
+      - deb
+      - deb-src
+    uris: http://deb.debian.org/debian
+    suites:
+      - bookworm
+      - bookworm-updates
+      - bookworm-backports
+    components:
+      - main
+      - non-free-firmware
+      - contrib
+      - non-free
+
+- name: Set APT repository (debian-security)
+  ansible.builtin.deb822_repository:
+    name: debian-security
+    types:
+      - deb
+      - deb-src
+    uris: https://security.debian.org/debian-security/
+    suites:
+      - bookworm-security
+    components:
+      - main
+      - non-free-firmware
+      - contrib
+      - non-free
+</code></pre><h3 id="execute-shell-script">Execute shell script</h3>
 <p>** TBD **</p>
 <h3 id="copy-configuration-file">Copy configuration file</h3>
 <p>** TBD **</p>
