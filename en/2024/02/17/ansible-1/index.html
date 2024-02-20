@@ -230,7 +230,7 @@ as markdown files or on
   gather_facts: false
   become: true
   tasks:
-    - name: Update the whole system
+    - name: Upgrade the whole system
       ansible.builtin.apt:
         upgrade: safe
     - name: Install packages
@@ -255,7 +255,7 @@ use <code>ansible.builtin.apt</code> module.</p>
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY [Example for ansible.builtin.apt with many packages] **********************
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Update the whole system] *************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Upgrade the whole system] ************************************************
 </span></span><span style="display:flex;"><span>ok: [localhost]
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Install packages] ********************************************************
@@ -287,7 +287,7 @@ use <code>ansible.builtin.apt</code> module.</p>
     package_name_remove:
       - nano
   tasks:
-    - name: Update the whole system
+    - name: Upgrade the whole system
       ansible.builtin.apt:
         upgrade: safe
     - name: Install packages listed in package_name
@@ -308,7 +308,7 @@ substitution is used.  Be careful for the use of quotation marks.</p>
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY [Example for ansible.builtin.apt with many packages] **********************
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Update the whole system] *************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Upgrade the whole system] ************************************************
 </span></span><span style="display:flex;"><span>ok: [localhost]
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [Install packages listed in package_name] *********************************
