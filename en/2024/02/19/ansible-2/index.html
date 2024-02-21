@@ -126,7 +126,8 @@ example to create an initial system setup playbook.
 </span></span><span style="display:flex;"><span>EOF
 </span></span><span style="display:flex;"><span> $ ansible-galaxy init roles/base
 </span></span></code></pre></div><p>This creates a nice source template.  Let me merge what was presented in
-<a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a> to this template.</p>
+&ldquo;<a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a>&rdquo;
+to this template.</p>
 <pre tabindex="0"><code> $ tree
 .
 ├── README.md
@@ -229,10 +230,13 @@ can also be used to create files and directories and to set permissions on them.
 # No password for 8 hours
 #Defaults timestamp_timeout = 480
 #Defaults timestamp_type = global
-</code></pre><p>Here, files stored under <code>roles/base/files</code> are copied to the remote system.</p>
+</code></pre><p>Here, a file specified by the relative path from <code>roles/base/files</code> is copied
+to the remote system.</p>
 <h3 id="module-to-setup-configuration-file-from-a-template-file">Module to setup configuration file from a template file</h3>
 <p>Similar to <code>ansible.builtin.copy</code> module, <code>ansible.builtin.template</code> module can
-setup using jinja template files stored under <code>roles/base/templates</code>.</p>
+setup using
+<a href="https://en.wikipedia.org/wiki/Jinja_(template_engine)">jinja template</a>
+files specified by the relative paths from <code>roles/base/templates</code>.</p>
 <ul>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html">ansible.builtin.template</a></li>
 </ul>
@@ -261,11 +265,13 @@ an arbitrary program can be quite handy.</p>
 <a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/">Ansible.Builtin</a>.</p>
 <p>As for the organization of the playbook,
 <a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html">blocks</a>
-can be used logical groups of tasks.</p>
-<p>As for running operations on change,
+can be used to make logical groups of tasks.</p>
+<p>As for running some operations on change due to tasks,
 <a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_handlers.html">handler</a>
 can be used.</p>
-<p>I think I now grok how Ansible can be used.  So much for talking &hellip;.</p>
+<p>I think I now grok how I can use Ansible.  So much for talking &hellip;.</p>
+<p>I may need to change role name from generic word &ldquo;base&rdquo; to something more
+specific when I code more practical playbooks.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
