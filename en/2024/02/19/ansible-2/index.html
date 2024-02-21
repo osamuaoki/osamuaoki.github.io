@@ -155,13 +155,7 @@ to this template.</p>
         │   └── test.yml
         └── vars
             └── main.yml
-</code></pre><p>There are</p>
-<ul>
-<li>good old keys:<code>tasks</code>, <code>vars</code></li>
-<li>some new keys: <code>defaults</code>, <code>handlers</code>, and <code>meta</code></li>
-<li>some data file paths: <code>files</code>, <code>templates</code></li>
-<li>test project path: <code>tests</code></li>
-</ul>
+</code></pre><p>Read &ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html#role-directory-structure">Role directory structure</a>&rdquo; for explanation.</p>
 <h3 id="module-to-setup-apt-repository-configuration">Module to setup APT repository configuration</h3>
 <p>Let me setup APT repository using deb822 format  using following modules:</p>
 <ul>
@@ -261,17 +255,28 @@ an arbitrary program can be quite handy.</p>
 </li>
 </ul>
 <h3 id="further-actions">Further actions</h3>
-<p>We can find more <code>ansible.builtin</code> modules at
-<a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/">Ansible.Builtin</a>.</p>
-<p>As for the organization of the playbook,
-<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html">blocks</a>
-can be used to make logical groups of tasks.</p>
-<p>As for running some operations on change due to tasks,
-<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_handlers.html">handler</a>
-can be used.</p>
-<p>I think I now grok how I can use Ansible.  So much for talking &hellip;.</p>
-<p>I may need to change role name from generic word &ldquo;base&rdquo; to something more
-specific when I code more practical playbooks.</p>
+<p>I think I need to read through followings to grok how I can use Ansible and playbook.</p>
+<ul>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/getting_started/basic_concepts.html">Ansible concepts</a>&rdquo; &ndash; Control node, Managed nodes, Inventory, Playbooks, Plays, Roles, Tasks, Handlers, Modules, Plugins, Collections</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/">Ansible.Builtin</a>&rdquo; &ndash; Reference for all modules and plugins contained in <code>ansible-core</code></li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/">Using Ansible playbooks</a>&rdquo;
+<ul>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html">Ansible playbooks</a>&rdquo; &ndash; Ansible Playbooks offer a configuration management and multi-machine deployment system.</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks.html">Working with playbooks</a>&rdquo;
+<ul>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html">Blocks</a>&rdquo; &ndash; Blocks create logical groups of tasks</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_handlers.html">Handler</a>&rdquo; &ndash; Running operations on change</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html">Roles</a>&rdquo; &ndash; Roles let you automatically load related vars, files, tasks, handlers, etc.</li>
+</ul>
+</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_execution.html">Executing playbooks</a>
+<ul>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html">Tags</a>&rdquo; &ndash; run only specific parts of playbook.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
