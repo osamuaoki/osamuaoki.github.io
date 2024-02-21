@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/19 (initial publish),
-2024/02/20 (last update)
+2024/02/21 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00066.md
@@ -69,8 +69,8 @@ en/note-00066.md
       <ul>
         <li><a href="#creating-a-full-project-template-with-ansible-galaxy">Creating a full project template with <code>ansible-galaxy</code></a></li>
         <li><a href="#setup-apt-repository">Setup APT repository</a></li>
-        <li><a href="#execute-shell-script">Execute shell script</a></li>
         <li><a href="#copy-configuration-file">Copy configuration file</a></li>
+        <li><a href="#execute-shell-script">Execute shell script</a></li>
         <li><a href="#create-directory-with-file-module">Create directory with file module</a></li>
       </ul>
     </li>
@@ -85,13 +85,19 @@ scripts.  They are offered in 2 formats:</p>
 <li><a href="https://galaxy.ansible.com/ui/standalone/roles/">Roles</a> &ndash; data downloaded as &ldquo;<code>git clone ...</code>&rdquo;.</li>
 <li><a href="https://galaxy.ansible.com/ui/collections/">Collections</a> &ndash; data downloaded in &ldquo;<code>*.tar.gz</code>&rdquo; format.</li>
 </ul>
-<p>Actual data seems to be comming from github.repository.</p>
+<p>Once some interesting script is found from the search on the
+<a href="https://galaxy.ansible.com/ui/">Ansible Galaxy</a> web site, execute the listed
+command.  E.g.:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible-galaxy ansible-galaxy role install foo.bar
+</span></span><span style="display:flex;"><span> ...
+</span></span></code></pre></div><p>Actual data seems to be comming from github.repository and is downloaded to
+<code>~/.ansible</code>.</p>
 <p>They tend to address generic administration tasks on remote hosts and a bit
 complicated.  Let me use them as examples to learn Ansible.</p>
 <h2 id="creating-an-initial-system-setup-playbook">Creating an initial system setup playbook</h2>
-<p>Let me expand
-<a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a>
-to create an initial system setup playbook.
+<p>Let me expand the
+&ldquo;<a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a>&rdquo;
+example to create an initial system setup playbook.
 .</p>
 <h3 id="creating-a-full-project-template-with-ansible-galaxy">Creating a full project template with <code>ansible-galaxy</code></h3>
 <p>Let&rsquo;s create a full project template with <code>ansible-galaxy</code> as:</p>
@@ -106,8 +112,8 @@ to create an initial system setup playbook.
 </span></span><span style="display:flex;"><span>      ansible_connection: local
 </span></span><span style="display:flex;"><span>EOF
 </span></span><span style="display:flex;"><span> $ ansible-galaxy init roles/base
-</span></span></code></pre></div><p>This creates a source template.  Let&rsquo;s merge what was presented in
-<a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a> to this.</p>
+</span></span></code></pre></div><p>This creates a nice source template.  Let&rsquo;s merge what was presented in
+<a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a> to this template.</p>
 <pre tabindex="0"><code> $ tree
 .
 ├── README.md
@@ -143,10 +149,10 @@ to create an initial system setup playbook.
 <li>test project path: <code>tests</code></li>
 </ul>
 <h3 id="setup-apt-repository">Setup APT repository</h3>
-<p>Let&rsquo;s setup APT repository using deb822 format using:</p>
+<p>Let&rsquo;s setup APT repository using deb822 format  using following modules:</p>
 <ul>
-<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/deb822_repository_module.html#ansible-collections-ansible-builtin-deb822-repository-module">ansible.builtin.deb822_repository module</a></li>
-<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html#ansible-collections-ansible-builtin-file-module">ansible.builtin.file module</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/deb822_repository_module.html#ansible-collections-ansible-builtin-deb822-repository-module">ansible.builtin.deb822_repository</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html#ansible-collections-ansible-builtin-file-module">ansible.builtin.file</a></li>
 </ul>
 <p><code>apt_setup.yml</code>:</p>
 <pre tabindex="0"><code>---
@@ -186,9 +192,13 @@ to create an initial system setup playbook.
       - non-free-firmware
       - contrib
       - non-free
-</code></pre><h3 id="execute-shell-script">Execute shell script</h3>
-<p>** TBD **</p>
-<h3 id="copy-configuration-file">Copy configuration file</h3>
+</code></pre><h3 id="copy-configuration-file">Copy configuration file</h3>
+<p>Let&rsquo;s setup <code>/etc/sudoers.d/passwordless</code> configuration file using following modules:</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>Here, the use of <code>.j2</code> filename extension for template file is not a must but a
+convention which helps vim to use correct syntax coloring schemes.</p>
+<h3 id="execute-shell-script">Execute shell script</h3>
 <p>** TBD **</p>
 <h3 id="create-directory-with-file-module">Create directory with file module</h3>
 <p>** TBD **</p>
