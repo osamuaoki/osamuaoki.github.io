@@ -68,10 +68,11 @@ en/note-00066.md
     <li><a href="#creating-an-initial-system-setup-playbook">Creating an initial system setup playbook</a>
       <ul>
         <li><a href="#creating-a-full-project-template-with-ansible-galaxy">Creating a full project template with <code>ansible-galaxy</code></a></li>
-        <li><a href="#setup-apt-repository">Setup APT repository</a></li>
-        <li><a href="#copy-configuration-file">Copy configuration file</a></li>
-        <li><a href="#execute-shell-script">Execute shell script</a></li>
-        <li><a href="#create-directory-with-file-module">Create directory with file module</a></li>
+        <li><a href="#module-to-setup-apt-repository-configuration">Module to setup APT repository configuration</a></li>
+        <li><a href="#module-to-copy-configuration-file">Module to copy configuration file</a></li>
+        <li><a href="#module-to-setup-configuration-file-from-a-template-file">Module to setup configuration file from a template file</a></li>
+        <li><a href="#modules-to-execute-the-shell-command">Modules to execute the shell command</a></li>
+        <li><a href="#further-actions">Further actions</a></li>
       </ul>
     </li>
   </ul>
@@ -90,20 +91,32 @@ scripts.  They are offered in 2 formats:</p>
 command.  E.g.:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible-galaxy ansible-galaxy role install foo.bar
 </span></span><span style="display:flex;"><span> ...
-</span></span></code></pre></div><p>Actual data seems to be comming from github.repository and is downloaded to
-<code>~/.ansible</code>.</p>
-<p>They tend to address generic administration tasks on remote hosts and a bit
-complicated.  Let me use them as examples to learn Ansible.</p>
+</span></span></code></pre></div><p>Actual data seems to be coming from github.repository and is downloaded to
+the default location <code>ANSIBLE_HOME</code> which is <code>~/.ansible</code>.</p>
+<p>The default search path for the role can be found in the default <code>ansible.cfg</code>
+template as:</p>
+<pre tabindex="0"><code># (pathspec) Colon separated paths in which Ansible will search for Roles.
+roles_path={{ ANSIBLE_HOME ~ &#34;/roles:/usr/share/ansible/roles:/etc/ansible/roles&#34; }}
+</code></pre><p>This &ldquo;~&rdquo; (tilde) operator is a <a href="https://jinja.palletsprojects.com/en/3.0.x/templates/#other-operators">jinja string concatenation
+operator</a>.</p>
+<p>These scripts tend to address generic administration tasks on remote hosts and a bit
+complicated.  Also, some of them are old and uses deprecated features.
+Let me use them carefully only as reference examples to learn Ansible.</p>
 <h2 id="creating-an-initial-system-setup-playbook">Creating an initial system setup playbook</h2>
 <p>Let me expand the
 &ldquo;<a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a>&rdquo;
 example to create an initial system setup playbook.
 .</p>
 <h3 id="creating-a-full-project-template-with-ansible-galaxy">Creating a full project template with <code>ansible-galaxy</code></h3>
-<p>Let&rsquo;s create a full project template with <code>ansible-galaxy</code> as:</p>
+<p>Let me create a full project template with <code>ansible-galaxy</code> as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd /path/to/ansible-config-data/
-</span></span><span style="display:flex;"><span> $ ansible-config init --disabled &gt;ansible.cfg
-</span></span><span style="display:flex;"><span> $ sed -i -e &#39;/^;inventory/s/^*$/inventory=inventory.yml/&#39; ansible.cfg
+</span></span><span style="display:flex;"><span> $ cat &gt;ansible.cfg &lt;&lt; EOF
+</span></span><span style="display:flex;"><span>[defaults]
+</span></span><span style="display:flex;"><span># <span style="color:#f92672">(</span>pathlist<span style="color:#f92672">)</span> Comma separated list of Ansible inventory sources
+</span></span><span style="display:flex;"><span>inventory=inventory.yml
+</span></span><span style="display:flex;"><span># disables searching roles in ~/.ansible/roles
+</span></span><span style="display:flex;"><span>roles_path=./roles
+</span></span><span style="display:flex;"><span>EOF
 </span></span><span style="display:flex;"><span> $ cat &gt;inventory.yml &lt;&lt; EOF
 </span></span><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span>all:
@@ -112,7 +125,7 @@ example to create an initial system setup playbook.
 </span></span><span style="display:flex;"><span>      ansible_connection: local
 </span></span><span style="display:flex;"><span>EOF
 </span></span><span style="display:flex;"><span> $ ansible-galaxy init roles/base
-</span></span></code></pre></div><p>This creates a nice source template.  Let&rsquo;s merge what was presented in
+</span></span></code></pre></div><p>This creates a nice source template.  Let me merge what was presented in
 <a href="/en/2024/02/17/ansible-1//#playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</a> to this template.</p>
 <pre tabindex="0"><code> $ tree
 .
@@ -148,13 +161,13 @@ example to create an initial system setup playbook.
 <li>some data file paths: <code>files</code>, <code>templates</code></li>
 <li>test project path: <code>tests</code></li>
 </ul>
-<h3 id="setup-apt-repository">Setup APT repository</h3>
-<p>Let&rsquo;s setup APT repository using deb822 format  using following modules:</p>
+<h3 id="module-to-setup-apt-repository-configuration">Module to setup APT repository configuration</h3>
+<p>Let me setup APT repository using deb822 format  using following modules:</p>
 <ul>
-<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/deb822_repository_module.html#ansible-collections-ansible-builtin-deb822-repository-module">ansible.builtin.deb822_repository</a></li>
-<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html#ansible-collections-ansible-builtin-file-module">ansible.builtin.file</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html">ansible.builtin.file</a> &ndash; remove file</li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/deb822_repository_module.html">ansible.builtin.deb822_repository</a></li>
 </ul>
-<p><code>apt_setup.yml</code>:</p>
+<p><code>roles/base/tasks/apt_setup.yml</code>:</p>
 <pre tabindex="0"><code>---
 - name: Remove /etc/apt/sources.list
   ansible.builtin.file:
@@ -192,18 +205,67 @@ example to create an initial system setup playbook.
       - non-free-firmware
       - contrib
       - non-free
-</code></pre><h3 id="copy-configuration-file">Copy configuration file</h3>
-<p>Let&rsquo;s setup <code>/etc/sudoers.d/passwordless</code> configuration file using following modules:</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<p>Here, the use of <code>.j2</code> filename extension for template file is not a must but a
-convention which helps vim to use correct syntax coloring schemes.</p>
-<h3 id="execute-shell-script">Execute shell script</h3>
-<p>** TBD **</p>
-<h3 id="create-directory-with-file-module">Create directory with file module</h3>
-<p>** TBD **</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+</code></pre><p><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html">ansible.builtin.file</a>
+can also be used to create files and directories and to set permissions on them.</p>
+<h3 id="module-to-copy-configuration-file">Module to copy configuration file</h3>
+<p>Let me setup <code>/etc/sudoers.d/passwordless</code> configuration file using following module:</p>
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html">ansible.builtin.copy</a></li>
+</ul>
+<p><code>roles/base/tasks/sudoers.yml</code>:</p>
+<pre tabindex="0"><code>- name: Allow passwordless for all %sudo
+  ansible.builtin.copy:
+    src: etc/sudoers.d/passwordless
+    dest: /etc/sudoers.d/passwordless
+    owner: root
+    group: root
+    mode: &#39;0644&#39;
+  tags:
+    - sudoers
+</code></pre><p><code>roles/base/files/etc/sudoers.d/passwordless</code>:</p>
+<pre tabindex="0"><code># No passowrd required for the user in sudo group
+# please note the last match wins configuration
+%sudo ALL = (ALL:ALL) NOPASSWD: ALL
+# No password for 8 hours
+#Defaults timestamp_timeout = 480
+#Defaults timestamp_type = global
+</code></pre><p>Here, files stored under <code>roles/base/files</code> are copied to the remote system.</p>
+<h3 id="module-to-setup-configuration-file-from-a-template-file">Module to setup configuration file from a template file</h3>
+<p>Similar to <code>ansible.builtin.copy</code> module, <code>ansible.builtin.template</code> module can
+setup using jinja template files stored under <code>roles/base/templates</code>.</p>
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html">ansible.builtin.template</a></li>
+</ul>
+<p>The template file uses <code>.j2</code> filename extension as a convention.  This helps
+<code>vim</code> to apply the jinja syntax highlight.</p>
+<h3 id="modules-to-execute-the-shell-command">Modules to execute the shell command</h3>
+<p>Although using proper builtin modules is desirable in many cases, executing
+an arbitrary program can be quite handy.</p>
+<p>There are 4 modules to accommodate this.</p>
+<ul>
+<li>Python on the remote system is <strong>required</strong>:
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/command_module.html">ansible.builtin.command</a> &ndash; No piping and redirects (C 2016)</li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/shell_module.html">ansible.builtin.shell</a>  &ndash; Piping and redirects allowed (C 2018)</li>
+</ul>
+</li>
+<li>Python on the remote system is <strong>NOT required</strong>:
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/raw_module.html">ansible.builtin.raw</a> &ndash; SSH command execution (C 2012)</li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/script_module.html">ansible.builtin.script</a> &ndash; Copy script and execute (C 2012)</li>
+</ul>
+</li>
+</ul>
+<h3 id="further-actions">Further actions</h3>
+<p>We can find more <code>ansible.builtin</code> modules at
+<a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/">Ansible.Builtin</a>.</p>
+<p>As for the organization of the playbook,
+<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html">blocks</a>
+can be used logical groups of tasks.</p>
+<p>As for running operations on change,
+<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_handlers.html">handler</a>
+can be used.</p>
+<p>I think I now grok how Ansible can be used.  So much for talking &hellip;.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->

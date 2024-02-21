@@ -96,13 +96,19 @@ more generic remote host usages and is too much to digest, this memo should be
 a good minimal use case for me to get started.  (Somehow, it is sometimes
 easier to look into the Python module directory to find and understand how to
 use <code>ansible</code>.)</p>
+<p>Debian 12 Bookworm packages are based on:</p>
+<ul>
+<li><code>ansible-core</code> 2.14.3 (incl. the Ansible builtin modules)</li>
+<li><code>ansible</code> 7.3.0 (incl. the Ansible community packages)</li>
+<li><code>ansible-lint</code> 6.13.1</li>
+</ul>
 <h2 id="installation-of-ansible">Installation of Ansible</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sudo apt update
 </span></span><span style="display:flex;"><span>$ sudo apt install ansible ansible-lint
 </span></span></code></pre></div><h2 id="what-is-ansible">What is Ansible</h2>
 <p>Ansible is an IT Automation Platform which uses declarative configuration file
 called Playbooks.</p>
-<p>Ansible Playbooks are lists of tasks that automatically execute for your
+<p>Ansible Playbooks are lists of tasks that automatically execute for one&rsquo;s
 specified inventory.</p>
 <p>Here:</p>
 <ul>
@@ -127,7 +133,7 @@ That is addressed later.</p>
 <a href="https://docs.ansible.com/ansible/latest/cli/ansible-config.html">ansible-config</a>.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ cd /path/to/ansible-config-data/
 </span></span><span style="display:flex;"><span>$ ansible-config init --disabled &gt;ansible.cfg
-</span></span></code></pre></div><p>Let&rsquo;s keep the working directory placed on <code>/path/to/ansible-config-data/</code> from
+</span></span></code></pre></div><p>Let me keep the working directory placed on <code>/path/to/ansible-config-data/</code> from
 here on.</p>
 <h2 id="create-inventory-with-localhost">Create inventory with <code>localhost</code></h2>
 <p>Update <code>ansible.cfg</code>:</p>
@@ -136,7 +142,7 @@ here on.</p>
 <pre tabindex="0"><code>[defaults]
 # (pathlist) Comma separated list of Ansible inventory sources
 inventory=inventory.yml
-</code></pre><p>Let&rsquo;s create simplest possible <code>inventory.yml</code> to define groups of hosts
+</code></pre><p>Let me create simplest possible <code>inventory.yml</code> to define groups of hosts
 on which <code>ansible</code> operates as:</p>
 <pre tabindex="0"><code>---
 all:
@@ -145,8 +151,8 @@ all:
       ansible_connection: local
 </code></pre><p>(This is <code>localhost</code> only and explicitly uses local connection.  When I wish to
 support remote clients with ssh, I need to update this.)</p>
-<p>This helps to quiet &ldquo;[WARNING]&rdquo; when you execute following playbook examples.
-It&rsquo;s content requirement is found in
+<p>This helps to quiet &ldquo;[WARNING]&rdquo; when I execute following playbook examples.</p>
+<p>It&rsquo;s content requirement is found in
 <code>/usr/lib/python3/dist-packages/ansible/plugins/inventory/yaml.py</code> as:</p>
 <ul>
 <li>&ldquo;YAML-based inventory, should start with the C(all) group and contain hosts/vars/children entries.&rdquo;</li>
@@ -156,7 +162,7 @@ It&rsquo;s content requirement is found in
 <li>File MUST have a valid extension, defined in configuration.</li>
 </ul>
 <h2 id="use-of-ansible-playbook-command-localhost">Use of <code>ansible-playbook</code> command (localhost)</h2>
-<p>Let&rsquo;s learn to use playbook via <code>ansible-playbook</code> command first with APT operation.</p>
+<p>Let me learn to use playbook via <code>ansible-playbook</code> command first with APT operation.</p>
 <ul>
 <li><a href="https://docs.ansible.com/ansible/latest/reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/apt_module.html">ansible.builtin.apt module</a></li>
@@ -177,7 +183,7 @@ It&rsquo;s content requirement is found in
 </code></pre><p>This playbook consists of 1 play and contains a single task definition which
 uses <code>ansible.builtin.apt</code> module.</p>
 <p>The module executable itself is written in Python.</p>
-<p>Let&rsquo;s run this playbook on the localhost without &ldquo;screen&rdquo; package:</p>
+<p>Let me run this playbook on the localhost without &ldquo;screen&rdquo; package:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible-playbook pb_screen.yml
 </span></span><span style="display:flex;"><span>PLAY [Example for ansible.builtin.apt with screen] *******************************
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
@@ -188,7 +194,7 @@ uses <code>ansible.builtin.apt</code> module.</p>
 </span></span><span style="display:flex;"><span>localhost                  : ok=1    changed=1    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 </span></span></code></pre></div><p>So package is installed and system is changed.</p>
 <h3 id="playbook-to-install-screen-again">Playbook to install &ldquo;screen&rdquo; again</h3>
-<p>Let&rsquo;s run the same playbook again:</p>
+<p>Let me run the same playbook again:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible-playbook pb_screen.yml
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY [Example for ansible.builtin.apt with screen] *******************************
@@ -322,7 +328,7 @@ substitution is used.  Be careful for the use of quotation marks.</p>
 </span></span><span style="display:flex;"><span>localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 </span></span></code></pre></div><h3 id="playbook-to-install-multiple-packages-use-roles">Playbook to install multiple packages (use roles)</h3>
 <p>Although single page playbook works fine for small task, writing one big playbook in the base directory is messy.</p>
-<p>Let&rsquo;s split above playbook into multiple files with <code>pb-main.yml</code> in the
+<p>Let me split above playbook into multiple files with <code>pb-main.yml</code> in the
 base directory.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ tree
 </span></span><span style="display:flex;"><span>.
@@ -360,7 +366,15 @@ directory.</p>
 - import_tasks: upgrade.yml
 - import_tasks: install.yml
 - import_tasks: remove.yml
-</code></pre><p><code>roles/base/tasks/upgrade.yml</code>:</p>
+</code></pre><p>Here,
+<a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/import_tasks_module.html">import_tasks</a>
+is used to pre-process the statement statically at the time whole
+playbooks are parsed and includes referred tasks.</p>
+<p>(Similar
+<a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/include_tasks_module.html">include_tasks</a>
+is used to process the statement dynamically every
+time this playbook statement is executed and includes referred tasks.)</p>
+<p><code>roles/base/tasks/upgrade.yml</code>:</p>
 <pre tabindex="0"><code>---
 - name: Upgrade the whole system
   ansible.builtin.apt:
@@ -414,8 +428,10 @@ which match the parent directory name is required to use the file name <code>mai
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY RECAP **************************************************************************
 </span></span><span style="display:flex;"><span>localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 </span></span></code></pre></div><h3 id="play-a-part-of-playbook-with-tag">Play a part of Playbook with tag</h3>
-<p>Since I added <code>tags:</code> keys in the previous example, I can selectively play a
-part of playbook.  For example:</p>
+<p><a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html">Tags</a>
+let me execute or skip selected tasks.</p>
+<p>Since I already added <code>tags:</code> keys in the previous example, let me selectively
+play a part of playbook.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible-playbook -t install pb_main.yml
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY [Example for ansible.builtin.apt with many packages] *******************************************************************************************************************
@@ -425,8 +441,16 @@ part of playbook.  For example:</p>
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY RECAP ******************************************************************************************************************************************************************
 </span></span><span style="display:flex;"><span>localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
-</span></span></code></pre></div><h2 id="use-of-ansible-command-localhost">Use of <code>ansible</code> command (localhost)</h2>
-<p>You can test modules directly from <code>ansible</code> CLI.  For example
+</span></span></code></pre></div><p><code>ansible-playbook</code> offers five tag-related command-line options:</p>
+<ul>
+<li><code>--tags all</code> &ndash; run all tasks, ignore tags (default behavior)</li>
+<li><code>--tags tag1,tag2</code> &ndash; run only tasks with either the tag tag1 or the tag tag2</li>
+<li><code>--skip-tags tag3,tag4</code> &ndash; run all tasks except those with either the tag tag3 or the tag tag4</li>
+<li><code>--tags tagged</code> &ndash; run only tasks with at least one tag</li>
+<li><code>--tags untagged</code> &ndash; run only tasks with no tags</li>
+</ul>
+<h2 id="use-of-ansible-command-localhost">Use of <code>ansible</code> command (localhost)</h2>
+<p>I can test modules directly from <code>ansible</code> CLI.  For example
 <code>ansible.builtin.apt</code> module can be tested from any directory as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible -i localhost, -c local localhost -m ansible.builtin.apt -a &#34;name=screen state=present&#34;
 </span></span><span style="display:flex;"><span>localhost | SUCCESS =&gt; {
@@ -439,7 +463,7 @@ part of playbook.  For example:</p>
 </span></span><span style="display:flex;"><span>}
 </span></span></code></pre></div><p>Please note the use of <strong>comma</strong> in <code>-i locales,</code> option for the host list.
 (This is not the inventory host path.)</p>
-<p>If your working directory is still placed on <code>/path/to/ansible-config-data/</code>
+<p>If my working directory is still placed on <code>/path/to/ansible-config-data/</code>
 where properly configured <code>ansible.cfg</code> exists, the above can be simplified as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible localhost -m ansible.builtin.apt -a &#34;name=screen state=present&#34;
 </span></span><span style="display:flex;"><span> ...
