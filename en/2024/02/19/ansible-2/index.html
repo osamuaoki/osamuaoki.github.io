@@ -209,7 +209,8 @@ can also be used to create files and directories and to set permissions on them.
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html">ansible.builtin.copy</a></li>
 </ul>
 <p><code>roles/base/tasks/sudoers.yml</code>:</p>
-<pre tabindex="0"><code>- name: Allow passwordless for all %sudo
+<pre tabindex="0"><code>---
+- name: Allow passwordless for all %sudo
   ansible.builtin.copy:
     src: etc/sudoers.d/passwordless
     dest: /etc/sudoers.d/passwordless
