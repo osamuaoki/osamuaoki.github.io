@@ -133,76 +133,76 @@ It also takes care variable type issues.</p>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html">ansible.builtin.set_fact</a> &ndash; Set host variable(s) and fact(s)</li>
 </ul>
 <p><code>roles/base/defaults/main.yml</code>:</p>
-<pre tabindex="0"><code>---
-# prefix internal variables with underscore
-#   -- let -e to set external variables without underscore
-# ensure internal variables to be defined (and boolean for override)
-#
-_var1: &#34;{{ var1 | default(&#39;1&#39;) }}&#34;
-_var2: &#34;{{ var2 | default(&#39;2&#39;) }}&#34;
-
-#_varTF: True
-_varTF: &#34;{{ _var1 == _var2 }}&#34;
-
-_var1_override:  &#34;{{ var1_override | default(false) | bool }}&#34; 
-_var2_override:  &#34;{{ var2_override | default(false) | bool }}&#34; 
-</code></pre><p><code>roles/base/vars/main.yml</code></p>
-<pre tabindex="0"><code>---
-# vars file
-
-_var3: &#34;&#34;
-</code></pre><p>Then tested these against <code>roles/base/tasks/main.yml</code> and played with it from
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># prefix internal variables with underscore</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   -- let -e to set external variables without underscore</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ensure internal variables to be defined (and boolean for override)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">_var1</span>: <span style="color:#e6db74">&#34;{{ var1 | default(&#39;1&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">_var2</span>: <span style="color:#e6db74">&#34;{{ var2 | default(&#39;2&#39;) }}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#_varTF: True</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">_varTF</span>: <span style="color:#e6db74">&#34;{{ _var1 == _var2 }}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">_var1_override</span>:  <span style="color:#e6db74">&#34;{{ var1_override | default(false) | bool }}&#34;</span> 
+</span></span><span style="display:flex;"><span><span style="color:#f92672">_var2_override</span>:  <span style="color:#e6db74">&#34;{{ var2_override | default(false) | bool }}&#34;</span> 
+</span></span></code></pre></div><p><code>roles/base/vars/main.yml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># vars file</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">_var3</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span></code></pre></div><p>Then tested these against <code>roles/base/tasks/main.yml</code> and played with it from
 the command line.  Many repeated long lines are for the variable value tracing.</p>
 <p><code>roles/base/tasks/main.yml</code>:</p>
-<pre tabindex="0"><code>---
-
-- name: Debug external variables with msg
-  ansible.builtin.debug:
-    msg: &#34;var1_override = &#39;{{ var1_override | default(&#39;***UNDEFIINED***&#39;) }}&#39; var2_override = &#39;{{ var2_override | default(&#39;***UNDEFIINED***&#39;) }}&#39;&#34;
-
-- name: Debug internal variables with msg
-  ansible.builtin.debug:
-    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
-
-- name: set var1 to &#34;111&#34; (if _var1_override is True)
-  ansible.builtin.set_fact:
-    _var1: &#34;111&#34;
-  when: _var1_override
-
-- name: Debug internal variables with msg
-  ansible.builtin.debug:
-    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
-
-- name: set var2 to &#34;222&#34; (if _var2_override is True)
-  ansible.builtin.set_fact:
-    _var2: &#34;222&#34;
-  when: _var2_override
-
-- name: Debug internal variables with msg
-  ansible.builtin.debug:
-    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
-
-- name: set _var3 (_var1+_var2)
-  ansible.builtin.set_fact:
-    _var3: &#34;{{ _var1 + _var2 }}&#34;
-
-- name: Debug internal variables with msg
-  ansible.builtin.debug:
-    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
-
-- name: set _var3 to &#34;zzzzz&#34; with var1 == var2
-  ansible.builtin.set_fact:
-    _var3: &#34;zzzzz&#34;
-  when: _varTF
-
-- name: Debug internal variables with msg
-  ansible.builtin.debug:
-    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
-
-- name: Debug result of _var1 == _var2
-  ansible.builtin.debug:
-    var: _var1 == _var2
-</code></pre><p>Using these, I tested as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Debug external variables with msg</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.debug</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">msg</span>: <span style="color:#e6db74">&#34;var1_override = &#39;{{ var1_override | default(&#39;***UNDEFIINED***&#39;) }}&#39; var2_override = &#39;{{ var2_override | default(&#39;***UNDEFIINED***&#39;) }}&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Debug internal variables with msg</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.debug</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">msg</span>: <span style="color:#e6db74">&#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">set var1 to &#34;111&#34; (if _var1_override is True)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.set_fact</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">_var1</span>: <span style="color:#e6db74">&#34;111&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">when</span>: <span style="color:#ae81ff">_var1_override</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Debug internal variables with msg</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.debug</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">msg</span>: <span style="color:#e6db74">&#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">set var2 to &#34;222&#34; (if _var2_override is True)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.set_fact</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">_var2</span>: <span style="color:#e6db74">&#34;222&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">when</span>: <span style="color:#ae81ff">_var2_override</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Debug internal variables with msg</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.debug</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">msg</span>: <span style="color:#e6db74">&#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">set _var3 (_var1+_var2)</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.set_fact</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">_var3</span>: <span style="color:#e6db74">&#34;{{ _var1 + _var2 }}&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Debug internal variables with msg</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.debug</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">msg</span>: <span style="color:#e6db74">&#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">set _var3 to &#34;zzzzz&#34; with var1 == var2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.set_fact</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">_var3</span>: <span style="color:#e6db74">&#34;zzzzz&#34;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">when</span>: <span style="color:#ae81ff">_varTF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Debug internal variables with msg</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.debug</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">msg</span>: <span style="color:#e6db74">&#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Debug result of _var1 == _var2</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.debug</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">var</span>: <span style="color:#ae81ff">_var1 == _var2</span>
+</span></span></code></pre></div><p>Using these, I tested as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible-playbook pb_main.yml -e &#34;var1=0 var2=0 var1_override=1 var2_override=0&#34;
 </span></span><span style="display:flex;"><span>...
 </span></span></code></pre></div><p>YAML or JSON is too much to type in the command line.  The <code>-e</code> option with

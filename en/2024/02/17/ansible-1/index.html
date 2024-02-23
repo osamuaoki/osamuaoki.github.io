@@ -140,17 +140,17 @@ here on.</p>
 <p>Update <code>ansible.cfg</code>:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sed -i -e <span style="color:#e6db74">&#39;/^;inventory/s/^*$/inventory=inventory.yml/&#39;</span> ansible.cfg
 </span></span></code></pre></div><p>This creates <code>ansible.cfg</code> as (after removing non-essential comments and empty lines):</p>
-<pre tabindex="0"><code>[defaults]
-# (pathlist) Comma separated list of Ansible inventory sources
-inventory=inventory.yml
-</code></pre><p>Let me create simplest possible <code>inventory.yml</code> to define groups of hosts
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[defaults]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># (pathlist) Comma separated list of Ansible inventory sources</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">inventory</span><span style="color:#f92672">=</span><span style="color:#e6db74">inventory.yml</span>
+</span></span></code></pre></div><p>Let me create simplest possible <code>inventory.yml</code> to define groups of hosts
 on which <code>ansible</code> operates as:</p>
-<pre tabindex="0"><code>---
-all:
-  hosts:
-    localhost:
-      ansible_connection: local
-</code></pre><p>(This is <code>localhost</code> only and explicitly uses local connection.  When I wish to
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#f92672">all</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">hosts</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">localhost</span>:
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ansible_connection</span>: <span style="color:#ae81ff">local</span>
+</span></span></code></pre></div><p>(This is <code>localhost</code> only and explicitly uses local connection.  When I wish to
 support remote clients with ssh, I need to update this.)</p>
 <p>This helps to quiet &ldquo;[WARNING]&rdquo; when I execute following playbook examples.</p>
 <p>It&rsquo;s content requirement is found in
@@ -170,18 +170,18 @@ support remote clients with ssh, I need to update this.)</p>
 </ul>
 <h3 id="playbook-to-install-screen">Playbook to install &ldquo;screen&rdquo;</h3>
 <p>Here is an example playbook <code>pb_screen.yml</code> to install &ldquo;screen&rdquo; package.</p>
-<pre tabindex="0"><code>---
-- name: Example for ansible.builtin.apt with screen
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  become: true
-  tasks:
-    - name: Install &#34;screen&#34; package
-      ansible.builtin.apt:
-        name: screen
-        state: present
-</code></pre><p>This playbook consists of 1 play and contains a single task definition which
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Example for ansible.builtin.apt with screen</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">hosts</span>: <span style="color:#ae81ff">localhost</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">connection</span>: <span style="color:#ae81ff">local</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">gather_facts</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">become</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tasks</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install &#34;screen&#34; package</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>: <span style="color:#ae81ff">screen</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">state</span>: <span style="color:#ae81ff">present</span>
+</span></span></code></pre></div><p>This playbook consists of 1 play and contains a single task definition which
 uses <code>ansible.builtin.apt</code> module.</p>
 <p>The module executable itself is written in Python.</p>
 <p>Let me run this playbook on the localhost without &ldquo;screen&rdquo; package:</p>
@@ -230,33 +230,34 @@ under its module directory <code>/usr/lib/python3/dist-packages/ansiblelint/rule
 as markdown files or on
 <a href="https://ansible.readthedocs.io/projects/lint/rules/">Ansible Lint Documentation: Rules</a>.</p>
 <h3 id="playbook-to-install-multiple-packages-tasks">Playbook to install multiple packages (tasks)</h3>
-<p>Here is another example playbook <code>pb_many.yml</code> to upgrade, install, and remove packages.</p>
-<pre tabindex="0"><code>---
-- name: Example for ansible.builtin.apt with many packages
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  become: true
-  tasks:
-    - name: Upgrade the whole system
-      ansible.builtin.apt:
-        upgrade: safe
-    - name: Install packages
-      ansible.builtin.apt:
-        name: [&#34;screen&#34;, &#34;sudo&#34;]
-        state: present
-    - name: Install more packages
-      ansible.builtin.apt:
-        name:
-          - mc
-          - aptitude
-          - vim
-        state: present
-    - name: Remove packages
-      ansible.builtin.apt:
-        name: [&#34;nano&#34;]
-        state: absent
-</code></pre><p>This playbook consists of 1 play and contains 3 task definitions all of which
+<p>Here is another example playbook <code>pb_many.yml</code> to upgrade, install, and remove
+packages.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Example for ansible.builtin.apt with many packages</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">hosts</span>: <span style="color:#ae81ff">localhost</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">connection</span>: <span style="color:#ae81ff">local</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">gather_facts</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">become</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tasks</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Upgrade the whole system</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">upgrade</span>: <span style="color:#ae81ff">safe</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install packages</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>: [<span style="color:#e6db74">&#34;screen&#34;</span>, <span style="color:#e6db74">&#34;sudo&#34;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">state</span>: <span style="color:#ae81ff">present</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install more packages</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>:
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">mc</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">aptitude</span>
+</span></span><span style="display:flex;"><span>          - <span style="color:#ae81ff">vim</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">state</span>: <span style="color:#ae81ff">present</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Remove packages</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>: [<span style="color:#e6db74">&#34;nano&#34;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">state</span>: <span style="color:#ae81ff">absent</span>
+</span></span></code></pre></div><p>This playbook consists of 1 play and contains 3 task definitions all of which
 use <code>ansible.builtin.apt</code> module.</p>
 <p>Here, 2 style of YAML lists are used.  Both works fine.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible-playbook pb_many.yml 
@@ -279,34 +280,34 @@ use <code>ansible.builtin.apt</code> module.</p>
 </span></span><span style="display:flex;"><span>localhost                  : ok=4    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 </span></span></code></pre></div><h3 id="playbook-to-install-multiple-packages-tasksvars">Playbook to install multiple packages (tasks+vars)</h3>
 <p>Here is another example playbook <code>pb_many_vars.yml</code> to upgrade, install, and remove packages.</p>
-<pre tabindex="0"><code>---
-- name: Example for ansible.builtin.apt with many packages
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  become: true
-  vars:
-    package_name_install:
-      - screen
-      - sudo
-      - mc
-      - aptitude
-      - vim
-    package_name_remove:
-      - nano
-  tasks:
-    - name: Upgrade the whole system
-      ansible.builtin.apt:
-        upgrade: safe
-    - name: Install packages listed in package_name
-      ansible.builtin.apt:
-        name: &#34;{{ package_name_install }}&#34;
-        state: present
-    - name: Remove packages
-      ansible.builtin.apt:
-        name: &#34;{{ package_name_remove }}&#34;
-        state: absent
-</code></pre><p>This playbook consists of 1 play and contains 1 list variable definition for
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Example for ansible.builtin.apt with many packages</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">hosts</span>: <span style="color:#ae81ff">localhost</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">connection</span>: <span style="color:#ae81ff">local</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">gather_facts</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">become</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">vars</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">package_name_install</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">screen</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">sudo</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">mc</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">aptitude</span>
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">vim</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">package_name_remove</span>:
+</span></span><span style="display:flex;"><span>      - <span style="color:#ae81ff">nano</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tasks</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Upgrade the whole system</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">upgrade</span>: <span style="color:#ae81ff">safe</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install packages listed in package_name</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;{{ package_name_install }}&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">state</span>: <span style="color:#ae81ff">present</span>
+</span></span><span style="display:flex;"><span>    - <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Remove packages</span>
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;{{ package_name_remove }}&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">state</span>: <span style="color:#ae81ff">absent</span>
+</span></span></code></pre></div><p>This playbook consists of 1 play and contains 1 list variable definition for
 <code>package_name</code> and 3 task definitions all of which use <code>ansible.builtin.apt</code>
 module.</p>
 <p>Here,
@@ -350,24 +351,24 @@ base directory.</p>
 <li>YAML data key for <code>tasks:</code> and <code>vars:</code> are removed.</li>
 <li>YAML data key <code>roles:</code> is added and it lists &ldquo;base&rdquo; as its component.</li>
 </ul>
-<pre tabindex="0"><code>---
-- name: Example for ansible.builtin.apt with many packages
-  hosts: localhost
-  connection: local
-  gather_facts: false
-  become: true
-  roles:
-    - base
-</code></pre><p>Here, listed value(s) for <code>roles</code> matches the directory name under the <code>roles/</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Example for ansible.builtin.apt with many packages</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">hosts</span>: <span style="color:#ae81ff">localhost</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">connection</span>: <span style="color:#ae81ff">local</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">gather_facts</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">become</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">roles</span>:
+</span></span><span style="display:flex;"><span>    - <span style="color:#ae81ff">base</span>
+</span></span></code></pre></div><p>Here, listed value(s) for <code>roles</code> matches the directory name under the <code>roles/</code>
 directory.</p>
 <p>Original YAML data under <code>tasks:</code> are essentially moved to
 <code>roles/base/tasks/main.yml</code> using inclusion of 3 files.</p>
 <p><code>roles/base/tasks/main.yml</code>:</p>
-<pre tabindex="0"><code>---
-- import_tasks: upgrade.yml
-- import_tasks: install.yml
-- import_tasks: remove.yml
-</code></pre><p>Here,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">import_tasks</span>: <span style="color:#ae81ff">upgrade.yml</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">import_tasks</span>: <span style="color:#ae81ff">install.yml</span>
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">import_tasks</span>: <span style="color:#ae81ff">remove.yml</span>
+</span></span></code></pre></div><p>Here,
 <a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/import_tasks_module.html">import_tasks</a>
 is used to pre-process the statement statically at the time whole
 playbooks are parsed and includes referred tasks.</p>
@@ -376,42 +377,42 @@ playbooks are parsed and includes referred tasks.</p>
 is used to process the statement dynamically every
 time this playbook statement is executed and includes referred tasks.)</p>
 <p><code>roles/base/tasks/upgrade.yml</code>:</p>
-<pre tabindex="0"><code>---
-- name: Upgrade the whole system
-  ansible.builtin.apt:
-    upgrade: safe
-  tags: upgrade
-</code></pre><p><code>roles/base/tasks/install.yml</code>:</p>
-<pre tabindex="0"><code>---
-- name: Install packages listed in package_name
-  ansible.builtin.apt:
-    name: &#34;{{ package_name_install }}&#34;
-    state: present
-  tags: install
-</code></pre><p><code>roles/base/tasks/remove.yml</code>:</p>
-<pre tabindex="0"><code>---
-- name: Remove packages
-  ansible.builtin.apt:
-    name: &#34;{{ package_name_remove }}&#34;
-    state: absent
-  tags: remove
-</code></pre><p>All 3 split task files have <code>tags:</code> key specified to offer flexiblity to
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Upgrade the whole system</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">upgrade</span>: <span style="color:#ae81ff">safe</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tags</span>: <span style="color:#ae81ff">upgrade</span>
+</span></span></code></pre></div><p><code>roles/base/tasks/install.yml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Install packages listed in package_name</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;{{ package_name_install }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">state</span>: <span style="color:#ae81ff">present</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tags</span>: <span style="color:#ae81ff">install</span>
+</span></span></code></pre></div><p><code>roles/base/tasks/remove.yml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Remove packages</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.apt</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#e6db74">&#34;{{ package_name_remove }}&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">state</span>: <span style="color:#ae81ff">absent</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">tags</span>: <span style="color:#ae81ff">remove</span>
+</span></span></code></pre></div><p>All 3 split task files have <code>tags:</code> key specified to offer flexiblity to
 the playbook as explained in the next section.</p>
 <p>Original YAML data under <code>vars:</code> are moved to <code>roles/base/vars/main.yml</code></p>
 <p><code>roles/base/tasks/main.yml</code>:</p>
-<pre tabindex="0"><code>---
-# vars file
-
-package_name_install:
-  - screen
-  - sudo
-  - mc
-  - aptitude
-  - vim
-
-package_name_remove:
-  - nano
-</code></pre><p>In the above, the entry point data file for each key such as <code>tasks</code> and <code>vars</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># vars file</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package_name_install</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">screen</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">sudo</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">mc</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">aptitude</span>
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">vim</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">package_name_remove</span>:
+</span></span><span style="display:flex;"><span>  - <span style="color:#ae81ff">nano</span>
+</span></span></code></pre></div><p>In the above, the entry point data file for each key such as <code>tasks</code> and <code>vars</code>
 which match the parent directory name is required to use the file name <code>main.yml</code>.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ansible-playbook pb_main.yml
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
@@ -427,7 +428,7 @@ which match the parent directory name is required to use the file name <code>mai
 </span></span><span style="display:flex;"><span>ok: [localhost]
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY RECAP **************************************************************************
-</span></span><span style="display:flex;"><span>localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+</span></span><span style="display:flex;"><span>localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 </span></span></code></pre></div><h3 id="play-a-part-of-playbook-with-tag">Play a part of Playbook with tag</h3>
 <p><a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html">Tags</a>
 let me execute only selected portion of tasks easily.</p>
@@ -435,13 +436,13 @@ let me execute only selected portion of tasks easily.</p>
 play a part of playbook.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible-playbook -t install pb_main.yml
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY [Example for ansible.builtin.apt with many packages] *******************************************************************************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY [Example for ansible.builtin.apt with many packages] ***************************
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [base : Install packages listed in package_name] ***********************************************************************************************************************
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>TASK [base : Install packages listed in package_name] *******************************
 </span></span><span style="display:flex;"><span>ok: [localhost]
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY RECAP ******************************************************************************************************************************************************************
-</span></span><span style="display:flex;"><span>localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>PLAY RECAP **************************************************************************
+</span></span><span style="display:flex;"><span>localhost                  : ok=1    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0
 </span></span></code></pre></div><p><code>ansible-playbook</code> offers five tag-related command-line options:</p>
 <ul>
 <li><code>--tags all</code> &ndash; run all tasks, ignore tags (default behavior)</li>
