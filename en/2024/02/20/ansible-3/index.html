@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/20 (initial publish),
-2024/02/23 (last update)
+2024/02/24 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00067.md
@@ -119,13 +119,14 @@ values may be updated as tasks are processed.</p>
 <h3 id="strategy-to-use-variables">Strategy to use variables</h3>
 <p>I can understand the rationale behind making &ldquo;extra vars&rdquo; to have a powerful
 precedence position.  It&rsquo;s handy for debugging.</p>
-<p>But, we can&rsquo;t use such &ldquo;extra vars&rdquo; variable names casually within the play and
+<p>But, I can&rsquo;t use such &ldquo;extra vars&rdquo; variable names casually within the play and
 try to rewrite their effective values with other variables.  So the approach of
 using corresponding but different internal variable names is the only
-reasonable alternative.  Then we can handle default values for the undefined
-cases and variable type issues can be handled gracefully.</p>
-<p>I put such variable name conversion code in the low priority &ldquo;role default&rdquo;.
-It also takes care variable type issues.</p>
+reasonable alternative.  Then I can handle default values for the undefined
+cases and variable type issues gracefully.</p>
+<p>I put such variable name conversion code from externally exposed to change
+Ansible behavior to corresponding internal one in the low priority &ldquo;role
+default&rdquo;.  It also takes care variable type issues.</p>
 <h3 id="testing-variables-in-action">Testing variables in action</h3>
 <p>Let me setup variable test code using following modules:</p>
 <ul>
