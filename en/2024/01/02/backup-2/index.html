@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/01/02 (initial publish),
-2024/01/12 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00061.md
@@ -95,46 +95,46 @@ $ systemctl status media-osamu-BKUP_USB.mount
        What: /dev/sda1
 </code></pre><h2 id="backup-upon-each-mount-event">Backup upon each mount event</h2>
 <p>Create <code>~/.config/systemd/user/bss-BKUP_USB.service</code> as:</p>
-<pre tabindex="0"><code>[Unit]
-Description=USB Disk backup
-Requires=media-penguin-BKUP_USB.mount
-After=media-penguin-BKUP_USB.mount
-
-[Service]
-ExecStart=bss --may --type usb batch BKUP_USB
-
-[Install]
-WantedBy=media-penguin-BKUP_USB.mount
-</code></pre><p>Create <code>~/.config/bss/BKUP_USB</code></p>
-<pre tabindex="0"><code>########################################################################
-# make new backup copy (path are relative from $HOME)
-# * source is a btrfs subvolume at ~/SRC_SUBVOL
-#   * always ignore error from gather
-# * destination is auto-mountable partition on a USB drive:
-#   * formatted as btrfs and
-#   * labeled as &#39;DST_LABEL&#39;
-########################################################################
-bss_usb_backup () {
-  # $1: SRC_SUBVOL
-  # $2: DST_LABEL
-  bss gather &#34;$1&#34; || true
-  bss copy   &#34;$1&#34; &#34;/media/$(id -un)/$2/$1&#34; || $BSS_MAY
-  bss snap        &#34;/media/$(id -un)/$2/$1&#34; || $BSS_MAY
-  bss process     &#34;/media/$(id -un)/$2/$1&#34; || $BSS_MAY
-}
-
-# Backup to BKUP_USB (high frequency backup SSD device)
-MSGID=$(notify-send -p &#34;bss: BKUP_USB&#34; &#34;backup in progress ...&#34;)
-bss_usb_backup Documents BKUP_USB
-notify-send -r &#34;$MSGID&#34; &#34;bss: BKUP_USB&#34; &#34;backup finished!&#34;
-
-# vim:se sw=2 ts=2 sts=2 et ai tw=78:
-</code></pre><p>Please note use of <code>notify-send</code> in this script.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">USB Disk backup</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Requires</span><span style="color:#f92672">=</span><span style="color:#e6db74">media-penguin-BKUP_USB.mount</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">After</span><span style="color:#f92672">=</span><span style="color:#e6db74">media-penguin-BKUP_USB.mount</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Service]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ExecStart</span><span style="color:#f92672">=</span><span style="color:#e6db74">bss --may --type usb batch BKUP_USB</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Install]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">WantedBy</span><span style="color:#f92672">=</span><span style="color:#e6db74">media-penguin-BKUP_USB.mount</span>
+</span></span></code></pre></div><p>Create <code>~/.config/bss/BKUP_USB</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">########################################################################</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># make new backup copy (path are relative from $HOME)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># * source is a btrfs subvolume at ~/SRC_SUBVOL</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   * always ignore error from gather</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># * destination is auto-mountable partition on a USB drive:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   * formatted as btrfs and</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   * labeled as &#39;DST_LABEL&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">########################################################################</span>
+</span></span><span style="display:flex;"><span>bss_usb_backup <span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># $1: SRC_SUBVOL</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># $2: DST_LABEL</span>
+</span></span><span style="display:flex;"><span>  bss gather <span style="color:#e6db74">&#34;</span>$1<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">||</span> true
+</span></span><span style="display:flex;"><span>  bss copy   <span style="color:#e6db74">&#34;</span>$1<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;/media/</span><span style="color:#66d9ef">$(</span>id -un<span style="color:#66d9ef">)</span><span style="color:#e6db74">/</span>$2<span style="color:#e6db74">/</span>$1<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">||</span> $BSS_MAY
+</span></span><span style="display:flex;"><span>  bss snap        <span style="color:#e6db74">&#34;/media/</span><span style="color:#66d9ef">$(</span>id -un<span style="color:#66d9ef">)</span><span style="color:#e6db74">/</span>$2<span style="color:#e6db74">/</span>$1<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">||</span> $BSS_MAY
+</span></span><span style="display:flex;"><span>  bss process     <span style="color:#e6db74">&#34;/media/</span><span style="color:#66d9ef">$(</span>id -un<span style="color:#66d9ef">)</span><span style="color:#e6db74">/</span>$2<span style="color:#e6db74">/</span>$1<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">||</span> $BSS_MAY
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Backup to BKUP_USB (high frequency backup SSD device)</span>
+</span></span><span style="display:flex;"><span>MSGID<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>notify-send -p <span style="color:#e6db74">&#34;bss: BKUP_USB&#34;</span> <span style="color:#e6db74">&#34;backup in progress ...&#34;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>bss_usb_backup Documents BKUP_USB
+</span></span><span style="display:flex;"><span>notify-send -r <span style="color:#e6db74">&#34;</span>$MSGID<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;bss: BKUP_USB&#34;</span> <span style="color:#e6db74">&#34;backup finished!&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># vim:se sw=2 ts=2 sts=2 et ai tw=78:</span>
+</span></span></code></pre></div><p>Please note use of <code>notify-send</code> in this script.</p>
 <p>Then, activate this service unit as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ systemctl --user enable bss-BKUP_USB.service
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ systemctl --user enable bss-BKUP_USB.service
 </span></span></code></pre></div><p>Somehow, I get the following unexpected spurious yellow warning.</p>
-<pre tabindex="0"><code>Unit /home/penguin/.config/systemd/user/bss-BKUP_USB.service is added as a dependency to a non-existent unit media-penguin-BKUP_USB.mount.
-</code></pre><p>Despite this warning, USB storage seems to be getting backup data when my workstation is powered up with USB drive plugged-in or when it get plugged-in.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>Unit /home/penguin/.config/systemd/user/bss-BKUP_USB.service is added as a dependency to a non-existent unit media-penguin-BKUP_USB.mount.
+</span></span></code></pre></div><p>Despite this warning, USB storage seems to be getting backup data when my workstation is powered up with USB drive plugged-in or when it get plugged-in.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 

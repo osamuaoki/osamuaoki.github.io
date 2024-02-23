@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/12/24 (initial publish),
-2023/12/25 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00060.md
@@ -80,8 +80,8 @@ en/note-00060.md
 <p>Here is a memo over IP address and its logging.</p>
 <h2 id="local-ip-address">Local IP address</h2>
 <p>Local IP address can be obtained by using <code>ip addr</code>.</p>
-<pre tabindex="0"><code> $ ip addr
-</code></pre><p>For processing this output with script, use of <code>-o</code> option is handy.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ip addr
+</span></span></code></pre></div><p>For processing this output with script, use of <code>-o</code> option is handy.</p>
 <h2 id="global-ip-address">Global IP address</h2>
 <p>If a workstation is behind the firewall, Global IP address is that for the
 gateway device.</p>
@@ -125,46 +125,44 @@ gateway device.</p>
 <p>So I don&rsquo;t get global IP with IPv4 but have global IP with IPv6.</p>
 <h2 id="logging-ip-address-with-systemd-timer">Logging IP address with systemd timer</h2>
 <h3 id="configsystemdusermyipservice"><code>~/.config/systemd/user/myip.service</code></h3>
-<pre tabindex="0"><code>[Unit]
-Description=Check external IP address
-Documentation=man:myip(1)
-# journalctl -a -b -t myip
-
-[Service]
-Type=oneshot
-Nice=15
-# ifconfig.co can be other IP servicing similar functionality.
-# See https://serverfault.com/questions/1007184/how-to-check-ipv6-address-via-command-line
-ExecStart=systemd-cat -p 5 -t &#34;myip&#34; sh -c &#39;echo &#34;External IP: IPv4=$(curl -4 https://ifconfig.co 2&gt;/dev/null)&#34;&#39;
-ExecStart=systemd-cat -p 5 -t &#34;myip&#34; sh -c &#39;echo &#34;External IP: IPv6=$(curl -6 https://ifconfig.co 2&gt;/dev/null)&#34;&#39;
-IOSchedulingClass=idle
-CPUSchedulingPolicy=idle
-StandardInput=null
-StandardOutput=null
-StandardError=null
-</code></pre><h3 id="configsystemdusermyiptimer"><code>~/.config/systemd/user/myip.timer</code>:</h3>
-<pre tabindex="0"><code># activate by: systemctl --user enable myip.timer
-[Unit]
-Description=Check external IP address
-Documentation=man:myip(1)
-
-[Timer]
-# 90 sec min is enough for connecting to new Wifi service
-OnStartupSec=90
-
-[Install]
-WantedBy=timers.target
-</code></pre><h3 id="activating-timer-service">Activating timer service</h3>
-<pre tabindex="0"><code> $ systemctl --user enable myip.timer
-</code></pre><p>This creates a symlink <code>~/.config/systemd/user/timers.target.wants/myip.timer</code> pointing to <code>~/.config/systemd/user/myip.timer</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">Check external IP address</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Documentation</span><span style="color:#f92672">=</span><span style="color:#e6db74">man:myip(1)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># journalctl -a -b -t myip</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Service]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Type</span><span style="color:#f92672">=</span><span style="color:#e6db74">oneshot</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Nice</span><span style="color:#f92672">=</span><span style="color:#e6db74">15</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># ifconfig.co can be other IP servicing similar functionality.</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># See https://serverfault.com/questions/1007184/how-to-check-ipv6-address-via-command-line</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ExecStart</span><span style="color:#f92672">=</span><span style="color:#e6db74">systemd-cat -p 5 -t &#34;myip&#34; sh -c &#39;echo &#34;External IP: IPv4=$(curl -4 https://ifconfig.co 2&gt;/dev/null)&#34;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">ExecStart</span><span style="color:#f92672">=</span><span style="color:#e6db74">systemd-cat -p 5 -t &#34;myip&#34; sh -c &#39;echo &#34;External IP: IPv6=$(curl -6 https://ifconfig.co 2&gt;/dev/null)&#34;&#39;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">IOSchedulingClass</span><span style="color:#f92672">=</span><span style="color:#e6db74">idle</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">CPUSchedulingPolicy</span><span style="color:#f92672">=</span><span style="color:#e6db74">idle</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">StandardInput</span><span style="color:#f92672">=</span><span style="color:#e6db74">null</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">StandardOutput</span><span style="color:#f92672">=</span><span style="color:#e6db74">null</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">StandardError</span><span style="color:#f92672">=</span><span style="color:#e6db74">null</span>
+</span></span></code></pre></div><h3 id="configsystemdusermyiptimer"><code>~/.config/systemd/user/myip.timer</code>:</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#75715e"># activate by: systemctl --user enable myip.timer</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">Check external IP address</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Documentation</span><span style="color:#f92672">=</span><span style="color:#e6db74">man:myip(1)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Timer]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 90 sec min is enough for connecting to new Wifi service</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">OnStartupSec</span><span style="color:#f92672">=</span><span style="color:#e6db74">90</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Install]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">WantedBy</span><span style="color:#f92672">=</span><span style="color:#e6db74">timers.target</span>
+</span></span></code></pre></div><h3 id="activating-timer-service">Activating timer service</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ systemctl --user enable myip.timer
+</span></span></code></pre></div><p>This creates a symlink <code>~/.config/systemd/user/timers.target.wants/myip.timer</code> pointing to <code>~/.config/systemd/user/myip.timer</code></p>
 <h3 id="checking-logged-ips">Checking logged IPs</h3>
 <p>IP address as I powered-on this time.</p>
-<pre tabindex="0"><code> $ journalctl -a -b -t myip
-</code></pre><p>IP address as I powered-on recently.</p>
-<pre tabindex="0"><code> $ journalctl -a -t myip
-</code></pre><!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ journalctl -a -b -t myip
+</span></span></code></pre></div><p>IP address as I powered-on recently.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ journalctl -a -t myip
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
