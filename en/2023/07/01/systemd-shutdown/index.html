@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/07/01 (initial publish),
-2023/07/09 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00048.md
@@ -85,19 +85,19 @@ following process names:</p>
 </ul>
 <p>Edit <code>/etc/systemd/system.conf</code> to reduce timeout from default 100s according to
 <code>systemd-system.conf</code>(5):</p>
-<pre tabindex="0"><code> DefaultTimeoutStartSec=, DefaultTimeoutStopSec=,
- DefaultTimeoutAbortSec=, DefaultRestartSec=
-     Configures the default timeouts for starting, stopping and aborting
-     of units, as well as the default time to sleep between automatic
-     restarts of units, as configured per-unit in TimeoutStartSec=,
-     TimeoutStopSec=, TimeoutAbortSec= and RestartSec= (for services, see
-     systemd.service(5) for details on the per-unit settings). Disabled
-     by default, when service with Type=oneshot is used. For non-service
-     units, DefaultTimeoutStartSec= sets the default TimeoutSec= value.
-     DefaultTimeoutStartSec= and DefaultTimeoutStopSec= default to 90s.
-     DefaultTimeoutAbortSec= is not set by default so that all units fall
-     back to TimeoutStopSec=.  DefaultRestartSec= defaults to 100ms.
-</code></pre><p>This can be a quick workaround to reduce time to shutdown from 100s to 60s
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span> <span style="color:#a6e22e">DefaultTimeoutStartSec</span><span style="color:#f92672">=</span><span style="color:#e6db74">, DefaultTimeoutStopSec=,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> DefaultTimeoutAbortSec=, DefaultRestartSec=
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     Configures the default timeouts for starting, stopping and aborting
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     of units, as well as the default time to sleep between automatic
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     restarts of units, as configured per-unit in TimeoutStartSec=,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     TimeoutStopSec=, TimeoutAbortSec= and RestartSec= (for services, see
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     systemd.service(5) for details on the per-unit settings). Disabled
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     by default, when service with Type=oneshot is used. For non-service
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     units, DefaultTimeoutStartSec= sets the default TimeoutSec= value.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     DefaultTimeoutStartSec= and DefaultTimeoutStopSec= default to 90s.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     DefaultTimeoutAbortSec= is not set by default so that all units fall
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     back to TimeoutStopSec=.  DefaultRestartSec= defaults to 100ms.</span>
+</span></span></code></pre></div><p>This can be a quick workaround to reduce time to shutdown from 100s to 60s
 without knowing the offending process.</p>
 <p>This is not the root cause fix.</p>
 <h2 id="root-cause-fix-for-timeout">Root cause fix for timeout</h2>
@@ -109,14 +109,14 @@ without knowing the offending process.</p>
 <!-- raw HTML omitted -->
 <p>For example, I edited the seemingly offending <code>*.service</code> files such as
 <code>/lib/systemd/user/tracke~er-fs-control-3.service</code> by adding dependency as:</p>
-<pre tabindex="0"><code>[Unit]
-...
-Conflicts=shutdown.target initrd-switch-root.target
-Before=shutdown.target initrd-switch-root.target
-
-[Service]
-...
-</code></pre><p>This seemed to help avoid waiting for timeout.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">...</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Conflicts</span><span style="color:#f92672">=</span><span style="color:#e6db74">shutdown.target initrd-switch-root.target</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Before</span><span style="color:#f92672">=</span><span style="color:#e6db74">shutdown.target initrd-switch-root.target</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Service]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">...</span>
+</span></span></code></pre></div><p>This seemed to help avoid waiting for timeout.</p>
 <!-- raw HTML omitted -->
 
 

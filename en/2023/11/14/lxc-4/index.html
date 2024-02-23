@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/14 (initial publish),
-2023/11/25 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00055.md
@@ -183,67 +183,67 @@ wayland under the Debian bookworm environment.</p>
 Debian bookworm environment in the followings.</p>
 <h2 id="yaml-setting-for-profiledefault">YAML setting for profile=default</h2>
 <p>Let&rsquo;s see the default LXD profile:</p>
-<pre tabindex="0"><code>$ lxc profile show default
-config: {}
-description: Default LXD profile
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  root:
-    path: /
-    pool: default
-    type: disk
-name: default
-used_by:
-- /1.0/instances/d0
-- /1.0/instances/d1
-- /1.0/instances/d2
-</code></pre><p>The last list for key=<code>used_by</code> changes as I use this profile.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxc profile show default
+</span></span><span style="display:flex;"><span>config: {}
+</span></span><span style="display:flex;"><span>description: Default LXD profile
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  eth0:
+</span></span><span style="display:flex;"><span>    name: eth0
+</span></span><span style="display:flex;"><span>    network: lxdbr0
+</span></span><span style="display:flex;"><span>    type: nic
+</span></span><span style="display:flex;"><span>  root:
+</span></span><span style="display:flex;"><span>    path: /
+</span></span><span style="display:flex;"><span>    pool: default
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>name: default
+</span></span><span style="display:flex;"><span>used_by:
+</span></span><span style="display:flex;"><span>- /1.0/instances/d0
+</span></span><span style="display:flex;"><span>- /1.0/instances/d1
+</span></span><span style="display:flex;"><span>- /1.0/instances/d2
+</span></span></code></pre></div><p>The last list for key=<code>used_by</code> changes as I use this profile.</p>
 <p>Unless this list is empty, profile can&rsquo;t be deleted.</p>
 <h2 id="user-specific-sockets-used-by-ipc">User specific sockets used by IPC</h2>
 <p>For my primary user (name=<code>osamu</code>, UID=<code>1000</code>) on the host system running
 Debian 12 bookworm with GNOME wayland, I see following user accessible sockets under <code>/run/user/</code> and <code>/tmp</code>:</p>
-<pre tabindex="0"><code> $ ls -l $(find /run/user -type s 2&gt;/dev/null)
-srwxrwxrwx 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/at-spi/bus
-srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/bus
-srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gcr/ssh
-srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.dirmngr
-srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent
-srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent.browser
-srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent.extra
-srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent.ssh
-srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/keyring/control
-srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/keyring/pkcs11
-srw------- 1 osamu osamu 0 Nov 25 07:14 /run/user/1000/keyring/.ssh
-srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/keyring/ssh
-srwxrwxr-x 1 osamu osamu 0 Nov 25 07:47 /run/user/1000/nvim.11027.0
-srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/openssh_agent
-srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/pipewire-0
-srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/pk-debconf-socket
-srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/pulse/native
-srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/snapd-session-agent.socket
-s--------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/systemd/inaccessible/sock
-srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/systemd/notify
-srwx------ 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/systemd/private
-srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/wayland-0
- $ ls -l $(find /tmp -type s 2&gt;/dev/null)
-srwxr-xr-x 1 osamu      osamu      0 Nov 25 07:15 /tmp/.com.google.Chrome.0JD6Mr/SingletonSocket
-srwxrwxrwx 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.ICE-unix/1847
-srwxrwxrwx 1 osamu      osamu      0 Nov 25 07:13 /tmp/.ICE-unix/2702
-srwxr-xr-x 1 osamu      osamu      0 Nov 25 07:13 /tmp/.X11-unix/X0
-srwxr-xr-x 1 osamu      osamu      0 Nov 25 07:13 /tmp/.X11-unix/X1
-srwxr-xr-x 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.X11-unix/X1024
-srwxr-xr-x 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.X11-unix/X1025
-</code></pre><p>Let me check further who uses X sockets while running GNOME desktop on Wayland.</p>
-<pre tabindex="0"><code> $ lsof -U |grep -e &#39;[^@]/tmp/\.X11-unix/&#39;
-gnome-she 2733 osamu   45u  unix 0x0000000061b9b072      0t0 38083 /tmp/.X11-unix/X1 type=STREAM (LISTEN)
-Xwayland  3244 osamu    5u  unix 0x000000005899b02d      0t0 38081 /tmp/.X11-unix/X0 type=STREAM (LISTEN)
- $ ps aux |grep &#39;\(273[3]\|324[4]\)&#39;
-osamu       2733  3.1  0.9 5187384 299252 ?      Ssl  07:12   1:04 /usr/bin/gnome-shell
-osamu       3244  0.3  0.3 788556 123388 ?       Sl   07:12   0:07 /usr/bin/Xwayland :0 -rootless -noreset -accessx -core -auth /run/user/1000/.mutter-Xwaylandauth.VC1EF2 -listenfd 4 -listenfd 5 -displayfd 6 -initfd 7
-</code></pre><p>So the monitor screen is accessed as <code>/run/user/1000/wayland-0</code> from Wayland on
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ls -l $(find /run/user -type s 2&gt;/dev/null)
+</span></span><span style="display:flex;"><span>srwxrwxrwx 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/at-spi/bus
+</span></span><span style="display:flex;"><span>srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/bus
+</span></span><span style="display:flex;"><span>srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gcr/ssh
+</span></span><span style="display:flex;"><span>srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.dirmngr
+</span></span><span style="display:flex;"><span>srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent
+</span></span><span style="display:flex;"><span>srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent.browser
+</span></span><span style="display:flex;"><span>srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent.extra
+</span></span><span style="display:flex;"><span>srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gnupg/S.gpg-agent.ssh
+</span></span><span style="display:flex;"><span>srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/keyring/control
+</span></span><span style="display:flex;"><span>srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/keyring/pkcs11
+</span></span><span style="display:flex;"><span>srw------- 1 osamu osamu 0 Nov 25 07:14 /run/user/1000/keyring/.ssh
+</span></span><span style="display:flex;"><span>srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/keyring/ssh
+</span></span><span style="display:flex;"><span>srwxrwxr-x 1 osamu osamu 0 Nov 25 07:47 /run/user/1000/nvim.11027.0
+</span></span><span style="display:flex;"><span>srw------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/openssh_agent
+</span></span><span style="display:flex;"><span>srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/pipewire-0
+</span></span><span style="display:flex;"><span>srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/pk-debconf-socket
+</span></span><span style="display:flex;"><span>srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/pulse/native
+</span></span><span style="display:flex;"><span>srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/snapd-session-agent.socket
+</span></span><span style="display:flex;"><span>s--------- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/systemd/inaccessible/sock
+</span></span><span style="display:flex;"><span>srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/systemd/notify
+</span></span><span style="display:flex;"><span>srwx------ 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/systemd/private
+</span></span><span style="display:flex;"><span>srwxr-xr-x 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/wayland-0
+</span></span><span style="display:flex;"><span> $ ls -l $(find /tmp -type s 2&gt;/dev/null)
+</span></span><span style="display:flex;"><span>srwxr-xr-x 1 osamu      osamu      0 Nov 25 07:15 /tmp/.com.google.Chrome.0JD6Mr/SingletonSocket
+</span></span><span style="display:flex;"><span>srwxrwxrwx 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.ICE-unix/1847
+</span></span><span style="display:flex;"><span>srwxrwxrwx 1 osamu      osamu      0 Nov 25 07:13 /tmp/.ICE-unix/2702
+</span></span><span style="display:flex;"><span>srwxr-xr-x 1 osamu      osamu      0 Nov 25 07:13 /tmp/.X11-unix/X0
+</span></span><span style="display:flex;"><span>srwxr-xr-x 1 osamu      osamu      0 Nov 25 07:13 /tmp/.X11-unix/X1
+</span></span><span style="display:flex;"><span>srwxr-xr-x 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.X11-unix/X1024
+</span></span><span style="display:flex;"><span>srwxr-xr-x 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.X11-unix/X1025
+</span></span></code></pre></div><p>Let me check further who uses X sockets while running GNOME desktop on Wayland.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lsof -U |grep -e &#39;[^@]/tmp/\.X11-unix/&#39;
+</span></span><span style="display:flex;"><span>gnome-she 2733 osamu   45u  unix 0x0000000061b9b072      0t0 38083 /tmp/.X11-unix/X1 type=STREAM (LISTEN)
+</span></span><span style="display:flex;"><span>Xwayland  3244 osamu    5u  unix 0x000000005899b02d      0t0 38081 /tmp/.X11-unix/X0 type=STREAM (LISTEN)
+</span></span><span style="display:flex;"><span> $ ps aux |grep &#39;\(273[3]\|324[4]\)&#39;
+</span></span><span style="display:flex;"><span>osamu       2733  3.1  0.9 5187384 299252 ?      Ssl  07:12   1:04 /usr/bin/gnome-shell
+</span></span><span style="display:flex;"><span>osamu       3244  0.3  0.3 788556 123388 ?       Sl   07:12   0:07 /usr/bin/Xwayland :0 -rootless -noreset -accessx -core -auth /run/user/1000/.mutter-Xwaylandauth.VC1EF2 -listenfd 4 -listenfd 5 -displayfd 6 -initfd 7
+</span></span></code></pre></div><p>So the monitor screen is accessed as <code>/run/user/1000/wayland-0</code> from Wayland on
 my environment.</p>
 <p>If sound needs to be accessed, sockets such as <code>/run/user/1000/pipewire-0</code> may
 be needed.  If X program needs to be accessed, sockets such as
@@ -253,56 +253,56 @@ be needed.  If X program needs to be accessed, sockets such as
 <h2 id="yaml-to-allow-display-to-wayland-using-extra-disk-device">YAML to allow display to Wayland using extra disk device</h2>
 <p>Here is a simple YAML data example (<code>wayland.yaml</code>) to add <code>disk</code> device for
 the Wayland socket.</p>
-<pre tabindex="0"><code>config:
-  boot.autostart: false
-  raw.idmap: both 1000 1000
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      lock_passwd: True
-      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
-      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-      shell: /bin/bash
-    write_files:
-    - path: /usr/local/bin/mystartup.sh
-      permissions: 0755
-      content: |
-        #!/bin/sh
-        uid=$(id -u)
-        run_dir=/run/user/$uid
-        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
-        ln -sf /mnt/runuser/wayland-0 $run_dir/wayland-0
-    - path: /usr/local/etc/mystartup.service
-      content: |
-        [Unit]
-        After=local-fs.target
-        [Service]
-        Type=oneshot
-        ExecStart=/usr/local/bin/mystartup.sh
-        [Install]
-        WantedBy=default.target
-    runcmd:
-    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
-    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
-    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
-    - chown -R osamu:osamu /home/osamu
-    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
-description: Wayland LXD profile
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  root:
-    path: /
-    pool: default
-    type: disk
-  wayland-0:
-    source: /run/user/1000/wayland-0
-    path: /mnt/runuser/wayland-0
-    type: disk
-</code></pre><p>Here, <code>raw.idmap: both 1000 1000</code> ensures permissions of
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">config</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">boot.autostart</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">raw.idmap</span>: <span style="color:#ae81ff">both 1000 1000</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">user.user-data</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    #cloud-config
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    users:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - name: osamu
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      lock_passwd: True
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      shell: /bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    write_files:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - path: /usr/local/bin/mystartup.sh
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      permissions: 0755
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      content: |
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        #!/bin/sh
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        uid=$(id -u)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        run_dir=/run/user/$uid
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ln -sf /mnt/runuser/wayland-0 $run_dir/wayland-0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - path: /usr/local/etc/mystartup.service
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      content: |
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [Unit]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        After=local-fs.target
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [Service]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        Type=oneshot
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ExecStart=/usr/local/bin/mystartup.sh
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [Install]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        WantedBy=default.target
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    runcmd:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - chown -R osamu:osamu /home/osamu
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile</span>    
+</span></span><span style="display:flex;"><span><span style="color:#f92672">description</span>: <span style="color:#ae81ff">Wayland LXD profile</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">devices</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">eth0</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">eth0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">network</span>: <span style="color:#ae81ff">lxdbr0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">nic</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">root</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">pool</span>: <span style="color:#ae81ff">default</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">disk</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">wayland-0</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">source</span>: <span style="color:#ae81ff">/run/user/1000/wayland-0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/mnt/runuser/wayland-0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">disk</span>
+</span></span></code></pre></div><p>Here, <code>raw.idmap: both 1000 1000</code> ensures permissions of
 <code>/mnt/runuser/wayland-0</code> is matches with the host to offer R/W access from
 <code>osamu</code> <code>UID=1000</code>.</p>
 <p>The <code>mystartup.sh</code> script in <code>user.user-data</code> is generated and applied when
@@ -312,112 +312,112 @@ usual location in the container (<code>/run/user/1000/wayland-0</code>) every ti
 primary user <code>osamu</code> logs in.</p>
 <h2 id="running-wayland-gui-application-eog-in-container">Running Wayland GUI application <code>eog</code> in container</h2>
 <p>Let me first create a profile <code>wayland</code>:</p>
-<pre tabindex="0"><code> $ lxc profile create wayland
- $ lxc profile edit wayland &lt; wayland.yaml
- $ lxc profile ls
-+---------+---------------------+---------+
-|  NAME   |     DESCRIPTION     | USED BY |
-+---------+---------------------+---------+
-| default | Default LXD profile | 3       |
-+---------+---------------------+---------+
-| wayland | Wayland LXD profile | 0       |
-+---------+---------------------+---------+
-</code></pre><p>Let me start <code>wayland</code> instance with <code>wayland</code> profile</p>
-<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud wayland --profile wayland
-</code></pre><p>Let me inspect this instance. (We need to expand to see effective configuration
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc profile create wayland
+</span></span><span style="display:flex;"><span> $ lxc profile edit wayland &lt; wayland.yaml
+</span></span><span style="display:flex;"><span> $ lxc profile ls
+</span></span><span style="display:flex;"><span>+---------+---------------------+---------+
+</span></span><span style="display:flex;"><span>|  NAME   |     DESCRIPTION     | USED BY |
+</span></span><span style="display:flex;"><span>+---------+---------------------+---------+
+</span></span><span style="display:flex;"><span>| default | Default LXD profile | 3       |
+</span></span><span style="display:flex;"><span>+---------+---------------------+---------+
+</span></span><span style="display:flex;"><span>| wayland | Wayland LXD profile | 0       |
+</span></span><span style="display:flex;"><span>+---------+---------------------+---------+
+</span></span></code></pre></div><p>Let me start <code>wayland</code> instance with <code>wayland</code> profile</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch images:debian/12/cloud wayland --profile wayland
+</span></span></code></pre></div><p>Let me inspect this instance. (We need to expand to see effective configuration
 settings.)</p>
-<pre tabindex="0"><code> $ lxc config show wayland -e
-architecture: x86_64
-config:
-  boot.autostart: &#34;false&#34;
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231124_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231124_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  raw.idmap: both 1000 1000
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      lock_passwd: True
-      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
-      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-      shell: /bin/bash
-    write_files:
-    - path: /usr/local/bin/mystartup.sh
-      permissions: 0755
-      content: |
-        #!/bin/sh
-        uid=$(id -u)
-        run_dir=/run/user/$uid
-        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
-        ln -sf /mnt/runuser/wayland-0 $run_dir/wayland-0
-    - path: /usr/local/etc/mystartup.service
-      content: |
-        [Unit]
-        After=local-fs.target
-        [Service]
-        Type=oneshot
-        ExecStart=/usr/local/bin/mystartup.sh
-        [Install]
-        WantedBy=default.target
-    runcmd:
-    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
-    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
-    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
-    - chown -R osamu:osamu /home/osamu
-    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
-  volatile.base_image: 03e51acc22a673de40cf411923bebc3215bea394cf828cafabb6b61925fd722f
-  volatile.cloud-init.instance-id: 731cdfd7-9f7e-4e76-a900-9c53b6caf3ba
-  volatile.eth0.host_name: veth1db326cc
-  volatile.eth0.hwaddr: 00:16:3e:d9:a7:2a
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: 514a4bb8-aa7d-4b33-b76e-feb8d9d3f3c8
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  root:
-    path: /
-    pool: default
-    type: disk
-  wayland-0:
-    path: /mnt/runuser/wayland-0
-    source: /run/user/1000/wayland-0
-    type: disk
-ephemeral: false
-profiles:
-- wayland
-stateful: false
-description: &#34;&#34;
-</code></pre><p>Now, we can see full contents of <code>user.user_data:</code> and <code>devices:</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc config show wayland -e
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  boot.autostart: &#34;false&#34;
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20231124_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20231124_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: squashfs
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  raw.idmap: both 1000 1000
+</span></span><span style="display:flex;"><span>  user.user-data: |
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      lock_passwd: True
+</span></span><span style="display:flex;"><span>      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+</span></span><span style="display:flex;"><span>      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+</span></span><span style="display:flex;"><span>      shell: /bin/bash
+</span></span><span style="display:flex;"><span>    write_files:
+</span></span><span style="display:flex;"><span>    - path: /usr/local/bin/mystartup.sh
+</span></span><span style="display:flex;"><span>      permissions: 0755
+</span></span><span style="display:flex;"><span>      content: |
+</span></span><span style="display:flex;"><span>        #!/bin/sh
+</span></span><span style="display:flex;"><span>        uid=$(id -u)
+</span></span><span style="display:flex;"><span>        run_dir=/run/user/$uid
+</span></span><span style="display:flex;"><span>        mkdir -p $run_dir &amp;&amp; chmod 700 $run_dir &amp;&amp; chown $uid:$uid $run_dir
+</span></span><span style="display:flex;"><span>        ln -sf /mnt/runuser/wayland-0 $run_dir/wayland-0
+</span></span><span style="display:flex;"><span>    - path: /usr/local/etc/mystartup.service
+</span></span><span style="display:flex;"><span>      content: |
+</span></span><span style="display:flex;"><span>        [Unit]
+</span></span><span style="display:flex;"><span>        After=local-fs.target
+</span></span><span style="display:flex;"><span>        [Service]
+</span></span><span style="display:flex;"><span>        Type=oneshot
+</span></span><span style="display:flex;"><span>        ExecStart=/usr/local/bin/mystartup.sh
+</span></span><span style="display:flex;"><span>        [Install]
+</span></span><span style="display:flex;"><span>        WantedBy=default.target
+</span></span><span style="display:flex;"><span>    runcmd:
+</span></span><span style="display:flex;"><span>    - mkdir -p /home/osamu/.config/systemd/user/default.target.wants
+</span></span><span style="display:flex;"><span>    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
+</span></span><span style="display:flex;"><span>    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
+</span></span><span style="display:flex;"><span>    - chown -R osamu:osamu /home/osamu
+</span></span><span style="display:flex;"><span>    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile
+</span></span><span style="display:flex;"><span>  volatile.base_image: 03e51acc22a673de40cf411923bebc3215bea394cf828cafabb6b61925fd722f
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: 731cdfd7-9f7e-4e76-a900-9c53b6caf3ba
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: veth1db326cc
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:d9:a7:2a
+</span></span><span style="display:flex;"><span>  volatile.idmap.base: &#34;0&#34;
+</span></span><span style="display:flex;"><span>  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.idmap: &#39;[]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.uuid: 514a4bb8-aa7d-4b33-b76e-feb8d9d3f3c8
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  eth0:
+</span></span><span style="display:flex;"><span>    name: eth0
+</span></span><span style="display:flex;"><span>    network: lxdbr0
+</span></span><span style="display:flex;"><span>    type: nic
+</span></span><span style="display:flex;"><span>  root:
+</span></span><span style="display:flex;"><span>    path: /
+</span></span><span style="display:flex;"><span>    pool: default
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>  wayland-0:
+</span></span><span style="display:flex;"><span>    path: /mnt/runuser/wayland-0
+</span></span><span style="display:flex;"><span>    source: /run/user/1000/wayland-0
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- wayland
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span><span style="display:flex;"><span>description: &#34;&#34;
+</span></span></code></pre></div><p>Now, we can see full contents of <code>user.user_data:</code> and <code>devices:</code>.</p>
 <p>This <code>user.user_data:</code> YAML data is passed to <code>cloud-init</code> to create files and
 execute commands as the container starts.</p>
-<pre tabindex="0"><code> $ lxc exec wayland -- apt install eog
- $ lxc exec wayland -- sudo -u osamu -i eog
-</code></pre><p>This container environment allowed me to run an Wayland GUI program <code>eog</code> in
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc exec wayland -- apt install eog
+</span></span><span style="display:flex;"><span> $ lxc exec wayland -- sudo -u osamu -i eog
+</span></span></code></pre></div><p>This container environment allowed me to run an Wayland GUI program <code>eog</code> in
 container and displaying its result to the host GNOME Desktop.  Nice.</p>
 <h2 id="running-wayland-gui-application-firefox-in-container-using-disk-device">Running Wayland GUI application <code>firefox</code> in container using disk device</h2>
 <p>I  installed and tried the <code>firefox-esr</code> package.</p>
 <p>Then started <code>firefox</code>:</p>
-<pre tabindex="0"><code> $ lxc exec wayland -- apt install firefox-esr
- $ lxc exec wayland -- sudo -u osamu -i firefox
-[GFX1-]: glxtest: libpci missing
-</code></pre><p>This can be fixed by installing <code>libpci3</code> package (<a href="https://askubuntu.com/questions/1334192/glxtest-libpci-missing-although-i-made-an-apt-install">some web
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc exec wayland -- apt install firefox-esr
+</span></span><span style="display:flex;"><span> $ lxc exec wayland -- sudo -u osamu -i firefox
+</span></span><span style="display:flex;"><span>[GFX1-]: glxtest: libpci missing
+</span></span></code></pre></div><p>This can be fixed by installing <code>libpci3</code> package (<a href="https://askubuntu.com/questions/1334192/glxtest-libpci-missing-although-i-made-an-apt-install">some web
 article</a>
 implies to install <code>libpci-dev</code> which installs more packages in addition to
 <code>libpci3</code> as a cure.):</p>
-<pre tabindex="0"><code> $ lxc exec wayland -- apt install libpci3
- $ lxc exec wayland -- sudo -u osamu -i firefox
-</code></pre><p>Normally, <code>pciutils</code> package which has &ldquo;priority: standard&rdquo; is installed and
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc exec wayland -- apt install libpci3
+</span></span><span style="display:flex;"><span> $ lxc exec wayland -- sudo -u osamu -i firefox
+</span></span></code></pre></div><p>Normally, <code>pciutils</code> package which has &ldquo;priority: standard&rdquo; is installed and
 pulls in <code>libpci3</code>.  But <code>firefox-esr</code> doesn&rsquo;t list <code>libpci3</code> explicitly as
 <code>Depends:</code> nor <code>Recommends:</code>.  I suppose this is a
 <a href="https://bugs.debian.org/993308">bug</a>.</p>

@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/11 (initial publish),
-2023/11/21 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00050.md
@@ -127,34 +127,34 @@ kernel.</a></p>
 <h2 id="installation-of-lxd-to-debian-12">Installation of LXD to Debian 12</h2>
 <p>On a Debian 12 system with its <code>/var/lib</code> on btrfs, I run following commands to
 install LXD.</p>
-<pre tabindex="0"><code> $ sudo aptitude install lxc lxd lxd-tools
- $ sudo adduser osamu lxd
- $ sudo newusers group
- $ sudo lxd init
-  ... go with defaults
-</code></pre><p>This seems to create the <code>/var/lib/lxd/images/</code> directory.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo aptitude install lxc lxd lxd-tools
+</span></span><span style="display:flex;"><span> $ sudo adduser osamu lxd
+</span></span><span style="display:flex;"><span> $ sudo newusers group
+</span></span><span style="display:flex;"><span> $ sudo lxd init
+</span></span><span style="display:flex;"><span>  ... go with defaults
+</span></span></code></pre></div><p>This seems to create the <code>/var/lib/lxd/images/</code> directory.</p>
 <h2 id="tracing-first-steps-with-lxd">Tracing &ldquo;First steps with LXD&rdquo;</h2>
 <p>I traced &ldquo;First steps with LXD&rdquo; with some extra operations to check what is
 really happening.</p>
 <h3 id="getting-system-images-for-lxd">Getting system images for LXD</h3>
 <p>Since manpage for <code>lxc-launch</code> on Debian 12 is useless, let&rsquo;s see:</p>
-<pre tabindex="0"><code> $ lxc launch -h
-Description:
-  Create and start instances from images
-
-Usage:
-  lxc launch [&lt;remote&gt;:]&lt;image&gt; [&lt;remote&gt;:][&lt;name&gt;] [flags]
-...
-</code></pre><p>Full list of <code>remote</code> is available by issuing <code>lxc remote list</code>.  Notable ones
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch -h
+</span></span><span style="display:flex;"><span>Description:
+</span></span><span style="display:flex;"><span>  Create and start instances from images
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span><span style="display:flex;"><span>  lxc launch [&lt;remote&gt;:]&lt;image&gt; [&lt;remote&gt;:][&lt;name&gt;] [flags]
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Full list of <code>remote</code> is available by issuing <code>lxc remote list</code>.  Notable ones
 are:</p>
 <ul>
 <li><code>images</code> for all images at <a href="https://images.linuxcontainers.org/">https://images.linuxcontainers.org/</a></li>
 <li><code>ubuntu</code> for specifically Ubuntu images at <a href="https://cloud-images.ubuntu.com/releases">https://cloud-images.ubuntu.com/releases</a></li>
 </ul>
 <p>Let me create and start instances from images for &ldquo;Ubuntu 22.04&rdquo; and &ldquo;Debian 12&rdquo;.</p>
-<pre tabindex="0"><code> $ lxc launch images:debian/12 debian-12
- $ lxc launch ubuntu:22.04 ubuntu-2204
-</code></pre><p>System images specified as <code>ubuntu:22.04</code> or <code>images:debian/12</code> are downloaded
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch images:debian/12 debian-12
+</span></span><span style="display:flex;"><span> $ lxc launch ubuntu:22.04 ubuntu-2204
+</span></span></code></pre></div><p>System images specified as <code>ubuntu:22.04</code> or <code>images:debian/12</code> are downloaded
 to <code>/var/lib/lxd/images/</code>.  Each of these seems to be made of 2 files.  One for
 rootfs and another for templates(?) sharing the same hash value as a part of
 their file name. These images seems to be offered in a squashfs. The hash
@@ -167,165 +167,164 @@ image.</p>
 created under <code>/var/lib/lxd/containers/</code>.  These instance names are listed by
 <code>lxc ls</code> and also used for the directory name under
 <code>/var/lib/lxd/storage-pools/default/containers</code></p>
-<p>Here:</p>
-<pre tabindex="0"><code>lxc launch ... = lxc init ... + lxc start ...
-</code></pre><h3 id="inspect-instances">Inspect instances</h3>
+<p>Here:<code>lxc launch ...</code> = <code>lxc init ...</code> + <code>lxc start ...</code></p>
+<h3 id="inspect-instances">Inspect instances</h3>
 <p>Let me inspect instances.</p>
-<pre tabindex="0"><code> $ lxc list
-+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-|    NAME     |  STATE  |         IPV4         |                    IPV6                     |   TYPE    | SNAPSHOTS |
-+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-| debian-12   | RUNNING | 10.30.104.128 (eth0) | fd42:2b6:d45:cc06:216:3eff:febf:4ec6 (eth0) | CONTAINER | 0         |
-+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-| ubuntu-2204 | RUNNING | 10.30.104.155 (eth0) | fd42:2b6:d45:cc06:216:3eff:fecc:8b51 (eth0) | CONTAINER | 0         |
-+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-</code></pre><p>Let me stop these instances and inspect them:</p>
-<pre tabindex="0"><code> $ lxc stop debian-12
- $ lxc stop ubuntu-2204
- $ lxc list
-+-------------+---------+------+------+-----------+-----------+
-|    NAME     |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
-+-------------+---------+------+------+-----------+-----------+
-| debian-12   | STOPPED |      |      | CONTAINER | 0         |
-+-------------+---------+------+------+-----------+-----------+
-| ubuntu-2204 | STOPPED |      |      | CONTAINER | 0         |
-+-------------+---------+------+------+-----------+-----------+
-</code></pre><p>More detailed information can be obtained:</p>
-<pre tabindex="0"><code> $ lxc info debian-12
-Name: debian-12
-Status: STOPPED
-Type: container
-Architecture: x86_64
-Created: 2023/10/11 10:59 JST
-Last Used: 2023/10/12 05:08 JST
-</code></pre><p>Let me turn-on <code>debian-12</code> and quickly inspect it twice in the row.</p>
-<pre tabindex="0"><code> $ lxc start debian-12
- $ lxc list
-+-------------+---------+------+------+-----------+-----------+
-|    NAME     |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
-+-------------+---------+------+------+-----------+-----------+
-| debian-12   | RUNNING |      |      | CONTAINER | 0         |
-+-------------+---------+------+------+-----------+-----------+
-| ubuntu-2204 | STOPPED |      |      | CONTAINER | 0         |
-+-------------+---------+------+------+-----------+-----------+
- $ lxc list
-+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-|    NAME     |  STATE  |         IPV4         |                    IPV6                     |   TYPE    | SNAPSHOTS |
-+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-| debian-12   | RUNNING | 10.30.104.128 (eth0) | fd42:2b6:d45:cc06:216:3eff:febf:4ec6 (eth0) | CONTAINER | 0         |
-+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-| ubuntu-2204 | STOPPED |                      |                                             | CONTAINER | 0         |
-+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
-</code></pre><p>This changed results are because of slow network activation.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc list
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</span></span><span style="display:flex;"><span>|    NAME     |  STATE  |         IPV4         |                    IPV6                     |   TYPE    | SNAPSHOTS |
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| debian-12   | RUNNING | 10.30.104.128 (eth0) | fd42:2b6:d45:cc06:216:3eff:febf:4ec6 (eth0) | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| ubuntu-2204 | RUNNING | 10.30.104.155 (eth0) | fd42:2b6:d45:cc06:216:3eff:fecc:8b51 (eth0) | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</span></span></code></pre></div><p>Let me stop these instances and inspect them:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc stop debian-12
+</span></span><span style="display:flex;"><span> $ lxc stop ubuntu-2204
+</span></span><span style="display:flex;"><span> $ lxc list
+</span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>|    NAME     |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
+</span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| debian-12   | STOPPED |      |      | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| ubuntu-2204 | STOPPED |      |      | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
+</span></span></code></pre></div><p>More detailed information can be obtained:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc info debian-12
+</span></span><span style="display:flex;"><span>Name: debian-12
+</span></span><span style="display:flex;"><span>Status: STOPPED
+</span></span><span style="display:flex;"><span>Type: container
+</span></span><span style="display:flex;"><span>Architecture: x86_64
+</span></span><span style="display:flex;"><span>Created: 2023/10/11 10:59 JST
+</span></span><span style="display:flex;"><span>Last Used: 2023/10/12 05:08 JST
+</span></span></code></pre></div><p>Let me turn-on <code>debian-12</code> and quickly inspect it twice in the row.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc start debian-12
+</span></span><span style="display:flex;"><span> $ lxc list
+</span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>|    NAME     |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
+</span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| debian-12   | RUNNING |      |      | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| ubuntu-2204 | STOPPED |      |      | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span> $ lxc list
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</span></span><span style="display:flex;"><span>|    NAME     |  STATE  |         IPV4         |                    IPV6                     |   TYPE    | SNAPSHOTS |
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| debian-12   | RUNNING | 10.30.104.128 (eth0) | fd42:2b6:d45:cc06:216:3eff:febf:4ec6 (eth0) | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| ubuntu-2204 | STOPPED |                      |                                             | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
+</span></span></code></pre></div><p>This changed results are because of slow network activation.</p>
 <p>Let me set IPV6 network configuration to be disabled.  I need to restart it
 to activate this network configuration change.</p>
-<pre tabindex="0"><code> $ lxc network set lxdbr0 ipv6.address none
- $ lxc restart debian-12
- $ lxc list
-+-------------+---------+----------------------+------+-----------+-----------+
-|    NAME     |  STATE  |        IPV4          | IPV6 |   TYPE    | SNAPSHOTS |
-+-------------+---------+----------------------+------+-----------+-----------+
-| debian-12   | RUNNING | 10.30.104.128 (eth0) |      | CONTAINER | 0         |
-+-------------+---------+----------------------+------+-----------+-----------+
-| ubuntu-2204 | STOPPED |                      |      | CONTAINER | 0         |
-+-------------+---------+----------------------+------+-----------+-----------+
-</code></pre><p>The fact of changing results for repeated last 2 commands indicate that establishment of network address takes time.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc network set lxdbr0 ipv6.address none
+</span></span><span style="display:flex;"><span> $ lxc restart debian-12
+</span></span><span style="display:flex;"><span> $ lxc list
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>|    NAME     |  STATE  |        IPV4          | IPV6 |   TYPE    | SNAPSHOTS |
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| debian-12   | RUNNING | 10.30.104.128 (eth0) |      | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| ubuntu-2204 | STOPPED |                      |      | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+-------------+---------+----------------------+------+-----------+-----------+
+</span></span></code></pre></div><p>The fact of changing results for repeated last 2 commands indicate that establishment of network address takes time.</p>
 <h3 id="inspect-images">Inspect images</h3>
 <p>Let me inspect images</p>
-<pre tabindex="0"><code> $ lxc image list
-+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
-| ALIAS | FINGERPRINT  | PUBLIC |                 DESCRIPTION                 | ARCHITECTURE |   TYPE    |   SIZE   |          UPLOAD DATE          |
-+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
-|       | 80496135241f | no     | Debian bookworm amd64 (20231012_05:24)      | x86_64       | CONTAINER | 94.20MB  | Oct 12, 2023 at 8:07am (UTC)  |
-+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
-|       | b948dd91cd5a | no     | ubuntu 22.04 LTS amd64 (release) (20231010) | x86_64       | CONTAINER | 435.08MB | Oct 10, 2023 at 10:20am (UTC) |
-+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
-</code></pre><h3 id="inspect-filesystem">Inspect filesystem</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc image list
+</span></span><span style="display:flex;"><span>+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
+</span></span><span style="display:flex;"><span>| ALIAS | FINGERPRINT  | PUBLIC |                 DESCRIPTION                 | ARCHITECTURE |   TYPE    |   SIZE   |          UPLOAD DATE          |
+</span></span><span style="display:flex;"><span>+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
+</span></span><span style="display:flex;"><span>|       | 80496135241f | no     | Debian bookworm amd64 (20231012_05:24)      | x86_64       | CONTAINER | 94.20MB  | Oct 12, 2023 at 8:07am (UTC)  |
+</span></span><span style="display:flex;"><span>+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
+</span></span><span style="display:flex;"><span>|       | b948dd91cd5a | no     | ubuntu 22.04 LTS amd64 (release) (20231010) | x86_64       | CONTAINER | 435.08MB | Oct 10, 2023 at 10:20am (UTC) |
+</span></span><span style="display:flex;"><span>+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
+</span></span></code></pre></div><h3 id="inspect-filesystem">Inspect filesystem</h3>
 <p>Let&rsquo;s see how all these images and instances are stored under <code>/var/lib/lxd</code></p>
-<pre tabindex="0"><code> $ sudo btrfs subvolume list /var/lib/lxd|grep &#34;var/lib/lxd&#34;
-ID 42668 gen 1952301 top level 22924 path var/lib/lxd/storage-pools/default
-ID 43251 gen 1951314 top level 42668 path var/lib/lxd/storage-pools/default/images/b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
-ID 43284 gen 1952313 top level 42668 path var/lib/lxd/storage-pools/default/containers/debian-12
-ID 43315 gen 1951563 top level 42668 path var/lib/lxd/storage-pools/default/containers/ubuntu-2204
-ID 43369 gen 1952233 top level 42668 path var/lib/lxd/storage-pools/default/images/80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
- $ sudo ls -li /var/lib/lxd/storage-pools/default/images
-total 0
-256 drwx--x--x 1 root root 56 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
-256 drwx--x--x 1 root root 56 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
- $ sudo ls -li /var/lib/lxd/storage-pools/default/containers
-total 0
-256 d--x------ 1 231072 root 78 Oct 11 10:59 debian-12
-256 d--x------ 1 root   root 78 Oct 11 21:53 ubuntu-2204
-</code></pre><p>I see btrfs subvolume is generated here.  <code>inode=256</code> means the root of btrfs subvolume.</p>
-<pre tabindex="0"><code> $ sudo ls -l /var/lib/lxd/images
-total 541992
--rw-r--r-- 1 root root       680 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
--rw-r--r-- 1 root root  98775040 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678.rootfs
--rw-r--r-- 1 root root       412 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
--rw-r--r-- 1 root root 456216576 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf.rootfs
-</code></pre><p>These seem to be downloaded squashfs files</p>
-<pre tabindex="0"><code> $ sudo bash -c &#34;ls -il /var/lib/lxd/storage-pools/default/images/80496135241f*&#34;
-total 4
-257 -rw-r--r-- 1 root root 535 Oct 12 14:29 metadata.yaml
-261 drwxr-xr-x 1 root root 154 Oct 12 14:29 rootfs
-258 drwxr-xr-x 1 root root  42 Oct 12 14:29 templates
- $ sudo bash -c &#34;ls -l /var/lib/lxd/storage-pools/default/images/80496135241f*/rootfs&#34;
-total 24
-lrwxrwxrwx 1 root root    7 Oct 12 14:25 bin -&gt; usr/bin
-drwxr-xr-x 1 root root    0 Sep 30 05:04 boot
-drwxr-xr-x 1 root root    0 Oct 12 14:29 dev
-drwxr-xr-x 1 root root 1570 Oct 12 14:29 etc
-drwxr-xr-x 1 root root    0 Sep 30 05:04 home
-lrwxrwxrwx 1 root root    7 Oct 12 14:25 lib -&gt; usr/lib
-lrwxrwxrwx 1 root root    9 Oct 12 14:25 lib32 -&gt; usr/lib32
-lrwxrwxrwx 1 root root    9 Oct 12 14:25 lib64 -&gt; usr/lib64
-lrwxrwxrwx 1 root root   10 Oct 12 14:25 libx32 -&gt; usr/libx32
-drwxr-xr-x 1 root root    0 Oct 12 14:25 media
-drwxr-xr-x 1 root root    0 Oct 12 14:25 mnt
-drwxr-xr-x 1 root root    0 Oct 12 14:25 opt
-drwxr-xr-x 1 root root    0 Sep 30 05:04 proc
-drwx------ 1 root root   38 Oct 12 14:25 root
-drwxr-xr-x 1 root root    0 Oct 12 14:25 run
-lrwxrwxrwx 1 root root    8 Oct 12 14:25 sbin -&gt; usr/sbin
-drwxr-xr-x 1 root root    0 Oct 12 14:25 srv
-drwxr-xr-x 1 root root    0 Sep 30 05:04 sys
-drwxrwxrwt 1 root root    0 Oct 12 14:25 tmp
-drwxr-xr-x 1 root root  116 Oct 12 14:25 usr
-drwxr-xr-x 1 root root   90 Oct 12 14:25 var
- $ sudo ls -l /var/lib/lxd/storage-pools/default/containers/debian-12
-total 8
--r-------- 1 root root 3136 Oct 12 19:38 backup.yaml
--rw-r--r-- 1 root root  535 Oct 10 14:28 metadata.yaml
-drwxr-xr-x 1 root root  154 Oct 10 14:28 rootfs
-drwxr-xr-x 1 root root   42 Oct 10 14:28 templates
- $ sudo ls -l /var/lib/lxd/storage-pools/default/containers/debian-12/rootfs
-total 24
-lrwxrwxrwx 1 root root    7 Oct 10 14:25 bin -&gt; usr/bin
-drwxr-xr-x 1 root root    0 Sep 30 05:04 boot
-drwxr-xr-x 1 root root    0 Oct 10 14:28 dev
-drwxr-xr-x 1 root root 1570 Oct 10 14:28 etc
-drwxr-xr-x 1 root root    0 Sep 30 05:04 home
-lrwxrwxrwx 1 root root    7 Oct 10 14:25 lib -&gt; usr/lib
-lrwxrwxrwx 1 root root    9 Oct 10 14:25 lib32 -&gt; usr/lib32
-lrwxrwxrwx 1 root root    9 Oct 10 14:25 lib64 -&gt; usr/lib64
-lrwxrwxrwx 1 root root   10 Oct 10 14:25 libx32 -&gt; usr/libx32
-drwxr-xr-x 1 root root    0 Oct 10 14:25 media
-drwxr-xr-x 1 root root    0 Oct 10 14:25 mnt
-drwxr-xr-x 1 root root    0 Oct 10 14:25 opt
-drwxr-xr-x 1 root root    0 Sep 30 05:04 proc
-drwx------ 1 root root   38 Oct 10 14:25 root
-drwxr-xr-x 1 root root    0 Oct 10 14:25 run
-lrwxrwxrwx 1 root root    8 Oct 10 14:25 sbin -&gt; usr/sbin
-drwxr-xr-x 1 root root    0 Oct 10 14:25 srv
-drwxr-xr-x 1 root root    0 Sep 30 05:04 sys
-drwxrwxrwt 1 root root   74 Oct 12 19:44 tmp
-drwxr-xr-x 1 root root  116 Oct 10 14:25 usr
-drwxr-xr-x 1 root root   90 Oct 10 14:25 var
-</code></pre><p>I see btrfs subvolume is used for each file tree based on images and instances.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo btrfs subvolume list /var/lib/lxd|grep &#34;var/lib/lxd&#34;
+</span></span><span style="display:flex;"><span>ID 42668 gen 1952301 top level 22924 path var/lib/lxd/storage-pools/default
+</span></span><span style="display:flex;"><span>ID 43251 gen 1951314 top level 42668 path var/lib/lxd/storage-pools/default/images/b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
+</span></span><span style="display:flex;"><span>ID 43284 gen 1952313 top level 42668 path var/lib/lxd/storage-pools/default/containers/debian-12
+</span></span><span style="display:flex;"><span>ID 43315 gen 1951563 top level 42668 path var/lib/lxd/storage-pools/default/containers/ubuntu-2204
+</span></span><span style="display:flex;"><span>ID 43369 gen 1952233 top level 42668 path var/lib/lxd/storage-pools/default/images/80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
+</span></span><span style="display:flex;"><span> $ sudo ls -li /var/lib/lxd/storage-pools/default/images
+</span></span><span style="display:flex;"><span>total 0
+</span></span><span style="display:flex;"><span>256 drwx--x--x 1 root root 56 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
+</span></span><span style="display:flex;"><span>256 drwx--x--x 1 root root 56 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
+</span></span><span style="display:flex;"><span> $ sudo ls -li /var/lib/lxd/storage-pools/default/containers
+</span></span><span style="display:flex;"><span>total 0
+</span></span><span style="display:flex;"><span>256 d--x------ 1 231072 root 78 Oct 11 10:59 debian-12
+</span></span><span style="display:flex;"><span>256 d--x------ 1 root   root 78 Oct 11 21:53 ubuntu-2204
+</span></span></code></pre></div><p>I see btrfs subvolume is generated here.  <code>inode=256</code> means the root of btrfs subvolume.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo ls -l /var/lib/lxd/images
+</span></span><span style="display:flex;"><span>total 541992
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root       680 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root  98775040 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678.rootfs
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root       412 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 456216576 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf.rootfs
+</span></span></code></pre></div><p>These seem to be downloaded squashfs files</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo bash -c &#34;ls -il /var/lib/lxd/storage-pools/default/images/80496135241f*&#34;
+</span></span><span style="display:flex;"><span>total 4
+</span></span><span style="display:flex;"><span>257 -rw-r--r-- 1 root root 535 Oct 12 14:29 metadata.yaml
+</span></span><span style="display:flex;"><span>261 drwxr-xr-x 1 root root 154 Oct 12 14:29 rootfs
+</span></span><span style="display:flex;"><span>258 drwxr-xr-x 1 root root  42 Oct 12 14:29 templates
+</span></span><span style="display:flex;"><span> $ sudo bash -c &#34;ls -l /var/lib/lxd/storage-pools/default/images/80496135241f*/rootfs&#34;
+</span></span><span style="display:flex;"><span>total 24
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    7 Oct 12 14:25 bin -&gt; usr/bin
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Sep 30 05:04 boot
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 12 14:29 dev
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root 1570 Oct 12 14:29 etc
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Sep 30 05:04 home
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    7 Oct 12 14:25 lib -&gt; usr/lib
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    9 Oct 12 14:25 lib32 -&gt; usr/lib32
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    9 Oct 12 14:25 lib64 -&gt; usr/lib64
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root   10 Oct 12 14:25 libx32 -&gt; usr/libx32
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 12 14:25 media
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 12 14:25 mnt
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 12 14:25 opt
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Sep 30 05:04 proc
+</span></span><span style="display:flex;"><span>drwx------ 1 root root   38 Oct 12 14:25 root
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 12 14:25 run
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    8 Oct 12 14:25 sbin -&gt; usr/sbin
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 12 14:25 srv
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Sep 30 05:04 sys
+</span></span><span style="display:flex;"><span>drwxrwxrwt 1 root root    0 Oct 12 14:25 tmp
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root  116 Oct 12 14:25 usr
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root   90 Oct 12 14:25 var
+</span></span><span style="display:flex;"><span> $ sudo ls -l /var/lib/lxd/storage-pools/default/containers/debian-12
+</span></span><span style="display:flex;"><span>total 8
+</span></span><span style="display:flex;"><span>-r-------- 1 root root 3136 Oct 12 19:38 backup.yaml
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root  535 Oct 10 14:28 metadata.yaml
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root  154 Oct 10 14:28 rootfs
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root   42 Oct 10 14:28 templates
+</span></span><span style="display:flex;"><span> $ sudo ls -l /var/lib/lxd/storage-pools/default/containers/debian-12/rootfs
+</span></span><span style="display:flex;"><span>total 24
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    7 Oct 10 14:25 bin -&gt; usr/bin
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Sep 30 05:04 boot
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 10 14:28 dev
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root 1570 Oct 10 14:28 etc
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Sep 30 05:04 home
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    7 Oct 10 14:25 lib -&gt; usr/lib
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    9 Oct 10 14:25 lib32 -&gt; usr/lib32
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    9 Oct 10 14:25 lib64 -&gt; usr/lib64
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root   10 Oct 10 14:25 libx32 -&gt; usr/libx32
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 10 14:25 media
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 10 14:25 mnt
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 10 14:25 opt
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Sep 30 05:04 proc
+</span></span><span style="display:flex;"><span>drwx------ 1 root root   38 Oct 10 14:25 root
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 10 14:25 run
+</span></span><span style="display:flex;"><span>lrwxrwxrwx 1 root root    8 Oct 10 14:25 sbin -&gt; usr/sbin
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Oct 10 14:25 srv
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root    0 Sep 30 05:04 sys
+</span></span><span style="display:flex;"><span>drwxrwxrwt 1 root root   74 Oct 12 19:44 tmp
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root  116 Oct 10 14:25 usr
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root   90 Oct 10 14:25 var
+</span></span></code></pre></div><p>I see btrfs subvolume is used for each file tree based on images and instances.</p>
 <p>Hmmm&hellip;. <code>debian-12</code> is owned by <code>231072</code> while <code>ubuntu-2204</code> is owned by <code>root</code> for directory under <code>/var/lib/lxd/storage-pools/default/containers</code>. The uid=<code>231072</code> is found in <code>/etc/subuid</code> as:</p>
-<pre tabindex="0"><code>_lxd:231072:10000001
-root:231072:10000001
-</code></pre><p>This directory ownership changes:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>_lxd:231072:10000001
+</span></span><span style="display:flex;"><span>root:231072:10000001
+</span></span></code></pre></div><p>This directory ownership changes:</p>
 <ul>
 <li>from <code>root</code> to <code>231072</code> when container state is changed from <code>STOPPED</code> to <code>RUNNING</code>.</li>
 <li>from <code>231072</code> to <code>root</code> when container state is changed from <code>RUNNING</code> to <code>STOPPED</code>.</li>
@@ -353,48 +352,48 @@ container images and instances don&rsquo;t have the normal <code>uid=1000</code>
 <p>Issues of different UID between outside and inside of the container can be taken care nicely with above commands.</p>
 <h3 id="example-of-operations-on-instances">Example of operations on instances</h3>
 <p>Here is an example of basic operations on instances.</p>
-<pre tabindex="0"><code> $ lxc copy debian-12 debian-12-ephemerical
- $ lxc exec debian-12-ephemerical -- adduser osamu
-Adding user `osamu&#39; ...
-...
- $ lxc start  debian-12-ephemerical --console
-To detach from the console, press: &lt;ctrl&gt;+a q
-Queued start job for default target graphical.target.
-[  OK  ] Created slice system-getty.slice - Slice /system/getty.
-...
-[  OK  ] Finished systemd-update-utmp-runlev… - Record Runlevel Change in UTMP.
-
-Debian GNU/Linux 12 debian-12-ephemerical console
-
-debian-12-ephemerical login: osamu
-Password:
-Linux debian-12-ephemerical 6.4.0-0.deb12.2-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.4.4-3~bpo12+1 (2023-08-08) x86_64
-
-The programs included with the Debian GNU/Linux system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
-
-Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-osamu@debian-12-ephemerical:~$
-</code></pre><p>One can detach from the console for the container instance with <code>CTRL-A+q</code> and gain console for the host machine.  One can regain access to the console for the container instance by:</p>
-<pre tabindex="0"><code> $ lxc console debian-12-ephemerical
-To detach from the console, press: &lt;ctrl&gt;+a q
-
-osamu@debian-12-ephemerical:~$
-</code></pre><p>You can stop and delete this instance from the console on the host machine as:</p>
-<pre tabindex="0"><code> $ lxc stop debian-12-ephemerical
- $ lxc delete debian-12-ephemerical
-</code></pre><h3 id="more-example-of-operations-on-instances-and-images">More example of operations on instances and images</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc copy debian-12 debian-12-ephemerical
+</span></span><span style="display:flex;"><span> $ lxc exec debian-12-ephemerical -- adduser osamu
+</span></span><span style="display:flex;"><span>Adding user `osamu&#39; ...
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span> $ lxc start  debian-12-ephemerical --console
+</span></span><span style="display:flex;"><span>To detach from the console, press: &lt;ctrl&gt;+a q
+</span></span><span style="display:flex;"><span>Queued start job for default target graphical.target.
+</span></span><span style="display:flex;"><span>[  OK  ] Created slice system-getty.slice - Slice /system/getty.
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>[  OK  ] Finished systemd-update-utmp-runlev… - Record Runlevel Change in UTMP.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Debian GNU/Linux 12 debian-12-ephemerical console
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>debian-12-ephemerical login: osamu
+</span></span><span style="display:flex;"><span>Password:
+</span></span><span style="display:flex;"><span>Linux debian-12-ephemerical 6.4.0-0.deb12.2-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.4.4-3~bpo12+1 (2023-08-08) x86_64
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>The programs included with the Debian GNU/Linux system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms for each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+</span></span><span style="display:flex;"><span>permitted by applicable law.
+</span></span><span style="display:flex;"><span>osamu@debian-12-ephemerical:~$
+</span></span></code></pre></div><p>One can detach from the console for the container instance with <code>CTRL-A+q</code> and gain console for the host machine.  One can regain access to the console for the container instance by:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc console debian-12-ephemerical
+</span></span><span style="display:flex;"><span>To detach from the console, press: &lt;ctrl&gt;+a q
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>osamu@debian-12-ephemerical:~$
+</span></span></code></pre></div><p>You can stop and delete this instance from the console on the host machine as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc stop debian-12-ephemerical
+</span></span><span style="display:flex;"><span> $ lxc delete debian-12-ephemerical
+</span></span></code></pre></div><h3 id="more-example-of-operations-on-instances-and-images">More example of operations on instances and images</h3>
 <p>Let&rsquo;s play more &hellip;</p>
-<pre tabindex="0"><code> $ cd path/to/working-space
- $ lxc init images:debian/bookworm/cloud dbc
- $ lxc start dbc
- $ lxc export dbc backup-dbc.tar.gz
- $ lxc stop dbc
- $ lxc publish dbc --alias idbc
- $ lxc image export idbc
-</code></pre><p>Initial downloaded image get downloaded in 2 files.  One with <code>.rootfs</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd path/to/working-space
+</span></span><span style="display:flex;"><span> $ lxc init images:debian/bookworm/cloud dbc
+</span></span><span style="display:flex;"><span> $ lxc start dbc
+</span></span><span style="display:flex;"><span> $ lxc export dbc backup-dbc.tar.gz
+</span></span><span style="display:flex;"><span> $ lxc stop dbc
+</span></span><span style="display:flex;"><span> $ lxc publish dbc --alias idbc
+</span></span><span style="display:flex;"><span> $ lxc image export idbc
+</span></span></code></pre></div><p>Initial downloaded image get downloaded in 2 files.  One with <code>.rootfs</code>
 extension and the other smaller file with the same filename without <code>.rootfs</code>
 extension to <code>/var/lib/lxd/images</code>.  This is PUBLIC=yes image.  This filename
 is long hash string.</p>
@@ -457,18 +456,18 @@ no.</p>
 <li>Unified taraball:  32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92</li>
 <li>Split tarballs: 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3.rootfs</li>
 </ul>
-<pre tabindex="0"><code> # cd /var/lib/lxd/images
- # file 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3
-187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3: XZ compressed data, checksum CRC64
- # file 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3.rootfs
-187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3.rootfs: Squashfs filesystem, little endian, version 4.0, xz compressed, 456497140 bytes, 42504 inodes, blocksize: 131072 bytes, created: Thu Oct 26 02:21:34 2023
- # file 32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92
-32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92: gzip compressed data, from Unix, original size modulo 2^32 524245504 gzip compressed data, unknown method, ASCII, has CRC, from FAT filesystem (MS-DOS, OS/2, NT), original size modulo 2^32 524245504
- # sha256sum 32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92
-32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92  32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92
- # sha256sum &lt;(cat 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3.rootfs)
-187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3  /dev/fd/63
-</code></pre><p>See:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> # cd /var/lib/lxd/images
+</span></span><span style="display:flex;"><span> # file 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3
+</span></span><span style="display:flex;"><span>187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3: XZ compressed data, checksum CRC64
+</span></span><span style="display:flex;"><span> # file 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3.rootfs
+</span></span><span style="display:flex;"><span>187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3.rootfs: Squashfs filesystem, little endian, version 4.0, xz compressed, 456497140 bytes, 42504 inodes, blocksize: 131072 bytes, created: Thu Oct 26 02:21:34 2023
+</span></span><span style="display:flex;"><span> # file 32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92
+</span></span><span style="display:flex;"><span>32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92: gzip compressed data, from Unix, original size modulo 2^32 524245504 gzip compressed data, unknown method, ASCII, has CRC, from FAT filesystem (MS-DOS, OS/2, NT), original size modulo 2^32 524245504
+</span></span><span style="display:flex;"><span> # sha256sum 32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92
+</span></span><span style="display:flex;"><span>32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92  32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92
+</span></span><span style="display:flex;"><span> # sha256sum &lt;(cat 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3.rootfs)
+</span></span><span style="display:flex;"><span>187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3  /dev/fd/63
+</span></span></code></pre></div><p>See:</p>
 <ul>
 <li><a href="https://documentation.ubuntu.com/lxd/en/latest/reference/image_format">image format</a>
 <ul>
@@ -503,28 +502,28 @@ no.</p>
 <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1055786">bug #1055786</a>.</p>
 <p>Here is how I get around this problem by removing toxic <code>netdev</code> out of
 installed file <code>/etc/cloud/cloud.cfg</code>:</p>
-<pre tabindex="0"><code> $ cd path/to
- $ lxc init images:debian/bookworm/cloud dbc0
- $ lxc file pull dbc0/etc/cloud/cloud.cfg .
- $ sed -i -e &#39;s/ netdev,//&#39; cloud.cfg
- $ lxc file push cloud.cfg dbc0/etc/cloud/
- $ lxc publish dbc0 --alias dbc
-Instance published with fingerprint: 379e858cc15808dbdf6a27a028a8b0098213656c0b4565bbc1b64b90b61d9dbd
- $ lxc start dbc0
- $ lxc launch dbc dbc1
-</code></pre><p>Now I have a fixed image <code>379e858cc15808dbdf6a27a028a8b0098213656c0b4565bbc1b64b90b61d9dbd</code> with its alias <code>dbc</code> as a local image.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd path/to
+</span></span><span style="display:flex;"><span> $ lxc init images:debian/bookworm/cloud dbc0
+</span></span><span style="display:flex;"><span> $ lxc file pull dbc0/etc/cloud/cloud.cfg .
+</span></span><span style="display:flex;"><span> $ sed -i -e &#39;s/ netdev,//&#39; cloud.cfg
+</span></span><span style="display:flex;"><span> $ lxc file push cloud.cfg dbc0/etc/cloud/
+</span></span><span style="display:flex;"><span> $ lxc publish dbc0 --alias dbc
+</span></span><span style="display:flex;"><span>Instance published with fingerprint: 379e858cc15808dbdf6a27a028a8b0098213656c0b4565bbc1b64b90b61d9dbd
+</span></span><span style="display:flex;"><span> $ lxc start dbc0
+</span></span><span style="display:flex;"><span> $ lxc launch dbc dbc1
+</span></span></code></pre></div><p>Now I have a fixed image <code>379e858cc15808dbdf6a27a028a8b0098213656c0b4565bbc1b64b90b61d9dbd</code> with its alias <code>dbc</code> as a local image.</p>
 <p>2 fixed instances<code>dbc0</code> and <code>dbc1</code> running.</p>
 <p>I needed <code>lxc pull ...</code> + substitution + <code>lxc push ...</code> combination in the
 above commmand sequence since I wanted these file modification to happen before
 starting instance. (<code>lxc exec ... -- command ...</code> requires running instance)</p>
 <p>You can see this behavior as:</p>
-<pre tabindex="0"><code>$ lxc stop dbc0
-$ lxc exec dbc0 -- echo &#34;Hello&#34;
-Error: Instance is not running
-$ lxc start dbc0
-$ lxc exec dbc0 -- echo &#34;Hello&#34;
-Hello
-</code></pre><p>For interactive modification, <code>lxc pull ...</code> + substitution + <code>lxc push ...</code>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxc stop dbc0
+</span></span><span style="display:flex;"><span>$ lxc exec dbc0 -- echo <span style="color:#e6db74">&#34;Hello&#34;</span>
+</span></span><span style="display:flex;"><span>Error: Instance is not running
+</span></span><span style="display:flex;"><span>$ lxc start dbc0
+</span></span><span style="display:flex;"><span>$ lxc exec dbc0 -- echo <span style="color:#e6db74">&#34;Hello&#34;</span>
+</span></span><span style="display:flex;"><span>Hello
+</span></span></code></pre></div><p>For interactive modification, <code>lxc pull ...</code> + substitution + <code>lxc push ...</code>
 combination here can be replaced with <code>lxc file edit dbc0/etc/cloud/cloud.cfg</code>.</p>
 <p>This allows me easily change other values such as the primary account name <code>debian</code>.</p>
 <h3 id="tweaking-metadata-of-an-image">Tweaking metadata of an image</h3>
@@ -537,25 +536,25 @@ data in these directory nor hash value used for the image name but updates
 description displayed by <code>lxc image ls dbc</code>.</p>
 <p>Although there seem to be only interactive editor available to modify metadata, you can do more with this by changing actual program for editor via exported environment variables <code>EDITOR</code> and <code>VISUAL</code> (<code>VISUAL</code> supersedes <code>EDITOR</code>).</p>
 <p>To get a copy of <code>metadata.yaml</code> as the <code>copy_metadata.yaml</code> on the host</p>
-<pre tabindex="0"><code> $ unset VISUAL
- $ export EDITOR=cat
- $ lxc config metadata edit d0 &gt;copy_metadata.yaml
-</code></pre><p>To update the <code>metadata.yaml</code> with the <code>copy_metadata.yaml</code> on the host</p>
-<pre tabindex="0"><code> $ unset VISUAL
- $ export EDITOR=&#34;tee&#34;
- $ lxc config metadata edit d0 &lt;copy_metadata.yaml
-</code></pre><h3 id="lxd-one-liners">LXD one liners</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ unset VISUAL
+</span></span><span style="display:flex;"><span> $ export EDITOR=cat
+</span></span><span style="display:flex;"><span> $ lxc config metadata edit d0 &gt;copy_metadata.yaml
+</span></span></code></pre></div><p>To update the <code>metadata.yaml</code> with the <code>copy_metadata.yaml</code> on the host</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ unset VISUAL
+</span></span><span style="display:flex;"><span> $ export EDITOR=&#34;tee&#34;
+</span></span><span style="display:flex;"><span> $ lxc config metadata edit d0 &lt;copy_metadata.yaml
+</span></span></code></pre></div><h3 id="lxd-one-liners">LXD one liners</h3>
 <p>Stop all instances:</p>
-<pre tabindex="0"><code> $ for f in $(lxc ls -cn -fcsv) ; do lxc stop $f; done
-</code></pre><p>Delete all instances:</p>
-<pre tabindex="0"><code> $ for f in $(lxc ls -cn -fcsv) ; do lxc delete $f; done
-</code></pre><p>Delete all images:</p>
-<pre tabindex="0"><code> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
-</code></pre><p>Delete all images without alias:</p>
-<pre tabindex="0"><code> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,$/s/,//p&#34;) ; do lxc image delete $f; done
-</code></pre><p>Delete all images with alias:</p>
-<pre tabindex="0"><code> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,..*$/s/,.*$//p&#34;) ; do lxc image delete $f; done
-</code></pre><p>I think I got some glimpses of LXC/LXD commmands.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc ls -cn -fcsv) ; do lxc stop $f; done
+</span></span></code></pre></div><p>Delete all instances:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc ls -cn -fcsv) ; do lxc delete $f; done
+</span></span></code></pre></div><p>Delete all images:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
+</span></span></code></pre></div><p>Delete all images without alias:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,$/s/,//p&#34;) ; do lxc image delete $f; done
+</span></span></code></pre></div><p>Delete all images with alias:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,..*$/s/,.*$//p&#34;) ; do lxc image delete $f; done
+</span></span></code></pre></div><p>I think I got some glimpses of LXC/LXD commmands.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="review-gui-tools-to-support-lxd-management">Review: GUI tools to support LXD management</h2>
@@ -576,391 +575,391 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 <ul>
 <li>The <code>lxd-client</code> package pulled in by <code>lxd</code> offers <code>lxc</code> command with many subcommands.  Auto-generated manpages on Debian 12 are mostly useless. Use <code>-h</code> with command to see reasonable command usage syntax.</li>
 </ul>
-<pre tabindex="0"><code> $ lxc -h --all --sub-commands
-
-Description:
-  Command line client for LXD
-
-  All of LXD&#39;s features can be driven through the various commands below.
-  For help with any of those, simply call them with --help.
-
-Usage:
-  lxc [command]
-
-Available Commands:
-  alias        Manage command aliases
-    add          Add new aliases
-    list         List aliases
-    remove       Remove aliases
-    rename       Rename aliases
-  cluster      Manage cluster members
-    add                 Request a join token for adding a cluster member
-    edit                Edit cluster member configurations as YAML
-    enable              Enable clustering on a single non-clustered LXD server
-    evacuate            Evacuate cluster member
-    get                 Get values for cluster member configuration keys
-    group               Manage cluster groups
-      assign       Assign sets of groups to cluster members
-      create       Create a cluster group
-      delete       Delete a cluster group
-      edit         Edit a cluster group
-      list         List all the cluster groups
-      remove       Remove member from group
-      rename       Rename a cluster group
-      show         Show cluster group configurations
-    list                List all the cluster members
-    list-tokens         List all active cluster member join tokens
-    remove              Remove a member from the cluster
-    rename              Rename a cluster member
-    restore             Restore cluster member
-    revoke-token        Revoke cluster member join token
-    role                Manage cluster roles
-      add          Add roles to a cluster member
-      remove       Remove roles from a cluster member
-    set                 Set a cluster member&#39;s configuration keys
-    show                Show details of a cluster member
-    unset               Unset a cluster member&#39;s configuration keys
-    update-certificate  Update cluster certificate
-  config       Manage instance and server configuration options
-    device       Manage devices
-      add          Add instance devices
-      get          Get values for device configuration keys
-      list         List instance devices
-      override     Copy profile inherited devices and override configuration keys
-      remove       Remove instance devices
-      set          Set device configuration keys
-      show         Show full device configuration
-      unset        Unset device configuration keys
-    edit         Edit instance or server configurations as YAML
-    get          Get values for instance or server configuration keys
-    metadata     Manage instance metadata files
-      edit         Edit instance metadata files
-      show         Show instance metadata files
-    set          Set instance or server configuration keys
-    show         Show instance or server configurations
-    template     Manage instance file templates
-      create       Create new instance file templates
-      delete       Delete instance file templates
-      edit         Edit instance file templates
-      list         List instance file templates
-      show         Show content of instance file templates
-    trust        Manage trusted clients
-      add           Add new trusted client
-      edit          Edit trust configurations as YAML
-      list          List trusted clients
-      list-tokens   List all active certificate add tokens
-      remove        Remove trusted client
-      revoke-token  Revoke certificate add token
-      show          Show trust configurations
-    unset        Unset instance or server configuration keys
-  console      Attach to instance consoles
-  copy         Copy instances within or in between LXD servers
-  delete       Delete instances and snapshots
-  exec         Execute commands in instances
-  export       Export instance backups
-  file         Manage files in instances
-    delete       Delete files in instances
-    edit         Edit files in instances
-    mount        Mount files from instances
-    pull         Pull files from instances
-    push         Push files into instances
-  help         Help about any command
-  image        Manage images
-    alias           Manage image aliases
-      create       Create aliases for existing images
-      delete       Delete image aliases
-      list         List image aliases
-      rename       Rename aliases
-    copy            Copy images between servers
-    delete          Delete images
-    edit            Edit image properties
-    export          Export and download images
-    get-property    Get image properties
-    import          Import images into the image store
-    info            Show useful information about images
-    list            List images
-    refresh         Refresh images
-    set-property    Set image properties
-    show            Show image properties
-    unset-property  Unset image properties
-  import       Import instance backups
-  info         Show instance or server information
-  init         Create instances from images
-  launch       Create and start instances from images
-  list         List instances
-  manpage      Generate manpages for all commands
-  monitor      Monitor a local or remote LXD server
-  move         Move instances within or in between LXD servers
-  network      Manage and attach instances to networks
-    acl             Manage network ACLs
-      create       Create new network ACLs
-      delete       Delete network ACLs
-      edit         Edit network ACL configurations as YAML
-      get          Get values for network ACL configuration keys
-      list         List available network ACLS
-      rename       Rename network ACLs
-      rule         Manage network ACL rules
-        add          Add rules to an ACL
-        remove       Remove rules from an ACL
-      set          Set network ACL configuration keys
-      show         Show network ACL configurations
-      show-log     Show network ACL log
-      unset        Unset network ACL configuration keys
-    attach          Attach network interfaces to instances
-    attach-profile  Attach network interfaces to profiles
-    create          Create new networks
-    delete          Delete networks
-    detach          Detach network interfaces from instances
-    detach-profile  Detach network interfaces from profiles
-    edit            Edit network configurations as YAML
-    forward         Manage network forwards
-      create       Create new network forwards
-      delete       Delete network forwards
-      edit         Edit network forward configurations as YAML
-      get          Get values for network forward configuration keys
-      list         List available network forwards
-      port         Manage network forward ports
-        add          Add ports to a forward
-        remove       Remove ports from a forward
-      set          Set network forward keys
-      show         Show network forward configurations
-      unset        Unset network forward configuration keys
-    get             Get values for network configuration keys
-    info            Get runtime information on networks
-    list            List available networks
-    list-leases     List DHCP leases
-    peer            Manage network peerings
-      create       Create new network peering
-      delete       Delete network peerings
-      edit         Edit network peer configurations as YAML
-      get          Get values for network peer configuration keys
-      list         List available network peers
-      set          Set network peer keys
-      show         Show network peer configurations
-      unset        Unset network peer configuration keys
-    rename          Rename networks
-    set             Set network configuration keys
-    show            Show network configurations
-    unset           Unset network configuration keys
-    zone            Manage network zones
-      create       Create new network zones
-      delete       Delete network zones
-      edit         Edit network zone configurations as YAML
-      get          Get values for network zone configuration keys
-      list         List available network zoneS
-      record       Manage network zone records
-        create       Create new network zone record
-        delete       Delete network zone record
-        edit         Edit network zone record configurations as YAML
-        entry        Manage network zone record entries
-        get          Get values for network zone record configuration keys
-        list         List available network zone records
-        set          Set network zone record configuration keys
-        show         Show network zone record configuration
-        unset        Unset network zone record configuration keys
-      set          Set network zone configuration keys
-      show         Show network zone configurations
-      unset        Unset network zone configuration keys
-  operation    List, show and delete background operations
-    delete       Delete a background operation (will attempt to cancel)
-    list         List background operations
-    show         Show details on a background operation
-  pause        Pause instances
-  profile      Manage profiles
-    add          Add profiles to instances
-    assign       Assign sets of profiles to instances
-    copy         Copy profiles
-    create       Create profiles
-    delete       Delete profiles
-    device       Manage devices
-      add          Add instance devices
-      get          Get values for device configuration keys
-      list         List instance devices
-      remove       Remove instance devices
-      set          Set device configuration keys
-      show         Show full device configuration
-      unset        Unset device configuration keys
-    edit         Edit profile configurations as YAML
-    get          Get values for profile configuration keys
-    list         List profiles
-    remove       Remove profiles from instances
-    rename       Rename profiles
-    set          Set profile configuration keys
-    show         Show profile configurations
-    unset        Unset profile configuration keys
-  project      Manage projects
-    create       Create projects
-    delete       Delete projects
-    edit         Edit project configurations as YAML
-    get          Get values for project configuration keys
-    info         Get a summary of resource allocations
-    list         List projects
-    rename       Rename projects
-    set          Set project configuration keys
-    show         Show project options
-    switch       Switch the current project
-    unset        Unset project configuration keys
-  publish      Publish instances as images
-  query        Send a raw query to LXD
-  remote       Manage the list of remote servers
-    add          Add new remote servers
-    get-default  Show the default remote
-    list         List the available remotes
-    remove       Remove remotes
-    rename       Rename remotes
-    set-url      Set the URL for the remote
-    switch       Switch the default remote
-  rename       Rename instances and snapshots
-  restart      Restart instances
-  restore      Restore instances from snapshots
-  snapshot     Create instance snapshots
-  start        Start instances
-  stop         Stop instances
-  storage      Manage storage pools and volumes
-    create       Create storage pools
-    delete       Delete storage pools
-    edit         Edit storage pool configurations as YAML
-    get          Get values for storage pool configuration keys
-    info         Show useful information about storage pools
-    list         List available storage pools
-    set          Set storage pool configuration keys
-    show         Show storage pool configurations and resources
-    unset        Unset storage pool configuration keys
-    volume       Manage storage volumes
-      attach          Attach new storage volumes to instances
-      attach-profile  Attach new storage volumes to profiles
-      copy            Copy storage volumes
-      create          Create new custom storage volumes
-      delete          Delete storage volumes
-      detach          Detach storage volumes from instances
-      detach-profile  Detach storage volumes from profiles
-      edit            Edit storage volume configurations as YAML
-      export          Export custom storage volume
-      get             Get values for storage volume configuration keys
-      import          Import custom storage volumes
-      info            Show storage volume state information
-      list            List storage volumes
-      move            Move storage volumes between pools
-      rename          Rename storage volumes and storage volume snapshots
-      restore         Restore storage volume snapshots
-      set             Set storage volume configuration keys
-      show            Show storage volume configurations
-      snapshot        Snapshot storage volumes
-      unset           Unset storage volume configuration keys
-  version      Show local and remote versions
-  warning      Manage warnings
-    acknowledge  Acknowledge warning
-    delete       Delete warning
-    list         List warnings
-    show         Show warning
-
-Flags:
-      --all            Show less common commands
-      --debug          Show all debug messages
-      --force-local    Force using the local unix socket
-  -h, --help           Print help
-      --project        Override the source project
-  -q, --quiet          Don&#39;t show progress information
-      --sub-commands   Use with help or --help to view sub-commands
-  -v, --verbose        Show all information messages
-      --version        Print version number
-
-Use &#34;lxc [command] --help&#34; for more information about a command.
-</code></pre><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc -h --all --sub-commands
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Description:
+</span></span><span style="display:flex;"><span>  Command line client for LXD
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  All of LXD&#39;s features can be driven through the various commands below.
+</span></span><span style="display:flex;"><span>  For help with any of those, simply call them with --help.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span><span style="display:flex;"><span>  lxc [command]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Available Commands:
+</span></span><span style="display:flex;"><span>  alias        Manage command aliases
+</span></span><span style="display:flex;"><span>    add          Add new aliases
+</span></span><span style="display:flex;"><span>    list         List aliases
+</span></span><span style="display:flex;"><span>    remove       Remove aliases
+</span></span><span style="display:flex;"><span>    rename       Rename aliases
+</span></span><span style="display:flex;"><span>  cluster      Manage cluster members
+</span></span><span style="display:flex;"><span>    add                 Request a join token for adding a cluster member
+</span></span><span style="display:flex;"><span>    edit                Edit cluster member configurations as YAML
+</span></span><span style="display:flex;"><span>    enable              Enable clustering on a single non-clustered LXD server
+</span></span><span style="display:flex;"><span>    evacuate            Evacuate cluster member
+</span></span><span style="display:flex;"><span>    get                 Get values for cluster member configuration keys
+</span></span><span style="display:flex;"><span>    group               Manage cluster groups
+</span></span><span style="display:flex;"><span>      assign       Assign sets of groups to cluster members
+</span></span><span style="display:flex;"><span>      create       Create a cluster group
+</span></span><span style="display:flex;"><span>      delete       Delete a cluster group
+</span></span><span style="display:flex;"><span>      edit         Edit a cluster group
+</span></span><span style="display:flex;"><span>      list         List all the cluster groups
+</span></span><span style="display:flex;"><span>      remove       Remove member from group
+</span></span><span style="display:flex;"><span>      rename       Rename a cluster group
+</span></span><span style="display:flex;"><span>      show         Show cluster group configurations
+</span></span><span style="display:flex;"><span>    list                List all the cluster members
+</span></span><span style="display:flex;"><span>    list-tokens         List all active cluster member join tokens
+</span></span><span style="display:flex;"><span>    remove              Remove a member from the cluster
+</span></span><span style="display:flex;"><span>    rename              Rename a cluster member
+</span></span><span style="display:flex;"><span>    restore             Restore cluster member
+</span></span><span style="display:flex;"><span>    revoke-token        Revoke cluster member join token
+</span></span><span style="display:flex;"><span>    role                Manage cluster roles
+</span></span><span style="display:flex;"><span>      add          Add roles to a cluster member
+</span></span><span style="display:flex;"><span>      remove       Remove roles from a cluster member
+</span></span><span style="display:flex;"><span>    set                 Set a cluster member&#39;s configuration keys
+</span></span><span style="display:flex;"><span>    show                Show details of a cluster member
+</span></span><span style="display:flex;"><span>    unset               Unset a cluster member&#39;s configuration keys
+</span></span><span style="display:flex;"><span>    update-certificate  Update cluster certificate
+</span></span><span style="display:flex;"><span>  config       Manage instance and server configuration options
+</span></span><span style="display:flex;"><span>    device       Manage devices
+</span></span><span style="display:flex;"><span>      add          Add instance devices
+</span></span><span style="display:flex;"><span>      get          Get values for device configuration keys
+</span></span><span style="display:flex;"><span>      list         List instance devices
+</span></span><span style="display:flex;"><span>      override     Copy profile inherited devices and override configuration keys
+</span></span><span style="display:flex;"><span>      remove       Remove instance devices
+</span></span><span style="display:flex;"><span>      set          Set device configuration keys
+</span></span><span style="display:flex;"><span>      show         Show full device configuration
+</span></span><span style="display:flex;"><span>      unset        Unset device configuration keys
+</span></span><span style="display:flex;"><span>    edit         Edit instance or server configurations as YAML
+</span></span><span style="display:flex;"><span>    get          Get values for instance or server configuration keys
+</span></span><span style="display:flex;"><span>    metadata     Manage instance metadata files
+</span></span><span style="display:flex;"><span>      edit         Edit instance metadata files
+</span></span><span style="display:flex;"><span>      show         Show instance metadata files
+</span></span><span style="display:flex;"><span>    set          Set instance or server configuration keys
+</span></span><span style="display:flex;"><span>    show         Show instance or server configurations
+</span></span><span style="display:flex;"><span>    template     Manage instance file templates
+</span></span><span style="display:flex;"><span>      create       Create new instance file templates
+</span></span><span style="display:flex;"><span>      delete       Delete instance file templates
+</span></span><span style="display:flex;"><span>      edit         Edit instance file templates
+</span></span><span style="display:flex;"><span>      list         List instance file templates
+</span></span><span style="display:flex;"><span>      show         Show content of instance file templates
+</span></span><span style="display:flex;"><span>    trust        Manage trusted clients
+</span></span><span style="display:flex;"><span>      add           Add new trusted client
+</span></span><span style="display:flex;"><span>      edit          Edit trust configurations as YAML
+</span></span><span style="display:flex;"><span>      list          List trusted clients
+</span></span><span style="display:flex;"><span>      list-tokens   List all active certificate add tokens
+</span></span><span style="display:flex;"><span>      remove        Remove trusted client
+</span></span><span style="display:flex;"><span>      revoke-token  Revoke certificate add token
+</span></span><span style="display:flex;"><span>      show          Show trust configurations
+</span></span><span style="display:flex;"><span>    unset        Unset instance or server configuration keys
+</span></span><span style="display:flex;"><span>  console      Attach to instance consoles
+</span></span><span style="display:flex;"><span>  copy         Copy instances within or in between LXD servers
+</span></span><span style="display:flex;"><span>  delete       Delete instances and snapshots
+</span></span><span style="display:flex;"><span>  exec         Execute commands in instances
+</span></span><span style="display:flex;"><span>  export       Export instance backups
+</span></span><span style="display:flex;"><span>  file         Manage files in instances
+</span></span><span style="display:flex;"><span>    delete       Delete files in instances
+</span></span><span style="display:flex;"><span>    edit         Edit files in instances
+</span></span><span style="display:flex;"><span>    mount        Mount files from instances
+</span></span><span style="display:flex;"><span>    pull         Pull files from instances
+</span></span><span style="display:flex;"><span>    push         Push files into instances
+</span></span><span style="display:flex;"><span>  help         Help about any command
+</span></span><span style="display:flex;"><span>  image        Manage images
+</span></span><span style="display:flex;"><span>    alias           Manage image aliases
+</span></span><span style="display:flex;"><span>      create       Create aliases for existing images
+</span></span><span style="display:flex;"><span>      delete       Delete image aliases
+</span></span><span style="display:flex;"><span>      list         List image aliases
+</span></span><span style="display:flex;"><span>      rename       Rename aliases
+</span></span><span style="display:flex;"><span>    copy            Copy images between servers
+</span></span><span style="display:flex;"><span>    delete          Delete images
+</span></span><span style="display:flex;"><span>    edit            Edit image properties
+</span></span><span style="display:flex;"><span>    export          Export and download images
+</span></span><span style="display:flex;"><span>    get-property    Get image properties
+</span></span><span style="display:flex;"><span>    import          Import images into the image store
+</span></span><span style="display:flex;"><span>    info            Show useful information about images
+</span></span><span style="display:flex;"><span>    list            List images
+</span></span><span style="display:flex;"><span>    refresh         Refresh images
+</span></span><span style="display:flex;"><span>    set-property    Set image properties
+</span></span><span style="display:flex;"><span>    show            Show image properties
+</span></span><span style="display:flex;"><span>    unset-property  Unset image properties
+</span></span><span style="display:flex;"><span>  import       Import instance backups
+</span></span><span style="display:flex;"><span>  info         Show instance or server information
+</span></span><span style="display:flex;"><span>  init         Create instances from images
+</span></span><span style="display:flex;"><span>  launch       Create and start instances from images
+</span></span><span style="display:flex;"><span>  list         List instances
+</span></span><span style="display:flex;"><span>  manpage      Generate manpages for all commands
+</span></span><span style="display:flex;"><span>  monitor      Monitor a local or remote LXD server
+</span></span><span style="display:flex;"><span>  move         Move instances within or in between LXD servers
+</span></span><span style="display:flex;"><span>  network      Manage and attach instances to networks
+</span></span><span style="display:flex;"><span>    acl             Manage network ACLs
+</span></span><span style="display:flex;"><span>      create       Create new network ACLs
+</span></span><span style="display:flex;"><span>      delete       Delete network ACLs
+</span></span><span style="display:flex;"><span>      edit         Edit network ACL configurations as YAML
+</span></span><span style="display:flex;"><span>      get          Get values for network ACL configuration keys
+</span></span><span style="display:flex;"><span>      list         List available network ACLS
+</span></span><span style="display:flex;"><span>      rename       Rename network ACLs
+</span></span><span style="display:flex;"><span>      rule         Manage network ACL rules
+</span></span><span style="display:flex;"><span>        add          Add rules to an ACL
+</span></span><span style="display:flex;"><span>        remove       Remove rules from an ACL
+</span></span><span style="display:flex;"><span>      set          Set network ACL configuration keys
+</span></span><span style="display:flex;"><span>      show         Show network ACL configurations
+</span></span><span style="display:flex;"><span>      show-log     Show network ACL log
+</span></span><span style="display:flex;"><span>      unset        Unset network ACL configuration keys
+</span></span><span style="display:flex;"><span>    attach          Attach network interfaces to instances
+</span></span><span style="display:flex;"><span>    attach-profile  Attach network interfaces to profiles
+</span></span><span style="display:flex;"><span>    create          Create new networks
+</span></span><span style="display:flex;"><span>    delete          Delete networks
+</span></span><span style="display:flex;"><span>    detach          Detach network interfaces from instances
+</span></span><span style="display:flex;"><span>    detach-profile  Detach network interfaces from profiles
+</span></span><span style="display:flex;"><span>    edit            Edit network configurations as YAML
+</span></span><span style="display:flex;"><span>    forward         Manage network forwards
+</span></span><span style="display:flex;"><span>      create       Create new network forwards
+</span></span><span style="display:flex;"><span>      delete       Delete network forwards
+</span></span><span style="display:flex;"><span>      edit         Edit network forward configurations as YAML
+</span></span><span style="display:flex;"><span>      get          Get values for network forward configuration keys
+</span></span><span style="display:flex;"><span>      list         List available network forwards
+</span></span><span style="display:flex;"><span>      port         Manage network forward ports
+</span></span><span style="display:flex;"><span>        add          Add ports to a forward
+</span></span><span style="display:flex;"><span>        remove       Remove ports from a forward
+</span></span><span style="display:flex;"><span>      set          Set network forward keys
+</span></span><span style="display:flex;"><span>      show         Show network forward configurations
+</span></span><span style="display:flex;"><span>      unset        Unset network forward configuration keys
+</span></span><span style="display:flex;"><span>    get             Get values for network configuration keys
+</span></span><span style="display:flex;"><span>    info            Get runtime information on networks
+</span></span><span style="display:flex;"><span>    list            List available networks
+</span></span><span style="display:flex;"><span>    list-leases     List DHCP leases
+</span></span><span style="display:flex;"><span>    peer            Manage network peerings
+</span></span><span style="display:flex;"><span>      create       Create new network peering
+</span></span><span style="display:flex;"><span>      delete       Delete network peerings
+</span></span><span style="display:flex;"><span>      edit         Edit network peer configurations as YAML
+</span></span><span style="display:flex;"><span>      get          Get values for network peer configuration keys
+</span></span><span style="display:flex;"><span>      list         List available network peers
+</span></span><span style="display:flex;"><span>      set          Set network peer keys
+</span></span><span style="display:flex;"><span>      show         Show network peer configurations
+</span></span><span style="display:flex;"><span>      unset        Unset network peer configuration keys
+</span></span><span style="display:flex;"><span>    rename          Rename networks
+</span></span><span style="display:flex;"><span>    set             Set network configuration keys
+</span></span><span style="display:flex;"><span>    show            Show network configurations
+</span></span><span style="display:flex;"><span>    unset           Unset network configuration keys
+</span></span><span style="display:flex;"><span>    zone            Manage network zones
+</span></span><span style="display:flex;"><span>      create       Create new network zones
+</span></span><span style="display:flex;"><span>      delete       Delete network zones
+</span></span><span style="display:flex;"><span>      edit         Edit network zone configurations as YAML
+</span></span><span style="display:flex;"><span>      get          Get values for network zone configuration keys
+</span></span><span style="display:flex;"><span>      list         List available network zoneS
+</span></span><span style="display:flex;"><span>      record       Manage network zone records
+</span></span><span style="display:flex;"><span>        create       Create new network zone record
+</span></span><span style="display:flex;"><span>        delete       Delete network zone record
+</span></span><span style="display:flex;"><span>        edit         Edit network zone record configurations as YAML
+</span></span><span style="display:flex;"><span>        entry        Manage network zone record entries
+</span></span><span style="display:flex;"><span>        get          Get values for network zone record configuration keys
+</span></span><span style="display:flex;"><span>        list         List available network zone records
+</span></span><span style="display:flex;"><span>        set          Set network zone record configuration keys
+</span></span><span style="display:flex;"><span>        show         Show network zone record configuration
+</span></span><span style="display:flex;"><span>        unset        Unset network zone record configuration keys
+</span></span><span style="display:flex;"><span>      set          Set network zone configuration keys
+</span></span><span style="display:flex;"><span>      show         Show network zone configurations
+</span></span><span style="display:flex;"><span>      unset        Unset network zone configuration keys
+</span></span><span style="display:flex;"><span>  operation    List, show and delete background operations
+</span></span><span style="display:flex;"><span>    delete       Delete a background operation (will attempt to cancel)
+</span></span><span style="display:flex;"><span>    list         List background operations
+</span></span><span style="display:flex;"><span>    show         Show details on a background operation
+</span></span><span style="display:flex;"><span>  pause        Pause instances
+</span></span><span style="display:flex;"><span>  profile      Manage profiles
+</span></span><span style="display:flex;"><span>    add          Add profiles to instances
+</span></span><span style="display:flex;"><span>    assign       Assign sets of profiles to instances
+</span></span><span style="display:flex;"><span>    copy         Copy profiles
+</span></span><span style="display:flex;"><span>    create       Create profiles
+</span></span><span style="display:flex;"><span>    delete       Delete profiles
+</span></span><span style="display:flex;"><span>    device       Manage devices
+</span></span><span style="display:flex;"><span>      add          Add instance devices
+</span></span><span style="display:flex;"><span>      get          Get values for device configuration keys
+</span></span><span style="display:flex;"><span>      list         List instance devices
+</span></span><span style="display:flex;"><span>      remove       Remove instance devices
+</span></span><span style="display:flex;"><span>      set          Set device configuration keys
+</span></span><span style="display:flex;"><span>      show         Show full device configuration
+</span></span><span style="display:flex;"><span>      unset        Unset device configuration keys
+</span></span><span style="display:flex;"><span>    edit         Edit profile configurations as YAML
+</span></span><span style="display:flex;"><span>    get          Get values for profile configuration keys
+</span></span><span style="display:flex;"><span>    list         List profiles
+</span></span><span style="display:flex;"><span>    remove       Remove profiles from instances
+</span></span><span style="display:flex;"><span>    rename       Rename profiles
+</span></span><span style="display:flex;"><span>    set          Set profile configuration keys
+</span></span><span style="display:flex;"><span>    show         Show profile configurations
+</span></span><span style="display:flex;"><span>    unset        Unset profile configuration keys
+</span></span><span style="display:flex;"><span>  project      Manage projects
+</span></span><span style="display:flex;"><span>    create       Create projects
+</span></span><span style="display:flex;"><span>    delete       Delete projects
+</span></span><span style="display:flex;"><span>    edit         Edit project configurations as YAML
+</span></span><span style="display:flex;"><span>    get          Get values for project configuration keys
+</span></span><span style="display:flex;"><span>    info         Get a summary of resource allocations
+</span></span><span style="display:flex;"><span>    list         List projects
+</span></span><span style="display:flex;"><span>    rename       Rename projects
+</span></span><span style="display:flex;"><span>    set          Set project configuration keys
+</span></span><span style="display:flex;"><span>    show         Show project options
+</span></span><span style="display:flex;"><span>    switch       Switch the current project
+</span></span><span style="display:flex;"><span>    unset        Unset project configuration keys
+</span></span><span style="display:flex;"><span>  publish      Publish instances as images
+</span></span><span style="display:flex;"><span>  query        Send a raw query to LXD
+</span></span><span style="display:flex;"><span>  remote       Manage the list of remote servers
+</span></span><span style="display:flex;"><span>    add          Add new remote servers
+</span></span><span style="display:flex;"><span>    get-default  Show the default remote
+</span></span><span style="display:flex;"><span>    list         List the available remotes
+</span></span><span style="display:flex;"><span>    remove       Remove remotes
+</span></span><span style="display:flex;"><span>    rename       Rename remotes
+</span></span><span style="display:flex;"><span>    set-url      Set the URL for the remote
+</span></span><span style="display:flex;"><span>    switch       Switch the default remote
+</span></span><span style="display:flex;"><span>  rename       Rename instances and snapshots
+</span></span><span style="display:flex;"><span>  restart      Restart instances
+</span></span><span style="display:flex;"><span>  restore      Restore instances from snapshots
+</span></span><span style="display:flex;"><span>  snapshot     Create instance snapshots
+</span></span><span style="display:flex;"><span>  start        Start instances
+</span></span><span style="display:flex;"><span>  stop         Stop instances
+</span></span><span style="display:flex;"><span>  storage      Manage storage pools and volumes
+</span></span><span style="display:flex;"><span>    create       Create storage pools
+</span></span><span style="display:flex;"><span>    delete       Delete storage pools
+</span></span><span style="display:flex;"><span>    edit         Edit storage pool configurations as YAML
+</span></span><span style="display:flex;"><span>    get          Get values for storage pool configuration keys
+</span></span><span style="display:flex;"><span>    info         Show useful information about storage pools
+</span></span><span style="display:flex;"><span>    list         List available storage pools
+</span></span><span style="display:flex;"><span>    set          Set storage pool configuration keys
+</span></span><span style="display:flex;"><span>    show         Show storage pool configurations and resources
+</span></span><span style="display:flex;"><span>    unset        Unset storage pool configuration keys
+</span></span><span style="display:flex;"><span>    volume       Manage storage volumes
+</span></span><span style="display:flex;"><span>      attach          Attach new storage volumes to instances
+</span></span><span style="display:flex;"><span>      attach-profile  Attach new storage volumes to profiles
+</span></span><span style="display:flex;"><span>      copy            Copy storage volumes
+</span></span><span style="display:flex;"><span>      create          Create new custom storage volumes
+</span></span><span style="display:flex;"><span>      delete          Delete storage volumes
+</span></span><span style="display:flex;"><span>      detach          Detach storage volumes from instances
+</span></span><span style="display:flex;"><span>      detach-profile  Detach storage volumes from profiles
+</span></span><span style="display:flex;"><span>      edit            Edit storage volume configurations as YAML
+</span></span><span style="display:flex;"><span>      export          Export custom storage volume
+</span></span><span style="display:flex;"><span>      get             Get values for storage volume configuration keys
+</span></span><span style="display:flex;"><span>      import          Import custom storage volumes
+</span></span><span style="display:flex;"><span>      info            Show storage volume state information
+</span></span><span style="display:flex;"><span>      list            List storage volumes
+</span></span><span style="display:flex;"><span>      move            Move storage volumes between pools
+</span></span><span style="display:flex;"><span>      rename          Rename storage volumes and storage volume snapshots
+</span></span><span style="display:flex;"><span>      restore         Restore storage volume snapshots
+</span></span><span style="display:flex;"><span>      set             Set storage volume configuration keys
+</span></span><span style="display:flex;"><span>      show            Show storage volume configurations
+</span></span><span style="display:flex;"><span>      snapshot        Snapshot storage volumes
+</span></span><span style="display:flex;"><span>      unset           Unset storage volume configuration keys
+</span></span><span style="display:flex;"><span>  version      Show local and remote versions
+</span></span><span style="display:flex;"><span>  warning      Manage warnings
+</span></span><span style="display:flex;"><span>    acknowledge  Acknowledge warning
+</span></span><span style="display:flex;"><span>    delete       Delete warning
+</span></span><span style="display:flex;"><span>    list         List warnings
+</span></span><span style="display:flex;"><span>    show         Show warning
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Flags:
+</span></span><span style="display:flex;"><span>      --all            Show less common commands
+</span></span><span style="display:flex;"><span>      --debug          Show all debug messages
+</span></span><span style="display:flex;"><span>      --force-local    Force using the local unix socket
+</span></span><span style="display:flex;"><span>  -h, --help           Print help
+</span></span><span style="display:flex;"><span>      --project        Override the source project
+</span></span><span style="display:flex;"><span>  -q, --quiet          Don&#39;t show progress information
+</span></span><span style="display:flex;"><span>      --sub-commands   Use with help or --help to view sub-commands
+</span></span><span style="display:flex;"><span>  -v, --verbose        Show all information messages
+</span></span><span style="display:flex;"><span>      --version        Print version number
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Use &#34;lxc [command] --help&#34; for more information about a command.
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <ul>
 <li>The <code>lxd</code> package offers <code>lxd</code> and <code>lxd-user</code> daemons with many subcommands for <code>lxd</code>.  Subcommand tool description tends to include &ldquo;low-level&rdquo;.</li>
 </ul>
-<pre tabindex="0"><code> $ lxd -h
-Description:
-  The LXD container manager (daemon)
-
-  This is the LXD daemon command line. It&#39;s typically started directly by your
-  init system and interacted with through a tool like `lxc`.
-
-  There are however a number of subcommands that let you interact directly with
-  the local LXD daemon and which may not be performed through the REST API alone.
-
-Usage:
-  lxd [flags]
-  lxd [command]
-
-Available Commands:
-  activateifneeded   Check if LXD should be started
-  cluster            Low-level cluster administration commands
-  help               Help about any command
-  import             Command has been replaced with &#34;lxd recover&#34;
-  init               Configure the LXD daemon
-  recover            Recover missing instances and volumes from existing and unknown storage pools
-  shutdown           Tell LXD to shutdown all containers and exit
-  version            Show the server version
-  waitready          Wait for LXD to be ready to process requests
-
-Flags:
-  -d, --debug     Show all debug messages
-      --group     The group of users that will be allowed to talk to LXD
-  -h, --help      Print help
-      --logfile   Path to the log file
-      --syslog    Log to syslog
-      --trace     Log tracing targets
-  -v, --verbose   Show all information messages
-      --version   Print version number
-
-Use &#34;lxd [command] --help&#34; for more information about a command.
-</code></pre><p>Since I used this <code>init</code> subcommand, let&rsquo;s see:</p>
-<pre tabindex="0"><code> $ lxd init -h
-Description:
-  Configure the LXD daemon
-
-Usage:
-  lxd init [flags]
-
-Examples:
-  init --minimal
-  init --auto [--network-address=IP] [--network-port=8443] [--storage-backend=dir]
-              [--storage-create-device=DEVICE] [--storage-create-loop=SIZE]
-              [--storage-pool=POOL] [--trust-password=PASSWORD]
-  init --preseed
-  init --dump
-
-
-Flags:
-      --auto                    Automatic (non-interactive) mode
-      --dump                    Dump YAML config to stdout
-      --minimal                 Minimal configuration (non-interactive)
-      --network-address         Address to bind LXD to (default: none)
-      --network-port            Port to bind LXD to (default: 8443) (default -1)
-      --preseed                 Pre-seed mode, expects YAML config from stdin
-      --storage-backend         Storage backend to use (btrfs, dir, lvm or zfs, default: dir)
-      --storage-create-device   Setup device based storage using DEVICE
-      --storage-create-loop     Setup loop based storage with SIZE in GB (default -1)
-      --storage-pool            Storage pool to use or create
-      --trust-password          Password required to add new clients
-
-Global Flags:
-  -d, --debug     Show all debug messages
-  -h, --help      Print help
-      --logfile   Path to the log file
-      --syslog    Log to syslog
-      --trace     Log tracing targets
-  -v, --verbose   Show all information messages
-      --version   Print version number
-</code></pre><p>I also see another command in this package.</p>
-<pre tabindex="0"><code> $ lxd-user -h
-Description:
-  LXD user project daemon
-
-  This daemon is used to allow users that aren&#39;t considered to be LXD
-  administrators access to a personal LXD project with suitable
-  restrictions.
-
-Usage:
-  lxd-user [flags]
-
-Flags:
-  -h, --help      Print help
-      --version   Print version number
-</code></pre><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd -h
+</span></span><span style="display:flex;"><span>Description:
+</span></span><span style="display:flex;"><span>  The LXD container manager (daemon)
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  This is the LXD daemon command line. It&#39;s typically started directly by your
+</span></span><span style="display:flex;"><span>  init system and interacted with through a tool like `lxc`.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  There are however a number of subcommands that let you interact directly with
+</span></span><span style="display:flex;"><span>  the local LXD daemon and which may not be performed through the REST API alone.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span><span style="display:flex;"><span>  lxd [flags]
+</span></span><span style="display:flex;"><span>  lxd [command]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Available Commands:
+</span></span><span style="display:flex;"><span>  activateifneeded   Check if LXD should be started
+</span></span><span style="display:flex;"><span>  cluster            Low-level cluster administration commands
+</span></span><span style="display:flex;"><span>  help               Help about any command
+</span></span><span style="display:flex;"><span>  import             Command has been replaced with &#34;lxd recover&#34;
+</span></span><span style="display:flex;"><span>  init               Configure the LXD daemon
+</span></span><span style="display:flex;"><span>  recover            Recover missing instances and volumes from existing and unknown storage pools
+</span></span><span style="display:flex;"><span>  shutdown           Tell LXD to shutdown all containers and exit
+</span></span><span style="display:flex;"><span>  version            Show the server version
+</span></span><span style="display:flex;"><span>  waitready          Wait for LXD to be ready to process requests
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Flags:
+</span></span><span style="display:flex;"><span>  -d, --debug     Show all debug messages
+</span></span><span style="display:flex;"><span>      --group     The group of users that will be allowed to talk to LXD
+</span></span><span style="display:flex;"><span>  -h, --help      Print help
+</span></span><span style="display:flex;"><span>      --logfile   Path to the log file
+</span></span><span style="display:flex;"><span>      --syslog    Log to syslog
+</span></span><span style="display:flex;"><span>      --trace     Log tracing targets
+</span></span><span style="display:flex;"><span>  -v, --verbose   Show all information messages
+</span></span><span style="display:flex;"><span>      --version   Print version number
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Use &#34;lxd [command] --help&#34; for more information about a command.
+</span></span></code></pre></div><p>Since I used this <code>init</code> subcommand, let&rsquo;s see:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd init -h
+</span></span><span style="display:flex;"><span>Description:
+</span></span><span style="display:flex;"><span>  Configure the LXD daemon
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span><span style="display:flex;"><span>  lxd init [flags]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Examples:
+</span></span><span style="display:flex;"><span>  init --minimal
+</span></span><span style="display:flex;"><span>  init --auto [--network-address=IP] [--network-port=8443] [--storage-backend=dir]
+</span></span><span style="display:flex;"><span>              [--storage-create-device=DEVICE] [--storage-create-loop=SIZE]
+</span></span><span style="display:flex;"><span>              [--storage-pool=POOL] [--trust-password=PASSWORD]
+</span></span><span style="display:flex;"><span>  init --preseed
+</span></span><span style="display:flex;"><span>  init --dump
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Flags:
+</span></span><span style="display:flex;"><span>      --auto                    Automatic (non-interactive) mode
+</span></span><span style="display:flex;"><span>      --dump                    Dump YAML config to stdout
+</span></span><span style="display:flex;"><span>      --minimal                 Minimal configuration (non-interactive)
+</span></span><span style="display:flex;"><span>      --network-address         Address to bind LXD to (default: none)
+</span></span><span style="display:flex;"><span>      --network-port            Port to bind LXD to (default: 8443) (default -1)
+</span></span><span style="display:flex;"><span>      --preseed                 Pre-seed mode, expects YAML config from stdin
+</span></span><span style="display:flex;"><span>      --storage-backend         Storage backend to use (btrfs, dir, lvm or zfs, default: dir)
+</span></span><span style="display:flex;"><span>      --storage-create-device   Setup device based storage using DEVICE
+</span></span><span style="display:flex;"><span>      --storage-create-loop     Setup loop based storage with SIZE in GB (default -1)
+</span></span><span style="display:flex;"><span>      --storage-pool            Storage pool to use or create
+</span></span><span style="display:flex;"><span>      --trust-password          Password required to add new clients
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Global Flags:
+</span></span><span style="display:flex;"><span>  -d, --debug     Show all debug messages
+</span></span><span style="display:flex;"><span>  -h, --help      Print help
+</span></span><span style="display:flex;"><span>      --logfile   Path to the log file
+</span></span><span style="display:flex;"><span>      --syslog    Log to syslog
+</span></span><span style="display:flex;"><span>      --trace     Log tracing targets
+</span></span><span style="display:flex;"><span>  -v, --verbose   Show all information messages
+</span></span><span style="display:flex;"><span>      --version   Print version number
+</span></span></code></pre></div><p>I also see another command in this package.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd-user -h
+</span></span><span style="display:flex;"><span>Description:
+</span></span><span style="display:flex;"><span>  LXD user project daemon
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  This daemon is used to allow users that aren&#39;t considered to be LXD
+</span></span><span style="display:flex;"><span>  administrators access to a personal LXD project with suitable
+</span></span><span style="display:flex;"><span>  restrictions.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span><span style="display:flex;"><span>  lxd-user [flags]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Flags:
+</span></span><span style="display:flex;"><span>  -h, --help      Print help
+</span></span><span style="display:flex;"><span>      --version   Print version number
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <ul>
 <li>The <code>lxd-tools</code> package offers extra tools for <code>lxd</code>.

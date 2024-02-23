@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/12 (initial publish),
-2023/11/25 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00053.md
@@ -80,8 +80,8 @@ en/note-00053.md
 <p>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
 <h2 id="default-lxd-debian-image-issues">Default LXD Debian image issues</h2>
 <p>Let me simply use the default LXD Debian image to launch <code>d0</code> instance with:</p>
-<pre tabindex="0"><code> $ lxd launch images:debian/12/cloud d0
-</code></pre><p>Then, the resulting <code>d0</code> image has a few glitches to my taste:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd launch images:debian/12/cloud d0
+</span></span></code></pre></div><p>Then, the resulting <code>d0</code> image has a few glitches to my taste:</p>
 <ul>
 <li>The primary user in the container is always <code>debian</code> having UID=1000, GID=1001</li>
 <li>The <code>netdev</code> group is generated as GID=1000 (this is system group and should have
@@ -91,49 +91,49 @@ GID somewhere between 100 and 999.)</li>
 <h2 id="lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</h2>
 <p>I first created local image with primary user name set to <code>osamu</code> and without
 <code>netdev</code> in groups-list as <code>deb-12</code>-image:</p>
-<pre tabindex="0"><code> $ lxc init images:debian/12/cloud d0
- $ lxc file edit d0/etc/cloud/cloud.cfg
- $ lxc publish d0 --alias deb-12
-</code></pre><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc init images:debian/12/cloud d0
+</span></span><span style="display:flex;"><span> $ lxc file edit d0/etc/cloud/cloud.cfg
+</span></span><span style="display:flex;"><span> $ lxc publish d0 --alias deb-12
+</span></span></code></pre></div><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
 data is implemented by <code>cloud-config</code> in rather later part of its process.  So
 trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> doesn&rsquo;t work.</p>
 <p>Later, in order to automate this, I created a script to fix its image:
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a>.  This
 removes <code>netdev</code> group and optionally changes the primary user to <code>osamu</code> for
 cloud-init.</p>
-<pre tabindex="0"><code>$ lxcinit -h
-
-=============================================================================
-NAME:
-  lxcinit -- download lxd Debian cloud image and make local fixed image
-             &#34;deb-&lt;name&gt;&#34;
-
-SYNOPSIS:
-  lxcinit [-b|-d|-h|-p|-u|--] [&lt;name&gt;]
-
-DESCRIPTION:
-  lxcinit creates a local un-previlidged LXD image &#34;deb-&lt;name&gt;&#34; just like
-  the following but with some fix-ups on /etc/cloud/cloud.cfg:
-
-  $ lxc init images:debian/&lt;name&gt;/cloud deb-&lt;name&gt;
-  $ lxc publish deb-&lt;name&gt; --alias=deb-&lt;name&gt;
-
-  The default &lt;name&gt; is &#34;sid&#34;.  The &lt;name&gt; consists of the codename or the
-  release version:
-    - &#34;sid&#34;, &#34;trixie&#34;, &#34;bookworm&#34;, &#34;bullseye&#34;, &#34;buster&#34;, 12, 11, 10
-
-  You can&#39;t have an existing instance name such as deb-&lt;name&gt; for this
-  command to function.
-
-OPTIONS: (only the first character matters)
-  -base BASE  set base name as BASE (&#34;deb-&#34;)
-  -delete     delete unmodified instance deb-&lt;name&gt;
-  -help       print this help message and exit
-  -primary    match primary user name in container with the current user
-  -update     update the local image deb-&lt;name&gt; after removing it first.
-
-=============================================================================
-</code></pre><p>This was an interesting practice for me to get familiar with <code>lxc publish ...</code>.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxcinit -h
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>=============================================================================
+</span></span><span style="display:flex;"><span>NAME:
+</span></span><span style="display:flex;"><span>  lxcinit -- download lxd Debian cloud image and make local fixed image
+</span></span><span style="display:flex;"><span>             &#34;deb-&lt;name&gt;&#34;
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>SYNOPSIS:
+</span></span><span style="display:flex;"><span>  lxcinit [-b|-d|-h|-p|-u|--] [&lt;name&gt;]
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>DESCRIPTION:
+</span></span><span style="display:flex;"><span>  lxcinit creates a local un-previlidged LXD image &#34;deb-&lt;name&gt;&#34; just like
+</span></span><span style="display:flex;"><span>  the following but with some fix-ups on /etc/cloud/cloud.cfg:
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  $ lxc init images:debian/&lt;name&gt;/cloud deb-&lt;name&gt;
+</span></span><span style="display:flex;"><span>  $ lxc publish deb-&lt;name&gt; --alias=deb-&lt;name&gt;
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  The default &lt;name&gt; is &#34;sid&#34;.  The &lt;name&gt; consists of the codename or the
+</span></span><span style="display:flex;"><span>  release version:
+</span></span><span style="display:flex;"><span>    - &#34;sid&#34;, &#34;trixie&#34;, &#34;bookworm&#34;, &#34;bullseye&#34;, &#34;buster&#34;, 12, 11, 10
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  You can&#39;t have an existing instance name such as deb-&lt;name&gt; for this
+</span></span><span style="display:flex;"><span>  command to function.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>OPTIONS: (only the first character matters)
+</span></span><span style="display:flex;"><span>  -base BASE  set base name as BASE (&#34;deb-&#34;)
+</span></span><span style="display:flex;"><span>  -delete     delete unmodified instance deb-&lt;name&gt;
+</span></span><span style="display:flex;"><span>  -help       print this help message and exit
+</span></span><span style="display:flex;"><span>  -primary    match primary user name in container with the current user
+</span></span><span style="display:flex;"><span>  -update     update the local image deb-&lt;name&gt; after removing it first.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>=============================================================================
+</span></span></code></pre></div><p>This was an interesting practice for me to get familiar with <code>lxc publish ...</code>.
 But TBH, this is a bit cumbersome to use.  So I don&rsquo;t use this much.</p>
 <h2 id="configuration-of-lxd-instance">Configuration of LXD instance</h2>
 <p>Instead of fixing the image itself, I tried to generate properly configured
@@ -157,97 +157,97 @@ instance with the existing configuration to minimize overhead.</p>
 <p>The latter style using profile provides me with an organized working environment.</p>
 <h2 id="overriding-default_user-of-cloud-init-with-profile">Overriding <code>default_user</code> of cloud-init with profile</h2>
 <p>The root cause of issue is <code>default_user</code> data provided as the default cloud-init setting and cloud-init automatically creates normal group if it finds missing group name in <code>groups</code> list.  These can be seen in <code>/etc/cloud/cloud.cfg</code> as:</p>
-<pre tabindex="0"><code>...
-   default_user:
-     name: debian
-     lock_passwd: True
-     gecos: Debian
-     groups: [adm, audio, cdrom, dialout, dip, floppy, netdev, plugdev, sudo, video]
-     sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-     shell: /bin/bash
-</code></pre><p>I found out <a href="https://github.com/canonical/cloud-init/issues/4603">this feature is the intended feature</a>, I needed to find an easy way
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>   <span style="color:#f92672">default_user</span>:
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">name</span>: <span style="color:#ae81ff">debian</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">lock_passwd</span>: <span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">gecos</span>: <span style="color:#ae81ff">Debian</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">groups</span>: [<span style="color:#ae81ff">adm, audio, cdrom, dialout, dip, floppy, netdev, plugdev, sudo, video]</span>
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">sudo</span>: [<span style="color:#e6db74">&#34;ALL=(ALL) NOPASSWD:ALL&#34;</span>]
+</span></span><span style="display:flex;"><span>     <span style="color:#f92672">shell</span>: <span style="color:#ae81ff">/bin/bash</span>
+</span></span></code></pre></div><p>I found out <a href="https://github.com/canonical/cloud-init/issues/4603">this feature is the intended feature</a>, I needed to find an easy way
 to override this default setting.</p>
 <p>I eventually found &ldquo;<a href="https://cloudinit.readthedocs.io/en/latest/reference/modules.html#users-and-groups">Users and Groups</a>&rdquo; on cloud-init reference document. The &ldquo;Summary&rdquo; explanation was confusing for me.  So I tried &ldquo;Examples&rdquo; to see how thisfeature can be used.</p>
 <h3 id="test-script-userssh">Test script <code>users.sh</code></h3>
 <p>I created a simple shell script <code>users.sh</code> to test configuration.</p>
-<pre tabindex="0"><code>#!/bin/sh -e
-lxc stop d0 &gt;/dev/null 2&gt;&amp;1 || true
-lxc delete d0 &gt;/dev/null 2&gt;&amp;1 || true
-lxc ls -f compact | grep d0 || true
-echo &#34;I: ===== YAML data $1 ===========&#34;
-cat $1
-echo &#34;I: ===== launch d0 ==============&#34;
-lxc launch images:debian/12/cloud d0 &lt;$1
-echo &#34;I: ===== wait 3 sec ===&#34;
-sleep 3
-echo &#34;I: ===== check home directory ===&#34;
-lxc exec d0 -- ls -la /home
-echo &#34;I: ===== check /etc/passwd ======&#34;
-lxc exec d0 -- tail -n5 /etc/passwd
-echo &#34;I: ===== check /etc/group =======&#34;
-lxc exec d0 -- egrep -e &#34;(adm|plugdev|netdev|osamu|debian)&#34; /etc/group
-</code></pre><p>NOTE: Instead of waiting for 3 seconds with <code>sleep 3</code> and hoping for the start
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh -e
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>lxc stop d0 &gt;/dev/null 2&gt;&amp;<span style="color:#ae81ff">1</span> <span style="color:#f92672">||</span> true
+</span></span><span style="display:flex;"><span>lxc delete d0 &gt;/dev/null 2&gt;&amp;<span style="color:#ae81ff">1</span> <span style="color:#f92672">||</span> true
+</span></span><span style="display:flex;"><span>lxc ls -f compact | grep d0 <span style="color:#f92672">||</span> true
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;I: ===== YAML data </span>$1<span style="color:#e6db74"> ===========&#34;</span>
+</span></span><span style="display:flex;"><span>cat $1
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;I: ===== launch d0 ==============&#34;</span>
+</span></span><span style="display:flex;"><span>lxc launch images:debian/12/cloud d0 &lt;$1
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;I: ===== wait 3 sec ===&#34;</span>
+</span></span><span style="display:flex;"><span>sleep <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;I: ===== check home directory ===&#34;</span>
+</span></span><span style="display:flex;"><span>lxc exec d0 -- ls -la /home
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;I: ===== check /etc/passwd ======&#34;</span>
+</span></span><span style="display:flex;"><span>lxc exec d0 -- tail -n5 /etc/passwd
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;I: ===== check /etc/group =======&#34;</span>
+</span></span><span style="display:flex;"><span>lxc exec d0 -- egrep -e <span style="color:#e6db74">&#34;(adm|plugdev|netdev|osamu|debian)&#34;</span> /etc/group
+</span></span></code></pre></div><p>NOTE: Instead of waiting for 3 seconds with <code>sleep 3</code> and hoping for the start
 up process is finished, <code>lxc exec d0 -- cloud-init status --wait</code> may address
 this requirement better.</p>
 <h3 id="override-default_user-settings-1">Override <code>default_user</code> settings (1)</h3>
 <p>The following simply sets <code>users:</code> to an empty list overrides <code>default_user</code>
 settings.</p>
-<pre tabindex="0"><code>$ ./users.sh users0.yaml
-I: ===== YAML data users0.yaml ===========
-config:
-  user.user-data: |
-    #cloud-config
-    users: []
-I: ===== launch d0 ==============
-Creating d0
-Starting d0
-I: ===== wait 3 sec ===
-I: ===== check home directory ===
-total 0
-drwxr-xr-x 1 root root   0 Sep 29 20:04 .
-drwxr-xr-x 1 root root 154 Nov 18 05:29 ..
-I: ===== check /etc/passwd ======
-_apt:x:42:65534::/nonexistent:/usr/sbin/nologin
-nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
-messagebus:x:100:101::/nonexistent:/usr/sbin/nologin
-systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
-systemd-resolve:x:997:997:systemd Resolver:/:/usr/sbin/nologin
-I: ===== check /etc/group =======
-adm:x:4:
-plugdev:x:46:
-</code></pre><p>This can avoid setting <code>netdev</code> to GID=1000 but can&rsquo;t have the primary user.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ./users.sh users0.yaml
+</span></span><span style="display:flex;"><span>I: ===== YAML data users0.yaml ===========
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  user.user-data: |
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users: []
+</span></span><span style="display:flex;"><span>I: ===== launch d0 ==============
+</span></span><span style="display:flex;"><span>Creating d0
+</span></span><span style="display:flex;"><span>Starting d0
+</span></span><span style="display:flex;"><span>I: ===== wait 3 sec ===
+</span></span><span style="display:flex;"><span>I: ===== check home directory ===
+</span></span><span style="display:flex;"><span>total 0
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root   0 Sep 29 20:04 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root 154 Nov 18 05:29 ..
+</span></span><span style="display:flex;"><span>I: ===== check /etc/passwd ======
+</span></span><span style="display:flex;"><span>_apt:x:42:65534::/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>messagebus:x:100:101::/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>systemd-resolve:x:997:997:systemd Resolver:/:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>I: ===== check /etc/group =======
+</span></span><span style="display:flex;"><span>adm:x:4:
+</span></span><span style="display:flex;"><span>plugdev:x:46:
+</span></span></code></pre></div><p>This can avoid setting <code>netdev</code> to GID=1000 but can&rsquo;t have the primary user.</p>
 <h3 id="override-default_user-settings-2">Override <code>default_user</code> settings (2)</h3>
 <p>The following sets <code>users:</code> to a list with updated <code>name:</code> and <code>groups:</code> list
 overrides <code>default_user</code> settings.</p>
-<pre tabindex="0"><code>$ ./users.sh users1.yaml
-I: ===== YAML data users1.yaml ===========
-config:
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      groups: [adm, mail]
-I: ===== launch d0 ==============
-Creating d0
-Starting d0
-I: ===== wait 3 sec ===
-I: ===== check home directory ===
-total 0
-drwxr-xr-x 1 root  root   10 Nov 19 03:32 .
-drwxr-xr-x 1 root  root  154 Nov 18 05:29 ..
-drwxr-xr-x 1 osamu osamu  62 Nov 19 03:33 osamu
-I: ===== check /etc/passwd ======
-nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
-messagebus:x:100:101::/nonexistent:/usr/sbin/nologin
-systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
-systemd-resolve:x:997:997:systemd Resolver:/:/usr/sbin/nologin
-osamu:x:1000:1000::/home/osamu:/bin/sh
-I: ===== check /etc/group =======
-adm:x:4:osamu
-mail:x:8:osamu
-plugdev:x:46:
-osamu:x:1000:
-</code></pre><p>This can avoid setting <code>netdev</code> to GID=1000 and sets the primary user to
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ./users.sh users1.yaml
+</span></span><span style="display:flex;"><span>I: ===== YAML data users1.yaml ===========
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  user.user-data: |
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      groups: [adm, mail]
+</span></span><span style="display:flex;"><span>I: ===== launch d0 ==============
+</span></span><span style="display:flex;"><span>Creating d0
+</span></span><span style="display:flex;"><span>Starting d0
+</span></span><span style="display:flex;"><span>I: ===== wait 3 sec ===
+</span></span><span style="display:flex;"><span>I: ===== check home directory ===
+</span></span><span style="display:flex;"><span>total 0
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root  root   10 Nov 19 03:32 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root  root  154 Nov 18 05:29 ..
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 osamu osamu  62 Nov 19 03:33 osamu
+</span></span><span style="display:flex;"><span>I: ===== check /etc/passwd ======
+</span></span><span style="display:flex;"><span>nobody:x:65534:65534:nobody:/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>messagebus:x:100:101::/nonexistent:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>systemd-network:x:998:998:systemd Network Management:/:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>systemd-resolve:x:997:997:systemd Resolver:/:/usr/sbin/nologin
+</span></span><span style="display:flex;"><span>osamu:x:1000:1000::/home/osamu:/bin/sh
+</span></span><span style="display:flex;"><span>I: ===== check /etc/group =======
+</span></span><span style="display:flex;"><span>adm:x:4:osamu
+</span></span><span style="display:flex;"><span>mail:x:8:osamu
+</span></span><span style="display:flex;"><span>plugdev:x:46:
+</span></span><span style="display:flex;"><span>osamu:x:1000:
+</span></span></code></pre></div><p>This can avoid setting <code>netdev</code> to GID=1000 and sets the primary user to
 <code>osamu</code> with reasonable UID/GID..</p>
 <p>In order this to add &ldquo;osamu&rdquo; to all groups (excluding <code>netdev</code>) as the initial
 list, <code>groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]</code>

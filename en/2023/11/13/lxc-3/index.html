@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/13 (initial publish),
-2023/11/21 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00054.md
@@ -80,11 +80,11 @@ en/note-00054.md
 <h2 id="clean-up-d0-instance-for-experiment">Clean up <code>d0</code> instance for experiment</h2>
 <p>In following examples, the instance <code>d0</code> is always deleted in advance without
 mentions by:</p>
-<pre tabindex="0"><code> $ lxc stop d0
- $ lxc delete d0
-</code></pre><p>or simply:</p>
-<pre tabindex="0"><code> $ lxc delete d0 -f
-</code></pre><h2 id="merging-yaml-settings">Merging YAML settings</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc stop d0
+</span></span><span style="display:flex;"><span> $ lxc delete d0
+</span></span></code></pre></div><p>or simply:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc delete d0 -f
+</span></span></code></pre></div><h2 id="merging-yaml-settings">Merging YAML settings</h2>
 <p>As seen in following examples, YAML settings of <code>lxc</code> are merged by key for dictionary.</p>
 <h2 id="subuid-and-subgid-on-debian-with-lxd">subuid and subgid on Debian with LXD</h2>
 <p>UID and GID:</p>
@@ -97,11 +97,11 @@ mentions by:</p>
 <li>64-bit Linux allows: 0 = 2^64-1 = 18,446,744,073,709,551,615</li>
 </ul>
 <p>For Debian with 2 normal UID/GID, <code>/etc/subuid</code> and <code>/etc/subgid</code> are:</p>
-<pre tabindex="0"><code>osamu:100000:65536
-zzz:165536:65536
-_lxd:231072:10000001
-root:231072:10000001
-</code></pre><p>This means:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>osamu:100000:65536
+</span></span><span style="display:flex;"><span>zzz:165536:65536
+</span></span><span style="display:flex;"><span>_lxd:231072:10000001
+</span></span><span style="display:flex;"><span>root:231072:10000001
+</span></span></code></pre></div><p>This means:</p>
 <ul>
 <li>UID=0 in LXD container is mapped to UID=231072 on host.</li>
 <li>UID=1000 in LXD container is mapped to UID=232072 on host.</li>
@@ -110,11 +110,11 @@ root:231072:10000001
 <p>It seems that the values in these files changes with distributions and install
 condition.  Debian uses <code>lxd</code> for user name and <code>_lxd</code> for group name while
 other distribution seems to use <code>lxd</code> for both user and group name for LXD.</p>
-<pre tabindex="0"><code> $ grep lxd /etc/passwd
-_lxd:x:129:138::/var/lib/lxd/:/bin/false
- $ grep lxd /etc/group
-lxd:x:138:osamu
-</code></pre><p>NOTE: If you change <code>/etc/subuid</code> and <code>/etc/subgid</code>, you need to execute
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ grep lxd /etc/passwd
+</span></span><span style="display:flex;"><span>_lxd:x:129:138::/var/lib/lxd/:/bin/false
+</span></span><span style="display:flex;"><span> $ grep lxd /etc/group
+</span></span><span style="display:flex;"><span>lxd:x:138:osamu
+</span></span></code></pre></div><p>NOTE: If you change <code>/etc/subuid</code> and <code>/etc/subgid</code>, you need to execute
 <code>systemctl restart lxd</code> or reboot the system to get system updated.</p>
 <h2 id="basic-id-mapping-of-lxd">Basic ID Mapping of LXD</h2>
 <p>I created and used the baseline <code>deb-12</code> image using <code>lxcinit -d -p 12</code>.</p>
@@ -124,17 +124,17 @@ user (UID=1000) shell with <code>lxc exec d0 -- sudo -u osamu bash -i</code> in 
 instance <code>d0</code>.</p>
 <p>Then I started one primary user (UID=1000) shell on the host Gnome terminal,
 and one root (UID=0) shell on the Linux terminal tty3 on the host system.</p>
-<pre tabindex="0"><code> $ ps aux
-...
-231072     18801  0.0  0.0   7588  3584 pts/1    Ss+  07:07   0:00 bash -i
-...
-232072     19122  0.0  0.0   7588  3584 pts/3    S+   07:08   0:00 bash -i
-...
-osamu      21311  1.2  0.0   8600  5376 pts/7    Ss   07:25   0:00 bash
-...
-root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
-...
-</code></pre><p>Let&rsquo;s see <code>/proc/18801</code>, <code>/proc/19122</code>, <code>proc/21311</code>, and <code>proc/22686</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ps aux
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>231072     18801  0.0  0.0   7588  3584 pts/1    Ss+  07:07   0:00 bash -i
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>232072     19122  0.0  0.0   7588  3584 pts/3    S+   07:08   0:00 bash -i
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>osamu      21311  1.2  0.0   8600  5376 pts/7    Ss   07:25   0:00 bash
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span>root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Let&rsquo;s see <code>/proc/18801</code>, <code>/proc/19122</code>, <code>proc/21311</code>, and <code>proc/22686</code>.</p>
 <table>
 <thead>
 <tr>
@@ -190,43 +190,43 @@ root       22686  0.0  0.0   8468  5120 tty3     S+   07:33   0:00 -bash
 <h2 id="mounting-file-ro----lxc-config-">Mounting file (RO) &ndash; <code>lxc config ...</code></h2>
 <p>Let&rsquo;s start an instance <code>d0</code> with the primary user in the container being
 <code>osamu</code>.  (<code>user1.yaml</code> is from &ldquo;<a href="/en/2023/11/12/lxc-2//#override-default_user-settings-2">Override default_user settings (2)</a>&rdquo;)</p>
-<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud d0 &lt;user1.yaml
-</code></pre><p>Let&rsquo;s think about sharing the directory <code>~/</code> of the primary user <code>osamu</code> in the
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch images:debian/12/cloud d0 &lt;user1.yaml
+</span></span></code></pre></div><p>Let&rsquo;s think about sharing the directory <code>~/</code> of the primary user <code>osamu</code> in the
 host as a directory <code>~/shared</code> of the primary user <code>osamu</code> in the container by
 mounting it.</p>
-<pre tabindex="0"><code> $ echo $HOME
-/home/osamu
- $ lxc config device add d0 homedir disk source=/home/osamu path=/home/osamu/host
- $ lxc config device show d0
-homedir:
-  path: /home/osamu/host
-  source: /home/osamu
-  type: disk
- $ lxc start d0
- $ lxc exec do -- sudo -u osamu -i
-osamu@d0:\~$ ls -la
-total 16
-drwxr-xr-x 1 osamu  osamu    146 Nov 17 12:53 .
-drwxr-xr-x 1 root   root      10 Nov 17 05:09 ..
--rw------- 1 osamu  osamu      7 Nov 17 09:04 .bash_history
--rw-r--r-- 1 osamu  osamu    220 Apr 23  2023 .bash_logout
--rw-r--r-- 1 osamu  osamu   3526 Apr 23  2023 .bashrc
--rw-r--r-- 1 osamu  osamu    807 Apr 23  2023 .profile
-drwx------ 1 osamu  osamu     30 Nov 17 05:09 .ssh
--rw-r--r-- 1 osamu  osamu      0 Nov 17 12:52 .sudo_as_admin_successful
-drwxr-xr-x 1 nobody nogroup 2132 Nov 17 08:54 host
-osamu@d0:\~$ ls -lani
-total 16
-21804 drwxr-xr-x 1  1000  1000  146 Nov 17 12:53 .
-  992 drwxr-xr-x 1     0     0   10 Nov 17 05:09 ..
-21916 -rw------- 1  1000  1000   62 Nov 17 12:57 .bash_history
-21805 -rw-r--r-- 1  1000  1000  220 Apr 23  2023 .bash_logout
-21806 -rw-r--r-- 1  1000  1000 3526 Apr 23  2023 .bashrc
-21807 -rw-r--r-- 1  1000  1000  807 Apr 23  2023 .profile
-21820 drwx------ 1  1000  1000   30 Nov 17 05:09 .ssh
-21990 -rw-r--r-- 1  1000  1000    0 Nov 17 12:52 .sudo_as_admin_successful
-  256 drwxr-xr-x 1 65534 65534 2132 Nov 17 08:54 host
-</code></pre><p>Here, a few interesting points.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ echo $HOME
+</span></span><span style="display:flex;"><span>/home/osamu
+</span></span><span style="display:flex;"><span> $ lxc config device add d0 homedir disk source=/home/osamu path=/home/osamu/host
+</span></span><span style="display:flex;"><span> $ lxc config device show d0
+</span></span><span style="display:flex;"><span>homedir:
+</span></span><span style="display:flex;"><span>  path: /home/osamu/host
+</span></span><span style="display:flex;"><span>  source: /home/osamu
+</span></span><span style="display:flex;"><span>  type: disk
+</span></span><span style="display:flex;"><span> $ lxc start d0
+</span></span><span style="display:flex;"><span> $ lxc exec do -- sudo -u osamu -i
+</span></span><span style="display:flex;"><span>osamu@d0:\~$ ls -la
+</span></span><span style="display:flex;"><span>total 16
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 osamu  osamu    146 Nov 17 12:53 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root   root      10 Nov 17 05:09 ..
+</span></span><span style="display:flex;"><span>-rw------- 1 osamu  osamu      7 Nov 17 09:04 .bash_history
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 osamu  osamu    220 Apr 23  2023 .bash_logout
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 osamu  osamu   3526 Apr 23  2023 .bashrc
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 osamu  osamu    807 Apr 23  2023 .profile
+</span></span><span style="display:flex;"><span>drwx------ 1 osamu  osamu     30 Nov 17 05:09 .ssh
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 osamu  osamu      0 Nov 17 12:52 .sudo_as_admin_successful
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 nobody nogroup 2132 Nov 17 08:54 host
+</span></span><span style="display:flex;"><span>osamu@d0:\~$ ls -lani
+</span></span><span style="display:flex;"><span>total 16
+</span></span><span style="display:flex;"><span>21804 drwxr-xr-x 1  1000  1000  146 Nov 17 12:53 .
+</span></span><span style="display:flex;"><span>  992 drwxr-xr-x 1     0     0   10 Nov 17 05:09 ..
+</span></span><span style="display:flex;"><span>21916 -rw------- 1  1000  1000   62 Nov 17 12:57 .bash_history
+</span></span><span style="display:flex;"><span>21805 -rw-r--r-- 1  1000  1000  220 Apr 23  2023 .bash_logout
+</span></span><span style="display:flex;"><span>21806 -rw-r--r-- 1  1000  1000 3526 Apr 23  2023 .bashrc
+</span></span><span style="display:flex;"><span>21807 -rw-r--r-- 1  1000  1000  807 Apr 23  2023 .profile
+</span></span><span style="display:flex;"><span>21820 drwx------ 1  1000  1000   30 Nov 17 05:09 .ssh
+</span></span><span style="display:flex;"><span>21990 -rw-r--r-- 1  1000  1000    0 Nov 17 12:52 .sudo_as_admin_successful
+</span></span><span style="display:flex;"><span>  256 drwxr-xr-x 1 65534 65534 2132 Nov 17 08:54 host
+</span></span></code></pre></div><p>Here, a few interesting points.</p>
 <ul>
 <li>The directory assigned to <code>path=</code> doesn&rsquo;t need to exist in advance.  It is created automatically.</li>
 <li><code>/home/osamu</code> on the host is mounted to <code>/home/osamu/host</code> in the container.</li>
@@ -236,131 +236,130 @@ total 16
 </ul>
 <h2 id="mounting-file-rw----lxc-config-">Mounting file (RW) &ndash; <code>lxc config ...</code></h2>
 <p>Let me use <code>raw.idmap</code>.</p>
-<pre tabindex="0"><code>$ lxc config set d0 raw.idmap=&#39;both 1000 1000&#39;
-$ lxc start d0
-Error: Failed to run: /usr/bin/lxd forkstart d0 /var/lib/lxd/containers /var/log/lxd/d0/lxc.conf: exit status 1
-Try `lxc info --show-log d0` for more info
-$ lxc info --show-log d0
-Name: d0
-Status: STOPPED
-Type: container
-Architecture: x86_64
-Created: 2023/11/17 14:09 JST
-Last Used: 2023/11/17 22:11 JST
-
-Log:
-
-lxc d0 20231117131132.970 ERROR    conf - ../src/lxc/conf.c:lxc_map_ids:3701 - newuidmap failed to write mapping &#34;newuidmap: uid range [1000-1001) -&gt; [1000-1001) not allowed&#34;: newuidmap 40760 0 231072 1000 1000 1000 1 1001 232073 9999000
-...
-</code></pre><p>Oops, it failed!  Googling lead me to read tips:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxc config set d0 raw.idmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;both 1000 1000&#39;</span>
+</span></span><span style="display:flex;"><span>$ lxc start d0
+</span></span><span style="display:flex;"><span>Error: Failed to run: /usr/bin/lxd forkstart d0 /var/lib/lxd/containers /var/log/lxd/d0/lxc.conf: exit status 1
+</span></span><span style="display:flex;"><span>Try `lxc info --show-log d0` for more info
+</span></span><span style="display:flex;"><span>$ lxc info --show-log d0
+</span></span><span style="display:flex;"><span>Name: d0
+</span></span><span style="display:flex;"><span>Status: STOPPED
+</span></span><span style="display:flex;"><span>Type: container
+</span></span><span style="display:flex;"><span>Architecture: x86_64
+</span></span><span style="display:flex;"><span>Created: 2023/11/17 14:09 JST
+</span></span><span style="display:flex;"><span>Last Used: 2023/11/17 22:11 JST
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Log:
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>lxc d0 20231117131132.970 ERROR    conf - ../src/lxc/conf.c:lxc_map_ids:3701 - newuidmap failed to write mapping &#34;newuidmap: uid range [1000-1001) -&gt; [1000-1001) not allowed&#34;: newuidmap 40760 0 231072 1000 1000 1000 1 1001 232073 9999000
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Oops, it failed!  Googling lead me to read tips:</p>
 <ul>
 <li><a href="https://stgraber.org/2017/06/15/custom-user-mappings-in-lxd-containers/">Custom user mappings in LXD containers</a></li>
 <li><a href="https://www.cyberciti.biz/faq/how-to-add-or-mount-directory-in-lxd-linux-container/">How to add or mount directory in LXD (Linux container)</a></li>
 </ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
-<pre tabindex="0"><code> $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subuid
- $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subgid
- $ cat /etc/subuid
-osamu:100000:65536
-zzz:165536:65536
-_lxd:231072:10000001
-root:231072:10000001
-root:1000:1
- $ cat /etc/subgid
-osamu:100000:65536
-zzz:165536:65536
-_lxd:231072:10000001
-root:231072:10000001
-root:1000:1
- $ sudo systemctl restart lxd
-</code></pre><p>This updates LXD and fixes situation.  Now.</p>
-<pre tabindex="0"><code>
- $ lxc start d0
- $ lxc exec d0 -- sudo -u osamu -i ls -la
-total 16
-drwxr-xr-x 1 osamu osamu  146 Nov 17 12:53 .
-drwxr-xr-x 1 root  root    10 Nov 17 05:09 ..
--rw------- 1 osamu osamu   79 Nov 17 13:05 .bash_history
--rw-r--r-- 1 osamu osamu  220 Apr 23  2023 .bash_logout
--rw-r--r-- 1 osamu osamu 3526 Apr 23  2023 .bashrc
--rw-r--r-- 1 osamu osamu  807 Apr 23  2023 .profile
-drwx------ 1 osamu osamu   30 Nov 17 05:09 .ssh
--rw-r--r-- 1 osamu osamu    0 Nov 17 12:52 .sudo_as_admin_successful
-drwxr-xr-x 1 osamu osamu 2132 Nov 17 15:13 host
-</code></pre><p>No more error and RW access with matching UID/GID!</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subuid
+</span></span><span style="display:flex;"><span> $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subgid
+</span></span><span style="display:flex;"><span> $ cat /etc/subuid
+</span></span><span style="display:flex;"><span>osamu:100000:65536
+</span></span><span style="display:flex;"><span>zzz:165536:65536
+</span></span><span style="display:flex;"><span>_lxd:231072:10000001
+</span></span><span style="display:flex;"><span>root:231072:10000001
+</span></span><span style="display:flex;"><span>root:1000:1
+</span></span><span style="display:flex;"><span> $ cat /etc/subgid
+</span></span><span style="display:flex;"><span>osamu:100000:65536
+</span></span><span style="display:flex;"><span>zzz:165536:65536
+</span></span><span style="display:flex;"><span>_lxd:231072:10000001
+</span></span><span style="display:flex;"><span>root:231072:10000001
+</span></span><span style="display:flex;"><span>root:1000:1
+</span></span><span style="display:flex;"><span> $ sudo systemctl restart lxd
+</span></span></code></pre></div><p>This updates LXD and fixes situation.  Now.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc start d0
+</span></span><span style="display:flex;"><span> $ lxc exec d0 -- sudo -u osamu -i ls -la
+</span></span><span style="display:flex;"><span>total 16
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 osamu osamu  146 Nov 17 12:53 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root  root    10 Nov 17 05:09 ..
+</span></span><span style="display:flex;"><span>-rw------- 1 osamu osamu   79 Nov 17 13:05 .bash_history
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 osamu osamu  220 Apr 23  2023 .bash_logout
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 osamu osamu 3526 Apr 23  2023 .bashrc
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 osamu osamu  807 Apr 23  2023 .profile
+</span></span><span style="display:flex;"><span>drwx------ 1 osamu osamu   30 Nov 17 05:09 .ssh
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 osamu osamu    0 Nov 17 12:52 .sudo_as_admin_successful
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 osamu osamu 2132 Nov 17 15:13 host
+</span></span></code></pre></div><p>No more error and RW access with matching UID/GID!</p>
 <p>Let me check configuration of instance <code>d0</code>.</p>
-<pre tabindex="0"><code> $ lxc config show d0
-architecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231119_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231119_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  raw.idmap: both 1000 1000
-  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
-  volatile.cloud-init.instance-id: c858bc54-89fb-401a-859f-9be2be0baf3c
-  volatile.eth0.host_name: veth659389ff
-  volatile.eth0.hwaddr: 00:16:3e:93:1b:3c
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: 11479146-4515-4491-811a-9ee9d56760c1
-devices:
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
-ephemeral: false
-profiles:
-- default
-stateful: false
-description: &#34;&#34;
- $ lxc config show d0 -e
-architecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231119_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231119_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  raw.idmap: both 1000 1000
-  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
-  volatile.cloud-init.instance-id: c858bc54-89fb-401a-859f-9be2be0baf3c
-  volatile.eth0.host_name: veth659389ff
-  volatile.eth0.hwaddr: 00:16:3e:93:1b:3c
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: 11479146-4515-4491-811a-9ee9d56760c1
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
-  root:
-    path: /
-    pool: default
-    type: disk
-ephemeral: false
-profiles:
-- default
-stateful: false
-description: &#34;&#34;
-</code></pre><h2 id="mounting-file-rw----profiledefault--sharedyaml">Mounting file (RW) &ndash; profile=default + <code>shared.yaml</code></h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc config show d0
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20231119_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20231119_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: squashfs
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  raw.idmap: both 1000 1000
+</span></span><span style="display:flex;"><span>  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: c858bc54-89fb-401a-859f-9be2be0baf3c
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: veth659389ff
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:93:1b:3c
+</span></span><span style="display:flex;"><span>  volatile.idmap.base: &#34;0&#34;
+</span></span><span style="display:flex;"><span>  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.idmap: &#39;[]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.uuid: 11479146-4515-4491-811a-9ee9d56760c1
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  homedir:
+</span></span><span style="display:flex;"><span>    path: /home/osamu/host
+</span></span><span style="display:flex;"><span>    source: /home/osamu
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- default
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span><span style="display:flex;"><span>description: &#34;&#34;
+</span></span><span style="display:flex;"><span> $ lxc config show d0 -e
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20231119_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20231119_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: squashfs
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  raw.idmap: both 1000 1000
+</span></span><span style="display:flex;"><span>  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: c858bc54-89fb-401a-859f-9be2be0baf3c
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: veth659389ff
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:93:1b:3c
+</span></span><span style="display:flex;"><span>  volatile.idmap.base: &#34;0&#34;
+</span></span><span style="display:flex;"><span>  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.idmap: &#39;[]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.uuid: 11479146-4515-4491-811a-9ee9d56760c1
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  eth0:
+</span></span><span style="display:flex;"><span>    name: eth0
+</span></span><span style="display:flex;"><span>    network: lxdbr0
+</span></span><span style="display:flex;"><span>    type: nic
+</span></span><span style="display:flex;"><span>  homedir:
+</span></span><span style="display:flex;"><span>    path: /home/osamu/host
+</span></span><span style="display:flex;"><span>    source: /home/osamu
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>  root:
+</span></span><span style="display:flex;"><span>    path: /
+</span></span><span style="display:flex;"><span>    pool: default
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- default
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span><span style="display:flex;"><span>description: &#34;&#34;
+</span></span></code></pre></div><h2 id="mounting-file-rw----profiledefault--sharedyaml">Mounting file (RW) &ndash; profile=default + <code>shared.yaml</code></h2>
 <p>Instead of configuring via <code>lxc config ...</code> command line, here is a YAML
 configuration <code>shared.yaml</code> to get an equivalent settings.</p>
 <ul>
@@ -368,312 +367,312 @@ configuration <code>shared.yaml</code> to get an equivalent settings.</p>
 <li>the primary user name <code>osamu</code></li>
 <li><code>/home/osamu/host</code> sharing contents with the home directory of <code>osamu</code>.</li>
 </ul>
-<pre tabindex="0"><code>config:
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      lock_passwd: True
-      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
-      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-      shell: /bin/bash
-  raw.idmap: both 1000 1000
-devices:
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
-</code></pre><p>Then launch <code>d0</code> with:</p>
-<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud d0 &lt;shared.yaml
-</code></pre><p>The resulting configuration is:</p>
-<pre tabindex="0"><code> $ lxc config show d0
-architecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231118_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231118_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      lock_passwd: True
-      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
-      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-      shell: /bin/bash
-  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
-  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
-  volatile.eth0.host_name: vethf053a734
-  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
-devices:
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
-ephemeral: false
-profiles:
-- default
-stateful: false
-description: &#34;&#34;
-</code></pre><p>It looks good but I wasn&rsquo;t sure if ethernet bridge device is created.  So I
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">config</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">user.user-data</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    #cloud-config
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    users:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - name: osamu
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      lock_passwd: True
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      shell: /bin/bash</span>    
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">raw.idmap</span>: <span style="color:#ae81ff">both 1000 1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">devices</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">homedir</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/home/osamu/host</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">source</span>: <span style="color:#ae81ff">/home/osamu</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">disk</span>
+</span></span></code></pre></div><p>Then launch <code>d0</code> with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch images:debian/12/cloud d0 &lt;shared.yaml
+</span></span></code></pre></div><p>The resulting configuration is:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc config show d0
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20231118_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20231118_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: squashfs
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  user.user-data: |
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      lock_passwd: True
+</span></span><span style="display:flex;"><span>      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+</span></span><span style="display:flex;"><span>      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+</span></span><span style="display:flex;"><span>      shell: /bin/bash
+</span></span><span style="display:flex;"><span>  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: vethf053a734
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
+</span></span><span style="display:flex;"><span>  volatile.idmap.base: &#34;0&#34;
+</span></span><span style="display:flex;"><span>  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.idmap: &#39;[]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  homedir:
+</span></span><span style="display:flex;"><span>    path: /home/osamu/host
+</span></span><span style="display:flex;"><span>    source: /home/osamu
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- default
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span><span style="display:flex;"><span>description: &#34;&#34;
+</span></span></code></pre></div><p>It looks good but I wasn&rsquo;t sure if ethernet bridge device is created.  So I
 expand this configuration as:</p>
-<pre tabindex="0"><code> $ lxc config show d0 -e
-architecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231118_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231118_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      lock_passwd: True
-      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
-      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-      shell: /bin/bash
-  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
-  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
-  volatile.eth0.host_name: vethf053a734
-  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
-  root:
-    path: /
-    pool: default
-    type: disk
-ephemeral: false
-profiles:
-- default
-stateful: false
-</code></pre><p>It looks good to me.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc config show d0 -e
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20231118_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20231118_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: squashfs
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  user.user-data: |
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      lock_passwd: True
+</span></span><span style="display:flex;"><span>      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+</span></span><span style="display:flex;"><span>      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+</span></span><span style="display:flex;"><span>      shell: /bin/bash
+</span></span><span style="display:flex;"><span>  volatile.base_image: 95c1684ed49c0d5a2f1f9014d8e0e506cfa5a4fb43a457bdd84d79916aa1dcd3
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: f3632c49-81de-45d0-9d75-582195a32666
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: vethf053a734
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:85:6f:b4
+</span></span><span style="display:flex;"><span>  volatile.idmap.base: &#34;0&#34;
+</span></span><span style="display:flex;"><span>  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:10000001}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.idmap: &#39;[]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.uuid: b3de4c22-e23f-4939-b083-4bccdfdcb725
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  eth0:
+</span></span><span style="display:flex;"><span>    name: eth0
+</span></span><span style="display:flex;"><span>    network: lxdbr0
+</span></span><span style="display:flex;"><span>    type: nic
+</span></span><span style="display:flex;"><span>  homedir:
+</span></span><span style="display:flex;"><span>    path: /home/osamu/host
+</span></span><span style="display:flex;"><span>    source: /home/osamu
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>  root:
+</span></span><span style="display:flex;"><span>    path: /
+</span></span><span style="display:flex;"><span>    pool: default
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- default
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span></code></pre></div><p>It looks good to me.</p>
 <h2 id="mounting-file-rw----profileshared">Mounting file (RW) &ndash; profile=shared</h2>
 <p>I used <code>shared.yaml</code> to make profile <code>shared</code> as:</p>
-<pre tabindex="0"><code> $ lxc profile create shared
- $ lxc profile edit sharedx &lt;shared.yaml
- $ $ lxc profile edit shared
-Profile shared created
- $ lxc profile edit shared &lt;shared.yaml
- $ lxc launch images:debian/12/cloud d0 --profile=shared
-Creating d0
-Error: Failed instance creation: Failed creating instance record: Failed initialising instance: Invalid devices: Failed detecting root disk device: No root device could be found
-</code></pre><p>Hmmmm.. root device which was defined in <code>profile=default</code> is missing.  So I also specified <code>--profile=default</code> as:</p>
-<pre tabindex="0"><code> $ lxc launch images:debian/12/cloud d0 --profile=default --profile=shared
-Creating d0
-Starting d0
- $ lxc config show d0
-architecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231119_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231119_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
-  volatile.cloud-init.instance-id: 0b8eac4b-f530-4628-a615-8f3b995b5680
-  volatile.eth0.host_name: veth3abc0116
-  volatile.eth0.hwaddr: 00:16:3e:fa:e7:a5
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: 3387ffc3-8640-4173-9f22-398bd0484dcd
-devices: {}
-ephemeral: false
-profiles:
-- default
-- shared
-stateful: false
-description: &#34;&#34;
- $  lxc config show d0 -e
-architecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231119_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231119_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  raw.idmap: both 1000 1000
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      lock_passwd: True
-      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
-      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-      shell: /bin/bash
-  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
-  volatile.cloud-init.instance-id: 0b8eac4b-f530-4628-a615-8f3b995b5680
-  volatile.eth0.host_name: veth3abc0116
-  volatile.eth0.hwaddr: 00:16:3e:fa:e7:a5
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: 3387ffc3-8640-4173-9f22-398bd0484dcd
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
-  root:
-    path: /
-    pool: default
-    type: disk
-ephemeral: false
-profiles:
-- default
-- shared
-stateful: false
-</code></pre><p>Unless expanded, settings set by each profile listed under <code>profiles:</code> as list
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc profile create shared
+</span></span><span style="display:flex;"><span> $ lxc profile edit sharedx &lt;shared.yaml
+</span></span><span style="display:flex;"><span> $ $ lxc profile edit shared
+</span></span><span style="display:flex;"><span>Profile shared created
+</span></span><span style="display:flex;"><span> $ lxc profile edit shared &lt;shared.yaml
+</span></span><span style="display:flex;"><span> $ lxc launch images:debian/12/cloud d0 --profile=shared
+</span></span><span style="display:flex;"><span>Creating d0
+</span></span><span style="display:flex;"><span>Error: Failed instance creation: Failed creating instance record: Failed initialising instance: Invalid devices: Failed detecting root disk device: No root device could be found
+</span></span></code></pre></div><p>Hmmmm.. root device which was defined in <code>profile=default</code> is missing.  So I also specified <code>--profile=default</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch images:debian/12/cloud d0 --profile=default --profile=shared
+</span></span><span style="display:flex;"><span>Creating d0
+</span></span><span style="display:flex;"><span>Starting d0
+</span></span><span style="display:flex;"><span> $ lxc config show d0
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20231119_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20231119_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: squashfs
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: 0b8eac4b-f530-4628-a615-8f3b995b5680
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: veth3abc0116
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:fa:e7:a5
+</span></span><span style="display:flex;"><span>  volatile.idmap.base: &#34;0&#34;
+</span></span><span style="display:flex;"><span>  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.idmap: &#39;[]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.uuid: 3387ffc3-8640-4173-9f22-398bd0484dcd
+</span></span><span style="display:flex;"><span>devices: {}
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- default
+</span></span><span style="display:flex;"><span>- shared
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span><span style="display:flex;"><span>description: &#34;&#34;
+</span></span><span style="display:flex;"><span> $  lxc config show d0 -e
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20231119_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20231119_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: squashfs
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  raw.idmap: both 1000 1000
+</span></span><span style="display:flex;"><span>  user.user-data: |
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      lock_passwd: True
+</span></span><span style="display:flex;"><span>      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+</span></span><span style="display:flex;"><span>      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+</span></span><span style="display:flex;"><span>      shell: /bin/bash
+</span></span><span style="display:flex;"><span>  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: 0b8eac4b-f530-4628-a615-8f3b995b5680
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: veth3abc0116
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:fa:e7:a5
+</span></span><span style="display:flex;"><span>  volatile.idmap.base: &#34;0&#34;
+</span></span><span style="display:flex;"><span>  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.idmap: &#39;[]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.uuid: 3387ffc3-8640-4173-9f22-398bd0484dcd
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  eth0:
+</span></span><span style="display:flex;"><span>    name: eth0
+</span></span><span style="display:flex;"><span>    network: lxdbr0
+</span></span><span style="display:flex;"><span>    type: nic
+</span></span><span style="display:flex;"><span>  homedir:
+</span></span><span style="display:flex;"><span>    path: /home/osamu/host
+</span></span><span style="display:flex;"><span>    source: /home/osamu
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>  root:
+</span></span><span style="display:flex;"><span>    path: /
+</span></span><span style="display:flex;"><span>    pool: default
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- default
+</span></span><span style="display:flex;"><span>- shared
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span></code></pre></div><p>Unless expanded, settings set by each profile listed under <code>profiles:</code> as list
 can&rsquo;s be seen.</p>
 <h2 id="mounting-file-rw----profilesharedx">Mounting file (RW) &ndash; profile=sharedx</h2>
 <p>Since specifying 2 profiles are cumbersome, I made <code>sharedx.yaml</code> as:</p>
-<pre tabindex="0"><code>config:
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      lock_passwd: True
-      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
-      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-      shell: /bin/bash
-  raw.idmap: both 1000 1000
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  root:
-    path: /
-    pool: default
-    type: disk
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
- $ lxc profile create sharedx
-Profile sharedx created
- $ lxc profile edit sharedx &lt;sharedx.yaml
- $ lxc launch images:debian/12/cloud d0 --profile=sharedx
-Creating d0
-Starting d0
- $ lxc exec d0 -- ls -la /home/osamu
-total 0
-drwxr-xr-x 1 root  root    16 Nov 19 14:10 .
-drwxr-xr-x 1 root  root    10 Nov 19 14:10 ..
-drwx------ 1 osamu osamu   30 Nov 19 14:10 .ssh
-drwxr-xr-x 1 osamu osamu 2254 Nov 19 13:40 host
-</code></pre><p>Now, I got my intended instance <code>d0</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">config</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">user.user-data</span>: |<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    #cloud-config
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    users:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - name: osamu
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      lock_passwd: True
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      shell: /bin/bash</span>    
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">raw.idmap</span>: <span style="color:#ae81ff">both 1000 1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">devices</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">eth0</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">name</span>: <span style="color:#ae81ff">eth0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">network</span>: <span style="color:#ae81ff">lxdbr0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">nic</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">root</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">pool</span>: <span style="color:#ae81ff">default</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">disk</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">homedir</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">path</span>: <span style="color:#ae81ff">/home/osamu/host</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">source</span>: <span style="color:#ae81ff">/home/osamu</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">disk</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">$ lxc profile create sharedx</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">Profile sharedx created</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">$ lxc profile edit sharedx &lt;sharedx.yaml</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">$ lxc launch images:debian/12/cloud d0 --profile=sharedx</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">Creating d0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">Starting d0</span>
+</span></span><span style="display:flex;"><span> <span style="color:#ae81ff">$ lxc exec d0 -- ls -la /home/osamu</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">total 0</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">drwxr-xr-x 1 root  root    16 Nov 19 14:10 .</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">drwxr-xr-x 1 root  root    10 Nov 19 14:10 ..</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">drwx------ 1 osamu osamu   30 Nov 19 14:10 .ssh</span>
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">drwxr-xr-x 1 osamu osamu 2254 Nov 19 13:40 host</span>
+</span></span></code></pre></div><p>Now, I got my intended instance <code>d0</code>.</p>
 <p>Let me double check its configuration.</p>
-<pre tabindex="0"><code> $ lxc config show d0
-architecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231119_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231119_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
-  volatile.cloud-init.instance-id: b618beef-9f19-4b0c-a9b7-f8b7cabca484
-  volatile.eth0.host_name: vetha0f3aa40
-  volatile.eth0.hwaddr: 00:16:3e:1f:70:1f
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: 7c6b708c-0645-4faf-b68c-2472da6c7596
-devices: {}
-ephemeral: false
-profiles:
-- sharedx
-stateful: false
-description: &#34;&#34;
- $ lxc config show d0 -e
-architecture: x86_64
-config:
-  image.architecture: amd64
-  image.description: Debian bookworm amd64 (20231119_05:24)
-  image.os: Debian
-  image.release: bookworm
-  image.serial: &#34;20231119_05:24&#34;
-  image.type: squashfs
-  image.variant: cloud
-  raw.idmap: both 1000 1000
-  user.user-data: |
-    #cloud-config
-    users:
-    - name: osamu
-      lock_passwd: True
-      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
-      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
-      shell: /bin/bash
-  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
-  volatile.cloud-init.instance-id: b618beef-9f19-4b0c-a9b7-f8b7cabca484
-  volatile.eth0.host_name: vetha0f3aa40
-  volatile.eth0.hwaddr: 00:16:3e:1f:70:1f
-  volatile.idmap.base: &#34;0&#34;
-  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
-  volatile.last_state.idmap: &#39;[]&#39;
-  volatile.last_state.power: RUNNING
-  volatile.uuid: 7c6b708c-0645-4faf-b68c-2472da6c7596
-devices:
-  eth0:
-    name: eth0
-    network: lxdbr0
-    type: nic
-  homedir:
-    path: /home/osamu/host
-    source: /home/osamu
-    type: disk
-  root:
-    path: /
-    pool: default
-    type: disk
-ephemeral: false
-profiles:
-- sharedx
-stateful: false
-</code></pre><!-- raw HTML omitted -->
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc config show d0
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20231119_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20231119_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: squashfs
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: b618beef-9f19-4b0c-a9b7-f8b7cabca484
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: vetha0f3aa40
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:1f:70:1f
+</span></span><span style="display:flex;"><span>  volatile.idmap.base: &#34;0&#34;
+</span></span><span style="display:flex;"><span>  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.idmap: &#39;[]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.uuid: 7c6b708c-0645-4faf-b68c-2472da6c7596
+</span></span><span style="display:flex;"><span>devices: {}
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- sharedx
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span><span style="display:flex;"><span>description: &#34;&#34;
+</span></span><span style="display:flex;"><span> $ lxc config show d0 -e
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20231119_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20231119_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: squashfs
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  raw.idmap: both 1000 1000
+</span></span><span style="display:flex;"><span>  user.user-data: |
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      lock_passwd: True
+</span></span><span style="display:flex;"><span>      groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]
+</span></span><span style="display:flex;"><span>      sudo: [&#34;ALL=(ALL) NOPASSWD:ALL&#34;]
+</span></span><span style="display:flex;"><span>      shell: /bin/bash
+</span></span><span style="display:flex;"><span>  volatile.base_image: 02f1ae40b26f73862579d1e4402df009688f7cb0ee17ccc58c5bc3c1a9bdf9b1
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: b618beef-9f19-4b0c-a9b7-f8b7cabca484
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: vetha0f3aa40
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:1f:70:1f
+</span></span><span style="display:flex;"><span>  volatile.idmap.base: &#34;0&#34;
+</span></span><span style="display:flex;"><span>  volatile.idmap.current: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.idmap.next: &#39;[{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:false,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:231072,&#34;Nsid&#34;:0,&#34;Maprange&#34;:1000},{&#34;Isuid&#34;:true,&#34;Isgid&#34;:true,&#34;Hostid&#34;:1000,&#34;Nsid&#34;:1000,&#34;Maprange&#34;:1},{&#34;Isuid&#34;:false,&#34;Isgid&#34;:true,&#34;Hostid&#34;:232073,&#34;Nsid&#34;:1001,&#34;Maprange&#34;:9999000}]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.idmap: &#39;[]&#39;
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.uuid: 7c6b708c-0645-4faf-b68c-2472da6c7596
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  eth0:
+</span></span><span style="display:flex;"><span>    name: eth0
+</span></span><span style="display:flex;"><span>    network: lxdbr0
+</span></span><span style="display:flex;"><span>    type: nic
+</span></span><span style="display:flex;"><span>  homedir:
+</span></span><span style="display:flex;"><span>    path: /home/osamu/host
+</span></span><span style="display:flex;"><span>    source: /home/osamu
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>  root:
+</span></span><span style="display:flex;"><span>    path: /
+</span></span><span style="display:flex;"><span>    pool: default
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- sharedx
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span></code></pre></div><!-- raw HTML omitted -->
 
 
 <table width="100%">

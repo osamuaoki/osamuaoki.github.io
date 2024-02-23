@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/06/19 (initial publish),
-2023/12/28 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00047.md
@@ -92,7 +92,7 @@ en/note-00047.md
         <li><a href="#xkbru-interference-fix"><code>xkb=ru</code> interference fix</a></li>
         <li><a href="#add-test-keys-for-code-verification">Add <code>test-keys</code> for code verification</a></li>
         <li><a href="#use--keyvalisforbiddenkeyval">Use  <code>keyvalIsForbidden(keyval)</code></a></li>
-        <li><a href="#fix-constant-calling">Fix Constant calling</a></li>
+        <li><a href="#fix-constant-calling">Fix constant calling</a></li>
         <li><a href="#use-only-non-shift-backspace-to-delete">Use only non-SHIFT BackSpace to delete</a></li>
         <li><a href="#modifier-combos-as-shortcut">Modifier-combos as shortcut</a></li>
         <li><a href="#gnome-45">GNOME 45</a></li>
@@ -316,13 +316,13 @@ through the primary xkb before invoking any ibus.</p>
 <p>I created dummy extension to test code snippets to debug code</p>
 <h3 id="use--keyvalisforbiddenkeyval">Use  <code>keyvalIsForbidden(keyval)</code></h3>
 <p>Force to avoid cursor and return keys.</p>
-<h3 id="fix-constant-calling">Fix Constant calling</h3>
-<pre tabindex="0"><code>-    if ((mask === 0 || mask === Gdk.SHIFT_MASK) &amp;&amp; keycode !== 0) {
-+    if ((mask === 0 || mask === Gdk.ModifierType.SHIFT_MASK) &amp;&amp; keycode !== 0) {
-</code></pre><h3 id="use-only-non-shift-backspace-to-delete">Use only non-SHIFT BackSpace to delete</h3>
-<pre tabindex="0"><code>-            if (keyval === Gdk.KEY_BackSpace) {
-+            if (mask === 0 &amp;&amp; keyval === Gdk.KEY_BackSpace) {
-</code></pre><h3 id="modifier-combos-as-shortcut">Modifier-combos as shortcut</h3>
+<h3 id="fix-constant-calling">Fix constant calling</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#f92672">-    if ((mask === 0 || mask === Gdk.SHIFT_MASK) &amp;&amp; keycode !== 0) {
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+    if ((mask === 0 || mask === Gdk.ModifierType.SHIFT_MASK) &amp;&amp; keycode !== 0) {
+</span></span></span></code></pre></div><h3 id="use-only-non-shift-backspace-to-delete">Use only non-SHIFT BackSpace to delete</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-diff" data-lang="diff"><span style="display:flex;"><span><span style="color:#f92672">-            if (keyval === Gdk.KEY_BackSpace) {
+</span></span></span><span style="display:flex;"><span><span style="color:#f92672"></span><span style="color:#a6e22e">+            if (mask === 0 &amp;&amp; keyval === Gdk.KEY_BackSpace) {
+</span></span></span></code></pre></div><h3 id="modifier-combos-as-shortcut">Modifier-combos as shortcut</h3>
 <p>There are some odd key code:</p>
 <ul>
 <li><code>Shift-Alt_L</code> pressed &ndash;&gt; <code>&lt;Shift&gt;Meta_L</code> generated</li>
@@ -416,7 +416,7 @@ best installed via flatpak.</p>
 <h3 id="tip-checking-systemd-log">Tip: Checking systemd log</h3>
 <p>I can see all <strong>gnome-shell</strong> log including DEBUG output from the last system
 boot as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ journalctl -p <span style="color:#ae81ff">7</span> -b -g gnome-shell
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ journalctl -p <span style="color:#ae81ff">7</span> -b -g gnome-shell
 </span></span></code></pre></div><ul>
 <li>Use <code>-g gjs</code> for <code>prefs.js</code>.</li>
 <li>Use <code>-f</code> instead of <code>-b</code> to monitor continuously.</li>
