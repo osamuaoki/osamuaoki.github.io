@@ -68,7 +68,8 @@ en/note-00067.md
     <li><a href="#using-variables-in-ansible">Using Variables in Ansible</a>
       <ul>
         <li><a href="#variable-precedence">Variable precedence</a></li>
-        <li><a href="#testing--variables-in-action">Testing  variables in action</a></li>
+        <li><a href="#strategy-to-use-variables">Strategy to use variables</a></li>
+        <li><a href="#testing-variables-in-action">Testing variables in action</a></li>
       </ul>
     </li>
     <li><a href="#notable-links-to-documentation">Notable links to documentation</a></li>
@@ -113,9 +114,19 @@ precedence</a>&rdquo;.</p>
 <li>extra vars (for example, -e &ldquo;user=my_user&rdquo;)(always win precedence)</li>
 </ul>
 <p>I noticed these variable settings are somewhat like Makefile.  Unlike normal
-shell scripts, <code>vars:</code> definition after <code>task:</code> are effective and values may be
-updated as tasks are processed.</p>
-<h3 id="testing--variables-in-action">Testing  variables in action</h3>
+shell scripts, <code>vars: ...</code> definition after <code>task: ...</code> are effective and
+values may be updated as tasks are processed.</p>
+<h3 id="strategy-to-use-variables">Strategy to use variables</h3>
+<p>I can understand the rationale behind making &ldquo;extra vars&rdquo; to have a powerful
+precedence position.  It&rsquo;s handy for debugging.</p>
+<p>But, we can&rsquo;t use such &ldquo;extra vars&rdquo; variable names casually within the play and
+try to rewrite their effective values with other variables.  So the approach of
+using corresponding but different internal variable names is the only
+reasonable alternative.  Then we can handle default values for the undefined
+cases and variable type issues can be handled gracefully.</p>
+<p>I put such variable name conversion code in the low priority &ldquo;role default&rdquo;.
+It also takes care variable type issues.</p>
+<h3 id="testing-variables-in-action">Testing variables in action</h3>
 <p>Let me setup variable test code using following modules:</p>
 <ul>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html">ansible.builtin.debug</a> &ndash;  Print statements during execution</li>
@@ -141,7 +152,7 @@ _var2_override:  &#34;{{ var2_override | default(false) | bool }}&#34;
 
 _var3: &#34;&#34;
 </code></pre><p>Then tested these against <code>roles/base/tasks/main.yml</code> and played with it from
-the command line.</p>
+the command line.  Many repeated long lines are for the variable value tracing.</p>
 <p><code>roles/base/tasks/main.yml</code>:</p>
 <pre tabindex="0"><code>---
 
