@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/17 (initial publish),
-2024/02/21 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00065.md
@@ -102,6 +102,7 @@ use <code>ansible</code>.)</p>
 <li><code>ansible</code> 7.3.0 (incl. the Ansible community packages)</li>
 <li><code>ansible-lint</code> 6.13.1</li>
 </ul>
+<p>FYI: <a href="https://github.com/osamuaoki/osamuaoki-hugo-proj">Test code github repo</a></p>
 <h2 id="installation-of-ansible">Installation of Ansible</h2>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sudo apt update
 </span></span><span style="display:flex;"><span>$ sudo apt install ansible ansible-lint
@@ -429,7 +430,7 @@ which match the parent directory name is required to use the file name <code>mai
 </span></span><span style="display:flex;"><span>localhost                  : ok=3    changed=0    unreachable=0    failed=0    skipped=0    rescued=0    ignored=0   
 </span></span></code></pre></div><h3 id="play-a-part-of-playbook-with-tag">Play a part of Playbook with tag</h3>
 <p><a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html">Tags</a>
-let me execute or skip selected tasks.</p>
+let me execute only selected portion of tasks easily.</p>
 <p>Since I already added <code>tags:</code> keys in the previous example, let me selectively
 play a part of playbook.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible-playbook -t install pb_main.yml
@@ -449,6 +450,12 @@ play a part of playbook.</p>
 <li><code>--tags tagged</code> &ndash; run only tasks with at least one tag</li>
 <li><code>--tags untagged</code> &ndash; run only tasks with no tags</li>
 </ul>
+<p>Note: Considering the default behavior without specifying <code>-t</code> option feature
+being <code>-t all</code>, this tag thing should be used only to narrow the execution
+scope.  If I want to add extra codes such as debug echos which should be
+<strong>normally skipped</strong>, I should use conditional approach controlled by the value
+of some variables to skip them.  The wording of the initial phrase of this
+section was chosen without using <strong>skip</strong> to emphasize this fact.</p>
 <h2 id="use-of-ansible-command-localhost">Use of <code>ansible</code> command (localhost)</h2>
 <p>I can test modules directly from <code>ansible</code> CLI.  For example
 <code>ansible.builtin.apt</code> module can be tested from any directory as:</p>

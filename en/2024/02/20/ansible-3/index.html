@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Ansible (3) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Ansible (3)</span></h1>
+
+<h3 class="date">Date:
+2024/02/20 (initial publish),
+2024/02/23 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00067.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/02/19/ansible-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#recap-of-my-trials-of-playbooks">Recap of my trials of playbooks</a></li>
+    <li><a href="#using-variables-in-ansible">Using Variables in Ansible</a>
+      <ul>
+        <li><a href="#variable-precedence">Variable precedence</a></li>
+        <li><a href="#testing--variables-in-action">Testing  variables in action</a></li>
+      </ul>
+    </li>
+    <li><a href="#notable-links-to-documentation">Notable links to documentation</a></li>
+  </ul>
+</nav>
+
+<p>Here is a series of memos of me trying to use ansible on Debian 12 (<code>bookworm</code>).</p>
+<p>FYI: <a href="https://github.com/osamuaoki/osamuaoki-hugo-proj">Test code github repo</a></p>
+<h2 id="recap-of-my-trials-of-playbooks">Recap of my trials of playbooks</h2>
+<p>Up to here, I tried simple playbooks in which <a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html#playbook-execution">a playbook runs in order from top to bottom</a>.</p>
+<p>Let me read over again &ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html#playbook-execution">Playbook execution</a>&rdquo;:</p>
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html#playbook-execution">Playbook execution</a>
+<ul>
+<li>A playbook runs in order from top to bottom. Within each play, tasks also run in order from top to bottom.</li>
+<li><a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html#task-execution">Task execution: By default, Ansible executes each task in order, one at a time, against all
+machines matched by the host pattern. Each task executes a module with specific
+arguments. When a task has executed on all target machines, Ansible moves on to
+the next task</a></li>
+</ul>
+</li>
+</ul>
+<p>So far, it was simple.</p>
+<h2 id="using-variables-in-ansible">Using Variables in Ansible</h2>
+<p>Then I read &ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html">Using Variables</a>&rdquo;.
+This feature of &ldquo;Ansible uses variables to manage differences between systems.&rdquo;
+is a very attractive one.  But when I tried variables, I got confused a bit
+until I found &ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable">Ansible loads every possible variable it finds, and then
+chooses the variable to apply based on variable
+precedence</a>&rdquo;.</p>
+<h3 id="variable-precedence">Variable precedence</h3>
+<p>Here is the order of precedence from least to greatest for notable ones:</p>
+<ul>
+<li>role defaults (defined in role/defaults/main.yml)</li>
+<li>&hellip;</li>
+<li>host facts / <a href="https://docs.ansible.com/ansible/latest/modules/set_fact_module.html#parameter-cacheable">cached</a> set_facts</li>
+<li>play vars (defined in <code>vars:</code> immediately under each play)</li>
+<li>&hellip;</li>
+<li>role vars (defined in role/vars/main.yml)</li>
+<li>task vars (only for the task, defined in <code>vars:</code> immediately under each task)</li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html">set_facts</a> / <a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#registering-variables">registered vars</a></li>
+<li>extra vars (for example, -e &ldquo;user=my_user&rdquo;)(always win precedence)</li>
+</ul>
+<p>I noticed these variable settings are somewhat like Makefile.  Unlike normal
+shell scripts, <code>vars:</code> definition after <code>task:</code> are effective and values may be
+updated as tasks are processed.</p>
+<h3 id="testing--variables-in-action">Testing  variables in action</h3>
+<p>Let me setup variable test code using following modules:</p>
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html">ansible.builtin.debug</a> &ndash;  Print statements during execution</li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html">ansible.builtin.set_fact</a> &ndash; Set host variable(s) and fact(s)</li>
+</ul>
+<p><code>roles/base/defaults/main.yml</code>:</p>
+<pre tabindex="0"><code>---
+# prefix internal variables with underscore
+#   -- let -e to set external variables without underscore
+# ensure internal variables to be defined (and boolean for override)
+#
+_var1: &#34;{{ var1 | default(&#39;1&#39;) }}&#34;
+_var2: &#34;{{ var2 | default(&#39;2&#39;) }}&#34;
+
+#_varTF: True
+_varTF: &#34;{{ _var1 == _var2 }}&#34;
+
+_var1_override:  &#34;{{ var1_override | default(false) | bool }}&#34; 
+_var2_override:  &#34;{{ var2_override | default(false) | bool }}&#34; 
+</code></pre><p><code>roles/base/vars/main.yml</code></p>
+<pre tabindex="0"><code>---
+# vars file
+
+_var3: &#34;&#34;
+</code></pre><p>Then tested these against <code>roles/base/tasks/main.yml</code> and played with it from
+the command line.</p>
+<p><code>roles/base/tasks/main.yml</code>:</p>
+<pre tabindex="0"><code>---
+
+- name: Debug external variables with msg
+  ansible.builtin.debug:
+    msg: &#34;var1_override = &#39;{{ var1_override | default(&#39;***UNDEFIINED***&#39;) }}&#39; var2_override = &#39;{{ var2_override | default(&#39;***UNDEFIINED***&#39;) }}&#39;&#34;
+
+- name: Debug internal variables with msg
+  ansible.builtin.debug:
+    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
+
+- name: set var1 to &#34;111&#34; (if _var1_override is True)
+  ansible.builtin.set_fact:
+    _var1: &#34;111&#34;
+  when: _var1_override
+
+- name: Debug internal variables with msg
+  ansible.builtin.debug:
+    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
+
+- name: set var2 to &#34;222&#34; (if _var2_override is True)
+  ansible.builtin.set_fact:
+    _var2: &#34;222&#34;
+  when: _var2_override
+
+- name: Debug internal variables with msg
+  ansible.builtin.debug:
+    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
+
+- name: set _var3 (_var1+_var2)
+  ansible.builtin.set_fact:
+    _var3: &#34;{{ _var1 + _var2 }}&#34;
+
+- name: Debug internal variables with msg
+  ansible.builtin.debug:
+    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
+
+- name: set _var3 to &#34;zzzzz&#34; with var1 == var2
+  ansible.builtin.set_fact:
+    _var3: &#34;zzzzz&#34;
+  when: _varTF
+
+- name: Debug internal variables with msg
+  ansible.builtin.debug:
+    msg: &#34;_var1 = &#39;{{ _var1 }}&#39; _var2 = &#39;{{ _var2 }}&#39; _var3 = &#39;{{ _var3 }}&#39; _varTF = &#39;{{ _varTF }}&#39; _var1_override = &#39;{{ _var1_override }}&#39; _var2_override = &#39;{{ _var2_override }}&#39;&#34;
+
+- name: Debug result of _var1 == _var2
+  ansible.builtin.debug:
+    var: _var1 == _var2
+</code></pre><p>Using these, I tested as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible-playbook pb_main.yml -e &#34;var1=0 var2=0 var1_override=1 var2_override=0&#34;
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>YAML or JSON is too much to type in the command line.  The <code>-e</code> option with
+easier to type <code>key=value</code> produces <code>value</code> in string.  The application of
+<code>|bool</code> in Ansible code as above ensures the value to be boolean .</p>
+<p>Now I understand why I see many <code>when: some_vaiable |bool</code> in Ansible code
+examples.  See <a href="https://github.com/ansible/ansible/issues/17193">Ansible issue #17193</a>.</p>
+<h2 id="notable-links-to-documentation">Notable links to documentation</h2>
+<p>TBH, &ldquo;<a href="https://docs.ansible.com/">Ansible Documentation</a>&rdquo; is too big to read
+though whenever I wonder.  Here are links to the portion I keep coming back.</p>
+<ul>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/getting_started/basic_concepts.html">Ansible concepts</a>&rdquo; &ndash; Control node, Managed nodes, Inventory, Playbooks, Plays, Roles, Tasks, Handlers, Modules, Plugins, Collections</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/">Ansible.Builtin</a>&rdquo; &ndash; Reference for all modules and plugins contained in <code>ansible-core</code></li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/">Using Ansible playbooks</a>&rdquo;
+<ul>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html">Ansible playbooks</a>&rdquo; &ndash; Ansible Playbooks offer a configuration management and multi-machine deployment system.</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks.html">Working with playbooks</a>&rdquo;
+<ul>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html">Conditionals</a>&rdquo; &ndash; Conditional execution of task depending on the value of variable and fact.</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html">Blocks</a>&rdquo; &ndash; Blocks create logical groups of tasks</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_handlers.html">Handler</a>&rdquo; &ndash; Running operations on change</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html">Roles</a>&rdquo; &ndash; Roles let you automatically load related vars, files, tasks, handlers, etc.</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html">Using Variables</a>&rdquo; &ndash; Manage differences between systems by creating variables with standard YAML syntax
+<ul>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#understanding-variable-precedence">Understanding variable precedence</a>&rdquo;</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_execution.html">Executing playbooks</a>
+<ul>
+<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html">Tags</a>&rdquo; &ndash; Enable to run only specific parts of playbook</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>REFERENCE &amp; APPENDICES
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/reference_appendices/playbooks_keywords.html">Playbook Keywords</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/reference_appendices/test_strategies.html">Testing Strategies</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html">YAML Syntax</a></li>
+</ul>
+</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/02/19/ansible-2/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

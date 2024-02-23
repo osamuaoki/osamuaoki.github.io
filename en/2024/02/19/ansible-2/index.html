@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/19 (initial publish),
-2024/02/21 (last update)
+2024/02/23 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00066.md
@@ -54,7 +54,7 @@ en/note-00066.md
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/02/20/ansible-3/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -72,14 +72,13 @@ en/note-00066.md
         <li><a href="#module-to-copy-configuration-file">Module to copy configuration file</a></li>
         <li><a href="#module-to-setup-configuration-file-from-a-template-file">Module to setup configuration file from a template file</a></li>
         <li><a href="#modules-to-execute-the-shell-command">Modules to execute the shell command</a></li>
-        <li><a href="#notable-other-modules">Notable other modules</a></li>
-        <li><a href="#further-actions">Further actions</a></li>
       </ul>
     </li>
   </ul>
 </nav>
 
 <p>Here is a series of memos of me trying to use ansible on Debian 12 (<code>bookworm</code>).</p>
+<p>FYI: <a href="https://github.com/osamuaoki/osamuaoki-hugo-proj">Test code github repo</a></p>
 <h2 id="searching-roles-in-ansible-galaxy-and-ansible-galaxy">Searching roles in Ansible Galaxy and <code>ansible-galaxy</code></h2>
 <p><a href="https://galaxy.ansible.com/ui/">Ansible Galaxy</a> is a curation site for Ansible
 scripts.  They are offered in 2 formats:</p>
@@ -158,7 +157,7 @@ to this template.</p>
             └── main.yml
 </code></pre><p>Read &ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html#role-directory-structure">Role directory structure</a>&rdquo; for explanation.</p>
 <h3 id="module-to-setup-apt-repository-configuration">Module to setup APT repository configuration</h3>
-<p>Let me setup APT repository using deb822 format  using following modules:</p>
+<p>Let me setup APT repository using deb822 format using following modules:</p>
 <ul>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html">ansible.builtin.file</a> &ndash; remove file</li>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/deb822_repository_module.html">ansible.builtin.deb822_repository</a></li>
@@ -256,37 +255,6 @@ an arbitrary program can be quite handy.</p>
 </ul>
 </li>
 </ul>
-<h3 id="notable-other-modules">Notable other modules</h3>
-<ul>
-<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/debug_module.html">ansible.builtin.debug</a> &ndash;  Print statements during execution</li>
-<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html">ansible.builtin.set_fact</a> &ndash; Set host variable(s) and fact(s)</li>
-</ul>
-<h3 id="further-actions">Further actions</h3>
-<p>I think I need to read through followings to grok how I can use Ansible and playbook.</p>
-<ul>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/getting_started/basic_concepts.html">Ansible concepts</a>&rdquo; &ndash; Control node, Managed nodes, Inventory, Playbooks, Plays, Roles, Tasks, Handlers, Modules, Plugins, Collections</li>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/">Ansible.Builtin</a>&rdquo; &ndash; Reference for all modules and plugins contained in <code>ansible-core</code></li>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/">Using Ansible playbooks</a>&rdquo;
-<ul>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_intro.html">Ansible playbooks</a>&rdquo; &ndash; Ansible Playbooks offer a configuration management and multi-machine deployment system.</li>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks.html">Working with playbooks</a>&rdquo;
-<ul>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_conditionals.html">Conditionals</a>&rdquo; &ndash; Conditional execution of task depending on the value of variable and fact.</li>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_blocks.html">Blocks</a>&rdquo; &ndash; Blocks create logical groups of tasks</li>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_handlers.html">Handler</a>&rdquo; &ndash; Running operations on change</li>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_reuse_roles.html">Roles</a>&rdquo; &ndash; Roles let you automatically load related vars, files, tasks, handlers, etc.</li>
-</ul>
-</li>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_execution.html">Executing playbooks</a>
-<ul>
-<li>&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_tags.html">Tags</a>&rdquo; &ndash; Enable to run only specific parts of playbook</li>
-</ul>
-</li>
-</ul>
-</li>
-</ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
@@ -299,7 +267,7 @@ an arbitrary program can be quite handy.</p>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/02/20/ansible-3/">Next Post</a></td>
   
   </tr>
   </tbody>
