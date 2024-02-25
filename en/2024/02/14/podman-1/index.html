@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/02/14 (initial publish),
-2024/02/23 (last update)
+2024/02/25 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00064.md
@@ -80,6 +80,7 @@ en/note-00064.md
     <li><a href="#dockerfile"><code>Dockerfile</code></a></li>
     <li><a href="#references">References</a></li>
     <li><a href="#note-on-directory-usage-of-podman">Note on directory usage of <code>podman</code></a></li>
+    <li><a href="#typical-cliché-for-dockerpodman">Typical cliché for <code>docker</code>/<code>podman</code></a></li>
   </ul>
 </nav>
 
@@ -294,7 +295,48 @@ situation as:</p>
 </ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<h2 id="typical-cliché-for-dockerpodman">Typical cliché for <code>docker</code>/<code>podman</code></h2>
+<p>I often see the following cliché:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ docker run -it --rm -w /root alpine:edge sh -uelic &#34;
+</span></span><span style="display:flex;"><span>   apk add $list_of_packages --update
+</span></span><span style="display:flex;"><span>   $command_string
+</span></span><span style="display:flex;"><span>&#34;
+</span></span></code></pre></div><p>Here:</p>
+<ul>
+<li><code>docker</code>: This can be <code>podman</code>.</li>
+<li><code>-it</code>: Keep stdin open and allocate a pseudo-TTY.</li>
+<li><code>--rm</code>: Automatically remove the container when it exits.</li>
+<li><code>-w /root</code>: Working directory inside the container to be /root.</li>
+<li><code>alpine:edge</code>: <a href="https://hub.docker.com/_/alpine">Docker official image based on Alpine Linux</a> with tag=<code>edge</code></li>
+<li><code>sh -uelic</code>:</li>
+</ul>
+<p>Here, Alpine Linux is is a lightweight Linux distribution suitable for docker.  Its
+<a href="https://hub.docker.com/_/alpine">Docker official image</a> tag can be:</p>
+<ul>
+<li><a href="https://wiki.alpinelinux.org/wiki/Repositories#Edge">edge</a> for the current development tree</li>
+<li><code>latest</code> for the latest stable release (default w/o tag)</li>
+</ul>
+<p>As for Busybox <code>sh</code> options:</p>
+<ul>
+<li><code>-u</code>: Exit immediately if an undefined variable is attempted to be expanded</li>
+<li><code>-e</code>: Exit immediately if any untested command fails.</li>
+<li><code>-l</code>: Login shell</li>
+<li><code>-i</code>: Interactive shell</li>
+<li><code>-c</code>: Read commands from the command_string operands</li>
+</ul>
+<p>As for <code>$list_of_packages</code>, search them in
+<a href="https://pkgs.alpinelinux.org/packages">Alpine linux packages page</a>.</p>
+<p>If I want to use Debian based system instead of Alpine, I can use
+<code>debian:unstable</code> instead for the Docker official image and use
+<code>apt</code> instead of <code>apk</code>.</p>
+<p>If I want to make the current working directory available and to use
+<code>debian:unstable</code>, it should be:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ docker run -it --rm -w /root -v .:/root/cwd debian:unstable sh -uelic &#34;
+</span></span><span style="display:flex;"><span>apt update ; apt upgrade; apt install add $list_of_packages
+</span></span><span style="display:flex;"><span>cd cwd
+</span></span><span style="display:flex;"><span>$command_string
+</span></span><span style="display:flex;"><span>&#34;
+</span></span></code></pre></div><!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
