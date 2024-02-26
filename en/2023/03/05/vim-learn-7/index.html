@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2024/01/04 (last update)
+2024/02/26 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00040.md
@@ -109,7 +109,7 @@ with lua based lazyVim (v10.15.1) as my primary editor invoked by
 with very minimal customization.</p>
 <h2 id="vi-as-an-baseline-simple-editor">Vi as an baseline simple editor</h2>
 <p>Here, I created <a href="https://github.com/osamuaoki/dot-vim">a single generic configuration file for Vim and NeoVim <code>~/.vimrc</code></a>.</p>
-<pre tabindex="0"><code>&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vimrc)
+<pre tabindex="0"><code class="language-vi" data-lang="vi">&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vimrc)
 &#34;&#34;&#34;   - For NeoVim, use &#34;nvim -u ~/.vimrc [filename]&#34;
 &#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
 set nocompatible                &#34; :h &#39;cp -- sensible (n)vim mode
@@ -128,7 +128,7 @@ colorscheme industry
 &#34;colorscheme default
 set laststatus=2                &#34; :h &#39;ls (default 1)
 &#34;&#34;&#34; boolian options can be unset by prefixing &#34;no&#34;
-set list                        &#34; :h &#39;list (default nolist)
+&#34;set list                        &#34; :h &#39;list (default nolist)
 set smartcase                   &#34; :h &#39;scs -- Override the &#39;ignorecase&#39; option
 set autoindent                  &#34; :h &#39;ai
 set smartindent                 &#34; :h &#39;si
@@ -144,6 +144,11 @@ nnoremap &lt;C-H&gt; &lt;C-W&gt;h
 nnoremap &lt;C-J&gt; &lt;C-W&gt;j
 nnoremap &lt;C-K&gt; &lt;C-W&gt;k
 nnoremap &lt;C-L&gt; &lt;C-W&gt;l
+&#34;&#34;&#34; execute macro recorded with &lt;ESC&gt;qq.....&lt;ESC&gt;q with Q
+nnoremap Q @q
+&#34;&#34;&#34; center after jump next
+nnoremap n nzz
+nnoremap N Nzz
 &#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
 &#34;&#34;&#34; fast &#34;jk&#34; to get out of INSERT mode (&lt;ESC&gt;)
 inoremap  jk        &lt;ESC&gt;
@@ -361,8 +366,8 @@ running
 <code>osamu</code> branch.</p>
 <ul>
 <li><code>escape.lua</code> for <code>max397574/better-escape.nvim</code></li>
-<li><code>neorg.lua</code> for <code>nvim-neorg/neorg</code></li>
-<li><code>oil.lua</code> for <code>stevearc/oil.nvim</code></li>
+<li><del><code>neorg.lua</code> for <code>nvim-neorg/neorg</code></del> (disabled)</li>
+<li><del><code>oil.lua</code> for <code>stevearc/oil.nvim</code></del> (disabled)</li>
 </ul>
 <h2 id="treesitter-and-lsp">Treesitter and LSP</h2>
 <p>It is a bit confusing what is all about
