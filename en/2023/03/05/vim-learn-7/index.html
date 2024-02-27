@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2024/02/26 (last update)
+2024/02/27 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00040.md
@@ -109,7 +109,7 @@ with lua based lazyVim (v10.15.1) as my primary editor invoked by
 with very minimal customization.</p>
 <h2 id="vi-as-an-baseline-simple-editor">Vi as an baseline simple editor</h2>
 <p>Here, I created <a href="https://github.com/osamuaoki/dot-vim">a single generic configuration file for Vim and NeoVim <code>~/.vimrc</code></a>.</p>
-<pre tabindex="0"><code class="language-vi" data-lang="vi">&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vimrc)
+<pre tabindex="0"><code>&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vimrc)
 &#34;&#34;&#34;   - For NeoVim, use &#34;nvim -u ~/.vimrc [filename]&#34;
 &#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
 set nocompatible                &#34; :h &#39;cp -- sensible (n)vim mode
@@ -126,19 +126,22 @@ set viminfo=!,&#39;100,&lt;5000,s100,h &#34; :h &#39;vi -- bigger copy buffer et
 &#34;&#34;&#34; shine slate torte zellner
 colorscheme industry
 &#34;colorscheme default
-set laststatus=2                &#34; :h &#39;ls (default 1)
+set scrolloff=5                 &#34; :h &#39;scr -- show 5 lines around cursor
+set laststatus=2                &#34; :h &#39;ls (default 1)  k
 &#34;&#34;&#34; boolian options can be unset by prefixing &#34;no&#34;
 &#34;set list                        &#34; :h &#39;list (default nolist)
 set smartcase                   &#34; :h &#39;scs -- Override the &#39;ignorecase&#39; option
 set autoindent                  &#34; :h &#39;ai
 set smartindent                 &#34; :h &#39;si
 set nowrap                      &#34; :h &#39;wrap
+set nolist                      &#34; :h &#39;list -- (enable when needed)
 set noerrorbells                &#34; :h &#39;eb
 set novisualbell                &#34; :h &#39;vb
 set t_vb=                       &#34; :h &#39;t_vb -- termcap visual bell
 set spell                       &#34; :h &#39;spell
 set spelllang=en_us,cjk         &#34; :h &#39;spl -- english spell, ignore CJK
 &#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+&#34;&#34;&#34; Popular mappings
 &#34;&#34;&#34; Window moves without using CTRL-W which is dangerous in INSERT mode
 nnoremap &lt;C-H&gt; &lt;C-W&gt;h
 nnoremap &lt;C-J&gt; &lt;C-W&gt;j
@@ -149,13 +152,38 @@ nnoremap Q @q
 &#34;&#34;&#34; center after jump next
 nnoremap n nzz
 nnoremap N Nzz
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
 &#34;&#34;&#34; fast &#34;jk&#34; to get out of INSERT mode (&lt;ESC&gt;)
 inoremap  jk        &lt;ESC&gt;
 &#34;&#34;&#34; double &lt;ESC&gt; to get out of TERM mode (CTRL-\ CTRL-N)
 tnoremap &lt;ESC&gt;&lt;ESC&gt; &lt;C-\&gt;&lt;C-N&gt;
 &#34;&#34;&#34; fast &#34;jkjk&#34; to get out of TERM mode (CTRL-\ CTRL-N)
 tnoremap jkjk &lt;C-\&gt;&lt;C-N&gt;
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+&#34;&#34;&#34; nvim default mappings (no need for nvim)
+&#34;&#34;&#34; copy to EOL (no delete) like D for d
+noremap Y y$
+&#34;&#34;&#34; &#34;nnoremap &lt;C-L&gt; &lt;Cmd&gt;nohlsearch&lt;Bar&gt;diffupdate&lt;Bar&gt;normal! &lt;C-L&gt;&lt;CR&gt;
+&#34;&#34;&#34; disable prefix repeats for erases
+inoremap &lt;C-U&gt; &lt;C-G&gt;u&lt;C-U&gt;
+inoremap &lt;C-W&gt; &lt;C-G&gt;u&lt;C-W&gt;
+&#34;&#34;&#34; search visual selected string for visual mode
+xnoremap * y/\V&lt;C-R&gt;&#34;&lt;CR&gt;
+xnoremap # y?\V&lt;C-R&gt;&#34;&lt;CR&gt;
+&#34;&#34;&#34; repeat last substitute and *KEEP* flags
+nnoremap &amp; :&amp;&amp;&lt;CR&gt;
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+&#34;&#34;&#34; Force to use underline for spell check results
+augroup SpellUnderline
+  autocmd!
+  autocmd ColorScheme * highlight SpellBad term=Underline gui=Undercurl
+  autocmd ColorScheme * highlight SpellCap term=Underline gui=Undercurl
+  autocmd ColorScheme * highlight SpellLocal term=Underline gui=Undercurl
+  autocmd ColorScheme * highlight SpellRare term=Underline gui=Undercurl
+augroup END
+&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
+&#34;&#34;&#34; highlight tailing spaces as red color
+highlight RedundantSpaces ctermbg=red guibg=red
+call matchadd(&#39;RedundantSpaces&#39;, &#39;\s\+$&#39;)
 &#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
 &#34;&#34;&#34; Use faster &#39;rg&#39; (ripgrep package) for :grep
 if executable(&#34;rg&#34;)
@@ -171,27 +199,6 @@ augroup RetainLastCursorPosition
     \ if line(&#34;&#39;\&#34;&#34;) &gt; 0 &amp;&amp; line (&#34;&#39;\&#34;&#34;) &lt;= line(&#34;$&#34;) |
     \   exe &#34;normal! g&#39;\&#34;&#34; |
     \ endif
-augroup END
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-&#34;&#34;&#34; Force to use underline for spell check results
-augroup SpellUnderline
-  autocmd!
-  autocmd ColorScheme *
-    \ highlight SpellBad
-    \   term=Underline
-    \   gui=Undercurl
-  autocmd ColorScheme *
-    \ highlight SpellCap
-    \   term=Underline
-    \   gui=Undercurl
-  autocmd ColorScheme *
-    \ highlight SpellLocal
-    \   term=Underline
-    \   gui=Undercurl
-  autocmd ColorScheme *
-    \ highlight SpellRare
-    \   term=Underline
-    \   gui=Undercurl
 augroup END
 &#34; vim: set sw=2 sts=2 et ft=vim :
 </code></pre><p>Since nvim may not available, I created bash alias for <code>vi</code> in <code>~/.bashrc</code> as:</p>
