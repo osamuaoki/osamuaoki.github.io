@@ -73,6 +73,7 @@ en/note-00067.md
       </ul>
     </li>
     <li><a href="#yaml-block-and-linebreak">YAML block and linebreak</a></li>
+    <li><a href="#yaml-and-shell-here-documents">YAML and Shell &ldquo;Here Documents&rdquo;</a></li>
     <li><a href="#debug-hints">Debug hints</a></li>
     <li><a href="#notable-links-to-documentation">Notable links to documentation</a></li>
   </ul>
@@ -223,6 +224,29 @@ style</a> defining
 &ldquo;<code>+</code>&rdquo; to retain linebreaks for blank lines following the string block and
 &ldquo;<code>-</code>&rdquo; to strip the linebreak at the end of string block.</p>
 <p>For any &ldquo;<code>|</code>&rdquo;, &ldquo;<code>|+</code>&rdquo;, &ldquo;<code>|-</code>&rdquo; cases, linebreaks inside of the string block are retained.</p>
+<h2 id="yaml-and-shell-here-documents">YAML and Shell &ldquo;Here Documents&rdquo;</h2>
+<p>With Ansible (2.14.3) with jinja (3.1.2), many previously raised issues
+(<a href="https://github.com/ansible/ansible/issues/12856">#12856</a>,
+<a href="https://github.com/ansible/ansible/issues/32800">#32800</a>)
+seem to be resolved now.</p>
+<p>So no more extra space added to require <code>&lt;&lt;' END'</code> etc.</p>
+<p>I have tested this with a single &ldquo;<code>cat``&quot; command:</code></p>
+<ul>
+<li><code>ansible.builtin.shell: |</code> (a.k.a.: free_form)</li>
+<li><code>ansible.builtin.shell:</code> with <code>cmd:|</code> in the following indented line</li>
+<li><code>ansible.builtin.script: |</code> (a.k.a.: free_form)</li>
+<li><code>ansible.builtin.script: |</code> with <code>cmd:|</code> in the following indented line</li>
+<li><code>ansible.builtin.raw: |</code> (a.k.a.: free_form)</li>
+</ul>
+<p>Any time &ldquo;free_form&rdquo; is used, single leading spaces are somehow dropped.</p>
+<p><code>ansible.builtin.shell:</code> and <code>ansible.builtin.raw:</code> don&rsquo;t require command name
+to be specified as the full path from <code>/</code> on the target system.</p>
+<p><code>ansible.builtin.script:</code> requires command name to be specified as the full
+path from <code>/</code> on the target system.</p>
+<p>In short, <code>ansible.builtin.shell:</code> with <code>cmd:|</code> in the following indented line
+to start indented shell code block is the best option for me.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h2 id="debug-hints">Debug hints</h2>
 <p>I found interesting post on <a href="https://www.reddit.com/r/ansible/comments/14lbknm/debugging_ansible_jinja2_templates/">redit</a>.</p>
 <ul>
