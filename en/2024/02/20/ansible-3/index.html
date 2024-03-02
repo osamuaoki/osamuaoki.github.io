@@ -73,7 +73,7 @@ en/note-00067.md
       </ul>
     </li>
     <li><a href="#yaml-block-and-linebreak">YAML block and linebreak</a></li>
-    <li><a href="#yaml-and-shell-here-documents">YAML and Shell &ldquo;Here Documents&rdquo;</a></li>
+    <li><a href="#yaml-and-shell-here-documents">YAML and shell &ldquo;Here Documents&rdquo;</a></li>
     <li><a href="#debug-hints">Debug hints</a></li>
     <li><a href="#notable-links-to-documentation">Notable links to documentation</a></li>
   </ul>
@@ -100,9 +100,8 @@ the next task</a></li>
 <p>Then I read &ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html">Using Variables</a>&rdquo;.
 This feature of &ldquo;Ansible uses variables to manage differences between systems.&rdquo;
 is a very attractive one.  But when I tried variables, I got confused a bit
-until I found &ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable">Ansible loads every possible variable it finds, and then
-chooses the variable to apply based on variable
-precedence</a>&rdquo;.</p>
+until I found
+&ldquo;<a href="https://docs.ansible.com/ansible/latest/playbook_guide/playbooks_variables.html#variable-precedence-where-should-i-put-a-variable">Ansible loads every possible variable it finds, and then chooses the variable to apply based on variable precedence</a>&rdquo;.</p>
 <h3 id="variable-precedence">Variable precedence</h3>
 <p>Here is the order of precedence from least to greatest for notable ones:</p>
 <ul>
@@ -224,7 +223,7 @@ style</a> defining
 &ldquo;<code>+</code>&rdquo; to retain linebreaks for blank lines following the string block and
 &ldquo;<code>-</code>&rdquo; to strip the linebreak at the end of string block.</p>
 <p>For any &ldquo;<code>|</code>&rdquo;, &ldquo;<code>|+</code>&rdquo;, &ldquo;<code>|-</code>&rdquo; cases, linebreaks inside of the string block are retained.</p>
-<h2 id="yaml-and-shell-here-documents">YAML and Shell &ldquo;Here Documents&rdquo;</h2>
+<h2 id="yaml-and-shell-here-documents">YAML and shell &ldquo;Here Documents&rdquo;</h2>
 <p>With Ansible (2.14.3) with jinja (3.1.2), many previously raised issues
 (<a href="https://github.com/ansible/ansible/issues/12856">#12856</a>,
 <a href="https://github.com/ansible/ansible/issues/32800">#32800</a>)
@@ -247,12 +246,22 @@ to be specified as the full path from <code>/</code> on the target system.</p>
 path from <code>/</code> on the target system.</p>
 <p>In short, <code>ansible.builtin.shell:</code> with <code>cmd:|</code> in the following indented line
 to start indented shell code block is the best option for me.</p>
+<p>If creating a file is the objective, following builtin should also be
+considered.</p>
+<ul>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/copy_module.html">ansible.builtin.copy</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/template_module.html">ansible.builtin.template</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/assemble_module.html">ansible.builtin.assemble</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/blockinfile_module.html">ansible.builtin.blockinfile</a></li>
+<li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html">ansible.builtin.file</a></li>
+</ul>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="debug-hints">Debug hints</h2>
 <p>I found interesting post on <a href="https://www.reddit.com/r/ansible/comments/14lbknm/debugging_ansible_jinja2_templates/">redit</a>.</p>
 <ul>
 <li>Setting <code>export ANSIBLE_STDOUT_CALLBACK=debug</code> turns that block of a &ldquo;single string with \n&quot;s errors into something more readable.</li>
+<li>Setting <code>DEFAULT_STDOUT_CALLBACK=debug</code> in <code>ansible.cfg</code>  does the same.</li>
 <li>Tacking on <code>| default(&quot;NOTHING&quot;)</code> after yaml extraction of data.</li>
 </ul>
 <h2 id="notable-links-to-documentation">Notable links to documentation</h2>
