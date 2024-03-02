@@ -214,13 +214,15 @@ easier to type <code>key=value</code> produces <code>value</code> in string.  Th
 <p>Now I understand why I see many <code>when: some_vaiable |bool</code> in Ansible code
 examples.  See <a href="https://github.com/ansible/ansible/issues/17193">Ansible issue #17193</a>.</p>
 <h2 id="yaml-block-and-linebreak">YAML block and linebreak</h2>
-<p>I knew &ldquo;<code>|</code>&rdquo; and &ldquo;<code>&gt;</code>&rdquo; from
-<a href="https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html">Ansible&rsquo;s YAML syntax page</a>
-are for keeping the linebreak or converting the linebreak to the space.</p>
-<p>But I see many playbooks use &ldquo;<code>|+</code>&rdquo; instead and wasn&rsquo;t sure what it means until I found
+<p>I knew &ldquo;<code>|</code>&rdquo; and &ldquo;<code>&gt;</code>&rdquo; are for keeping the linebreak or converting the
+linebreak to the space from
+<a href="https://docs.ansible.com/ansible/latest/reference_appendices/YAMLSyntax.html">Ansible&rsquo;s YAML syntax page</a>.</p>
+<p>I see many playbooks use &ldquo;<code>|+</code>&rdquo; instead and wasn&rsquo;t sure what it means until I found
 <a href="https://yaml.org/spec/1.2.2/#chapter-8-block-style-productions">YAML spec on block
 style</a> defining
-&ldquo;<code>+</code>&rdquo; to retain the last linebreak and &ldquo;<code>-</code>&rdquo; to strip the lastlinebreak.</p>
+&ldquo;<code>+</code>&rdquo; to retain linebreaks for blank lines following the string block and
+&ldquo;<code>-</code>&rdquo; to strip the linebreak at the end of string block.</p>
+<p>For any &ldquo;<code>|</code>&rdquo;, &ldquo;<code>|+</code>&rdquo;, &ldquo;<code>|-</code>&rdquo; cases, linebreaks inside of the string block are retained.</p>
 <h2 id="debug-hints">Debug hints</h2>
 <p>I found interesting post on <a href="https://www.reddit.com/r/ansible/comments/14lbknm/debugging_ansible_jinja2_templates/">redit</a>.</p>
 <ul>
