@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Container with LXC/INCUS (6) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Container with LXC/INCUS (6)</span></h1>
+
+<h3 class="date">Date:
+2024/03/02 (initial publish),
+2024/03/03 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00068.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/02/20/ansible-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#what-is-lxd-and-incus">What is LXD and Incus</a></li>
+    <li><a href="#installation-of-incus-to-debian-12">Installation of Incus to Debian 12</a></li>
+    <li><a href="#tracing-first-steps-with-incus">Tracing &ldquo;First steps with Incus&rdquo;</a>
+      <ul>
+        <li><a href="#getting-system-images-for-incus">Getting system images for Incus</a></li>
+        <li><a href="#inspect-instances">Inspect instances</a></li>
+      </ul>
+    </li>
+    <li><a href="#access-container">Access container</a></li>
+  </ul>
+</nav>
+
+<p>Here is a series of memos of me trying to use LXC/LXD and LXC/INCUS on Debian 12 (<code>bookworm</code>).</p>
+<h2 id="what-is-lxd-and-incus">What is LXD and Incus</h2>
+<p>It has been some time since <a href="/en/2023/10/11/lxc-1/">Container with LXC/LXD (1)</a>.</p>
+<ul>
+<li>Upstream <a href="https://linuxcontainers.org/incus/">Incus</a> (0.6 released 2024-02-23) is at <a href="https://github.com/lxc/incus">https://github.com/lxc/incus</a> by linuxcontainers.org
+<ul>
+<li>&ldquo;<a href="https://discuss.linuxcontainers.org/t/incus-0-6-has-been-released/19134">Incus 0.6 has been released</a>&rdquo; announcement gives explanations on technical changes.
+<ul>
+<li>The command name has been changed to <code>incus</code>.</li>
+<li><a href="https://gihyo.jp/article/2024/01/linux_containers-0055">コンテナと仮想マシンのマネージャ&quot;Incus&quot; (Japanese)</a> also gives a nice overview.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Incus is available for Debian 12 from <a href="https://github.com/zabbly/incus">Zabbly package repository</a>.
+<ul>
+<li>APT setup is at <a href="https://github.com/zabbly/incus">Zabbly package repository</a> as README.md.</li>
+<li><a href="https://linuxcontainers.org/incus/docs/main/tutorial/first_steps/">First steps with Incus</a> &ndash; <code>incus-admin</code> group allows full control over Incus.</li>
+</ul>
+</li>
+</ul>
+<p>Now, I decided to purge LXD and try Incus on Debian 12.</p>
+<h2 id="installation-of-incus-to-debian-12">Installation of Incus to Debian 12</h2>
+<p>On a Debian 12 system with its <code>/var/lib</code> on btrfs, I run following commands to
+install Incus.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> ... setup APT
+</span></span><span style="display:flex;"><span> $ sudo aptitude install incus incus-ui-canonical
+</span></span><span style="display:flex;"><span> $ sudo adduser osamu incus-admin
+</span></span><span style="display:flex;"><span> $ poweroff
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span> $ incus admin init --minimal
+</span></span><span style="display:flex;"><span>  ... go with defaults
+</span></span></code></pre></div><p>This seems to create the <code>/var/lib/incus/images/</code> directory.</p>
+<h2 id="tracing-first-steps-with-incus">Tracing &ldquo;First steps with Incus&rdquo;</h2>
+<p>I traced
+&ldquo;<a href="https://linuxcontainers.org/incus/docs/main/tutorial/first_steps/">First steps with Incus</a>&rdquo;.</p>
+<h3 id="getting-system-images-for-incus">Getting system images for Incus</h3>
+<p>Since manpage for <code>incus</code> is missing, let&rsquo;s see:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus launch -h
+</span></span><span style="display:flex;"><span>Description:
+</span></span><span style="display:flex;"><span>  Create and start instances from images
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span><span style="display:flex;"><span>  incus launch [&lt;remote&gt;:]&lt;image&gt; [&lt;remote&gt;:][&lt;name&gt;] [flags]
+</span></span><span style="display:flex;"><span>...
+</span></span></code></pre></div><p>Full list of <code>remote</code> is available by:.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus remote list
+</span></span><span style="display:flex;"><span>+-----------------+------------------------------------+---------------+-------------+--------+--------+--------+
+</span></span><span style="display:flex;"><span>|      NAME       |                URL                 |   PROTOCOL    |  AUTH TYPE  | PUBLIC | STATIC | GLOBAL |
+</span></span><span style="display:flex;"><span>+-----------------+------------------------------------+---------------+-------------+--------+--------+--------+
+</span></span><span style="display:flex;"><span>| images          | https://images.linuxcontainers.org | simplestreams | none        | YES    | NO     | NO     |
+</span></span><span style="display:flex;"><span>+-----------------+------------------------------------+---------------+-------------+--------+--------+--------+
+</span></span><span style="display:flex;"><span>| local (current) | unix://                            | incus         | file access | NO     | YES    | NO     |
+</span></span><span style="display:flex;"><span>+-----------------+------------------------------------+---------------+-------------+--------+--------+--------+
+</span></span></code></pre></div><p>Let me create and start instances from images for &ldquo;Ubuntu 22.04&rdquo; and &ldquo;Debian 12&rdquo;.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus launch ubuntu/22.04 u1
+</span></span><span style="display:flex;"><span> $ incus launch images:debian/12 d1
+</span></span></code></pre></div><p>System images specified as <code>images:ubuntu/22.04</code> or <code>images:debian/12</code> are downloaded
+to <code>/var/lib/incus/images/</code>.  Each of these seems to be made of 2 files.  One for
+rootfs and another for templates(?) sharing the same hash value as a part of
+their file name. These images seems to be offered in a squashfs. The hash
+values are listed by <code>incus images ls</code>.  The same hash values are used for the
+directory name under <code>/var/lib/lxd/storage-pools/default/images/</code> too.</p>
+<p>The first invocation of <code>incus launch</code> for an image seems to download it while
+its subsequent invocations seems to use the previously downloaded corresponding
+image.</p>
+<p>Local instance names are <code>u1</code> and <code>d1</code> here.   They seem to be
+created under <code>/var/lib/incus/containers/</code>.  These instance names are listed by
+<code>incus ls</code> and also used for the directory name under
+<code>/var/lib/incus/storage-pools/default/containers</code></p>
+<p>Here:<code>incus launch ...</code> = <code>incus init ...</code> + <code>incus start ...</code></p>
+<h3 id="inspect-instances">Inspect instances</h3>
+<p>Let me inspect instances.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus list
+</span></span><span style="display:flex;"><span>+------+---------+------+----------------------------------------------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| NAME |  STATE  | IPV4 |                     IPV6                     |   TYPE    | SNAPSHOTS |
+</span></span><span style="display:flex;"><span>+------+---------+------+----------------------------------------------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| d1   | RUNNING |      | fd42:4c3b:8e2d:60d:216:3eff:fe19:8160 (eth0) | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+------+---------+------+----------------------------------------------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| u1   | RUNNING |      | fd42:4c3b:8e2d:60d:216:3eff:fe1e:7fb7 (eth0) | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+------+---------+------+----------------------------------------------+-----------+-----------+
+</span></span></code></pre></div><p>Let me stop these instances, and inspect them:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus stop d1
+</span></span><span style="display:flex;"><span> $ incus stop u1
+</span></span><span style="display:flex;"><span> $ incus list
+</span></span><span style="display:flex;"><span>+------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| NAME |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
+</span></span><span style="display:flex;"><span>+------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| d1   | STOPPED |      |      | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+------+---------+------+------+-----------+-----------+
+</span></span><span style="display:flex;"><span>| u1   | STOPPED |      |      | CONTAINER | 0         |
+</span></span><span style="display:flex;"><span>+------+---------+------+------+-----------+-----------+
+</span></span></code></pre></div><p>So far, no difference from LXD except for the command name being changed from
+<code>lxc</code> to <code>incus</code> and image repository to use.</p>
+<h2 id="access-container">Access container</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus start d1
+</span></span><span style="display:flex;"><span> $ incus exec d1 -- bash
+</span></span><span style="display:flex;"><span> root@d1:~# id
+</span></span><span style="display:flex;"><span>uid=0(root) gid=0(root) groups=0(root)
+</span></span><span style="display:flex;"><span> root@d1:~# adduser osamu
+</span></span><span style="display:flex;"><span> ... ^D
+</span></span></code></pre></div><p>Let&rsquo;s login:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus console d1
+</span></span><span style="display:flex;"><span>To detach from the console, press: &lt;ctrl&gt;+a q
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>d1 login: osamu
+</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span>Linux d1 6.5.0-0.deb12.4-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.5.10-1~bpo12+1 (2023-11-23) x86_64
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>The programs included with the Debian GNU/Linux system are free software;
+</span></span><span style="display:flex;"><span>the exact distribution terms for each program are described in the
+</span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+</span></span><span style="display:flex;"><span>permitted by applicable law.
+</span></span><span style="display:flex;"><span>osamu@d1:~$ id
+</span></span><span style="display:flex;"><span>uid=1000(osamu) gid=1000(osamu) groups=1000(osamu),100(users)
+</span></span><span style="display:flex;"><span> ...
+</span></span></code></pre></div><p>Looks like the weird group ID issue has been resolved in the upstream image.  Very nice.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/02/20/ansible-3/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
