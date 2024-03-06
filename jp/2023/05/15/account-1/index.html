@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/05/15 (initial publish),
-2023/09/02 (last update)
+2024/03/06 (last update)
 </h3>
 <h3 class="source">Source:
 jp/note-00059.md
@@ -66,7 +66,19 @@ jp/note-00059.md
   <ul>
     <li><a href="#gnucashは複式簿記">GnuCashは複式簿記</a></li>
     <li><a href="#会計用語の日英比較整理">会計用語の日英比較整理</a></li>
-    <li><a href="#会計データーの入力">会計データーの入力</a></li>
+    <li><a href="#勘定科目ラベル">勘定科目ラベル</a></li>
+    <li><a href="#貸借残高の正負符号">貸借残高の正負符号</a></li>
+    <li><a href="#会計データーの入力">会計データーの入力</a>
+      <ul>
+        <li><a href="#販売時に請求書invoiceを発行し会計データーを入力">販売時に請求書(INVOICE)を発行し、会計データーを入力</a></li>
+        <li><a href="#入金予定日に入金を照合し売掛金の消込みを行い会計データーを入力">入金予定日に入金を照合し、売掛金の消込みを行い、会計データーを入力</a></li>
+        <li><a href="#取引負担出費を立替金で支払い会計データーを入力">取引負担出費を立替金で支払い、会計データーを入力</a></li>
+        <li><a href="#取引先負担出費の立替金の入金を照合し会計データーを入力">取引先負担出費の立替金の入金を照合し、会計データーを入力</a></li>
+        <li><a href="#プライベート資金を事業用に充当し会計データーを入力">プライベート資金を事業用に充当し、会計データーを入力</a></li>
+        <li><a href="#経費の計上">経費の計上</a></li>
+        <li><a href="#照合">照合</a></li>
+      </ul>
+    </li>
     <li><a href="#会計データー集計結果の出力">会計データー集計結果の出力</a>
       <ul>
         <li><a href="#貸借対照表balance-sheet">貸借対照表(Balance sheet)</a></li>
@@ -80,9 +92,10 @@ jp/note-00059.md
     <li><a href="#納税関連文書の電子保存やタイムスタンプ">納税関連文書の電子保存やタイムスタンプ</a></li>
     <li><a href="#上記に関連する情報サイト集">上記に関連する情報サイト集</a>
       <ul>
-        <li><a href="#青色申告gnucashでの検索結果で見つかる関連サイト">「青色申告　GNUCASH」での検索結果で見つかる関連サイト</a></li>
+        <li><a href="#青色申告-gnucashでの検索結果で見つかる関連サイト">「青色申告 GNUCASH」での検索結果で見つかる関連サイト</a></li>
         <li><a href="#国税庁の税金関連サイト">国税庁の税金関連サイト</a></li>
         <li><a href="#会計用語の参考サイト">会計用語の参考サイト</a></li>
+        <li><a href="#納税フリーランス関係サイト">納税・フリーランス関係サイト</a></li>
       </ul>
     </li>
   </ul>
@@ -176,7 +189,8 @@ jp/note-00059.md
 </tr>
 </tbody>
 </table>
-<p>また、会計で用いる正式ラベルのDebit/Creditと異なるGnuCash独自の複式簿記入力欄のラベルを、各アカウントタイプ毎に日英表記で整理しました。</p>
+<h2 id="勘定科目ラベル">勘定科目ラベル</h2>
+<p>会計で用いる勘定科目ラベルの正式ラベルのDebit/Creditと異なるデフォルトのGnuCash独自の複式簿記入力欄のラベルを、各アカウントタイプ毎に日英表記で整理しました。</p>
 <table>
 <thead>
 <tr>
@@ -237,14 +251,128 @@ jp/note-00059.md
 </tr>
 </tbody>
 </table>
-<p>正式の複式簿記では、左の列が借方(Debit)、右の列が貸方(Credit)と一貫してラベルされています。デフォルトのGnuCashでは各列のラベルを上記の表のようにアカウントタイプごとに素人でもわかる表現で置き換えています。</p>
-<p>このラベル表記法は、<code>編集</code> -&gt; <code>設定</code> -&gt; <code>勘定項目</code> -&gt; <code>ラベル</code> (<code>Edit</code> -&gt; <code>Preferences</code> -&gt; <code>Accounts</code> -&gt; <code>Labels</code>)を使って選択できます。</p>
+<p>正式の複式簿記では、左の列が借方(Debit)、右の列が貸方(Credit)と一貫してラベルされています。</p>
+<p>デフォルトのGnuCashでは、各列のラベルを上記の表のようにアカウントタイプごとに素人感覚に合う言葉を選び複式簿記の標準表現を置き換えて表示しています。</p>
+<p>ただ、世間一般の会計処理法情報と表記が違うので、余計ややこしい感もあります。</p>
+<p>私は、勘定科目ラベル表記法は複式簿記の標準表現の「借方(Debit、左)」と「貸方(Credit、右)」で統一されるように、<code>編集</code> -&gt; <code>設定</code> -&gt; <code>勘定項目</code> -&gt; <code>ラベル</code> (<code>Edit</code> -&gt; <code>Preferences</code> -&gt; <code>Accounts</code> -&gt; <code>Labels</code>)の「正式な勘定科目ラベルを使う」をチェックして有効化しています。。</p>
+<h2 id="貸借残高の正負符号">貸借残高の正負符号</h2>
+<p>さて、「正式な勘定科目ラベルを使う」の上にある、「貸借勘定の正負を反転する勘定科目(reverse balance accounts)」の意味や意図が不明瞭で気になりました。結論としては、デフォルトの「貸方勘定項目(Credit accounts)」を選ぶのが良いようです。こうすることで、負の値（資産が出ていく）となる<a href="https://lists.gnucash.org/pipermail/gnucash-user/2018-February/075156.html">「貸方勘定項目」の、負債(Liabilities) と 純資産(Equity)」の集計値が正の値で表示されるだけ」</a>とのことでした。</p>
+<p>ちなみに、貸借対照表（B/S）では以下です：</p>
+<pre tabindex="0"><code>  資産(Assets) = 負債(Liabilities) + 純資産(Equity)
+</code></pre><p>これを左辺に集めすべて和で整理すると：</p>
+<pre tabindex="0"><code>  資産(Assets) + ( - 負債(Liabilities)) + ( - 純資産(Equity))                  = 0
+</code></pre><p>これが、選択理由。</p>
+<p>ちなみに、純資産を展開すると以下です：</p>
+<pre tabindex="0"><code>  資産(Assets) = 負債(Liabilities) + (収益(Revenue) - 費用(Expenses))
+</code></pre><p>これを左辺に集めすべて和で整理すると：</p>
+<pre tabindex="0"><code>  資産(Assets) + ( - 負債(Liabilities)) + ( - 収益(Revenue))  + 費用(Expenses) = 0
+</code></pre><p>これは、選ばなかったけど「収益・費用」という選択肢の背景かな？</p>
 <h2 id="会計データーの入力">会計データーの入力</h2>
 <p>まず「勘定科目」(Accounts)を作成します。</p>
 <p>取引のあった「勘定科目」(Accounts)を開くと、データーが入力できます。その際、相手先の勘定科目にもデーターが入力されます。これが入力の基本です。
 慣れたら、スプレッドシートで同様のことをするより遥かに効率的です。</p>
 <p>銀行の記録やクレジットカードの記録は、CVS形式でダウンロードして読み込んでいます。日本語の場合、UTF-8でなくShiftJisのことも多いので<a href="/jp/2023/04/08/date-format-1/">日付フォーマット対応やエンコーディング変換</a>は要注意です。</p>
 <p>ちなみに、<code>ツール</code>(<code>Tools</code>)-&gt;<code>一般仕訳帳</code>(<code>General Journal</code>)で表示される一般仕訳帳があります。これからも編集可能ですが、何でも出来すぎて危険なので日常的な入力には使わないようにしています。</p>
+<h3 id="販売時に請求書invoiceを発行し会計データーを入力">販売時に請求書(INVOICE)を発行し、会計データーを入力</h3>
+<p>販売時に掛売上を計上する。</p>
+<table>
+<thead>
+<tr>
+<th>借方科目</th>
+<th>貸方科目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>売掛金</td>
+<td>売上高</td>
+</tr>
+</tbody>
+</table>
+<h3 id="入金予定日に入金を照合し売掛金の消込みを行い会計データーを入力">入金予定日に入金を照合し、売掛金の消込みを行い、会計データーを入力</h3>
+<p>たとえば</p>
+<table>
+<thead>
+<tr>
+<th>借方科目</th>
+<th>貸方科目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入金口座</td>
+<td>売掛金</td>
+</tr>
+<tr>
+<td>支払手数料</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="取引負担出費を立替金で支払い会計データーを入力">取引負担出費を立替金で支払い、会計データーを入力</h3>
+<p><a href="https://freelance.kantan-aoiro.net/faq/faq04_06.html">フリーランスの顧客負担の交通費などの立替金</a>は、資産の科目で、以下の記帳です。</p>
+<table>
+<thead>
+<tr>
+<th>借方科目</th>
+<th>貸方科目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>立替金</td>
+<td>現金</td>
+</tr>
+</tbody>
+</table>
+<h3 id="取引先負担出費の立替金の入金を照合し会計データーを入力">取引先負担出費の立替金の入金を照合し、会計データーを入力</h3>
+<p>たとえば</p>
+<table>
+<thead>
+<tr>
+<th>借方科目</th>
+<th>貸方科目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>入金口座</td>
+<td>立替金</td>
+</tr>
+<tr>
+<td>支払手数料</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h3 id="プライベート資金を事業用に充当し会計データーを入力">プライベート資金を事業用に充当し、会計データーを入力</h3>
+<p>プライベート資金を事業用に充当するときは、<a href="https://www.freee.co.jp/kb/kb-blue-return/admin/">「事業主借を貸方（右側）にして処理する仕訳」が基本</a>とか。</p>
+<table>
+<thead>
+<tr>
+<th>借方科目</th>
+<th>貸方科目</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>現金</td>
+<td>事業主借</td>
+</tr>
+</tbody>
+</table>
+<p>法律上、個人事業主は事業用口座とプライベート用口座を分ける必要がありませんとのこと。</p>
+<h3 id="経費の計上">経費の計上</h3>
+<p><a href="https://www.freee.co.jp/kb/kb-kaigyou/expenses-freelance/#content3-2">経費は課税対象の所得(＝ 収入 － 必要経費 － 各種控除)に効くので重要</a>とのこと。</p>
+<p>PC も10万円以下なら経費計上でき、それ以上の価格のPCは減価償却費で計上できるとか。とにかく<a href="https://freelance.bizlink.io/tips/freelance-computer-expense">色々特例がありややこしそう</a>。</p>
+<p>ただ非サーバーのPCは基本4年償却なので、、、、私のようにに古いPCを使い続けていると修理費・修理部品代以外は計上できないので、そこは悩むまでもない。</p>
+<h3 id="照合">照合</h3>
+<p>「照・R」欄は、一文字表示なので最初意味がわかりにくいですが、意味は照合(Reconsile)欄でした。</p>
+<p>データー行の照合(Reconsile)欄をクリックすると表示が切り替わります。</p>
+<ul>
+<li>「未」照合＝「N」ew</li>
+<li>「清」算済＝「C」lear</li>
+</ul>
 <h2 id="会計データー集計結果の出力">会計データー集計結果の出力</h2>
 <p>会計データーの集計結果の出力は<code>帳票</code>(<code>Reports</code>)メニューから行います。</p>
 <h3 id="貸借対照表balance-sheet">貸借対照表(Balance sheet)</h3>
@@ -315,12 +443,11 @@ GnuCashを使って会計をすれば簡単に準備できます。</p>
 <li><a href="https://dullwhale-public.hateblo.jp/entry/2023/01/03/165650">GnuCashで決算 (2023-01-03)</a></li>
 <li><a href="http://neko2015.sblo.jp/article/189310690.html">GnuCashで決算 (2022-02-02)</a></li>
 <li><a href="https://www.nofuture.tv/20180307">GnuCashで決算と期首処理 (2018-03-07)</a></li>
-<li><a href="http://orangeprose.blog.fc2.com/blog-entry-1006.html">GnuCash――決算整理と期首整理 (2014-03-22)</a></li>
+<li><a href="http://orangeprose.blog.fc2.com/blog-entry-1006.html">GnuCash ―― 決算整理と期首整理 (2014-03-22)</a></li>
 </ul>
 <h2 id="納税関連文書の電子保存やタイムスタンプ">納税関連文書の電子保存やタイムスタンプ</h2>
 <p>有料の業者サービスを使わずに、領収書などの文書をタイムスタンプを押し保存するフリーソフト環境下での手法を考えてみました。</p>
-<p>「<a href="https://www.nta.go.jp/law/joho-zeikaishaku/sonota/jirei/pdf/0021011-017.pdf">教えて！！令和３年度改正　電子帳簿保存法 (pdf)</a>」のP9にある要件、「NTPサーバーによるタイムスタンプ」を「自己が管理しないクラウドサービス」を見て気づいたのは、これにメールサービスが利用できそうだということです。「スキャンデーター等を添付したメールを作成」、「DKIMの署名をつけて送信するメールサーバーを通して送信」、「保存用メールアカウントに保存」すれば、メールサーバーがNTPデーターによりタイムスタンプしているし、メールサーバー運用会社が持つ秘密キーを用いてメールを署名しているので改竄防止されています。</p>
-<p>まあ、これが認められるかどうかは知りませんが。。。</p>
+<p>「<a href="https://www.nta.go.jp/law/joho-zeikaishaku/sonota/jirei/pdf/0021011-017.pdf">教えて！！令和３年度改正　電子帳簿保存法 (pdf)</a>」のP9にある要件、「NTPサーバーによるタイムスタンプ」を「自己が管理しないクラウドサービス」を見て気づいたのは、これにメールサービスが利用できそうだということです。「スキャンデーター等を添付したメールを作成」、「DKIMの署名をつけて送信するメールサーバーを通して送信」、「保存用メールアカウントに保存」すれば、メールサーバーがNTPデーターによりタイムスタンプしているし、メールサーバー運用会社が持つ秘密キーを用いてメールを署名しているので改竄防止されています。でも、どうもあまり上手くは使えないようです</p>
 <p>参考：</p>
 <ul>
 <li><a href="https://www.nta.go.jp/taxes/shiraberu/shinkoku/kojin_jigyo/index.htm">個人で事業を行っている方の記帳・帳簿等の保存について</a></li>
@@ -339,7 +466,7 @@ GnuCashを使って会計をすれば簡単に準備できます。</p>
 </li>
 </ul>
 <h2 id="上記に関連する情報サイト集">上記に関連する情報サイト集</h2>
-<h3 id="青色申告gnucashでの検索結果で見つかる関連サイト">「青色申告　GNUCASH」での検索結果で見つかる関連サイト</h3>
+<h3 id="青色申告-gnucashでの検索結果で見つかる関連サイト">「青色申告 GNUCASH」での検索結果で見つかる関連サイト</h3>
 <ul>
 <li><a href="https://tesu-go.com/?s=gnucash">てすの暮らしの知恵 (Search=gnucash)</a> &ndash; 「【GnuCash】確定申告・国税納入方法まとめ (2023-02-17)」　ほかの記事多数</li>
 <li><a href="https://money.senooken.jp/post/2020/02/24/3915/">GnuCashによる確定申告に必要な帳簿と決算書の作成 (2020-02-24)</a></li>
@@ -366,6 +493,15 @@ GnuCashを使って会計をすれば簡単に準備できます。</p>
 <li><a href="https://biz.moneyforward.com/accounting/basic/56495/">頻出勘定科目132選</a></li>
 <li><a href="http://www.urasoebusiness.net/BSAccountList.html">貸借対照表 (Balance Sheet）</a></li>
 <li><a href="https://keiriplus.jp/tips/kaikei-english/">会計英語の勘定科目123選！決算書ベースで頻出単語を覚えよう</a></li>
+</ul>
+<h3 id="納税フリーランス関係サイト">納税・フリーランス関係サイト</h3>
+<ul>
+<li><a href="https://www.yayoi-kk.co.jp/shinkoku/oyakudachi/">確定申告お役立ち情報</a></li>
+<li><a href="https://www.freee.co.jp/kb/kb-kaigyou/">開業の基礎知識</a>
+<ul>
+<li><a href="https://www.freee.co.jp/kb/kb-kaigyou/freeelance-tax/">開業の基礎知識: フリーランス（個人事業主）が支払う税金の種類と節税対策を解説</a></li>
+</ul>
+</li>
 </ul>
 <!-- raw HTML omitted -->
 
