@@ -254,19 +254,19 @@ jp/note-00059.md
 <p>正式の複式簿記では、左の列が借方(Debit)、右の列が貸方(Credit)と一貫してラベルされています。</p>
 <p>デフォルトのGnuCashでは、各列のラベルを上記の表のようにアカウントタイプごとに素人感覚に合う言葉を選び複式簿記の標準表現を置き換えて表示しています。</p>
 <p>ただ、世間一般の会計処理法情報と表記が違うので、余計ややこしい感もあります。</p>
-<p>私は、勘定科目ラベル表記法は複式簿記の標準表現の「借方(Debit、左)」と「貸方(Credit、右)」で統一されるように、<code>編集</code> -&gt; <code>設定</code> -&gt; <code>勘定項目</code> -&gt; <code>ラベル</code> (<code>Edit</code> -&gt; <code>Preferences</code> -&gt; <code>Accounts</code> -&gt; <code>Labels</code>)の「正式な勘定科目ラベルを使う」をチェックして有効化しています。。</p>
+<p>私は、勘定科目ラベル表記法は複式簿記の標準表現の「借方(Debit、左)」と「貸方(Credit、右)」で統一されるように、<code>編集</code> -&gt; <code>設定</code> -&gt; <code>勘定項目</code> -&gt; <code>ラベル</code> (<code>Edit</code> -&gt; <code>Preferences</code> -&gt; <code>Accounts</code> -&gt; <code>Labels</code>)の「正式な勘定科目ラベルを使う」をチェックして有効化しています。</p>
 <h2 id="貸借残高の正負符号">貸借残高の正負符号</h2>
 <p>さて、「正式な勘定科目ラベルを使う」の上にある、「貸借勘定の正負を反転する勘定科目(reverse balance accounts)」の意味や意図が不明瞭で気になりました。結論としては、デフォルトの「貸方勘定項目(Credit accounts)」を選ぶのが良いようです。こうすることで、負の値（資産が出ていく）となる<a href="https://lists.gnucash.org/pipermail/gnucash-user/2018-February/075156.html">「貸方勘定項目」の、負債(Liabilities) と 純資産(Equity)」の集計値が正の値で表示されるだけ」</a>とのことでした。</p>
 <p>ちなみに、貸借対照表（B/S）では以下です：</p>
 <pre tabindex="0"><code>  資産(Assets) = 負債(Liabilities) + 純資産(Equity)
 </code></pre><p>これを左辺に集めすべて和で整理すると：</p>
 <pre tabindex="0"><code>  資産(Assets) + ( - 負債(Liabilities)) + ( - 純資産(Equity))                  = 0
-</code></pre><p>これが、選択理由。</p>
+</code></pre><p>これが、貸借残高の正負符号で貸方勘定項目(Credit accounts)」を選ぶ理由かな。</p>
 <p>ちなみに、純資産を展開すると以下です：</p>
 <pre tabindex="0"><code>  資産(Assets) = 負債(Liabilities) + (収益(Revenue) - 費用(Expenses))
 </code></pre><p>これを左辺に集めすべて和で整理すると：</p>
 <pre tabindex="0"><code>  資産(Assets) + ( - 負債(Liabilities)) + ( - 収益(Revenue))  + 費用(Expenses) = 0
-</code></pre><p>これは、選ばなかったけど「収益・費用」という選択肢の背景かな？</p>
+</code></pre><p>これは、選ばなかったけど「収益・費用」という選択肢の存在背景かな？</p>
 <h2 id="会計データーの入力">会計データーの入力</h2>
 <p>まず「勘定科目」(Accounts)を作成します。</p>
 <p>取引のあった「勘定科目」(Accounts)を開くと、データーが入力できます。その際、相手先の勘定科目にもデーターが入力されます。これが入力の基本です。
@@ -361,7 +361,7 @@ jp/note-00059.md
 </tr>
 </tbody>
 </table>
-<p>法律上、個人事業主は事業用口座とプライベート用口座を分ける必要がありませんとのこと。</p>
+<p>法律上は、個人事業主は事業用口座とプライベート用口座を分ける必要が無いとのこと。</p>
 <h3 id="経費の計上">経費の計上</h3>
 <p><a href="https://www.freee.co.jp/kb/kb-kaigyou/expenses-freelance/#content3-2">経費は課税対象の所得(＝ 収入 － 必要経費 － 各種控除)に効くので重要</a>とのこと。</p>
 <p>PC も10万円以下なら経費計上でき、それ以上の価格のPCは減価償却費で計上できるとか。とにかく<a href="https://freelance.bizlink.io/tips/freelance-computer-expense">色々特例がありややこしそう</a>。</p>
