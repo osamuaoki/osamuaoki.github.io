@@ -7,6 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language><atom:link href="/index.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Virtual machine with INCUS (7)</title>
+      <link>/en/2024/03/13/lxc-7/</link>
+      <pubDate>Wed, 13 Mar 2024 00:00:00 +0000</pubDate>
+      
+      <guid>/en/2024/03/13/lxc-7/</guid>
+      <description>Here is a series of memos of me trying to use LXC/LXD and INCUS on Debian 12 (bookworm).
+In order to make full transition to incus, I will trace what I did with lxc with incus while addressing not only container systems but also virtual machine systems.
+Tracing Container with LXC/LXD (1) Since I have enough CPU and memory, I started container systems and VM systems as follows.
+$ incus launch images:debian/12 ct -c limits.</description>
+    </item>
+    
+    <item>
       <title>Debianで青色申告2023 (e-Tax)</title>
       <link>/jp/2024/03/10/etax2023/</link>
       <pubDate>Sun, 10 Mar 2024 00:00:00 +0000</pubDate>
@@ -29,12 +41,12 @@ GnuCashで決算 (2023-01-03) 実務的な期首・期末処理手順（簡潔�
     </item>
     
     <item>
-      <title>Container with LXC/INCUS (6)</title>
+      <title>Container with INCUS (6)</title>
       <link>/en/2024/03/02/lxc-6/</link>
       <pubDate>Sat, 02 Mar 2024 00:00:00 +0000</pubDate>
       
       <guid>/en/2024/03/02/lxc-6/</guid>
-      <description>Here is a series of memos of me trying to use LXC/LXD and LXC/INCUS on Debian 12 (bookworm).
+      <description>Here is a series of memos of me trying to use LXC/LXD and INCUS on Debian 12 (bookworm).
 What is LXD and Incus It has been some time since Container with LXC/LXD (1).
 Upstream Incus (0.6 released 2024-02-23) is at https://github.com/lxc/incus by linuxcontainers.org &amp;ldquo;Incus 0.6 has been released&amp;rdquo; announcement gives explanations on technical changes. The command name has been changed to incus. コンテナと仮想マシンのマネージャ&amp;quot;Incus&amp;quot; (Japanese) also gives a nice overview. Incus is available for Debian 12 from Zabbly package repository.</description>
     </item>
@@ -1189,7 +1201,7 @@ UUID=???first / btrfs subvol=@rootfs,defaults 0 0 UUID=???second /home/foo btrfs
       
       <guid>/jp/2021/02/13/virt-06/</guid>
       <description>Linux Namespaces の雰囲気が分かったところで、非特権ユーザー権限から立ち 上げられたLXC仮想環境を作ってみます。
-NOTE: (2023-12-25) LXDを使い出したら、カス環境管理が便利なので以下のシェル操作ベースのコンテナ管理手法は休眠です。
+NOTE: (2023-12-25/2024-03-14) LXD/Incusを使い出したら、カスタマイズした環境管理が便利なので以下のシェル操作ベースのコンテナ管理手法は休眠です。
 非特権LXC実行環境整備 LXC (1:4.0.6-1) をBulleseye環境で/usr/share/doc/lxc/README.Debianの &amp;ldquo;Unprivileged containers&amp;quot;に従って設定していきます。(2021/02)
 まずKERNELがunprivileged user namespacesを有効にしていることを確認します。
 $ sudo uname -a Linux **** 5.10.0-3-amd64 #1 SMP Debian 5.10.13-1 (2021-02-06) x86_64 GNU/Linux $ sudo sysctl kernel.unprivileged_userns_clone kernel.unprivileged_userns_clone = 1 ユーザーアカウント設定の/etc/subuidと/etc/subgidはすでに設定されていました。 これらは親システムのUIDやGIDからLXCコンテナ内から見えるUIDやGIDへの対応関係定義 しています。

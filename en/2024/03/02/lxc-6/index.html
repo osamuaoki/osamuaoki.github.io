@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Container with LXC/INCUS (6) | Goofing Osamu</title>
+    <title>Container with INCUS (6) | Goofing Osamu</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -32,11 +32,11 @@
     </nav>
 
 <div class="article-meta">
-<h1><span class="title">Container with LXC/INCUS (6)</span></h1>
+<h1><span class="title">Container with INCUS (6)</span></h1>
 
 <h3 class="date">Date:
 2024/03/02 (initial publish),
-2024/03/03 (last update)
+2024/03/14 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00068.md
@@ -54,7 +54,7 @@ en/note-00068.md
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/03/13/lxc-7/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -73,10 +73,13 @@ en/note-00068.md
       </ul>
     </li>
     <li><a href="#access-container">Access container</a></li>
+    <li><a href="#getting-ipv4-working-with-firewalld">Getting IPv4 working with <code>firewalld</code></a></li>
+    <li><a href="#etcsubuid-and-etcsubgid"><code>/etc/subuid</code> and <code>/etc/subgid</code></a></li>
+    <li><a href="#summary-of-transition-from-lxc--commands-to-incus--commands">Summary of transition from <code>lxc ...</code> commands to <code>incus ...</code> commands</a></li>
   </ul>
 </nav>
 
-<p>Here is a series of memos of me trying to use LXC/LXD and LXC/INCUS on Debian 12 (<code>bookworm</code>).</p>
+<p>Here is a series of memos of me trying to use LXC/LXD and INCUS on Debian 12 (<code>bookworm</code>).</p>
 <h2 id="what-is-lxd-and-incus">What is LXD and Incus</h2>
 <p>It has been some time since <a href="/en/2023/10/11/lxc-1/">Container with LXC/LXD (1)</a>.</p>
 <ul>
@@ -131,7 +134,7 @@ install Incus.</p>
 </span></span><span style="display:flex;"><span>| local (current) | unix://                            | incus         | file access | NO     | YES    | NO     |
 </span></span><span style="display:flex;"><span>+-----------------+------------------------------------+---------------+-------------+--------+--------+--------+
 </span></span></code></pre></div><p>Let me create and start instances from images for &ldquo;Ubuntu 22.04&rdquo; and &ldquo;Debian 12&rdquo;.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus launch ubuntu/22.04 u1
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus launch images:ubuntu/22.04 u1
 </span></span><span style="display:flex;"><span> $ incus launch images:debian/12 d1
 </span></span></code></pre></div><p>System images specified as <code>images:ubuntu/22.04</code> or <code>images:debian/12</code> are downloaded
 to <code>/var/lib/incus/images/</code>.  Each of these seems to be made of 2 files.  One for
@@ -182,7 +185,7 @@ created under <code>/var/lib/incus/containers/</code>.  These instance names are
 </span></span><span style="display:flex;"><span>To detach from the console, press: &lt;ctrl&gt;+a q
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>d1 login: osamu
-</span></span><span style="display:flex;"><span>Password: 
+</span></span><span style="display:flex;"><span>Password:
 </span></span><span style="display:flex;"><span>Linux d1 6.5.0-0.deb12.4-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.5.10-1~bpo12+1 (2023-11-23) x86_64
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>The programs included with the Debian GNU/Linux system are free software;
@@ -194,7 +197,31 @@ created under <code>/var/lib/incus/containers/</code>.  These instance names are
 </span></span><span style="display:flex;"><span>osamu@d1:~$ id
 </span></span><span style="display:flex;"><span>uid=1000(osamu) gid=1000(osamu) groups=1000(osamu),100(users)
 </span></span><span style="display:flex;"><span> ...
-</span></span></code></pre></div><p>Looks like the weird group ID issue has been resolved in the upstream image.  Very nice.</p>
+</span></span></code></pre></div><p>This looked like the weird group ID issue has been resolved in the upstream
+image.  But as I checked closely, the image I downloaded is non-cloud image
+<code>images:debian/12</code> without any user setup.  Cloud image
+<code>images:debian/12/cloud</code> still seems to suffer the same problem.</p>
+<h2 id="getting-ipv4-working-with-firewalld">Getting IPv4 working with <code>firewalld</code></h2>
+<p>I have enabled a firewall system for my workstation based on <code>firewalld</code></p>
+<p>I configure my system with its GUI <code>firewall-config</code> as follows:</p>
+<ul>
+<li>Connection <code>incusbr0</code> has to be in the <code>internal</code> zone instead of <code>public</code> zone.</li>
+<li><code>internal</code> zone has to be set to &ldquo;Masquerade zone&rdquo;.  (This is required!)</li>
+</ul>
+<h2 id="etcsubuid-and-etcsubgid"><code>/etc/subuid</code> and <code>/etc/subgid</code></h2>
+<p>Although non essential, I have removed 2nd normal user and updated
+<code>/etc/subuid</code> and <code>/etc/subgid</code> as follows:</p>
+<pre tabindex="0"><code>root:1000:1
+osamu:100000:65536
+root:1000000:1000000000
+</code></pre><h2 id="summary-of-transition-from-lxc--commands-to-incus--commands">Summary of transition from <code>lxc ...</code> commands to <code>incus ...</code> commands</h2>
+<ul>
+<li>Becoming <code>incus-admin</code> group member now allows a user to perform all activities.</li>
+<li><code>lxd init</code> transition from <code>lxc ...</code> commands to <code>incus ...</code> commands now <code>incus admin init</code>.</li>
+<li>All other <code>lxc ...</code> commands are <code>incus ...</code>.</li>
+<li>The main remote repository to use is <code>images:</code> provided by <a href="https://linuxcontainers.org/">https://linuxcontainers.org/</a> only (No more <code>ubuntu:</code>).</li>
+<li>Update firewall configuration with IP masquerade for IPv4.</li>
+</ul>
 <!-- raw HTML omitted -->
 
 
@@ -206,7 +233,7 @@ created under <code>/var/lib/incus/containers/</code>.  These instance names are
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/03/13/lxc-7/">Next Post</a></td>
   
   </tr>
   </tbody>

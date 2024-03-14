@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Virtual machine with INCUS (7) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Virtual machine with INCUS (7)</span></h1>
+
+<h3 class="date">Date:
+2024/03/13 (initial publish),
+2024/03/14 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00069.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/03/02/lxc-6/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#tracing-container-with-lxclxd-1hahahugoshortcodes0hbhb">Tracing <a href="HAHAHUGOSHORTCODEs0HBHB">Container with LXC/LXD (1)</a></a></li>
+  </ul>
+</nav>
+
+<p>Here is a series of memos of me trying to use LXC/LXD and INCUS on Debian 12 (<code>bookworm</code>).</p>
+<p>In order to make full transition to <code>incus</code>, I will trace what I did with <code>lxc</code>
+with <code>incus</code> while addressing not only container systems but also virtual
+machine systems.</p>
+<h2 id="tracing-container-with-lxclxd-1hahahugoshortcodes0hbhb">Tracing <a href="/en/2023/10/11/lxc-1/">Container with LXC/LXD (1)</a></h2>
+<p>Since I have enough CPU and memory, I started container systems and VM systems
+as follows.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus launch images:debian/12       ct       -c limits.cpu=4 -c limits.memory=4GiB
+</span></span><span style="display:flex;"><span> $ incus launch images:debian/12/cloud ctc      -c limits.cpu=4 -c limits.memory=4GiB
+</span></span><span style="display:flex;"><span> $ incus launch images:debian/12       vm  --vm -c limits.cpu=4 -c limits.memory=4GiB
+</span></span><span style="display:flex;"><span> $ incus launch images:debian/12/cloud vmc --vm -c limits.cpu=4 -c limits.memory=4GiB
+</span></span></code></pre></div><p>After some time for DHCP resolution:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus ls
+</span></span><span style="display:flex;"><span>+------+---------+-------------------------+------------------------------------------------+-----------------+-----------+
+</span></span><span style="display:flex;"><span>| NAME |  STATE  |          IPV4           |                      IPV6                      |      TYPE       | SNAPSHOTS |
+</span></span><span style="display:flex;"><span>+------+---------+-------------------------+------------------------------------------------+-----------------+-----------+
+</span></span><span style="display:flex;"><span>| ct   | RUNNING | 10.214.117.246 (eth0)   | fd42:4c3b:8e2d:60d:216:3eff:fe75:d242 (eth0)   | CONTAINER       | 0         |
+</span></span><span style="display:flex;"><span>+------+---------+-------------------------+------------------------------------------------+-----------------+-----------+
+</span></span><span style="display:flex;"><span>| ctc  | RUNNING | 10.214.117.158 (eth0)   | fd42:4c3b:8e2d:60d:216:3eff:fe7b:9c42 (eth0)   | CONTAINER       | 0         |
+</span></span><span style="display:flex;"><span>+------+---------+-------------------------+------------------------------------------------+-----------------+-----------+
+</span></span><span style="display:flex;"><span>| vm   | RUNNING | 10.214.117.171 (enp5s0) | fd42:4c3b:8e2d:60d:216:3eff:fe0a:a43d (enp5s0) | VIRTUAL-MACHINE | 0         |
+</span></span><span style="display:flex;"><span>+------+---------+-------------------------+------------------------------------------------+-----------------+-----------+
+</span></span><span style="display:flex;"><span>| vmc  | RUNNING | 10.214.117.118 (enp5s0) | fd42:4c3b:8e2d:60d:216:3eff:fefb:e649 (enp5s0) | VIRTUAL-MACHINE | 0         |
+</span></span><span style="display:flex;"><span>+------+---------+-------------------------+------------------------------------------------+-----------------+-----------+
+</span></span></code></pre></div><p>As I check default primary user&rsquo;s GID issue:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus exec ct -- grep &#34;:1000:&#34; /etc/passwd
+</span></span><span style="display:flex;"><span> $ incus exec vm -- grep &#34;:1000:&#34; /etc/passwd
+</span></span><span style="display:flex;"><span> $ incus exec ctc -- grep &#34;:1000:&#34; /etc/passwd
+</span></span><span style="display:flex;"><span>debian:x:1000:1001:Debian:/home/debian:/bin/bash
+</span></span><span style="display:flex;"><span> $ incus exec vmc -- grep &#34;:1000:&#34; /etc/passwd
+</span></span><span style="display:flex;"><span>debian:x:1000:1001:Debian:/home/debian:/bin/bash
+</span></span></code></pre></div><p>Now I know that</p>
+<ul>
+<li>basic image doesn&rsquo;t have the primary user</li>
+<li>cloud image has the primary user created by cloud-init with obscure GID.</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/03/02/lxc-6/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
