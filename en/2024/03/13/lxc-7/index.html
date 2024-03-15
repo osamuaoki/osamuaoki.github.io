@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/03/13 (initial publish),
-2024/03/14 (last update)
+2024/03/15 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00069.md
@@ -100,11 +100,99 @@ as follows.</p>
 </span></span><span style="display:flex;"><span>debian:x:1000:1001:Debian:/home/debian:/bin/bash
 </span></span><span style="display:flex;"><span> $ incus exec vmc -- grep &#34;:1000:&#34; /etc/passwd
 </span></span><span style="display:flex;"><span>debian:x:1000:1001:Debian:/home/debian:/bin/bash
-</span></span></code></pre></div><p>Now I know that</p>
+</span></span></code></pre></div><p>I confirmed the situation mentioned in
+<a href="/en/2023/10/11/lxc-1/">Container with LXC/LXD(1)</a> is still around:</p>
 <ul>
 <li>basic image doesn&rsquo;t have the primary user</li>
 <li>cloud image has the primary user created by cloud-init with obscure GID.</li>
 </ul>
+<p>Let me trace <a href="/en/2023/11/12/lxc-2/">Container with LXC/LXD (2)</a> to get
+rid of this ugly <code>GID=1001</code>.</p>
+<p>Let me clean up existing instances.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus delete -f ct vm ctc vmc
+</span></span></code></pre></div><p>Let me double-check available cloud images for Debian Bookworm.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus delete -f ct vm ctc vmc
+</span></span><span style="display:flex;"><span> $ incus image ls images: debian amd64 cloud bookworm -f compact
+</span></span><span style="display:flex;"><span>           ALIAS            FINGERPRINT   PUBLIC               DESCRIPTION                ARCHITECTURE       TYPE          SIZE         UPLOAD DATE
+</span></span><span style="display:flex;"><span>  debian/12/cloud (3 more)  5b56844619e2  yes     Debian bookworm amd64 (20240315_05:24)  x86_64        CONTAINER        122.04MiB  2024/03/15 09:00 JST
+</span></span><span style="display:flex;"><span>  debian/12/cloud (3 more)  db744150188f  yes     Debian bookworm amd64 (20240315_05:24)  x86_64        VIRTUAL-MACHINE  394.61MiB  2024/03/15 09:00 JST
+</span></span></code></pre></div><p>Let me check default profile.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile show default
+</span></span><span style="display:flex;"><span>config: {}
+</span></span><span style="display:flex;"><span>description: Default Incus profile
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  eth0:
+</span></span><span style="display:flex;"><span>    name: eth0
+</span></span><span style="display:flex;"><span>    network: incusbr0
+</span></span><span style="display:flex;"><span>    type: nic
+</span></span><span style="display:flex;"><span>  root:
+</span></span><span style="display:flex;"><span>    path: /
+</span></span><span style="display:flex;"><span>    pool: default
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>name: default
+</span></span><span style="display:flex;"><span>used_by: []
+</span></span></code></pre></div><p>Let me make a customized YAML profile <code>osamu0.yaml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">description</span>: <span style="color:#ae81ff">Osamu&#39;s default Incus profile</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">config</span>:
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">user.user-data</span>: |-<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    #cloud-config
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    users:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - name: osamu
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">      groups: adm, mail</span>    
+</span></span></code></pre></div><p>Let me make customized profile <code>osamu0</code> based on <code>osamu0.yaml</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile create osamu0
+</span></span><span style="display:flex;"><span> $ incus profile edit &lt;osamu0.yaml
+</span></span><span style="display:flex;"><span> $ incus profile show osamu0
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  user.user-data: |-
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      groups: adm, mail
+</span></span><span style="display:flex;"><span>description: Osamu&#39;s default Incus profile 0
+</span></span><span style="display:flex;"><span>devices: {}
+</span></span><span style="display:flex;"><span>name: osamu
+</span></span><span style="display:flex;"><span>used_by: []
+</span></span></code></pre></div><p>TBH, I initially had trouble making the above YAML to work as intended since I dropped <code>#cloud-config</code> line thinking it as the mere comment.</p>
+<p>I then found a cloud-init page listing the
+<a href="https://cloudinit.readthedocs.io/en/latest/howto/debug_user_data.html">two most common issues</a>
+with cloud config user data:</p>
+<blockquote>
+<ul>
+<li>Incorrectly formatted YAML</li>
+<li>The first line does not start with #cloud-config</li>
+</ul>
+</blockquote>
+<p>I also made another profile <code>osamu1</code> based on <code>osamu1.yaml</code> which uses
+<code>cloud-init.user-data: |-</code> instead of <code>user.user-data: |-</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus launch images:debian/12/cloud  ctc0  -c limits.cpu=4 -c limits.memory=4GiB --profile default --profile osamu0
+</span></span><span style="display:flex;"><span> $ incus launch images:debian/12/cloud  ctc1  -c limits.cpu=4 -c limits.memory=4GiB --profile default --profile osamu1
+</span></span><span style="display:flex;"><span> $ incus launch images:debian/12/cloud  vmc0  -c limits.cpu=4 --vm -c limits.memory=4GiB --profile default --profile osamu0
+</span></span><span style="display:flex;"><span> $ incus launch images:debian/12/cloud  vmc1  -c limits.cpu=4 --vm -c limits.memory=4GiB --profile default --profile osamu1
+</span></span><span style="display:flex;"><span> $ sleep 5
+</span></span><span style="display:flex;"><span> $ incus ls -f compact
+</span></span><span style="display:flex;"><span>  NAME   STATE            IPV4                                 IPV6                            TYPE        SNAPSHOTS
+</span></span><span style="display:flex;"><span>  ctc0  RUNNING  10.214.117.73 (eth0)     fd42:4c3b:8e2d:60d:216:3eff:fe35:ac44 (eth0)    CONTAINER        0
+</span></span><span style="display:flex;"><span>  ctc1  RUNNING  10.214.117.113 (eth0)    fd42:4c3b:8e2d:60d:216:3eff:fe41:a4a8 (eth0)    CONTAINER        0
+</span></span><span style="display:flex;"><span>  vmc0  RUNNING  10.214.117.242 (enp5s0)  fd42:4c3b:8e2d:60d:216:3eff:fe52:8840 (enp5s0)  VIRTUAL-MACHINE  0
+</span></span><span style="display:flex;"><span>  vmc1  RUNNING  10.214.117.222 (enp5s0)  fd42:4c3b:8e2d:60d:216:3eff:fe76:2b84 (enp5s0)  VIRTUAL-MACHINE  0
+</span></span><span style="display:flex;"><span> $ incus exec ctc0 -- grep &#34;:1000:&#34; /etc/passwd
+</span></span><span style="display:flex;"><span>osamu:x:1000:1000::/home/osamu:/bin/sh
+</span></span><span style="display:flex;"><span> $ incus exec ctc1 -- grep &#34;:1000:&#34; /etc/passwd
+</span></span><span style="display:flex;"><span>osamu:x:1000:1000::/home/osamu:/bin/sh
+</span></span><span style="display:flex;"><span> $ incus exec vmc1 -- grep &#34;:1000:&#34; /etc/passwd
+</span></span><span style="display:flex;"><span>osamu:x:1000:1000::/home/osamu:/bin/sh
+</span></span><span style="display:flex;"><span> $ incus exec vmc0 -- grep &#34;:1000:&#34; /etc/passwd
+</span></span><span style="display:flex;"><span>osamu:x:1000:1000::/home/osamu:/bin/sh
+</span></span></code></pre></div><p>So both <code>cloud-init.user-data: |-</code> instead of <code>user.user-data: |-</code> are valid
+YAML configuration.</p>
+<p>Let me set password for <code>root</code> account.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus exec vmc0 -- passwd
+</span></span><span style="display:flex;"><span>New password: 
+</span></span><span style="display:flex;"><span>Retype new password: 
+</span></span><span style="display:flex;"><span>passwd: password updated successfully
+</span></span><span style="display:flex;"><span> $ incus restart vmc0 --console=vga
+</span></span></code></pre></div><p>Nice VGA screen shows up ;-)  This <code>--console=vga</code> is only for VM.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->

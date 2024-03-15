@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/11/12 (initial publish),
-2024/02/23 (last update)
+2024/03/15 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00053.md
@@ -65,7 +65,7 @@ en/note-00053.md
 <nav id="TableOfContents">
   <ul>
     <li><a href="#default-lxd-debian-image-issues">Default LXD Debian image issues</a></li>
-    <li><a href="#lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</a></li>
+    <li><a href="#lxcinit-local-fixed-up-image-generation-command"><code>./lxcinit</code>: local fixed-up image generation command</a></li>
     <li><a href="#configuration-of-lxd-instance">Configuration of LXD instance</a></li>
     <li><a href="#overriding-default_user-of-cloud-init-with-profile">Overriding <code>default_user</code> of cloud-init with profile</a>
       <ul>
@@ -88,7 +88,7 @@ en/note-00053.md
 GID somewhere between 100 and 999.)</li>
 </ul>
 <p>Here are my efforts to get a sane instance generated.</p>
-<h2 id="lxcinit-local-fixed-up-image-generation-command"><code>lxcinit</code>: local fixed-up image generation command</h2>
+<h2 id="lxcinit-local-fixed-up-image-generation-command"><code>./lxcinit</code>: local fixed-up image generation command</h2>
 <p>I first created local image with primary user name set to <code>osamu</code> and without
 <code>netdev</code> in groups-list as <code>deb-12</code>-image:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc init images:debian/12/cloud d0
@@ -142,15 +142,41 @@ instance with the existing configuration to minimize overhead.</p>
 <ul>
 <li>Configure directly with YAML
 <ul>
-<li><code>lxc launch images:debian/12/cloud d0 &lt;user.yaml</code></li>
+<li>merge strategy
+<ul>
+<li><code>lxc launch images:debian/12/cloud d0 &lt;user.yaml</code>
+<ul>
 <li><code>user.yaml</code> is merged with the <code>default</code> profile</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 <li>Configure indirectly with profile
 <ul>
-<li>create profile <code>lxc profile edit user &lt; user.yaml</code></li>
-<li><code>lxc launch images:debian/12/cloud d0 --profile user</code></li>
+<li>merge strategy
+<ul>
+<li>create profile <code>user</code> with <code>lxc profile create user</code></li>
+<li>edit profile <code>user</code> with <code>lxc profile edit user &lt; user.yaml</code></li>
+<li><code>lxc launch images:debian/12/cloud d0 --profile default --profile user</code>
+<ul>
+<li>the <code>user</code> profile is merged to the <code>default</code> profile</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>replace strategy
+<ul>
+<li>create profile <code>user</code> with <code>lxc profile create user</code></li>
+<li>edit profile <code>user</code> with <code>lxc profile edit user &lt; user.yaml</code></li>
+<li><code>lxc launch images:debian/12/cloud d0 --profile user</code>
+<ul>
 <li>the <code>user</code> profile replaces the <code>default</code> profile</li>
+</ul>
+</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
