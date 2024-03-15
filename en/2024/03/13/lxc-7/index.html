@@ -64,7 +64,8 @@ en/note-00069.md
 
 <nav id="TableOfContents">
   <ul>
-    <li><a href="#start-container-and-vm-with-incus">Start Container and VM with Incus</a></li>
+    <li><a href="#simple-start-of-container-and-vm-with-incus">Simple start of Container and VM with Incus</a></li>
+    <li><a href="#clean-start-of-container-and-vm-with-incus">Clean start of Container and VM with Incus</a></li>
   </ul>
 </nav>
 
@@ -72,7 +73,7 @@ en/note-00069.md
 <p>In order to make full transition to <code>incus</code>, I will trace what I did with <code>lxc</code>
 with <code>incus</code> while addressing not only container systems but also virtual
 machine systems.</p>
-<h2 id="start-container-and-vm-with-incus">Start Container and VM with Incus</h2>
+<h2 id="simple-start-of-container-and-vm-with-incus">Simple start of Container and VM with Incus</h2>
 <p>Let me trace <a href="/en/2023/10/11/lxc-1/">Container with LXC/LXD (1)</a>.</p>
 <p>Since I have enough CPU and memory, I started container systems and VM systems
 as follows.</p>
@@ -106,6 +107,7 @@ as follows.</p>
 <li>basic image doesn&rsquo;t have the primary user</li>
 <li>cloud image has the primary user created by cloud-init with obscure GID.</li>
 </ul>
+<h2 id="clean-start-of-container-and-vm-with-incus">Clean start of Container and VM with Incus</h2>
 <p>Let me trace <a href="/en/2023/11/12/lxc-2/">Container with LXC/LXD (2)</a> to get
 rid of this ugly <code>GID=1001</code>.</p>
 <p>Let me clean up existing instances.</p>
