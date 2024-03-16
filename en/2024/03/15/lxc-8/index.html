@@ -66,6 +66,7 @@ en/note-00070.md
   <ul>
     <li><a href="#full-de-in-vm-and-its-storage-size">Full DE in VM and its storage size</a></li>
     <li><a href="#the-source-of-the-storage-size-limitation">The source of the storage size limitation</a></li>
+    <li><a href="#starting-vm-with-larger-disk-size">Starting VM with larger disk size</a></li>
   </ul>
 </nav>
 
@@ -85,8 +86,8 @@ tmpfs           5.0M     0  5.0M   0% /run/lock
 tmpfs            50M   18M   33M  35% /run/incus_agent
 /dev/sda1        99M   12M   87M  12% /boot/efi
 tmpfs           391M   64K  391M   1% /run/user/1000
-</code></pre><p>I see VM has relatively small 10GB.  This is OK for console system but not
-enough for full GUI DE.</p>
+</code></pre><p>I see that VM has relatively small 10GB allocated.  This is OK for console
+system but not enough for full GUI DE.</p>
 <h2 id="the-source-of-the-storage-size-limitation">The source of the storage size limitation</h2>
 <p>I checked VM as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config show vmc0
@@ -210,7 +211,53 @@ enough for full GUI DE.</p>
 </span></span><span style="display:flex;"><span> $ sudo ls -lh virtual-machines/vmc{0,1}/root.img
 </span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 10G Mar 16 11:18 virtual-machines/vmc0/root.img
 </span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 10G Mar 15 23:54 virtual-machines/vmc1/root.img
-</span></span></code></pre></div><p>Althogh <code>driver: dir</code>, VM seems to use disk image files.</p>
+</span></span></code></pre></div><p>Althogh <code>driver: dir</code> is used, each VM seems to use a fixed 10GB size disk
+image <code>root.img</code>.</p>
+<h2 id="starting-vm-with-larger-disk-size">Starting VM with larger disk size</h2>
+<p>I found a gentoo wiki page on
+<a href="https://wiki.gentoo.org/wiki/Incus#Growing_default_disk_size">Growing default disk size</a>
+to be quite useful.</p>
+<p>I created osamu-large profile using <code>osamu-large.yaml</code> file under the
+<a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/018_incus0">018_incus</a>
+directory.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile edit  osamu-large &lt;osamu-large.yaml
+</span></span><span style="display:flex;"><span> $ incus profile show  osamu-large
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  user.user-data: |-
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      groups: adm, mail
+</span></span><span style="display:flex;"><span>      sudo: ALL=(ALL) NOPASSWD:ALL
+</span></span><span style="display:flex;"><span>description: Osamu&#39;s large Incus profile
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  root:
+</span></span><span style="display:flex;"><span>    path: /
+</span></span><span style="display:flex;"><span>    pool: default
+</span></span><span style="display:flex;"><span>    size: 40GiB
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>name: osamu-large
+</span></span><span style="display:flex;"><span>used_by: []
+</span></span><span style="display:flex;"><span> $ incus launch images:debian/12/cloud vmc-large  --vm -c limits.cpu=4 -c limits.memory=4GiB --profile default --profile osamu-large
+</span></span><span style="display:flex;"><span>Launching vmc-large
+</span></span><span style="display:flex;"><span> $ sudo ls -lh /var/lib/incus/storage-pools/default/virtual-machines/vmc-large/root.img
+</span></span><span style="display:flex;"><span> $ cd /var/lib/incus/storage-pools/default/virtual-machines/
+</span></span><span style="display:flex;"><span> $ sudo ls -lh vmc-large/root.img
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 40G Mar 16 13:56 vmc-large/root.img
+</span></span><span style="display:flex;"><span> $ incus exec vmc-large -- df -h
+</span></span><span style="display:flex;"><span>Filesystem      Size  Used Avail Use% Mounted on
+</span></span><span style="display:flex;"><span>udev            1.9G     0  1.9G   0% /dev
+</span></span><span style="display:flex;"><span>tmpfs           391M  652K  391M   1% /run
+</span></span><span style="display:flex;"><span>/dev/sda2        39G  1.1G   38G   3% /
+</span></span><span style="display:flex;"><span>tmpfs           2.0G     0  2.0G   0% /dev/shm
+</span></span><span style="display:flex;"><span>tmpfs           5.0M     0  5.0M   0% /run/lock
+</span></span><span style="display:flex;"><span>tmpfs            50M   18M   33M  35% /run/incus_agent
+</span></span><span style="display:flex;"><span>/dev/sda1        99M   12M   87M  12% /boot/efi
+</span></span></code></pre></div><p>I got a system with a large 40GB disk.  Good!</p>
+<p>When I tried to change disk size for existing instance, I got.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config device set vmc0 root size=20GB
+</span></span><span style="display:flex;"><span>Error: Device from profile(s) cannot be modified for individual instance. Override device or modify profile instead
+</span></span></code></pre></div><p>I need to learn more on <a href="https://linuxcontainers.org/incus/docs/main/storage/">Incus: Storage</a>.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
