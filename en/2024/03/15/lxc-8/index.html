@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Virtual machine with INCUS (8) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Virtual machine with INCUS (8)</span></h1>
+
+<h3 class="date">Date:
+2024/03/15 (initial publish),
+2024/03/16 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00070.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/03/13/lxc-7/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#full-de-in-vm-and-its-storage-size">Full DE in VM and its storage size</a></li>
+    <li><a href="#the-source-of-the-storage-size-limitation">The source of the storage size limitation</a></li>
+  </ul>
+</nav>
+
+<p>Here is a series of memos of me trying to use LXC/LXD and INCUS on Debian 12 (<code>bookworm</code>).</p>
+<h2 id="full-de-in-vm-and-its-storage-size">Full DE in VM and its storage size</h2>
+<p>I had problem with VM created by INCUS when I installed full DE and upgraded to
+the <code>testing</code> due to &ldquo;disk full`.</p>
+<p>In order to check reason for the above problem, I installed most DE (w/o Office
+programs) without upgrade again.  I see:</p>
+<pre tabindex="0"><code> $ incus exec vmc0 -- df -h
+Filesystem      Size  Used Avail Use% Mounted on
+udev            1.9G     0  1.9G   0% /dev
+tmpfs           391M  1.4M  390M   1% /run
+/dev/sda2       9.6G  4.7G  4.9G  49% /
+tmpfs           2.0G     0  2.0G   0% /dev/shm
+tmpfs           5.0M     0  5.0M   0% /run/lock
+tmpfs            50M   18M   33M  35% /run/incus_agent
+/dev/sda1        99M   12M   87M  12% /boot/efi
+tmpfs           391M   64K  391M   1% /run/user/1000
+</code></pre><p>I see VM has relatively small 10GB.  This is OK for console system but not
+enough for full GUI DE.</p>
+<h2 id="the-source-of-the-storage-size-limitation">The source of the storage size limitation</h2>
+<p>I checked VM as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config show vmc0
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20240314_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20240314_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: disk-kvm.img
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  limits.cpu: &#34;4&#34;
+</span></span><span style="display:flex;"><span>  limits.memory: 4GiB
+</span></span><span style="display:flex;"><span>  user.user-data: |-
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      groups: adm, mail
+</span></span><span style="display:flex;"><span>      sudo: ALL=(ALL) NOPASSWD:ALL
+</span></span><span style="display:flex;"><span>  volatile.base_image: 8836a6135879e0f6d5be849eeaca9eb69290eb780784dfde7f980eb2395e77a2
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: caef9568-f8db-4b7d-babb-8e05fcf75fd3
+</span></span><span style="display:flex;"><span>  volatile.eth0.host_name: tapc904272d
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:52:88:40
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: RUNNING
+</span></span><span style="display:flex;"><span>  volatile.last_state.ready: &#34;false&#34;
+</span></span><span style="display:flex;"><span>  volatile.uuid: 38b6e9a4-03e1-4e03-a91f-634d57c3ead5
+</span></span><span style="display:flex;"><span>  volatile.uuid.generation: 38b6e9a4-03e1-4e03-a91f-634d57c3ead5
+</span></span><span style="display:flex;"><span>  volatile.vsock_id: &#34;2876819046&#34;
+</span></span><span style="display:flex;"><span>devices: {}
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- default
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span><span style="display:flex;"><span>description: Osamu&#39;s default Incus profile 0
+</span></span></code></pre></div><p>I see no storage limitation here.</p>
+<p>Let me dig into <code>default</code> profile used.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile show default
+</span></span><span style="display:flex;"><span>config: {}
+</span></span><span style="display:flex;"><span>description: Default Incus profile
+</span></span><span style="display:flex;"><span>devices:
+</span></span><span style="display:flex;"><span>  eth0:
+</span></span><span style="display:flex;"><span>    name: eth0
+</span></span><span style="display:flex;"><span>    network: incusbr0
+</span></span><span style="display:flex;"><span>    type: nic
+</span></span><span style="display:flex;"><span>  root:
+</span></span><span style="display:flex;"><span>    path: /
+</span></span><span style="display:flex;"><span>    pool: default
+</span></span><span style="display:flex;"><span>    type: disk
+</span></span><span style="display:flex;"><span>name: default
+</span></span><span style="display:flex;"><span>used_by:
+</span></span><span style="display:flex;"><span>- /1.0/instances/vmc0
+</span></span><span style="display:flex;"><span>- /1.0/instances/vmc1
+</span></span><span style="display:flex;"><span>- /1.0/instances/ctc0
+</span></span><span style="display:flex;"><span>- /1.0/instances/ctc1
+</span></span></code></pre></div><p>Here, <code>root</code> device uses storage pool <code>default</code>.  Let me dig into this storage pool
+<code>default</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus storage show default
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  source: /var/lib/incus/storage-pools/default
+</span></span><span style="display:flex;"><span>description: &#34;&#34;
+</span></span><span style="display:flex;"><span>name: default
+</span></span><span style="display:flex;"><span>driver: dir
+</span></span><span style="display:flex;"><span>used_by:
+</span></span><span style="display:flex;"><span>- /1.0/instances/ctc0
+</span></span><span style="display:flex;"><span>- /1.0/instances/ctc1
+</span></span><span style="display:flex;"><span>- /1.0/instances/vmc0
+</span></span><span style="display:flex;"><span>- /1.0/instances/vmc1
+</span></span><span style="display:flex;"><span>- /1.0/profiles/default
+</span></span><span style="display:flex;"><span>status: Created
+</span></span><span style="display:flex;"><span>locations:
+</span></span><span style="display:flex;"><span>- none
+</span></span></code></pre></div><p>So I looked into <code>/var/lib/incus/storage-pools/default</code>.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd /var/lib/incus/storage-pools/default
+</span></span><span style="display:flex;"><span> $ sudo tree -F -L 3 .
+</span></span><span style="display:flex;"><span>./
+</span></span><span style="display:flex;"><span>├── buckets/
+</span></span><span style="display:flex;"><span>├── containers/
+</span></span><span style="display:flex;"><span>│   ├── ctc0/
+</span></span><span style="display:flex;"><span>│   │   ├── backup.yaml
+</span></span><span style="display:flex;"><span>│   │   ├── metadata.yaml
+</span></span><span style="display:flex;"><span>│   │   ├── rootfs/
+</span></span><span style="display:flex;"><span>│   │   └── templates/
+</span></span><span style="display:flex;"><span>│   └── ctc1/
+</span></span><span style="display:flex;"><span>│       ├── backup.yaml
+</span></span><span style="display:flex;"><span>│       ├── metadata.yaml
+</span></span><span style="display:flex;"><span>│       ├── rootfs/
+</span></span><span style="display:flex;"><span>│       └── templates/
+</span></span><span style="display:flex;"><span>├── containers-snapshots/
+</span></span><span style="display:flex;"><span>├── custom/
+</span></span><span style="display:flex;"><span>├── custom-snapshots/
+</span></span><span style="display:flex;"><span>├── images/
+</span></span><span style="display:flex;"><span>├── virtual-machines/
+</span></span><span style="display:flex;"><span>│   ├── vmc0/
+</span></span><span style="display:flex;"><span>│   │   ├── agent-client.crt
+</span></span><span style="display:flex;"><span>│   │   ├── agent-client.key
+</span></span><span style="display:flex;"><span>│   │   ├── agent.crt
+</span></span><span style="display:flex;"><span>│   │   ├── agent.key
+</span></span><span style="display:flex;"><span>│   │   ├── backup.yaml
+</span></span><span style="display:flex;"><span>│   │   ├── config/
+</span></span><span style="display:flex;"><span>│   │   ├── metadata.yaml
+</span></span><span style="display:flex;"><span>│   │   ├── OVMF_VARS.4MB.ms.fd
+</span></span><span style="display:flex;"><span>│   │   ├── qemu.nvram -&gt; OVMF_VARS.4MB.ms.fd
+</span></span><span style="display:flex;"><span>│   │   ├── root.img
+</span></span><span style="display:flex;"><span>│   │   └── templates/
+</span></span><span style="display:flex;"><span>│   └── vmc1/
+</span></span><span style="display:flex;"><span>│       ├── agent-client.crt
+</span></span><span style="display:flex;"><span>│       ├── agent-client.key
+</span></span><span style="display:flex;"><span>│       ├── agent.crt
+</span></span><span style="display:flex;"><span>│       ├── agent.key
+</span></span><span style="display:flex;"><span>│       ├── backup.yaml
+</span></span><span style="display:flex;"><span>│       ├── config/
+</span></span><span style="display:flex;"><span>│       ├── metadata.yaml
+</span></span><span style="display:flex;"><span>│       ├── OVMF_VARS.4MB.ms.fd
+</span></span><span style="display:flex;"><span>│       ├── qemu.nvram -&gt; OVMF_VARS.4MB.ms.fd
+</span></span><span style="display:flex;"><span>│       ├── root.img
+</span></span><span style="display:flex;"><span>│       └── templates/
+</span></span><span style="display:flex;"><span>└── virtual-machines-snapshots/
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>21 directories, 22 files
+</span></span><span style="display:flex;"><span> $ sudo ls -lh virtual-machines/vmc{0,1}/root.img
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 10G Mar 16 11:18 virtual-machines/vmc0/root.img
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 10G Mar 15 23:54 virtual-machines/vmc1/root.img
+</span></span></code></pre></div><p>Althogh <code>driver: dir</code>, VM seems to use disk image files.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/03/13/lxc-7/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2023 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/03/13 (initial publish),
-2024/03/15 (last update)
+2024/03/16 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00069.md
@@ -54,7 +54,7 @@ en/note-00069.md
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/03/15/lxc-8/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -66,6 +66,9 @@ en/note-00069.md
   <ul>
     <li><a href="#simple-start-of-container-and-vm-with-incus">Simple start of Container and VM with Incus</a></li>
     <li><a href="#clean-start-of-container-and-vm-with-incus">Clean start of Container and VM with Incus</a></li>
+    <li><a href="#yaml-syntax-for-chomp">YAML syntax for chomp</a></li>
+    <li><a href="#setting-up-vm-with-incus-exec-">Setting up VM with <code>incus exec ...</code></a></li>
+    <li><a href="#starting-vm-with-vga-console">Starting VM with VGA console</a></li>
   </ul>
 </nav>
 
@@ -76,12 +79,12 @@ machine systems.</p>
 <h2 id="simple-start-of-container-and-vm-with-incus">Simple start of Container and VM with Incus</h2>
 <p>Let me trace <a href="/en/2023/10/11/lxc-1/">Container with LXC/LXD (1)</a>.</p>
 <p>Since I have enough CPU and memory, I started container systems and VM systems
-as follows.</p>
+as follows.  (I assigned more CPU and memory)</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus launch images:debian/12       ct       -c limits.cpu=4 -c limits.memory=4GiB
 </span></span><span style="display:flex;"><span> $ incus launch images:debian/12/cloud ctc      -c limits.cpu=4 -c limits.memory=4GiB
 </span></span><span style="display:flex;"><span> $ incus launch images:debian/12       vm  --vm -c limits.cpu=4 -c limits.memory=4GiB
 </span></span><span style="display:flex;"><span> $ incus launch images:debian/12/cloud vmc --vm -c limits.cpu=4 -c limits.memory=4GiB
-</span></span></code></pre></div><p>After some time for DHCP resolution:</p>
+</span></span></code></pre></div><p>After some time waiting for the DHCP resolution:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus ls
 </span></span><span style="display:flex;"><span>+------+---------+-------------------------+------------------------------------------------+-----------------+-----------+
 </span></span><span style="display:flex;"><span>| NAME |  STATE  |          IPV4           |                      IPV6                      |      TYPE       | SNAPSHOTS |
@@ -113,8 +116,7 @@ rid of this ugly <code>GID=1001</code>.</p>
 <p>Let me clean up existing instances.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus delete -f ct vm ctc vmc
 </span></span></code></pre></div><p>Let me double-check available cloud images for Debian Bookworm.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus delete -f ct vm ctc vmc
-</span></span><span style="display:flex;"><span> $ incus image ls images: debian amd64 cloud bookworm -f compact
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus image ls images: debian amd64 cloud bookworm -f compact
 </span></span><span style="display:flex;"><span>           ALIAS            FINGERPRINT   PUBLIC               DESCRIPTION                ARCHITECTURE       TYPE          SIZE         UPLOAD DATE
 </span></span><span style="display:flex;"><span>  debian/12/cloud (3 more)  5b56844619e2  yes     Debian bookworm amd64 (20240315_05:24)  x86_64        CONTAINER        122.04MiB  2024/03/15 09:00 JST
 </span></span><span style="display:flex;"><span>  debian/12/cloud (3 more)  db744150188f  yes     Debian bookworm amd64 (20240315_05:24)  x86_64        VIRTUAL-MACHINE  394.61MiB  2024/03/15 09:00 JST
@@ -188,15 +190,47 @@ with cloud config user data:</p>
 </span></span><span style="display:flex;"><span>osamu:x:1000:1000::/home/osamu:/bin/sh
 </span></span></code></pre></div><p>So both <code>cloud-init.user-data: |-</code> instead of <code>user.user-data: |-</code> are valid
 YAML configuration.</p>
-<p>Let me set password for <code>root</code> account.</p>
+<h2 id="yaml-syntax-for-chomp">YAML syntax for chomp</h2>
+<p>There are <a href="https://yaml.org/spec/1.2.2/#23-scalars">two styles for scalar content in block notation</a>:</p>
+<ul>
+<li>literal style (indicated by “<code>|</code>”) where all line breaks are significant.</li>
+<li>folded style (denoted by “<code>&gt;</code>”) where each line break is folded to a space unless it ends an empty or a more-indented line.</li>
+</ul>
+<p>There are  <a href="https://yaml.org/spec/1.2.2/#8112-block-chomping-indicator">Block Chomping Indicator</a>:</p>
+<ul>
+<li>&ldquo;<code>-</code>&rdquo;: STRIP &ndash;  the final line break character and any trailing empty lines are excluded</li>
+<li>&ldquo;<code>+</code>&rdquo;: KEEP &ndash; the final line break and any trailing empty lines are included</li>
+<li>&ldquo;``&rdquo;: CLIP &ndash; the final line break character is included but any trailing empty lines are excluded</li>
+</ul>
+<p>This is where &ldquo;<code>+</code>&rdquo; in &ldquo;<code>|+</code>&rdquo; comes from.</p>
+<h2 id="setting-up-vm-with-incus-exec-">Setting up VM with <code>incus exec ...</code></h2>
+<p>Let me set the password for <code>root</code> and <code>osamu</code> accounts.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus exec vmc0 -- passwd
-</span></span><span style="display:flex;"><span>New password: 
-</span></span><span style="display:flex;"><span>Retype new password: 
+</span></span><span style="display:flex;"><span>New password:
+</span></span><span style="display:flex;"><span>Retype new password:
 </span></span><span style="display:flex;"><span>passwd: password updated successfully
-</span></span><span style="display:flex;"><span> $ incus restart vmc0 --console=vga
+</span></span><span style="display:flex;"><span> $ incus exec vmc0 -- passwd osamu
+</span></span><span style="display:flex;"><span>New password:
+</span></span><span style="display:flex;"><span>Retype new password:
+</span></span><span style="display:flex;"><span>passwd: password updated successfully
+</span></span></code></pre></div><p>Let&rsquo;s also configure system:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus exec vmc0 -- apt update
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span> $ incus exec vmc0 -- apt install aptitude sudo wget git mc neovim
+</span></span><span style="display:flex;"><span>...
+</span></span><span style="display:flex;"><span> $ incus exec vmc0 -- usermod -aG sudo osamu
+</span></span><span style="display:flex;"><span> $ incus exec vmc0 -- chsh osamu
+</span></span><span style="display:flex;"><span>Password:
+</span></span><span style="display:flex;"><span>Changing the login shell for osamu
+</span></span><span style="display:flex;"><span>Enter the new value, or press ENTER for the default
+</span></span><span style="display:flex;"><span>	Login Shell [/bin/sh]: /bin/bash
+</span></span></code></pre></div><h2 id="starting-vm-with-vga-console">Starting VM with VGA console</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus restart vmc0 --console=vga
 </span></span></code></pre></div><p>Nice VGA screen shows up ;-)  This <code>--console=vga</code> is only for VM.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<p>If I get to manage VMs via <code>incus</code> with VGA console, I don&rsquo;t need to use
+<code>virt-manager</code> any more. (I didn&rsquo;t like XML based configuration used by
+<code>virt-manager</code> platform.  YAML is cleaner and <code>incus</code> CLI is more consistent
+UX for me.)</p>
 <!-- raw HTML omitted -->
 
 
@@ -208,7 +242,7 @@ YAML configuration.</p>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/03/15/lxc-8/">Next Post</a></td>
   
   </tr>
   </tbody>
