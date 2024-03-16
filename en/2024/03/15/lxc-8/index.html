@@ -76,17 +76,17 @@ en/note-00070.md
 the <code>testing</code> due to &ldquo;disk full`.</p>
 <p>In order to check reason for the above problem, I installed most DE (w/o Office
 programs) without upgrade again.  I see:</p>
-<pre tabindex="0"><code> $ incus exec vmc0 -- df -h
-Filesystem      Size  Used Avail Use% Mounted on
-udev            1.9G     0  1.9G   0% /dev
-tmpfs           391M  1.4M  390M   1% /run
-/dev/sda2       9.6G  4.7G  4.9G  49% /
-tmpfs           2.0G     0  2.0G   0% /dev/shm
-tmpfs           5.0M     0  5.0M   0% /run/lock
-tmpfs            50M   18M   33M  35% /run/incus_agent
-/dev/sda1        99M   12M   87M  12% /boot/efi
-tmpfs           391M   64K  391M   1% /run/user/1000
-</code></pre><p>I see that VM has relatively small 10GB allocated.  This is OK for console
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus exec vmc0 -- df -h
+</span></span><span style="display:flex;"><span>Filesystem      Size  Used Avail Use% Mounted on
+</span></span><span style="display:flex;"><span>udev            1.9G     0  1.9G   0% /dev
+</span></span><span style="display:flex;"><span>tmpfs           391M  1.4M  390M   1% /run
+</span></span><span style="display:flex;"><span>/dev/sda2       9.6G  4.7G  4.9G  49% /
+</span></span><span style="display:flex;"><span>tmpfs           2.0G     0  2.0G   0% /dev/shm
+</span></span><span style="display:flex;"><span>tmpfs           5.0M     0  5.0M   0% /run/lock
+</span></span><span style="display:flex;"><span>tmpfs            50M   18M   33M  35% /run/incus_agent
+</span></span><span style="display:flex;"><span>/dev/sda1        99M   12M   87M  12% /boot/efi
+</span></span><span style="display:flex;"><span>tmpfs           391M   64K  391M   1% /run/user/1000
+</span></span></code></pre></div><p>I see that VM has relatively small 10GB allocated.  This is OK for console
 system but not enough for full GUI DE.</p>
 <h2 id="the-source-of-the-storage-size-limitation">The source of the storage size limitation</h2>
 <p>I checked VM as:</p>
