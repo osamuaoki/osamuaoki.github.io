@@ -257,7 +257,46 @@ directory.</p>
 <p>When I tried to change disk size for existing instance, I got.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config device set vmc0 root size=20GB
 </span></span><span style="display:flex;"><span>Error: Device from profile(s) cannot be modified for individual instance. Override device or modify profile instead
-</span></span></code></pre></div><p>I need to learn more on <a href="https://linuxcontainers.org/incus/docs/main/storage/">Incus: Storage</a>.</p>
+</span></span></code></pre></div><p>OK, so I need to modify profile, instead.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config show vmc1
+</span></span><span style="display:flex;"><span>architecture: x86_64
+</span></span><span style="display:flex;"><span>config:
+</span></span><span style="display:flex;"><span>  cloud-init.user-data: |-
+</span></span><span style="display:flex;"><span>    #cloud-config
+</span></span><span style="display:flex;"><span>    users:
+</span></span><span style="display:flex;"><span>    - name: osamu
+</span></span><span style="display:flex;"><span>      groups: adm, mail
+</span></span><span style="display:flex;"><span>  image.architecture: amd64
+</span></span><span style="display:flex;"><span>  image.description: Debian bookworm amd64 (20240314_05:24)
+</span></span><span style="display:flex;"><span>  image.os: Debian
+</span></span><span style="display:flex;"><span>  image.release: bookworm
+</span></span><span style="display:flex;"><span>  image.serial: &#34;20240314_05:24&#34;
+</span></span><span style="display:flex;"><span>  image.type: disk-kvm.img
+</span></span><span style="display:flex;"><span>  image.variant: cloud
+</span></span><span style="display:flex;"><span>  limits.cpu: &#34;4&#34;
+</span></span><span style="display:flex;"><span>  limits.memory: 4GiB
+</span></span><span style="display:flex;"><span>  volatile.base_image: 8836a6135879e0f6d5be849eeaca9eb69290eb780784dfde7f980eb2395e77a2
+</span></span><span style="display:flex;"><span>  volatile.cloud-init.instance-id: 94ade860-4afc-462f-92ab-f5c09baf18e6
+</span></span><span style="display:flex;"><span>  volatile.eth0.hwaddr: 00:16:3e:76:2b:84
+</span></span><span style="display:flex;"><span>  volatile.last_state.power: STOPPED
+</span></span><span style="display:flex;"><span>  volatile.uuid: 9b9f43d6-e371-4516-8404-d76ffeba0030
+</span></span><span style="display:flex;"><span>  volatile.uuid.generation: 9b9f43d6-e371-4516-8404-d76ffeba0030
+</span></span><span style="display:flex;"><span>  volatile.vsock_id: &#34;3154049642&#34;
+</span></span><span style="display:flex;"><span>devices: {}
+</span></span><span style="display:flex;"><span>ephemeral: false
+</span></span><span style="display:flex;"><span>profiles:
+</span></span><span style="display:flex;"><span>- default
+</span></span><span style="display:flex;"><span>stateful: false
+</span></span><span style="display:flex;"><span>description: Osamu&#39;s default Incus profile 1
+</span></span></code></pre></div><p>Since profile <code>osamu0</code> and <code>osamu1</code> only had <code>config:</code> and no <code>devices:</code>, the
+above lists only <code>default</code> profile.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile add  vmc1 osamu-large
+</span></span><span style="display:flex;"><span>Profile osamu-large added to vmc1
+</span></span><span style="display:flex;"><span> $ incus profile add  vmc0 osamu-large
+</span></span><span style="display:flex;"><span>Profile osamu-large added to vmc0
+</span></span></code></pre></div><p>These seems to update disk size to 40GB.</p>
+<p>It is a bit confusing for me but, at least, I have usable VMs from INCUS.</p>
+<p>I need to learn more on <a href="https://linuxcontainers.org/incus/docs/main/storage/">Incus: Storage</a>.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
