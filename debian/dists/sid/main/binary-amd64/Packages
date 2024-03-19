@@ -355,3 +355,53 @@ Description: tentative web page for incus
  This is proof-of-concept package to provide a static web page
  content for use with the Debian incus package.
 
+Package: unzip-i18n
+Source: unzip
+Version: 6.0-28.2
+Architecture: amd64
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 379
+Depends: libbz2-1.0, libc6 (>= 2.34)
+Suggests: zip
+Conflicts: unzip
+Replaces: unzip
+Provides: unzip
+Multi-Arch: foreign
+Homepage: https://infozip.sourceforge.net/UnZip.html
+Priority: optional
+Section: utils
+Filename: pool/main/u/unzip/unzip-i18n_6.0-28.2_amd64.deb
+Size: 168048
+SHA256: 13d107ae792a9ee97b168645d61e19954c691f385fb049e506f0ca9aa05dc280
+SHA1: 3da144c052b1fa9986a9bf37a8b62e12c684ff61
+MD5sum: 957e849beda103dd042131ed43101fb2
+Description: De-archiver for .zip files with i18n supports
+ InfoZIP's unzip program. With the exception of multi-volume archives
+ (ie, .ZIP files that are split across several disks using PKZIP's /& option),
+ this can handle any file produced either by PKZIP, or the corresponding
+ InfoZIP zip program.
+ .
+ This version supports encryption.
+ .
+ This unzip-i18n supports file name encoding conversion with -O and -I options.
+Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
+Package: unzip-i18n-dbgsym
+Source: unzip
+Version: 6.0-28.2
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 330
+Depends: unzip-i18n (= 6.0-28.2)
+Priority: optional
+Section: debug
+Filename: pool/main/u/unzip/unzip-i18n-dbgsym_6.0-28.2_amd64.deb
+Size: 280248
+SHA256: 22087781255fe204ca01b57e56bfdab170b43f3ec195ee9fb6794af49ca652ee
+SHA1: 69b273298efaaf085b1cfdc18c89429b50ed0c62
+MD5sum: c10d5121748b539a7c8d245e18157ac7
+Description: debug symbols for unzip-i18n
+Build-Ids: 7f1f4eac8d4d39a1243de85ef700572cee4d991e c85f585cd7a5e936ccf6861721c34356e681ffbc d6c589583781e28107b4db5e15e1bb974dfe3275
+Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
