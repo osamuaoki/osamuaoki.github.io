@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/01/02 (initial publish),
-2024/02/23 (last update)
+2024/03/26 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00061.md
@@ -66,11 +66,13 @@ en/note-00061.md
   <ul>
     <li><a href="#find-out-systemd-service-name-of-auto-mounted-usb-disk">Find out systemd service name of auto mounted USB disk</a></li>
     <li><a href="#backup-upon-each-mount-event">Backup upon each mount event</a></li>
+    <li><a href="#bss-gather-"><code>bss gather ...</code></a></li>
   </ul>
 </nav>
 
 <p>Here is a memo over automatic USB backup.</p>
-<p>(This uses the latest <code>batch</code> subcommand of <code>bss</code>)</p>
+<p>This is a follow-up of &ldquo;<a href="/en/2021/11/02/backup-1/">Backup and snapshot</a>&rdquo;.</p>
+<p>(This uses the latest <code>batch</code> and <code>gather</code> subcommand of <code>bss</code>)</p>
 <p><code>udev</code>(7) under &ldquo;RUN&rdquo; clearly states &ldquo;This can only be used for very
 short-running foreground tasks.&rdquo;.</p>
 <p>We still see old tips such as <a href="https://blog.deadlypenguin.com/2009/09/25/automatic-backups-with-udev/">Automatic backups with
@@ -85,15 +87,15 @@ mechanism</a>.
 <p>Let&rsquo;s suppose my backup USB drive is (auto)mounted as
 <code>/media/osamu/BKUP_USB</code>.  Then, I can use <code>systemctl list-units -t mount|grep BKUP_USB</code> to find systemd service name corresponding to
 <code>/media/osamu/BKUP_USB</code>.  For example:</p>
-<pre tabindex="0"><code>$ systemctl list-units -t mount|grep USB
-  media-osamu-BKUP_USB.mount      loaded active mounted /media/osamu/BKUP_USB
-$ systemctl status media-osamu-BKUP_USB.mount
-● media-osamu-BKUP_USB.mount - /media/osamu/BKUP_USB
-     Loaded: loaded (/proc/self/mountinfo)
-     Active: active (mounted) since Wed 2024-01-03 20:32:41 JST; 14min ago
-      Where: /media/osamu/BKUP_USB
-       What: /dev/sda1
-</code></pre><h2 id="backup-upon-each-mount-event">Backup upon each mount event</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ systemctl list-units -t mount|grep USB
+</span></span><span style="display:flex;"><span>  media-osamu-BKUP_USB.mount      loaded active mounted /media/osamu/BKUP_USB
+</span></span><span style="display:flex;"><span>$ systemctl status media-osamu-BKUP_USB.mount
+</span></span><span style="display:flex;"><span>● media-osamu-BKUP_USB.mount - /media/osamu/BKUP_USB
+</span></span><span style="display:flex;"><span>     Loaded: loaded (/proc/self/mountinfo)
+</span></span><span style="display:flex;"><span>     Active: active (mounted) since Wed 2024-01-03 20:32:41 JST; 14min ago
+</span></span><span style="display:flex;"><span>      Where: /media/osamu/BKUP_USB
+</span></span><span style="display:flex;"><span>       What: /dev/sda1
+</span></span></code></pre></div><h2 id="backup-upon-each-mount-event">Backup upon each mount event</h2>
 <p>Create <code>~/.config/systemd/user/bss-BKUP_USB.service</code> as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">USB Disk backup</span>
@@ -135,6 +137,87 @@ $ systemctl status media-osamu-BKUP_USB.mount
 </span></span></code></pre></div><p>Somehow, I get the following unexpected spurious yellow warning.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>Unit /home/penguin/.config/systemd/user/bss-BKUP_USB.service is added as a dependency to a non-existent unit media-penguin-BKUP_USB.mount.
 </span></span></code></pre></div><p>Despite this warning, USB storage seems to be getting backup data when my workstation is powered up with USB drive plugged-in or when it get plugged-in.</p>
+<h2 id="bss-gather-"><code>bss gather ...</code></h2>
+<p>The <code>bss gather</code> subcommand was introduced as an alternative tool to enable
+secure remote backups when <code>luksimg</code> was dropped.  In March 2024, <code>bss gather</code>
+changed its configuration file format.  Now it uses &ldquo;FILTER RULES&rdquo; of
+<code>rsync</code>(1).</p>
+<p>For gather configuration file <code>.gather.rc</code>, <code>bss gather</code> executes <code>rsync</code> with
+the following (excluding details):</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ rsync -a --filter=&#34;. .gather.rc&#34; $srcdir $destdir
+</span></span></code></pre></div><p>The syntax of gather configuration file is defined in the &ldquo;FILTER RULES&rdquo; in
+<code>rsync</code>(1) manpage.</p>
+<p>Although this gather configuration file can be written in any order, I usually
+organize this file in the following order.</p>
+<ul>
+<li>Partial path exclusion match rules to be forced
+<ul>
+<li>file name match rule (e.g. &ldquo;<code>- *~</code>&rdquo; without &ldquo;<code>/</code>&rdquo;)</li>
+<li>dir name match rule (e.g., &ldquo;<code>- .git/</code>&rdquo; with only one &ldquo;<code>/</code>&rdquo; at the end)</li>
+</ul>
+</li>
+<li>Full path inclusion match rules (pattern starts with &ldquo;<code>/</code>&rdquo;)
+<ul>
+<li>the parent3 dir inclusion match rule (e.g., &ldquo;<code>+ /a/</code>&rdquo; with &ldquo;<code>/</code>&rdquo; at the end)</li>
+<li>the parent2 dir inclusion match rule (e.g., &ldquo;<code>+ /a/b/</code>&rdquo; with &ldquo;<code>/</code>&rdquo; at the end)</li>
+<li>the parent1 dir inclusion match rule (e.g., &ldquo;<code>+ /a/b/c/</code>&rdquo; with &ldquo;<code>/</code>&rdquo; at the end)</li>
+<li>the target inclusion match rule (no &ldquo;<code>/</code>&rdquo; at the end)
+<ul>
+<li>inclusion match rule for individual target file (e.g., &ldquo;<code>+ /a/b/c/targetfile</code>&rdquo;)</li>
+<li>recursive inclusion match rule for files under target dir (e.g., &ldquo;<code>+ /a/b/c/targetdir/***</code>&rdquo;)</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Full path fall-back all-exclusion match rule (e.g., &ldquo;<code>- /***</code>&rdquo;)</li>
+</ul>
+<p>For example, configuration for home directory looks like:</p>
+<pre tabindex="0"><code># Force exclude always for partial match (dir)
+- .git/
+- .bss.d/
+# Force exclude always for partial match (file)
+- *~
+- core
+# Pull path match for files in the base path
++ /.bashrc
++ /.devscripts
++ /.editorconfig
++ /.face
++ /.face.icon
++ /.gbp.conf
++ /.gitconfig
++ /.profile
++ /.pycodestyle
++ /.reportbugrc
++ /.sbuildrc
++ /.shellcheckrc
++ /.vimrc
+# Pull path match for recursive include -- match parent dir path first
++ /.config/
++ /.config/autostart/***
++ /.config/black/***
++ /.config/bss/***
++ /.config/flake8/***
++ /.config/kitty/***
++ /.config/pylint/***
++ /.config/systemd/***
++ /.config/nvim/***
++ /.gnupg/***
++ /.ssh/***
++ /.local/
++ /.local/share/
++ /.local/share/keyrings/***
++ /.sbuildrc.d/***
++ /.bashrc.d/***
++ /bin/***
+# Drop files and directory not included explicitly in the above
+- /***
+</code></pre><p>The use of <code>***</code> (available for recent <code>rsync</code>) makes it easy to write rule.</p>
+<p>The above execution is actually over-simplified.  In reality, details are taken
+care to avoid gathering snapshot files under the <code>.bss.d/</code> directory as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ rsync -aHS --delete-excluded --mkpath --filter=&#34;- .bss.d/&#34; \
+</span></span><span style="display:flex;"><span>              --filter=&#34;. .gather.rc&#34; $srcdir $destdir
+</span></span></code></pre></div><p>For more, see <a href="https://github.com/osamuaoki/bss">https://github.com/osamuaoki/bss</a></p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
