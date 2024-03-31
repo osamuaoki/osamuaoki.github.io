@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/03/02 (initial publish),
-2024/03/17 (last update)
+2024/03/31 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00068.md
@@ -211,10 +211,28 @@ image.  But as I checked closely, the image I downloaded is non-cloud image
 <h2 id="etcsubuid-and-etcsubgid"><code>/etc/subuid</code> and <code>/etc/subgid</code></h2>
 <p>Although non essential, I have removed 2nd normal user and updated
 <code>/etc/subuid</code> and <code>/etc/subgid</code> as follows:</p>
-<pre tabindex="0"><code>root:1000:1
-osamu:100000:65536
-root:1000000:1000000000
-</code></pre><h2 id="summary-of-transition-from-lxc--commands-to-incus--commands">Summary of transition from <code>lxc ...</code> commands to <code>incus ...</code> commands</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>root:1000:1
+</span></span><span style="display:flex;"><span>root:1000000:1000000000
+</span></span><span style="display:flex;"><span>osamu:100000:65536
+</span></span></code></pre></div><p>The definition are <code>username:start_id:range</code>.</p>
+<p>The first 2 lines are for <code>incus</code> which runs as <code>root</code>.</p>
+<ul>
+<li>By the first line, <a href="https://linuxcontainers.org/incus/docs/main/userns-idmap/">idmap</a> for the primary user <code>UID/GID=1000</code> enabled by allowing to map root to 1000.</li>
+<li>By the second line, incus can create many (Full UID/GID space of <code>256*256=65,536</code>) since ID starts from <code>1,000,000</code> which span <code>1,000,000,000</code>.</li>
+</ul>
+<p>Interesting technical background is &ldquo;<a href="https://discuss.linuxcontainers.org/t/converting-from-lxd-had-to-add-root1-to-etc-subuid-why/18754">Converting from lxd</a>&rdquo;.</p>
+<p>The last line is for <code>podman</code>.</p>
+<ul>
+<li>Since ID starts from <code>100,000</code> beyond the normal UID range <code>0-65,535</code>.
+<ul>
+<li>For the second user with UID=<code>1001</code>, you add <code>second_user:165536:65536</code> (or <code>second_user:200000:65536</code>).</li>
+<li>For the third user with UID=<code>1002</code>, you add <code>third_user:231072:65536</code> (or <code>third_user:300000:65536</code>).</li>
+<li>There are enough IDs before ID <code>1,000,000</code> used by <code>incus</code> to ensure non-overlapping range.</li>
+</ul>
+</li>
+</ul>
+<p>Important thing is non-overlapping range.</p>
+<h2 id="summary-of-transition-from-lxc--commands-to-incus--commands">Summary of transition from <code>lxc ...</code> commands to <code>incus ...</code> commands</h2>
 <ul>
 <li>Becoming <code>incus-admin</code> group member now allows a user to perform all activities.</li>
 <li><code>lxd init</code> transition from <code>lxc ...</code> commands to <code>incus ...</code> commands now <code>incus admin init</code>.</li>
