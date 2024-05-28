@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/03/10 (initial publish),
-2024/03/13 (last update)
+2024/05/28 (last update)
 </h3>
 <h3 class="source">Source:
 jp/note-00062.md
@@ -68,7 +68,8 @@ jp/note-00062.md
       <ul>
         <li><a href="#e-taxがwindows専用問題">e-TaxがWindows専用問題</a></li>
         <li><a href="#ふるさと納税関連">ふるさと納税関連</a></li>
-        <li><a href="#医療費控除">医療費控除</a></li>
+        <li><a href="#医療費控除の処理">医療費控除の処理</a></li>
+        <li><a href="#クレジットカードの取引履歴の取り込み">クレジットカードの取引履歴の取り込み</a></li>
         <li><a href="#参考にした先人のウエッブページ">参考にした先人のウエッブページ</a></li>
         <li><a href="#gnucash-を使った複式簿記の準備">Gnucash を使った複式簿記の準備</a></li>
         <li><a href="#売掛問題">「売掛」問題</a></li>
@@ -104,7 +105,7 @@ jp/note-00062.md
 <p>この「サポート」の件は無視します。あくまで「これ以外で使用禁止」などはないので、間抜けな制約は、PCブラウザーのExtensionで、Windowsのふりをすれば、最近のPC WEB(Debian)＋携帯(iPhone)で十分乗り切れるということが、<a href="/jp/2023/02/28/etax2022/">２０２２年度確定申告</a>の際に判明しています。</p>
 <h3 id="ふるさと納税関連">ふるさと納税関連</h3>
 <p>ふるさと納税関連のデーター入力は、マイナポータルで連携していたので、仲介業者のXMLデーターが使えて楽でした。</p>
-<h3 id="医療費控除">医療費控除</h3>
+<h3 id="医療費控除の処理">医療費控除の処理</h3>
 <p>医療費控除も、マイナポータルで連携していたので、健康保険組合のデーターが使えて楽なはずでしたが要注意でした。</p>
 <ul>
 <li>医療機関からのデーターで、修正申請関係が、ほぼ確定申告時に反映されていない。</li>
@@ -112,9 +113,15 @@ jp/note-00062.md
 <li>健康保険組合のデーターだけだと、控除対象の交通費がリストアップされていない。（当たり前ですが）</li>
 </ul>
 <p>健康保険組合の医療費データーは、かなり間抜けな構造（XMLをCSVに落し込んだ感じのテキストファイル）で、集計シートに読み込むのにスクリプト前処理をし、LibreOffice上で表計算を使いながら実際の領収書と照合し整形しました。最後は国税庁提供の<a href="https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/iryou-shuukei.htm">医療費集計フォーム</a>にLibreOfficeでコピペで張り込みアップロードしました。医療機関名の２０文字制約等、要注意です。</p>
-<p>スクリプト前処理は、<a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/017_medexpense">私のgithubにあるmedformスクリプト</a>を、医療費（家族毎別々に取得）のCSVファイルのあるフォルダーに置き、以下で対応しました。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ./medform &lt; FILENAME.csv
-</span></span></code></pre></div><h3 id="参考にした先人のウエッブページ">参考にした先人のウエッブページ</h3>
+<p>スクリプトによる前処理は、<a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/blob/master/017_formmed/formmed">私のgithubにあるformmedスクリプト</a> を、医療費（家族毎別々に取得）のCSVファイルのあるフォルダーに置き、以下で対応しました。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ./formmed &lt; FILENAME.csv
+</span></span></code></pre></div><h3 id="クレジットカードの取引履歴の取り込み">クレジットカードの取引履歴の取り込み</h3>
+<p>カードからの取引履歴は、確定分と予定分で書式が違ったり、外貨取引やポイント割引の記載が混在していたり、カードごとに特例情報があったりします。CSVファイルからの数字は読み込めるのですが、GnuCashへの転機が意外と面倒です。医療費データー用のフィルターをベースに、クレジットカード用の前処理フィルター等を後日作りました。</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/blob/master/017_formmed/formvisa">formvisa: VISA card</a>　SMBC系VISAと大丸VISAカードに対応</li>
+<li><a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/blob/master/017_formmed/formsjis">formsjis: SJIS CSV analysis</a> SJISのCSVファイルの分析用</li>
+</ul>
+<h3 id="参考にした先人のウエッブページ">参考にした先人のウエッブページ</h3>
 <p>GnuCash を利用して帳簿をつけたり青色申告することを書いた、先人のウエッブページで面白かったものを以下に記します。</p>
 <ul>
 <li><a href="https://dullwhale-public.hateblo.jp/entry/2023/01/03/165650">GnuCashで決算 (2023-01-03)</a> 実務的な期首・期末処理手順（簡潔）</li>

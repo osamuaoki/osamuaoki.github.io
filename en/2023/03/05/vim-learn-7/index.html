@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2024/03/04 (last update)
+2024/05/28 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00040.md
@@ -72,6 +72,7 @@ en/note-00040.md
         <li><a href="#key-bindings">Key bindings</a></li>
         <li><a href="#colorscheme-of-lazyvim">Colorscheme of Lazyvim</a></li>
         <li><a href="#masonnvim-support"><code>mason.nvim</code> support</a></li>
+        <li><a href="#choice-of-linter-and-formatter">Choice of linter and formatter</a></li>
       </ul>
     </li>
     <li><a href="#lazyvim-customization">LazyVim customization</a>
@@ -80,7 +81,6 @@ en/note-00040.md
         <li><a href="#opening-gzip-files">Opening Gzip files</a></li>
         <li><a href="#extra-features-as-opt-in-features">Extra features as opt-in features</a></li>
         <li><a href="#column-and-line-number-and-unicode-codepoint-in-statusline">Column and Line number and, Unicode codepoint in statusline</a></li>
-        <li><a href="#vimdoc-help-files">Vimdoc help files</a></li>
         <li><a href="#extra-plugins">Extra plugins</a></li>
       </ul>
     </li>
@@ -99,140 +99,151 @@ packages.</p>
 customization mechanism, they were still a bit overwhelming and sometimes too
 much.  I needed a simpler baseline Neovim configuration platform which offers
 most features as <strong>opt-in</strong>.</p>
-<p>As of 2023-12-24, I have migrated to NeoVim (v0.9.5-dev-41+g25bedc925, local deb)
-with lua based lazyVim (v10.15.1) as my primary editor invoked by
-<code>nvim</code> (or via its <code>nv</code> alias) with
+<p>As of 2024-04-10, I have migrated to NeoVim (NVIM v0.10.0-dev, local deb)
+with lua based lazyVim (v10.21.1) as my primary editor invoked by
+<code>nvim</code> (or via its <code>n</code> alias) with
 <a href="https://github.com/osamuaoki/starter">my customized LazyVim starter</a>.
 <a href="#lazyvim">See below for how I configured this</a></p>
 <p>This LazyVim is nice but a bit heavy.</p>
 <p>I decided to use <code>vi</code> to start Vim or Nvim with a single file configuration
-with very minimal customization.</p>
+with very minimal customization.  (Sometimes, LazyVim acts strange.  This <code>vi</code>
+is much faster to start and caused no such issues.)</p>
 <h2 id="vi-as-an-baseline-simple-editor">Vi as an baseline simple editor</h2>
 <p>Here, I created <a href="https://github.com/osamuaoki/dot-vim">a single generic configuration file for Vim and NeoVim <code>~/.vimrc</code></a>.</p>
-<pre tabindex="0"><code>&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vimrc)
-&#34;&#34;&#34;   - For NeoVim, use &#34;nvim -u ~/.vimrc [filename]&#34;
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-set nocompatible                &#34; :h &#39;cp -- sensible (n)vim mode
-syntax on                       &#34; :h :syn-on
-filetype plugin indent on       &#34; :h :filetype-overview
-set encoding=utf-8              &#34; :h &#39;enc (default: latin1) -- sensible encoding
-&#34;&#34;&#34; current vim option value can be verified by :set encoding?
-set backspace=indent,eol,start  &#34; :h &#39;bs (default: nobs) -- sensible BS
-set statusline=%&lt;%f%m%r%h%w%=%y[U+%04B]%2l/%2L=%P,%2c%V
-set listchars=eol:¶,tab:⇄\ ,extends:↦,precedes:↤,nbsp:␣
-set viminfo=!,&#39;100,&lt;5000,s100,h &#34; :h &#39;vi -- bigger copy buffer etc.
-&#34;&#34;&#34; Pick &#34;colorscheme&#34; from blue darkblue default delek desert elflord evening
-&#34;&#34;&#34; habamax industry koehler lunaperche morning murphy pablo peachpuff quiet ron
-&#34;&#34;&#34; shine slate torte zellner
-colorscheme industry
-&#34;colorscheme default
-set scrolloff=5                 &#34; :h &#39;scr -- show 5 lines around cursor
-set laststatus=2                &#34; :h &#39;ls (default 1)  k
-&#34;&#34;&#34; boolian options can be unset by prefixing &#34;no&#34;
-&#34;set list                        &#34; :h &#39;list (default nolist)
-set smartcase                   &#34; :h &#39;scs -- Override the &#39;ignorecase&#39; option
-set autoindent                  &#34; :h &#39;ai
-set smartindent                 &#34; :h &#39;si
-set nowrap                      &#34; :h &#39;wrap
-set nolist                      &#34; :h &#39;list -- (enable when needed)
-set noerrorbells                &#34; :h &#39;eb
-set novisualbell                &#34; :h &#39;vb
-set t_vb=                       &#34; :h &#39;t_vb -- termcap visual bell
-set spell                       &#34; :h &#39;spell
-set spelllang=en_us,cjk         &#34; :h &#39;spl -- english spell, ignore CJK
-set clipboard=unnamedplus       &#34; :h &#39;clipboard -- cut/copy/paste with other app
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-&#34;&#34;&#34; Popular mappings
-&#34;&#34;&#34; Window moves without using CTRL-W which is dangerous in INSERT mode
-nnoremap &lt;C-H&gt; &lt;C-W&gt;h
-nnoremap &lt;C-J&gt; &lt;C-W&gt;j
-nnoremap &lt;C-K&gt; &lt;C-W&gt;k
-silent! nnoremap &lt;C-L&gt; &lt;C-W&gt;l
-&#34;&#34;&#34; nohlsearch with &lt;ESC&gt; (&lt;C-L&gt; is mapped as above)
-inoremap &lt;ESC&gt; &lt;CMD&gt;noh&lt;CR&gt;&lt;ESC&gt;
-nnoremap &lt;ESC&gt; &lt;CMD&gt;noh&lt;CR&gt;&lt;ESC&gt;
-&#34;&#34;&#34; execute macro recorded with &lt;ESC&gt;qq.....&lt;ESC&gt;q with Q
-nnoremap Q @q
-&#34;&#34;&#34; center after jump next
-nnoremap n nzz
-nnoremap N Nzz
-&#34;&#34;&#34; fast &#34;jk&#34; to get out of INSERT mode (&lt;ESC&gt;)
-inoremap  jk        &lt;ESC&gt;
-&#34;&#34;&#34; double &lt;ESC&gt; to get out of TERM mode (CTRL-\ CTRL-N)
-tnoremap &lt;ESC&gt;&lt;ESC&gt; &lt;C-\&gt;&lt;C-N&gt;
-&#34;&#34;&#34; fast &#34;jkjk&#34; to get out of TERM mode (CTRL-\ CTRL-N)
-tnoremap jkjk &lt;C-\&gt;&lt;C-N&gt;
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-&#34;&#34;&#34; nvim default mappings (no need for nvim)
-&#34;&#34;&#34; copy to EOL (no delete) like D for d
-noremap Y y$
-&#34;&#34;&#34; disable prefix repeats for erases
-inoremap &lt;C-U&gt; &lt;C-G&gt;u&lt;C-U&gt;
-inoremap &lt;C-W&gt; &lt;C-G&gt;u&lt;C-W&gt;
-&#34;&#34;&#34; search visual selected string for visual mode
-xnoremap * y/\V&lt;C-R&gt;&#34;&lt;CR&gt;
-xnoremap # y?\V&lt;C-R&gt;&#34;&lt;CR&gt;
-&#34;&#34;&#34; repeat last substitute and *KEEP* flags
-nnoremap &amp; :&amp;&amp;&lt;CR&gt;
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-&#34;&#34;&#34; Force to use underline for spell check results
-augroup SpellUnderline
-  autocmd!
-  autocmd ColorScheme * highlight SpellBad term=Underline gui=Undercurl
-  autocmd ColorScheme * highlight SpellCap term=Underline gui=Undercurl
-  autocmd ColorScheme * highlight SpellLocal term=Underline gui=Undercurl
-  autocmd ColorScheme * highlight SpellRare term=Underline gui=Undercurl
-augroup END
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-&#34;&#34;&#34; highlight tailing spaces as red color
-highlight RedundantSpaces ctermbg=red guibg=red
-call matchadd(&#39;RedundantSpaces&#39;, &#39;\s\+$&#39;)
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-&#34;&#34;&#34; Use faster &#39;rg&#39; (ripgrep package) for :grep
-if executable(&#34;rg&#34;)
-  &#34; port https://www.vi-improved.org/recommendations/ to rg
-  set grepprg=rg\ --no-heading\ --color=never\ --ignore-case\ --column
-  set grepformat=%f:%l:%c:%m,%f:%l:%m
-endif
-&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;
-&#34;&#34;&#34; Retain last cursor position :h &#39;&#34;
-augroup RetainLastCursorPosition
-  autocmd!
-  autocmd BufReadPost *
-    \ if line(&#34;&#39;\&#34;&#34;) &gt; 0 &amp;&amp; line (&#34;&#39;\&#34;&#34;) &lt;= line(&#34;$&#34;) |
-    \   exe &#34;normal! g&#39;\&#34;&#34; |
-    \ endif
-augroup END
-&#34; vim: set sw=2 sts=2 et ft=vim :
-</code></pre><p>Since nvim may not available, I created bash alias for <code>vi</code> in <code>~/.bashrc</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># GOOD OLDE VI as baseline editor (minimum resource file)</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -r <span style="color:#e6db74">&#34;~/.vimrc&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
-</span></span><span style="display:flex;"><span>  VIMRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;~/.vimrc&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#75715e">&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vimrc)</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34;   - For NeoVim, use &#34;nvim -u ~/.vimrc [filename]&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">nocompatible</span>                <span style="color:#75715e">&#34; :h &#39;cp -- sensible (n)vim mode</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">syntax</span> <span style="color:#a6e22e">on</span>                       <span style="color:#75715e">&#34; :h :syn-on</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">filetype</span> <span style="color:#a6e22e">plugin</span> <span style="color:#a6e22e">indent</span> <span style="color:#a6e22e">on</span>       <span style="color:#75715e">&#34; :h :filetype-overview</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">encoding</span>=<span style="color:#a6e22e">utf</span><span style="color:#ae81ff">-8</span>              <span style="color:#75715e">&#34; :h &#39;enc (default: latin1) -- sensible encoding</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; current vim option value can be verified by :set encoding?</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">backspace</span>=<span style="color:#a6e22e">indent</span>,<span style="color:#a6e22e">eol</span>,<span style="color:#a6e22e">start</span>  <span style="color:#75715e">&#34; :h &#39;bs (default: nobs) -- sensible BS</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">statusline</span>=%&lt;%<span style="color:#a6e22e">f</span>%<span style="color:#a6e22e">m</span>%<span style="color:#a6e22e">r</span>%<span style="color:#a6e22e">h</span>%<span style="color:#a6e22e">w</span>%=%<span style="color:#a6e22e">y</span>[<span style="color:#a6e22e">U</span>+%<span style="color:#ae81ff">04</span>B]%<span style="color:#ae81ff">2</span>l/%<span style="color:#ae81ff">2</span>L=%<span style="color:#a6e22e">P</span>,%<span style="color:#ae81ff">2</span>c%<span style="color:#a6e22e">V</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">listchars</span>=<span style="color:#a6e22e">eol</span>:¶,<span style="color:#a6e22e">tab</span>:⇄\ ,<span style="color:#a6e22e">extends</span>:↦,<span style="color:#a6e22e">precedes</span>:↤,<span style="color:#a6e22e">nbsp</span>:␣<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">viminfo</span>=!,<span style="color:#e6db74">&#39;100,&lt;5000,s100,h &#34; :h &#39;</span><span style="color:#a6e22e">vi</span> -- <span style="color:#a6e22e">bigger</span> <span style="color:#a6e22e">copy</span> <span style="color:#a6e22e">buffer</span> <span style="color:#a6e22e">etc</span>.<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; Pick &#34;colorscheme&#34; from blue darkblue default delek desert elflord evening</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; habamax industry koehler lunaperche morning murphy pablo peachpuff quiet ron</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; shine slate torte zellner</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">colorscheme</span> <span style="color:#a6e22e">industry</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;colorscheme default</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">scrolloff</span>=<span style="color:#ae81ff">5</span>                 <span style="color:#75715e">&#34; :h &#39;scr -- show 5 lines around cursor</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">laststatus</span>=<span style="color:#ae81ff">2</span>                <span style="color:#75715e">&#34; :h &#39;ls (default 1)  k</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; boolian options can be unset by prefixing &#34;no&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;set list                        &#34; :h &#39;list (default nolist)</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">smartcase</span>                   <span style="color:#75715e">&#34; :h &#39;scs -- Override the &#39;ignorecase&#39; option</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">autoindent</span>                  <span style="color:#75715e">&#34; :h &#39;ai</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">smartindent</span>                 <span style="color:#75715e">&#34; :h &#39;si</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">nowrap</span>                      <span style="color:#75715e">&#34; :h &#39;wrap</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">nolist</span>                      <span style="color:#75715e">&#34; :h &#39;list -- (enable when needed)</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">noerrorbells</span>                <span style="color:#75715e">&#34; :h &#39;eb</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">novisualbell</span>                <span style="color:#75715e">&#34; :h &#39;vb</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">t_vb</span>=                       <span style="color:#75715e">&#34; :h &#39;t_vb -- termcap visual bell</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">spell</span>                       <span style="color:#75715e">&#34; :h &#39;spell</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">spelllang</span>=<span style="color:#a6e22e">en_us</span>,<span style="color:#a6e22e">cjk</span>         <span style="color:#75715e">&#34; :h &#39;spl -- english spell, ignore CJK</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">set</span> <span style="color:#a6e22e">clipboard</span>=<span style="color:#a6e22e">unnamedplus</span>       <span style="color:#75715e">&#34; :h &#39;clipboard -- cut/copy/paste with other app</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; Popular mappings</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; Window moves without using CTRL-W which is dangerous in INSERT mode</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">nnoremap</span> &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">H</span>&gt; &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">W</span>&gt;<span style="color:#a6e22e">h</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">nnoremap</span> &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">J</span>&gt; &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">W</span>&gt;<span style="color:#a6e22e">j</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">nnoremap</span> &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">K</span>&gt; &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">W</span>&gt;<span style="color:#a6e22e">k</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">silent</span>! <span style="color:#a6e22e">nnoremap</span> &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">L</span>&gt; &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">W</span>&gt;<span style="color:#a6e22e">l</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; nohlsearch with &lt;ESC&gt; (&lt;C-L&gt; is mapped as above)</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">inoremap</span> &lt;<span style="color:#a6e22e">ESC</span>&gt; &lt;<span style="color:#a6e22e">CMD</span>&gt;<span style="color:#a6e22e">noh</span>&lt;<span style="color:#a6e22e">CR</span>&gt;&lt;<span style="color:#a6e22e">ESC</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">nnoremap</span> &lt;<span style="color:#a6e22e">ESC</span>&gt; &lt;<span style="color:#a6e22e">CMD</span>&gt;<span style="color:#a6e22e">noh</span>&lt;<span style="color:#a6e22e">CR</span>&gt;&lt;<span style="color:#a6e22e">ESC</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; execute macro recorded with &lt;ESC&gt;qq.....&lt;ESC&gt;q with Q</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">nnoremap</span> <span style="color:#a6e22e">Q</span> @<span style="color:#a6e22e">q</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; center after jump next</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">nnoremap</span> <span style="color:#a6e22e">n</span> <span style="color:#a6e22e">nzz</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">nnoremap</span> <span style="color:#a6e22e">N</span> <span style="color:#a6e22e">Nzz</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; fast &#34;jk&#34; to get out of INSERT mode (&lt;ESC&gt;)</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">inoremap</span>  <span style="color:#a6e22e">jk</span>        &lt;<span style="color:#a6e22e">ESC</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; double &lt;ESC&gt; to get out of TERM mode (CTRL-\ CTRL-N)</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">tnoremap</span> &lt;<span style="color:#a6e22e">ESC</span>&gt;&lt;<span style="color:#a6e22e">ESC</span>&gt; &lt;<span style="color:#a6e22e">C</span>-\&gt;&lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">N</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; fast &#34;jkjk&#34; to get out of TERM mode (CTRL-\ CTRL-N)</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">tnoremap</span> <span style="color:#a6e22e">jkjk</span> &lt;<span style="color:#a6e22e">C</span>-\&gt;&lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">N</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; nvim default mappings (no need for nvim)</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; copy to EOL (no delete) like D for d</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">noremap</span> <span style="color:#a6e22e">Y</span> <span style="color:#a6e22e">y</span>$<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; disable prefix repeats for erases</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">inoremap</span> &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">U</span>&gt; &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">G</span>&gt;<span style="color:#a6e22e">u</span>&lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">U</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">inoremap</span> &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">W</span>&gt; &lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">G</span>&gt;<span style="color:#a6e22e">u</span>&lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">W</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; search visual selected string for visual mode</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">xnoremap</span> * <span style="color:#a6e22e">y</span>/\<span style="color:#a6e22e">V</span>&lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">R</span>&gt;&#34;&lt;<span style="color:#a6e22e">CR</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">xnoremap</span> # <span style="color:#a6e22e">y</span>?\<span style="color:#a6e22e">V</span>&lt;<span style="color:#a6e22e">C</span>-<span style="color:#a6e22e">R</span>&gt;&#34;&lt;<span style="color:#a6e22e">CR</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; repeat last substitute and *KEEP* flags</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">nnoremap</span> &amp; :&amp;&amp;&lt;<span style="color:#a6e22e">CR</span>&gt;<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; Force to use underline for spell check results</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">augroup</span> <span style="color:#a6e22e">SpellUnderline</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">autocmd</span>!<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">autocmd</span> <span style="color:#a6e22e">ColorScheme</span> * <span style="color:#a6e22e">highlight</span> <span style="color:#a6e22e">SpellBad</span> <span style="color:#a6e22e">term</span>=<span style="color:#a6e22e">Underline</span> <span style="color:#a6e22e">gui</span>=<span style="color:#a6e22e">Undercurl</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">autocmd</span> <span style="color:#a6e22e">ColorScheme</span> * <span style="color:#a6e22e">highlight</span> <span style="color:#a6e22e">SpellCap</span> <span style="color:#a6e22e">term</span>=<span style="color:#a6e22e">Underline</span> <span style="color:#a6e22e">gui</span>=<span style="color:#a6e22e">Undercurl</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">autocmd</span> <span style="color:#a6e22e">ColorScheme</span> * <span style="color:#a6e22e">highlight</span> <span style="color:#a6e22e">SpellLocal</span> <span style="color:#a6e22e">term</span>=<span style="color:#a6e22e">Underline</span> <span style="color:#a6e22e">gui</span>=<span style="color:#a6e22e">Undercurl</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">autocmd</span> <span style="color:#a6e22e">ColorScheme</span> * <span style="color:#a6e22e">highlight</span> <span style="color:#a6e22e">SpellRare</span> <span style="color:#a6e22e">term</span>=<span style="color:#a6e22e">Underline</span> <span style="color:#a6e22e">gui</span>=<span style="color:#a6e22e">Undercurl</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">augroup</span> <span style="color:#a6e22e">END</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; highlight tailing spaces as red color</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">highlight</span> <span style="color:#a6e22e">RedundantSpaces</span> <span style="color:#a6e22e">ctermbg</span>=<span style="color:#a6e22e">red</span> <span style="color:#a6e22e">guibg</span>=<span style="color:#a6e22e">red</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">call</span> <span style="color:#a6e22e">matchadd</span>(<span style="color:#e6db74">&#39;RedundantSpaces&#39;</span>, <span style="color:#e6db74">&#39;\s\+$&#39;</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; Use faster &#39;rg&#39; (ripgrep package) for :grep</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">if</span> <span style="color:#a6e22e">executable</span>(<span style="color:#e6db74">&#34;rg&#34;</span>)<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">  &#34; port https://www.vi-improved.org/recommendations/ to rg</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">set</span> <span style="color:#a6e22e">grepprg</span>=<span style="color:#a6e22e">rg</span>\ --<span style="color:#a6e22e">no</span>-<span style="color:#a6e22e">heading</span>\ --<span style="color:#a6e22e">color</span>=<span style="color:#a6e22e">never</span>\ --<span style="color:#a6e22e">ignore</span>-<span style="color:#a6e22e">case</span>\ --<span style="color:#a6e22e">column</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">set</span> <span style="color:#a6e22e">grepformat</span>=%<span style="color:#a6e22e">f</span>:%<span style="color:#a6e22e">l</span>:%<span style="color:#a6e22e">c</span>:%<span style="color:#a6e22e">m</span>,%<span style="color:#a6e22e">f</span>:%<span style="color:#a6e22e">l</span>:%<span style="color:#a6e22e">m</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">endif</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34;&#34;&#34; Retain last cursor position :h &#39;&#34;</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">augroup</span> <span style="color:#a6e22e">RetainLastCursorPosition</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">autocmd</span>!<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  <span style="color:#a6e22e">autocmd</span> <span style="color:#a6e22e">BufReadPost</span> *<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    \ <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">line</span>(<span style="color:#e6db74">&#34;&#39;\&#34;&#34;</span>) &gt; <span style="color:#ae81ff">0</span> &amp;&amp; <span style="color:#a6e22e">line</span> (<span style="color:#e6db74">&#34;&#39;\&#34;&#34;</span>) &lt;= <span style="color:#a6e22e">line</span>(<span style="color:#e6db74">&#34;$&#34;</span>) |<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    \   <span style="color:#a6e22e">exe</span> <span style="color:#e6db74">&#34;normal! g&#39;\&#34;&#34;</span> |<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>    \ <span style="color:#66d9ef">endif</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#a6e22e">augroup</span> <span style="color:#a6e22e">END</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#75715e">&#34; vim: set sw=2 sts=2 et ft=vim :</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><p>Since nvim may not available, I created bash alias for <code>vi</code> etc. in <code>~/.bashrc</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># sourced at the end of ~/.bashrc</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># vim:set sw=2 sts=2 ai si et:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Use: shfmt -s -w</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#=============================================================================</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -r <span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.vimrc&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  VIMRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.vimrc&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
-</span></span><span style="display:flex;"><span>  VIMRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;NONE&#34;</span>
+</span></span><span style="display:flex;"><span>  VIMRC<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;NORC&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> type nvim &gt;/dev/null ; <span style="color:#66d9ef">then</span>
-</span></span><span style="display:flex;"><span>  alias nv<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim&#39;</span>
-</span></span><span style="display:flex;"><span>  alias vi<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -u $VIMRC&#39;</span>
-</span></span><span style="display:flex;"><span>  alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nvim -u NORC&#39;</span>
-</span></span><span style="display:flex;"><span>  alias sv<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SUDO_EDITOR=&#39;/usr/bin/nvim -u NORC&#39; /usr/bin/sudoedit&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">elif</span> type vim &gt;/dev/null ; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> type /usr/bin/nvim &gt; /dev/null; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  export EDITOR<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/usr/bin/nvim&#34;</span>
+</span></span><span style="display:flex;"><span>  NVIM_APPNAME<span style="color:#f92672">=</span>nvim1 <span style="color:#75715e"># &#34;osamu&#34; https://github.com/osamuaoki/starter</span>
+</span></span><span style="display:flex;"><span>  export NVIM_APPNAME
+</span></span><span style="display:flex;"><span>  alias n<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/usr/bin/nvim&#34;</span>
+</span></span><span style="display:flex;"><span>  alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/usr/bin/nvim -u NORC&#34;</span>
+</span></span><span style="display:flex;"><span>  alias vi<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/usr/bin/nvim -u $VIMRC&#39;</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># Set NVIM_APPNAME for nvim</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#NVIM_APPNAME=nvim # &#34;experiment</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e">#NVIM_APPNAME=nvim0 # &#34;upstream/main&#34; https://github.com/LazyVim/starter</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#75715e"># special nvim APPs as I feel like</span>
+</span></span><span style="display:flex;"><span>  alias nvim0<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;env NVIM_APPNAME=nvim0 /usr/bin/nvim&#34;</span> <span style="color:#75715e"># upstream default</span>
+</span></span><span style="display:flex;"><span>  alias nvim1<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;env NVIM_APPNAME=nvim1 /usr/bin/nvim&#34;</span> <span style="color:#75715e"># osamu default</span>
+</span></span><span style="display:flex;"><span>  alias sv<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;env SUDO_EDITOR=&#39;/usr/bin/nvim -u NORC&#39; /usr/bin/sudoedit&#34;</span>
+</span></span><span style="display:flex;"><span>  alias norg<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;env NVIM_APPNAME=norg /usr/bin/nvim&#34;</span>
+</span></span><span style="display:flex;"><span>  alias nr<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;env NVIM_APPNAME=nvimrocks /usr/bin/nvim&#34;</span>
+</span></span><span style="display:flex;"><span>  alias vimdiff<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;/usr/bin/nvim -d -u $VIMRC&#39;</span>
+</span></span><span style="display:flex;"><span>  alias view<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/usr/bin/nvim -R -u NORC&#34;</span>
+</span></span><span style="display:flex;"><span>  alias ex<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/usr/bin/nvim -e -u NORC&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">elif</span> type vim &gt; /dev/null; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>  export EDITOR<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vim&#39;</span>
+</span></span><span style="display:flex;"><span>  alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;vim -N -u NORC&#34;</span>
 </span></span><span style="display:flex;"><span>  alias vi<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vim -N -u $VIMRC&#39;</span>
-</span></span><span style="display:flex;"><span>  alias v<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vim -N -u NORC&#39;</span>
-</span></span><span style="display:flex;"><span>  alias sv<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;SUDO_EDITOR=&#39;/usr/bin/vim -N -u NORC&#39; /usr/bin/sudoedit&#34;</span>
+</span></span><span style="display:flex;"><span>  alias sv<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;env SUDO_EDITOR=&#39;/usr/bin/vim -N -u NORC&#39; /usr/bin/sudoedit&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
-</span></span><span style="display:flex;"><span>  unalias vi
 </span></span><span style="display:flex;"><span>  unset VIMRC
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -n <span style="color:#e6db74">&#34;</span>$VIMRC<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
-</span></span><span style="display:flex;"><span>  export EDITOR<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi&#39;</span>
-</span></span><span style="display:flex;"><span>  export VISUAL<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi&#39;</span>
-</span></span><span style="display:flex;"><span>  alias vimdiff<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi -d&#39;</span>
-</span></span><span style="display:flex;"><span>  alias view<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi -R&#39;</span>
-</span></span><span style="display:flex;"><span>  alias ex<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;vi -e&#39;</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
-</span></span></code></pre></div><p>Now that <code>$NVIM_APPNAME</code> environment variable is supported, I should think
-about using this, soon.</p>
+</span></span><span style="display:flex;"><span>export VISUAL<span style="color:#f92672">=</span>$EDITOR
+</span></span></code></pre></div><p>Here, I use <code>$NVIM_APPNAME</code> environment variable.</p>
 <h2 id="lazyvim">LazyVim</h2>
 <p>A new baseline Neovim setup system
 <a href="https://github.com/LazyVim/LazyVim">LazyVim</a> is published by the upstream of
@@ -257,8 +268,8 @@ together with all other packages including the package manager
 <h3 id="terminal-emulator">Terminal emulator</h3>
 <p>The current <code>gnome-terminal</code> seems to support true color and undercurls without
 much issues.</p>
-<p>Just to be sure, I also installed <code>kitty</code> and <code>alacritty</code> which are officially
-supported by <a href="https://www.lazyvim.org/">www.lazyvim.org</a>.</p>
+<p>Just to be sure, I also installed <code>kitty</code> and optionally <code>alacritty</code> which are
+officially supported by <a href="https://www.lazyvim.org/">www.lazyvim.org</a>.</p>
 <p>The <code>colorscheme</code> for them was adjusted to match <code>gnome-terminal</code> to ensure
 readability for programs such as <code>mc</code>.</p>
 <h3 id="key-bindings">Key bindings</h3>
@@ -298,32 +309,57 @@ latest, just press &ldquo;U&rdquo;.</p>
 <code>~/.local/share/nvim/mason/bin/&lt;progname&gt;</code>. So executable programs from Neovim
 plugins are not the one on the main system.</p>
 <p>As I see my situation with <code>:checkhelth mason</code>.:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>mason: require(&#34;mason.health&#34;).check()
-</span></span><span style="display:flex;"><span>========================================================================
-</span></span><span style="display:flex;"><span>## mason.nvim report
-</span></span><span style="display:flex;"><span>  - OK: neovim version &gt;= 0.7.0
-</span></span><span style="display:flex;"><span>  - OK: **Go**: `go version go1.19.6 linux/amd64`
-</span></span><span style="display:flex;"><span>  - OK: **cargo**: `cargo 1.65.0`
-</span></span><span style="display:flex;"><span>  - OK: **luarocks**: `/usr/bin/luarocks 3.8.0`
-</span></span><span style="display:flex;"><span>  - OK: **Ruby**: `ruby 3.1.2p20 (2022-04-12 revision 4491bb740a) [x86_64-linux-gnu]`
-</span></span><span style="display:flex;"><span>  - OK: **RubyGem**: `3.3.15`
-</span></span><span style="display:flex;"><span>  - WARNING: **Composer**: not available
-</span></span><span style="display:flex;"><span>  - WARNING: **PHP**: not available
-</span></span><span style="display:flex;"><span>  - OK: **npm**: `9.2.0`
-</span></span><span style="display:flex;"><span>  - OK: **node**: `v18.13.0`
-</span></span><span style="display:flex;"><span>  - OK: **python3**: `Python 3.11.2`
-</span></span><span style="display:flex;"><span>  - OK: **pip3**: `pip 23.0.1 from /usr/lib/python3/dist-packages/pip (python 3.11)`
-</span></span><span style="display:flex;"><span>  - WARNING: **javac**: not available
-</span></span><span style="display:flex;"><span>  - OK: **java**: `openjdk version &#34;17.0.6&#34; 2023-01-17`
-</span></span><span style="display:flex;"><span>  - WARNING: **julia**: not available
-</span></span><span style="display:flex;"><span>  - OK: **wget**: `GNU Wget 1.21.3 built on linux-gnu.`
-</span></span><span style="display:flex;"><span>  - OK: **curl**: `curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.8 zlib/1.2.13 brotli/1.0.9 zstd/1.5.4 libidn2/2.3.3 libpsl/0.21.2 (+libidn2/2.3.3) libssh2/1.10.0 nghttp2/1.52.0 librtmp/2.3`
-</span></span><span style="display:flex;"><span>  - OK: **gzip**: `gzip 1.12`
-</span></span><span style="display:flex;"><span>  - OK: **tar**: `tar (GNU tar) 1.34`
-</span></span><span style="display:flex;"><span>  - WARNING: **pwsh**: not available
-</span></span><span style="display:flex;"><span>  - OK: **bash**: `GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)`
-</span></span><span style="display:flex;"><span>  - OK: **sh**: `Ok`
-</span></span><span style="display:flex;"><span>  - OK: GitHub API rate limit. Used: 0. Remaining: 60. Limit: 60. Reset: Tue 07 Mar 2023 01:45:13 AM JST.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>==============================================================================
+</span></span><span style="display:flex;"><span>mason: require(&#34;mason.health&#34;).check()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mason.nvim ~
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK mason.nvim version v1.10.0
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK PATH: prepend
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK Providers:
+</span></span><span style="display:flex;"><span>    mason.providers.registry-api
+</span></span><span style="display:flex;"><span>    mason.providers.client
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK neovim version &gt;= 0.7.0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mason.nvim [Registries] ~
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK Registry <span style="color:#e6db74">`github.com/mason-org/mason-registry version: 2024-04-10-ripe-crush`</span> is installed.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mason.nvim [Core utils] ~
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK unzip: <span style="color:#e6db74">`UnZip 6.00 of 20 April 2009, by Debian. Original by Info-ZIP.`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK wget: <span style="color:#e6db74">`GNU Wget 1.21.3 built on linux-gnu.`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK curl: <span style="color:#e6db74">`curl 7.88.1 (x86_64-pc-linux-gnu) libcurl/7.88.1 OpenSSL/3.0.11 zlib/1.2.13 brotli/1.0.9 zstd/1.5.4 libidn2/2.3.3 libpsl/0.21.2 (+libidn2/2.3.3) libssh2/1.10.0 nghttp2/1.52.0 librtmp/2.3 OpenLDAP/2.5.13`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK gzip: <span style="color:#e6db74">`gzip 1.12`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK tar: <span style="color:#e6db74">`tar (GNU tar) 1.34`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK bash: <span style="color:#e6db74">`GNU bash, version 5.2.15(1)-release (x86_64-pc-linux-gnu)`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK sh: <span style="color:#e6db74">`Ok`</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mason.nvim [Languages] ~
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK Go: <span style="color:#e6db74">`go version go1.19.8 linux/amd64`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> WARNING Composer: not available
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">-</span> ADVICE:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">-</span> spawn: composer failed with exit code - and signal -. composer is not executable
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> WARNING PHP: not available
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">-</span> ADVICE:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">-</span> spawn: php failed with exit code - and signal -. php is not executable
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK cargo: <span style="color:#e6db74">`cargo 1.65.0`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK Ruby: <span style="color:#e6db74">`ruby 3.1.2p20 (2022-04-12 revision 4491bb740a) [x86_64-linux-gnu]`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> WARNING javac: not available
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">-</span> ADVICE:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">-</span> spawn: javac failed with exit code - and signal -. javac is not executable
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK node: <span style="color:#e6db74">`v18.19.0`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> WARNING julia: not available
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">-</span> ADVICE:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">-</span> spawn: julia failed with exit code - and signal -. julia is not executable
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK python: <span style="color:#e6db74">`Python 3.11.2`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK luarocks: <span style="color:#e6db74">`/usr/bin/luarocks 3.8.0`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK java: <span style="color:#e6db74">`openjdk version &#34;17.0.10&#34; 2024-01-16`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK RubyGem: <span style="color:#e6db74">`3.3.15`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK pip: <span style="color:#e6db74">`pip 23.0.1 from /usr/lib/python3/dist-packages/pip (python 3.11)`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK python venv: <span style="color:#e6db74">`Ok`</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK npm: <span style="color:#e6db74">`9.2.0`</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mason.nvim [GitHub] ~
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">-</span> OK GitHub API rate limit. Used: 0. Remaining: 60. Limit: 60. Reset: Wed 10 Apr 2024 03:06:37 PM JST.
+</span></span><span style="display:flex;"><span>  Install and authenticate via gh-cli to increase rate limit.
 </span></span></code></pre></div><p>I ended up to install following Debian packages as required system programs.</p>
 <ul>
 <li><code>luarocks</code></li>
@@ -335,40 +371,81 @@ plugins are not the one on the main system.</p>
 <li><code>curl</code></li>
 <li><code>wget</code></li>
 </ul>
-<p>See more <code>:h mason.nvim</code></p>
-<p>In order to make <code>mason.nvim</code> generated programs accessible from shell
-prompt, I have modifies <code>~/.profile</code> to include the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># set PATH so it includes mason.nvim&#39;s private bin if it exists (Neovim/mason.nvim)</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -d <span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.local/share/nvim/mason/bin/&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
-</span></span><span style="display:flex;"><span>    PATH<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;</span>$HOME<span style="color:#e6db74">/.local/share/nvim/mason/bin:</span>$PATH<span style="color:#e6db74">&#34;</span>
-</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
-</span></span></code></pre></div><p>I also added
+<p>See more <code>:h mason.nvim</code>.</p>
+<p>The programs generated by <code>mason.nvim</code> are accessible only from <code>:term</code>.</p>
+<p>I also added
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/dot/.editorconfig">~/.editorconfig</a>
 to cope with sources using <a href="https://editorconfig.org/">editorconfig</a>.</p>
+<h3 id="choice-of-linter-and-formatter">Choice of linter and formatter</h3>
+<p>I have installed and used followings established formatter and linter tools from DEB packages.</p>
+<ul>
+<li>Bash
+<ul>
+<li><code>shellcheck</code> (HASKELL) (linter)</li>
+</ul>
+</li>
+<li><code>shfmt</code> (GO) (formatter)</li>
+<li>Python
+<ul>
+<li><code>black</code> (PYTHON) (formatter)</li>
+<li><code>isort</code> (PYTHON) (formatter)</li>
+</ul>
+</li>
+<li>Perl
+<ul>
+<li><code>perltidy</code> (Perl) (formatter)</li>
+</ul>
+</li>
+</ul>
+<p>On top of these, <code>mason.nvim</code> enables to install and use much newer tools
+(These are accessible from <code>:term</code>).</p>
+<ul>
+<li>Bash
+<ul>
+<li><code>shellharden</code> (Rust) &ndash; new over shellcheck (linter)</li>
+<li><code>shfmt</code> (GO) (formatter)</li>
+</ul>
+</li>
+<li>Python
+<ul>
+<li><code>ruff</code> (Rust) &ndash; new over <code>black</code> and <code>isort</code> (formatter and linter)</li>
+</ul>
+</li>
+<li>Lua
+<ul>
+<li>Stylua (Rust) (formatter)</li>
+<li>selene (Rust) &ndash; new over <code>luacheck</code> (linter)</li>
+</ul>
+</li>
+</ul>
+<p>These seem to be installed under <code>$XDG_DATA_HOME/$NVIM_APPNAME/</code> (e.g.,
+<code>~/.local/share/nvim1</code>) and <code>$PATH</code> in <code>:term</code> is extended to include installed
+binary path (e.g., <code>~/.local/share/nvim1/bin</code>) when <code>NVIM_APPNAME=nvim1</code> is
+set.</p>
 <h2 id="lazyvim-customization">LazyVim customization</h2>
 <p>I created <a href="https://github.com/osamuaoki/starter">folked LazyVim starter</a> with
 my changes in <code>osamu</code> branch to keep backup of my local configuration.  I
 intend to <code>git push -f</code>.  It now contains following changes.</p>
 <h3 id="update-gitigonore">Update <code>.gitigonore</code></h3>
-<p>I excluded <code>lazy-lock.json</code> from git repo.</p>
+<p>I excluded <code>*.json</code> from git repo.</p>
 <h3 id="opening-gzip-files">Opening Gzip files</h3>
 <p>Since Debian ships most documentation files as Gzipped, I enabled &ldquo;gzip&rdquo;
 plugin for <code>view</code> purpose.</p>
 <h3 id="extra-features-as-opt-in-features">Extra features as opt-in features</h3>
-<p>I made following extra features disabled as started.  These can be enabled via key
-bindings.</p>
+<p>I made following extra features disabled as started.  These can be enabled
+via key bindings.</p>
 <ul>
 <li>input suggestions (<code>nvim-cmp</code>, Toggle with <code>&lt;leader&gt;u&lt;tab&gt;</code>)</li>
-<li>input pairs (<code>mini.pairs</code>, Toggle with <code>&lt;leader&gt;u'</code>)</li>
-<li>auto format on save (<code>nvim-lspconfig</code>, Toggle with <code>&lt;leader&gt;uf</code>)</li>
+<li>enable all goodies (with <code>&lt;leader&gt;ua</code>)</li>
+<li>disable all goodies (with <code>&lt;leader&gt;uA</code>)</li>
+<li>Zap all Notifications (with <code>&lt;leader&gt;z</code>)</li>
+<li>Recall all Notifications (with <code>&lt;leader&gt;Z</code>)</li>
+<li>NOP to avoid accidental undo (with <code>&lt;leader&gt;uu</code>)</li>
 </ul>
-<p>I also made <code>&lt;leader&gt;uu</code> as NOP to avoid accidental undo <code>u</code>.</p>
 <h3 id="column-and-line-number-and-unicode-codepoint-in-statusline">Column and Line number and, Unicode codepoint in statusline</h3>
 <p>Using <code>~/.config/nvim/lua/plugin/ui.lua</code>, I replaced clock display in statusline with Column and Line number and, Unicode codepoint as <code>1: 1 [+U20]</code> (Unreadable chars are OK if hack font is used).</p>
-<h3 id="vimdoc-help-files">Vimdoc help files</h3>
-<p>I add access to many hidden help files available under <code>LOCAL ADDITIONS:</code> by
-running
-<a href="https://github.com/osamuaoki/starter/blob/osamu/vimdoc-lazy">vimdoc-lazy</a>.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <h3 id="extra-plugins">Extra plugins</h3>
 <p>A few extra plugin supports are introduced by adding configuration files in
 <code>~/.config/nvim/lua/plugin/</code> of
@@ -376,8 +453,6 @@ running
 <code>osamu</code> branch.</p>
 <ul>
 <li><code>escape.lua</code> for <code>max397574/better-escape.nvim</code></li>
-<li><del><code>neorg.lua</code> for <code>nvim-neorg/neorg</code></del> (disabled)</li>
-<li><del><code>oil.lua</code> for <code>stevearc/oil.nvim</code></del> (disabled)</li>
 </ul>
 <h2 id="treesitter-and-lsp">Treesitter and LSP</h2>
 <p>It is a bit confusing what is all about
