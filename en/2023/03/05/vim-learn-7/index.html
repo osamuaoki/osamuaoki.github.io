@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/03/05 (initial publish),
-2024/05/28 (last update)
+2024/06/02 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00040.md
@@ -81,7 +81,6 @@ en/note-00040.md
         <li><a href="#opening-gzip-files">Opening Gzip files</a></li>
         <li><a href="#extra-features-as-opt-in-features">Extra features as opt-in features</a></li>
         <li><a href="#column-and-line-number-and-unicode-codepoint-in-statusline">Column and Line number and, Unicode codepoint in statusline</a></li>
-        <li><a href="#extra-plugins">Extra plugins</a></li>
       </ul>
     </li>
     <li><a href="#treesitter-and-lsp">Treesitter and LSP</a></li>
@@ -99,8 +98,8 @@ packages.</p>
 customization mechanism, they were still a bit overwhelming and sometimes too
 much.  I needed a simpler baseline Neovim configuration platform which offers
 most features as <strong>opt-in</strong>.</p>
-<p>As of 2024-04-10, I have migrated to NeoVim (NVIM v0.10.0-dev, local deb)
-with lua based lazyVim (v10.21.1) as my primary editor invoked by
+<p>As of 2024-06-02, I have migrated to NeoVim (NVIM v0.10.0, local deb)
+with lua based lazyVim as my primary editor invoked by
 <code>nvim</code> (or via its <code>n</code> alias) with
 <a href="https://github.com/osamuaoki/starter">my customized LazyVim starter</a>.
 <a href="#lazyvim">See below for how I configured this</a></p>
@@ -382,9 +381,9 @@ to cope with sources using <a href="https://editorconfig.org/">editorconfig</a>.
 <li>Bash
 <ul>
 <li><code>shellcheck</code> (HASKELL) (linter)</li>
+<li><code>shfmt</code> (GO) (formatter)</li>
 </ul>
 </li>
-<li><code>shfmt</code> (GO) (formatter)</li>
 <li>Python
 <ul>
 <li><code>black</code> (PYTHON) (formatter)</li>
@@ -435,25 +434,15 @@ plugin for <code>view</code> purpose.</p>
 <p>I made following extra features disabled as started.  These can be enabled
 via key bindings.</p>
 <ul>
-<li>input suggestions (<code>nvim-cmp</code>, Toggle with <code>&lt;leader&gt;u&lt;tab&gt;</code>)</li>
-<li>enable all goodies (with <code>&lt;leader&gt;ua</code>)</li>
-<li>disable all goodies (with <code>&lt;leader&gt;uA</code>)</li>
+<li>toggle completion (<code>nvim-cmp</code>, Toggle with <code>&lt;leader&gt;uP</code>)</li>
+<li>enable auto-input (with <code>&lt;leader&gt;ua</code>) by completion, auto pairs, auto format</li>
+<li>disable auto-input (with <code>&lt;leader&gt;uA</code>) by completion, auto pairs, auto format</li>
 <li>Zap all Notifications (with <code>&lt;leader&gt;z</code>)</li>
 <li>Recall all Notifications (with <code>&lt;leader&gt;Z</code>)</li>
 <li>NOP to avoid accidental undo (with <code>&lt;leader&gt;uu</code>)</li>
 </ul>
 <h3 id="column-and-line-number-and-unicode-codepoint-in-statusline">Column and Line number and, Unicode codepoint in statusline</h3>
-<p>Using <code>~/.config/nvim/lua/plugin/ui.lua</code>, I replaced clock display in statusline with Column and Line number and, Unicode codepoint as <code>1: 1 [+U20]</code> (Unreadable chars are OK if hack font is used).</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<h3 id="extra-plugins">Extra plugins</h3>
-<p>A few extra plugin supports are introduced by adding configuration files in
-<code>~/.config/nvim/lua/plugin/</code> of
-<a href="https://github.com/osamuaoki/starter">my folked LazyVim starter</a> in
-<code>osamu</code> branch.</p>
-<ul>
-<li><code>escape.lua</code> for <code>max397574/better-escape.nvim</code></li>
-</ul>
+<p>Using <code>~/.config/nvim/lua/plugin/ui.lua</code>, I replaced clock display in statusline with Unicode codepoint as <code>[+U20]</code>.</p>
 <h2 id="treesitter-and-lsp">Treesitter and LSP</h2>
 <p>It is a bit confusing what is all about
 <a href="https://neovim.io/doc/user/treesitter.html">Treesitter</a> and
