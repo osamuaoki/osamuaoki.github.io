@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Re-learning Vim (8) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Re-learning Vim (8)</span></h1>
+
+<h3 class="date">Date:
+2024/06/04 (initial publish),
+2024/06/05 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00074.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/03/28/gtd-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#nvim-configuration-retrospective">Nvim configuration retrospective</a></li>
+    <li><a href="#folding-of-markdown-file">Folding of markdown file</a></li>
+    <li><a href="#revising-basics----quickfix">Revising basics &ndash; quickfix</a></li>
+    <li><a href="#ex-mode-command-line">Ex-mode command line</a></li>
+  </ul>
+</nav>
+
+<h2 id="nvim-configuration-retrospective">Nvim configuration retrospective</h2>
+<p>I have been updating Nvim configuration with LazyVim as described in
+<a href="/en/2023/03/05/vim-learn-7/">Re-learning Vim (7)</a> to make it behave as close
+as plain Nvim.</p>
+<h2 id="folding-of-markdown-file">Folding of markdown file</h2>
+<p>I have always used <code>gq</code> under visual line mode to rewrap range of lines within
+<code>'textwidth</code>.  Since LazyVim sets <code>'formatexpr</code>, it doesn&rsquo;t work as expected
+any more for some <code>'filetype</code> such as <code>markdown</code>.</p>
+<p>Easy workaround is to use <code>gw</code> instead.</p>
+<h2 id="revising-basics----quickfix">Revising basics &ndash; quickfix</h2>
+<p>I feel I need to revisit some key baseline Vim operation techniques beyond the
+use of keyboard MACRO.</p>
+<table>
+<thead>
+<tr>
+<th>&ldquo;quickfix list&rdquo;</th>
+<th>&ldquo;location list&rdquo;</th>
+<th>functionality</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>global</td>
+<td>window-local</td>
+<td>scope of list</td>
+</tr>
+<tr>
+<td><code>:vim[grep]</code></td>
+<td><code>:lv[imgrep]</code></td>
+<td>Vim internal search</td>
+</tr>
+<tr>
+<td><code>:gr[ep]</code></td>
+<td><code>:lgr[ep]</code></td>
+<td>Vim external search</td>
+</tr>
+<tr>
+<td><code>:helpg[rep]</code></td>
+<td><code>:lh[elpgrep]</code></td>
+<td>Help message search</td>
+</tr>
+<tr>
+<td><code>:mak[e]</code></td>
+<td><code>:lmak[e]</code></td>
+<td>Error messsage search</td>
+</tr>
+<tr>
+<td><code>:cdo {cmd}</code></td>
+<td><code>:ld[o] {cmd}</code></td>
+<td>Execute <code>{cmd}</code> for all errors/matches</td>
+</tr>
+<tr>
+<td><code>:cc</code></td>
+<td><code>:ll</code></td>
+<td>Display error/match</td>
+</tr>
+<tr>
+<td><code>:cn[ext]</code></td>
+<td><code>:ln[ext]</code></td>
+<td>Display next error/match</td>
+</tr>
+<tr>
+<td><code>:cp[revious]</code> or <code>:cN</code></td>
+<td><code>:lp[revious]</code>  or <code>:lN</code></td>
+<td>Display previous error/match</td>
+</tr>
+<tr>
+<td><code>:cfir[st]</code></td>
+<td><code>:lfir[st]</code></td>
+<td>Display first error/match</td>
+</tr>
+<tr>
+<td><code>:cla[st]</code></td>
+<td><code>:lla[st]</code></td>
+<td>Display last error/match</td>
+</tr>
+<tr>
+<td><code>:cli[st]</code></td>
+<td><code>:lli[st]</code></td>
+<td>List all errors/matches</td>
+</tr>
+<tr>
+<td><code>:cope[n]</code></td>
+<td><code>:lop[en]</code></td>
+<td>Open list of errors/matches</td>
+</tr>
+<tr>
+<td><code>:ccl[ose]</code></td>
+<td><code>:lcl[ose]</code></td>
+<td>Close list of errors/matches</td>
+</tr>
+</tbody>
+</table>
+<p>Here, <code>{cmd}</code>  is like <code>s/foo/bar/gc</code>.</p>
+<h2 id="ex-mode-command-line">Ex-mode command line</h2>
+<p>There are special characters for EX-mode command line.</p>
+<ul>
+<li><code>##</code> : all names in the argument list</li>
+<li><code>%</code> : current file name</li>
+</ul>
+<p>If the faster <code>rg</code> (<code>ripgrep</code> package) is used for <code>:grep</code>, it can offer
+optimal recursive tree search from the current working tree by
+not-specifying the target file in Ex-mode command line.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/03/28/gtd-1/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2024 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
