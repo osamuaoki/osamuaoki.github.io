@@ -79,7 +79,7 @@ en/note-00040.md
       <ul>
         <li><a href="#update-gitigonore">Update <code>.gitigonore</code></a></li>
         <li><a href="#opening-gzip-files">Opening Gzip files</a></li>
-        <li><a href="#extra-features-as-opt-in-features">Extra features as opt-in features</a></li>
+        <li><a href="#lazyvims-extra-features-as-opt-in-features">LazyVim&rsquo;s extra features as opt-in features</a></li>
         <li><a href="#column-and-line-number-and-unicode-codepoint-in-statusline">Column and Line number and, Unicode codepoint in statusline</a></li>
       </ul>
     </li>
@@ -436,16 +436,15 @@ intend to <code>git push -f</code>.  It now contains following changes.</p>
 <h3 id="opening-gzip-files">Opening Gzip files</h3>
 <p>Since Debian ships most documentation files as Gzipped, I enabled &ldquo;gzip&rdquo;
 plugin for <code>view</code> purpose.</p>
-<h3 id="extra-features-as-opt-in-features">Extra features as opt-in features</h3>
-<p>I made following extra features disabled as started.  These can be enabled
-via key bindings.</p>
+<h3 id="lazyvims-extra-features-as-opt-in-features">LazyVim&rsquo;s extra features as opt-in features</h3>
+<p>I made some LazyVim&rsquo;s extra features as opt-in features by making them disabled as started.</p>
+<p>Additional key bindings are added to enable/disable/toggle these.</p>
 <ul>
-<li>toggle completion (<code>nvim-cmp</code>, Toggle with <code>&lt;leader&gt;uP</code>)</li>
-<li>enable auto-input (with <code>&lt;leader&gt;ua</code>) by completion, auto pairs, auto format</li>
-<li>disable auto-input (with <code>&lt;leader&gt;uA</code>) by completion, auto pairs, auto format</li>
-<li>Zap all Notifications (with <code>&lt;leader&gt;z</code>)</li>
-<li>Recall all Notifications (with <code>&lt;leader&gt;Z</code>)</li>
-<li>NOP to avoid accidental undo (with <code>&lt;leader&gt;uu</code>)</li>
+<li>auto-input (= completion, auto pairs, auto format) &ndash; enable with <code>&lt;leader&gt;ua</code> / disable with <code>&lt;leader&gt;uA</code></li>
+<li>completion (cmp by <code>nvim-cmp</code>) &ndash; toggle with <code>&lt;leader&gt;uP</code></li>
+<li>dismiss all Notifications with <code>&lt;leader&gt;z</code></li>
+<li>recall all Notifications with <code>&lt;leader&gt;Z</code></li>
+<li>activate menu for Lazy Extras with <code>&lt;leader&gt;X</code> &ndash; since LazyVim&rsquo;s dashboard has been disabled</li>
 </ul>
 <h3 id="column-and-line-number-and-unicode-codepoint-in-statusline">Column and Line number and, Unicode codepoint in statusline</h3>
 <p>Using <code>~/.config/nvim/lua/plugin/ui.lua</code>, I replaced clock display in statusline with Unicode codepoint as <code>[+U20]</code>.</p>
