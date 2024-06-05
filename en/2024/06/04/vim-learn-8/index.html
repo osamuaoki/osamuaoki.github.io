@@ -65,9 +65,13 @@ en/note-00074.md
 <nav id="TableOfContents">
   <ul>
     <li><a href="#nvim-configuration-retrospective">Nvim configuration retrospective</a></li>
+    <li><a href="#vim-configuration-touch-ups">Vim configuration touch-ups</a></li>
     <li><a href="#folding-of-markdown-file">Folding of markdown file</a></li>
     <li><a href="#revising-basics----quickfix">Revising basics &ndash; quickfix</a></li>
     <li><a href="#ex-mode-command-line">Ex-mode command line</a></li>
+    <li><a href="#use-case-manual-changes">Use case (manual changes)</a></li>
+    <li><a href="#use-case-automatic-changes">Use case (automatic changes)</a></li>
+    <li><a href="#filter-quicklist">Filter quicklist</a></li>
   </ul>
 </nav>
 
@@ -75,6 +79,12 @@ en/note-00074.md
 <p>I have been updating Nvim configuration with LazyVim as described in
 <a href="/en/2023/03/05/vim-learn-7/">Re-learning Vim (7)</a> to make it behave as close
 as plain Nvim.</p>
+<h2 id="vim-configuration-touch-ups">Vim configuration touch-ups</h2>
+<p>In order to make my Vim experience to match my LazyVim/Nvim configuration, I
+updated my <code>.vimrc</code>.</p>
+<ul>
+<li><a href="https://github.com/osamuaoki/dot-vim/blob/master/.vimrc">osamu&rsquo;s ~/.vimrc file</a></li>
+</ul>
 <h2 id="folding-of-markdown-file">Folding of markdown file</h2>
 <p>I have always used <code>gq</code> under visual line mode to rewrap range of lines within
 <code>'textwidth</code>.  Since LazyVim sets <code>'formatexpr</code>, it doesn&rsquo;t work as expected
@@ -93,8 +103,8 @@ use of keyboard MACRO.</p>
 </thead>
 <tbody>
 <tr>
-<td>global</td>
-<td>window-local</td>
+<td>global list</td>
+<td>window-local list</td>
 <td>scope of list</td>
 </tr>
 <tr>
@@ -116,6 +126,16 @@ use of keyboard MACRO.</p>
 <td><code>:mak[e]</code></td>
 <td><code>:lmak[e]</code></td>
 <td>Error messsage search</td>
+</tr>
+<tr>
+<td><code>:cope[n]</code></td>
+<td><code>:lop[en]</code></td>
+<td>Open list of errors/matches</td>
+</tr>
+<tr>
+<td><code>:ccl[ose]</code></td>
+<td><code>:lcl[ose]</code></td>
+<td>Close list of errors/matches</td>
 </tr>
 <tr>
 <td><code>:cdo {cmd}</code></td>
@@ -152,28 +172,48 @@ use of keyboard MACRO.</p>
 <td><code>:lli[st]</code></td>
 <td>List all errors/matches</td>
 </tr>
-<tr>
-<td><code>:cope[n]</code></td>
-<td><code>:lop[en]</code></td>
-<td>Open list of errors/matches</td>
-</tr>
-<tr>
-<td><code>:ccl[ose]</code></td>
-<td><code>:lcl[ose]</code></td>
-<td>Close list of errors/matches</td>
-</tr>
 </tbody>
 </table>
 <p>Here, <code>{cmd}</code>  is like <code>s/foo/bar/gc</code>.</p>
+<p>LazyVim and my updated <code>~/.vimrc</code> map <code>[q</code> and <code>]q</code> to <code>:cprevious&lt;cr&gt;</code> and <code>:cnext&lt;cr&gt;</code>.</p>
 <h2 id="ex-mode-command-line">Ex-mode command line</h2>
 <p>There are special characters for EX-mode command line.</p>
 <ul>
-<li><code>##</code> : all names in the argument list</li>
-<li><code>%</code> : current file name</li>
+<li><code>##</code> : substitute with all names in the argument list when executed</li>
+<li><code>%</code> : substitute with the current file name when executed</li>
+<li><code>&lt;c-r&gt;%</code> : insert the current file name to the command line</li>
+<li><code>%&lt;tab&gt;</code> : insert the current file name to the command line</li>
 </ul>
 <p>If the faster <code>rg</code> (<code>ripgrep</code> package) is used for <code>:grep</code>, it can offer
 optimal recursive tree search from the current working tree by
 not-specifying the target file in Ex-mode command line.</p>
+<p>Wildcard expressions such as <code>*</code>, <code>*.txt</code>, <code>**.md</code>, &hellip;, parsed by the
+enderlining shell (Bash) may be useful.
+| <code>:cope[n]</code>           | <code>:lop[en]</code>            | Open list of errors/matches |
+| <code>:ccl[ose]</code>          | <code>:lcl[ose]</code>           | Close list of errors/matches |</p>
+<h2 id="use-case-manual-changes">Use case (manual changes)</h2>
+<ul>
+<li>At shell prompt, enter: <code>vi file1.txt file2.txt</code></li>
+<li>In Vim/Nvim normal mode, enter <code>: gr 'pattern' ##</code></li>
+<li>Open quickfix window with <code>:copen</code></li>
+<li>Move and press within quickfix window to jump to matching location in target files.</li>
+<li>Use <code>]q</code> or <code>[q</code> to navigate in target files and make manual changes.</li>
+<li>Close quickfix window with <code>:cclose</code></li>
+<li>Save all and quit with <code>:wqa</code></li>
+</ul>
+<h2 id="use-case-automatic-changes">Use case (automatic changes)</h2>
+<ul>
+<li>At shell prompt, enter: <code>vi file1.txt file2.txt</code></li>
+<li>In Vim/Nvim normal mode, enter <code>:gr 'pattern' ##</code></li>
+<li>Substitute all with confirmation with <code>:cdo 's/pattern/subststring/gc'</code></li>
+<li>Save all and quit with <code>:wqa</code></li>
+</ul>
+<h2 id="filter-quicklist">Filter quicklist</h2>
+<ul>
+<li>Load <code>cfilter</code> with: <code>:packadd cfilter</code></li>
+<li>Remove matched from quicklist with <code>:Cfilter! /exclude_pattern/</code></li>
+<li>Select matched in quicklist with <code>:Cfilter /include_pattern/</code></li>
+</ul>
 <!-- raw HTML omitted -->
 
 
