@@ -71,7 +71,8 @@ en/note-00074.md
     <li><a href="#ex-mode-command-line">Ex-mode command line</a></li>
     <li><a href="#use-case-manual-changes">Use case (manual changes)</a></li>
     <li><a href="#use-case-automatic-changes">Use case (automatic changes)</a></li>
-    <li><a href="#filter-quicklist">Filter quicklist</a></li>
+    <li><a href="#filter-quicklist-contents">Filter quicklist contents</a></li>
+    <li><a href="#regex-dialects">Regex dialects</a></li>
   </ul>
 </nav>
 
@@ -208,12 +209,35 @@ enderlining shell (Bash) may be useful.
 <li>Substitute all with confirmation with <code>:cdo 's/pattern/subststring/gc'</code></li>
 <li>Save all and quit with <code>:wqa</code></li>
 </ul>
-<h2 id="filter-quicklist">Filter quicklist</h2>
+<h2 id="filter-quicklist-contents">Filter quicklist contents</h2>
+<p>Use <code>exclude_pattern</code> and <code>include_pattern</code> (vim internal regex).</p>
 <ul>
+<li>&hellip;</li>
 <li>Load <code>cfilter</code> with: <code>:packadd cfilter</code></li>
 <li>Remove matched from quicklist with <code>:Cfilter! /exclude_pattern/</code></li>
 <li>Select matched in quicklist with <code>:Cfilter /include_pattern/</code></li>
 </ul>
+<h2 id="regex-dialects">Regex dialects</h2>
+<ul>
+<li>Case sensitive regex:
+<ul>
+<li><code>(?-i)</code> in the pattern for <code>rg</code> (POSIX 1003.2 regular expressions)</li>
+<li><code>\C</code> in the pattern for Vim internal</li>
+<li><code>-i</code> in the command option for grep</li>
+</ul>
+</li>
+<li>Case <strong>in</strong>sensitive regex:
+<ul>
+<li><code>(?i)</code> in the pattern for <code>rg</code> (POSIX 1003.2 regular expressions)</li>
+<li><code>\c</code> in the pattern for Vim internal</li>
+<li><code>--no-ignore-case</code> in the command option for grep</li>
+</ul>
+</li>
+</ul>
+<p>All modern platforms, such as Perl, Python, Rust, &hellip;, support POSIX 1003.2
+regular expressions.  So be careful for Vim RE.</p>
+<p>Since I use <code>rg</code> or Vim internal regex, I decided to keep their default to be
+smart case and set them as needed to be specific ones.</p>
 <!-- raw HTML omitted -->
 
 
