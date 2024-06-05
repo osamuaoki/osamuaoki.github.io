@@ -67,12 +67,18 @@ en/note-00074.md
     <li><a href="#nvim-configuration-retrospective">Nvim configuration retrospective</a></li>
     <li><a href="#vim-configuration-touch-ups">Vim configuration touch-ups</a></li>
     <li><a href="#folding-of-markdown-file">Folding of markdown file</a></li>
-    <li><a href="#revising-basics----quickfix">Revising basics &ndash; quickfix</a></li>
-    <li><a href="#ex-mode-command-line">Ex-mode command line</a></li>
-    <li><a href="#use-case-manual-changes">Use case (manual changes)</a></li>
-    <li><a href="#use-case-automatic-changes">Use case (automatic changes)</a></li>
-    <li><a href="#filter-quicklist-contents">Filter quicklist contents</a></li>
-    <li><a href="#regex-dialects">Regex dialects</a></li>
+    <li><a href="#basics-around-quickfix-list">Basics around quickfix list</a>
+      <ul>
+        <li><a href="#command-summary">Command summary</a></li>
+        <li><a href="#ex-mode-command-line">Ex-mode command line</a></li>
+        <li><a href="#use-case-manual-changes">Use case (manual changes)</a></li>
+        <li><a href="#use-case-automatic-changes">Use case (automatic changes)</a></li>
+        <li><a href="#filter-quickfix-list-contents">Filter quickfix list contents</a></li>
+        <li><a href="#regex-dialects-around-quickfix-list">Regex dialects around quickfix list</a></li>
+      </ul>
+    </li>
+    <li><a href="#lua-in-nvim-basics">Lua in Nvim basics</a></li>
+    <li><a href="#nvim-logging">Nvim logging</a></li>
   </ul>
 </nav>
 
@@ -80,9 +86,10 @@ en/note-00074.md
 <p>I have been updating Nvim configuration with LazyVim as described in
 <a href="/en/2023/03/05/vim-learn-7/">Re-learning Vim (7)</a> to make it behave as close
 as plain Nvim.</p>
+<p>I made further changes to <a href="https://github.com/osamuaoki/starter">my forked LazyVim starter</a>.</p>
 <h2 id="vim-configuration-touch-ups">Vim configuration touch-ups</h2>
 <p>In order to make my Vim experience to match my LazyVim/Nvim configuration, I
-updated my <code>.vimrc</code>.</p>
+also updated my <code>~/.vimrc</code>.</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/dot-vim/blob/master/.vimrc">osamu&rsquo;s ~/.vimrc file</a></li>
 </ul>
@@ -91,7 +98,8 @@ updated my <code>.vimrc</code>.</p>
 <code>'textwidth</code>.  Since LazyVim sets <code>'formatexpr</code>, it doesn&rsquo;t work as expected
 any more for some <code>'filetype</code> such as <code>markdown</code>.</p>
 <p>Easy workaround is to use <code>gw</code> instead.</p>
-<h2 id="revising-basics----quickfix">Revising basics &ndash; quickfix</h2>
+<h2 id="basics-around-quickfix-list">Basics around quickfix list</h2>
+<h3 id="command-summary">Command summary</h3>
 <p>I feel I need to revisit some key baseline Vim operation techniques beyond the
 use of keyboard MACRO.</p>
 <p>Let&rsquo;s look into &ldquo;Quickfix list&rdquo; and &ldquo;location list&rdquo;.</p>
@@ -197,7 +205,7 @@ use of keyboard MACRO.</p>
 <code>:cnext&lt;cr&gt;</code> for easy navigation based on quickfix list.</p>
 <p>Unless I get to do very complicated things, I should be OK just using global
 quickfix list.</p>
-<h2 id="ex-mode-command-line">Ex-mode command line</h2>
+<h3 id="ex-mode-command-line">Ex-mode command line</h3>
 <p>There are special characters for EX-mode command line.</p>
 <ul>
 <li><code>##</code> : substitute with all names in the argument list when executed</li>
@@ -210,7 +218,7 @@ optimal recursive tree search from the current working tree by
 not-specifying the target file in Ex-mode command line.</p>
 <p>The wildcard expression such as <code>*</code>, <code>*.txt</code>, <code>**.md</code>, &hellip;, parsed by the
 underlining shell (Bash) may also be useful.</p>
-<h2 id="use-case-manual-changes">Use case (manual changes)</h2>
+<h3 id="use-case-manual-changes">Use case (manual changes)</h3>
 <ul>
 <li>At shell prompt, enter: <code>vi file1.txt file2.txt</code></li>
 <li>In Vim/Nvim normal mode, enter <code>: gr 'pattern' ##</code></li>
@@ -220,25 +228,25 @@ underlining shell (Bash) may also be useful.</p>
 <li>Close quickfix window with <code>:cclose</code></li>
 <li>Save all and quit with <code>:wqa</code></li>
 </ul>
-<h2 id="use-case-automatic-changes">Use case (automatic changes)</h2>
+<h3 id="use-case-automatic-changes">Use case (automatic changes)</h3>
 <ul>
 <li>At shell prompt, enter: <code>vi file1.txt file2.txt</code></li>
 <li>In Vim/Nvim normal mode, enter <code>:gr 'pattern' ##</code></li>
 <li>Substitute all with confirmation with <code>:cdo 's/pattern/subststring/gc'</code></li>
 <li>Save all and quit with <code>:wqa</code></li>
 </ul>
-<h2 id="filter-quicklist-contents">Filter quicklist contents</h2>
+<h3 id="filter-quickfix-list-contents">Filter quickfix list contents</h3>
 <p>Use <code>exclude_pattern</code> and <code>include_pattern</code> (vim internal regex).</p>
 <ul>
 <li>&hellip;</li>
 <li>Load <code>cfilter</code> with: <code>:packadd cfilter</code> (if not done yet)</li>
-<li>Remove matched from quicklist with <code>:Cfilter! /exclude_pattern/</code></li>
-<li>Select matched in quicklist with <code>:Cfilter /include_pattern/</code></li>
+<li>Remove matched from quickfix list with <code>:Cfilter! /exclude_pattern/</code></li>
+<li>Select matched in quickfix list with <code>:Cfilter /include_pattern/</code></li>
 </ul>
 <p>(I updated <code>~/.vimrc</code> and <code>~/.config/nvim/lua/config/lazy.lua</code>)</p>
-<p>This is quite handy to trim down quicklist to run <code>:cdo {cmd}</code> script.</p>
+<p>This is quite handy to trim down quickfix list to run <code>:cdo {cmd}</code> script.</p>
 <p><code>:col</code> and <code>:cnew</code> are handy for this type of operation.</p>
-<h2 id="regex-dialects">Regex dialects</h2>
+<h3 id="regex-dialects-around-quickfix-list">Regex dialects around quickfix list</h3>
 <ul>
 <li>Case sensitive regex:
 <ul>
@@ -259,6 +267,24 @@ underlining shell (Bash) may also be useful.</p>
 regular expressions.  So be careful for Vim RE.</p>
 <p>Since I use <code>rg</code> or Vim internal regex, I decided to keep their default to be
 smart case and set them as needed to be specific ones.</p>
+<h2 id="lua-in-nvim-basics">Lua in Nvim basics</h2>
+<p>There are 4 ways to print the value of an internal variable <code>var</code> in
+NORMAL-mode.</p>
+<ul>
+<li><code>:lua vim.print(var)</code></li>
+<li><code>:lua print(vim.inspect(var))</code></li>
+<li><code>:lua =var</code></li>
+<li><code>:=var</code></li>
+</ul>
+<p>Here are tutorials:</p>
+<ul>
+<li>&ldquo;<a href="https://neovim.io/doc/user/lua-guide.html">Lua-guide</a>&rdquo; for Nvim</li>
+<li>&ldquo;<a href="https://lua.org/manual/5.1/">Lua 5.1 Reference Manual</a>&rdquo; for language</li>
+</ul>
+<p>&ldquo;Lua-guide&rdquo; in the above is based on &ldquo;<a href="https://github.com/nanotee/nvim-lua-guide">nvim-lua-guide</a>&rdquo; and supersede it now.</p>
+<h2 id="nvim-logging">Nvim logging</h2>
+<p>Invoke with option: <code>nvim -V10logfile.txt file1 file2</code></p>
+<p><code>:=_G</code> should dump code to log.  Other variables can be inspected, too.</p>
 <!-- raw HTML omitted -->
 
 
