@@ -173,10 +173,22 @@ use of keyboard MACRO.</p>
 <td><code>:lli[st]</code></td>
 <td>List all errors/matches</td>
 </tr>
+<tr>
+<td><code>:col[der]</code></td>
+<td><code>:lol[der]</code></td>
+<td>Open older list of errors/matches</td>
+</tr>
+<tr>
+<td><code>:cne[wer]</code></td>
+<td><code>:lne[wer]</code></td>
+<td>Open newer list of errors/matches</td>
+</tr>
 </tbody>
 </table>
 <p>Here, <code>{cmd}</code>  is like <code>s/foo/bar/gc</code>.</p>
 <p>LazyVim and my updated <code>~/.vimrc</code> map <code>[q</code> and <code>]q</code> to <code>:cprevious&lt;cr&gt;</code> and <code>:cnext&lt;cr&gt;</code>.</p>
+<p>Unless I get to do very complicated things, I should be OK just using global
+quickfix list.</p>
 <h2 id="ex-mode-command-line">Ex-mode command line</h2>
 <p>There are special characters for EX-mode command line.</p>
 <ul>
@@ -188,10 +200,8 @@ use of keyboard MACRO.</p>
 <p>If the faster <code>rg</code> (<code>ripgrep</code> package) is used for <code>:grep</code>, it can offer
 optimal recursive tree search from the current working tree by
 not-specifying the target file in Ex-mode command line.</p>
-<p>Wildcard expressions such as <code>*</code>, <code>*.txt</code>, <code>**.md</code>, &hellip;, parsed by the
-enderlining shell (Bash) may be useful.
-| <code>:cope[n]</code>           | <code>:lop[en]</code>            | Open list of errors/matches |
-| <code>:ccl[ose]</code>          | <code>:lcl[ose]</code>           | Close list of errors/matches |</p>
+<p>The wildcard expression such as <code>*</code>, <code>*.txt</code>, <code>**.md</code>, &hellip;, parsed by the
+underlining shell (Bash) may be useful.</p>
 <h2 id="use-case-manual-changes">Use case (manual changes)</h2>
 <ul>
 <li>At shell prompt, enter: <code>vi file1.txt file2.txt</code></li>
@@ -213,10 +223,13 @@ enderlining shell (Bash) may be useful.
 <p>Use <code>exclude_pattern</code> and <code>include_pattern</code> (vim internal regex).</p>
 <ul>
 <li>&hellip;</li>
-<li>Load <code>cfilter</code> with: <code>:packadd cfilter</code></li>
+<li>Load <code>cfilter</code> with: <code>:packadd cfilter</code> (if not done yet)</li>
 <li>Remove matched from quicklist with <code>:Cfilter! /exclude_pattern/</code></li>
 <li>Select matched in quicklist with <code>:Cfilter /include_pattern/</code></li>
 </ul>
+<p>(I updated <code>~/.vimrc</code> and <code>~/.config/nvim/lua/config/lazy.lua</code>)</p>
+<p>This is quite handy to trim down quicklist to run <code>:cdo {cmd}</code> script.</p>
+<p><code>:col</code> and <code>:cnew</code> are handy for this type of operation.</p>
 <h2 id="regex-dialects">Regex dialects</h2>
 <ul>
 <li>Case sensitive regex:
