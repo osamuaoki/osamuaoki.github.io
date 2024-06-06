@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/06/04 (initial publish),
-2024/06/05 (last update)
+2024/06/06 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00074.md
@@ -77,8 +77,19 @@ en/note-00074.md
         <li><a href="#regex-dialects-around-quickfix-list">Regex dialects around quickfix list</a></li>
       </ul>
     </li>
-    <li><a href="#lua-in-nvim-basics">Lua in Nvim basics</a></li>
-    <li><a href="#nvim-logging">Nvim logging</a></li>
+    <li><a href="#lua-in-nvim-basics">Lua in Nvim basics</a>
+      <ul>
+        <li><a href="#nvim-logging">Nvim logging</a></li>
+      </ul>
+    </li>
+    <li><a href="#basic-modules-in-lazyvim">Basic modules in LazyVim</a>
+      <ul>
+        <li><a href="#noicenvim">noice.nvim</a></li>
+        <li><a href="#todo-commentsnvim">todo-comments.nvim</a></li>
+        <li><a href="#troublenvim">trouble.nvim</a></li>
+      </ul>
+    </li>
+    <li><a href="#breaking-changes-of-lazyvim-and-extras">Breaking changes of LazyVim and extras</a></li>
   </ul>
 </nav>
 
@@ -88,8 +99,8 @@ en/note-00074.md
 as plain Nvim.</p>
 <p>I made further changes to <a href="https://github.com/osamuaoki/starter">my forked LazyVim starter</a>.</p>
 <h2 id="vim-configuration-touch-ups">Vim configuration touch-ups</h2>
-<p>In order to make my Vim experience to match my LazyVim/Nvim configuration, I
-also updated my <code>~/.vimrc</code>.</p>
+<p>In order to make my Vim experience to match my LazyVim/Nvim configuration as
+much, I also updated my <code>~/.vimrc</code>.</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/dot-vim/blob/master/.vimrc">osamu&rsquo;s ~/.vimrc file</a></li>
 </ul>
@@ -282,9 +293,36 @@ NORMAL-mode.</p>
 <li>&ldquo;<a href="https://lua.org/manual/5.1/">Lua 5.1 Reference Manual</a>&rdquo; for language</li>
 </ul>
 <p>&ldquo;Lua-guide&rdquo; in the above is based on &ldquo;<a href="https://github.com/nanotee/nvim-lua-guide">nvim-lua-guide</a>&rdquo; and supersede it now.</p>
-<h2 id="nvim-logging">Nvim logging</h2>
+<h3 id="nvim-logging">Nvim logging</h3>
 <p>Invoke with option: <code>nvim -V10logfile.txt file1 file2</code></p>
 <p><code>:=_G</code> should dump code to log.  Other variables can be inspected, too.</p>
+<h2 id="basic-modules-in-lazyvim">Basic modules in LazyVim</h2>
+<p>I went through <a href="https://www.lazyvim.org/keymaps">LazyVim&rsquo;s keymap page</a> to
+check available non-extra modules and functionalities.</p>
+<p>I found a few interesting ones which I overlooked.</p>
+<h3 id="noicenvim">noice.nvim</h3>
+<p>I now realize noice.nvim offers a nice UI for recalling messages from the
+message history, etc.  (Updated keymap.)</p>
+<h3 id="todo-commentsnvim">todo-comments.nvim</h3>
+<p>Interesting search UI with quickfix.  Keyword are followed by a colon:</p>
+<ul>
+<li><code>TODO:</code> do something</li>
+<li><code>FIX:</code> this should be fixed</li>
+<li><code>HACK:</code> weird code warning</li>
+</ul>
+<h3 id="troublenvim">trouble.nvim</h3>
+<p>Interesting diagnostic and LSP UI with quickfix and telescope.</p>
+<h2 id="breaking-changes-of-lazyvim-and-extras">Breaking changes of LazyVim and extras</h2>
+<p>In order to understand historical context of LazyVim development, I checked:</p>
+<ul>
+<li><a href="https://github.com/LazyVim/LazyVim/blob/main/NEWS.md">NEWS.md</a></li>
+<li><a href="https://github.com/LazyVim/LazyVim/blob/main/CHANGELOG.md">CHANGELOG.md</a> by searching on &ldquo;<code>BREAKING CHANGES</code>&rdquo;.</li>
+</ul>
+<p>These gave me decent perspective.</p>
+<p>Then, I realize
+<a href="https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/util/plugin.lua">lua/lazyvim/util/plugin.lua</a>
+has interesting summary of reasons of existences for some extras &ndash;
+deprecated/renamed/&hellip; .</p>
 <!-- raw HTML omitted -->
 
 
