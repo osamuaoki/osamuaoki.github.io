@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2013/08/13 (initial publish),
-2021/08/02 (last update)
+2024/06/07 (last update)
 </h3>
 <h3 class="source">Source:
 en/fun2-00013.md
@@ -275,7 +275,7 @@ overhead making the compiled Vala <code>prime</code> program with GLib to run ve
 slow.  You get more information from the interactive screen by pressing ENTER
 on the line of the <code>g_list_last</code> function and then on the <code>Annotate g_list_last</code> line.</p>
 <p>Annotated g_list_last</p>
-<pre tabindex="0"><code>g_list_last                                                                     
+<pre tabindex="0"><code>g_list_last
        │
        │    Disassembly of section .text:
        │
@@ -295,9 +295,9 @@ on the line of the <code>g_list_last</code> function and then on the <code>Annot
 list.  This not only wastes many instructions but also runs through
 large memory space causing stalled-cycles for the cached memory system.</p>
 <p>The assembly code &ldquo;<code>repz   retq</code>&rdquo; did not make sense to me.  As I searched the
-web for the answer, I found this to be for <a href="http://repzret.org/p/repzret/%5Bthe">http://repzret.org/p/repzret/[the</a> code
-optimization of the branch prediction mechanism].  For us to read the generated
-assembly code, this is practically the same as &ldquo;<code>retq</code>&rdquo;, though.</p>
+web for the answer, I found this to be for <a href="http://repzret.org/p/repzret/">the code optimization of the branch
+prediction mechanism</a>.  For us to read the
+generated assembly code, this is practically the same as &ldquo;<code>retq</code>&rdquo;, though.</p>
 <p>In the (<a href="/en/2013/08/05/fun2prog-prime/#c-with-the-list">C with the list</a>) source,
 the code is compact, the pointer to the tail-end of the list is kept in the
 <code>tail</code> pointer variable, and the <code>tail</code> pointer is updated without scanning the
