@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/06/04 (initial publish),
-2024/06/07 (last update)
+2024/06/08 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00074.md
@@ -54,7 +54,7 @@ en/note-00074.md
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/06/08/vim-learn-9/">Next Post</a></td>
   
   </tr>
   </tbody>
@@ -153,7 +153,12 @@ use of keyboard MACRO.</p>
 <tr>
 <td><code>:mak[e]</code></td>
 <td><code>:lmak[e]</code></td>
-<td>Error messsage search</td>
+<td>Run <code>makeprg</code></td>
+</tr>
+<tr>
+<td><code>:cex[pr] {expr}</code></td>
+<td><code>:lex[pr] {expr}</code></td>
+<td>Run <code>{expr}</code></td>
 </tr>
 <tr>
 <td><code>:cope[n]</code></td>
@@ -171,9 +176,9 @@ use of keyboard MACRO.</p>
 <td>Execute <code>{cmd}</code> for all errors/matches</td>
 </tr>
 <tr>
-<td><code>:cc</code></td>
-<td><code>:ll</code></td>
-<td>Display error/match</td>
+<td><code>:cc</code> [<em>nr</em>]</td>
+<td><code>:ll</code> [<em>nr</em>]</td>
+<td>Display <em>nr</em>-th error/match</td>
 </tr>
 <tr>
 <td><code>:cn[ext]</code></td>
@@ -213,11 +218,28 @@ use of keyboard MACRO.</p>
 </tbody>
 </table>
 <p>Here, <code>{cmd}</code> in the above for <code>:cdo</code> is Ex-command like <code>s/foo/bar/gc</code>.
-<code>{cmd}</code> can contain <code>|</code> to concatenate several commands.</p>
+<code>{cmd}</code> can contain <code>|</code> to concatenate several commands in Ex-mode.</p>
 <p>LazyVim and my updated <code>~/.vimrc</code> map <code>[q</code> and <code>]q</code> to <code>:cprevious&lt;cr&gt;</code> and
 <code>:cnext&lt;cr&gt;</code> for easy navigation based on quickfix list.</p>
 <p>Unless I get to do very complicated things, I should be OK just using global
 quickfix list.</p>
+<p>I normally set <code>hidden</code> and <code>autowrite</code>, so forcing some command to jump to
+different buffer is safe.</p>
+<p>For customizing <code>:make</code> behavior, see:</p>
+<ul>
+<li><code>:h 'makeprg</code> (currently <code>make</code> is used to generate input)</li>
+<li><code>:h 'errorformat</code> (complicated match string used)</li>
+</ul>
+<p>For customizing <code>:cexpr {expr}</code> behavior, see:</p>
+<ul>
+<li><code>:h :cexpr</code> (Here, <code>{expr}</code> is like <code>system(grep -n xyz *)</code> is used to generate input)</li>
+<li>The same <code>:h 'errorformat</code> is used to parse the result of <code>{expr}</code>.</li>
+</ul>
+<p>For customizing <code>:grep</code> behavior, see:</p>
+<ul>
+<li><code>:h 'grepprg</code> (currently <code>rg\ --vimgrep</code> is used to generate input)</li>
+<li><code>:h 'grepformat</code> (currently <code>%f:%l:%c:%m</code> filename:line_number:column_number:messsage)</li>
+</ul>
 <h3 id="ex-mode-command-line">Ex-mode command line</h3>
 <p>There are special characters for EX-mode command line.</p>
 <ul>
@@ -226,9 +248,9 @@ quickfix list.</p>
 <li><code>&lt;c-r&gt;%</code> : insert the current file name to the command line</li>
 <li><code>%&lt;tab&gt;</code> : insert the current file name to the command line</li>
 </ul>
-<p>If the faster <code>rg</code> (<code>ripgrep</code> package) is used for <code>:grep</code>, it can offer
-optimal recursive tree search from the current working tree by
-not-specifying the target file in Ex-mode command line.</p>
+<p>If the faster <code>rg</code> (<code>ripgrep</code> package) is used for <code>:grep</code>, it can easily offer
+optimal recursive tree search from the current working tree by not-specifying
+the target file in Ex-mode command line.</p>
 <p>The wildcard expression such as <code>*</code>, <code>*.txt</code>, <code>**.md</code>, &hellip;, parsed by the
 underlining shell (Bash) may also be useful.</p>
 <h3 id="use-case-manual-changes">Use case (manual changes)</h3>
@@ -345,7 +367,7 @@ deprecated/renamed/&hellip; .</p>
   
   <td align="center" width="33%"><a href="/en/">Top</a></td>
   
-  <td align="right" width="33%"><a href="#">***</a></td>
+  <td align="right" width="33%"><a href="/en/2024/06/08/vim-learn-9/">Next Post</a></td>
   
   </tr>
   </tbody>
