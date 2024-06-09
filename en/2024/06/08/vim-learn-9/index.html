@@ -192,11 +192,23 @@ position.</p>
 </span></span><span style="display:flex;"><span>(gdb) n
 </span></span><span style="display:flex;"><span>The factorial of 17 is -288522240
 </span></span><span style="display:flex;"><span>10	    exit(0);
+</span></span><span style="display:flex;"><span>(gdb) c
+</span></span><span style="display:flex;"><span>Continuing.
+</span></span><span style="display:flex;"><span>[Inferior 1 (process 72091) exited normally]
 </span></span></code></pre></div><p>Since 17 * 2,004,189,184 =  36,507,221,999, and <code>int</code> is 32 bit signed integer,  overflow occurred (max = 0x7FFF_FFFF= 2,147,483,647).</p>
 <h2 id="inspect-running-program-via-dap">Inspect running program (via DAP)</h2>
 <p>XXX FIXME XXX:</p>
-<p>Not yet on Debian since Debian only has GDB 13.  DAP support
+<p>Not yet on Debian since Debian only has GDB 13.  Native DAP support
 requires GDB 14.</p>
+<p>Currently &hellip;:</p>
+<ul>
+<li><a href="https://github.com/mfussenegger/nvim-dap/wiki/C-C---Rust-(gdb-via--vscode-cpptools)">C C Rust (gdb via vscode cpptools)</a>
+<ul>
+<li><a href="https://github.com/Microsoft/vscode-cpptools">github: microsoft/vscode-cpptools</a></li>
+</ul>
+</li>
+<li><a href="https://microsoft.github.io/debug-adapter-protocol/">Debug Adapter Protocol</a></li>
+</ul>
 <h2 id="jump-to-the-specific-position-in-a-file-generic-vim">Jump to the specific position in a file: generic Vim</h2>
 <p>Let me revisit trick to jump to the specific position manually.</p>
 <p>To go to line 99 of <code>file.txt</code>, try:</p>
