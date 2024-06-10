@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/06/08 (initial publish),
-2024/06/09 (last update)
+2024/06/10 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00075.md
@@ -67,6 +67,7 @@ en/note-00075.md
     <li><a href="#an-example-c-program-with-makefile">An example C program with Makefile</a></li>
     <li><a href="#jump-to-errors-in-the-source-code-c-program-example-with-quickfix">Jump to errors in the source code: C program example with quickfix</a></li>
     <li><a href="#inspect-running-program-direct-gdb">Inspect running program (direct GDB)</a></li>
+    <li><a href="#inspect-running-program-remote-gdb">Inspect running program (remote GDB)</a></li>
     <li><a href="#inspect-running-program-via-dap">Inspect running program (via DAP)</a></li>
     <li><a href="#jump-to-the-specific-position-in-a-file-generic-vim">Jump to the specific position in a file: generic Vim</a></li>
   </ul>
@@ -196,19 +197,36 @@ position.</p>
 </span></span><span style="display:flex;"><span>Continuing.
 </span></span><span style="display:flex;"><span>[Inferior 1 (process 72091) exited normally]
 </span></span></code></pre></div><p>Since 17 * 2,004,189,184 =  36,507,221,999, and <code>int</code> is 32 bit signed integer,  overflow occurred (max = 0x7FFF_FFFF= 2,147,483,647).</p>
+<h2 id="inspect-running-program-remote-gdb">Inspect running program (remote GDB)</h2>
+<p>Let&rsquo;s think about simple single host with 2 terminal console case.</p>
+<p>On console GDBSERVER (remote), let&rsquo;s start <code>gdbserver</code> to test <code>./test</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdbserver localhost:1234 ./test
+</span></span><span style="display:flex;"><span>Process ./test created; pid = 32761
+</span></span><span style="display:flex;"><span>Listening on port 1234
+</span></span></code></pre></div><p>On console GDB (local), start <code>gdb</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdb -q
+</span></span><span style="display:flex;"><span>(gdb) target remote localhost:1234
+</span></span><span style="display:flex;"><span>(gdb) b 7
+</span></span><span style="display:flex;"><span>Breakpoint 1 at 0x55555555519c: file test.c, line 7.
+</span></span><span style="display:flex;"><span>(gdb) c
+</span></span><span style="display:flex;"><span>Continuing.
+</span></span><span style="display:flex;"><span>Reading /lib/x86_64-linux-gnu/libc.so.6 from remote target...
+</span></span></code></pre></div><p>On console GDBSERVER, we see the following and enter <code>5</code> on prompt.</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>Remote debugging from host ::1, port 60566
+</span></span><span style="display:flex;"><span>Enter the number: 5
+</span></span></code></pre></div><p>On console GDB, start <code>gdb</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>Breakpoint 1, main () at test.c:7
+</span></span></code></pre></div><p>With above, <code>./test</code> is tested with full access to stdin and stdout.</p>
 <h2 id="inspect-running-program-via-dap">Inspect running program (via DAP)</h2>
-<p>XXX FIXME XXX:</p>
-<p>Not yet on Debian since Debian only has GDB 13.  Native DAP support
-requires GDB 14.</p>
-<p>Currently &hellip;:</p>
-<ul>
-<li><a href="https://github.com/mfussenegger/nvim-dap/wiki/C-C---Rust-(gdb-via--vscode-cpptools)">C C Rust (gdb via vscode cpptools)</a>
-<ul>
-<li><a href="https://github.com/Microsoft/vscode-cpptools">github: microsoft/vscode-cpptools</a></li>
-</ul>
-</li>
-<li><a href="https://microsoft.github.io/debug-adapter-protocol/">Debug Adapter Protocol</a></li>
-</ul>
+<p>Since Debian/Bookworm 12 currently has GDB 13, we need to follow
+&ldquo;<a href="https://github.com/mfussenegger/nvim-dap/wiki/C-C---Rust-(gdb-via--vscode-cpptools)">C C Rust (gdb via vscode cpptools)</a>&rdquo;
+using
+&ldquo;<a href="https://github.com/Microsoft/vscode-cpptools">github: microsoft/vscode-cpptools</a>&rdquo;.
+LazyVim can activate <code>dap.core</code> LazyExtra and activate <code>cpptools </code> and
+<code>codelldb</code> in DAP by running <code>:Mason</code> (or <code>&lt;leader&gt;cm</code>).</p>
+<p>Next GDB 14 can support <a href="https://microsoft.github.io/debug-adapter-protocol/">DAP (Debug Adapter Protocol)</a> natively.</p>
+<p>Problem is Nvim with DAP UI doesn&rsquo;t seem to allow running program using STDIN.</p>
+<p>XXX FIXME XXX &ndash; more contents to come &hellip;</p>
 <h2 id="jump-to-the-specific-position-in-a-file-generic-vim">Jump to the specific position in a file: generic Vim</h2>
 <p>Let me revisit trick to jump to the specific position manually.</p>
 <p>To go to line 99 of <code>file.txt</code>, try:</p>
