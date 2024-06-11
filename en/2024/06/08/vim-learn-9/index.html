@@ -232,11 +232,53 @@ position.</p>
 &ldquo;<a href="https://github.com/mfussenegger/nvim-dap/wiki/C-C---Rust-(gdb-via--vscode-cpptools)">C C Rust (gdb via vscode cpptools)</a>&rdquo;
 using
 &ldquo;<a href="https://github.com/Microsoft/vscode-cpptools">github: microsoft/vscode-cpptools</a>&rdquo;.
-LazyVim can activate <code>dap.core</code> LazyExtra and activate <code>cpptools </code> and
-<code>codelldb</code> in DAP by running <code>:Mason</code> (or <code>&lt;leader&gt;cm</code>).</p>
+LazyVim can activate <code>dap.core</code> LazyExtra and activate <code>cpptools </code> in DAP by running <code>:Mason</code> (or <code>&lt;leader&gt;cm</code>).</p>
 <p>Next GDB 14 can support <a href="https://microsoft.github.io/debug-adapter-protocol/">DAP (Debug Adapter Protocol)</a> natively.</p>
 <p>Problem is Nvim with DAP UI doesn&rsquo;t seem to allow running program using STDIN.</p>
-<p>XXX FIXME XXX &ndash; more contents to come &hellip;</p>
+<p>Run <code>./test</code> on a separate console under <code>gdbserver</code> as above solved this
+issue for me.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>I need to read
+<code>nvim-dap-ui/doc/nvim-dap-ui.txt</code> and <a href="https://github.com/rcarriga/nvim-dap-ui">nvim-dap-ui/README.md</a> directory since this is not
+shown in normal Vim-help system.</p>
+<p>Let&rsquo;s check the meaning of DAP-UI.  Following are reordered to match the GUI display by the source code (<code>repl</code>):</p>
+<pre tabindex="0"><code>play = &#34;&#34;       /   pause = &#34;&#34;,
+step_into = &#34;&#34;
+step_over = &#34;&#34;
+step_out = &#34;&#34;
+step_back = &#34;&#34;
+run_last = &#34;&#34;
+terminate = &#34;&#34;
+disconnect = &#34;&#34;
+</code></pre><p>(The above needs font support)</p>
+<p>Now I see why debug session terminated when I was playing with icons.  Variable names give me good hints, here.</p>
+<p>Setting BP etc., are by keymaps like <code>&lt;leader&gt;db</code> etc. in the main C source display.</p>
+<p>As for each meanings of sidebar elements, I guess them as follows from variable names in the <code>layout</code> table:</p>
+<ul>
+<li><code>left</code> (sidebar)
+<ul>
+<li><code>scopes</code></li>
+<li><code>breakpoints</code></li>
+<li><code>stacks</code></li>
+<li><code>watches</code></li>
+</ul>
+</li>
+<li><code>bottom</code> (sidebar)
+<ul>
+<li><code>repl</code></li>
+<li><code>console</code></li>
+</ul>
+</li>
+</ul>
+<p>Also, I see following keymaps.  These seem to work in left and bottom sidebars. The meaning of these are still vague for me, though.</p>
+<pre tabindex="0"><code>edit = &#34;e&#34;
+expand = { &#34;&lt;CR&gt;&#34; &#34;&lt;2-LeftMouse&gt;&#34; },
+open = &#34;o&#34;
+remove = &#34;d&#34;
+repl = &#34;r&#34;
+toggle = &#34;t&#34;
+</code></pre><p>Also UI dialog for &ldquo;Input&rdquo; and &ldquo;Condition&rdquo; needs to be investigated.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="jump-to-the-specific-position-in-a-file-generic-vim">Jump to the specific position in a file: generic Vim</h2>
