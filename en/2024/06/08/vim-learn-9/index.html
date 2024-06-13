@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/06/08 (initial publish),
-2024/06/12 (last update)
+2024/06/13 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00075.md
@@ -70,6 +70,7 @@ en/note-00075.md
     <li><a href="#inspect-running-program-remote-gdb">Inspect running program (remote GDB)</a></li>
     <li><a href="#inspect-running-program-via-dap">Inspect running program (via DAP)</a></li>
     <li><a href="#jump-to-the-specific-position-in-a-file-generic-vim">Jump to the specific position in a file: generic Vim</a></li>
+    <li><a href="#my-todo-list">My TODO list</a></li>
   </ul>
 </nav>
 
@@ -243,15 +244,17 @@ issue for me.</p>
 <code>nvim-dap-ui/doc/nvim-dap-ui.txt</code> and <a href="https://github.com/rcarriga/nvim-dap-ui">nvim-dap-ui/README.md</a> directory since this is not
 shown in normal Vim-help system.</p>
 <p>Let&rsquo;s check the meaning of DAP-UI.  Following are reordered to match the GUI display by the lua source code of <code>nvim-dap-ui</code> (for icons in <code>repl</code> element):</p>
-<pre tabindex="0"><code>play = &#34;&#34;       /   pause = &#34;&#34;,
-step_into = &#34;&#34;
-step_over = &#34;&#34;
-step_out = &#34;&#34;
-step_back = &#34;&#34;
-run_last = &#34;&#34;
-terminate = &#34;&#34;
-disconnect = &#34;&#34;
-</code></pre><p>(The above needs font support)</p>
+<ul>
+<li>play = &ldquo;&rdquo;       /   pause = &ldquo;&rdquo;</li>
+<li>step_into = &ldquo;&rdquo; &ndash; step</li>
+<li>step_over = &ldquo;&rdquo; &ndash; next</li>
+<li>step_out = &ldquo;&rdquo; &ndash; finish</li>
+<li>step_back = &ldquo;&rdquo; &ndash; (PC&ndash;)</li>
+<li>run_last = &ldquo;&rdquo; &ndash; (run again)</li>
+<li>terminate = &ldquo;&rdquo; &ndash; This one is tricky</li>
+<li>disconnect = &ldquo;&rdquo; &ndash; This one is tricky</li>
+</ul>
+<p>(The above needs font support)</p>
 <p>Now I see why debug session terminated when I was playing with icons.  Variable names give me good hints, here.</p>
 <p>Setting BP etc., are by keymaps like <code>&lt;leader&gt;db</code> etc. in the main C source display.</p>
 <p>As for each meanings of sidebar elements, I guess them as follows from variable names in the <code>layout</code> table:</p>
@@ -272,13 +275,20 @@ disconnect = &#34;&#34;
 </li>
 </ul>
 <p>Also, I see following keymaps.  These seem to work in left and bottom sidebars. The meaning of these are still vague for me, though.</p>
-<pre tabindex="0"><code>edit = &#34;e&#34;
-expand = { &#34;&lt;CR&gt;&#34; &#34;&lt;2-LeftMouse&gt;&#34; },
-open = &#34;o&#34;
-remove = &#34;d&#34;
-repl = &#34;r&#34;
-toggle = &#34;t&#34;
-</code></pre><p>Also UI dialog for &ldquo;Input&rdquo; and &ldquo;Condition&rdquo; needs to be investigated.</p>
+<ul>
+<li>edit = &ldquo;e&rdquo;</li>
+<li>expand = <code>{ &quot;&lt;CR&gt;&quot; &quot;&lt;2-LeftMouse&gt;&quot; }</code></li>
+<li>open = &ldquo;o&rdquo;</li>
+<li>remove = &ldquo;d&rdquo;</li>
+<li>repl = &ldquo;r&rdquo;</li>
+<li>toggle = &ldquo;t&rdquo;</li>
+</ul>
+<p>Also UI dialog for &ldquo;Input&rdquo; and &ldquo;Condition&rdquo; needs to be investigated. &hellip;.</p>
+<p>After fiddling updates, DAP stops working even with simple <code>hello</code> with direct
+<code>gdb</code> run without using <code>gdbserver</code>.  It errors as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>DAP Couldn&#39;t connect to localhost:${port}: ECONNREFUSED
+</span></span></code></pre></div><p>This makes no sense to me.  TBH, it&rsquo;s too complicated and unstable for me at this moment to use this DAP.</p>
+<p>Let me stick to the basic direct CLI GDB usage for now.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 <h2 id="jump-to-the-specific-position-in-a-file-generic-vim">Jump to the specific position in a file: generic Vim</h2>
@@ -293,6 +303,46 @@ toggle = &#34;t&#34;
 separator&rdquo;.
 NOTE: Indexing for line and column in Vim starts at 1. <code>0G</code> is for the last
 line.  (List index in Vim Script starts at 0.)</p>
+<h2 id="my-todo-list">My TODO list</h2>
+<ul>
+<li>LUA debug
+<ul>
+<li><a href="https://github.com/jbyuki/one-small-step-for-vimkind">one-small-step-for-vimkind, a.k.a osv</a></li>
+<li><a href="https://zignar.net/2023/06/10/debugging-lua-in-neovim/">Debugging Lua in Neovim</a></li>
+</ul>
+</li>
+<li>PYTHON debug
+<ul>
+<li><a href="https://docs.python.org/3/library/pdb.html">The Python Debugger</a> from python.org</li>
+<li><a href="https://github.com/rocky/python3-trepan">python3-trepan</a></li>
+</ul>
+</li>
+<li><a href="https://neovimcraft.com/?search=tag%3Apreconfigured-configuration">Preconfigured setups</a>
+<ul>
+<li><a href="https://github.com/LazyVim/starter">LazyVim&rsquo;s official starter</a>
+<ul>
+<li><a href="https://github.com/LazyVim/LazyVim">LazyVim</a> &ndash; <code>lazy.nvim</code> based</li>
+<li><a href="https://github.com/folke/lazy.nvim">lazy.nvim</a> &ndash; plugin manager of choice</li>
+</ul>
+</li>
+<li><a href="https://github.com/osamuaoki/starter">osamu&rsquo;s starter with mod based on LazyVim</a></li>
+<li><a href="https://github.com/NvChad/starter">NvChad&rsquo;s official starter</a>
+<ul>
+<li><a href="https://github.com/NvChad/NvChad">NvChad</a> &ndash; <code>lazy.nvim</code> based</li>
+</ul>
+</li>
+<li><a href="https://github.com/AstroNvim/template">AstroNvim&rsquo;s template</a>
+<ul>
+<li><a href="https://github.com/AstroNvim/AstroNvim">AstroNvim</a> &ndash; <code>lazy.nvim</code> based</li>
+</ul>
+</li>
+<li><a href="https://github.com/nvim-lua/kickstart.nvim">kickstart.nvim</a> &ndash; baseline only</li>
+</ul>
+</li>
+<li><a href="https://github.com/doctorfree/nvim-lazyman">Lazyman Neovim Configuration Manager</a></li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
 
