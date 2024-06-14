@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/06/08 (initial publish),
-2024/06/13 (last update)
+2024/06/14 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00075.md
@@ -106,13 +106,13 @@ this.</li>
 <li><code>-ggdb</code>: Produce debug symbol by GDB (with extra data)</li>
 </ul>
 </li>
-<li>Other GCC notable options</li>
+<li>Other GCC notable options
+<ul>
 <li><code>-E</code>: Get the preprocessor output only</li>
 <li><code>-S</code>: Get the assembly code</li>
 <li><code>-V</code>: Get the verbose output of compilation</li>
 <li><code>-fPIC</code>: Get a position-independent code</li>
-<li><code>-Wl,option</code>: Linker option
-<ul>
+<li><code>-Wl,option</code>: Linker option</li>
 <li><code>-Wl,-z,relo</code>: pass <code>-z relo</code> to LD.</li>
 </ul>
 </li>
@@ -146,20 +146,20 @@ position.</p>
 </span></span><span style="display:flex;"><span>$ gdb -q ./test
 </span></span><span style="display:flex;"><span>Reading symbols from ./test...
 </span></span><span style="display:flex;"><span>(gdb) list 1,15
-</span></span><span style="display:flex;"><span>1	#include &lt;stdlib.h&gt;
-</span></span><span style="display:flex;"><span>2	#include &lt;stdio.h&gt;
-</span></span><span style="display:flex;"><span>3	int main() {
-</span></span><span style="display:flex;"><span>4	  int i, final, factorial = 1;
-</span></span><span style="display:flex;"><span>5	  printf(&#34;Enter the number: &#34;);
-</span></span><span style="display:flex;"><span>6	  if (scanf(&#34;%d&#34;, &amp;final)) {
-</span></span><span style="display:flex;"><span>7	    for (i = 1; i &lt;= final; i++)
-</span></span><span style="display:flex;"><span>8	      factorial = factorial * i;
-</span></span><span style="display:flex;"><span>9	    printf(&#34;The factorial of %d is %d\n&#34;, final, factorial);
-</span></span><span style="display:flex;"><span>10	    exit(0);
-</span></span><span style="display:flex;"><span>11	  } else {
-</span></span><span style="display:flex;"><span>12	    exit(1);
-</span></span><span style="display:flex;"><span>13	  }
-</span></span><span style="display:flex;"><span>14	}
+</span></span><span style="display:flex;"><span>1#include &lt;stdlib.h&gt;
+</span></span><span style="display:flex;"><span>2#include &lt;stdio.h&gt;
+</span></span><span style="display:flex;"><span>3int main() {
+</span></span><span style="display:flex;"><span>4  int i, final, factorial = 1;
+</span></span><span style="display:flex;"><span>5  printf(&#34;Enter the number: &#34;);
+</span></span><span style="display:flex;"><span>6  if (scanf(&#34;%d&#34;, &amp;final)) {
+</span></span><span style="display:flex;"><span>7    for (i = 1; i &lt;= final; i++)
+</span></span><span style="display:flex;"><span>8      factorial = factorial * i;
+</span></span><span style="display:flex;"><span>9    printf(&#34;The factorial of %d is %d\n&#34;, final, factorial);
+</span></span><span style="display:flex;"><span>10    exit(0);
+</span></span><span style="display:flex;"><span>11  } else {
+</span></span><span style="display:flex;"><span>12    exit(1);
+</span></span><span style="display:flex;"><span>13  }
+</span></span><span style="display:flex;"><span>14}
 </span></span><span style="display:flex;"><span>(gdb) b 8
 </span></span><span style="display:flex;"><span>Breakpoint 1 at 0x1199: file test.c, line 8.
 </span></span><span style="display:flex;"><span>(gdb) run
@@ -169,7 +169,7 @@ position.</p>
 </span></span><span style="display:flex;"><span>Enter the number: 17
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Breakpoint 1, main () at test.c:8
-</span></span><span style="display:flex;"><span>8	      factorial = factorial * i;
+</span></span><span style="display:flex;"><span>8      factorial = factorial * i;
 </span></span><span style="display:flex;"><span>(gdb) info locals
 </span></span><span style="display:flex;"><span>i = 1
 </span></span><span style="display:flex;"><span>final = 17
@@ -178,22 +178,22 @@ position.</p>
 </span></span><span style="display:flex;"><span>Will ignore next 15 crossings of breakpoint 1.  Continuing.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Breakpoint 1, main () at test.c:8
-</span></span><span style="display:flex;"><span>8	      factorial = factorial * i;
+</span></span><span style="display:flex;"><span>8      factorial = factorial * i;
 </span></span><span style="display:flex;"><span>(gdb) info locals
 </span></span><span style="display:flex;"><span>i = 17
 </span></span><span style="display:flex;"><span>final = 17
 </span></span><span style="display:flex;"><span>factorial = 2004189184
 </span></span><span style="display:flex;"><span>(gdb) n
-</span></span><span style="display:flex;"><span>7	    for (i = 1; i &lt;= final; i++)
+</span></span><span style="display:flex;"><span>7    for (i = 1; i &lt;= final; i++)
 </span></span><span style="display:flex;"><span>(gdb) n
-</span></span><span style="display:flex;"><span>9	    printf(&#34;The factorial of %d is %d\n&#34;, final, factorial);
+</span></span><span style="display:flex;"><span>9    printf(&#34;The factorial of %d is %d\n&#34;, final, factorial);
 </span></span><span style="display:flex;"><span>(gdb) info locals
 </span></span><span style="display:flex;"><span>i = 18
 </span></span><span style="display:flex;"><span>final = 17
 </span></span><span style="display:flex;"><span>factorial = -288522240
 </span></span><span style="display:flex;"><span>(gdb) n
 </span></span><span style="display:flex;"><span>The factorial of 17 is -288522240
-</span></span><span style="display:flex;"><span>10	    exit(0);
+</span></span><span style="display:flex;"><span>10    exit(0);
 </span></span><span style="display:flex;"><span>(gdb) c
 </span></span><span style="display:flex;"><span>Continuing.
 </span></span><span style="display:flex;"><span>[Inferior 1 (process 72091) exited normally]
