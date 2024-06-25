@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Re-learning Vim (11) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Re-learning Vim (11)</span></h1>
+
+<h3 class="date">Date:
+2024/06/25 (initial publish),
+2024/06/25 (last update)
+</h3>
+<h3 class="source">Source:
+en/note-00077.md
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/06/08/vim-learn-10/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#frequently-used-nvim-actions">Frequently used (n)vim actions</a></li>
+    <li><a href="#lazyvim-specific-tricks">LazyVim specific tricks</a></li>
+    <li><a href="#give-up-for-now">Give up for now</a></li>
+    <li><a href="#future-todos">Future TODOs</a></li>
+  </ul>
+</nav>
+
+<h2 id="frequently-used-nvim-actions">Frequently used (n)vim actions</h2>
+<p>Here are my frequently used vim tricks under my LazyVim settings.</p>
+<ul>
+<li>change VIM operation mode
+<ul>
+<li><code>&lt;esc&gt;</code> or quick <code>jk</code> &ndash; INSERT to NORMAL</li>
+<li><code>a</code> / <code>A</code> &ndash; NORMAL to INSERT (after cursor/line)</li>
+<li><code>i</code> / <code>I</code> &ndash; NORMAL to INSERT (before cursor/line)</li>
+<li><code>o</code> / <code>O</code> &ndash; NORMAL to INSERT with a open line (after/before)</li>
+<li><code>R</code> &ndash; NORMAL to REPLACE (on cursor)
+<ul>
+<li><code>r</code> is for single char and not so useful (?may remap to <code>R</code>?)</li>
+</ul>
+</li>
+<li><code>v</code> / <code>V</code> / <code>&lt;C-v&gt;</code> &ndash; NORMAL to VISUAL / V-LINE / V-BLOCK</li>
+</ul>
+</li>
+<li>cursor motions
+<ul>
+<li><code>h</code> / <code>j</code> / <code>k</code> / <code>l</code> &ndash; cursor move
+<ul>
+<li><code>j</code> shape points to downward.</li>
+<li><code>k</code> shape points to upward.</li>
+</ul>
+</li>
+<li><code>&lt;c-h&gt;</code> / <code>&lt;c-j&gt;</code> / <code>&lt;c-k&gt;</code> / <code>&lt;c-l&gt;</code> &ndash; window jump</li>
+<li><code>H</code> / <code>L</code> &ndash; tabline jump  (remapped)
+<ul>
+<li><code>J</code> &ndash; join line,  <code>K</code> &ndash; LSP</li>
+</ul>
+</li>
+<li><code>&lt;C-left&gt;</code> / <code>&lt;c-down&gt;</code> / <code>&lt;c-up&gt;</code> / <code>&lt;c-right&gt;</code> &ndash; window resize</li>
+<li><code>w</code> <code>b</code> and <code>W</code> <code>B</code> &ndash; next(forward)/previous(backward) start of word</li>
+<li><code>e</code> <code>ge</code> and <code>E</code> <code>gE</code> &ndash; next/previous end of word</li>
+<li><code>g</code> and <code>]</code> and <code>[</code> + α &ndash; move with which-key selection</li>
+<li><code>gg</code> &ndash; move to the top of file</li>
+<li><code>G</code> &ndash; move to the bottom of file</li>
+<li><code>0</code> &ndash; move to the first column of the line</li>
+<li><code>^</code> &ndash; move to the first non-white space char of the line</li>
+<li><code>$</code> &ndash; move to the last column of the line</li>
+</ul>
+</li>
+<li>screen motions and foldings
+<ul>
+<li><code>&lt;c-b&gt;</code> / <code>&lt;c-u&gt;</code> / <code>&lt;c-d&gt;</code> / <code>&lt;c-f&gt;</code> &ndash; screen jump (up, up/2, down/2, down)</li>
+<li><code>zt</code> &ndash; position cursor line at the top of screen</li>
+<li><code>zz</code> &ndash; position cursor line at the center of screen</li>
+<li><code>zb</code> &ndash; position cursor line at the bottom of screen</li>
+<li><code>z</code> + α &ndash; fold operations with which-key selection</li>
+</ul>
+</li>
+<li>actions
+<ul>
+<li>Record: qα, End-Record: q, Play-Record: @α, Mark as α: mα, Jump to α: `α/&lsquo;α</li>
+<li><code>u</code> &ndash; Undo</li>
+<li><code>&lt;C-r&gt;</code> &ndash; Redo</li>
+<li><code>.</code> &ndash; Repeat</li>
+<li><code>q</code> + β &ndash; record MACRO as β</li>
+<li><code>q</code> &ndash; End-Recording MACRO</li>
+<li><code>@</code> + β &ndash; Play-Recording MACRO</li>
+<li><code>&lt;C-r&gt;</code> + α &ndash; paste with selection + α</li>
+<li><code>p</code> &ndash; paste (after)</li>
+<li><code>P</code> &ndash; paste (before)</li>
+<li><code>dd</code> &ndash; delete a whole line</li>
+<li><code>D</code> &ndash; delete cursor to the end of line</li>
+<li><code>cc</code> &ndash; delete a whole line and insert</li>
+<li><code>C</code> &ndash; delete cursor to the end of line and insert</li>
+<li><code>J</code> &ndash; join with the next line</li>
+</ul>
+</li>
+<li>actions with motion or text objects
+<ul>
+<li><code>c</code> / <code>d</code> / <code>y</code> / <code>p</code> + <code>{motion}</code>
+<ul>
+<li><code>ciw</code> change in a word (inside)</li>
+<li><code>cib</code> change in a whole balanced <code>(...)</code> <code>[...]</code> <code>{...}</code></li>
+<li><code>cit</code> change in a whole balanced <code>&lt;tag&gt;...&lt;/tag&gt;</code></li>
+<li><code>ci&quot;</code> change in a whole balanced <code>&quot;...&quot;</code></li>
+<li><code>c5e</code> change next 5 words from cursor</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>searches
+<ul>
+<li><code>f</code> / <code>F</code> / <code>t</code> / <code>T</code> + <code>{char}</code> &ndash; repeat with <code>,</code> and <code>;</code> (<code>fβi</code> == <code>tβa</code>)</li>
+<li><code>/</code> / <code>?</code> + <code>{string}</code> &ndash; repeat with <code>n</code> and <code>N</code></li>
+<li><code>*</code> / <code>#</code> &ndash; repeat with <code>n</code> and <code>N</code></li>
+<li><code>m</code> + β &ndash; mark as β</li>
+<li><code>'</code> + β &ndash; jump to β (You may use <code>`` (backtick) instead of</code>&rsquo;`)</li>
+</ul>
+</li>
+<li>global substitutions
+<ul>
+<li><code>:%s/pattern/subst/gc</code> &ndash; all lines in the file</li>
+<li><code>:cdo s/pattern/subst/gc</code> &ndash; all quickfix lines</li>
+</ul>
+</li>
+<li>reformat (<code>V-LINE</code> mode)
+<ul>
+<li><code>gq</code> &ndash; reformat LSP</li>
+<li><code>gw</code> &ndash; reformat VIM</li>
+<li><code>=</code> &ndash; re-indent</li>
+<li><code>&gt;</code> &ndash; increase indent</li>
+<li><code>&lt;</code> &ndash; reduce indent</li>
+</ul>
+</li>
+<li>Tag jumps
+<ul>
+<li><code>&lt;C-]&gt;</code> &ndash; jump to link-destination</li>
+<li><code>&lt;C-t&gt;</code> &ndash; jump back to link-source</li>
+<li><code>&lt;C-i&gt;</code> / <code>&lt;C-o&gt;</code>: jump next / previous link-destination</li>
+</ul>
+</li>
+<li>quickfix tricks
+<ul>
+<li><code>:vim /pattern/ %</code> &ndash; search within a file</li>
+<li><code>:gr 'pattern' ##</code> &ndash; search within all open files</li>
+<li><code>:cdo {cmd}</code> and <code>:cfdo {cmd}</code> &ndash; execute <code>{cmd}</code> for all quickfix items</li>
+<li><code>:cex script.sh</code></li>
+<li><code>[q</code> and <code>]q</code> mapped to <code>:cprev</code> and <code>:cnext</code></li>
+<li><code>:packadd cfilter</code> and use <code>:Cfilter[!]</code>
+<ul>
+<li><code>:colder</code> and <code>:cnewer</code></li>
+</ul>
+</li>
+<li>Telescope
+<ul>
+<li><code>&lt;Tab&gt;</code> / <code>&lt;S-Tab&gt;</code> to mark list item</li>
+<li><code>&lt;c-q&gt;</code> / <code>&lt;m-q&gt;</code> to create a down-selected (reverse) list</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>Here, I used:</p>
+<ul>
+<li>&ldquo;α&rdquo; for a which-key prompted key input.</li>
+<li>&ldquo;β&rdquo; for a single character input.</li>
+</ul>
+<h2 id="lazyvim-specific-tricks">LazyVim specific tricks</h2>
+<p>Now <code>:message</code> is now shown in pop-up.  Use <code>&lt;leader&gt;snh</code> to check.</p>
+<h2 id="give-up-for-now">Give up for now</h2>
+<ul>
+<li>Stay out of &ldquo;Lication list&rdquo; and stick to &ldquo;Quickfix List&rdquo;</li>
+<li>Stay out of DAP</li>
+<li>Keep tab and navigate with <code>H</code> / <code>L</code> and give up using their native functions.</li>
+</ul>
+<h2 id="future-todos">Future TODOs</h2>
+<ul>
+<li>History related tricks with &ldquo;Quickfix List&rdquo;.
+<ul>
+<li>Save and restore</li>
+<li>Menu select</li>
+</ul>
+</li>
+<li>Learn to use Telescope programing</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2024/06/08/vim-learn-10/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2024 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
