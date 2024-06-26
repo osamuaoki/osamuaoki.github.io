@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/06/08 (initial publish),
-2024/06/26 (last update)
+2024/06/27 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00076.md
@@ -167,10 +167,13 @@ missing features (2024-06-21).</p>
 </ul>
 </li>
 </ul>
+<p>(This customization is on-going activity.)</p>
 <p>I think I have good enough for my normal uses.</p>
 <p>I keep diagnose and spellcheck are ON but most of auto-input features are off.</p>
-<p>I didn&rsquo;t install <code>bqf-nvim</code> since its quickfix list down-selection was already
-available as a part of <code>telescope</code> capability.</p>
+<p>I ended up not to install <code>bqf-nvim</code> nor <code>qf.nvim</code> since LazyVim had enough
+capability without them for managing Quickfix List.</p>
+<p>This is because LazyVim uses <code>telescope</code>.  It can provide quickfix list
+down-selection capability as installed.  With customization as described below, it can manage quickfix history too.</p>
 <h3 id="quickfix-history">Quickfix history</h3>
 <p>Please note down-selected list from both Quickfix list and Location list are
 sent to the top of the quickfix list history.</p>
@@ -184,7 +187,7 @@ sent to the top of the quickfix list history.</p>
 </ul>
 <p>Quickfix list history can be
 managed via Telescope by adding the following keymap:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>map(<span style="color:#e6db74">&#34;n&#34;</span>, <span style="color:#e6db74">&#34;&lt;leader&gt;xh&#34;</span>, <span style="color:#e6db74">&#34;&lt;cmd&gt;Telescope quickfixhistory&lt;cr&gt;&#34;</span>, { desc <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Pick QfList from its History&#34;</span> })
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>map(<span style="color:#e6db74">&#34;n&#34;</span>, <span style="color:#e6db74">&#34;&lt;leader&gt;xh&#34;</span>, <span style="color:#e6db74">&#34;&lt;cmd&gt;Telescope quickfixhistory&lt;cr&gt;&#34;</span>, { desc <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Quickfix History&#34;</span> })
 </span></span></code></pre></div><p>With this setup, I don&rsquo;t need any more plugins to use quickfix features.</p>
 <p>(I think XML tag insert and tripple-backtick insert features are ON by some FT plugin.)</p>
 <!-- raw HTML omitted -->
