@@ -74,7 +74,8 @@ en/note-00077.md
 <h2 id="frequently-used-nvim-actions">Frequently used (n)vim actions</h2>
 <p>Here are my frequently used vim tricks under my LazyVim settings.</p>
 <ul>
-<li>change VIM operation mode
+<li>
+<p>change VIM operation mode</p>
 <ul>
 <li><code>&lt;esc&gt;</code> or quick <code>jk</code> &ndash; INSERT to NORMAL</li>
 <li><code>a</code> / <code>A</code> &ndash; NORMAL to INSERT (after cursor/line)</li>
@@ -87,8 +88,10 @@ en/note-00077.md
 </li>
 <li><code>v</code> / <code>V</code> / <code>&lt;C-v&gt;</code> &ndash; NORMAL to VISUAL / V-LINE / V-BLOCK</li>
 </ul>
+<p>For NORMAL mode:</p>
 </li>
-<li>cursor motions
+<li>
+<p>cursor motions</p>
 <ul>
 <li><code>h</code> / <code>j</code> / <code>k</code> / <code>l</code> &ndash; cursor move
 <ul>
@@ -113,7 +116,8 @@ en/note-00077.md
 <li><code>$</code> &ndash; move to the last column of the line</li>
 </ul>
 </li>
-<li>searches
+<li>
+<p>searches</p>
 <ul>
 <li><code>f</code> / <code>F</code> / <code>t</code> / <code>T</code> + <code>{char}</code>
 <ul>
@@ -127,7 +131,8 @@ en/note-00077.md
 <li><code>'</code> + β &ndash; jump to β (You may use <code>`` (backtick) instead of</code>&rsquo;`)</li>
 </ul>
 </li>
-<li>screen motions and foldings
+<li>
+<p>screen motions and foldings</p>
 <ul>
 <li><code>&lt;c-b&gt;</code> / <code>&lt;c-u&gt;</code> / <code>&lt;c-d&gt;</code> / <code>&lt;c-f&gt;</code> &ndash; screen jump (up, up/2, down/2, down)</li>
 <li><code>zt</code> &ndash; position cursor line at the top of screen</li>
@@ -136,14 +141,16 @@ en/note-00077.md
 <li><code>z</code> + α &ndash; fold operations with which-key selection</li>
 </ul>
 </li>
-<li>actions
+<li>
+<p>actions</p>
 <ul>
 <li><code>u</code> &ndash; Undo</li>
 <li><code>&lt;C-r&gt;</code> &ndash; Redo</li>
 <li><code>.</code> &ndash; Repeat</li>
 </ul>
 </li>
-<li>actions with motion or text objects
+<li>
+<p>actions with motion or text objects</p>
 <ul>
 <li><code>c</code> / <code>d</code> / <code>y</code> + <code>{motion}</code>
 <ul>
@@ -157,7 +164,8 @@ en/note-00077.md
 <li><code>v</code> + cursor moves + <code>c</code> / <code>d</code> / <code>y</code> &ndash; actions with visual selection</li>
 </ul>
 </li>
-<li>actions cut and paste like
+<li>
+<p>actions cut and paste like</p>
 <ul>
 <li><code>p</code> &ndash; paste (after)</li>
 <li><code>P</code> &ndash; paste (before)</li>
@@ -168,7 +176,8 @@ en/note-00077.md
 <li><code>J</code> &ndash; join with the next line</li>
 </ul>
 </li>
-<li>actions with MACRO
+<li>
+<p>actions with MACRO</p>
 <ul>
 <li><code>q</code> + β &ndash; record MACRO as β</li>
 <li><code>q</code> &ndash; End-Recording MACRO</li>
@@ -177,13 +186,15 @@ en/note-00077.md
 <li><code>&lt;C-r&gt;</code> + α &ndash; paste with selection + α</li>
 </ul>
 </li>
-<li>global substitutions
+<li>
+<p>global substitutions</p>
 <ul>
 <li><code>:%s/pattern/subst/gc</code> &ndash; all lines in the file</li>
 <li><code>:cdo s/pattern/subst/gc</code> &ndash; all quickfix lines</li>
 </ul>
 </li>
-<li>reformat (<code>V-LINE</code> mode)
+<li>
+<p>reformat (<code>V-LINE</code> mode)</p>
 <ul>
 <li><code>gq</code> &ndash; reformat LSP</li>
 <li><code>gw</code> &ndash; reformat VIM</li>
@@ -192,14 +203,16 @@ en/note-00077.md
 <li><code>&lt;</code> &ndash; reduce indent</li>
 </ul>
 </li>
-<li>Tag jumps (<code>:help</code>)
+<li>
+<p>Tag jumps (<code>:help</code>)</p>
 <ul>
 <li><code>&lt;C-]&gt;</code> &ndash; jump to link-destination</li>
 <li><code>&lt;C-t&gt;</code> &ndash; jump back to link-source</li>
 <li><code>&lt;C-i&gt;</code> / <code>&lt;C-o&gt;</code>: jump next / previous link-destination</li>
 </ul>
 </li>
-<li>quickfix tricks
+<li>
+<p>quickfix tricks</p>
 <ul>
 <li><code>:vim /pattern/ %</code> &ndash; search within a file</li>
 <li><code>:gr 'pattern' ##</code> &ndash; search within all open files</li>
@@ -224,8 +237,8 @@ en/note-00077.md
 </li>
 <li><code>:h</code> &ndash; help</li>
 <li><code>:on</code> &ndash; only</li>
-<li><code>wall</code>  &ndash; write all buffers</li>
-<li><code>qa</code>  &ndash; quit all buffers if already saved</li>
+<li><code>:wall</code>  &ndash; write all buffers</li>
+<li><code>:qa</code>  &ndash; quit all buffers if already saved</li>
 </ul>
 </li>
 </ul>
@@ -233,6 +246,14 @@ en/note-00077.md
 <ul>
 <li>&ldquo;α&rdquo; for a which-key prompted key input.</li>
 <li>&ldquo;β&rdquo; for a single character input.</li>
+</ul>
+<p>For INSERT mode:</p>
+<ul>
+<li><code>&lt;c-c&gt;</code> &ndash; Quit insert mode (It seems this is useful when resize cause screen freeze.)</li>
+<li><code>&lt;c-u&gt;</code> &ndash; Erase line before cursor</li>
+<li><code>&lt;c-v&gt;</code> &ndash; Input non-ascii using octal etc.</li>
+<li><code>&lt;c-w&gt;</code> &ndash; Erase a word before cursor</li>
+<li><code>&lt;c-r&gt;</code> &ndash; Insert register (with which-key help)</li>
 </ul>
 <p>I realize I don&rsquo;t use nor remember other esoteric keymps (especially ones in INSERT mode.).</p>
 <h2 id="benefit-of-lazyvim-over-plain-nvim">Benefit of LazyVim over plain Nvim</h2>
