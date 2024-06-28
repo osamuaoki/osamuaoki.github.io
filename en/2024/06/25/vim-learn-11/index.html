@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/06/25 (initial publish),
-2024/06/27 (last update)
+2024/06/28 (last update)
 </h3>
 <h3 class="source">Source:
 en/note-00077.md
@@ -113,6 +113,20 @@ en/note-00077.md
 <li><code>$</code> &ndash; move to the last column of the line</li>
 </ul>
 </li>
+<li>searches
+<ul>
+<li><code>f</code> / <code>F</code> / <code>t</code> / <code>T</code> + <code>{char}</code>
+<ul>
+<li><code>fβi</code> == <code>tβa</code> but I tend to use prior</li>
+<li>repeat with <code>,</code> and <code>;</code>, prefix with repeats</li>
+</ul>
+</li>
+<li><code>/</code> / <code>?</code> + <code>{string}</code> &ndash; repeat with <code>n</code> and <code>N</code></li>
+<li><code>*</code> / <code>#</code> &ndash; repeat with <code>n</code> and <code>N</code></li>
+<li><code>m</code> + β &ndash; mark as β</li>
+<li><code>'</code> + β &ndash; jump to β (You may use <code>`` (backtick) instead of</code>&rsquo;`)</li>
+</ul>
+</li>
 <li>screen motions and foldings
 <ul>
 <li><code>&lt;c-b&gt;</code> / <code>&lt;c-u&gt;</code> / <code>&lt;c-d&gt;</code> / <code>&lt;c-f&gt;</code> &ndash; screen jump (up, up/2, down/2, down)</li>
@@ -129,16 +143,9 @@ en/note-00077.md
 <li><code>.</code> &ndash; Repeat</li>
 </ul>
 </li>
-<li>actions cut and paste like
+<li>actions with motion or text objects
 <ul>
-<li><code>p</code> &ndash; paste (after)</li>
-<li><code>P</code> &ndash; paste (before)</li>
-<li><code>dd</code> &ndash; delete a whole line</li>
-<li><code>D</code> &ndash; delete cursor to the end of line</li>
-<li><code>cc</code> &ndash; delete a whole line and insert</li>
-<li><code>C</code> &ndash; delete cursor to the end of line and insert</li>
-<li><code>J</code> &ndash; join with the next line</li>
-<li><code>c</code> / <code>d</code> / <code>y</code> + <code>{motion}</code> &ndash; actions with motion or text objects
+<li><code>c</code> / <code>d</code> / <code>y</code> + <code>{motion}</code>
 <ul>
 <li><code>ciw</code> change in a word (inside)</li>
 <li><code>cib</code> change in a whole balanced <code>(...)</code> <code>[...]</code> <code>{...}</code></li>
@@ -150,6 +157,17 @@ en/note-00077.md
 <li><code>v</code> + cursor moves + <code>c</code> / <code>d</code> / <code>y</code> &ndash; actions with visual selection</li>
 </ul>
 </li>
+<li>actions cut and paste like
+<ul>
+<li><code>p</code> &ndash; paste (after)</li>
+<li><code>P</code> &ndash; paste (before)</li>
+<li><code>dd</code> &ndash; delete a whole line</li>
+<li><code>D</code> &ndash; delete cursor to the end of line</li>
+<li><code>cc</code> &ndash; delete a whole line and insert</li>
+<li><code>C</code> &ndash; delete cursor to the end of line and insert</li>
+<li><code>J</code> &ndash; join with the next line</li>
+</ul>
+</li>
 <li>actions with MACRO
 <ul>
 <li><code>q</code> + β &ndash; record MACRO as β</li>
@@ -157,15 +175,6 @@ en/note-00077.md
 <li><code>@</code> + β &ndash; Play Recorded MACRO</li>
 <li><code>Q</code> &ndash; Play the last Recorded MACRO</li>
 <li><code>&lt;C-r&gt;</code> + α &ndash; paste with selection + α</li>
-</ul>
-</li>
-<li>searches
-<ul>
-<li><code>f</code> / <code>F</code> / <code>t</code> / <code>T</code> + <code>{char}</code> &ndash; repeat with <code>,</code> and <code>;</code> (<code>fβi</code> == <code>tβa</code>)</li>
-<li><code>/</code> / <code>?</code> + <code>{string}</code> &ndash; repeat with <code>n</code> and <code>N</code></li>
-<li><code>*</code> / <code>#</code> &ndash; repeat with <code>n</code> and <code>N</code></li>
-<li><code>m</code> + β &ndash; mark as β</li>
-<li><code>'</code> + β &ndash; jump to β (You may use <code>`` (backtick) instead of</code>&rsquo;`)</li>
 </ul>
 </li>
 <li>global substitutions
