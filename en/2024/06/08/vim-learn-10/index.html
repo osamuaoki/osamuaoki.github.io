@@ -172,7 +172,7 @@ missing features (2024-06-21).</p>
 <p>I keep diagnose and spellcheck are ON but most of auto-input features are off.</p>
 <p>I ended up not to install <code>bqf-nvim</code> nor <code>qf.nvim</code> since LazyVim had enough
 capability without them for managing Quickfix List.</p>
-<p>This is because LazyVim uses <code>telescope</code>.  It can provide quickfix list
+<p>This is because LazyVim uses <code>telescope</code> or <code>fzf-lua</code>.  It can provide quickfix list
 down-selection capability as installed.  With customization as described below, it can manage quickfix history too.</p>
 <h3 id="quickfix-history">Quickfix history</h3>
 <p>Please note down-selected list from both Quickfix list and Location list are
@@ -192,6 +192,11 @@ managed via Telescope by adding the following keymap:</p>
 <p>NOTE: I updated to use LazyExtras <code>editor.fzf</code>.  So no more <code>Telescope ...</code> but
 <code>FzfLua ...</code> and also desc = &ldquo;Quickfix Stack (FzfLua)&rdquo;</p>
 <p>(I think XML tag insert and tripple-backtick insert features are ON by some FT plugin.)</p>
+<p>NOTE: Many features get decent defaults in LazyVim than stock <code>nvim</code>.</p>
+<ul>
+<li><code>:set virtualedit=&quot;block&quot;</code></li>
+<li><a href="https://github.com/mhinz/vim-galore#saner-behavior-of-n-and-n">Saner behavior of n and N</a></li>
+</ul>
 <!-- raw HTML omitted -->
 
 
