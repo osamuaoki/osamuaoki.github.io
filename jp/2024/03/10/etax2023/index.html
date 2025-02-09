@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2024/03/10 (initial publish),
-2024/12/14 (last update)
+2025/02/09 (last update)
 </h3>
 <h3 class="source">Source:
 jp/note-00062.md
@@ -114,7 +114,7 @@ jp/note-00062.md
 </ul>
 <p>健康保険組合の医療費データーは、かなり間抜けな構造（XMLをCSVに落し込んだ感じのテキストファイル）で、集計シートに読み込むのにスクリプト前処理をし、LibreOffice上で表計算を使いながら実際の領収書と照合し整形しました。最後は国税庁提供の<a href="https://www.nta.go.jp/taxes/shiraberu/shinkoku/tokushu/keisubetsu/iryou-shuukei.htm">医療費集計フォーム</a>にLibreOfficeでコピペで張り込みアップロードしました。医療機関名の２０文字制約等、要注意です。</p>
 <p>スクリプトによる前処理は、<a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/blob/master/017_formmed/formmed">私のgithubにあるformmedスクリプト</a> を、医療費（家族毎別々に取得）のCSVファイルのあるフォルダーに置き、以下で対応しました。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ./formmed &lt; FILENAME.csv
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ./formmed FILENAME.csv
 </span></span></code></pre></div><h3 id="クレジットカードの取引履歴の取り込み">クレジットカードの取引履歴の取り込み</h3>
 <p>カードからの取引履歴は、確定分と予定分で書式が違ったり、外貨取引やポイント割引の記載が混在していたり、カードごとに特例情報があったりします。CSVファイルからの数字は読み込めるのですが、GnuCashへの転機が意外と面倒です。医療費データー用のフィルターをベースに、クレジットカード用の前処理フィルター等を後日作りました。</p>
 <ul>
