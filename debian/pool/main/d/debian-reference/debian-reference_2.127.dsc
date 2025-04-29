@@ -5,7 +5,7 @@ Format: 3.0 (native)
 Source: debian-reference
 Binary: debian-reference-common, debian-reference, debian-reference-en, debian-reference-de, debian-reference-fr, debian-reference-id, debian-reference-it, debian-reference-ja, debian-reference-pt, debian-reference-pt-br, debian-reference-zh-cn, debian-reference-zh-tw, debian-reference-es
 Architecture: all
-Version: 2.126
+Version: 2.127
 Maintainer: Osamu Aoki <osamu@debian.org>
 Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Standards-Version: 4.6.2
@@ -29,25 +29,25 @@ Package-List:
  debian-reference-zh-cn deb doc optional arch=all
  debian-reference-zh-tw deb doc optional arch=all
 Checksums-Sha1:
- 66ac8f2acca6f53dc88821deac1d96982300f19c 2245892 debian-reference_2.126.tar.xz
+ e85dd427b8ec78b5fd73033b0e5c10a481497d25 2245816 debian-reference_2.127.tar.xz
 Checksums-Sha256:
- e903d295ba207b11c72c6851b99d0971a1f25787fd6386883a959f048dc2a140 2245892 debian-reference_2.126.tar.xz
+ 7dda7505255b28ff0d5ae412eed81bf093d4b5e2aa0ef3ac99339473ede2bdce 2245816 debian-reference_2.127.tar.xz
 Files:
- b80051e2da1edbff6787f941c6c591b2 2245892 debian-reference_2.126.tar.xz
+ b6508fe8ea97a76684b8e77809a178d2 2245816 debian-reference_2.127.tar.xz
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAEBCgAdFiEEMTNyTWIHiBV56V1iHhNWiB3Y15EFAmgPjVUACgkQHhNWiB3Y
-15GVmhAAhZAxUgH0O84egNfQg3FFBz2qhThhWV10RF0mZQ4SDZfw/bEynb9MKtOx
-sILp3wxoDe7HUbyJbBMK1kALPciznHau22Yw+ksV0K5qNOts0lh+CE5AbD5vntOx
-/nThcQw+z8MPVqydaZHkORFcVc2e0rz9SIixq3YJ1WguzTHfQt0OTxueobviKGCp
-Inni+3teHSCFf/NWaNpTF0WHAS+zWfy2inuAcOnm85ySMC43LPmtfo5ZKDmf2qm6
-o7Sb8vXKDbXsIyjcRowJxI704avl0v3ODvMVacWiC0g5j3NmN+q+9XLWxVSL/8NR
-kNw0kgc2BhYfzD/6XGmQYkcCmKh+QaezZ9Is9cQUGpeA1kxkmPl1wt3okOHl52O7
-6kiMZyE/0hd5vw/5yLfj3DK7NJJgfSR389gzgPjus7srCKsSaHdLOBtkEg2Yw/TE
-Xeh8Hod77x8KFr05+fkecYFbqNyfRpb1a1NswU9FE2TvTm1Zrw2+uccEcTM4mQv/
-vhCQqkNRa5gdRoH0glnsbg5+Tcx7HG/t+SjSunPjqDBmBLkROvAQ0YtzY174nZ/p
-IJh+yfG06GXuD7RjuaBVpVfqCnw2Dp0jQ5J9CZAvZZc5d3ZPMB7RziWp9oi9i9fP
-FaQA2HSJOd59Kh/ZFC4Eq7yWOtsJjdC9mmVFb/SQ9aECFbAxrLQ=
-=qvy7
+iQIzBAEBCgAdFiEEMTNyTWIHiBV56V1iHhNWiB3Y15EFAmgRRPkACgkQHhNWiB3Y
+15EWbA/8DekJs2v62A1ooEeIM9T+hRSzR4iExPHHcwfaYknagbeJDhzXGXyaStW2
+fsosahGUf1gRvySqcIFkf4Pm7hM7FY7zxZB1jHMLR4HSIOFXbP6Hgxce5DRBnkyG
+96OJ8RzXHi5Nqe9jw4J56IuhJZqhuT00/M2COoiG+NZYNyXhwLD2Ig0PCBXh4I+4
+9gRAm3l+WtAu8fWfMzyFGWqmDojgvR1v4Q0IqQwhPwiQOxahYjac1qAhvw064M9+
+NKtVZi0xcD+hTHvnHr2gainBWZkmPWn0KVz8qGhSAjCwt5xqQGlABcyD9EaSPdmj
+ODwMBVXKWPwaefoL/queRX0InsYYG2DRNpb66aHDGPXCjQ/aWzQXlcDLEyGVA7Hs
+X9VtTiX1C3Ft78ZVULvDn8ZzzL6YJTQi3D+nBS17Herjt8ooPMAPiwBp52x7PaFE
+UHWwypYH0SY2fukg40IH2k0FkbhUy6LCYKcV5A7Q0TWA8aBZh4C3leMKA1xYOncM
+TX3X0PaTxho1c5rdlT/rX9fEzw8VFJ3wVZP33Uf6zRd/q6QkKQ8hcGqqYfF3OPi4
+i1ofpR3i8WtlDqVktoc4kcEX7RV1IJ6n/O31TDBQ0CKL8erO1Gnlrd6isnwp2aD9
++bFO7Y7F2LMtMYIkLt0UHk+vT4d4fKcYEp1NHBZ7o4UWAhtdta4=
+=4AHX
 -----END PGP SIGNATURE-----
