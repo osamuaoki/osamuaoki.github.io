@@ -1,342 +1,3 @@
-Package: 00-min
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: aptitude, locales-all, sudo, task-english, task-laptop, task-ssh-server
-Recommends: btrfs-progs, cryptsetup, discover, firmware-atheros, firmware-linux, firmware-realtek, git, gnupg, grub-pc | grub-efi-amd64, installation-report, linux-image-amd64, mc, screen, usbutils, vim, wget
-Replaces: nano
-Provides: nano
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/00-min_0.6_all.deb
-Size: 2036
-SHA256: c2be5a545b2e4787dc873ea92c6e92c9949465faf2ef7d0672adbbedc3332089
-SHA1: 6123ce874264d9502046a440de1f3e56fc8e524d
-MD5sum: dba1d6d47ed0af06d863e87d649c4a09
-Description: Task for the minimal non-GUI system
- This is a task package installing minimal system without GUI.
- .
- This is meant to be used for creating the initial image for the minimal chroot
- and virtual system.
- .
- Installer installed packages are included
-
-Package: 01-cli
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: 00-min
-Recommends: bsd-mailx, bzip2, cups, dislocker, dmsetup, e2fsprogs, eject, exfatprogs, fdisk, fzf, gdisk, gdu, gpart, hardinfo, hdparm, htop, hwinfo, info, iproute2, iptables, kpartx, less, liblz4-tool, libsecret-tools, lxc, lxd, lxd-tools, moreutils, mtools, mutt, ntfs-3g, nvme-cli, openssh-client, openssh-server, parted, pinentry-curses, printer-driver-escpr, python3-pip, python3-virtualenv, rsync, scdaemon, smartmontools, systemd-container, task-english, task-laptop, testdisk, time, tmux, tree, udftools, w3m, xfsprogs, xorriso, xxd, xz-utils, zip, zstd
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/01-cli_0.6_all.deb
-Size: 2200
-SHA256: b79fe5a882d8203aa46edc112cf5d6583afa30ab50fb2ba831e567ea7a0a89e5
-SHA1: 52c99a59991e7bf830f497deb5240faf66866121
-MD5sum: a2a5bf9b321942c130fbc222bde6b3ac
-Description: Task for the baseline CLI system
- This is a task package installing the baseline CLI system without GUI.
- .
- This contains:
-  * File system CLI tools
-  * Compression CLI tools
-  * Network CLI tools
- .
- This doesn't contain:
-  * Tools to compile and run programs
-  * Tools to install external programs not packaged by Debian
-
-Package: 02-gui
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: 01-cli, task-desktop
-Recommends: adwaita-qt, btrfs-heatmap, chromium, gitk, gnome-software-plugin-flatpak, gnome-software-plugin-snap, gparted, pinentry-gnome3, smart-notifier, ssh-askpass, tkinfo, wl-clipboard, xclip, xdg-desktop-portal, xdu, xsel
-Provides: gnome-shell-extensions
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/02-gui_0.6_all.deb
-Size: 2032
-SHA256: 69d724bcb2029e44310c495f72b64b2b85dc408c024eb89d1a1f892747a2cb63
-SHA1: 176651319c7b7bc07bcb1db3eb9634b8c5599726
-MD5sum: 5a47a8705ab7e9cee8ad6a4f0928b3bf
-Description: Task for the baseline GUI system
- This is a task package installing the baseline GUI system.
- .
- This contains:
-  * Desktop GUI tools
-  * Network GUI tools
- .
- This doesn't contain:
-  * Tools to compile and run programs
-  * Tools to install external programs not packaged by Debian
-
-Package: 03-jpn
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: 02-gui
-Recommends: fontmatrix, fonts-noto, fonts-takao, fonts-vlgothic, ibus-gtk, ibus-gtk3, ibus-gtk4, ibus-mozc, ibus-wayland, libqt5gui5, lv, nkf
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/03-jpn_0.6_all.deb
-Size: 1900
-SHA256: c5f3fb29d878fb55e3bce1170a9b8997c18ad64350bce470a3cccf9e45a9ce3a
-SHA1: 4afda5dc663e7935eba4417534f375661d7a2f30
-MD5sum: 12188bd0ca99e6e5048c11aff9274b2c
-Description: Task for the baseline Japanese GUI system
- This is a task package installing the baseline Japanese GUI system.
- .
- This contain:
-  * Input methods
-  * Fonts
-  * Encoding filter
-
-Package: 04-dev
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: 01-cli, build-essential, debhelper, devscripts
-Recommends: apt-file, ben, black, cargo, ccache, cgdb, clang-format, cmake, curl, debmake, dgit, dh-python, docbook-xml, docbook-xsl, eatmydata, faketime, gdb, gdebi, gettext, git-buildpackage, gitk, golang, golang-any, graphicsmagick-imagemagick-compat, hugo, imediff, libreply-perl, libterm-readline-gnu-perl, libxml2-utils, lsof, ltrace, luarocks, meld, nodejs, npm, perl, pipx, po4a, python3, python3-distutils-extra, python3-gi, python3-pil, python3-venv, quilt, reprepro, rlwrap, rpm2cpio, rustc, sbuild, shellcheck, shunit2, signing-party, strace, texinfo, xsltproc, xtrace
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/04-dev_0.6_all.deb
-Size: 2284
-SHA256: 48cd222a1f909a7fd75f7eb0f3ed51f0343e3072981d7d48fdfe14dead458add
-SHA1: 87d6b108af7d433b962a4804b3a7c2d06c80626a
-MD5sum: a0651a8749d3cdb3a6a9d7b064f3ee26
-Description: Task for the baseline development system
- This is a task package installing the baseline development system.
- .
- This contains:
-  * Tools to compile, run and debug programs
-  * Tools to execute interpreters with their support libraries
-  * Tools to develop Debian packages
-  * Tools to create web pages
-  * Tools to create deb package repository
-  * Tools to install external programs not packaged by Debian
- This doesn't contain:
-  * Tools to pull-in TeX programs
-
-Package: 05-doc
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 11
-Recommends: cpp-doc, debian-policy, debian-reference, debmake-doc, developers-reference, doc-base, gcc-doc, gccintro, gdb-doc, git-doc, ibus-doc, iproute2-doc, maint-guide, make-doc, perl-doc, python3-doc
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/05-doc_0.6_all.deb
-Size: 2048
-SHA256: ba2faac55e101359fc0dc7230ada2823433cf93fa2eb3b4ad99aa105252c2ca4
-SHA1: 957b7032ce110e827306bbb6a0055b015fd4bee9
-MD5sum: 23a22706da509d680d0d0188ebe807a8
-Description: Task to add documentation support
- This is a task package to add documentation support for the baseline
- development system.
- .
- This may pull in some non-free GFDL packages.
-
-Package: 06-typ
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: 02-gui
-Recommends: 01-cli, 03-jpn, 04-dev, 05-doc
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/06-typ_0.6_all.deb
-Size: 1832
-SHA256: a164a4f64873a9e85c02835f16458f4cf3fb2c7d55d06402d5a0152a5accefab
-SHA1: 11191432f11a303e238ad889f818f3c47db04977
-MD5sum: 5181c05aa805c9ddad722fc69e01355c
-Description: Task for the typical desktop system
- This is a task package installing the typical desktop system.
- .
- This is for the default Desktop installation.
-
-Package: 12-virt
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: 02-gui
-Recommends: gnome-boxes, lxc, vde2, virt-manager, virt-viewer
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/12-virt_0.6_all.deb
-Size: 1852
-SHA256: fff26e118776458b2462f7be9644b33b12812a8ed0deedc24beb2114cf94797d
-SHA1: beba5b98e2f53a50279cf5ef4914dc10c16464f9
-MD5sum: 0e825192cfdef4ef4304272c5aca56e9
-Description: Task to add virtual OS environment support
- This is a task package to add virtual OS environment support.
- .
- This is here to easily add and remove relevant packages.
-
-Package: 14-iot
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: 04-dev
-Recommends: arduino, arduino-mk, avra, avrdude, avrp, binutils-avr, freecad, fritzing, gcc-avr, gdb-avr, kicad, librecad, openscad, simavr
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/14-iot_0.6_all.deb
-Size: 1908
-SHA256: 873e28eb9d0d325ac576796d9e52082179f62f14cb7533f75166ddb1404fde7e
-SHA1: b5864b053daddd5918ca519f14bc69aa40736d22
-MD5sum: b1ba0dac7bcb368315c06d83a5c7eb9e
-Description: Task to add IoT development support
- This is a task package to add IoT development support.
- .
- This is here to easily add and remove relevant packages for hardware and
- firmware developments.
-
-Package: 14-tex
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: 04-dev
-Recommends: dblatex, fonts-arphic-bsmi00lp, fonts-arphic-gbsn00lp, fonts-wqy-zenhei, texlive-full, xmlto
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/14-tex_0.6_all.deb
-Size: 1876
-SHA256: 1ed283b87de75ecc5d1fa6024fb16292b3c4600e4f187bbb470546b5f80757d1
-SHA1: 843aec81bafdc62f08ac02c9ec1041563b621faa
-MD5sum: 8653c4228d2b98a6a530ff5ecd06ce08
-Description: Task to add TeX support
- This is a task package to add TeX support.
- .
- This is here to easily add and remove relevant packages to build PDF files.
-
-Package: 16-extra
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Depends: 06-typ
-Recommends: asciidoc, asciidoctor, fail2ban, git-svn, knockd, linux-cpupower, memtest86+, parallel, rclone, rename, shellinabox, subversion
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/16-extra_0.6_all.deb
-Size: 1940
-SHA256: 6784ffd06be86bb365ea7a00bcb5a41db4425292fc4879685b2e9eed42cf43e1
-SHA1: 9e877234d7a58cdf4fc19324ee89d66bbe720add
-MD5sum: de42a8b329d4fa189cfa82584a59bebf
-Description: Task to add extra utilities
- This is a task package to add extra utilities.  Anything which doesn't fit in
- the existing tasks are moved to here.
- .
- This is here to easily add and remove relevant packages.
-
-Package: 99-notex
-Source: osamu-task
-Version: 0.6
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 8
-Conflicts: dblatex, dvipng, texlive, texlive-base, texlive-binaries, texlive-full, texlive-latex-base, texlive-lualatex, texlive-xetex
-Provides: dblatex, dvipng, texlive, texlive-base, texlive-binaries, texlive-full, texlive-latex-base, texlive-lualatex, texlive-xetex
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/osamu-task
-Priority: optional
-Section: tasks
-Filename: pool/main/o/osamu-task/99-notex_0.6_all.deb
-Size: 1980
-SHA256: 6112c315dbb8d9d3474d218db2fcf047f50dc4136760215eee0e8261dfaa15b3
-SHA1: 24923ffb1413920e162b39dc4e4696034130140b
-MD5sum: 81b468e9c2250a2335dee3576fc16588
-Description: Task to avoid adding TeX related packages
- This is a task package to avoid adding TeX support.
- .
- This is here to easily skip installing TeX packages to avoid huge package
- installation due to their dependencies.
- .
- Installing this package doesn't prevent installing texinfo package and
- it to generate info pages.  But installing this will break its PDF generating
- capability.
-
-Package: bss
-Version: 2.2.1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 186
-Depends: btrfs-progs, e2fsprogs, libsecret-tools, rsync, sudo, systemd
-Multi-Arch: foreign
-Homepage: https://github.com/osamuaoki/bss
-Priority: optional
-Section: utils
-Filename: pool/main/b/bss/bss_2.2.1_all.deb
-Size: 37932
-SHA256: 847e6a76e959ba0784e39bedf1fb707751c983b6e62f97c60b02d6bc72215d46
-SHA1: 9936ed85dd1fd72f57896f3365cfeab0f8faa8a4
-MD5sum: 800ed8f1b4dccf511d09ace647b928eb
-Description: Btrfs Subvolume Snapshot Utility
- "bss" is basically a "btrfs subvolume ..." command wrapper to create and age
- historical snapshots with the intuitive snapshot subvolume name and flexible
- data aging capabilities.
- .
-   * check for required free blocks (minimum FMIN %).
-   * keep initial few (NMIN) snapshots unconditionally.
-   * limit the maximum number of snapshots to NMAX.
-   * keep initial snapshots unconditionally for initial time (TMIN).
-   * grow time intervals exponentially with the specified ratio (STEP %) up to
-     some specified age (TMAX).
-   * filter content files of snapshots after the mid point (TMID) of history
-     using the script ".bss.fltr" at the BASE directory.
- .
- This can be used to snapshot the root filesystem on btrfs.
-   * No requirement to make the root filesystem as subvol=@ or @rootfs.
-   * Examples for:
-     * Automatic pre and post package installation snapshots of / via APT
-       operations on Debian/Ubuntu system.
-     * Systemd timer event to snapshot on boot and time intervals.
-     * Systemd timer event to age snapshots on boot.
-     * Systemd mount event to backup a snapshot to USB storage.
-
 Package: debian-reference
 Version: 2.127
 Architecture: all
@@ -395,10 +56,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-de_2.127_all.deb
-Size: 1925556
-SHA256: f01486b646f4071082541f3280c32df7961fd2250f9640005157b88e980d7f33
-SHA1: e3a920eec3e63d7d4674b20e25a0732f7fa61a52
-MD5sum: 30e5f093820b1f08fdfff6f6075e6aaa
+Size: 1925548
+SHA256: b8589480bf03cd47b85e339cbe53e98467291d09de525acf37a72daf2ee0b56b
+SHA1: 988afd1f6558fa11e70ccdaab62cd158b626ec37
+MD5sum: f6bed52e39dc5fcc2280078183120103
 Description: Debian system administration guide, German translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -418,10 +79,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-en_2.127_all.deb
-Size: 1745688
-SHA256: eedb9f8c6fc85fff3ab256425ebc673b870d030fecbc260d815ab23d5f7bac61
-SHA1: c833094335142d0e3111d109e50f2c137dd35ed4
-MD5sum: 6a2af69e276e403d319a00f82af1e738
+Size: 1745680
+SHA256: dea24d35380276d7e59504c10af0b5a110d62e4f778571409ef3b341afabb557
+SHA1: b748cf3d5e7ef45201a9329f99cc07ecbc2e9524
+MD5sum: 2d3d666ce01d83a506703a9e80774e04
 Description: Debian system administration guide, English original
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -441,10 +102,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-es_2.127_all.deb
-Size: 1893968
-SHA256: 4874295e869f69366d6ccfb4e317426f1f5e29abfd151d011341193fa136aacc
-SHA1: 6f81929219f789be1856cf5cefb0580eda5989fa
-MD5sum: d1ccad88c34440437459f47bc29c7596
+Size: 1893964
+SHA256: 0b0a8e80b727cafa63c5df78f0ba9011e978c4ba654973bd649bb8cbdfbeaebd
+SHA1: d8fa9556be3c7c5e96b91f37c98387e51ea782fe
+MD5sum: c7719c68736cd69ecce013e3a8f16739
 Description: Debian system administration guide, Spanish translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -464,10 +125,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-fr_2.127_all.deb
-Size: 1927560
-SHA256: 7d6cfeb9f0f4ee7927d9e6a3ecbca52bb7686cff3b2ba10438ff00afa8a344ad
-SHA1: f94bf464caefa909b83732ec69da2612dca38535
-MD5sum: 6af7fc50eba26ce99148d1a01a956649
+Size: 1927556
+SHA256: a5819cdad156684ad06459e3c4067f20610b3bec7e7674bc662d09dddaa3f43b
+SHA1: 1615f655bfd8672d2ee9c7018b45e339a8d65c30
+MD5sum: f12f0a43596525e0506c65d781edca46
 Description: Debian system administration guide, French translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -487,10 +148,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-id_2.127_all.deb
-Size: 1775300
-SHA256: ae3fdb9523a0c8a71ed75c6afb20245dbe158a659f5882bda058575ad937b050
-SHA1: 0dcf25c30fea149029bb876a131cd090206664cd
-MD5sum: 152f319c1bea51efd2440037d5b32eda
+Size: 1775296
+SHA256: ffbaeaa88db6110726431f43800b8d5549fb4897cf5483a176e21476bdab498f
+SHA1: 8b4feb3efd3b188666fefadae81d65a627604f7e
+MD5sum: 00e64f2792ce1c944bc0af03c336ae26
 Description: Debian system administration guide, Indonesian translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -510,10 +171,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-it_2.127_all.deb
-Size: 1863720
-SHA256: 51d0d182f3c6ce070a68fe9d409d8f09fa2dd602374b09339d1e5ec7f93cc751
-SHA1: caab57b674bbab5e54ba23636563335b28381797
-MD5sum: 89e94da6248b3cfd8452a6b68be74609
+Size: 1863716
+SHA256: 80351cfa2d02eb1306c904bcaead779b8aac848d43ecc86eaec76c5afa316327
+SHA1: 9d8d84b63685119bc5d759a97755183553d62b83
+MD5sum: 5287c210a1a9702f8cb4bcc97ea86ad5
 Description: Debian system administration guide, Italian translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -533,10 +194,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-ja_2.127_all.deb
-Size: 2085192
-SHA256: 84c6387724510458d92923b9f4d0b95beef42820fe64c8fdd6cfe8b2de70335b
-SHA1: a453e58b75ab8a99da8a19a218514a2ca54b9b4a
-MD5sum: ddc8675530d6d1ca283f970414366ab4
+Size: 2085184
+SHA256: d91bf25d1b9036083f8e767a8ee23bc466a8cb5da569ac28f2c20ed40e157a06
+SHA1: 8e07428b7078bdb546a7737d5c1556e29e82962b
+MD5sum: bfd8a6e070fa3fca4cc5ae2db7f4b188
 Description: Debian system administration guide, Japanese translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -556,10 +217,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-pt_2.127_all.deb
-Size: 1853572
-SHA256: 84bec529c8425ab23804977018895366672acfcad5373a90a1a7234dac6b9bfc
-SHA1: c4fd8edf528c8bdcdade71efca734c2fbe7b0fa3
-MD5sum: 8807b5f9e06279678a9079ec15d85b36
+Size: 1853564
+SHA256: 90e86d38033772087f497ddace0fd92630f596817d22490ce78e011a1cd37fad
+SHA1: cb82806ce4a92ebeb570e72365dde09614440591
+MD5sum: d05d39b41d2f1c411b4a3ce39f820d5b
 Description: Debian system administration guide, Portuguese translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -579,10 +240,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-pt-br_2.127_all.deb
-Size: 1854368
-SHA256: 3d2c7bbd6b3efe41d02ccfbd1f3f410ef546727d15273a89ba71abac169e3a38
-SHA1: a482a34d455139c289570a0ddfaba977fab09916
-MD5sum: b80763b9e9e266d78f1ddf82db8f4f32
+Size: 1854360
+SHA256: e2dbed6750173a5008494eaf8396f7ae1cbf99e98251ca345880f56d1a6f5311
+SHA1: 2fc5d5fc237134f1db08782c7867e1936f816791
+MD5sum: 2d1cfe46f5e2c7cace54499c79dbd073
 Description: Debian system administration guide, Portuguese (Brazil) translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -602,10 +263,10 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-zh-cn_2.127_all.deb
-Size: 2016172
-SHA256: e9b498ece08218a65ac3e447ec4979509c65adcb8dacc479db6cd86145f07cd9
-SHA1: 7329c6e0d991e7ae0e0cd46f7b78726bd900bee0
-MD5sum: fca3bb731c247b53986a53010faba46e
+Size: 2016164
+SHA256: cf8a1ddce93e68f4ef9f434a8514c8ef6f308f3d458784ac52ad6423cfdf7795
+SHA1: 95bb5e3919221c31f6d662f6857fda313eff8004
+MD5sum: a653f6f150db22bc857a910fca0df2d1
 Description: Debian system administration guide, Chinese (Simplified) translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
@@ -625,82 +286,14 @@ Homepage: https://www.debian.org/doc/user-manuals#quick-reference
 Priority: optional
 Section: doc
 Filename: pool/main/d/debian-reference/debian-reference-zh-tw_2.127_all.deb
-Size: 2052944
-SHA256: 56f5171e35a77a4f46610e64b7e6b9cc67aa4e4d979f3701b4ccfbb9c7d81983
-SHA1: 8234305da8e67eb05298b2c4e824d0ea23978ad2
-MD5sum: 03f6eb5acf1d827ca3a9d8260f37adfe
+Size: 2052936
+SHA256: 37cf6bfdac5aa8a39c61c66bea39bb740a6b304da9c03132da51b49b8f8c4daa
+SHA1: 3472bdbf08e013f786f23ef8499bd45ceb16a5ea
+MD5sum: 6c39a605c01939db99fde806c1d37855
 Description: Debian system administration guide, Chinese (Traditional) translation
  This Debian Reference is intended to provide a broad overview of the Debian
  system as a post-installation user's guide. It covers many aspects of system
  administration through shell-command examples for non-developers.
  .
  The Chinese (Traditional) translation.
-
-Package: incus-ui-canonical
-Version: 0.6-1
-Architecture: all
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 4924
-Multi-Arch: foreign
-Homepage: https://osamuaoki.github.com/incus-ui-canonical
-Priority: optional
-Section: admin
-Filename: pool/main/i/incus-ui-canonical/incus-ui-canonical_0.6-1_all.deb
-Size: 1019952
-SHA256: 00e902f9117ebd7197623767c912bc2669ef6477b52066a97288aa8e35bc0c0a
-SHA1: 18db0ac854e678b8bc291ef28e1b8b3e1c3a3fc0
-MD5sum: 4cb93dcb7a0d26a39e57ed98c15ea51a
-Description: tentative web page for incus
- This is proof-of-concept package to provide a static web page
- content for use with the Debian incus package.
-
-Package: unzip-i18n
-Source: unzip
-Version: 6.0-28.2
-Architecture: amd64
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 379
-Depends: libbz2-1.0, libc6 (>= 2.34)
-Suggests: zip
-Conflicts: unzip
-Replaces: unzip
-Provides: unzip
-Multi-Arch: foreign
-Homepage: https://infozip.sourceforge.net/UnZip.html
-Priority: optional
-Section: utils
-Filename: pool/main/u/unzip/unzip-i18n_6.0-28.2_amd64.deb
-Size: 168048
-SHA256: 13d107ae792a9ee97b168645d61e19954c691f385fb049e506f0ca9aa05dc280
-SHA1: 3da144c052b1fa9986a9bf37a8b62e12c684ff61
-MD5sum: 957e849beda103dd042131ed43101fb2
-Description: De-archiver for .zip files with i18n supports
- InfoZIP's unzip program. With the exception of multi-volume archives
- (ie, .ZIP files that are split across several disks using PKZIP's /& option),
- this can handle any file produced either by PKZIP, or the corresponding
- InfoZIP zip program.
- .
- This version supports encryption.
- .
- This unzip-i18n supports file name encoding conversion with -O and -I options.
-Original-Maintainer: Santiago Vila <sanvila@debian.org>
-
-Package: unzip-i18n-dbgsym
-Source: unzip
-Version: 6.0-28.2
-Auto-Built-Package: debug-symbols
-Architecture: amd64
-Maintainer: Osamu Aoki <osamu@debian.org>
-Installed-Size: 330
-Depends: unzip-i18n (= 6.0-28.2)
-Priority: optional
-Section: debug
-Filename: pool/main/u/unzip/unzip-i18n-dbgsym_6.0-28.2_amd64.deb
-Size: 280248
-SHA256: 22087781255fe204ca01b57e56bfdab170b43f3ec195ee9fb6794af49ca652ee
-SHA1: 69b273298efaaf085b1cfdc18c89429b50ed0c62
-MD5sum: c10d5121748b539a7c8d245e18157ac7
-Description: debug symbols for unzip-i18n
-Build-Ids: 7f1f4eac8d4d39a1243de85ef700572cee4d991e c85f585cd7a5e936ccf6861721c34356e681ffbc d6c589583781e28107b4db5e15e1bb974dfe3275
-Original-Maintainer: Santiago Vila <sanvila@debian.org>
 
