@@ -1,470 +1,208 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>iot on Goofing Osamu</title>
+    <title>Iot on Goofing Osamu</title>
     <link>/categories/iot/</link>
-    <description>Recent content in iot on Goofing Osamu</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Iot on Goofing Osamu</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Mon, 03 Oct 2022 00:00:00 +0000</lastBuildDate><atom:link href="/categories/iot/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 04 Jan 2024 21:34:46 +0900</lastBuildDate>
+    <atom:link href="/categories/iot/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>内蔵キーボードのキーマップ改変(不発)</title>
       <link>/jp/2022/10/03/evdev02/</link>
       <pubDate>Mon, 03 Oct 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/10/03/evdev02/</guid>
-      <description>実験準備 内蔵キーボードのキーマップ改変準備の結果を生かす環境をつくるべく、とりあえずDebianの正式パッケージinterception-toolsをアップロードしました。
-アップストリームはシェルからの直接起動方法の基本として以下を例示してます。
-$ sudo nice -n -20 udevmon -c udevmon.yaml &amp;gt;udevmon.log 2&amp;gt;udevmon.err &amp;amp; Interception plugin for vimproved inputの作者が示している、テスト時のトラブル防止策が参考になります。
-# sleep 1 &amp;amp;&amp;amp; sudo nice -n -20 timeout 10 udevmon -c /etc/udevmon.yml sleepで１秒待つことで、ターミナルから離れて実験環境に移動できます。 timeoutでキーボード入力ができなくなったままになる事を回避しています。 (わたしは、追加の外付けUSBキーボードをつないでおくことも考えています。)
-また、使用するフィルタープログラムは、起動時に入出力バッファをクリアーすることも推奨されるようです。
-アップストリーム作成のudevmon.serviceファイルは、-3 Debian revision 以降はバイナリーパッケージに同梱されています。
-udevmonをudevmon.serviceファイルを使ってSystemdによりudevmonを自動起動させるよう、このファイルをとりあえず/etc/systemd/system/に置きます。 (もちろん、パッケージとしては/lib/systemd/system/にでもこのファイルをインストールして、そこに/etc/systemd/system/からsymlinkをはるようするのでしょう。)
-この自動起動設定の有効化と起動実験は以下となります。（これだと、シェルからの直接起動の様にsleepすることはない模様）
-$ sudo systemctl enable --now udevmon.service また、フィルターを書く際に気になるのはclearing bufferですが、そえは後ほど。。。。
-本体付属キーボード(i8042)用の設定 内蔵キーボードは/dev/input/by-path/platform-i8042-serio-0-event-kbdということがわかっているので、/etc/interception/udevmon.d/ディレクトリーを作成し、テスト用のダミーのint-kbd.yamlファイルを以下の内容で作成しました。
-- JOB: intercept -g $DEVNODE | cat - | uinput -d $DEVNODE DEVICE: LINK: /dev/input/by-path/platform-i8042-serio-0-event-kbd 上記の様にして起動実験して問題無しです。
-フィルター evmk 今度はsystemdのjournalへのログ出力ができるようにした、改良版のフィルター・ログ用のプログラムevmkを使うように、int-kbd.</description>
+      <description>実験準備 内蔵キーボードのキーマップ改変準備の結果を生かす環境をつくるべく、とりあえずDebianの正式パッケージinterception-toolsをアップロードしました。&#xA;アップストリームはシェルからの直接起動方法の基本として以下を例示してます。&#xA;$ sudo nice -n -20 udevmon -c udevmon.yaml &amp;gt;udevmon.log 2&amp;gt;udevmon.err &amp;amp; Interception plugin for vimproved inputの作者が示している、テスト時のトラブル防止策が参考になります。&#xA;# sleep 1 &amp;amp;&amp;amp; sudo nice -n -20 timeout 10 udevmon -c /etc/udevmon.yml sleepで１秒待つことで、ターミナルから離れて実験環境に移動できます。 timeoutでキーボード入力ができなくなったままになる事を回避しています。 (わたしは、追加の外付けUSBキーボードをつないでおくことも考えています。)&#xA;また、使用するフィルタープログラムは、起動時に入出力バッファをクリアーすることも推奨されるようです。&#xA;アップストリーム作成のudevmon.serviceファイルは、-3 Debian revision 以降はバイナリーパッケージに同梱されています。&#xA;udevmonをudevmon.serviceファイルを使ってSystemdによりudevmonを自動起動させるよう、このファイルをとりあえず/etc/systemd/system/に置きます。 (もちろん、パッケージとしては/lib/systemd/system/にでもこのファイルをインストールして、そこに/etc/systemd/system/からsymlinkをはるようするのでしょう。)&#xA;この自動起動設定の有効化と起動実験は以下となります。（これだと、シェルからの直接起動の様にsleepすることはない模様）&#xA;$ sudo systemctl enable --now udevmon.service また、フィルターを書く際に気になるのはclearing bufferですが、そえは後ほど。。。。&#xA;本体付属キーボード(i8042)用の設定 内蔵キーボードは/dev/input/by-path/platform-i8042-serio-0-event-kbdということがわかっているので、/etc/interception/udevmon.d/ディレクトリーを作成し、テスト用のダミーのint-kbd.yamlファイルを以下の内容で作成しました。&#xA;- JOB: intercept -g $DEVNODE | cat - | uinput -d $DEVNODE DEVICE: LINK: /dev/input/by-path/platform-i8042-serio-0-event-kbd 上記の様にして起動実験して問題無しです。&#xA;フィルター evmk 今度はsystemdのjournalへのログ出力ができるようにした、改良版のフィルター・ログ用のプログラムevmkを使うように、int-kbd.</description>
     </item>
-    
     <item>
       <title>QMK (7) -- キーマップ改善(続)</title>
       <link>/jp/2022/09/09/home-mt2/</link>
       <pubDate>Fri, 09 Sep 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/09/09/home-mt2/</guid>
-      <description>キーマップ改善の経緯 キーマップ改善の基本方針としてのタップとホールドの有効利用は、QMK (4) – キーマップ改善から変わっていません。
-以前から遊んでいたAVR系でQMKを使うcgc56という一体型キーボードと、 今回ARM系でQMKを使うSTM32F411CE (4)で作ったcgs58・cgs50という分割キーボードと、 できれば将来interceptionを使いLaptop PCの内蔵キーボードの全てで、キーマッピングの基本部分を共用できるようにすることにも配慮しました。
-特にcgc56を使ってきた経験を生かし、細かな調整を加えました。設計指針の要点をもう一度まとめると以下です。
-標準キーボードとキーの位置をできるだけ変えないことで、使用時のメンタルストレス無くする。(QWERTYの中心利用。ブロック毎に動かす感じ。) フィジカルストレスが少なくなるように、指の動きを少なくする。「基本的に使う部分」を(3rows x 6columns + 2thums ) x 2sides とし、1U以上の動き無くす。 HOME-ROW MODを採用する。(HOMEポジションがわかりやすいキー配置) 日本語と英語・コーディングの両方の用途に配慮する。(ANSIなのに「無変換」「変換」キーをつける変則構成。) キーマップ pico 「基本的に使う部分」を、左6x3_2キーと右6x3_2キーに限定し、それらのキーの使用は以下のようなpico系配列に落ち着いて来ました。
-│Tab│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │Bsp│ │Esc│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│Ent│ │Mut│ Z │ X │lgC│ V2│ B │***│***│ N │ M │ , │ . │ / │Psc│ │***│***│***│***│Muh│Sp1│***│***│Sp1│Hen│***│***│***│***│ これだと、全ての指のポジション移動量を1U以下に押さえられます。
-キー配列はANSIベースです。</description>
+      <description>キーマップ改善の経緯 キーマップ改善の基本方針としてのタップとホールドの有効利用は、QMK (4) – キーマップ改善から変わっていません。&#xA;以前から遊んでいたAVR系でQMKを使うcgc56という一体型キーボードと、 今回ARM系でQMKを使うSTM32F411CE (4)で作ったcgs58・cgs50という分割キーボードと、 できれば将来interceptionを使いLaptop PCの内蔵キーボードの全てで、キーマッピングの基本部分を共用できるようにすることにも配慮しました。&#xA;特にcgc56を使ってきた経験を生かし、細かな調整を加えました。設計指針の要点をもう一度まとめると以下です。&#xA;標準キーボードとキーの位置をできるだけ変えないことで、使用時のメンタルストレス無くする。(QWERTYの中心利用。ブロック毎に動かす感じ。) フィジカルストレスが少なくなるように、指の動きを少なくする。「基本的に使う部分」を(3rows x 6columns + 2thums ) x 2sides とし、1U以上の動き無くす。 HOME-ROW MODを採用する。(HOMEポジションがわかりやすいキー配置) 日本語と英語・コーディングの両方の用途に配慮する。(ANSIなのに「無変換」「変換」キーをつける変則構成。) キーマップ pico 「基本的に使う部分」を、左6x3_2キーと右6x3_2キーに限定し、それらのキーの使用は以下のようなpico系配列に落ち着いて来ました。&#xA;│Tab│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │Bsp│ │Esc│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│Ent│ │Mut│ Z │ X │lgC│ V2│ B │***│***│ N │ M │ , │ . │ / │Psc│ │***│***│***│***│Muh│Sp1│***│***│Sp1│Hen│***│***│***│***│ これだと、全ての指のポジション移動量を1U以下に押さえられます。&#xA;キー配列はANSIベースです。</description>
     </item>
-    
     <item>
       <title>STM32F411CE (4)</title>
       <link>/jp/2022/09/01/blackpill-4/</link>
       <pubDate>Thu, 01 Sep 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/09/01/blackpill-4/</guid>
-      <description>cgg56の反省 ARM系のMCU使用の練習にSTM32F411CE (1)で 作ったcgg56は結局 JoyStick は動きましたが、それほど操作性はよく ありませんでした。
-横に押すと、横にキーボード自体が動いてしまうという問題を抱えていました。
-一体型はcgc56がすでにあり、スプリットキーボードを試したかったので、 こちらのcgg56は改造して再利用することにしました。
-分割キーボードの作成 改造コンセプト cgg56をノコギリで２つに切り、ポインティング部品無しで構成する 分割キーボードに改造をすることにしました。
-ポインティングデバイスを除いたスペースには、キースイッチを追加します。
-切り離して短くなったMCUボード無しの側は、ホームセンターで5mm角の アクリル棒で追加購入しセメダインで接着延長して対象に仕上げ、追加 のMCUボードを取り付けました。左右接続は、余っていたUSB用のケーブルを 両端切りコネクター無しで直結して対応します。できた物はcgs58と名付けます。
-PIN接続 (cgs58) canterを参考にピン配置を決めました。
-ところで、(R0, C0)はキーボードをキー面上から見て左上です。
-以下の図もキーボードをキー面上から見て(TOP VIEW)ですので、実際の配線では 左右が逆になります。
-C6xとC7xは、C6とC7の内側のMCUボード横の穴にいれたキー向けの追加のカラムです。
-LTは左手側、RTは右手側です。
-Blackpill (TOP VIEW) LT RT RT LT USB-C +---+-----+---+ R0 R0 ------- B12 |* | | *|5V ----- R1 R1 ------- B13 |* | | *|GND -----------------+ R2 R2 ------- B14 |* | | *|3V3 z 10 K-ohm R3 R3 ------- B15 |* +-----+ *|B10 Open --+ C0 ------- A8 |* B N @|B2 ------ *** BOOT1 [USB] ------- A9 |* O R @|B1 ------ XX [USB] ------- A10 |* O S @|B0 ------ XX [USB] ------- A11 |* T T *|A7 ------ [USB] ------- A12 |* 0 *|A6 ------ C7x C3 ------- A15 |* *|A5 ------ C11 C2 ------- B3 |* *|A4 ------ C10 C5 ------- B4 |* *|A3 ------ C7 C6 ------- B5 |* *|A2 ------ C8 TX==\ /=TX ------- B6 |* *|A1 ------ C9 RX==/ \=RX ------- B7 |* *|A0 ------ *** USR C1 ------- B8 |* K *|R ------ *** NRST (/RST, ~RST) C4 ------- B9 |* E *|C15 ----- C12 **==5V==** ------- 5V |* Y *|C14 ----- C13 C6x **==GND=** ------- GND |* *|C13 ------*** BLUE LED 3V3 |* @ @ @ @ *|VB +-------------+ ^ ^ ^ ^ | | | | 3V3 ---------------+ | | | SWDIO -----------PA13--+ | | SWSCK -----------PA14----+ | GND ---------------------+ テスト用ファームウエアーで左右別々に配線と動作確認 実際には、連結以外の配線をして、qmkを書き込み配線確認をします。</description>
+      <description>cgg56の反省 ARM系のMCU使用の練習にSTM32F411CE (1)で 作ったcgg56は結局 JoyStick は動きましたが、それほど操作性はよく ありませんでした。&#xA;横に押すと、横にキーボード自体が動いてしまうという問題を抱えていました。&#xA;一体型はcgc56がすでにあり、スプリットキーボードを試したかったので、 こちらのcgg56は改造して再利用することにしました。&#xA;分割キーボードの作成 改造コンセプト cgg56をノコギリで２つに切り、ポインティング部品無しで構成する 分割キーボードに改造をすることにしました。&#xA;ポインティングデバイスを除いたスペースには、キースイッチを追加します。&#xA;切り離して短くなったMCUボード無しの側は、ホームセンターで5mm角の アクリル棒で追加購入しセメダインで接着延長して対象に仕上げ、追加 のMCUボードを取り付けました。左右接続は、余っていたUSB用のケーブルを 両端切りコネクター無しで直結して対応します。できた物はcgs58と名付けます。&#xA;PIN接続 (cgs58) canterを参考にピン配置を決めました。&#xA;ところで、(R0, C0)はキーボードをキー面上から見て左上です。&#xA;以下の図もキーボードをキー面上から見て(TOP VIEW)ですので、実際の配線では 左右が逆になります。&#xA;C6xとC7xは、C6とC7の内側のMCUボード横の穴にいれたキー向けの追加のカラムです。&#xA;LTは左手側、RTは右手側です。&#xA;Blackpill (TOP VIEW) LT RT RT LT USB-C +---+-----+---+ R0 R0 ------- B12 |* | | *|5V ----- R1 R1 ------- B13 |* | | *|GND -----------------+ R2 R2 ------- B14 |* | | *|3V3 z 10 K-ohm R3 R3 ------- B15 |* +-----+ *|B10 Open --+ C0 ------- A8 |* B N @|B2 ------ *** BOOT1 [USB] ------- A9 |* O R @|B1 ------ XX [USB] ------- A10 |* O S @|B0 ------ XX [USB] ------- A11 |* T T *|A7 ------ [USB] ------- A12 |* 0 *|A6 ------ C7x C3 ------- A15 |* *|A5 ------ C11 C2 ------- B3 |* *|A4 ------ C10 C5 ------- B4 |* *|A3 ------ C7 C6 ------- B5 |* *|A2 ------ C8 TX==\ /=TX ------- B6 |* *|A1 ------ C9 RX==/ \=RX ------- B7 |* *|A0 ------ *** USR C1 ------- B8 |* K *|R ------ *** NRST (/RST, ~RST) C4 ------- B9 |* E *|C15 ----- C12 **==5V==** ------- 5V |* Y *|C14 ----- C13 C6x **==GND=** ------- GND |* *|C13 ------*** BLUE LED 3V3 |* @ @ @ @ *|VB +-------------+ ^ ^ ^ ^ | | | | 3V3 ---------------+ | | | SWDIO -----------PA13--+ | | SWSCK -----------PA14----+ | GND ---------------------+ テスト用ファームウエアーで左右別々に配線と動作確認 実際には、連結以外の配線をして、qmkを書き込み配線確認をします。</description>
     </item>
-    
     <item>
       <title>内蔵キーボードのキーマップ改変準備</title>
       <link>/jp/2022/06/03/evdev01/</link>
       <pubDate>Fri, 03 Jun 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/06/03/evdev01/</guid>
-      <description>キーボード状況 USB接続の自作外付けキーボードでは、キーマップがQMKを使うとキーマップ改変が自由に構成でき、HOME ROW MOD等を使うと動きの少ない手や指にやさしいタイピングができます。
-PC内蔵のキーボードででも、同じようにキーマップ改変ができないかと言う気になり色々調査しました。
-interception-toolsを利用すれば、evdevのデーターをフィルター処理しキーマップを改変できそうです。 ただevdevのデーターの実際に使用されている慣習や制約、また異常時の対応法など不明点もあります。 単なるキーの置き換え以上の適当な先行例が見当たりません。
-公式のプラグインのDual Function Keysには、HOME ROW MODが上手く動作しないともかかれています。どうも状況は簡単ではないようです。
-実際の状況や解決策が分かりにくいので、まず読みやすいPythonのchorded_keymapを見ました。この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直し実状調査をしました。あとから考えるとほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。
-本体付属キーボード(i8042) やっつけで書いたログをstdoutに吐き出すこの解析用のmanglekbdプログラムの出力(時間は差分表示)は、本体付属の英語キーボードだと以下です。
-$ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 ~/bin/manglekbd -s u 0.024794	MSC,SCAN,0x1c	KEY,ENTER,↑	SYN,REPORT,0	0.486209	MSC,SCAN,0x2a	KEY,LEFTSHIFT,↓	SYN,REPORT,0	0.161347	MSC,SCAN,0x1e	KEY,A,↓	SYN,REPORT,0	A 0.082717	MSC,SCAN,0x1e	KEY,A,↑	SYN,REPORT,0	0.147690	MSC,SCAN,0x1f	KEY,S,↓	SYN,REPORT,0	S 0.070924	MSC,SCAN,0x1f	KEY,S,↑	SYN,REPORT,0	0.216163	MSC,SCAN,0x20	KEY,D,↓	SYN,REPORT,0	D 0.085756	MSC,SCAN,0x20	KEY,D,↑	SYN,REPORT,0	0.212290	MSC,SCAN,0x21	KEY,F,↓	SYN,REPORT,0	F 0.103219	MSC,SCAN,0x21	KEY,F,↑	SYN,REPORT,0	0.220644	MSC,SCAN,0x22	KEY,G,↓	SYN,REPORT,0	G 0.</description>
+      <description>キーボード状況 USB接続の自作外付けキーボードでは、キーマップがQMKを使うとキーマップ改変が自由に構成でき、HOME ROW MOD等を使うと動きの少ない手や指にやさしいタイピングができます。&#xA;PC内蔵のキーボードででも、同じようにキーマップ改変ができないかと言う気になり色々調査しました。&#xA;interception-toolsを利用すれば、evdevのデーターをフィルター処理しキーマップを改変できそうです。 ただevdevのデーターの実際に使用されている慣習や制約、また異常時の対応法など不明点もあります。 単なるキーの置き換え以上の適当な先行例が見当たりません。&#xA;公式のプラグインのDual Function Keysには、HOME ROW MODが上手く動作しないともかかれています。どうも状況は簡単ではないようです。&#xA;実際の状況や解決策が分かりにくいので、まず読みやすいPythonのchorded_keymapを見ました。この中のプログラムをベースにデーターダンプするユーティリティーを作り、更にもう一度出力をオプションでコントロール出きるように、最初から書き直し実状調査をしました。あとから考えるとほぼ同じ機能のコマンドevtestがあるんですが、この経験をしたことで少し実態が分かりました。&#xA;本体付属キーボード(i8042) やっつけで書いたログをstdoutに吐き出すこの解析用のmanglekbdプログラムの出力(時間は差分表示)は、本体付属の英語キーボードだと以下です。&#xA;$ sudo intercept /dev/input/by-path/platform-i8042-serio-0-event-kbd | python3 ~/bin/manglekbd -s u 0.024794&#x9;MSC,SCAN,0x1c&#x9;KEY,ENTER,↑&#x9;SYN,REPORT,0&#x9;0.486209&#x9;MSC,SCAN,0x2a&#x9;KEY,LEFTSHIFT,↓&#x9;SYN,REPORT,0&#x9;0.161347&#x9;MSC,SCAN,0x1e&#x9;KEY,A,↓&#x9;SYN,REPORT,0&#x9;A 0.082717&#x9;MSC,SCAN,0x1e&#x9;KEY,A,↑&#x9;SYN,REPORT,0&#x9;0.147690&#x9;MSC,SCAN,0x1f&#x9;KEY,S,↓&#x9;SYN,REPORT,0&#x9;S 0.070924&#x9;MSC,SCAN,0x1f&#x9;KEY,S,↑&#x9;SYN,REPORT,0&#x9;0.216163&#x9;MSC,SCAN,0x20&#x9;KEY,D,↓&#x9;SYN,REPORT,0&#x9;D 0.085756&#x9;MSC,SCAN,0x20&#x9;KEY,D,↑&#x9;SYN,REPORT,0&#x9;0.212290&#x9;MSC,SCAN,0x21&#x9;KEY,F,↓&#x9;SYN,REPORT,0&#x9;F 0.103219&#x9;MSC,SCAN,0x21&#x9;KEY,F,↑&#x9;SYN,REPORT,0&#x9;0.220644&#x9;MSC,SCAN,0x22&#x9;KEY,G,↓&#x9;SYN,REPORT,0&#x9;G 0.</description>
     </item>
-    
     <item>
       <title>Digital RGB LED (1)</title>
       <link>/jp/2022/05/21/rgbled1/</link>
       <pubDate>Sat, 21 May 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/05/21/rgbled1/</guid>
-      <description>電子工作の基本の光り物の駆動が、単純なカラーLEDを直接電流駆動するタイプから、MCUが組み込まれてデジタルコントロールの調色機能付のDigital RGB LEDとかNEOPIXEL LED等と呼ばれるLEDをデジタル信号ドライブするように変わってきました。その状況を調べました。
-よく使うDigital RGB LEDチップ LED size VDD data rate signal wire WS2812B 5mm x 5mm 5V 800 Kbps 1 WS2813 5mm x 5mm 5V 800 Kbps 2 WS2815B 5mm x 5mm 12V 800 Kbps 1 SK6812MINI-E 3.2mm x 2.8mm 5V 800 Kbps 1 すべて800 Kbps で、1.2 us毎に１ビットのクロックで、共通の制御信号でコントロールできます。
-WS2812B と その改良型のWS2813の違いは、WS2812B vs WS2813 Addressable RGB LED Strips – How are they different? に詳しいです。
-以下では、WS2812B と SK6812MINI-Eにフォーカスします。
-Digital RGB LED駆動パルス生成ソフト Digital RGB LED駆動パルス生成は、単純なMCUのループによるタイミング生成とDigital PIN のBit Bang操作という力技アプローチできます。クロックの遅いAVR系では、Adafruit NeoPixel Library (2.</description>
+      <description>電子工作の基本の光り物の駆動が、単純なカラーLEDを直接電流駆動するタイプから、MCUが組み込まれてデジタルコントロールの調色機能付のDigital RGB LEDとかNEOPIXEL LED等と呼ばれるLEDをデジタル信号ドライブするように変わってきました。その状況を調べました。&#xA;よく使うDigital RGB LEDチップ LED size VDD data rate signal wire WS2812B 5mm x 5mm 5V 800 Kbps 1 WS2813 5mm x 5mm 5V 800 Kbps 2 WS2815B 5mm x 5mm 12V 800 Kbps 1 SK6812MINI-E 3.2mm x 2.8mm 5V 800 Kbps 1 すべて800 Kbps で、1.2 us毎に１ビットのクロックで、共通の制御信号でコントロールできます。&#xA;WS2812B と その改良型のWS2813の違いは、WS2812B vs WS2813 Addressable RGB LED Strips – How are they different? に詳しいです。&#xA;以下では、WS2812B と SK6812MINI-Eにフォーカスします。&#xA;Digital RGB LED駆動パルス生成ソフト Digital RGB LED駆動パルス生成は、単純なMCUのループによるタイミング生成とDigital PIN のBit Bang操作という力技アプローチできます。クロックの遅いAVR系では、Adafruit NeoPixel Library (2.</description>
     </item>
-    
     <item>
       <title>測定関係(1)</title>
       <link>/jp/2022/05/08/measure-1/</link>
       <pubDate>Sun, 08 May 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/05/08/measure-1/</guid>
-      <description>以下は基本的に備忘録です。
-テスター 抵抗測定・ダイオード検査・導通テスト 古いカード型で簡便なSANWAのSD-420C (LR44 or SR44 ２個使用)と、最近の多機能のMASTECHのMS8221C (AAA or 単3　３個使用)を用いて、デジタルテスターの抵抗測定・ダイオード検査・導通テスト等の実状を確認しました。(以下の表中の括弧内は、端子印加電圧です。)
-機器名 SANWA MASTECH テスター端子サイズ L=13mm, φ=2.0mm L=15mm, φ=2.0mm 抵抗測定 (Open負荷) 11MΩ (0.216V) 12MΩ (0.239V) 導通ブザー試験 (Open負荷) 1484 and NO BEEP (1.443V) OL and NO BEEP (0.437V) ダイオード試験 (Open負荷) 導通ブザー兼用 OL (1.296V) 抵抗測定 (1KΩ負荷) 1KΩ (0.113V) 1KΩ (0.166V) 導通ブザー試験 (1KΩ負荷) 345 and BEEP (0.345V) NO BEEP (0.166V) ダイオード試験 (1KΩ負荷) 導通ブザー兼用 0.437V (0.437V) 導通ブザー試験の出力抵抗 3KΩ 1.6KΩ ダイオード試験の出力抵抗 導通ブザー兼用 2KΩ 何れの測定条件でも、赤線側にプラス電位の出力となる。 測定端子間電圧は、MASTECHの方がSANWAより低い (デバイスを壊す心配は低い) 測定端子間電圧は、測定法で異なり、ダイオード (1.</description>
+      <description>以下は基本的に備忘録です。&#xA;テスター 抵抗測定・ダイオード検査・導通テスト 古いカード型で簡便なSANWAのSD-420C (LR44 or SR44 ２個使用)と、最近の多機能のMASTECHのMS8221C (AAA or 単3　３個使用)を用いて、デジタルテスターの抵抗測定・ダイオード検査・導通テスト等の実状を確認しました。(以下の表中の括弧内は、端子印加電圧です。)&#xA;機器名 SANWA MASTECH テスター端子サイズ L=13mm, φ=2.0mm L=15mm, φ=2.0mm 抵抗測定 (Open負荷) 11MΩ (0.216V) 12MΩ (0.239V) 導通ブザー試験 (Open負荷) 1484 and NO BEEP (1.443V) OL and NO BEEP (0.437V) ダイオード試験 (Open負荷) 導通ブザー兼用 OL (1.296V) 抵抗測定 (1KΩ負荷) 1KΩ (0.113V) 1KΩ (0.166V) 導通ブザー試験 (1KΩ負荷) 345 and BEEP (0.345V) NO BEEP (0.166V) ダイオード試験 (1KΩ負荷) 導通ブザー兼用 0.437V (0.437V) 導通ブザー試験の出力抵抗 3KΩ 1.6KΩ ダイオード試験の出力抵抗 導通ブザー兼用 2KΩ 何れの測定条件でも、赤線側にプラス電位の出力となる。 測定端子間電圧は、MASTECHの方がSANWAより低い (デバイスを壊す心配は低い) 測定端子間電圧は、測定法で異なり、ダイオード (1.</description>
     </item>
-    
     <item>
       <title>QMK (6) -- カスタムキーボード参考情報</title>
       <link>/jp/2022/05/06/kbd-pcb/</link>
       <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/05/06/kbd-pcb/</guid>
-      <description>汎用設計の14x4のOrtholinearキーボードで試してみて、Mod-Tapを使う、片側6X3_3キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーマップが小指への負担もなく普通のNotePCのキーボードとの相互移行での違和感もなくいい感じでした。
-こうなると、使わないキーをなくした専用のスプリットデザインのキーボードが欲しくなります。
-CORNEがほぼ図星のデザインですが、折角なのでPromicroではなくARMの汎用ボード(40PINあるblackpillかPiPico)を使う一から設計製作をしたカスタムキーボードを作りたいと思いました。
-当分は取り組まないかもしれないけど、カスタムキーボードをPCBから設計製作する際に参考となる情報をまとめました。
-カスタムキーボードまとめサイト geekhack deskthority r/MechanicalKeyboards: wiki Self-Made Keyboards in Japan - Scrapbox ai03 Design Studio ai03.com! wiki ai03 Infobase Keebfol.io: Keyboard &amp;ndash; form: Keebfol.io Keebfolio: Awesome Mechanical Keyboard Mechanical Keyboard and where to find them Awesome Split Keyboards カスタムキーボードFirmware QMK Firmware &amp;ndash; QMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) &amp;ndash; based on TMK firmware TMK Firmware &amp;ndash; TMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) ZMK Firmware &amp;ndash; ZMK Firmware Repository (MIT License, Arm, Zephyr™ based) KMK Firmware &amp;ndash; Pythonic Mechanical Keyboard Firmware (Arm) Keyberon Firmware &amp;ndash; A rust crate to create a pure rust keyboard firmware (Arm) カスタムキーボードHW設計・製作 カスタムキーボードPCBの設計 PCBの設計は基本KiCadが使われます。</description>
+      <description>汎用設計の14x4のOrtholinearキーボードで試してみて、Mod-Tapを使う、片側6X3_3キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーマップが小指への負担もなく普通のNotePCのキーボードとの相互移行での違和感もなくいい感じでした。&#xA;こうなると、使わないキーをなくした専用のスプリットデザインのキーボードが欲しくなります。&#xA;CORNEがほぼ図星のデザインですが、折角なのでPromicroではなくARMの汎用ボード(40PINあるblackpillかPiPico)を使う一から設計製作をしたカスタムキーボードを作りたいと思いました。&#xA;当分は取り組まないかもしれないけど、カスタムキーボードをPCBから設計製作する際に参考となる情報をまとめました。&#xA;カスタムキーボードまとめサイト geekhack deskthority r/MechanicalKeyboards: wiki Self-Made Keyboards in Japan - Scrapbox ai03 Design Studio ai03.com! wiki ai03 Infobase Keebfol.io: Keyboard &amp;ndash; form: Keebfol.io Keebfolio: Awesome Mechanical Keyboard Mechanical Keyboard and where to find them Awesome Split Keyboards カスタムキーボードFirmware QMK Firmware &amp;ndash; QMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) &amp;ndash; based on TMK firmware TMK Firmware &amp;ndash; TMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) ZMK Firmware &amp;ndash; ZMK Firmware Repository (MIT License, Arm, Zephyr™ based) KMK Firmware &amp;ndash; Pythonic Mechanical Keyboard Firmware (Arm) Keyberon Firmware &amp;ndash; A rust crate to create a pure rust keyboard firmware (Arm) カスタムキーボードHW設計・製作 カスタムキーボードPCBの設計 PCBの設計は基本KiCadが使われます。</description>
     </item>
-    
     <item>
       <title>QMK (5) -- JOYSTICKサポート</title>
       <link>/jp/2022/04/02/joystick/</link>
       <pubDate>Sat, 02 Apr 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/04/02/joystick/</guid>
-      <description>状況 AVRで作ったQMKキーボードでは、タップとホールドを上手く利用した使いやすいキーマップができました。
-ARMで作ったQMKキーボードにこれを移植するとともに、追加ハードのアナログJOYSTICKをマウスの機能を提供するデバイスとして有効利用しました。
-JOYSTICKデバイスの追加とMCUの機能設定 「JOYSTICK」という言葉に引かれて、よく分からないままマニュアルの「Hardware Features」の「Joystick」をフォローして、ゲーム用のコントローラーとしての「JOYSTICK」デバイスを導入しました。
-ここで、ARM系のハードの初期化のカスタマイズ法を学びました。ARMではOS立ち上げコードがチップ機能の初期化をしているようです。マクロを定義することで、コンパイル時に設定が導入されます。ある意味AVRのfuseの感じです。
-ChibiOSは、デフォルトのhalconf.hやmcuconf.hを提供しているので、デフォルトでは無効化されたADCを使う等の場合には、設定をオーバーライド変更する必要がありました。 最初に、platforms/chibios/boards/keyboard-config-templates/内のファイルを、プロジェクトフォルダー内にコピーしたファイルをベースに、オーバーライド変更のみを設定します。 デフォルト値は#include_next &amp;quot;... .h&amp;quot;で読み込みます。(この辺の仕組みがが分かる前には、コンパイラーエラーに苦しみました。)
-ゲーム用のコントローラーとしての「JOYSTICK」デバイスの動作検証は、Gamepad Tester でしました。この環境での安定動作には、config.hに以下の追加が必要でした。(参考情報源)
-#define JOYSTICK_AXES_RESOLUTION 8 #define USB_POLLING_INTERVAL_MS 4 ゲーム用のコントローラーとしてのJOYSTICKデバイスを提供するソース
-cgg56:minijoy ゲーム用のコントローラーにマウスの機能を提供する設定は、OSの環境設定でできなくはないです。ただこれでは本末転倒です。 ストレートにマウスの機能自体を直接提供すること目的なので、これはここまでにします。
-JOYSTICKのハードによるマウス機能の提供 JOYSTICKのハードによるマウス機能の提供には、マニュアルの「Hardware Features」の「Pointing Device」をフォローします。
-cgg56:mini cgg56:micro Mouse keyよりは快適に動いていますが、ThnkpadのTrackpointが得意でない私には決して使いやすいとは言えない状態でした。
-本物のMouseは使いやすい。
-反省点 キー入力できない原因を調べたところ、UEW線の被覆熱削除不足による不良が２点、ダイオードの極性方向間違い１点が見つかった。
-UEW線は事前両端カットしてプリ半田して使う (結線不良となりやすい巻付法は使わない) ダイオードの極性の視認チェックは大事 MCU付きのボードをスイッチマトリクスにつなぎ込む前に、結線・ダイオード極性をテスターで電気的にもチェックすべき。 気づいたこと 結局joystickやトラックボールはマウスより使い勝手が良くない。
-QMKでは意外と多くのハードを利用してマウス機能の提供ができるようです。また、マウスの中身はほぼ似たデバイスのようです。 キーボードだけでなく、ポテンシオメーター、ロータリーエンコーダー、オプティカルセンサー等で作るポインティングデバイスででも遊べそうです。色んな事をみんなしていますね。
-ただMCU内臓でI2C等で出力が出てないと、KBへの組み込みには向かない気がする。
-まあ、トラックボールはあってもいいが一体化する必然性が低い。古いPS2のトラックボール のUSB化や、光学素子の高解像品への載せ換えは面白いかもしれない。
-ポインティングデバイスのソース 既存の組み込み製品・ジャンクから外すのも一案:
-ダイソーの300円ワイヤレスマウスを分解して回路図と部品表を書いてみた話 (2019-03-14) 「どうせ100均だろ？」って軽い気持ちで分解したら、 ガジェットの進化に驚いた！ トラックボールを作ってみた【試作編】 アナログスティックを使ってcrkbdをマウスとしても使えるようにした話 2 自作トラックポイント1 部品ソース例と価格:
-通常トラックポイント新品製品 ~$50 (工業用はもっと高い) Mini Panel Mount USB Trackball with Three Buttons by adafruit.</description>
+      <description>状況 AVRで作ったQMKキーボードでは、タップとホールドを上手く利用した使いやすいキーマップができました。&#xA;ARMで作ったQMKキーボードにこれを移植するとともに、追加ハードのアナログJOYSTICKをマウスの機能を提供するデバイスとして有効利用しました。&#xA;JOYSTICKデバイスの追加とMCUの機能設定 「JOYSTICK」という言葉に引かれて、よく分からないままマニュアルの「Hardware Features」の「Joystick」をフォローして、ゲーム用のコントローラーとしての「JOYSTICK」デバイスを導入しました。&#xA;ここで、ARM系のハードの初期化のカスタマイズ法を学びました。ARMではOS立ち上げコードがチップ機能の初期化をしているようです。マクロを定義することで、コンパイル時に設定が導入されます。ある意味AVRのfuseの感じです。&#xA;ChibiOSは、デフォルトのhalconf.hやmcuconf.hを提供しているので、デフォルトでは無効化されたADCを使う等の場合には、設定をオーバーライド変更する必要がありました。 最初に、platforms/chibios/boards/keyboard-config-templates/内のファイルを、プロジェクトフォルダー内にコピーしたファイルをベースに、オーバーライド変更のみを設定します。 デフォルト値は#include_next &amp;quot;... .h&amp;quot;で読み込みます。(この辺の仕組みがが分かる前には、コンパイラーエラーに苦しみました。)&#xA;ゲーム用のコントローラーとしての「JOYSTICK」デバイスの動作検証は、Gamepad Tester でしました。この環境での安定動作には、config.hに以下の追加が必要でした。(参考情報源)&#xA;#define JOYSTICK_AXES_RESOLUTION 8 #define USB_POLLING_INTERVAL_MS 4 ゲーム用のコントローラーとしてのJOYSTICKデバイスを提供するソース&#xA;cgg56:minijoy ゲーム用のコントローラーにマウスの機能を提供する設定は、OSの環境設定でできなくはないです。ただこれでは本末転倒です。 ストレートにマウスの機能自体を直接提供すること目的なので、これはここまでにします。&#xA;JOYSTICKのハードによるマウス機能の提供 JOYSTICKのハードによるマウス機能の提供には、マニュアルの「Hardware Features」の「Pointing Device」をフォローします。&#xA;cgg56:mini cgg56:micro Mouse keyよりは快適に動いていますが、ThnkpadのTrackpointが得意でない私には決して使いやすいとは言えない状態でした。&#xA;本物のMouseは使いやすい。&#xA;反省点 キー入力できない原因を調べたところ、UEW線の被覆熱削除不足による不良が２点、ダイオードの極性方向間違い１点が見つかった。&#xA;UEW線は事前両端カットしてプリ半田して使う (結線不良となりやすい巻付法は使わない) ダイオードの極性の視認チェックは大事 MCU付きのボードをスイッチマトリクスにつなぎ込む前に、結線・ダイオード極性をテスターで電気的にもチェックすべき。 気づいたこと 結局joystickやトラックボールはマウスより使い勝手が良くない。&#xA;QMKでは意外と多くのハードを利用してマウス機能の提供ができるようです。また、マウスの中身はほぼ似たデバイスのようです。 キーボードだけでなく、ポテンシオメーター、ロータリーエンコーダー、オプティカルセンサー等で作るポインティングデバイスででも遊べそうです。色んな事をみんなしていますね。&#xA;ただMCU内臓でI2C等で出力が出てないと、KBへの組み込みには向かない気がする。&#xA;まあ、トラックボールはあってもいいが一体化する必然性が低い。古いPS2のトラックボール のUSB化や、光学素子の高解像品への載せ換えは面白いかもしれない。&#xA;ポインティングデバイスのソース 既存の組み込み製品・ジャンクから外すのも一案:&#xA;ダイソーの300円ワイヤレスマウスを分解して回路図と部品表を書いてみた話 (2019-03-14) 「どうせ100均だろ？」って軽い気持ちで分解したら、 ガジェットの進化に驚いた！ トラックボールを作ってみた【試作編】 アナログスティックを使ってcrkbdをマウスとしても使えるようにした話 2 自作トラックポイント1 部品ソース例と価格:&#xA;通常トラックポイント新品製品 ~$50 (工業用はもっと高い) Mini Panel Mount USB Trackball with Three Buttons by adafruit.</description>
     </item>
-    
     <item>
       <title>QMK (4) -- キーマップ改善</title>
       <link>/jp/2022/03/15/home-mt/</link>
       <pubDate>Tue, 15 Mar 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/03/15/home-mt/</guid>
-      <description>キーマップ改善の方針 (タップとホールドの有効利用) QMKを使うcgc56やcgg56というQMKを利用したキーボード等を使って、色々試して気づいたり考えたことを以下に記します。
-メンタルストレス無く、フィジカルストレスの小さい指の動きが少ないキーマップが欲しい。 親指がカバーするのは、横に並ぶキーが少ないのが望ましい 人差し指は縦の動きで２列カバーする。 他の指は縦１列の動き以外はしない。 「QWERTY」は当分メインのキーマップのベース。 「QWFRTY」はローマ字入力用オプションの検討中キーマップ　（→　結局やめた）。 高速打鍵性自体は私の目指す所では無い。 キーのピッチをきっちり確保するにはNC工具での工作が不可欠。 NCとしてはPCBが安いし、PCBを注文する際に10cm角に収めると更に安い。 統計結果から、記号では「_ 」へのアクセスには要配慮。 14&amp;quot; のノートパソコン(Thinkpad T14 Gen1)に無いキーの優先度は低いと割り切る。 CURSORキーは重要なので、アクセス性は重要で、片手での操作性も重要。 TENキーはそれほど使用上重要では無いが、組み込むなら片手での操作性に配慮重要。 QMKのMOUSEキーはそれほど便利では無いので、組み込む際のアクセス性は重要で無い。 QMKではタップとホールドで出力キーが違う設定できますが、タップの入力文字の連続入力がカチカチ連打だと大変な気がしていました。
-実際には、一度タップ直後の再タップ時にホールドするとタップに対応する文字の長押しになるようで、OS側が連打処理してくれ使い勝手良好です。
-あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、タップとホールドを上手に使えば悪くない感じです。
-キーマップ 最初にトライしたレイヤー移動とモード変更機能のすべてを親指のキーに任せるアプローチには無理がありました。
-キーマップ osamu そこで30%キーボード系のferrisのキーマップをヒントにし、「基本的に使う部分」を、左5x3_2キーと右5x3_2キーと限定し、親指はレイヤー移動のみにしたキーマップを組むのがフィジカルストレス低減によさそうです。
-│***│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │***│ │***│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│***│ │***│ Z │ X │ C │ V │ B │***│***│ N │ M │ , │ .</description>
+      <description>キーマップ改善の方針 (タップとホールドの有効利用) QMKを使うcgc56やcgg56というQMKを利用したキーボード等を使って、色々試して気づいたり考えたことを以下に記します。&#xA;メンタルストレス無く、フィジカルストレスの小さい指の動きが少ないキーマップが欲しい。 親指がカバーするのは、横に並ぶキーが少ないのが望ましい 人差し指は縦の動きで２列カバーする。 他の指は縦１列の動き以外はしない。 「QWERTY」は当分メインのキーマップのベース。 「QWFRTY」はローマ字入力用オプションの検討中キーマップ　（→　結局やめた）。 高速打鍵性自体は私の目指す所では無い。 キーのピッチをきっちり確保するにはNC工具での工作が不可欠。 NCとしてはPCBが安いし、PCBを注文する際に10cm角に収めると更に安い。 統計結果から、記号では「_ 」へのアクセスには要配慮。 14&amp;quot; のノートパソコン(Thinkpad T14 Gen1)に無いキーの優先度は低いと割り切る。 CURSORキーは重要なので、アクセス性は重要で、片手での操作性も重要。 TENキーはそれほど使用上重要では無いが、組み込むなら片手での操作性に配慮重要。 QMKのMOUSEキーはそれほど便利では無いので、組み込む際のアクセス性は重要で無い。 QMKではタップとホールドで出力キーが違う設定できますが、タップの入力文字の連続入力がカチカチ連打だと大変な気がしていました。&#xA;実際には、一度タップ直後の再タップ時にホールドするとタップに対応する文字の長押しになるようで、OS側が連打処理してくれ使い勝手良好です。&#xA;あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、タップとホールドを上手に使えば悪くない感じです。&#xA;キーマップ 最初にトライしたレイヤー移動とモード変更機能のすべてを親指のキーに任せるアプローチには無理がありました。&#xA;キーマップ osamu そこで30%キーボード系のferrisのキーマップをヒントにし、「基本的に使う部分」を、左5x3_2キーと右5x3_2キーと限定し、親指はレイヤー移動のみにしたキーマップを組むのがフィジカルストレス低減によさそうです。&#xA;│***│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │***│ │***│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│***│ │***│ Z │ X │ C │ V │ B │***│***│ N │ M │ , │ .</description>
     </item>
-    
     <item>
       <title>STM32F411CE (3)</title>
       <link>/jp/2022/03/06/blackpill-3/</link>
       <pubDate>Sun, 06 Mar 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/03/06/blackpill-3/</guid>
-      <description>dfu-utilは、最近、Debianででも最新の 0.11-1 が使えるようになりました。dfu-suffix等もちゃんとmanpageが付いてます。
-プログラムの導入はDFUでできるめどが立ったのですが、DFUベースで動くシステムもう少しで遊んでみます。（STLINKは興味はあるけど後回しにします。）
-DFUのこつ 「DFUに入りにくい」などと言うことをNETで散見します。（チップを温めるなどという「おまじない」も日本語のどこかで見ました。）
-確かに、無頓着にBOOT0とNRSTのPUSHスイッチを同時押し・同時離しでDFUに入ろうとすると上手くいかないことがありました。
-でも、以下の手順をとれば、確実にDFUに入れます。
-まず、BOOT0を押す(1sこの状態を保つ) 併せて、NRSTも押す(1sこの状態を保つ) NRSTを離す(この時もBOOT0は押したまま) 3ステップの1s後、BOOT0を離す In short:
-Push BOOT0 &amp;ndash;&amp;gt; Push RESET &amp;ndash;&amp;gt; Release RESET &amp;ndash;&amp;gt; Release BOOT0. DFUデバイスのrealtimeの確認は、今風にjournalctl -fコマンドです。(昔はsudo dmsg -w)。
-繋がったDFUデバイスの詳細状況は、dfu-util -lで確認します。
-電源投入後すぐだと、一度以下のようなエラーでDFUに入れないことがありました。
-usb 4-2: new full-speed USB device number 4 using xhci_hcd usb 4-2: device descriptor read/64, error -71 usb 4-2: device descriptor read/64, error -71 usb 4-2: new full-speed USB device number 5 using xhci_hcd usb 4-2: device descriptor read/64, error -71 usb 4-2: device descriptor read/64, error -71 usb usb4-port2: attempt power cycle usb 4-2: new full-speed USB device number 6 using xhci_hcd usb 4-2: Device not responding to setup address.</description>
+      <description>dfu-utilは、最近、Debianででも最新の 0.11-1 が使えるようになりました。dfu-suffix等もちゃんとmanpageが付いてます。&#xA;プログラムの導入はDFUでできるめどが立ったのですが、DFUベースで動くシステムもう少しで遊んでみます。（STLINKは興味はあるけど後回しにします。）&#xA;DFUのこつ 「DFUに入りにくい」などと言うことをNETで散見します。（チップを温めるなどという「おまじない」も日本語のどこかで見ました。）&#xA;確かに、無頓着にBOOT0とNRSTのPUSHスイッチを同時押し・同時離しでDFUに入ろうとすると上手くいかないことがありました。&#xA;でも、以下の手順をとれば、確実にDFUに入れます。&#xA;まず、BOOT0を押す(1sこの状態を保つ) 併せて、NRSTも押す(1sこの状態を保つ) NRSTを離す(この時もBOOT0は押したまま) 3ステップの1s後、BOOT0を離す In short:&#xA;Push BOOT0 &amp;ndash;&amp;gt; Push RESET &amp;ndash;&amp;gt; Release RESET &amp;ndash;&amp;gt; Release BOOT0. DFUデバイスのrealtimeの確認は、今風にjournalctl -fコマンドです。(昔はsudo dmsg -w)。&#xA;繋がったDFUデバイスの詳細状況は、dfu-util -lで確認します。&#xA;電源投入後すぐだと、一度以下のようなエラーでDFUに入れないことがありました。&#xA;usb 4-2: new full-speed USB device number 4 using xhci_hcd usb 4-2: device descriptor read/64, error -71 usb 4-2: device descriptor read/64, error -71 usb 4-2: new full-speed USB device number 5 using xhci_hcd usb 4-2: device descriptor read/64, error -71 usb 4-2: device descriptor read/64, error -71 usb usb4-port2: attempt power cycle usb 4-2: new full-speed USB device number 6 using xhci_hcd usb 4-2: Device not responding to setup address.</description>
     </item>
-    
     <item>
       <title>STM32F411CE (2)</title>
       <link>/jp/2022/02/22/blackpill-2/</link>
       <pubDate>Tue, 22 Feb 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/02/22/blackpill-2/</guid>
-      <description>STM32F411CEが載っているblackpillの導入記録の続きです。
-HID BOOTLOADER の復元準備 前記の方法でQMKをDFUで内蔵フラッシュメモリーの0x800 0000から導入すると上書きされてしまいます。書き換えできるメモリーの最後にbootloaderを置くAVRと異なり、ARM系のSTM32Fはフラッシュの最初の0x800 0000にBootloader等を置かれているからです。
-STM32F103のような、ROM化されたUSB対応bootloaderが無いMCUの場合にはHID BOOTLOADERが必要ですが、STM32F411等はROMがDFUをサポートしてUSB経由のファームウエアー書き換えに対応しているので、HID BOOTLOADERは必須要素技術ではありません。ここは、後学のため元のHID BOOTLOADERの復元法を記します。元々はA9-A12ピン問題で悩んでいた際の学習ノートです。
-最初に入っていたHID Bootloaderは、ベンダーの WeActTC の技術情報サイトを覗き入手します。
-https://github.com/WeActTC HEXファイルやバイナリーのホストプログラムとともに、元ネタサイト情報もありました。
-https://github.com/Serasidis/STM32_HID_Bootloader ARDUINO作成のスケッチのアップロードは、WeAct_HID_Flash-CLIで単純にBINファイルを書いているので、ARDUINO系のシステムでSTM32F103と共通のファームウエアーを作成し使用するには、HID_Bootloaderも良いかもしれません。
-アドレス ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の情報によると、HID Bootloaderの APP forwarding addressは0x8004000だそうです。 STM32F103と違いSTM32F411はフラッシュの書き換え単位が16KBあるので、これだけのスペース空けています。
-ROM Addr 0x8000000 Bootloader 16KB 0x8004000 APP &amp;hellip;.. END つまり元々ボード上のMCUに書き込まれていたのHID Bootloaderには0x800 0400 に読み込まれて実行されるように作成したファームウエアーが必要です。
-QMKは通常0x800 0000 に書き込み実行するファームウエアーを作成するので、QMKファームウエアーの導入にHID Bootloaderは使えません。
-HEXファイル WeActが提供するプロプライエタリーのHEXファイルは以下:
-HID Bootloader: MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/Bootloader/WeAct_HID_Bootloader_F4x1.hex TESTアプリ: MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/APP/stm32f411_APP_test 0x8004000.hex 電源接続下での、DFUへのはいり方 BOOT0 と reset キーの同時押し 先に、resetキーのリリース 0.5秒後、BOOT0キーのリリース DFU接続の確認法 $ journalctl -f --no-hostname ... usb 6-1.4.2: new full-speed USB device number 33 using xhci_hcd usb 6-1.</description>
+      <description>STM32F411CEが載っているblackpillの導入記録の続きです。&#xA;HID BOOTLOADER の復元準備 前記の方法でQMKをDFUで内蔵フラッシュメモリーの0x800 0000から導入すると上書きされてしまいます。書き換えできるメモリーの最後にbootloaderを置くAVRと異なり、ARM系のSTM32Fはフラッシュの最初の0x800 0000にBootloader等を置かれているからです。&#xA;STM32F103のような、ROM化されたUSB対応bootloaderが無いMCUの場合にはHID BOOTLOADERが必要ですが、STM32F411等はROMがDFUをサポートしてUSB経由のファームウエアー書き換えに対応しているので、HID BOOTLOADERは必須要素技術ではありません。ここは、後学のため元のHID BOOTLOADERの復元法を記します。元々はA9-A12ピン問題で悩んでいた際の学習ノートです。&#xA;最初に入っていたHID Bootloaderは、ベンダーの WeActTC の技術情報サイトを覗き入手します。&#xA;https://github.com/WeActTC HEXファイルやバイナリーのホストプログラムとともに、元ネタサイト情報もありました。&#xA;https://github.com/Serasidis/STM32_HID_Bootloader ARDUINO作成のスケッチのアップロードは、WeAct_HID_Flash-CLIで単純にBINファイルを書いているので、ARDUINO系のシステムでSTM32F103と共通のファームウエアーを作成し使用するには、HID_Bootloaderも良いかもしれません。&#xA;アドレス ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の情報によると、HID Bootloaderの APP forwarding addressは0x8004000だそうです。 STM32F103と違いSTM32F411はフラッシュの書き換え単位が16KBあるので、これだけのスペース空けています。&#xA;ROM Addr 0x8000000 Bootloader 16KB 0x8004000 APP &amp;hellip;.. END つまり元々ボード上のMCUに書き込まれていたのHID Bootloaderには0x800 0400 に読み込まれて実行されるように作成したファームウエアーが必要です。&#xA;QMKは通常0x800 0000 に書き込み実行するファームウエアーを作成するので、QMKファームウエアーの導入にHID Bootloaderは使えません。&#xA;HEXファイル WeActが提供するプロプライエタリーのHEXファイルは以下:&#xA;HID Bootloader: MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/Bootloader/WeAct_HID_Bootloader_F4x1.hex TESTアプリ: MiniSTM32F4x1/Soft/WeAct_HID_FW_Bootloader/APP/stm32f411_APP_test 0x8004000.hex 電源接続下での、DFUへのはいり方 BOOT0 と reset キーの同時押し 先に、resetキーのリリース 0.5秒後、BOOT0キーのリリース DFU接続の確認法 $ journalctl -f --no-hostname ... usb 6-1.4.2: new full-speed USB device number 33 using xhci_hcd usb 6-1.</description>
     </item>
-    
     <item>
       <title>QMK (3) -- QWFRTY配列</title>
       <link>/jp/2022/02/14/qwfrty/</link>
       <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/02/14/qwfrty/</guid>
-      <description>背景 キーボードによるストレス低減のためのMCUを使ったIOTの初等プロジェクトとして、QMKを使うcgc56というQMKを利用したキーボードを作りました。
-ストレスのソースと削減指針は２つあり、そのバランスが重要です。
-フィジカルストレス削減には、できるだけ指の移動に無理が無いのが望ましいと考えます。 メンタルストレス削減には、できるだけ標準キーボードと変わらないのが望ましいと考えます。 このcgc56は元々は中指を伸ばして「E」を叩きづらいという個人的課題のフィジカルストレス削減のキーボードプロジェクトでした。
-これだけなら「E」と「F」のスワップで済ますのも良いのですが、それだけでは勿体ないので、苦労しない範囲でDVRAKの交互打鍵に近づけられないかと考えた妥協点案が上記の写真の「QWFRTY配列」です。これはあくまでQMKを利用した自作キーボードの最適化キー配列実験で、私の日常生活はQWERTY配列です。
-cgc56 (4x14) は planck (4x12) よりはキーの数が多い。 普通のLaptop PCのキーボードに近いキー配列が可能です。 一体型ですが両手間隔がとれ猫背にならずに使えます。 2つあるメインのFnキーキャップの前面角が面取り加工されてい、親指の触覚で手の位置が確認できます。 実は、DVORAK・COLMAK・WORKMAN・COLEMAK-DH等の既存の「エルゴノミックキーマップ」でフィジカルストレス削減する方策は、私にとっていずれも学習障壁（メンタルストレス）が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動も難しくなってしまいます)。
-この状況下で思いついた「QWFRTY配列」は使ってみてフィジカルストレス削減手法として意外とおもしろいので、ここに要点等をメモしておきます。
-（後記のように、「QWFRTY配列」は結局使っていません。）
-QWFRTY配列 「QWFRTY配列」は、11個のキーだけが標準の「QWERTY配列」から移動された配列です。
-名前は、１文字違いでややこしいですが、「QWFRTY配列」としました。キーは位置の要点を抜き出すと以下です。
-LEFT HAND RIGHT HAND │ Q │ W │_F_│ R │ T │ │ Y │_D_│_K_│_G_│ P │ │ A │_I_│_U_│_E_│_O_│ │_S_│_H_│_J_│ L │ ; │ │ Z │ X │ C │ V │ B │ │ N │ M │ , │ . │ / │ まあ、所詮実験レベルのお遊びですが、我ながら悪くない気もします。</description>
+      <description>背景 キーボードによるストレス低減のためのMCUを使ったIOTの初等プロジェクトとして、QMKを使うcgc56というQMKを利用したキーボードを作りました。&#xA;ストレスのソースと削減指針は２つあり、そのバランスが重要です。&#xA;フィジカルストレス削減には、できるだけ指の移動に無理が無いのが望ましいと考えます。 メンタルストレス削減には、できるだけ標準キーボードと変わらないのが望ましいと考えます。 このcgc56は元々は中指を伸ばして「E」を叩きづらいという個人的課題のフィジカルストレス削減のキーボードプロジェクトでした。&#xA;これだけなら「E」と「F」のスワップで済ますのも良いのですが、それだけでは勿体ないので、苦労しない範囲でDVRAKの交互打鍵に近づけられないかと考えた妥協点案が上記の写真の「QWFRTY配列」です。これはあくまでQMKを利用した自作キーボードの最適化キー配列実験で、私の日常生活はQWERTY配列です。&#xA;cgc56 (4x14) は planck (4x12) よりはキーの数が多い。 普通のLaptop PCのキーボードに近いキー配列が可能です。 一体型ですが両手間隔がとれ猫背にならずに使えます。 2つあるメインのFnキーキャップの前面角が面取り加工されてい、親指の触覚で手の位置が確認できます。 実は、DVORAK・COLMAK・WORKMAN・COLEMAK-DH等の既存の「エルゴノミックキーマップ」でフィジカルストレス削減する方策は、私にとっていずれも学習障壁（メンタルストレス）が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動も難しくなってしまいます)。&#xA;この状況下で思いついた「QWFRTY配列」は使ってみてフィジカルストレス削減手法として意外とおもしろいので、ここに要点等をメモしておきます。&#xA;（後記のように、「QWFRTY配列」は結局使っていません。）&#xA;QWFRTY配列 「QWFRTY配列」は、11個のキーだけが標準の「QWERTY配列」から移動された配列です。&#xA;名前は、１文字違いでややこしいですが、「QWFRTY配列」としました。キーは位置の要点を抜き出すと以下です。&#xA;LEFT HAND RIGHT HAND │ Q │ W │_F_│ R │ T │ │ Y │_D_│_K_│_G_│ P │ │ A │_I_│_U_│_E_│_O_│ │_S_│_H_│_J_│ L │ ; │ │ Z │ X │ C │ V │ B │ │ N │ M │ , │ . │ / │ まあ、所詮実験レベルのお遊びですが、我ながら悪くない気もします。</description>
     </item>
-    
     <item>
       <title>STM32F411CE (1)</title>
       <link>/jp/2022/02/07/blackpill-1/</link>
       <pubDate>Mon, 07 Feb 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/02/07/blackpill-1/</guid>
-      <description>基本のSTM32F系の安価だけど、純正STMチップ(同等品でない)が載っていそうな 小型のデモボードとして、WeActのblackpillをAliexpressの正規ショップ から購入しました。STM32F411CEが載っています。
-WeActのデバイス情報 https://github.com/WeActTC/MiniSTM32F4x1 PCB回路要点 IC PIN 機能 動作 7 NRST RESET SW, PUSH=0 , NORMAL=1 44 BOOT0 BOOT SW, PUSH=1, NORMAL=0 20 PB2 / BOOT1 NORMAL=0 (pull down res.) 10 PA0 / WKUP1 USER KEY, NORMAL=1, PUSH=0 2 PC13 / BLUE LED, LED_ON=0 STM32のメモリー 0x0000 0000 - 0x0007 FFFF (REMAPされる) &amp;ndash; The code area 通常 BOOT0は押されていないので: Flash memoryをさしている つまりユーザー作成のFirmware実行 BOOT0 pushed: System memory (BOOT0 pushed) CU内臓のBOOTLOADERの実行, STM32F411の場合はUSB経由のDFUもサポート 0x2000 0000 - 0x2002 0000 SRAM1 (128 KB) &amp;ndash; The data area 0x0800 0000 - 0x0807 FFFF Flash memory Flash memory (512KB) 0x1FFF 0000 - 0x1FFF 77FF System memory (32MB) 起動 the CPU fetches the top-of-stack value from address 0x0000 0000, the CPU starts code execution from the boot memory starting from 0x0000 0004.</description>
+      <description>基本のSTM32F系の安価だけど、純正STMチップ(同等品でない)が載っていそうな 小型のデモボードとして、WeActのblackpillをAliexpressの正規ショップ から購入しました。STM32F411CEが載っています。&#xA;WeActのデバイス情報 https://github.com/WeActTC/MiniSTM32F4x1 PCB回路要点 IC PIN 機能 動作 7 NRST RESET SW, PUSH=0 , NORMAL=1 44 BOOT0 BOOT SW, PUSH=1, NORMAL=0 20 PB2 / BOOT1 NORMAL=0 (pull down res.) 10 PA0 / WKUP1 USER KEY, NORMAL=1, PUSH=0 2 PC13 / BLUE LED, LED_ON=0 STM32のメモリー 0x0000 0000 - 0x0007 FFFF (REMAPされる) &amp;ndash; The code area 通常 BOOT0は押されていないので: Flash memoryをさしている つまりユーザー作成のFirmware実行 BOOT0 pushed: System memory (BOOT0 pushed) CU内臓のBOOTLOADERの実行, STM32F411の場合はUSB経由のDFUもサポート 0x2000 0000 - 0x2002 0000 SRAM1 (128 KB) &amp;ndash; The data area 0x0800 0000 - 0x0807 FFFF Flash memory Flash memory (512KB) 0x1FFF 0000 - 0x1FFF 77FF System memory (32MB) 起動 the CPU fetches the top-of-stack value from address 0x0000 0000, the CPU starts code execution from the boot memory starting from 0x0000 0004.</description>
     </item>
-    
     <item>
       <title>配線と半田付け</title>
       <link>/jp/2022/01/28/wire-1/</link>
       <pubDate>Fri, 28 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/01/28/wire-1/</guid>
-      <description>典型的配線材料 趣味の工作の基本配線材料を整理しました。
-基板上低電圧信号用 UEW電線 AWG-32 (0.2mm)　単線、5V 以下 基板上通常信号用 ジュンフロンETFE電線 AWG-30 単線 (0.26mm) 多色準備　Wirewrapにも使える 基板上電源線 TA (錫メッキ線) 0.5mm　単線 (AWG 24(0.51mm) 単線 の LAN cable使用線の流用) 基板間配線（コネクター使用圧着)はAWG 24(0.5mm)相当のヨリせん (多色準備?) 基板間配線（pin header経由直付け)はAWG 30(0.5mm)単線のWIREWRAP 基板間配線（PCB直付け)はAWG 30(0.5mm)単線のTHハンダ付け 電源: 15A current -&amp;gt; 0.8 mm2 -&amp;gt; 1mm -&amp;gt; AWG18のヨリせん 配線方法諸説 錫メッキ耐熱樹脂被覆導線をワイヤーストリッパー＋ハンダ付けで利用する配線方法 電子工作のヒント &amp;ndash; ジュンフロンAWG30使用(2000以前のページ?)、実用性高い &amp;ndash; 今の私の方法 愛用の工具と材料 (2007年) &amp;ndash; OK industries AWG30銀メッキKynar使用 &amp;ndash; 究極の実施例 &amp;ndash; 真似できない Circuit Board Prototyping Tips and Tricks Vector board, Dead bug, &amp;hellip; (2016) How to Solder properly || Through-hole (THT) &amp;amp; Surface-mount (SMD) Perfboard, solder wick (2017) UEW線・錫メッキ線を使うELM-CHANの究極の配線方法 (1997-&amp;gt;2014年) 信号線: ポリウレタン銅線(φ0.</description>
+      <description>典型的配線材料 趣味の工作の基本配線材料を整理しました。&#xA;基板上低電圧信号用 UEW電線 AWG-32 (0.2mm)　単線、5V 以下 基板上通常信号用 ジュンフロンETFE電線 AWG-30 単線 (0.26mm) 多色準備　Wirewrapにも使える 基板上電源線 TA (錫メッキ線) 0.5mm　単線 (AWG 24(0.51mm) 単線 の LAN cable使用線の流用) 基板間配線（コネクター使用圧着)はAWG 24(0.5mm)相当のヨリせん (多色準備?) 基板間配線（pin header経由直付け)はAWG 30(0.5mm)単線のWIREWRAP 基板間配線（PCB直付け)はAWG 30(0.5mm)単線のTHハンダ付け 電源: 15A current -&amp;gt; 0.8 mm2 -&amp;gt; 1mm -&amp;gt; AWG18のヨリせん 配線方法諸説 錫メッキ耐熱樹脂被覆導線をワイヤーストリッパー＋ハンダ付けで利用する配線方法 電子工作のヒント &amp;ndash; ジュンフロンAWG30使用(2000以前のページ?)、実用性高い &amp;ndash; 今の私の方法 愛用の工具と材料 (2007年) &amp;ndash; OK industries AWG30銀メッキKynar使用 &amp;ndash; 究極の実施例 &amp;ndash; 真似できない Circuit Board Prototyping Tips and Tricks Vector board, Dead bug, &amp;hellip; (2016) How to Solder properly || Through-hole (THT) &amp;amp; Surface-mount (SMD) Perfboard, solder wick (2017) UEW線・錫メッキ線を使うELM-CHANの究極の配線方法 (1997-&amp;gt;2014年) 信号線: ポリウレタン銅線(φ0.</description>
     </item>
-    
     <item>
       <title>MCU (AVRとARM) の周囲状況と比較</title>
       <link>/jp/2022/01/19/mcu-comp/</link>
       <pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/01/19/mcu-comp/</guid>
-      <description>MCUとそのプロトボード状況 AliExpressやbangoodを初めとした中華コマースサイトは便利なんだけど、魑魅魍魎の棲家ですね。
-中華コマースサイトで売られる安いボードは実際に使っているMCUまで違う状況と知り驚いてます。ICチップパッケージの刻印が本家で中身が違うなら贋チップ使用というのでしょうが、堂々とICチップパッケージの刻印にコンパチ品が書いてあったり、高性能だったりするようです。
-またPCB基板が同じPIN配置の製品ですが、回路配置利用権を考えると、ちょっとヤバいかもしれないので要注意。（ただ、小型のプロトボードはPINアウトを揃えると、必然的に本家のボードに似た回路配置になってしまう。PINアウトが同じこと自体は規制されないので判断は難しい。実際に入手し本家PCBと並べて詳細に比べないとコンパチPCB品が回路配置権を侵害したかどうかは判断できないので、入手前には無理。）
-とりあえずネットで見つけた関連情報のリンクをリストしておきます。
-Teensy https://www.pjrc.com/teensy/counterfeit.html &amp;ndash; Aliexpress販売のTeensyは本物でない。 本物のTeensy 2.0++は製造終了で欠品中(2022/Jan.)。AT90USB1286使用のコンパクトなボードはコンパチ品しか手に入らない状況。 ARM系(blue/blackpill) STM32-base のboard紹介によると、安いblue/blackpillは贋STMチップが多いとのこと。 https://hackaday.com/2020/10/22/stm32-clones-the-good-the-bad-and-the-ugly/ https://www.cnx-software.com/2019/02/10/cs32-mcu-stm32-clone-bluepill-board/ https://www.cnx-software.com/2019/12/24/stm32-black-pill-board-features-stm32f4-cortex-m4-mcu-optional-spi-flash/ https://www.cnx-software.com/2020/03/22/how-to-detect-stm32-fakes/ https://github.com/WeActTC/MiniSTM32F4x1/blob/master/README.md WeActの製品情報 怪しいパチ物(PCBパターンが同等？旧タイプ？)を売っているVENDERの実名リストがある（Aliexpressでよく見るTZTは怪しいらしい！） STM32F103コンパチチップ状況 GD32F103: https://www.gigadevice.com/products/microcontrollers/gd32/arm-cortex-m3/ &amp;ndash; Datasheet https://www.usenix.org/system/files/woot20-paper-obermaier.pdf &amp;ndash; 本物とコンパチチップのセキュリティー解析比較(USENIX, 2020以降) 評価 https://www.cnx-software.com/2015/12/21/gigadevice-gd32-is-a-faster-software-and-pin-to-pin-stm32-compatible-cortex-m3-mcu/ 評価 https://www.instructables.com/Alternative-to-STM32F103C8T6-by-GigaDevice/ コメント https://eetimes.itmedia.co.jp/ee/articles/2001/28/news032_2.html ATmega328P (Arduino Unoのチップ) 贋物は不良症状としてスリープモードの電流が多いこともあるようです。流石に調査がしっかりしているとおもったら、部品の調査検定会社のYOUTUBE情報でした。 DS18B20 Temperature Sensors https://www.cnx-software.com/2020/07/13/fake-ds18b20-temperature-sensors-counterfeit-clones/ FTDI FT232RLの贋物騒動 &amp;ndash; Windowsの正規品ドライバーで壊れる https://hackaday.com/2016/02/01/ftdi-drivers-break-fake-chips-again/ https://www.voltlog.com/identifying-replacing-a-fake-ftdi-ft232r-chip-voltlog-314/ CH340 (FT232類似機能品、最近のArduino系コンパチボードの標準チップ) https://note.com/akita11/n/n0ef8b362c8fc MCU (AVRとARM) の比較 QMKのプラットフォームのMCU (AVRとARM) の比較を、よく見かけるAtmel AVRとSTM ARMを使った、20mm幅程度のMCUボードでしました。
-使用チップ Flash SRAM FRQ Board AVR ATmega32u4 32KB 2.5KB 16 MHz ProMicro, Teensy2.</description>
+      <description>MCUとそのプロトボード状況 AliExpressやbangoodを初めとした中華コマースサイトは便利なんだけど、魑魅魍魎の棲家ですね。&#xA;中華コマースサイトで売られる安いボードは実際に使っているMCUまで違う状況と知り驚いてます。ICチップパッケージの刻印が本家で中身が違うなら贋チップ使用というのでしょうが、堂々とICチップパッケージの刻印にコンパチ品が書いてあったり、高性能だったりするようです。&#xA;またPCB基板が同じPIN配置の製品ですが、回路配置利用権を考えると、ちょっとヤバいかもしれないので要注意。（ただ、小型のプロトボードはPINアウトを揃えると、必然的に本家のボードに似た回路配置になってしまう。PINアウトが同じこと自体は規制されないので判断は難しい。実際に入手し本家PCBと並べて詳細に比べないとコンパチPCB品が回路配置権を侵害したかどうかは判断できないので、入手前には無理。）&#xA;とりあえずネットで見つけた関連情報のリンクをリストしておきます。&#xA;Teensy https://www.pjrc.com/teensy/counterfeit.html &amp;ndash; Aliexpress販売のTeensyは本物でない。 本物のTeensy 2.0++は製造終了で欠品中(2022/Jan.)。AT90USB1286使用のコンパクトなボードはコンパチ品しか手に入らない状況。 ARM系(blue/blackpill) STM32-base のboard紹介によると、安いblue/blackpillは贋STMチップが多いとのこと。 https://hackaday.com/2020/10/22/stm32-clones-the-good-the-bad-and-the-ugly/ https://www.cnx-software.com/2019/02/10/cs32-mcu-stm32-clone-bluepill-board/ https://www.cnx-software.com/2019/12/24/stm32-black-pill-board-features-stm32f4-cortex-m4-mcu-optional-spi-flash/ https://www.cnx-software.com/2020/03/22/how-to-detect-stm32-fakes/ https://github.com/WeActTC/MiniSTM32F4x1/blob/master/README.md WeActの製品情報 怪しいパチ物(PCBパターンが同等？旧タイプ？)を売っているVENDERの実名リストがある（Aliexpressでよく見るTZTは怪しいらしい！） STM32F103コンパチチップ状況 GD32F103: https://www.gigadevice.com/products/microcontrollers/gd32/arm-cortex-m3/ &amp;ndash; Datasheet https://www.usenix.org/system/files/woot20-paper-obermaier.pdf &amp;ndash; 本物とコンパチチップのセキュリティー解析比較(USENIX, 2020以降) 評価 https://www.cnx-software.com/2015/12/21/gigadevice-gd32-is-a-faster-software-and-pin-to-pin-stm32-compatible-cortex-m3-mcu/ 評価 https://www.instructables.com/Alternative-to-STM32F103C8T6-by-GigaDevice/ コメント https://eetimes.itmedia.co.jp/ee/articles/2001/28/news032_2.html ATmega328P (Arduino Unoのチップ) 贋物は不良症状としてスリープモードの電流が多いこともあるようです。流石に調査がしっかりしているとおもったら、部品の調査検定会社のYOUTUBE情報でした。 DS18B20 Temperature Sensors https://www.cnx-software.com/2020/07/13/fake-ds18b20-temperature-sensors-counterfeit-clones/ FTDI FT232RLの贋物騒動 &amp;ndash; Windowsの正規品ドライバーで壊れる https://hackaday.com/2016/02/01/ftdi-drivers-break-fake-chips-again/ https://www.voltlog.com/identifying-replacing-a-fake-ftdi-ft232r-chip-voltlog-314/ CH340 (FT232類似機能品、最近のArduino系コンパチボードの標準チップ) https://note.com/akita11/n/n0ef8b362c8fc MCU (AVRとARM) の比較 QMKのプラットフォームのMCU (AVRとARM) の比較を、よく見かけるAtmel AVRとSTM ARMを使った、20mm幅程度のMCUボードでしました。&#xA;使用チップ Flash SRAM FRQ Board AVR ATmega32u4 32KB 2.5KB 16 MHz ProMicro, Teensy2.</description>
     </item>
-    
     <item>
       <title>QMK (2)</title>
       <link>/jp/2022/01/18/qmk-2/</link>
       <pubDate>Tue, 18 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/01/18/qmk-2/</guid>
-      <description>QMKを使ってファームウエアー作成 手始めに、QMK : キーマップのカスタマイズ (2018年頃)も参考に、できるだけ今風の(2022年)qmkコマンドを使って、１つのキーのカスタムキーボードを作ります。
-対象ハードはatmega32u4が載ったTeensy2.0の中華コンパチボードです。本物のTeensy2.0でないのでatmel-dfuがBOOTLOADERだったはずです。ただ、BOOTLOADERはISP接続で小さな(512 bytes)HIDデバイスのnanoBoot (w/LED)に書き換えています。
-.word 0x03EB // idVendor -- Vendor ID (Atmel VID, from LUFA) .word 0x2067 // idProduct -- Product ID (HID Class Bootloader PID, from LUFA) これってqmk-hidと同じIDです。ファームウエアーのサイズはqmk-hidの4KB(?)よりnanoBootは小さいメリットがあります。
-ファームエアーのアップロードプロトコルは同じ　halfkeyコンパチのID違いなので、指定は同じにして良い気がします。
-作成デバイスはメディアキーのMUTE１つのデバイスです。
-テンプレート作成 $ qmk cd $ gitk --all ... (最新の「master」ブランチのリリースが0.15.15と確認) $ git checkout 0.15.15 $ git checkout -b osamu1 $ qmk new-keyboard Ψ Generating a new QMK keyboard directory Keyboard Name: one Keyboard Type: 1. avr 2.</description>
+      <description>QMKを使ってファームウエアー作成 手始めに、QMK : キーマップのカスタマイズ (2018年頃)も参考に、できるだけ今風の(2022年)qmkコマンドを使って、１つのキーのカスタムキーボードを作ります。&#xA;対象ハードはatmega32u4が載ったTeensy2.0の中華コンパチボードです。本物のTeensy2.0でないのでatmel-dfuがBOOTLOADERだったはずです。ただ、BOOTLOADERはISP接続で小さな(512 bytes)HIDデバイスのnanoBoot (w/LED)に書き換えています。&#xA;.word 0x03EB // idVendor -- Vendor ID (Atmel VID, from LUFA) .word 0x2067 // idProduct -- Product ID (HID Class Bootloader PID, from LUFA) これってqmk-hidと同じIDです。ファームウエアーのサイズはqmk-hidの4KB(?)よりnanoBootは小さいメリットがあります。&#xA;ファームエアーのアップロードプロトコルは同じ　halfkeyコンパチのID違いなので、指定は同じにして良い気がします。&#xA;作成デバイスはメディアキーのMUTE１つのデバイスです。&#xA;テンプレート作成 $ qmk cd $ gitk --all ... (最新の「master」ブランチのリリースが0.15.15と確認) $ git checkout 0.15.15 $ git checkout -b osamu1 $ qmk new-keyboard Ψ Generating a new QMK keyboard directory Keyboard Name: one Keyboard Type: 1. avr 2.</description>
     </item>
-    
     <item>
       <title>QMK (1)</title>
       <link>/jp/2022/01/14/qmk-1/</link>
       <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/01/14/qmk-1/</guid>
-      <description>どうもカスタムキーボードのフリーのファームウエアとしてはQMKが一番充実しているのですが、久しぶりにのぞくと2017年2月のころとかなり様子が変わっているようにも見えます。特に気になるのはconfig.jsonの存在です。
-とにかくカバーするキーボードハードウエアー数が大きくなってきたので、リファクターして共通部分の重複回避を試みている様です。
-QMKのドキュメントもかなり更新されています。
-復習を兼ねてコード・ドキュメントを追います。
-qmkコマンド導入とファームウエアーのビルド 最近、QMK Toolboxをpip経由で導入する、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperのqmkというCLIコマンドが提供されています。
-qmkコマンドは、作業環境設定や、firmwareのビルド、はたまた種々の関連処理プログラムの提供や起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。
-まず、Install Using pipに従い環境をDebian 11 (Bullseye/testing)に導入しました。
-qmk setupの自動設定でチェックアウトされるレポは、git submoduleを使っていて、レボがうまくまとめられています。レポ内にグラフィクスなどを保存しなくなり、キーマッピングもキーボード間で共用可能なものをまとめたり、マッピングだけのユーザーカスタム化情報がメインのkeyboads/以下のソースツリー外に置けるようです。ただソースを理解するのが少々手間となりました。
-qmkは、初期導入時に~/.bashrcを変更し、shellの環境変数QMK_HOMEにチェックアウトしたレポの場所を保存したようです。（手動でしたのかどうか忘れました）
-qmkのコマンドの説明はQMK CLI Commandsにあります。
-どうもビルドは公式にはqmkコマンドを使うようになっているそうですが、その背後で何がどうなっているのかが気になります。
-レポを見ると、791b9cc652 (&amp;ldquo;remove all makefiles from keyboard directories&amp;rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立のMakefileが無くなっています。だから、ビルドの実体はrootにあるMakefileがしているはずです。いかんせんrootのMakefileは複雑なので閉口でした。
-今残っているrootにあるMakefileにからむのかがwebにあるエンドユーザー向けの説明ではよく分からないので、試しにrootにあるMakefileを無効なターゲットで動かすと以下のメッセージが出ます。
-$ make help QMK Firmware 0.15.12 make: *** No rule to make target &amp;#39;help&amp;#39;. Stop. | | QMK&amp;#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&amp;#39;s `keymaps/` directory.</description>
+      <description>どうもカスタムキーボードのフリーのファームウエアとしてはQMKが一番充実しているのですが、久しぶりにのぞくと2017年2月のころとかなり様子が変わっているようにも見えます。特に気になるのはconfig.jsonの存在です。&#xA;とにかくカバーするキーボードハードウエアー数が大きくなってきたので、リファクターして共通部分の重複回避を試みている様です。&#xA;QMKのドキュメントもかなり更新されています。&#xA;復習を兼ねてコード・ドキュメントを追います。&#xA;qmkコマンド導入とファームウエアーのビルド 最近、QMK Toolboxをpip経由で導入する、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperのqmkというCLIコマンドが提供されています。&#xA;qmkコマンドは、作業環境設定や、firmwareのビルド、はたまた種々の関連処理プログラムの提供や起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。&#xA;まず、Install Using pipに従い環境をDebian 11 (Bullseye/testing)に導入しました。&#xA;qmk setupの自動設定でチェックアウトされるレポは、git submoduleを使っていて、レボがうまくまとめられています。レポ内にグラフィクスなどを保存しなくなり、キーマッピングもキーボード間で共用可能なものをまとめたり、マッピングだけのユーザーカスタム化情報がメインのkeyboads/以下のソースツリー外に置けるようです。ただソースを理解するのが少々手間となりました。&#xA;qmkは、初期導入時に~/.bashrcを変更し、shellの環境変数QMK_HOMEにチェックアウトしたレポの場所を保存したようです。（手動でしたのかどうか忘れました）&#xA;qmkのコマンドの説明はQMK CLI Commandsにあります。&#xA;どうもビルドは公式にはqmkコマンドを使うようになっているそうですが、その背後で何がどうなっているのかが気になります。&#xA;レポを見ると、791b9cc652 (&amp;ldquo;remove all makefiles from keyboard directories&amp;rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立のMakefileが無くなっています。だから、ビルドの実体はrootにあるMakefileがしているはずです。いかんせんrootのMakefileは複雑なので閉口でした。&#xA;今残っているrootにあるMakefileにからむのかがwebにあるエンドユーザー向けの説明ではよく分からないので、試しにrootにあるMakefileを無効なターゲットで動かすと以下のメッセージが出ます。&#xA;$ make help QMK Firmware 0.15.12 make: *** No rule to make target &amp;#39;help&amp;#39;. Stop. | | QMK&amp;#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&amp;#39;s `keymaps/` directory.</description>
     </item>
-    
     <item>
       <title>ATmega32u4 (4) -- AT90USB1286</title>
       <link>/jp/2021/12/11/atmega32u4-4/</link>
       <pubDate>Sat, 11 Dec 2021 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2021/12/11/atmega32u4-4/</guid>
-      <description>基本のUSB AVRのATmega32u4と AT90USB1286 を中心としたAVRチップに関して、ブートローダー関係を、１年半２年ぶりに見直し書きます。
-開発環境 ATmega328P (2)の開発環境を再現すればOKです。
-USB系のAVRで、変数名等の細かなところにとにかく疑問が出れば、/usr/lib/avr/include/以下を見れば分かります。。
-/usr/lib/avr/include/avr/iom32u4.h &amp;ndash; teensy2.0 (ATmega32u4) /usr/lib/avr/include/avr/iousb1286.h &amp;ndash; teensy2.0++ (AT90USB1286) FUSEビットのSET FUSEビットは、プログラム設定されると「0」で、プログラム解除されると「1」です。 不揮発メモリーのリセット状態が1なので、こうされている理屈は分かるのですが、通常のPIN信号電位等と逆で混乱します。
-プログラム設定(条件合致) = 対応ビット 0 プログラム設定(条件不合致) = 対応ビット 1 電源投入時ちゃんとファームウエアーが立ち上がるには、BOOTRSTは1にして application reset (address 0x0000)としないといけません。 (BOOTRSTは0だと Reset vector = boot loader resetとなり、メモリー末尾に行きます。)
-FUSEの設定変更(JTAG) FUSEの設定変更は当然ですが要注意です。　よく考えずにJTAGをENABLEしたら、一部GPIOピンが動作しなくなって驚きました。
-BOOT MODE (HWBE)のこと USB系のAVRの起動の基本確認事項として、BOOTのモードの状況を確認します。
-ARDUINO LEONARDO やTEENSY系の基板のPE2 (ALE,/HWBE)では、1K等で接地されています。だから、実際に出会うボードのリセットボタンが押された際のBOOT挙動は以下です。
-通常PE2は接地電位なので、リセットを押したらHWBEヒューズがON(0)にされてると、ブートローダーの起動となる。 強引にPE2(ALE)をVCCに繋いだ状態で、リセットだとHWBEヒューズ設定によらず、アプリファームが起動する。(その間1Kに電気が5mAも流れますが。) HWBEがOFF(1)の場合、PE2によらず常にアプリファームが起動する。 ISP接続によるMCUのプログラミング AVR-ISP II等を使うと、ブートローダーも何もない状態ででもISP接続でMCUに直接プログラム書き込みができます。
-http://ww1.microchip.com/downloads/en/Appnotes/doc2568.pdf http://ww1.microchip.com/downloads/en/AppNotes/doc1644.pdf ブートローダーの書き換えにはこれを使います
-確実ですが、接続が面倒でICピンを占領するので、定常的使用にはむきません。
-TEENSY系でのISP接続でのブートローダー書き込み接続 TEENSY系はARDUINOのようなISP接続でのブートローダー書き込み専用コネクターはついていません． だから、AVRISP2から出ているケーブル端の以下のようなコネクター穴に、PIN-PINのアダプターを差し込みます。 (私の場合クリップケーブル端のデュポンコネクターの横穴はフラットケーブルの方向に向けてつけている。写真参照) 接続はこのPIN-PINのアダプター経由で連結したクリップをボード端の穴へ繋ぐのが簡単のようです。
-つまり、私のアダプターは：
-female connector on flatcable end from AVRISP2 (hole view) male-male adapter PINs (top view) (used for connect to clip wires) ================= (RED LINE) FLAT CABLE ====== YELLOW 2 - VCC * * 1 - MISO RED FLAT CABLE ====== BLACK 4 - MOSI * * 3 - SCK GREEN FLAT CABLE ====== BLUE 6 - GND * * 5 - RESET WHITE (w/yellow clip) この接続先は以下です。</description>
+      <description>基本のUSB AVRのATmega32u4と AT90USB1286 を中心としたAVRチップに関して、ブートローダー関係を、１年半２年ぶりに見直し書きます。&#xA;開発環境 ATmega328P (2)の開発環境を再現すればOKです。&#xA;USB系のAVRで、変数名等の細かなところにとにかく疑問が出れば、/usr/lib/avr/include/以下を見れば分かります。。&#xA;/usr/lib/avr/include/avr/iom32u4.h &amp;ndash; teensy2.0 (ATmega32u4) /usr/lib/avr/include/avr/iousb1286.h &amp;ndash; teensy2.0++ (AT90USB1286) FUSEビットのSET FUSEビットは、プログラム設定されると「0」で、プログラム解除されると「1」です。 不揮発メモリーのリセット状態が1なので、こうされている理屈は分かるのですが、通常のPIN信号電位等と逆で混乱します。&#xA;プログラム設定(条件合致) = 対応ビット 0 プログラム設定(条件不合致) = 対応ビット 1 電源投入時ちゃんとファームウエアーが立ち上がるには、BOOTRSTは1にして application reset (address 0x0000)としないといけません。 (BOOTRSTは0だと Reset vector = boot loader resetとなり、メモリー末尾に行きます。)&#xA;FUSEの設定変更(JTAG) FUSEの設定変更は当然ですが要注意です。　よく考えずにJTAGをENABLEしたら、一部GPIOピンが動作しなくなって驚きました。&#xA;BOOT MODE (HWBE)のこと USB系のAVRの起動の基本確認事項として、BOOTのモードの状況を確認します。&#xA;ARDUINO LEONARDO やTEENSY系の基板のPE2 (ALE,/HWBE)では、1K等で接地されています。だから、実際に出会うボードのリセットボタンが押された際のBOOT挙動は以下です。&#xA;通常PE2は接地電位なので、リセットを押したらHWBEヒューズがON(0)にされてると、ブートローダーの起動となる。 強引にPE2(ALE)をVCCに繋いだ状態で、リセットだとHWBEヒューズ設定によらず、アプリファームが起動する。(その間1Kに電気が5mAも流れますが。) HWBEがOFF(1)の場合、PE2によらず常にアプリファームが起動する。 ISP接続によるMCUのプログラミング AVR-ISP II等を使うと、ブートローダーも何もない状態ででもISP接続でMCUに直接プログラム書き込みができます。&#xA;http://ww1.microchip.com/downloads/en/Appnotes/doc2568.pdf http://ww1.microchip.com/downloads/en/AppNotes/doc1644.pdf ブートローダーの書き換えにはこれを使います&#xA;確実ですが、接続が面倒でICピンを占領するので、定常的使用にはむきません。&#xA;TEENSY系でのISP接続でのブートローダー書き込み接続 TEENSY系はARDUINOのようなISP接続でのブートローダー書き込み専用コネクターはついていません． だから、AVRISP2から出ているケーブル端の以下のようなコネクター穴に、PIN-PINのアダプターを差し込みます。 (私の場合クリップケーブル端のデュポンコネクターの横穴はフラットケーブルの方向に向けてつけている。写真参照) 接続はこのPIN-PINのアダプター経由で連結したクリップをボード端の穴へ繋ぐのが簡単のようです。&#xA;つまり、私のアダプターは：&#xA;female connector on flatcable end from AVRISP2 (hole view) male-male adapter PINs (top view) (used for connect to clip wires) ================= (RED LINE) FLAT CABLE ====== YELLOW 2 - VCC * * 1 - MISO RED FLAT CABLE ====== BLACK 4 - MOSI * * 3 - SCK GREEN FLAT CABLE ====== BLUE 6 - GND * * 5 - RESET WHITE (w/yellow clip) この接続先は以下です。</description>
     </item>
-    
     <item>
       <title>How to make ISP with TTL-232R-5V</title>
       <link>/en/2021/11/12/avrisp-alt/</link>
       <pubDate>Fri, 12 Nov 2021 00:00:00 +0000</pubDate>
-      
       <guid>/en/2021/11/12/avrisp-alt/</guid>
-      <description>This is my manual for TTL-232R-5V based ISP which I made several years ago. I moved this content from other place to make it easy to find. I still use this as my back up IPS. This is 5V only programmer.
-I now use my Modified AVRISP MKII (in Japanese) as my main programmer. (If I every program AVR again.)
-Circuit It&amp;rsquo;s a bit un-intuitive, but USB to TTL level RS-232 adapter (Serial adapter) can be used in a special bit-bang mode.</description>
+      <description>This is my manual for TTL-232R-5V based ISP which I made several years ago. I moved this content from other place to make it easy to find. I still use this as my back up IPS. This is 5V only programmer.&#xA;I now use my Modified AVRISP MKII (in Japanese) as my main programmer. (If I every program AVR again.)&#xA;Circuit It&amp;rsquo;s a bit un-intuitive, but USB to TTL level RS-232 adapter (Serial adapter) can be used in a special bit-bang mode.</description>
     </item>
-    
     <item>
       <title>ATmega32u4 (3)</title>
       <link>/jp/2020/04/05/atmega32u4-3/</link>
       <pubDate>Sun, 05 Apr 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/04/05/atmega32u4-3/</guid>
-      <description>今回も引き続き基本のUSB AVRの ATmega32u4 を中心としたAVRチップに関して、Teensy 2.0の中華コンパチ評価ボード を用いて練習します。
-割り込みVector表 アセンブラーとC言語で書かれたBootloaderからの起動を追いかけて、 電源投入(POR)やリセットボタンを押された際のMCU処理の流れが気に なりました。アセンブラーは、しっかり割り込みVector表があるのが 分かるのですが、C言語で書かれた場合特に明示的なテーブルが無いの にどうして割り込みVector表がプログラムされてくるのかがよく見え ませんでした。
-C言語では割り込みルーチンはISR(&amp;lt;割り込みVector名&amp;gt;)という形で 関数として定義します。割り込みVector表自体は明示的にプログラムしません。
-後で考えれば「なーんだ」でしたが、リンカーがコンパイル時に、 このISR()関数定義にあわせて、コンパイラー提供のスタートアップ コード中の確保されている割り込みVector表に、割り込みルーチンの アドレスを入れ完成するらしいと分かりました。確かによく見ると 割り込みVector表は、blink.lstに見当たらないが、blink.lss等 に定義されています。
-ISP接続とUSB接続の干渉問題 ISP接続でブートローダーを導入した上で、その動作をUSB経由接続でアプリケーション のファームウエアーを導入して試そうとして見た際に、何度やっても電源投入で ファームウエアーが立ち上がらず、ブートローダーが立ち上がって悩みました。
-問題はISP接続のリセット線が繋がっていたことです。通電時でも0.5Vぐらいの端子の ため、リセット線がPULL-DOWNされてリセットボタンが押されたのと同じ状態になって MCUが停止していたようです。さらにややこしくしたのは改造ISPではプログラマーの 電圧検知端子がプログラマーのVCCに繋がっているので、評価ボードからプログラマー に電気が供給され、電圧の高いリセットボタンが離された状態に一時的にでもなるのか 単にMCUの実行が止まるのではなくちゃんとリセットがかかり、ブートローダーが 立ち上がるようです。
-少なくとも、プログラマーからのISP接続のリセット線だけは評価ボードから抜く 必要があります。まあ、VCCに繋がっている線も念のため抜くべきです。これらが ATmega32u4 (2) ISP接続 の「（使わないときは抜く）」という表記の背景です。
-LED点滅 (Lチカ) まず、ブートローダー動作確認用にATmega32u4用に単純なLEDの点滅（通称Lチカ） というアプリケーションのファームウエアーのコードをPD0:PD7ピン全部を点滅 させるように書き換えます。こうすることでLチカが、このアプリケーションに よるのか、それともブートローダー中のコードによるのかを、外部LED挙動で 簡単に判別できるようになります。
-#define F_CPU 16000000UL #include &amp;lt;avr/io.h&amp;gt; #include &amp;lt;util/delay.h&amp;gt; int main(void) { CLKPR = 0x80; CLKPR = 0; // set cpu prescale to 1 (disable CKDIV8) DDRD = 0xff; while (1) { PORTD = 0xff; _delay_ms(100); // 0.</description>
+      <description>今回も引き続き基本のUSB AVRの ATmega32u4 を中心としたAVRチップに関して、Teensy 2.0の中華コンパチ評価ボード を用いて練習します。&#xA;割り込みVector表 アセンブラーとC言語で書かれたBootloaderからの起動を追いかけて、 電源投入(POR)やリセットボタンを押された際のMCU処理の流れが気に なりました。アセンブラーは、しっかり割り込みVector表があるのが 分かるのですが、C言語で書かれた場合特に明示的なテーブルが無いの にどうして割り込みVector表がプログラムされてくるのかがよく見え ませんでした。&#xA;C言語では割り込みルーチンはISR(&amp;lt;割り込みVector名&amp;gt;)という形で 関数として定義します。割り込みVector表自体は明示的にプログラムしません。&#xA;後で考えれば「なーんだ」でしたが、リンカーがコンパイル時に、 このISR()関数定義にあわせて、コンパイラー提供のスタートアップ コード中の確保されている割り込みVector表に、割り込みルーチンの アドレスを入れ完成するらしいと分かりました。確かによく見ると 割り込みVector表は、blink.lstに見当たらないが、blink.lss等 に定義されています。&#xA;ISP接続とUSB接続の干渉問題 ISP接続でブートローダーを導入した上で、その動作をUSB経由接続でアプリケーション のファームウエアーを導入して試そうとして見た際に、何度やっても電源投入で ファームウエアーが立ち上がらず、ブートローダーが立ち上がって悩みました。&#xA;問題はISP接続のリセット線が繋がっていたことです。通電時でも0.5Vぐらいの端子の ため、リセット線がPULL-DOWNされてリセットボタンが押されたのと同じ状態になって MCUが停止していたようです。さらにややこしくしたのは改造ISPではプログラマーの 電圧検知端子がプログラマーのVCCに繋がっているので、評価ボードからプログラマー に電気が供給され、電圧の高いリセットボタンが離された状態に一時的にでもなるのか 単にMCUの実行が止まるのではなくちゃんとリセットがかかり、ブートローダーが 立ち上がるようです。&#xA;少なくとも、プログラマーからのISP接続のリセット線だけは評価ボードから抜く 必要があります。まあ、VCCに繋がっている線も念のため抜くべきです。これらが ATmega32u4 (2) ISP接続 の「（使わないときは抜く）」という表記の背景です。&#xA;LED点滅 (Lチカ) まず、ブートローダー動作確認用にATmega32u4用に単純なLEDの点滅（通称Lチカ） というアプリケーションのファームウエアーのコードをPD0:PD7ピン全部を点滅 させるように書き換えます。こうすることでLチカが、このアプリケーションに よるのか、それともブートローダー中のコードによるのかを、外部LED挙動で 簡単に判別できるようになります。&#xA;#define F_CPU 16000000UL #include &amp;lt;avr/io.h&amp;gt; #include &amp;lt;util/delay.h&amp;gt; int main(void) { CLKPR = 0x80; CLKPR = 0; // set cpu prescale to 1 (disable CKDIV8) DDRD = 0xff; while (1) { PORTD = 0xff; _delay_ms(100); // 0.</description>
     </item>
-    
     <item>
       <title>ATmega32u4 (2)</title>
       <link>/jp/2020/03/29/atmega32u4-2/</link>
       <pubDate>Sun, 29 Mar 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/03/29/atmega32u4-2/</guid>
-      <description>今回も引き続き基本のUSB AVRの ATmega32u4 を中心としたAVRチップのプログラム方法とその環境に関して、 調査と情報の整理をします。
-ISP接続 Arduino系の開発ボードなら、6pinのICSPコネクターが付いているので 1pin(ポチマーク)側にAVRISP mkIIからのISP接続フラットケーブルの 赤線側を合わせて挿せば良い ので簡単でした。
-ATmega32u4の開発ボードの SparkFun Pro Micro、 Teensy 2.0 や、AT90USB1286の開発ボードの Teensy 2.0++ などやそのコンパチ品はICSPコネクターが付いていないので 「直結接続」が必要です。
-「直結接続」のために、以下の写真のように片側にクリップ、 片側にオスやメスのデュポンコネクターが付いたワイヤーを準備 しました。(AVR系をAVRUSP mkIIでISP書き換えするにはオスの デュポンコネクター版だけで充分ですが、将来ARM系のSTM32F等を ST-LINK/V2等で書き換えするのにはメスのデュポンコネクター版が あると便利そうなので両方準備してみました。)
-左右逆にしないことが大事なので、接続関係をここにまとめます。
-ISP接続フラットケーブルのコネクター （赤線側上です。コネクター穴側から見た「左図」が大事！)
-RED SIDE 赤線側 BTM VIEW コネクター穴側 TOP VIEW VCC 2 1 MISO MISO 1 2 VCC MOSI 4 3 SCK SCK 3 4 MOSI GND 6 5 RST RST 5 6 GND (こっちがメイン) Looking from Looking from the the hole side back of the connector hole 以下、開発ボードの端子はチップが載っている表側(TOP側)から、 USBコネクターを「左」に置き見て、「半時計回り」(CCW)で 「0スタート」(逆方向は-1スタート、角からスタート、重複命名有り) で位置表記し、ISPコネクターの端子は赤線側を上にして、 コネクター穴側から見て位置表記することとします。</description>
+      <description>今回も引き続き基本のUSB AVRの ATmega32u4 を中心としたAVRチップのプログラム方法とその環境に関して、 調査と情報の整理をします。&#xA;ISP接続 Arduino系の開発ボードなら、6pinのICSPコネクターが付いているので 1pin(ポチマーク)側にAVRISP mkIIからのISP接続フラットケーブルの 赤線側を合わせて挿せば良い ので簡単でした。&#xA;ATmega32u4の開発ボードの SparkFun Pro Micro、 Teensy 2.0 や、AT90USB1286の開発ボードの Teensy 2.0++ などやそのコンパチ品はICSPコネクターが付いていないので 「直結接続」が必要です。&#xA;「直結接続」のために、以下の写真のように片側にクリップ、 片側にオスやメスのデュポンコネクターが付いたワイヤーを準備 しました。(AVR系をAVRUSP mkIIでISP書き換えするにはオスの デュポンコネクター版だけで充分ですが、将来ARM系のSTM32F等を ST-LINK/V2等で書き換えするのにはメスのデュポンコネクター版が あると便利そうなので両方準備してみました。)&#xA;左右逆にしないことが大事なので、接続関係をここにまとめます。&#xA;ISP接続フラットケーブルのコネクター （赤線側上です。コネクター穴側から見た「左図」が大事！)&#xA;RED SIDE 赤線側 BTM VIEW コネクター穴側 TOP VIEW VCC 2 1 MISO MISO 1 2 VCC MOSI 4 3 SCK SCK 3 4 MOSI GND 6 5 RST RST 5 6 GND (こっちがメイン) Looking from Looking from the the hole side back of the connector hole 以下、開発ボードの端子はチップが載っている表側(TOP側)から、 USBコネクターを「左」に置き見て、「半時計回り」(CCW)で 「0スタート」(逆方向は-1スタート、角からスタート、重複命名有り) で位置表記し、ISPコネクターの端子は赤線側を上にして、 コネクター穴側から見て位置表記することとします。</description>
     </item>
-    
     <item>
       <title>ATmega32u4 (1)</title>
       <link>/jp/2020/03/28/atmega32u4-1/</link>
       <pubDate>Sat, 28 Mar 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/03/28/atmega32u4-1/</guid>
-      <description>前々回・前回は、Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P のプログラムの勉強・練習をしました。その結果チップ周辺の配線状態 確認をホストPCのターミナルからするシェルのような avrmon を書きました。
-今回は基本のUSB AVRの ATmega32u4 を中心としたAVRチップのプログラム方法とその環境に関して、 調査と情報の整理をします。
-ATmega32u4開発ボード ATmega32u4を5V 16MHzで使う開発ボードをしては、 Arduino Leonardo、 Arduino micro、 SparkFun Pro Micro、 RobotDyn Micro ATmega32U4-MU、 Teensy 2.0などや そのコンパチ品が通販サイト(例えば、 banggood、 aliexpress、 ebay )で出回っています。私はTeensy 2.0のコンパチ品を入手しました。
-AVRへのプログラム導入 ATmega32u4へのプログラム導入アプローチは、 ATmega328Pへのプログラム導入アプローチ より選択肢が多く混乱しがちなので、以前書いた英語のメモ( Serial AVRや USB AVR )をベースに、日本語で以下に比較しながら状況を確認と整理をします。
-Serial AVR Serial AVR (ATmega328P等) では、チップにプログラムを導入するのに 主に２つのアプローチがあります:
-ISP: ホストPC上でavrdudeをISPモードで走らせ、AVR ISP mkII等の プログラマー経由でSPIポートに接続しATmega328Pを、ハードウエアー だけを用いチップを書き換えます。 Serial: ホストPC上でavrdudeをArduinoモードで走らせ、D0/D1ピンに TTLレベルのRS-232C接続経由で、チップの上位アドレスに置かれた ブートローダーソフトの助けを受け、チップを書き換えます。 開発ボード上に、FT-232R や CH340 等のUSB-Serial変換チップが 載っている場合、ホストPCから外見的にはUSB接続に見えます。 昔のAtmel STK500 や、昔のArduinoにはブートローダー(4KB)が導入済みです。 Firmwareを探すときにこれらの古いのを踏まないように要注意です。 最近のArduino系の開発ボードでは、サイズを小さくしたブートローダー のOptiboot(512B)が導入済みです。(一押し！) USB AVR USB AVR (ATmega32u4等) では、チップにプログラムを導入するのに 主に4つのアプローチがあります:</description>
+      <description>前々回・前回は、Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P のプログラムの勉強・練習をしました。その結果チップ周辺の配線状態 確認をホストPCのターミナルからするシェルのような avrmon を書きました。&#xA;今回は基本のUSB AVRの ATmega32u4 を中心としたAVRチップのプログラム方法とその環境に関して、 調査と情報の整理をします。&#xA;ATmega32u4開発ボード ATmega32u4を5V 16MHzで使う開発ボードをしては、 Arduino Leonardo、 Arduino micro、 SparkFun Pro Micro、 RobotDyn Micro ATmega32U4-MU、 Teensy 2.0などや そのコンパチ品が通販サイト(例えば、 banggood、 aliexpress、 ebay )で出回っています。私はTeensy 2.0のコンパチ品を入手しました。&#xA;AVRへのプログラム導入 ATmega32u4へのプログラム導入アプローチは、 ATmega328Pへのプログラム導入アプローチ より選択肢が多く混乱しがちなので、以前書いた英語のメモ( Serial AVRや USB AVR )をベースに、日本語で以下に比較しながら状況を確認と整理をします。&#xA;Serial AVR Serial AVR (ATmega328P等) では、チップにプログラムを導入するのに 主に２つのアプローチがあります:&#xA;ISP: ホストPC上でavrdudeをISPモードで走らせ、AVR ISP mkII等の プログラマー経由でSPIポートに接続しATmega328Pを、ハードウエアー だけを用いチップを書き換えます。 Serial: ホストPC上でavrdudeをArduinoモードで走らせ、D0/D1ピンに TTLレベルのRS-232C接続経由で、チップの上位アドレスに置かれた ブートローダーソフトの助けを受け、チップを書き換えます。 開発ボード上に、FT-232R や CH340 等のUSB-Serial変換チップが 載っている場合、ホストPCから外見的にはUSB接続に見えます。 昔のAtmel STK500 や、昔のArduinoにはブートローダー(4KB)が導入済みです。 Firmwareを探すときにこれらの古いのを踏まないように要注意です。 最近のArduino系の開発ボードでは、サイズを小さくしたブートローダー のOptiboot(512B)が導入済みです。(一押し！) USB AVR USB AVR (ATmega32u4等) では、チップにプログラムを導入するのに 主に4つのアプローチがあります:</description>
     </item>
-    
     <item>
       <title>ATmega328P (4)</title>
       <link>/jp/2020/03/10/atmega328p-4/</link>
       <pubDate>Tue, 10 Mar 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/03/10/atmega328p-4/</guid>
-      <description>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの勉強・練習の続きをしました。
-AVRのコーディング上の注意点 以下をAVRのコーディング上の注意点の参考にしました。
-2003年出版のIAR CベースのAVR035: Efficient C Coding for AVR 2011年出版のGCC4.5ベースのAtmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。&amp;ldquo;c99 plus GCC extensions&amp;quot;となるように-std=gnu99をWinAvrベースのMakefileに指定してます。 ちなみに、avr-gcc (GCC) 5.4.0では-std=C99は&amp;quot;ISO C99 standard&amp;quot;完全準拠の はずです。avr-gcc helpの記述に-std=c11、-std=c++11がありISO 2011 C/C++ まで完全準拠が選べるようです。WinAvrのMakefile内に書かれた 「ISO C99準拠が不完全」とのコメントは古いバージョンのavr-gccに基づいている ようですね。確かGCCは4以降では&amp;quot;ISO C99 standard&amp;quot;完全準拠だった気がします。
-ちなみに、-std=gnu99では、-std=c11で導入された0b10111011と言った ２進表記での整数定数表記ができます。これが便利です。
-8 bitのATmega328Pぐらいにフォーカスして、現在の開発環境下で私なりに検討して、 ある程度の憶測も折り込み、よくまとまっていたAVR035文書の結論を以下に書きなお して見ました。
-あまりコードサイズの最適化に頑張り過ぎることは無いと考えています。無理がある 時には、コードを凝るのではなく、所詮趣味でなので実現する機能を削るとか、値段 は知れているので高性能のチップに乗り換えるとかする方が良いのでしょう。実際 Arduino Nanoに載っているATmega328pですらかなり余裕があるので、読みやすくバグ 発生しにくいコーディングを心がけ、デバグしやすいように部分・部分をテストでき るモジュラーな構成を念頭にするもがいい気がします。
-そういった意味では、裸のavr-gcc+avr-libcでの開発に拘らずに、Arduino系のインフ ラを利用したコード開発をすれば楽になる面もあるのも事実です。このメモ作成は、 あくまでAVRのコーディングの基礎学習行為の備忘録です。
-Hints to Reduce Code Size Compile with full size optimization.</description>
+      <description>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの勉強・練習の続きをしました。&#xA;AVRのコーディング上の注意点 以下をAVRのコーディング上の注意点の参考にしました。&#xA;2003年出版のIAR CベースのAVR035: Efficient C Coding for AVR 2011年出版のGCC4.5ベースのAtmel AVR4027: Tips and Tricks to Optimize Your C Code for 8-bit AVR Microcontrollers わたしの現在の開発環境で使うのは、avr-gcc (GCC) 5.4.0です。&amp;ldquo;c99 plus GCC extensions&amp;quot;となるように-std=gnu99をWinAvrベースのMakefileに指定してます。 ちなみに、avr-gcc (GCC) 5.4.0では-std=C99は&amp;quot;ISO C99 standard&amp;quot;完全準拠の はずです。avr-gcc helpの記述に-std=c11、-std=c++11がありISO 2011 C/C++ まで完全準拠が選べるようです。WinAvrのMakefile内に書かれた 「ISO C99準拠が不完全」とのコメントは古いバージョンのavr-gccに基づいている ようですね。確かGCCは4以降では&amp;quot;ISO C99 standard&amp;quot;完全準拠だった気がします。&#xA;ちなみに、-std=gnu99では、-std=c11で導入された0b10111011と言った ２進表記での整数定数表記ができます。これが便利です。&#xA;8 bitのATmega328Pぐらいにフォーカスして、現在の開発環境下で私なりに検討して、 ある程度の憶測も折り込み、よくまとまっていたAVR035文書の結論を以下に書きなお して見ました。&#xA;あまりコードサイズの最適化に頑張り過ぎることは無いと考えています。無理がある 時には、コードを凝るのではなく、所詮趣味でなので実現する機能を削るとか、値段 は知れているので高性能のチップに乗り換えるとかする方が良いのでしょう。実際 Arduino Nanoに載っているATmega328pですらかなり余裕があるので、読みやすくバグ 発生しにくいコーディングを心がけ、デバグしやすいように部分・部分をテストでき るモジュラーな構成を念頭にするもがいい気がします。&#xA;そういった意味では、裸のavr-gcc+avr-libcでの開発に拘らずに、Arduino系のインフ ラを利用したコード開発をすれば楽になる面もあるのも事実です。このメモ作成は、 あくまでAVRのコーディングの基礎学習行為の備忘録です。&#xA;Hints to Reduce Code Size Compile with full size optimization.</description>
     </item>
-    
     <item>
       <title>ATmega328P (3)</title>
       <link>/jp/2020/03/06/atmega328p-3/</link>
       <pubDate>Fri, 06 Mar 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/03/06/atmega328p-3/</guid>
-      <description>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの勉強・練習の続きとして、 「AVR Libc Reference Manual」を読み込んでAVR独特の世界をみました。
-メモリー PCでのプログラムとはメモリー関係は、少々勝手が違い、IO関係を直接触る上、 メモリー空間も狭いので要注意です。
-さらにATmega328Pを含むAVRはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀに対してﾒﾓﾘとﾊﾞｽを分離する ﾊｰﾊﾞｰﾄﾞ構造を使用し、メモリーアドレス空間もそれぞれ別です。 （PCはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀがメモリーアドレス空間を共有するノイマン構造。）
-ﾌﾟﾛｸﾞﾗﾑは不揮発性のフラッシュに格納されます。 ﾃﾞｰﾀは通常の揮発性のSRAMに格納されます。 不揮発データーを格納する別のEEPROMもあります。 ATmega328Pだと：
-ﾌﾗｯｼｭ ﾒﾓﾘ容量 (ﾊﾞｲﾄ) 32K SRAM容量 (ﾊﾞｲﾄ) 2K EEPROM容量 (ﾊﾞｲﾄ) 1K 実際のデーターメモリー領域は以下です。
-ﾚｼﾞｽﾀ ﾌｧｲﾙ (32: 0x00-0x1F)　ーALUの汎用レジスタ I/Oﾚｼﾞｽﾀ (64: 0x20-0x5F) - アセンブラIN/OUT命令は0x20オフセットしたLDS/STS 拡張I/Oﾚｼﾞｽﾀ (160: 0x60-0xFF) 内蔵SRAM (2K: 0x100-0x3FFF) IN/OUT命令関連のことがよく分からない。どうもAVRの前の世代のマイコン8051の命令 のことのようだ。アセンブラコード移植を意識しているようだ。INTEL系はIOは0x00から 始まる独立アドレス空間なので、アセンブラコードは0x20オフセットした LDS/STS命令に置き換えると言っているようです。
-ﾌﾟﾛｸﾞﾗﾑ領域（フラッシュ）へのアクセスには専用のアセンブラコードLPM/SPMがあります。
-EEPROM領域へのアクセスは専用のI/Oﾚｼﾞｽﾀ経由で行うようです。
-Cコードからは、マクロが準備されているので、ﾌﾟﾛｸﾞﾗﾑ領域たやEEPROM領域へのアクセス には専用マクロ等を使うようだ。詳しくは「ATmega328Pマニュアル」の「ﾃﾞｰﾀ用EEPROMﾒﾓﾘ」や、 「AVR Libc Reference Manual」の「Data in Program Space」や、 avr/eeprom.h や avr/pgmspace.hを参照しましょう。
-また、AVRはﾊｰﾊﾞｰﾄﾞ構造なので、リンカーに渡すデーターメモリーの開始アドレス は実際のアドレスに0x800000 を手動で加えることも要注意です。
-メモリー消費の確認 メモリー消費は、avr-sizeコマンドで調べます。フラッシュ消費は「Program」、 SRAM消費は「Data」で示されます。SRAMの初期化データーをフラッシュが 保持するため、「.</description>
+      <description>前回に続きArduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの勉強・練習の続きとして、 「AVR Libc Reference Manual」を読み込んでAVR独特の世界をみました。&#xA;メモリー PCでのプログラムとはメモリー関係は、少々勝手が違い、IO関係を直接触る上、 メモリー空間も狭いので要注意です。&#xA;さらにATmega328Pを含むAVRはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀに対してﾒﾓﾘとﾊﾞｽを分離する ﾊｰﾊﾞｰﾄﾞ構造を使用し、メモリーアドレス空間もそれぞれ別です。 （PCはﾌﾟﾛｸﾞﾗﾑとﾃﾞｰﾀがメモリーアドレス空間を共有するノイマン構造。）&#xA;ﾌﾟﾛｸﾞﾗﾑは不揮発性のフラッシュに格納されます。 ﾃﾞｰﾀは通常の揮発性のSRAMに格納されます。 不揮発データーを格納する別のEEPROMもあります。 ATmega328Pだと：&#xA;ﾌﾗｯｼｭ ﾒﾓﾘ容量 (ﾊﾞｲﾄ) 32K SRAM容量 (ﾊﾞｲﾄ) 2K EEPROM容量 (ﾊﾞｲﾄ) 1K 実際のデーターメモリー領域は以下です。&#xA;ﾚｼﾞｽﾀ ﾌｧｲﾙ (32: 0x00-0x1F)　ーALUの汎用レジスタ I/Oﾚｼﾞｽﾀ (64: 0x20-0x5F) - アセンブラIN/OUT命令は0x20オフセットしたLDS/STS 拡張I/Oﾚｼﾞｽﾀ (160: 0x60-0xFF) 内蔵SRAM (2K: 0x100-0x3FFF) IN/OUT命令関連のことがよく分からない。どうもAVRの前の世代のマイコン8051の命令 のことのようだ。アセンブラコード移植を意識しているようだ。INTEL系はIOは0x00から 始まる独立アドレス空間なので、アセンブラコードは0x20オフセットした LDS/STS命令に置き換えると言っているようです。&#xA;ﾌﾟﾛｸﾞﾗﾑ領域（フラッシュ）へのアクセスには専用のアセンブラコードLPM/SPMがあります。&#xA;EEPROM領域へのアクセスは専用のI/Oﾚｼﾞｽﾀ経由で行うようです。&#xA;Cコードからは、マクロが準備されているので、ﾌﾟﾛｸﾞﾗﾑ領域たやEEPROM領域へのアクセス には専用マクロ等を使うようだ。詳しくは「ATmega328Pマニュアル」の「ﾃﾞｰﾀ用EEPROMﾒﾓﾘ」や、 「AVR Libc Reference Manual」の「Data in Program Space」や、 avr/eeprom.h や avr/pgmspace.hを参照しましょう。&#xA;また、AVRはﾊｰﾊﾞｰﾄﾞ構造なので、リンカーに渡すデーターメモリーの開始アドレス は実際のアドレスに0x800000 を手動で加えることも要注意です。&#xA;メモリー消費の確認 メモリー消費は、avr-sizeコマンドで調べます。フラッシュ消費は「Program」、 SRAM消費は「Data」で示されます。SRAMの初期化データーをフラッシュが 保持するため、「.</description>
     </item>
-    
     <item>
       <title>ATmega328P (2)</title>
       <link>/jp/2020/03/03/atmega328p-2/</link>
       <pubDate>Tue, 03 Mar 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/03/03/atmega328p-2/</guid>
-      <description>Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの練習の続きをしました。
-確かにハードとして少々古い感はありますが、５V仕様で安価で入手簡単な開発 ボードがあるのが練習用にいい感じです。
-開発環境 クロスコンパイル開発環境は以下でOK（2020/03, Debian stable buster）
-$ sudo apt install gcc-avr avr-libc binutils-avr コードスタイル 以下色々なところからコードを引っ張ってくると、コードスタイルが混じって 見づらくなるし、手動で直すのもばかばかしいのでちょっとコードスタイル関係を 調べました。もともとK&amp;amp;R系のTAB無し2-4スペースインデントの 1TBS なので、色々のスタイルガイドを見て、結局 GOOGLEスタイル に最も共感しました。
-今後はPython以外は全言語基本2スペースインデントにします。
-VIMのモードライン(C)
-// vim: set sts=2 sw=2 ft=c ai si et tw=80: VIMのモードライン(SH)
-# vim: set sts=2 sw=2 ft=sh ai si et tw=80: VIMのモードライン(PYTHON)
-# vim: set sts=4 sw=4 ft=python ai si et: Cの自動リフォーマットは
-$ clang-format -style=Google -i filename.c SHELLの全文リフォーマットはVIMで(modelineが無い場合は:set syntax=shの後)gg=Gとする。
-PYTHONの全文リフォーマットは「black」を使います。
-レファレンス文書 MICROCHIP社（AVRを作っていた旧Atmel社はPICを作っていた旧MICROCHIP社と合併 して、現在MICROCHIP社をして両方を供給中）の AVR関連英文サイト が基本の開発関連レファレンス文書を広くカバーしています。</description>
+      <description>Arduino Uno/Nano に使われている基本のシリアルAVRの ATmega328P を中心としてAVRチップのプログラムの練習の続きをしました。&#xA;確かにハードとして少々古い感はありますが、５V仕様で安価で入手簡単な開発 ボードがあるのが練習用にいい感じです。&#xA;開発環境 クロスコンパイル開発環境は以下でOK（2020/03, Debian stable buster）&#xA;$ sudo apt install gcc-avr avr-libc binutils-avr コードスタイル 以下色々なところからコードを引っ張ってくると、コードスタイルが混じって 見づらくなるし、手動で直すのもばかばかしいのでちょっとコードスタイル関係を 調べました。もともとK&amp;amp;R系のTAB無し2-4スペースインデントの 1TBS なので、色々のスタイルガイドを見て、結局 GOOGLEスタイル に最も共感しました。&#xA;今後はPython以外は全言語基本2スペースインデントにします。&#xA;VIMのモードライン(C)&#xA;// vim: set sts=2 sw=2 ft=c ai si et tw=80: VIMのモードライン(SH)&#xA;# vim: set sts=2 sw=2 ft=sh ai si et tw=80: VIMのモードライン(PYTHON)&#xA;# vim: set sts=4 sw=4 ft=python ai si et: Cの自動リフォーマットは&#xA;$ clang-format -style=Google -i filename.c SHELLの全文リフォーマットはVIMで(modelineが無い場合は:set syntax=shの後)gg=Gとする。&#xA;PYTHONの全文リフォーマットは「black」を使います。&#xA;レファレンス文書 MICROCHIP社（AVRを作っていた旧Atmel社はPICを作っていた旧MICROCHIP社と合併 して、現在MICROCHIP社をして両方を供給中）の AVR関連英文サイト が基本の開発関連レファレンス文書を広くカバーしています。</description>
     </item>
-    
     <item>
       <title>AVRISP markII mod-VCC (J)</title>
       <link>/jp/2020/02/27/avrisp-mod-j/</link>
       <pubDate>Thu, 27 Feb 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/02/27/avrisp-mod-j/</guid>
-      <description>AVRチップのISPプログラマにAVR ISP markIIを使うと、対象AVRチップに別途電源供給 する必要があり、ISP出力のPIN#2にVCCを供給していた以前の TTL-232R-5V を使った自作プロクラマー (英語) を使うより煩雑でした。
-そこで、AVR ISP markIIを改造し、ISP出力のPIN#2からVCCを供給出きるように改造し ました。
-参考情報 いろんな人が同様の不便を感じ、AVRISP mkIIのUSB から電源を取り、ISP出力のPIN#2 に つなぎVCC電源供給ソースとする改造記事を書いています。以下の改造記事を参考に しました。
-http://www.webx.dk/avrisp-mk2-modding/ (3V/5V selectable, use own fuse, easy output) https://jeelabs.org/2010/04/02/avrisp-mkii-w-5v-power/ (nice input after poly fuse) https://forum.arduino.cc/index.php?topic=125502.0 (half ass fix, Nice pics of wiring, good output point) https://qiita.com/hideyuki/items/71381b741d89878e3e79 (Easy access via TP1, No fuse) http://shiozoku.blogspot.com/2014/02/avr-isp-mkii.html Use switch (No fuse, interesting use reminder) https://electronics.stackexchange.com/questions/286693/can-anything-be-done-about-this-avrisp-mkii-or-is-it-dead (Nice pics of wiring, not the same purpose, fix by bypassing broken DC/DC)　これは本改造とは違う修理改造。 どうもこれらの記事の基板の方が私の持っている基板より配線が太く見やすいです。</description>
+      <description>AVRチップのISPプログラマにAVR ISP markIIを使うと、対象AVRチップに別途電源供給 する必要があり、ISP出力のPIN#2にVCCを供給していた以前の TTL-232R-5V を使った自作プロクラマー (英語) を使うより煩雑でした。&#xA;そこで、AVR ISP markIIを改造し、ISP出力のPIN#2からVCCを供給出きるように改造し ました。&#xA;参考情報 いろんな人が同様の不便を感じ、AVRISP mkIIのUSB から電源を取り、ISP出力のPIN#2 に つなぎVCC電源供給ソースとする改造記事を書いています。以下の改造記事を参考に しました。&#xA;http://www.webx.dk/avrisp-mk2-modding/ (3V/5V selectable, use own fuse, easy output) https://jeelabs.org/2010/04/02/avrisp-mkii-w-5v-power/ (nice input after poly fuse) https://forum.arduino.cc/index.php?topic=125502.0 (half ass fix, Nice pics of wiring, good output point) https://qiita.com/hideyuki/items/71381b741d89878e3e79 (Easy access via TP1, No fuse) http://shiozoku.blogspot.com/2014/02/avr-isp-mkii.html Use switch (No fuse, interesting use reminder) https://electronics.stackexchange.com/questions/286693/can-anything-be-done-about-this-avrisp-mkii-or-is-it-dead (Nice pics of wiring, not the same purpose, fix by bypassing broken DC/DC)　これは本改造とは違う修理改造。 どうもこれらの記事の基板の方が私の持っている基板より配線が太く見やすいです。</description>
     </item>
-    
     <item>
       <title>ATmega328P (1)</title>
       <link>/jp/2020/02/21/atmega328p-1/</link>
       <pubDate>Fri, 21 Feb 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/02/21/atmega328p-1/</guid>
-      <description>AVRチップのISP経由プログラムの練習をします。
-ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoのコンパチボードや本物の Uno等を使ってます。
-プロクラマー これには、 昔TTL-232R-5V を使った自作プロクラマー を使うのも良いのですが、最近Atmel AVR ISP mkIIをただで人からもらったので それを使います。
-詳細な使用説明書（英文）： AVR ISP mkII User Guide
-ソフト環境 Debian GNU/Linux buster=stable 環境です。
-$ sudo apt install avrdude 接続 純正のAVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。
-ちなみに、 昔TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。
-実は当方所有のAVRISP mkIIは、USB 電源 とPIN#1 をつないで電源供給ソースとする改造済みです。 このAVRISP mkIIの改造は、この次の記事です。　改造済みだと外部電源供給は不要ですが、電圧設定を間違いなくする必要があります。
-さて、ISPケーブルの赤線は１ピン側です。
-Uno Nano AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。
-AVRISP mkII に赤いLEDが点滅は、ISPコネクター「逆差し」です。
-Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.</description>
+      <description>AVRチップのISP経由プログラムの練習をします。&#xA;ATmega328P は手元にあったブレッドボードに挿せるArduino Nanoのコンパチボードや本物の Uno等を使ってます。&#xA;プロクラマー これには、 昔TTL-232R-5V を使った自作プロクラマー を使うのも良いのですが、最近Atmel AVR ISP mkIIをただで人からもらったので それを使います。&#xA;詳細な使用説明書（英文）： AVR ISP mkII User Guide&#xA;ソフト環境 Debian GNU/Linux buster=stable 環境です。&#xA;$ sudo apt install avrdude 接続 純正のAVRISP mkIIのVCCは電源電圧監視用でAVRISP mkII側からは電源供給されませんので、 別途チップへの電源供給ソースが必要！Unoなら12V、NanoならUSBを必ずつなぐこと。&#xA;ちなみに、 昔TTL-232R-5V を使った自作プロクラマー は電源電圧供給していたので便利な面がありました。&#xA;実は当方所有のAVRISP mkIIは、USB 電源 とPIN#1 をつないで電源供給ソースとする改造済みです。 このAVRISP mkIIの改造は、この次の記事です。　改造済みだと外部電源供給は不要ですが、電圧設定を間違いなくする必要があります。&#xA;さて、ISPケーブルの赤線は１ピン側です。&#xA;Uno Nano AVRISP mkII に赤いLEDがつきっぱなしは、ISPコネクター「差し込み忘れ」です。&#xA;AVRISP mkII に赤いLEDが点滅は、ISPコネクター「逆差し」です。&#xA;Uno $ sudo avrdude -c avrisp2 -P usb -p m328p -v avrdude: Version 6.3-20171130 Copyright (c) 2000-2005 Brian Dean, http://www.</description>
     </item>
-    
     <item>
       <title>自作キーボード(1)</title>
       <link>/jp/2020/01/03/cg56-1/</link>
       <pubDate>Fri, 03 Jan 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/01/03/cg56-1/</guid>
-      <description>以下は基本的に備忘録です。
-2016-2017年頃の自作キーボードのハード作成 Arduinoは素人ででもシステム細部まで理解して プログラム出きるので、それなりに面白いんですが、LEDのチカチカやbeep音出し だけではすぐに飽きてしまいました。
-そこでキーボードの自作を思いたち、2016年の年末から海外サイトを色々見ました。
-https://geekhack.org/ &amp;ndash; geekhack https://deskthority.net/ &amp;ndash; deskthority 昔から気になっていたことを根本的に解決してくれる ortholinear系のデザインのキーボードがとっても気になり 欲しくなりました。ただPCBからすべて買って組み立てるだけでは面白くない ので、キースイッチの位置精度が要るケース部品のネタ部分だけを3mm MDF板の レーザー加工で2017年2月に発注し入手しました。
-作ろうとしたキーボードのデザインは、14C * 4R のortholinear タイプで、 右端のキーを真ん中に移動し、左右の手を通常より2キー離れて置くことを特徴とし ていました。planck等で採用されている片側6列ではなく片側7列とし、左右の手 の間隔を通常より取ったので窮屈でない姿勢で使えるキーボードのデザインにでき たと一人悦に入っていました。
-MDFを木工ボンドで接着し組み立て、角をヤスリで落し、段差を紙粘土で埋めて スムーズな形にして、仕上げに塗装したあと、キーを置いてみて気分を楽しんで いました。
-まあ、MDFは木材感覚なので、塗装が出来るのと、角を削って落とせるのは メリットでした。キーはプレートマウント状態ですがMDF板は3mm あり1.0-1,5 mm 厚であるべきマウントプレートとして引っかかりある取り付けができませんでした。 それに関してはキースイッチをホットメルト接着剤で裏から留めることで安定させ たので、むしろカンカンという金属板の共鳴音もしなくていい感じでした。
-ただその後、他の事に忙しくなり、電子回路を組み上げずに中断していました。 (ケースの高さを抑えかつ強度を確保しようとし過ぎため、ケース内のスペース が少なく配線の作業性が極端に悪かったのも挫けた一因です。)
-キーボード関連MCU・ソフト状況 このころいろいろ読んでの、私なりのキーボード関連でのソフトに関する結論を 備忘録で記します。
-(昔、この辺は英語でhttps://github.com/osamuaoki/avrdude-friend/wiki に纏めていました。ちょっと加筆して整理しなおしました。今見直すとかなり 参考になります)
-まず、USBキーボードに使うMCUはやはりサポートソフト基盤のARDUINOやQMKがあり とっつきが良いATmega32u4に絞りました。読み込んだ資料は以下です。
-atmega32u4 data etc. atmega32u4 データシート LUFA: the Lightweight USB Framework for AVRs Arduino The QMK Configurator &amp;ndash; Open-source keyboard firmware for Atmel AVR and Arm USB families いくつか気づいたポイントを以下に箇条書きにします。</description>
+      <description>以下は基本的に備忘録です。&#xA;2016-2017年頃の自作キーボードのハード作成 Arduinoは素人ででもシステム細部まで理解して プログラム出きるので、それなりに面白いんですが、LEDのチカチカやbeep音出し だけではすぐに飽きてしまいました。&#xA;そこでキーボードの自作を思いたち、2016年の年末から海外サイトを色々見ました。&#xA;https://geekhack.org/ &amp;ndash; geekhack https://deskthority.net/ &amp;ndash; deskthority 昔から気になっていたことを根本的に解決してくれる ortholinear系のデザインのキーボードがとっても気になり 欲しくなりました。ただPCBからすべて買って組み立てるだけでは面白くない ので、キースイッチの位置精度が要るケース部品のネタ部分だけを3mm MDF板の レーザー加工で2017年2月に発注し入手しました。&#xA;作ろうとしたキーボードのデザインは、14C * 4R のortholinear タイプで、 右端のキーを真ん中に移動し、左右の手を通常より2キー離れて置くことを特徴とし ていました。planck等で採用されている片側6列ではなく片側7列とし、左右の手 の間隔を通常より取ったので窮屈でない姿勢で使えるキーボードのデザインにでき たと一人悦に入っていました。&#xA;MDFを木工ボンドで接着し組み立て、角をヤスリで落し、段差を紙粘土で埋めて スムーズな形にして、仕上げに塗装したあと、キーを置いてみて気分を楽しんで いました。&#xA;まあ、MDFは木材感覚なので、塗装が出来るのと、角を削って落とせるのは メリットでした。キーはプレートマウント状態ですがMDF板は3mm あり1.0-1,5 mm 厚であるべきマウントプレートとして引っかかりある取り付けができませんでした。 それに関してはキースイッチをホットメルト接着剤で裏から留めることで安定させ たので、むしろカンカンという金属板の共鳴音もしなくていい感じでした。&#xA;ただその後、他の事に忙しくなり、電子回路を組み上げずに中断していました。 (ケースの高さを抑えかつ強度を確保しようとし過ぎため、ケース内のスペース が少なく配線の作業性が極端に悪かったのも挫けた一因です。)&#xA;キーボード関連MCU・ソフト状況 このころいろいろ読んでの、私なりのキーボード関連でのソフトに関する結論を 備忘録で記します。&#xA;(昔、この辺は英語でhttps://github.com/osamuaoki/avrdude-friend/wiki に纏めていました。ちょっと加筆して整理しなおしました。今見直すとかなり 参考になります)&#xA;まず、USBキーボードに使うMCUはやはりサポートソフト基盤のARDUINOやQMKがあり とっつきが良いATmega32u4に絞りました。読み込んだ資料は以下です。&#xA;atmega32u4 data etc. atmega32u4 データシート LUFA: the Lightweight USB Framework for AVRs Arduino The QMK Configurator &amp;ndash; Open-source keyboard firmware for Atmel AVR and Arm USB families いくつか気づいたポイントを以下に箇条書きにします。</description>
     </item>
-    
   </channel>
 </rss>

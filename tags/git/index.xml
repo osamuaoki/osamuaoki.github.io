@@ -1,76 +1,40 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>git on Goofing Osamu</title>
+    <title>Git on Goofing Osamu</title>
     <link>/tags/git/</link>
-    <description>Recent content in git on Goofing Osamu</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Git on Goofing Osamu</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Wed, 27 Mar 2024 00:00:00 +0000</lastBuildDate><atom:link href="/tags/git/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 28 Mar 2024 11:08:27 +0900</lastBuildDate>
+    <atom:link href="/tags/git/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Git cheatsheet</title>
       <link>/en/2024/03/27/git-1/</link>
       <pubDate>Wed, 27 Mar 2024 00:00:00 +0000</pubDate>
-      
       <guid>/en/2024/03/27/git-1/</guid>
-      <description>Here is my take on git basic operations:
-See Git-operations5.odp.</description>
+      <description>Here is my take on git basic operations:&#xA;See Git-operations5.odp.</description>
     </item>
-    
     <item>
       <title>GITデフォルトブランチの`main`への移行</title>
       <link>/jp/2021/01/27/git-master-main/</link>
       <pubDate>Wed, 27 Jan 2021 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2021/01/27/git-master-main/</guid>
-      <description>２１世紀の世情の反映で、 PC の視点から、デフォールトのブランチ名は、masterに代わり、新規のプロジェクトでは mainが使われていきます。
-人を不愉快にすることを続けたく無いので、折に触れ過去のプロジェクトでも同様にするべく、 masterからmainへのデフォールトブランチ名を移行するための手順を、備忘録を兼ねたメモ としてここに作成します。
-GITHUBサーバーの変更 GithubのWeb interfaceで、Settings -&amp;gt; Branches -&amp;gt; Default branch から 「master」を「main」と変更します。
-ローカルのrepoの変更 ローカルブランチ名の変更 次に、GITHUBのWEBインターフェースの吹き出しにある指示手順で、ローカルの repoのブランチ名を状態を確認しながら変更します。
-$ git branch -a * master remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git branch -m master main $ git branch -a * main remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git status -sb ## main...origin/master トラッキングの移行 さらに、GITHUBのWEBインターフェースの吹き出しにある指示手順で リモートのトラッキングがうまくするための追加の関連設定を 状態を確認しながらします。
-$ git fetch origin From github.com:&amp;lt;user_name&amp;gt;/&amp;lt;project_name&amp;gt; * [new branch] main -&amp;gt; origin/main $ git branch -a * main remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/main remotes/origin/master $ git status -sb ## main.</description>
+      <description>２１世紀の世情の反映で、 PC の視点から、デフォールトのブランチ名は、masterに代わり、新規のプロジェクトでは mainが使われていきます。&#xA;人を不愉快にすることを続けたく無いので、折に触れ過去のプロジェクトでも同様にするべく、 masterからmainへのデフォールトブランチ名を移行するための手順を、備忘録を兼ねたメモ としてここに作成します。&#xA;GITHUBサーバーの変更 GithubのWeb interfaceで、Settings -&amp;gt; Branches -&amp;gt; Default branch から 「master」を「main」と変更します。&#xA;ローカルのrepoの変更 ローカルブランチ名の変更 次に、GITHUBのWEBインターフェースの吹き出しにある指示手順で、ローカルの repoのブランチ名を状態を確認しながら変更します。&#xA;$ git branch -a * master remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git branch -m master main $ git branch -a * main remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/master $ git status -sb ## main...origin/master トラッキングの移行 さらに、GITHUBのWEBインターフェースの吹き出しにある指示手順で リモートのトラッキングがうまくするための追加の関連設定を 状態を確認しながらします。&#xA;$ git fetch origin From github.com:&amp;lt;user_name&amp;gt;/&amp;lt;project_name&amp;gt; * [new branch] main -&amp;gt; origin/main $ git branch -a * main remotes/origin/HEAD -&amp;gt; origin/master remotes/origin/main remotes/origin/master $ git status -sb ## main.</description>
     </item>
-    
     <item>
       <title>Git Annex入門(1)</title>
       <link>/jp/2020/04/22/git-annex-01/</link>
       <pubDate>Wed, 22 Apr 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/04/22/git-annex-01/</guid>
-      <description>正直なところ、今は Git Annexを 使っていません。rsync と btrfs の 組み合わせでバックアップしています。(2021/07/07)
-Git関連ツールで、写真等の大きなデーターの分散保存・世代管理をする Git Annexというツールを walkthrough を読みながら学びました。間違っているかもしれませんが、 自分なりに簡単に以下にまとめて見ます。
-Git Annexの基本コンセプト Gitはデーターの分散管理では非常に便利ですが、 大きなデーターを直接扱うのが不得意 です。そこで、このGitが不得意な部分のデーターの分散管理を協調的に補完す るのがGit Annexです。
-写真等の大きなファイルを含むデーターは、ソースコードなどのテキスト ファイルを含むデーターと違い、ファイル自体がすでに圧縮されていて 保存の際のさらなるデーター圧縮のメリットが少ないことや、世代間の 詳細なデーター差分の検出には大きな労力が必要な割に、詳細な差分は サイズも大きくなりがちでメリットが少ないという特徴があります。
-そこで大きなファイルは、Gitの本体で直接扱かわずに、労力とのバランス を考えGitの上に構築したGit Annexで扱うのが望ましいです。Git Annexでは データー保存の効率化対象を単純なファイルの重複保存や世代間のファイル の位置移動に絞ります。この制約の下では、ファイル実体によって決まる 「ユニークな特定パスに保存する」ことで、ファイル実体の効率的な保存 が実現できます。「ユニーク」ということはファイル内容のハッシュ値 等を用いた文字列(Key)で実現します。Git Annexではファイル実体データー (Value)をGit本来のデーター保存インフラとは別の.git/annex/objects/ 以下に書き込み禁止のファイルパーミッションで保存します。
-一方、作業ディレクトリーツリー中のファイルがあった場所には Git Annex管理下に保存されたファイルへのシムリンクを置きます。 このシムリンクのデーターサイズは小さいので、本来のGitで問題なく 場所の保存や世代管理ができます。
-このままでは他のプログラムによるデーターの編集・更新ができな いので、Git Annexはシムリンクをファイルで置き換え編集可能化する unlock機能と、Git Annexに編集結果を戻すlock機能を提供します。
-さらにGit Annexは、「特定パスに保存する」という部分に関して、 「分散保存を管理するインフラを提供する」とすることで、すべての 分散管理レポジトリー内に全ファイルを保持しなくても良い とします。ここは全ファイルを保持する本来のGitレポジトリーと 大きく異なるところです。Git Annexは、分散管理レポジトリー間で それぞれが保存するファイルに関するメタ情報を交換するインフラも 提供します。
-Git Annexがチェックアウトした作業ディレクトリーツリー中で、 ローカルに保持していないファイルは、ダングリングシムリンク (宙ぶらりシムリンク)となってしまいます。その際に、保有するメタ 情報に基づき指定範囲のファイル実体をリモートサイトから簡単に オンディマンドでコピーしてくる部分チェックアウト機能や、 作業ディレクトリーツリー中ダングリングシムリンクを簡単に消す 機能もサポートします。
-Git Annexによるリモートサイトへのアクセスは抽象化されていて、 単純なファイルシステム経由のアクセスはもちろん、SSH経由のアクセス、 Amazon S3等の各種クラウドへのアクセスが、既成のバックエンドを 利用し、ほぼ同じ手順で簡単に実現出来るようになっています。</description>
+      <description>正直なところ、今は Git Annexを 使っていません。rsync と btrfs の 組み合わせでバックアップしています。(2021/07/07)&#xA;Git関連ツールで、写真等の大きなデーターの分散保存・世代管理をする Git Annexというツールを walkthrough を読みながら学びました。間違っているかもしれませんが、 自分なりに簡単に以下にまとめて見ます。&#xA;Git Annexの基本コンセプト Gitはデーターの分散管理では非常に便利ですが、 大きなデーターを直接扱うのが不得意 です。そこで、このGitが不得意な部分のデーターの分散管理を協調的に補完す るのがGit Annexです。&#xA;写真等の大きなファイルを含むデーターは、ソースコードなどのテキスト ファイルを含むデーターと違い、ファイル自体がすでに圧縮されていて 保存の際のさらなるデーター圧縮のメリットが少ないことや、世代間の 詳細なデーター差分の検出には大きな労力が必要な割に、詳細な差分は サイズも大きくなりがちでメリットが少ないという特徴があります。&#xA;そこで大きなファイルは、Gitの本体で直接扱かわずに、労力とのバランス を考えGitの上に構築したGit Annexで扱うのが望ましいです。Git Annexでは データー保存の効率化対象を単純なファイルの重複保存や世代間のファイル の位置移動に絞ります。この制約の下では、ファイル実体によって決まる 「ユニークな特定パスに保存する」ことで、ファイル実体の効率的な保存 が実現できます。「ユニーク」ということはファイル内容のハッシュ値 等を用いた文字列(Key)で実現します。Git Annexではファイル実体データー (Value)をGit本来のデーター保存インフラとは別の.git/annex/objects/ 以下に書き込み禁止のファイルパーミッションで保存します。&#xA;一方、作業ディレクトリーツリー中のファイルがあった場所には Git Annex管理下に保存されたファイルへのシムリンクを置きます。 このシムリンクのデーターサイズは小さいので、本来のGitで問題なく 場所の保存や世代管理ができます。&#xA;このままでは他のプログラムによるデーターの編集・更新ができな いので、Git Annexはシムリンクをファイルで置き換え編集可能化する unlock機能と、Git Annexに編集結果を戻すlock機能を提供します。&#xA;さらにGit Annexは、「特定パスに保存する」という部分に関して、 「分散保存を管理するインフラを提供する」とすることで、すべての 分散管理レポジトリー内に全ファイルを保持しなくても良い とします。ここは全ファイルを保持する本来のGitレポジトリーと 大きく異なるところです。Git Annexは、分散管理レポジトリー間で それぞれが保存するファイルに関するメタ情報を交換するインフラも 提供します。&#xA;Git Annexがチェックアウトした作業ディレクトリーツリー中で、 ローカルに保持していないファイルは、ダングリングシムリンク (宙ぶらりシムリンク)となってしまいます。その際に、保有するメタ 情報に基づき指定範囲のファイル実体をリモートサイトから簡単に オンディマンドでコピーしてくる部分チェックアウト機能や、 作業ディレクトリーツリー中ダングリングシムリンクを簡単に消す 機能もサポートします。&#xA;Git Annexによるリモートサイトへのアクセスは抽象化されていて、 単純なファイルシステム経由のアクセスはもちろん、SSH経由のアクセス、 Amazon S3等の各種クラウドへのアクセスが、既成のバックエンドを 利用し、ほぼ同じ手順で簡単に実現出来るようになっています。</description>
     </item>
-    
     <item>
       <title>GITを使うフォークの管理</title>
       <link>/jp/2020/04/02/git-fork/</link>
       <pubDate>Thu, 02 Apr 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/04/02/git-fork/</guid>
-      <description>Gitを使う際に、アップストリームのレポの更新に合わせて、 自分がフォークしたレポを如何にスムーズに更新していくかは、 フォークしたレポの開始方法やブランチ名の設定や実行するコマンド 手順に複数のアプローチや複数の対応方法があるだけに、いつも 混乱して悩まされます。
-備忘録を兼ねて、アップストリームがGITHUBを使っている 場合を軸にメモを作成します。
-世の流れで、デフォルトブランチ名に「master」ではなく「main」等を使うことが最近増えています。その場合は適宜以下も読み替えてください。
-GITを使うフォークの管理手順(基本) 簡単のために以下の前提を置きます。（追跡＝tracking）
-他人が管理する、アップストリームのリモートのレポ名を、「upstream」(任意名ですが慣習名)とします。 他人が管理する、アップストリームのリモートのレポ上の「master」ブランチを追跡します。（コピー元） 自分が管理する、フォークしたリモートのレポ名を、「origin」とします。 自分が管理する、フォークしたリモートのレポ上の「master」ブランチに追跡コピーを保管します。（コピー先） アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を、フォークしたレポに勝手に作らないようにします。 この際の、GITを使うフォークの管理手順は以下です。
-アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、 自分のアカウントにフォークされたリモートのレポを作成
-フォークされたレポをローカルに「git clone」して、ローカルのレポを作成
-$ git clone git@github.com:my_name/project_name.git ; cd project_name 自分が書き換える開発ブランチ(ここでは「devel」)を作成
-$ git checkout -b devel ファイルを編集し、開発ブランチにコミット
-アップストリームのリモートのレポをローカルにリモート「upstream」として追加。
-$ git remote add upstream https://github.com/upstream_name/project_name.git フォークされたレポの「master」ブランチをアップストリームのレポの「master」ブランチに同期
-$ git checkout master ; git fetch -p upstream ; git pull upstream master ; git push origin master -pは--pruneのショートハンドで、不要なリモート追跡ブランチを削除してくれます。
-開発ブランチに戻り、開発再開
-$ git checkout devel 状況に合わせて、merge/rebase等をする。(rebaseしたブランチのpushは要注意)
-$ git merge master $ git rebase -i master これは QMKプロジェクト 等で推奨されるフォーク手順です。</description>
+      <description>Gitを使う際に、アップストリームのレポの更新に合わせて、 自分がフォークしたレポを如何にスムーズに更新していくかは、 フォークしたレポの開始方法やブランチ名の設定や実行するコマンド 手順に複数のアプローチや複数の対応方法があるだけに、いつも 混乱して悩まされます。&#xA;備忘録を兼ねて、アップストリームがGITHUBを使っている 場合を軸にメモを作成します。&#xA;世の流れで、デフォルトブランチ名に「master」ではなく「main」等を使うことが最近増えています。その場合は適宜以下も読み替えてください。&#xA;GITを使うフォークの管理手順(基本) 簡単のために以下の前提を置きます。（追跡＝tracking）&#xA;他人が管理する、アップストリームのリモートのレポ名を、「upstream」(任意名ですが慣習名)とします。 他人が管理する、アップストリームのリモートのレポ上の「master」ブランチを追跡します。（コピー元） 自分が管理する、フォークしたリモートのレポ名を、「origin」とします。 自分が管理する、フォークしたリモートのレポ上の「master」ブランチに追跡コピーを保管します。（コピー先） アップストリームのレポにあるbranch名やtag名とぶつかるbranch名やtag名を、フォークしたレポに勝手に作らないようにします。 この際の、GITを使うフォークの管理手順は以下です。&#xA;アップストリームのレポのGITHUBウエッブページで「Fork」をクリックして、 自分のアカウントにフォークされたリモートのレポを作成&#xA;フォークされたレポをローカルに「git clone」して、ローカルのレポを作成&#xA;$ git clone git@github.com:my_name/project_name.git ; cd project_name 自分が書き換える開発ブランチ(ここでは「devel」)を作成&#xA;$ git checkout -b devel ファイルを編集し、開発ブランチにコミット&#xA;アップストリームのリモートのレポをローカルにリモート「upstream」として追加。&#xA;$ git remote add upstream https://github.com/upstream_name/project_name.git フォークされたレポの「master」ブランチをアップストリームのレポの「master」ブランチに同期&#xA;$ git checkout master ; git fetch -p upstream ; git pull upstream master ; git push origin master -pは--pruneのショートハンドで、不要なリモート追跡ブランチを削除してくれます。&#xA;開発ブランチに戻り、開発再開&#xA;$ git checkout devel 状況に合わせて、merge/rebase等をする。(rebaseしたブランチのpushは要注意)&#xA;$ git merge master $ git rebase -i master これは QMKプロジェクト 等で推奨されるフォーク手順です。</description>
     </item>
-    
   </channel>
 </rss>

@@ -36,10 +36,10 @@
 
 <h3 class="date">Date:
 2023/02/13 (initial publish),
-2023/12/23 (last update)
+2025/08/21 (last update)
 </h3>
 <h3 class="source">Source:
-en/note-00036.md
+note-00036
 </h3>
 </div>
 
@@ -64,17 +64,22 @@ en/note-00036.md
 
 <nav id="TableOfContents">
   <ul>
+    <li><a href="#hardware-fix">Hardware fix</a></li>
     <li><a href="#how-to-access-bios-menu-of-sony-vaio-svt1313">How to access BIOS menu of Sony VAIO SVT1313</a></li>
     <li><a href="#why-boot-with-mbr-and-not-with-uefi">Why boot with MBR and not with UEFI</a></li>
-    <li><a href="#use-of-btrfs-with-luks-on-mbr-system">Use of Btrfs with LUKS on MBR system</a></li>
+    <li><a href="#full-disk-install-with-default-encrypted-lvm-setup">Full disk install with default encrypted LVM setup</a></li>
+    <li><a href="#basic-cli-initial-setting">Basic CLI initial setting</a></li>
     <li><a href="#touchpad-of-sony-vaio">Touchpad of Sony VAIO</a></li>
+    <li><a href="#basic-gui-initial-setting">Basic GUI initial setting</a></li>
   </ul>
 </nav>
 
 <p>Let me keep up note on configuring and administrating my Sony Vaio SVT1313
-(Intel i5) under Debian GNU/Linux.  This is a second hand used PC which costed
-me about $100 as total after fixing its keyboard.</p>
-<p>This is hardware specific tips.</p>
+(Intel i5) under Debian GNU/Linux.  (Updated for Trixie in 2025)</p>
+<h2 id="hardware-fix">Hardware fix</h2>
+<p>I got a second hand used old SONY PC with minor keyboard gliches.</p>
+<p>It costed $100 as total after fixing its keyboard.</p>
+<p>This is my hardware specific tips.</p>
 <h2 id="how-to-access-bios-menu-of-sony-vaio-svt1313">How to access BIOS menu of Sony VAIO SVT1313</h2>
 <p>Pressing <strong>ASSIST</strong> button instead of <strong>POWER</strong> button starts PC with boot
 device and BIOS setting selection menu.</p>
@@ -89,61 +94,49 @@ and &ldquo;Delete&rdquo; are fixed.)</li>
 <li>The card side contacts of SO-DDR DRAM needed to be rubbed by eraser to get it
 work right.</li>
 </ul>
-<h2 id="use-of-btrfs-with-luks-on-mbr-system">Use of Btrfs with LUKS on MBR system</h2>
-<p><code>grub-pc</code> <a href="https://bugs.debian.org/1059244">has a bug which needs to be worked around.  See the procedure
-described there.</a>.  This is the essential
-step.</p>
-<p>I want to setup simple robust grub configuration entries to enable dual
-boot without mentioning kernel version.  To enable this, <code>/</code> must be on ext4
-accessible directly by <code>grub-pc</code> which lacks capabilities to handle BTRFS and
-LUKS encrypted volume.</p>
-<p>I put <code>/</code> on ext4 filesystem on non-encrypted partition.</p>
-<p>Since I wanted to keep all user data on encrypted disk, I set up system by
-mounting all <code>/usr</code>, <code>/var</code>, <code>/home/&lt;name&gt;</code>, etc. from the BTRFS subvolume
-under LUKS encrypted volume .</p>
-<p>This way, /vlmliniz etc. is stably available while user data are securely
-stored on encrypted volume using Btrfs allowing to make snapshots.</p>
-<h2 id="touchpad-of-sony-vaio">Touchpad of Sony VAIO</h2>
-<p>Touch pad only functions as left-click button.  I verified it by opening its
-touch pad to see one button switch under it.  So realizing left/right click needs some driver
-support.  So far under Wayland, I didn&rsquo;t see any easy solution. Interesting references are:</p>
+<h2 id="full-disk-install-with-default-encrypted-lvm-setup">Full disk install with default encrypted LVM setup</h2>
+<p>In order to setup simple robust system for me to take it out for my travel, I
+decided to select the full disk install with encrypted LVM while using d-i.</p>
+<h2 id="basic-cli-initial-setting">Basic CLI initial setting</h2>
+<p>Install:</p>
 <ul>
-<li><a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=597082">https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=597082</a></li>
-<li><a href="https://xorg-team.pages.debian.net/xorg/howto/configure-input.html">https://xorg-team.pages.debian.net/xorg/howto/configure-input.html</a></li>
-<li><a href="https://www.linux.org/threads/right-click-with-macbook.9667/">https://www.linux.org/threads/right-click-with-macbook.9667/</a></li>
-<li><a href="https://help.ubuntu.com/stable/ubuntu-help/mouse-mousekeys.html.en">https://help.ubuntu.com/stable/ubuntu-help/mouse-mousekeys.html.en</a></li>
-<li><a href="https://help.ubuntu.com/stable/ubuntu-help/a11y-right-click.html.en">https://help.ubuntu.com/stable/ubuntu-help/a11y-right-click.html.en</a></li>
-</ul>
-<p>I initially used following (now deprecated) setup.</p>
+<li><code>sudo</code>
 <ul>
-<li><del>Settings</del></li>
-<li>-&gt; <del>Accessibility</del></li>
-<li>-&gt; <del>Pointing &amp; Clicking: Click Assist On</del></li>
-<li>-&gt; <del>Simulated Secondary Click ON</del></li>
-</ul>
-<p>This method yields not-so-good user experiences when I wanted to open a linked
-page to another browser tab page with &ldquo;right-click &amp; select&rdquo;:</p>
-<ul>
-<li>Press TP</li>
-<li>&ndash;&gt; No left- nor right- pressed event</li>
-<li>Hold TP</li>
-<li>&ndash;&gt; Timer displayed to wait</li>
-<li>Release TP after timer</li>
-<li>&ndash;&gt; Left-released event (annoying)</li>
-<li>&ndash;&gt; Right-click (==pressed then released)</li>
-</ul>
-<p>I then found interesting setting in GNOME Tweak.</p>
-<ul>
-<li>Tweaks</li>
-<li>-&gt; &ldquo;Keyboard and Mouse&rdquo; tab</li>
-<li>-&gt; &ldquo;Mouse Click Emulation&rdquo; section
-<ul>
-<li>-&gt; Check on &ldquo;Area&rdquo;</li>
+<li>Execute <code>adduser &lt;username&gt; sudo</code></li>
 </ul>
 </li>
+<li><code>aptitude</code>
+<ul>
+<li>Type-<code>l</code> and set <code>~ooptional!~M</code> to set <code>A</code> on libraries auto-installed</li>
+</ul>
+</li>
+<li><code>systemd-cron</code> (no more <code>anacron</code>)</li>
+<li><code>mc</code></li>
+<li><code>neovim</code></li>
+<li><code>nano-</code> (remove)</li>
+<li><code>vim-tiny-</code> (remove)</li>
+</ul>
+<h2 id="touchpad-of-sony-vaio">Touchpad of Sony VAIO</h2>
+<p>GNOME 48 (Trixie@2025) supports many touchpad style well.</p>
+<ul>
+<li>Use GNOME &ldquo;Setting&rdquo; (Gear icon on the panel shown after clicking the right top
+corner) and select &ldquo;Mouse and Touchpad&rdquo; on left.  Then select &ldquo;Touchpad&rdquo; tab on
+the top.  Select corner push if you want to keep old way.</li>
 </ul>
 <p>For Mac or some Sony Vaio with single tap pad button, this allows secondary
 click as expected.</p>
+<h2 id="basic-gui-initial-setting">Basic GUI initial setting</h2>
+<p>Install:</p>
+<ul>
+<li><code>gnome-shell-extension-manager</code></li>
+<li><code>gnome-shell-extension-caffeine</code></li>
+<li><code>gnome-shell-extension-dashtodock</code></li>
+<li><code>gnome-shell-extension-hideactivities</code></li>
+</ul>
+<p>For more, see upcoming &ldquo;Debian Workstation (Trixie) (v2025-8)&rdquo;.</p>
+<ul>
+<li></li>
+</ul>
 <!-- raw HTML omitted -->
 
 

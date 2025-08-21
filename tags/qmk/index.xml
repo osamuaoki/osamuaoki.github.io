@@ -1,148 +1,68 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>qmk on Goofing Osamu</title>
+    <title>Qmk on Goofing Osamu</title>
     <link>/tags/qmk/</link>
-    <description>Recent content in qmk on Goofing Osamu</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Qmk on Goofing Osamu</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Fri, 09 Sep 2022 00:00:00 +0000</lastBuildDate><atom:link href="/tags/qmk/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 17 Sep 2022 13:51:15 +0900</lastBuildDate>
+    <atom:link href="/tags/qmk/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>QMK (7) -- キーマップ改善(続)</title>
       <link>/jp/2022/09/09/home-mt2/</link>
       <pubDate>Fri, 09 Sep 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/09/09/home-mt2/</guid>
-      <description>キーマップ改善の経緯 キーマップ改善の基本方針としてのタップとホールドの有効利用は、QMK (4) – キーマップ改善から変わっていません。
-以前から遊んでいたAVR系でQMKを使うcgc56という一体型キーボードと、 今回ARM系でQMKを使うSTM32F411CE (4)で作ったcgs58・cgs50という分割キーボードと、 できれば将来interceptionを使いLaptop PCの内蔵キーボードの全てで、キーマッピングの基本部分を共用できるようにすることにも配慮しました。
-特にcgc56を使ってきた経験を生かし、細かな調整を加えました。設計指針の要点をもう一度まとめると以下です。
-標準キーボードとキーの位置をできるだけ変えないことで、使用時のメンタルストレス無くする。(QWERTYの中心利用。ブロック毎に動かす感じ。) フィジカルストレスが少なくなるように、指の動きを少なくする。「基本的に使う部分」を(3rows x 6columns + 2thums ) x 2sides とし、1U以上の動き無くす。 HOME-ROW MODを採用する。(HOMEポジションがわかりやすいキー配置) 日本語と英語・コーディングの両方の用途に配慮する。(ANSIなのに「無変換」「変換」キーをつける変則構成。) キーマップ pico 「基本的に使う部分」を、左6x3_2キーと右6x3_2キーに限定し、それらのキーの使用は以下のようなpico系配列に落ち着いて来ました。
-│Tab│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │Bsp│ │Esc│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│Ent│ │Mut│ Z │ X │lgC│ V2│ B │***│***│ N │ M │ , │ . │ / │Psc│ │***│***│***│***│Muh│Sp1│***│***│Sp1│Hen│***│***│***│***│ これだと、全ての指のポジション移動量を1U以下に押さえられます。
-キー配列はANSIベースです。</description>
+      <description>キーマップ改善の経緯 キーマップ改善の基本方針としてのタップとホールドの有効利用は、QMK (4) – キーマップ改善から変わっていません。&#xA;以前から遊んでいたAVR系でQMKを使うcgc56という一体型キーボードと、 今回ARM系でQMKを使うSTM32F411CE (4)で作ったcgs58・cgs50という分割キーボードと、 できれば将来interceptionを使いLaptop PCの内蔵キーボードの全てで、キーマッピングの基本部分を共用できるようにすることにも配慮しました。&#xA;特にcgc56を使ってきた経験を生かし、細かな調整を加えました。設計指針の要点をもう一度まとめると以下です。&#xA;標準キーボードとキーの位置をできるだけ変えないことで、使用時のメンタルストレス無くする。(QWERTYの中心利用。ブロック毎に動かす感じ。) フィジカルストレスが少なくなるように、指の動きを少なくする。「基本的に使う部分」を(3rows x 6columns + 2thums ) x 2sides とし、1U以上の動き無くす。 HOME-ROW MODを採用する。(HOMEポジションがわかりやすいキー配置) 日本語と英語・コーディングの両方の用途に配慮する。(ANSIなのに「無変換」「変換」キーをつける変則構成。) キーマップ pico 「基本的に使う部分」を、左6x3_2キーと右6x3_2キーに限定し、それらのキーの使用は以下のようなpico系配列に落ち着いて来ました。&#xA;│Tab│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │Bsp│ │Esc│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│Ent│ │Mut│ Z │ X │lgC│ V2│ B │***│***│ N │ M │ , │ . │ / │Psc│ │***│***│***│***│Muh│Sp1│***│***│Sp1│Hen│***│***│***│***│ これだと、全ての指のポジション移動量を1U以下に押さえられます。&#xA;キー配列はANSIベースです。</description>
     </item>
-    
     <item>
       <title>QMK (6) -- カスタムキーボード参考情報</title>
       <link>/jp/2022/05/06/kbd-pcb/</link>
       <pubDate>Fri, 06 May 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/05/06/kbd-pcb/</guid>
-      <description>汎用設計の14x4のOrtholinearキーボードで試してみて、Mod-Tapを使う、片側6X3_3キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーマップが小指への負担もなく普通のNotePCのキーボードとの相互移行での違和感もなくいい感じでした。
-こうなると、使わないキーをなくした専用のスプリットデザインのキーボードが欲しくなります。
-CORNEがほぼ図星のデザインですが、折角なのでPromicroではなくARMの汎用ボード(40PINあるblackpillかPiPico)を使う一から設計製作をしたカスタムキーボードを作りたいと思いました。
-当分は取り組まないかもしれないけど、カスタムキーボードをPCBから設計製作する際に参考となる情報をまとめました。
-カスタムキーボードまとめサイト geekhack deskthority r/MechanicalKeyboards: wiki Self-Made Keyboards in Japan - Scrapbox ai03 Design Studio ai03.com! wiki ai03 Infobase Keebfol.io: Keyboard &amp;ndash; form: Keebfol.io Keebfolio: Awesome Mechanical Keyboard Mechanical Keyboard and where to find them Awesome Split Keyboards カスタムキーボードFirmware QMK Firmware &amp;ndash; QMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) &amp;ndash; based on TMK firmware TMK Firmware &amp;ndash; TMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) ZMK Firmware &amp;ndash; ZMK Firmware Repository (MIT License, Arm, Zephyr™ based) KMK Firmware &amp;ndash; Pythonic Mechanical Keyboard Firmware (Arm) Keyberon Firmware &amp;ndash; A rust crate to create a pure rust keyboard firmware (Arm) カスタムキーボードHW設計・製作 カスタムキーボードPCBの設計 PCBの設計は基本KiCadが使われます。</description>
+      <description>汎用設計の14x4のOrtholinearキーボードで試してみて、Mod-Tapを使う、片側6X3_3キー構成ぐらいのスプリットの小さな携帯タイプのカスタムキーマップが小指への負担もなく普通のNotePCのキーボードとの相互移行での違和感もなくいい感じでした。&#xA;こうなると、使わないキーをなくした専用のスプリットデザインのキーボードが欲しくなります。&#xA;CORNEがほぼ図星のデザインですが、折角なのでPromicroではなくARMの汎用ボード(40PINあるblackpillかPiPico)を使う一から設計製作をしたカスタムキーボードを作りたいと思いました。&#xA;当分は取り組まないかもしれないけど、カスタムキーボードをPCBから設計製作する際に参考となる情報をまとめました。&#xA;カスタムキーボードまとめサイト geekhack deskthority r/MechanicalKeyboards: wiki Self-Made Keyboards in Japan - Scrapbox ai03 Design Studio ai03.com! wiki ai03 Infobase Keebfol.io: Keyboard &amp;ndash; form: Keebfol.io Keebfolio: Awesome Mechanical Keyboard Mechanical Keyboard and where to find them Awesome Split Keyboards カスタムキーボードFirmware QMK Firmware &amp;ndash; QMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) &amp;ndash; based on TMK firmware TMK Firmware &amp;ndash; TMK Firmware Repository (GPL License, AVR or Arm, Lufa or ChibiOS™ based) ZMK Firmware &amp;ndash; ZMK Firmware Repository (MIT License, Arm, Zephyr™ based) KMK Firmware &amp;ndash; Pythonic Mechanical Keyboard Firmware (Arm) Keyberon Firmware &amp;ndash; A rust crate to create a pure rust keyboard firmware (Arm) カスタムキーボードHW設計・製作 カスタムキーボードPCBの設計 PCBの設計は基本KiCadが使われます。</description>
     </item>
-    
     <item>
       <title>QMK (5) -- JOYSTICKサポート</title>
       <link>/jp/2022/04/02/joystick/</link>
       <pubDate>Sat, 02 Apr 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/04/02/joystick/</guid>
-      <description>状況 AVRで作ったQMKキーボードでは、タップとホールドを上手く利用した使いやすいキーマップができました。
-ARMで作ったQMKキーボードにこれを移植するとともに、追加ハードのアナログJOYSTICKをマウスの機能を提供するデバイスとして有効利用しました。
-JOYSTICKデバイスの追加とMCUの機能設定 「JOYSTICK」という言葉に引かれて、よく分からないままマニュアルの「Hardware Features」の「Joystick」をフォローして、ゲーム用のコントローラーとしての「JOYSTICK」デバイスを導入しました。
-ここで、ARM系のハードの初期化のカスタマイズ法を学びました。ARMではOS立ち上げコードがチップ機能の初期化をしているようです。マクロを定義することで、コンパイル時に設定が導入されます。ある意味AVRのfuseの感じです。
-ChibiOSは、デフォルトのhalconf.hやmcuconf.hを提供しているので、デフォルトでは無効化されたADCを使う等の場合には、設定をオーバーライド変更する必要がありました。 最初に、platforms/chibios/boards/keyboard-config-templates/内のファイルを、プロジェクトフォルダー内にコピーしたファイルをベースに、オーバーライド変更のみを設定します。 デフォルト値は#include_next &amp;quot;... .h&amp;quot;で読み込みます。(この辺の仕組みがが分かる前には、コンパイラーエラーに苦しみました。)
-ゲーム用のコントローラーとしての「JOYSTICK」デバイスの動作検証は、Gamepad Tester でしました。この環境での安定動作には、config.hに以下の追加が必要でした。(参考情報源)
-#define JOYSTICK_AXES_RESOLUTION 8 #define USB_POLLING_INTERVAL_MS 4 ゲーム用のコントローラーとしてのJOYSTICKデバイスを提供するソース
-cgg56:minijoy ゲーム用のコントローラーにマウスの機能を提供する設定は、OSの環境設定でできなくはないです。ただこれでは本末転倒です。 ストレートにマウスの機能自体を直接提供すること目的なので、これはここまでにします。
-JOYSTICKのハードによるマウス機能の提供 JOYSTICKのハードによるマウス機能の提供には、マニュアルの「Hardware Features」の「Pointing Device」をフォローします。
-cgg56:mini cgg56:micro Mouse keyよりは快適に動いていますが、ThnkpadのTrackpointが得意でない私には決して使いやすいとは言えない状態でした。
-本物のMouseは使いやすい。
-反省点 キー入力できない原因を調べたところ、UEW線の被覆熱削除不足による不良が２点、ダイオードの極性方向間違い１点が見つかった。
-UEW線は事前両端カットしてプリ半田して使う (結線不良となりやすい巻付法は使わない) ダイオードの極性の視認チェックは大事 MCU付きのボードをスイッチマトリクスにつなぎ込む前に、結線・ダイオード極性をテスターで電気的にもチェックすべき。 気づいたこと 結局joystickやトラックボールはマウスより使い勝手が良くない。
-QMKでは意外と多くのハードを利用してマウス機能の提供ができるようです。また、マウスの中身はほぼ似たデバイスのようです。 キーボードだけでなく、ポテンシオメーター、ロータリーエンコーダー、オプティカルセンサー等で作るポインティングデバイスででも遊べそうです。色んな事をみんなしていますね。
-ただMCU内臓でI2C等で出力が出てないと、KBへの組み込みには向かない気がする。
-まあ、トラックボールはあってもいいが一体化する必然性が低い。古いPS2のトラックボール のUSB化や、光学素子の高解像品への載せ換えは面白いかもしれない。
-ポインティングデバイスのソース 既存の組み込み製品・ジャンクから外すのも一案:
-ダイソーの300円ワイヤレスマウスを分解して回路図と部品表を書いてみた話 (2019-03-14) 「どうせ100均だろ？」って軽い気持ちで分解したら、 ガジェットの進化に驚いた！ トラックボールを作ってみた【試作編】 アナログスティックを使ってcrkbdをマウスとしても使えるようにした話 2 自作トラックポイント1 部品ソース例と価格:
-通常トラックポイント新品製品 ~$50 (工業用はもっと高い) Mini Panel Mount USB Trackball with Three Buttons by adafruit.</description>
+      <description>状況 AVRで作ったQMKキーボードでは、タップとホールドを上手く利用した使いやすいキーマップができました。&#xA;ARMで作ったQMKキーボードにこれを移植するとともに、追加ハードのアナログJOYSTICKをマウスの機能を提供するデバイスとして有効利用しました。&#xA;JOYSTICKデバイスの追加とMCUの機能設定 「JOYSTICK」という言葉に引かれて、よく分からないままマニュアルの「Hardware Features」の「Joystick」をフォローして、ゲーム用のコントローラーとしての「JOYSTICK」デバイスを導入しました。&#xA;ここで、ARM系のハードの初期化のカスタマイズ法を学びました。ARMではOS立ち上げコードがチップ機能の初期化をしているようです。マクロを定義することで、コンパイル時に設定が導入されます。ある意味AVRのfuseの感じです。&#xA;ChibiOSは、デフォルトのhalconf.hやmcuconf.hを提供しているので、デフォルトでは無効化されたADCを使う等の場合には、設定をオーバーライド変更する必要がありました。 最初に、platforms/chibios/boards/keyboard-config-templates/内のファイルを、プロジェクトフォルダー内にコピーしたファイルをベースに、オーバーライド変更のみを設定します。 デフォルト値は#include_next &amp;quot;... .h&amp;quot;で読み込みます。(この辺の仕組みがが分かる前には、コンパイラーエラーに苦しみました。)&#xA;ゲーム用のコントローラーとしての「JOYSTICK」デバイスの動作検証は、Gamepad Tester でしました。この環境での安定動作には、config.hに以下の追加が必要でした。(参考情報源)&#xA;#define JOYSTICK_AXES_RESOLUTION 8 #define USB_POLLING_INTERVAL_MS 4 ゲーム用のコントローラーとしてのJOYSTICKデバイスを提供するソース&#xA;cgg56:minijoy ゲーム用のコントローラーにマウスの機能を提供する設定は、OSの環境設定でできなくはないです。ただこれでは本末転倒です。 ストレートにマウスの機能自体を直接提供すること目的なので、これはここまでにします。&#xA;JOYSTICKのハードによるマウス機能の提供 JOYSTICKのハードによるマウス機能の提供には、マニュアルの「Hardware Features」の「Pointing Device」をフォローします。&#xA;cgg56:mini cgg56:micro Mouse keyよりは快適に動いていますが、ThnkpadのTrackpointが得意でない私には決して使いやすいとは言えない状態でした。&#xA;本物のMouseは使いやすい。&#xA;反省点 キー入力できない原因を調べたところ、UEW線の被覆熱削除不足による不良が２点、ダイオードの極性方向間違い１点が見つかった。&#xA;UEW線は事前両端カットしてプリ半田して使う (結線不良となりやすい巻付法は使わない) ダイオードの極性の視認チェックは大事 MCU付きのボードをスイッチマトリクスにつなぎ込む前に、結線・ダイオード極性をテスターで電気的にもチェックすべき。 気づいたこと 結局joystickやトラックボールはマウスより使い勝手が良くない。&#xA;QMKでは意外と多くのハードを利用してマウス機能の提供ができるようです。また、マウスの中身はほぼ似たデバイスのようです。 キーボードだけでなく、ポテンシオメーター、ロータリーエンコーダー、オプティカルセンサー等で作るポインティングデバイスででも遊べそうです。色んな事をみんなしていますね。&#xA;ただMCU内臓でI2C等で出力が出てないと、KBへの組み込みには向かない気がする。&#xA;まあ、トラックボールはあってもいいが一体化する必然性が低い。古いPS2のトラックボール のUSB化や、光学素子の高解像品への載せ換えは面白いかもしれない。&#xA;ポインティングデバイスのソース 既存の組み込み製品・ジャンクから外すのも一案:&#xA;ダイソーの300円ワイヤレスマウスを分解して回路図と部品表を書いてみた話 (2019-03-14) 「どうせ100均だろ？」って軽い気持ちで分解したら、 ガジェットの進化に驚いた！ トラックボールを作ってみた【試作編】 アナログスティックを使ってcrkbdをマウスとしても使えるようにした話 2 自作トラックポイント1 部品ソース例と価格:&#xA;通常トラックポイント新品製品 ~$50 (工業用はもっと高い) Mini Panel Mount USB Trackball with Three Buttons by adafruit.</description>
     </item>
-    
     <item>
       <title>QMK (4) -- キーマップ改善</title>
       <link>/jp/2022/03/15/home-mt/</link>
       <pubDate>Tue, 15 Mar 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/03/15/home-mt/</guid>
-      <description>キーマップ改善の方針 (タップとホールドの有効利用) QMKを使うcgc56やcgg56というQMKを利用したキーボード等を使って、色々試して気づいたり考えたことを以下に記します。
-メンタルストレス無く、フィジカルストレスの小さい指の動きが少ないキーマップが欲しい。 親指がカバーするのは、横に並ぶキーが少ないのが望ましい 人差し指は縦の動きで２列カバーする。 他の指は縦１列の動き以外はしない。 「QWERTY」は当分メインのキーマップのベース。 「QWFRTY」はローマ字入力用オプションの検討中キーマップ　（→　結局やめた）。 高速打鍵性自体は私の目指す所では無い。 キーのピッチをきっちり確保するにはNC工具での工作が不可欠。 NCとしてはPCBが安いし、PCBを注文する際に10cm角に収めると更に安い。 統計結果から、記号では「_ 」へのアクセスには要配慮。 14&amp;quot; のノートパソコン(Thinkpad T14 Gen1)に無いキーの優先度は低いと割り切る。 CURSORキーは重要なので、アクセス性は重要で、片手での操作性も重要。 TENキーはそれほど使用上重要では無いが、組み込むなら片手での操作性に配慮重要。 QMKのMOUSEキーはそれほど便利では無いので、組み込む際のアクセス性は重要で無い。 QMKではタップとホールドで出力キーが違う設定できますが、タップの入力文字の連続入力がカチカチ連打だと大変な気がしていました。
-実際には、一度タップ直後の再タップ時にホールドするとタップに対応する文字の長押しになるようで、OS側が連打処理してくれ使い勝手良好です。
-あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、タップとホールドを上手に使えば悪くない感じです。
-キーマップ 最初にトライしたレイヤー移動とモード変更機能のすべてを親指のキーに任せるアプローチには無理がありました。
-キーマップ osamu そこで30%キーボード系のferrisのキーマップをヒントにし、「基本的に使う部分」を、左5x3_2キーと右5x3_2キーと限定し、親指はレイヤー移動のみにしたキーマップを組むのがフィジカルストレス低減によさそうです。
-│***│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │***│ │***│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│***│ │***│ Z │ X │ C │ V │ B │***│***│ N │ M │ , │ .</description>
+      <description>キーマップ改善の方針 (タップとホールドの有効利用) QMKを使うcgc56やcgg56というQMKを利用したキーボード等を使って、色々試して気づいたり考えたことを以下に記します。&#xA;メンタルストレス無く、フィジカルストレスの小さい指の動きが少ないキーマップが欲しい。 親指がカバーするのは、横に並ぶキーが少ないのが望ましい 人差し指は縦の動きで２列カバーする。 他の指は縦１列の動き以外はしない。 「QWERTY」は当分メインのキーマップのベース。 「QWFRTY」はローマ字入力用オプションの検討中キーマップ　（→　結局やめた）。 高速打鍵性自体は私の目指す所では無い。 キーのピッチをきっちり確保するにはNC工具での工作が不可欠。 NCとしてはPCBが安いし、PCBを注文する際に10cm角に収めると更に安い。 統計結果から、記号では「_ 」へのアクセスには要配慮。 14&amp;quot; のノートパソコン(Thinkpad T14 Gen1)に無いキーの優先度は低いと割り切る。 CURSORキーは重要なので、アクセス性は重要で、片手での操作性も重要。 TENキーはそれほど使用上重要では無いが、組み込むなら片手での操作性に配慮重要。 QMKのMOUSEキーはそれほど便利では無いので、組み込む際のアクセス性は重要で無い。 QMKではタップとホールドで出力キーが違う設定できますが、タップの入力文字の連続入力がカチカチ連打だと大変な気がしていました。&#xA;実際には、一度タップ直後の再タップ時にホールドするとタップに対応する文字の長押しになるようで、OS側が連打処理してくれ使い勝手良好です。&#xA;あまり複雑なキー動作の多重化は混乱を招き使い勝手が悪くなるのですべきでは無いですが、タップとホールドを上手に使えば悪くない感じです。&#xA;キーマップ 最初にトライしたレイヤー移動とモード変更機能のすべてを親指のキーに任せるアプローチには無理がありました。&#xA;キーマップ osamu そこで30%キーボード系のferrisのキーマップをヒントにし、「基本的に使う部分」を、左5x3_2キーと右5x3_2キーと限定し、親指はレイヤー移動のみにしたキーマップを組むのがフィジカルストレス低減によさそうです。&#xA;│***│ Q │ W │ E │ R │ T │***│***│ Y │ U │ I │ O │ P │***│ │***│lsA│lcS│laD│lgF│raG│***│***│raH│lgJ│laK│lcL│ls;│***│ │***│ Z │ X │ C │ V │ B │***│***│ N │ M │ , │ .</description>
     </item>
-    
     <item>
       <title>QMK (3) -- QWFRTY配列</title>
       <link>/jp/2022/02/14/qwfrty/</link>
       <pubDate>Mon, 14 Feb 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/02/14/qwfrty/</guid>
-      <description>背景 キーボードによるストレス低減のためのMCUを使ったIOTの初等プロジェクトとして、QMKを使うcgc56というQMKを利用したキーボードを作りました。
-ストレスのソースと削減指針は２つあり、そのバランスが重要です。
-フィジカルストレス削減には、できるだけ指の移動に無理が無いのが望ましいと考えます。 メンタルストレス削減には、できるだけ標準キーボードと変わらないのが望ましいと考えます。 このcgc56は元々は中指を伸ばして「E」を叩きづらいという個人的課題のフィジカルストレス削減のキーボードプロジェクトでした。
-これだけなら「E」と「F」のスワップで済ますのも良いのですが、それだけでは勿体ないので、苦労しない範囲でDVRAKの交互打鍵に近づけられないかと考えた妥協点案が上記の写真の「QWFRTY配列」です。これはあくまでQMKを利用した自作キーボードの最適化キー配列実験で、私の日常生活はQWERTY配列です。
-cgc56 (4x14) は planck (4x12) よりはキーの数が多い。 普通のLaptop PCのキーボードに近いキー配列が可能です。 一体型ですが両手間隔がとれ猫背にならずに使えます。 2つあるメインのFnキーキャップの前面角が面取り加工されてい、親指の触覚で手の位置が確認できます。 実は、DVORAK・COLMAK・WORKMAN・COLEMAK-DH等の既存の「エルゴノミックキーマップ」でフィジカルストレス削減する方策は、私にとっていずれも学習障壁（メンタルストレス）が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動も難しくなってしまいます)。
-この状況下で思いついた「QWFRTY配列」は使ってみてフィジカルストレス削減手法として意外とおもしろいので、ここに要点等をメモしておきます。
-（後記のように、「QWFRTY配列」は結局使っていません。）
-QWFRTY配列 「QWFRTY配列」は、11個のキーだけが標準の「QWERTY配列」から移動された配列です。
-名前は、１文字違いでややこしいですが、「QWFRTY配列」としました。キーは位置の要点を抜き出すと以下です。
-LEFT HAND RIGHT HAND │ Q │ W │_F_│ R │ T │ │ Y │_D_│_K_│_G_│ P │ │ A │_I_│_U_│_E_│_O_│ │_S_│_H_│_J_│ L │ ; │ │ Z │ X │ C │ V │ B │ │ N │ M │ , │ . │ / │ まあ、所詮実験レベルのお遊びですが、我ながら悪くない気もします。</description>
+      <description>背景 キーボードによるストレス低減のためのMCUを使ったIOTの初等プロジェクトとして、QMKを使うcgc56というQMKを利用したキーボードを作りました。&#xA;ストレスのソースと削減指針は２つあり、そのバランスが重要です。&#xA;フィジカルストレス削減には、できるだけ指の移動に無理が無いのが望ましいと考えます。 メンタルストレス削減には、できるだけ標準キーボードと変わらないのが望ましいと考えます。 このcgc56は元々は中指を伸ばして「E」を叩きづらいという個人的課題のフィジカルストレス削減のキーボードプロジェクトでした。&#xA;これだけなら「E」と「F」のスワップで済ますのも良いのですが、それだけでは勿体ないので、苦労しない範囲でDVRAKの交互打鍵に近づけられないかと考えた妥協点案が上記の写真の「QWFRTY配列」です。これはあくまでQMKを利用した自作キーボードの最適化キー配列実験で、私の日常生活はQWERTY配列です。&#xA;cgc56 (4x14) は planck (4x12) よりはキーの数が多い。 普通のLaptop PCのキーボードに近いキー配列が可能です。 一体型ですが両手間隔がとれ猫背にならずに使えます。 2つあるメインのFnキーキャップの前面角が面取り加工されてい、親指の触覚で手の位置が確認できます。 実は、DVORAK・COLMAK・WORKMAN・COLEMAK-DH等の既存の「エルゴノミックキーマップ」でフィジカルストレス削減する方策は、私にとっていずれも学習障壁（メンタルストレス）が高すぎました。(これらの有名配置だと、VIエディターでのカーソール移動も難しくなってしまいます)。&#xA;この状況下で思いついた「QWFRTY配列」は使ってみてフィジカルストレス削減手法として意外とおもしろいので、ここに要点等をメモしておきます。&#xA;（後記のように、「QWFRTY配列」は結局使っていません。）&#xA;QWFRTY配列 「QWFRTY配列」は、11個のキーだけが標準の「QWERTY配列」から移動された配列です。&#xA;名前は、１文字違いでややこしいですが、「QWFRTY配列」としました。キーは位置の要点を抜き出すと以下です。&#xA;LEFT HAND RIGHT HAND │ Q │ W │_F_│ R │ T │ │ Y │_D_│_K_│_G_│ P │ │ A │_I_│_U_│_E_│_O_│ │_S_│_H_│_J_│ L │ ; │ │ Z │ X │ C │ V │ B │ │ N │ M │ , │ . │ / │ まあ、所詮実験レベルのお遊びですが、我ながら悪くない気もします。</description>
     </item>
-    
     <item>
       <title>MCU (AVRとARM) の周囲状況と比較</title>
       <link>/jp/2022/01/19/mcu-comp/</link>
       <pubDate>Wed, 19 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/01/19/mcu-comp/</guid>
-      <description>MCUとそのプロトボード状況 AliExpressやbangoodを初めとした中華コマースサイトは便利なんだけど、魑魅魍魎の棲家ですね。
-中華コマースサイトで売られる安いボードは実際に使っているMCUまで違う状況と知り驚いてます。ICチップパッケージの刻印が本家で中身が違うなら贋チップ使用というのでしょうが、堂々とICチップパッケージの刻印にコンパチ品が書いてあったり、高性能だったりするようです。
-またPCB基板が同じPIN配置の製品ですが、回路配置利用権を考えると、ちょっとヤバいかもしれないので要注意。（ただ、小型のプロトボードはPINアウトを揃えると、必然的に本家のボードに似た回路配置になってしまう。PINアウトが同じこと自体は規制されないので判断は難しい。実際に入手し本家PCBと並べて詳細に比べないとコンパチPCB品が回路配置権を侵害したかどうかは判断できないので、入手前には無理。）
-とりあえずネットで見つけた関連情報のリンクをリストしておきます。
-Teensy https://www.pjrc.com/teensy/counterfeit.html &amp;ndash; Aliexpress販売のTeensyは本物でない。 本物のTeensy 2.0++は製造終了で欠品中(2022/Jan.)。AT90USB1286使用のコンパクトなボードはコンパチ品しか手に入らない状況。 ARM系(blue/blackpill) STM32-base のboard紹介によると、安いblue/blackpillは贋STMチップが多いとのこと。 https://hackaday.com/2020/10/22/stm32-clones-the-good-the-bad-and-the-ugly/ https://www.cnx-software.com/2019/02/10/cs32-mcu-stm32-clone-bluepill-board/ https://www.cnx-software.com/2019/12/24/stm32-black-pill-board-features-stm32f4-cortex-m4-mcu-optional-spi-flash/ https://www.cnx-software.com/2020/03/22/how-to-detect-stm32-fakes/ https://github.com/WeActTC/MiniSTM32F4x1/blob/master/README.md WeActの製品情報 怪しいパチ物(PCBパターンが同等？旧タイプ？)を売っているVENDERの実名リストがある（Aliexpressでよく見るTZTは怪しいらしい！） STM32F103コンパチチップ状況 GD32F103: https://www.gigadevice.com/products/microcontrollers/gd32/arm-cortex-m3/ &amp;ndash; Datasheet https://www.usenix.org/system/files/woot20-paper-obermaier.pdf &amp;ndash; 本物とコンパチチップのセキュリティー解析比較(USENIX, 2020以降) 評価 https://www.cnx-software.com/2015/12/21/gigadevice-gd32-is-a-faster-software-and-pin-to-pin-stm32-compatible-cortex-m3-mcu/ 評価 https://www.instructables.com/Alternative-to-STM32F103C8T6-by-GigaDevice/ コメント https://eetimes.itmedia.co.jp/ee/articles/2001/28/news032_2.html ATmega328P (Arduino Unoのチップ) 贋物は不良症状としてスリープモードの電流が多いこともあるようです。流石に調査がしっかりしているとおもったら、部品の調査検定会社のYOUTUBE情報でした。 DS18B20 Temperature Sensors https://www.cnx-software.com/2020/07/13/fake-ds18b20-temperature-sensors-counterfeit-clones/ FTDI FT232RLの贋物騒動 &amp;ndash; Windowsの正規品ドライバーで壊れる https://hackaday.com/2016/02/01/ftdi-drivers-break-fake-chips-again/ https://www.voltlog.com/identifying-replacing-a-fake-ftdi-ft232r-chip-voltlog-314/ CH340 (FT232類似機能品、最近のArduino系コンパチボードの標準チップ) https://note.com/akita11/n/n0ef8b362c8fc MCU (AVRとARM) の比較 QMKのプラットフォームのMCU (AVRとARM) の比較を、よく見かけるAtmel AVRとSTM ARMを使った、20mm幅程度のMCUボードでしました。
-使用チップ Flash SRAM FRQ Board AVR ATmega32u4 32KB 2.5KB 16 MHz ProMicro, Teensy2.</description>
+      <description>MCUとそのプロトボード状況 AliExpressやbangoodを初めとした中華コマースサイトは便利なんだけど、魑魅魍魎の棲家ですね。&#xA;中華コマースサイトで売られる安いボードは実際に使っているMCUまで違う状況と知り驚いてます。ICチップパッケージの刻印が本家で中身が違うなら贋チップ使用というのでしょうが、堂々とICチップパッケージの刻印にコンパチ品が書いてあったり、高性能だったりするようです。&#xA;またPCB基板が同じPIN配置の製品ですが、回路配置利用権を考えると、ちょっとヤバいかもしれないので要注意。（ただ、小型のプロトボードはPINアウトを揃えると、必然的に本家のボードに似た回路配置になってしまう。PINアウトが同じこと自体は規制されないので判断は難しい。実際に入手し本家PCBと並べて詳細に比べないとコンパチPCB品が回路配置権を侵害したかどうかは判断できないので、入手前には無理。）&#xA;とりあえずネットで見つけた関連情報のリンクをリストしておきます。&#xA;Teensy https://www.pjrc.com/teensy/counterfeit.html &amp;ndash; Aliexpress販売のTeensyは本物でない。 本物のTeensy 2.0++は製造終了で欠品中(2022/Jan.)。AT90USB1286使用のコンパクトなボードはコンパチ品しか手に入らない状況。 ARM系(blue/blackpill) STM32-base のboard紹介によると、安いblue/blackpillは贋STMチップが多いとのこと。 https://hackaday.com/2020/10/22/stm32-clones-the-good-the-bad-and-the-ugly/ https://www.cnx-software.com/2019/02/10/cs32-mcu-stm32-clone-bluepill-board/ https://www.cnx-software.com/2019/12/24/stm32-black-pill-board-features-stm32f4-cortex-m4-mcu-optional-spi-flash/ https://www.cnx-software.com/2020/03/22/how-to-detect-stm32-fakes/ https://github.com/WeActTC/MiniSTM32F4x1/blob/master/README.md WeActの製品情報 怪しいパチ物(PCBパターンが同等？旧タイプ？)を売っているVENDERの実名リストがある（Aliexpressでよく見るTZTは怪しいらしい！） STM32F103コンパチチップ状況 GD32F103: https://www.gigadevice.com/products/microcontrollers/gd32/arm-cortex-m3/ &amp;ndash; Datasheet https://www.usenix.org/system/files/woot20-paper-obermaier.pdf &amp;ndash; 本物とコンパチチップのセキュリティー解析比較(USENIX, 2020以降) 評価 https://www.cnx-software.com/2015/12/21/gigadevice-gd32-is-a-faster-software-and-pin-to-pin-stm32-compatible-cortex-m3-mcu/ 評価 https://www.instructables.com/Alternative-to-STM32F103C8T6-by-GigaDevice/ コメント https://eetimes.itmedia.co.jp/ee/articles/2001/28/news032_2.html ATmega328P (Arduino Unoのチップ) 贋物は不良症状としてスリープモードの電流が多いこともあるようです。流石に調査がしっかりしているとおもったら、部品の調査検定会社のYOUTUBE情報でした。 DS18B20 Temperature Sensors https://www.cnx-software.com/2020/07/13/fake-ds18b20-temperature-sensors-counterfeit-clones/ FTDI FT232RLの贋物騒動 &amp;ndash; Windowsの正規品ドライバーで壊れる https://hackaday.com/2016/02/01/ftdi-drivers-break-fake-chips-again/ https://www.voltlog.com/identifying-replacing-a-fake-ftdi-ft232r-chip-voltlog-314/ CH340 (FT232類似機能品、最近のArduino系コンパチボードの標準チップ) https://note.com/akita11/n/n0ef8b362c8fc MCU (AVRとARM) の比較 QMKのプラットフォームのMCU (AVRとARM) の比較を、よく見かけるAtmel AVRとSTM ARMを使った、20mm幅程度のMCUボードでしました。&#xA;使用チップ Flash SRAM FRQ Board AVR ATmega32u4 32KB 2.5KB 16 MHz ProMicro, Teensy2.</description>
     </item>
-    
     <item>
       <title>QMK (2)</title>
       <link>/jp/2022/01/18/qmk-2/</link>
       <pubDate>Tue, 18 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/01/18/qmk-2/</guid>
-      <description>QMKを使ってファームウエアー作成 手始めに、QMK : キーマップのカスタマイズ (2018年頃)も参考に、できるだけ今風の(2022年)qmkコマンドを使って、１つのキーのカスタムキーボードを作ります。
-対象ハードはatmega32u4が載ったTeensy2.0の中華コンパチボードです。本物のTeensy2.0でないのでatmel-dfuがBOOTLOADERだったはずです。ただ、BOOTLOADERはISP接続で小さな(512 bytes)HIDデバイスのnanoBoot (w/LED)に書き換えています。
-.word 0x03EB // idVendor -- Vendor ID (Atmel VID, from LUFA) .word 0x2067 // idProduct -- Product ID (HID Class Bootloader PID, from LUFA) これってqmk-hidと同じIDです。ファームウエアーのサイズはqmk-hidの4KB(?)よりnanoBootは小さいメリットがあります。
-ファームエアーのアップロードプロトコルは同じ　halfkeyコンパチのID違いなので、指定は同じにして良い気がします。
-作成デバイスはメディアキーのMUTE１つのデバイスです。
-テンプレート作成 $ qmk cd $ gitk --all ... (最新の「master」ブランチのリリースが0.15.15と確認) $ git checkout 0.15.15 $ git checkout -b osamu1 $ qmk new-keyboard Ψ Generating a new QMK keyboard directory Keyboard Name: one Keyboard Type: 1. avr 2.</description>
+      <description>QMKを使ってファームウエアー作成 手始めに、QMK : キーマップのカスタマイズ (2018年頃)も参考に、できるだけ今風の(2022年)qmkコマンドを使って、１つのキーのカスタムキーボードを作ります。&#xA;対象ハードはatmega32u4が載ったTeensy2.0の中華コンパチボードです。本物のTeensy2.0でないのでatmel-dfuがBOOTLOADERだったはずです。ただ、BOOTLOADERはISP接続で小さな(512 bytes)HIDデバイスのnanoBoot (w/LED)に書き換えています。&#xA;.word 0x03EB // idVendor -- Vendor ID (Atmel VID, from LUFA) .word 0x2067 // idProduct -- Product ID (HID Class Bootloader PID, from LUFA) これってqmk-hidと同じIDです。ファームウエアーのサイズはqmk-hidの4KB(?)よりnanoBootは小さいメリットがあります。&#xA;ファームエアーのアップロードプロトコルは同じ　halfkeyコンパチのID違いなので、指定は同じにして良い気がします。&#xA;作成デバイスはメディアキーのMUTE１つのデバイスです。&#xA;テンプレート作成 $ qmk cd $ gitk --all ... (最新の「master」ブランチのリリースが0.15.15と確認) $ git checkout 0.15.15 $ git checkout -b osamu1 $ qmk new-keyboard Ψ Generating a new QMK keyboard directory Keyboard Name: one Keyboard Type: 1. avr 2.</description>
     </item>
-    
     <item>
       <title>QMK (1)</title>
       <link>/jp/2022/01/14/qmk-1/</link>
       <pubDate>Fri, 14 Jan 2022 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2022/01/14/qmk-1/</guid>
-      <description>どうもカスタムキーボードのフリーのファームウエアとしてはQMKが一番充実しているのですが、久しぶりにのぞくと2017年2月のころとかなり様子が変わっているようにも見えます。特に気になるのはconfig.jsonの存在です。
-とにかくカバーするキーボードハードウエアー数が大きくなってきたので、リファクターして共通部分の重複回避を試みている様です。
-QMKのドキュメントもかなり更新されています。
-復習を兼ねてコード・ドキュメントを追います。
-qmkコマンド導入とファームウエアーのビルド 最近、QMK Toolboxをpip経由で導入する、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperのqmkというCLIコマンドが提供されています。
-qmkコマンドは、作業環境設定や、firmwareのビルド、はたまた種々の関連処理プログラムの提供や起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。
-まず、Install Using pipに従い環境をDebian 11 (Bullseye/testing)に導入しました。
-qmk setupの自動設定でチェックアウトされるレポは、git submoduleを使っていて、レボがうまくまとめられています。レポ内にグラフィクスなどを保存しなくなり、キーマッピングもキーボード間で共用可能なものをまとめたり、マッピングだけのユーザーカスタム化情報がメインのkeyboads/以下のソースツリー外に置けるようです。ただソースを理解するのが少々手間となりました。
-qmkは、初期導入時に~/.bashrcを変更し、shellの環境変数QMK_HOMEにチェックアウトしたレポの場所を保存したようです。（手動でしたのかどうか忘れました）
-qmkのコマンドの説明はQMK CLI Commandsにあります。
-どうもビルドは公式にはqmkコマンドを使うようになっているそうですが、その背後で何がどうなっているのかが気になります。
-レポを見ると、791b9cc652 (&amp;ldquo;remove all makefiles from keyboard directories&amp;rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立のMakefileが無くなっています。だから、ビルドの実体はrootにあるMakefileがしているはずです。いかんせんrootのMakefileは複雑なので閉口でした。
-今残っているrootにあるMakefileにからむのかがwebにあるエンドユーザー向けの説明ではよく分からないので、試しにrootにあるMakefileを無効なターゲットで動かすと以下のメッセージが出ます。
-$ make help QMK Firmware 0.15.12 make: *** No rule to make target &amp;#39;help&amp;#39;. Stop. | | QMK&amp;#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&amp;#39;s `keymaps/` directory.</description>
+      <description>どうもカスタムキーボードのフリーのファームウエアとしてはQMKが一番充実しているのですが、久しぶりにのぞくと2017年2月のころとかなり様子が変わっているようにも見えます。特に気になるのはconfig.jsonの存在です。&#xA;とにかくカバーするキーボードハードウエアー数が大きくなってきたので、リファクターして共通部分の重複回避を試みている様です。&#xA;QMKのドキュメントもかなり更新されています。&#xA;復習を兼ねてコード・ドキュメントを追います。&#xA;qmkコマンド導入とファームウエアーのビルド 最近、QMK Toolboxをpip経由で導入する、非プログラマーにも使いやすいマルチプラットフォーム対応のUIを目指したpythonで書かれたthin wrapperのqmkというCLIコマンドが提供されています。&#xA;qmkコマンドは、作業環境設定や、firmwareのビルド、はたまた種々の関連処理プログラムの提供や起動に用いるようです。でもビルドされるCコードのコアの部分はあまり変わっていないようです。&#xA;まず、Install Using pipに従い環境をDebian 11 (Bullseye/testing)に導入しました。&#xA;qmk setupの自動設定でチェックアウトされるレポは、git submoduleを使っていて、レボがうまくまとめられています。レポ内にグラフィクスなどを保存しなくなり、キーマッピングもキーボード間で共用可能なものをまとめたり、マッピングだけのユーザーカスタム化情報がメインのkeyboads/以下のソースツリー外に置けるようです。ただソースを理解するのが少々手間となりました。&#xA;qmkは、初期導入時に~/.bashrcを変更し、shellの環境変数QMK_HOMEにチェックアウトしたレポの場所を保存したようです。（手動でしたのかどうか忘れました）&#xA;qmkのコマンドの説明はQMK CLI Commandsにあります。&#xA;どうもビルドは公式にはqmkコマンドを使うようになっているそうですが、その背後で何がどうなっているのかが気になります。&#xA;レポを見ると、791b9cc652 (&amp;ldquo;remove all makefiles from keyboard directories&amp;rdquo;, 2017-09-27)で昔ビルドに使っていた各キーボード毎の独立のMakefileが無くなっています。だから、ビルドの実体はrootにあるMakefileがしているはずです。いかんせんrootのMakefileは複雑なので閉口でした。&#xA;今残っているrootにあるMakefileにからむのかがwebにあるエンドユーザー向けの説明ではよく分からないので、試しにrootにあるMakefileを無効なターゲットで動かすと以下のメッセージが出ます。&#xA;$ make help QMK Firmware 0.15.12 make: *** No rule to make target &amp;#39;help&amp;#39;. Stop. | | QMK&amp;#39;s make format is: | make keyboard_folder:keymap_folder[:target] | | Where `keyboard_folder` is the path to the keyboard relative to | `qmk_firmware/keyboards/`, and `keymap_folder` is the name of the | keymap folder under that board&amp;#39;s `keymaps/` directory.</description>
     </item>
-    
   </channel>
 </rss>

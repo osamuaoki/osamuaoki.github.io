@@ -1,51 +1,26 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>btrfs on Goofing Osamu</title>
+    <title>Btrfs on Goofing Osamu</title>
     <link>/tags/btrfs/</link>
-    <description>Recent content in btrfs on Goofing Osamu</description>
-    <generator>Hugo -- gohugo.io</generator>
+    <description>Recent content in Btrfs on Goofing Osamu</description>
+    <generator>Hugo</generator>
     <language>en-us</language>
-    <lastBuildDate>Tue, 16 Feb 2021 00:00:00 +0000</lastBuildDate><atom:link href="/tags/btrfs/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 28 Apr 2023 01:00:45 +0900</lastBuildDate>
+    <atom:link href="/tags/btrfs/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Btrfs入門(2)</title>
       <link>/jp/2021/02/16/btrfs-02/</link>
       <pubDate>Tue, 16 Feb 2021 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2021/02/16/btrfs-02/</guid>
-      <description>半年前に覗いたBtrfs をもう一度見直しました。以下は自分なりの備忘録メモです。
-subvolumeの使い方 使用法のガイド のリストのリンク先には興味深いコンテントがあります。 システム管理者ガイド 中の、subvolumeレイアウト の内容は、「使い方」を見詰め直す上で目から鱗でした。
-私は単純にFlatなsubvolumeレイアウトを乱用していましたが、 Nestedなsubvolumeレイアウトをうまく使い/etc/fstabを簡素化し、 よく考えて構成したMixedなsubvolumeレイアウトを使うと管理が楽そうです。
-この際、Ubuntu風の@home等の 慣習Subvolume命名法 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。
-Debianでは、subvolume名 @rootfsがシステムの導入の際に使われています。 一方、Ubuntuでは、subvolume名 @がシステムの導入の際に使われているようなので、要注意です。
-btrfs のシステムへの導入 RAID関係、圧縮関係、SWAP FILE関係にかかわらない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムのbtrfs化をめざします。
-busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem に指定すると、@rootfsというsubvolumeが作成され、その中にシステムが導入できます。
-NOTE: 強引にroot filesystemを@に置く設定をしてると、2022年７月以降はトラブルが 発生しました。素直に上記の様にd-i で btrfs への root filesystem導入をはかるのが良いようです。
-ユーザー毎のsubvolの追加など ホームディレクトリーにあるユーザーデーターをシステム再構築から保護する上でも、 ホームディレクトリーは別のパーティションかsubvolumeに保存するのが便利です。
-btrfsがあるので、@rootfsが置かれたbrtfs内に、ユーザー毎にsubvol=@homefooを 追加し、それを/etc/fstabからmountします。
-その際にユーザー権限でのsubvolume削除を可能にすると、Nestedなsubvolumeレイアウトが 使いやすくなります。そのためには、btrfsをuser_subvol_rm_allowedオプションで mountする必要があります。
-例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、 /etc/fstabのエントリーを以下とします。
-UUID=???first / btrfs subvol=@rootfs,defaults 0 0 UUID=???second /home/foo btrfs subvol=@homefoo,user_subvol_rm_allowed,defaults 0 0 btrfs(5) mount option に以下の記載があるのには要注意です。&amp;ldquo;most mount options apply to the whole filesystem and only options in the first mounted subvolume will take effect.</description>
+      <description>半年前に覗いたBtrfs をもう一度見直しました。以下は自分なりの備忘録メモです。&#xA;subvolumeの使い方 使用法のガイド のリストのリンク先には興味深いコンテントがあります。 システム管理者ガイド 中の、subvolumeレイアウト の内容は、「使い方」を見詰め直す上で目から鱗でした。&#xA;私は単純にFlatなsubvolumeレイアウトを乱用していましたが、 Nestedなsubvolumeレイアウトをうまく使い/etc/fstabを簡素化し、 よく考えて構成したMixedなsubvolumeレイアウトを使うと管理が楽そうです。&#xA;この際、Ubuntu風の@home等の 慣習Subvolume命名法 を、Flatなsubvolumeレイアウトなsubvolume名に適用しています。&#xA;Debianでは、subvolume名 @rootfsがシステムの導入の際に使われています。 一方、Ubuntuでは、subvolume名 @がシステムの導入の際に使われているようなので、要注意です。&#xA;btrfs のシステムへの導入 RAID関係、圧縮関係、SWAP FILE関係にかかわらない限りbtrfsはかなり安定なようなので ext4にしていたルートファイルシステムのbtrfs化をめざします。&#xA;busterリリース版のd-iでbtrfsのpartitionを作成し、それをroot filesystem に指定すると、@rootfsというsubvolumeが作成され、その中にシステムが導入できます。&#xA;NOTE: 強引にroot filesystemを@に置く設定をしてると、2022年７月以降はトラブルが 発生しました。素直に上記の様にd-i で btrfs への root filesystem導入をはかるのが良いようです。&#xA;ユーザー毎のsubvolの追加など ホームディレクトリーにあるユーザーデーターをシステム再構築から保護する上でも、 ホームディレクトリーは別のパーティションかsubvolumeに保存するのが便利です。&#xA;btrfsがあるので、@rootfsが置かれたbrtfs内に、ユーザー毎にsubvol=@homefooを 追加し、それを/etc/fstabからmountします。&#xA;その際にユーザー権限でのsubvolume削除を可能にすると、Nestedなsubvolumeレイアウトが 使いやすくなります。そのためには、btrfsをuser_subvol_rm_allowedオプションで mountする必要があります。&#xA;例えば、ホームディレクトリー内だけでsubvolume削除を可能にするには、 /etc/fstabのエントリーを以下とします。&#xA;UUID=???first / btrfs subvol=@rootfs,defaults 0 0 UUID=???second /home/foo btrfs subvol=@homefoo,user_subvol_rm_allowed,defaults 0 0 btrfs(5) mount option に以下の記載があるのには要注意です。&amp;ldquo;most mount options apply to the whole filesystem and only options in the first mounted subvolume will take effect.</description>
     </item>
-    
     <item>
       <title>Btrfs入門(1)</title>
       <link>/jp/2020/05/05/btrfs-01/</link>
       <pubDate>Tue, 05 May 2020 00:00:00 +0000</pubDate>
-      
       <guid>/jp/2020/05/05/btrfs-01/</guid>
-      <description>先日トライしたGit Annexは不完全燃焼でしたが、これをきっかけに 世代管理・dedup・ファイル圧縮に対応できるというファイルシステムの Btrfs をもう一度見直しました。以下は自分なりの備忘録メモです。
-Btrfsをどう使うのか まずBtrfsがどこまで使えて、どういう注意が要るのかを Debianのwiki で確認しました。
-2020年5月のLinux goofy 5.4.0-0.bpo.4-amd64でも初心者が 安心して気楽に使うにはまだ制約が多いですね。
-LVMに重ねるのは不安 RAID関連も使うのは不安 quotas/qgroupsは使わないこと Subvolume毎にbtrfs特有オプションでマウントできない制約がある 多くのbtrfs特有オプションは使わないのが無難: nodatacow, 圧縮関連, autodefrag, discard, space_cache=v2 &amp;ldquo;btrfs filesystem defrag&amp;ldquo;はソースSubvolumeにのみ実施。snapshotには実施禁止 スナップショットは12個まで(これでもLVMより状況は良い) ディスクは使用9割を越えないようにする ここまで調べて、システムファイル/usrやログ記録/var のbtrfs移行は面倒なので、当面は無理せず以下を移行対象に 考えます。
-データーのアーカイブ・バックアップ用の専用ドライブ /homeの専用パーティション 世代管理にはスナップショット機能を濫用しないように程々で 使い、バックアップソフトがバックアップする際にバックアップ メディア上の記録をdedupする配慮をし、ファイル圧縮は当面使 わないのはいい気がしました。
-推奨バックアップソフトはborgbackupがDebianのwikiには書か かれています。 確かに人気がある ようです。この他timeshiftやbtrbkやsnapperや btrfsmaintenanceパッケージも使えそうです。
-Btrfsを意識したdedupeという視点では jdupesがよく使われている ようです。単純なcp -r ...やrsync ...を、dedupをする jdupes --dedupe ...と組み合わせて使うのに対する、上記 専用ソフトのメリットは気になります&amp;hellip;ただ、jdupesはあまりファイル数が 多くとファイルのオープン数のせいかうまく動かないことがありました。 このへんは後日の課題かな。
-Subvolume命名法 Btrfs自体は 特定のSubvolume命名法の慣習を定めていません。
-Debianでは特にどうするって言う慣習が無いようです。
-ただ、Btrfsを積極的に使うディストリビューションが Subvolume命名法に関して特定の慣習をとっているため そこで開発されているGUIツールがそれに依存してる印象 があります。
-Ubuntu 慣習Subvolume命名法 @ @home スナップショット: timeshift OpenSuse 慣習Subvolume命名法 慣習Subvolume命名法(tutorial) @/ @/home スナップショット: snapper Debian 慣習Subvolume命名法 @rootfs &amp;ndash; d-i setting @home &amp;ndash; manual (timeshift compatible) スナップショット: timeshift &amp;ndash; need patch s/@/@rootfs/ 最近のDebianでは、borgbackup以外だと timeshiftの人気が出ています。 でもシステムのロールバックにフォーカスしていてユーザーデーターの スナップショットをしたいだけだと意外と使いにくくて止めました。</description>
+      <description>先日トライしたGit Annexは不完全燃焼でしたが、これをきっかけに 世代管理・dedup・ファイル圧縮に対応できるというファイルシステムの Btrfs をもう一度見直しました。以下は自分なりの備忘録メモです。&#xA;Btrfsをどう使うのか まずBtrfsがどこまで使えて、どういう注意が要るのかを Debianのwiki で確認しました。&#xA;2020年5月のLinux goofy 5.4.0-0.bpo.4-amd64でも初心者が 安心して気楽に使うにはまだ制約が多いですね。&#xA;LVMに重ねるのは不安 RAID関連も使うのは不安 quotas/qgroupsは使わないこと Subvolume毎にbtrfs特有オプションでマウントできない制約がある 多くのbtrfs特有オプションは使わないのが無難: nodatacow, 圧縮関連, autodefrag, discard, space_cache=v2 &amp;ldquo;btrfs filesystem defrag&amp;ldquo;はソースSubvolumeにのみ実施。snapshotには実施禁止 スナップショットは12個まで(これでもLVMより状況は良い) ディスクは使用9割を越えないようにする ここまで調べて、システムファイル/usrやログ記録/var のbtrfs移行は面倒なので、当面は無理せず以下を移行対象に 考えます。&#xA;データーのアーカイブ・バックアップ用の専用ドライブ /homeの専用パーティション 世代管理にはスナップショット機能を濫用しないように程々で 使い、バックアップソフトがバックアップする際にバックアップ メディア上の記録をdedupする配慮をし、ファイル圧縮は当面使 わないのはいい気がしました。&#xA;推奨バックアップソフトはborgbackupがDebianのwikiには書か かれています。 確かに人気がある ようです。この他timeshiftやbtrbkやsnapperや btrfsmaintenanceパッケージも使えそうです。&#xA;Btrfsを意識したdedupeという視点では jdupesがよく使われている ようです。単純なcp -r ...やrsync ...を、dedupをする jdupes --dedupe ...と組み合わせて使うのに対する、上記 専用ソフトのメリットは気になります&amp;hellip;ただ、jdupesはあまりファイル数が 多くとファイルのオープン数のせいかうまく動かないことがありました。 このへんは後日の課題かな。&#xA;Subvolume命名法 Btrfs自体は 特定のSubvolume命名法の慣習を定めていません。&#xA;Debianでは特にどうするって言う慣習が無いようです。&#xA;ただ、Btrfsを積極的に使うディストリビューションが Subvolume命名法に関して特定の慣習をとっているため そこで開発されているGUIツールがそれに依存してる印象 があります。&#xA;Ubuntu 慣習Subvolume命名法 @ @home スナップショット: timeshift OpenSuse 慣習Subvolume命名法 慣習Subvolume命名法(tutorial) @/ @/home スナップショット: snapper Debian 慣習Subvolume命名法 @rootfs &amp;ndash; d-i setting @home &amp;ndash; manual (timeshift compatible) スナップショット: timeshift &amp;ndash; need patch s/@/@rootfs/ 最近のDebianでは、borgbackup以外だと timeshiftの人気が出ています。 でもシステムのロールバックにフォーカスしていてユーザーデーターの スナップショットをしたいだけだと意外と使いにくくて止めました。</description>
     </item>
-    
   </channel>
 </rss>
