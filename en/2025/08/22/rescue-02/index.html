@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Rescue media(2) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Rescue media(2)</span></h1>
+
+<h3 class="date">Date:
+2025/08/22 (initial publish),
+2025/08/22 (last update)
+</h3>
+<h3 class="source">Source:
+note-00079
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2025/04/24/python3-polib/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#rescue-media">Rescue media</a></li>
+    <li><a href="#ventoy--gparted">Ventoy + Gparted</a></li>
+    <li><a href="#booting-system">Booting system</a></li>
+  </ul>
+</nav>
+
+<p>This is updated memo of <a href="/jp/2020/05/30/rescue-01/">Rescue media(1)</a>  (in Japanese).</p>
+<h2 id="rescue-media">Rescue media</h2>
+<p>There are many iso images which are useful for system administration and rescue
+tasks available on the web.  Here are some of the notable ones:</p>
+<ul>
+<li><a href="https://gparted.org/livecd.php">GParted live</a>
+<ul>
+<li>GOOD: active</li>
+<li>GOOD: Debian based system rescue media.</li>
+<li>GOOD: GUI partition manager</li>
+<li>BAD: Currently, Debian Lacks GUI LVM manager like <a href="https://github.com/storaged-project/blivet-gui">blivet-gui</a>
+<ul>
+<li>TODO: Follow <a href="https://gparted.org/create-gparted-live.php">Create GParted live from scratch</a> to install <a href="https://software.opensuse.org/download.html?project=home:vtrefny&amp;package=blivet-gui">blivet-gui deb pakage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="https://www.debian.org/distrib/netinst">debian-installer (netinst)</a>
+<ul>
+<li>GOOD: active and stable</li>
+<li>GOOD: This facilitates official Debian system install.</li>
+<li>BAD: &ldquo;rescue mode&rdquo; needs to mount a functioning root filesystem and it can&rsquo;t
+be unmounted for filesystem operation (fsck&hellip;).</li>
+</ul>
+</li>
+<li><a href="https://www.debian.org/CD/live/index.en.html">Debian live</a>
+<ul>
+<li>GOOD: active</li>
+</ul>
+</li>
+<li><a href="https://www.debian.org/CD/live/index.en.html">Debian live</a>
+<ul>
+<li>GOOD: active</li>
+<li>GOOD: Debian based system rescue media.</li>
+</ul>
+</li>
+<li><a href="https://www.kali.org/get-kali/#kali-live">Kali Linux Live image </a>
+<ul>
+<li>GOOD: active</li>
+<li>GOOD: Debian based system rescue media.</li>
+</ul>
+</li>
+<li><a href="https://www.system-rescue.org/">SYSTEM RESCUE HOMEPAGE</a>
+<ul>
+<li>GOOD: active</li>
+<li>FAIR: ARCHlinux based system rescue media</li>
+</ul>
+</li>
+<li><a href="https://www.supergrubdisk.org/super-grub2-disk/">Super Grub2 Disk</a>/<a href="https://www.supergrubdisk.org/rescatux/">Rescatux</a>
+<ul>
+<li>GOOD: last release 2024 for <a href="https://www.supergrubdisk.org/super-grub2-disk/">Super Grub2 Disk</a> (the multi disk/iso boot loader, now support btrfs)</li>
+<li>BAD: last released in 2021 for <a href="https://www.supergrubdisk.org/rescatux/">Rescatux</a> (outdated linux iso image)</li>
+</ul>
+</li>
+<li><a href="https://www.ventoy.net/en/index.html">Ventoy</a>
+<ul>
+<li>GOOD: active (the multi disk/iso boot loader w/o iso image)</li>
+</ul>
+</li>
+</ul>
+<h2 id="ventoy--gparted">Ventoy + Gparted</h2>
+<p>Since modern USB-keys have huge storage space, I decided to use
+<a href="https://www.ventoy.net/en/index.html">ventoy</a> and put all interesting iso
+images in it. This way, I only need to maintain one USB key.</p>
+<p>For the moment, I will mostly use Gparted live iso image.</p>
+<h2 id="booting-system">Booting system</h2>
+<ul>
+<li>Sony Vaio: power up system with a USB key inserted with &ldquo;ASSIST&rdquo; button.</li>
+<li>Thinkpad T14 Gen 1 (AMD): power up and press ENTER or F12</li>
+</ul>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2025/04/24/python3-polib/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2024 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+
