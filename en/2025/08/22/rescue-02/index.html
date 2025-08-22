@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2025/08/22 (initial publish),
-2025/08/22 (last update)
+2025/08/23 (last update)
 </h3>
 <h3 class="source">Source:
 note-00079
@@ -65,8 +65,8 @@ note-00079
 <nav id="TableOfContents">
   <ul>
     <li><a href="#rescue-media">Rescue media</a></li>
-    <li><a href="#ventoy--gparted">Ventoy + Gparted</a></li>
-    <li><a href="#booting-system">Booting system</a></li>
+    <li><a href="#ventoy--gparted-for-rescue-usb-key">Ventoy + Gparted for rescue USB-key</a></li>
+    <li><a href="#booting-system-with-usb-key">Booting system with USB-key</a></li>
     <li><a href="#use-case-migrating-from-ext4-to-btrfs-for-home">Use case: Migrating from ext4 to Btrfs for home</a></li>
   </ul>
 </nav>
@@ -99,11 +99,6 @@ be unmounted for filesystem operation (fsck&hellip;).</li>
 <li><a href="https://www.debian.org/CD/live/index.en.html">Debian live</a>
 <ul>
 <li>GOOD: active</li>
-</ul>
-</li>
-<li><a href="https://www.debian.org/CD/live/index.en.html">Debian live</a>
-<ul>
-<li>GOOD: active</li>
 <li>GOOD: Debian based system rescue media.</li>
 </ul>
 </li>
@@ -131,18 +126,20 @@ be unmounted for filesystem operation (fsck&hellip;).</li>
 </ul>
 </li>
 </ul>
-<h2 id="ventoy--gparted">Ventoy + Gparted</h2>
+<h2 id="ventoy--gparted-for-rescue-usb-key">Ventoy + Gparted for rescue USB-key</h2>
 <p>Since modern USB-keys have huge storage space, I decided to use
 <a href="https://www.ventoy.net/en/index.html">ventoy</a> and put all interesting iso
 images in it. This way, I only need to maintain one USB key.</p>
-<p>For the moment, I will mostly use Gparted live iso image.</p>
-<h2 id="booting-system">Booting system</h2>
+<p>For the moment, I will mostly use
+<a href="https://gparted.org/livecd.php">GParted live</a> iso image.</p>
+<h2 id="booting-system-with-usb-key">Booting system with USB-key</h2>
 <ul>
-<li>Sony Vaio: power up system with a USB key inserted with &ldquo;ASSIST&rdquo; button.</li>
+<li>Sony Vaio SVT1313: power up system with a USB key inserted with &ldquo;ASSIST&rdquo; button.</li>
 <li>Thinkpad T14 Gen 1 (AMD): power up and press ENTER or F12</li>
 </ul>
 <h2 id="use-case-migrating-from-ext4-to-btrfs-for-home">Use case: Migrating from ext4 to Btrfs for home</h2>
-<p>Let&rsquo;s think about encrypted LVM install case where <code>/dev/sda</code> holds LVM <code>root, </code>home<code>, and </code>swap_1<code>.  Let's convert </code>home` data to use btrfs instead of ext4.</p>
+<p>Let&rsquo;s think about encrypted LVM install case where <code>/dev/sda</code> holds LVM <code>root</code>,
+<code>home</code>, and <code>swap_1</code>.  Let&rsquo;s convert <code>home</code> data to use btrfs instead of ext4.</p>
 <ul>
 <li>Boot from USB to use rescue boot shell
 <ul>
