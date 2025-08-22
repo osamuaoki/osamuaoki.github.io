@@ -67,6 +67,7 @@ note-00079
     <li><a href="#rescue-media">Rescue media</a></li>
     <li><a href="#ventoy--gparted">Ventoy + Gparted</a></li>
     <li><a href="#booting-system">Booting system</a></li>
+    <li><a href="#use-case-migrating-from-ext4-to-btrfs-for-home">Use case: Migrating from ext4 to Btrfs for home</a></li>
   </ul>
 </nav>
 
@@ -140,8 +141,66 @@ images in it. This way, I only need to maintain one USB key.</p>
 <li>Sony Vaio: power up system with a USB key inserted with &ldquo;ASSIST&rdquo; button.</li>
 <li>Thinkpad T14 Gen 1 (AMD): power up and press ENTER or F12</li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
+<h2 id="use-case-migrating-from-ext4-to-btrfs-for-home">Use case: Migrating from ext4 to Btrfs for home</h2>
+<p>Let&rsquo;s think about encrypted LVM install case where <code>/dev/sda</code> holds LVM <code>root, </code>home<code>, and </code>swap_1<code>.  Let's convert </code>home` data to use btrfs instead of ext4.</p>
+<ul>
+<li>Boot from USB to use rescue boot shell
+<ul>
+<li>Decrypt LUKS partion (<code>/dev/sda5</code>)
+<ul>
+<li><code>sudo cryptosetup luksOpen /dev/sda5 sda5_crypt</code></li>
+<li>Now you see <code>/dev/mapper/hastname--vg-home</code>, <code>/dev/mapper/hastname--vg-root</code> etc.</li>
+<li>Mount <code>/dev/mapper/hastname--vg-home</code> to <code>mnt/home</code></li>
+<li>Mount <code>/dev/mapper/hastname--vg-root</code> to <code>/mnt/root</code></li>
+</ul>
+</li>
+<li>Copy all data from <code>/mnt/home/username</code> to <code>/mnt/root/home/</code>.</li>
+<li>Remove mounting of <code>hostname--vg-home</code> iin <code>/etc/fstab</code> by adding <code>#</code> at the head of line..</li>
+</ul>
+</li>
+<li>Boot normal SSD system
+<ul>
+<li>Install required program
+<ul>
+<li><code>sudo apt install btrfs-progs</code></li>
+</ul>
+</li>
+<li>Format forcebly the old <code>home</code> LV as btrfs
+<ul>
+<li><code>sudo mkfs.btrfs -f /dev/mapper/hostname--vg-home</code></li>
+</ul>
+</li>
+<li>Check LV and VG names with <code>lvs</code> and <code>vgs</code></li>
+<li>Rename the old <code>home</code> LV to <code>btrfs</code> LV
+<ul>
+<li><code>sudo lvrename hostname-vg home btrfs</code></li>
+</ul>
+</li>
+<li>Mount <code>/dev/mapper/hostname--vg-btrfs</code> at <code>/mnt</code>
+<ul>
+<li><code>sudo mount /dev/mapper/hostname--vg-btrfs /mnt</code></li>
+</ul>
+</li>
+<li>Create subvolume <code>@home</code> at <code>/mnt</code>
+<ul>
+<li><code>sudo btrfs subvolume create @home /mnt</code></li>
+</ul>
+</li>
+<li>Copy back data under <code>/home</code> to <code>/mnt/@home</code>.</li>
+<li>Change mounting of home in <code>/etc/fstab</code> to use <code>@home</code>-subvolume for home.
+<ul>
+<li>Add <code>/dev/mapper/hostname--vg-btrfs btrfs default,subvol=@home 0 2</code> in <code>/etc/fstab</code></li>
+</ul>
+</li>
+<li>Reboot</li>
+</ul>
+</li>
+</ul>
+<p>NOTE: Use <code>pvs</code>, <code>vgs</code>, <code>lvs</code>,and <code>lvmdiskscan</code> commands to assess LVM
+situation.  These are <code>lvm</code> subcommands but can be invoked as normal commands
+without <code>lvm</code> prefix.</p>
+<p>NOTE: <code>lvresize</code> can be invoked with <code>-r</code> option to perform FS resize along
+with LV resizing.</p>
 <!-- raw HTML omitted -->
 <!-- raw HTML omitted -->
 
