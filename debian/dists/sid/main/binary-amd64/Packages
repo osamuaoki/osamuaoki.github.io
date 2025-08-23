@@ -1,0 +1,88 @@
+Package: bss
+Version: 2.2.2
+Architecture: all
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 188
+Depends: btrfs-progs, e2fsprogs, libsecret-tools, rsync, sudo, systemd
+Multi-Arch: foreign
+Homepage: https://github.com/osamuaoki/bss
+Priority: optional
+Section: utils
+Filename: pool/main/b/bss/bss_2.2.2_all.deb
+Size: 38168
+SHA256: cf2c598111853a93d18184f9a0a5000292958aca6646ad2ce577f0dfe2f6681e
+SHA1: dbfb25d5392e673527d1ba0e9ef9c5de30a7e9c2
+MD5sum: 3640953630e690b00722df5abb63f445
+Description: Btrfs Subvolume Snapshot Utility
+ "bss" is basically a "btrfs subvolume ..." command wrapper to create and age
+ historical snapshots with the intuitive snapshot subvolume name and flexible
+ data aging capabilities.
+ .
+   * check for required free blocks (minimum FMIN %).
+   * keep initial few (NMIN) snapshots unconditionally.
+   * limit the maximum number of snapshots to NMAX.
+   * keep initial snapshots unconditionally for initial time (TMIN).
+   * grow time intervals exponentially with the specified ratio (STEP %) up to
+     some specified age (TMAX).
+   * filter content files of snapshots after the mid point (TMID) of history
+     using the script ".bss.fltr" at the BASE directory.
+ .
+ This can be used to snapshot the root filesystem on btrfs.
+   * No requirement to make the root filesystem as subvol=@ or @rootfs.
+   * Examples for:
+     * Automatic pre and post package installation snapshots of / via APT
+       operations on Debian/Ubuntu system.
+     * Systemd timer event to snapshot on boot and time intervals.
+     * Systemd timer event to age snapshots on boot.
+     * Systemd mount event to backup a snapshot to USB storage.
+
+Package: unzip-i18n
+Source: unzip
+Version: 6.0-29.~0i18n1
+Architecture: amd64
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 390
+Depends: libbz2-1.0, libc6 (>= 2.34)
+Suggests: zip
+Conflicts: unzip
+Replaces: unzip
+Provides: unzip
+Multi-Arch: foreign
+Homepage: https://infozip.sourceforge.net/UnZip.html
+Priority: optional
+Section: utils
+Filename: pool/main/u/unzip/unzip-i18n_6.0-29.~0i18n1_amd64.deb
+Size: 174628
+SHA256: 3708a1480c6052b4f787546f82c25af3df76bb8445ed9999f2901e0179234077
+SHA1: a17e453f145466b8dee42d9f1a5a8e9ab3124f85
+MD5sum: a0ffe3c413d1a225cf82a30827696080
+Description: De-archiver for .zip files with i18n supports
+ InfoZIP's unzip program. With the exception of multi-volume archives
+ (ie, .ZIP files that are split across several disks using PKZIP's /& option),
+ this can handle any file produced either by PKZIP, or the corresponding
+ InfoZIP zip program.
+ .
+ This version supports encryption.
+ .
+ This unzip-i18n supports file name encoding conversion with -O and -I options.
+Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
+Package: unzip-i18n-dbgsym
+Source: unzip
+Version: 6.0-29.~0i18n1
+Auto-Built-Package: debug-symbols
+Architecture: amd64
+Maintainer: Osamu Aoki <osamu@debian.org>
+Installed-Size: 406
+Depends: unzip-i18n (= 6.0-29.~0i18n1)
+Priority: optional
+Section: debug
+Filename: pool/main/u/unzip/unzip-i18n-dbgsym_6.0-29.~0i18n1_amd64.deb
+Size: 283688
+SHA256: 87931b4d1c36c7383d3d7ae92ecbdf31f10d27a367216cf57cc657541bb40a51
+SHA1: e9944014b9ba4704532ede4147678563448974f1
+MD5sum: ceff2b92a8dc549bb58bafa76d2d9e20
+Description: debug symbols for unzip-i18n
+Build-Ids: 9e05f67cdfc96981e2d5719932409c9321be939a a15784d6c72a7465aff1038871f28bc0d1c8c024 e4ed3132005c0a0bc316544934fb6d3584074ad7
+Original-Maintainer: Santiago Vila <sanvila@debian.org>
+
