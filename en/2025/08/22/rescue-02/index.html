@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2025/08/22 (initial publish),
-2025/08/23 (last update)
+2025/08/24 (last update)
 </h3>
 <h3 class="source">Source:
 note-00079
@@ -138,21 +138,38 @@ images in it. This way, I only need to maintain one USB key.</p>
 <li>Thinkpad T14 Gen 1 (AMD): power up and press ENTER or F12</li>
 </ul>
 <h2 id="use-case-migrating-from-ext4-to-btrfs-for-home">Use case: Migrating from ext4 to Btrfs for home</h2>
-<p>Let&rsquo;s think about encrypted LVM install case where <code>/dev/sda</code> holds LVM <code>root</code>,
-<code>home</code>, and <code>swap_1</code>.  Let&rsquo;s convert <code>home</code> data to use btrfs instead of ext4.</p>
+<p>Let&rsquo;s think about a system installed with <code>d-i</code> using its full disk install
+option with LUKS encryption on MBR SSD.</p>
+<ul>
+<li>hostname=<code>casper</code></li>
+<li><code>/dev/sda1</code>: <code>/boot</code> (1GB)</li>
+<li><code>/dev/sda2</code>: extended partition holding <code>/dev/sda5</code></li>
+<li><code>/dev/sda5</code>: holds LUKS (479GB)</li>
+<li>LUKS: holds LVM2 PV <code>/dev/mapper/sda5_crypt</code></li>
+<li>PV <code>/dev/mapper/sda5_crypt</code>: used as a only member of VG <code>casper-vg</code></li>
+<li>VG <code>casper-vg</code> found in <code>/dev/casper-vg</code> holds 3 LVs
+<ul>
+<li><code>/dev/casper-vg/root</code> = <code>/dev/mapper/casper--vg-root</code> (ext4, 32GB)</li>
+<li><code>/dev/casper-vg/home</code> = <code>/dev/mapper/casper--vg-home</code> (ext4, 438GB)</li>
+<li><code>/dev/casper-vg/swap_1</code> = <code>/dev/mapper/casper--vg-swap_1</code> (swap, 8.5GB)</li>
+</ul>
+</li>
+</ul>
+<p>Please note <code>-</code> in VG name is repeated in name used under <code>/dev/mapper</code>.</p>
+<p>Let&rsquo;s convert <code>/dev/casper-vg/home</code> to use btrfs instead of ext4.</p>
 <ul>
 <li>Boot from USB to use rescue boot shell
 <ul>
 <li>Decrypt LUKS partion (<code>/dev/sda5</code>)
 <ul>
 <li><code>sudo cryptosetup luksOpen /dev/sda5 sda5_crypt</code></li>
-<li>Now you see <code>/dev/mapper/hastname--vg-home</code>, <code>/dev/mapper/hastname--vg-root</code> etc.</li>
-<li>Mount <code>/dev/mapper/hastname--vg-home</code> to <code>mnt/home</code></li>
-<li>Mount <code>/dev/mapper/hastname--vg-root</code> to <code>/mnt/root</code></li>
+<li>Now you see <code>/dev/mapper/casper--vg-home</code>, <code>/dev/mapper/casper--vg-root</code> etc.</li>
+<li>Mount <code>/dev/mapper/casper--vg-home</code> to <code>mnt/home</code></li>
+<li>Mount <code>/dev/mapper/casper--vg-root</code> to <code>/mnt/root</code></li>
 </ul>
 </li>
 <li>Copy all data from <code>/mnt/home/username</code> to <code>/mnt/root/home/</code>.</li>
-<li>Remove mounting of <code>hostname--vg-home</code> iin <code>/etc/fstab</code> by adding <code>#</code> at the head of line..</li>
+<li>Remove mounting of <code>casper--vg-home</code> iin <code>/etc/fstab</code> by adding <code>#</code> at the head of line..</li>
 </ul>
 </li>
 <li>Boot normal SSD system
@@ -164,18 +181,18 @@ images in it. This way, I only need to maintain one USB key.</p>
 </li>
 <li>Format forcebly the old <code>home</code> LV as btrfs
 <ul>
-<li><code>sudo mkfs.btrfs -f /dev/mapper/hostname--vg-home</code></li>
+<li><code>sudo mkfs.btrfs -f /dev/mapper/casper--vg-home</code></li>
 </ul>
 </li>
 <li>Check LV and VG names with <code>lvs</code> and <code>vgs</code></li>
 <li>Rename the old <code>home</code> LV to <code>btrfs</code> LV
 <ul>
-<li><code>sudo lvrename hostname-vg home btrfs</code></li>
+<li><code>sudo lvrename casper-vg home btrfs</code></li>
 </ul>
 </li>
-<li>Mount <code>/dev/mapper/hostname--vg-btrfs</code> at <code>/mnt</code>
+<li>Mount <code>/dev/mapper/casper--vg-btrfs</code> at <code>/mnt</code>
 <ul>
-<li><code>sudo mount /dev/mapper/hostname--vg-btrfs /mnt</code></li>
+<li><code>sudo mount /dev/mapper/casper--vg-btrfs /mnt</code></li>
 </ul>
 </li>
 <li>Create subvolume <code>@home</code> at <code>/mnt</code>
@@ -186,7 +203,7 @@ images in it. This way, I only need to maintain one USB key.</p>
 <li>Copy back data under <code>/home</code> to <code>/mnt/@home</code>.</li>
 <li>Change mounting of home in <code>/etc/fstab</code> to use <code>@home</code>-subvolume for home.
 <ul>
-<li>Add <code>/dev/mapper/hostname--vg-btrfs btrfs default,subvol=@home 0 2</code> in <code>/etc/fstab</code></li>
+<li>Add <code>/dev/mapper/casper--vg-btrfs btrfs default,subvol=@home 0 2</code> in <code>/etc/fstab</code></li>
 </ul>
 </li>
 <li>Reboot</li>
