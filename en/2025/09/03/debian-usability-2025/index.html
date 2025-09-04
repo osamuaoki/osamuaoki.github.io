@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Debian Workstation (Trixie) (v2025-09) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Debian Workstation (Trixie) (v2025-09)</span></h1>
+
+<h3 class="date">Date:
+2025/09/03 (initial publish),
+2025/09/04 (last update)
+</h3>
+<h3 class="source">Source:
+note-00080
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2025/08/22/rescue-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li><a href="#workstation-usability">Workstation usability</a></li>
+    <li><a href="#bare-metal-initial-system-installation">Bare metal initial system installation</a>
+      <ul>
+        <li><a href="#initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></a></li>
+        <li><a href="#initial-manual-setup-minimal-cli-commands">Initial manual setup (minimal CLI commands)</a></li>
+        <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
+        <li><a href="#initial-manual-setup-sudo">Initial manual setup (SUDO)</a></li>
+        <li><a href="#initial-manual-setup-ssh">Initial manual setup (SSH)</a></li>
+        <li><a href="#initial-manual-setup-gpg">Initial manual setup (GPG)</a></li>
+        <li><a href="#initial-manual-setup-gnome">Initial manual setup (GNOME)</a></li>
+        <li><a href="#wallpaper-for-grub">Wallpaper for GRUB</a></li>
+        <li><a href="#os-probing-for-grub">OS probing for GRUB</a></li>
+        <li><a href="#multi-boot-with-grub-on-uefi-system">Multi-boot with GRUB on UEFI system</a></li>
+      </ul>
+    </li>
+    <li><a href="#gnome-desktop-customization">GNOME desktop customization</a>
+      <ul>
+        <li><a href="#terminal-customization">Terminal customization</a></li>
+        <li><a href="#wallpaper-for-gnome-settingstweaks">Wallpaper for GNOME (Settings+Tweaks)</a></li>
+        <li><a href="#keyboard-customization-settings">Keyboard customization (Settings)</a></li>
+        <li><a href="#keyboard-and-touchpad-shortcut-customization-extension">Keyboard and touchpad shortcut customization (Extension)</a></li>
+        <li><a href="#keyboard-shortcut-customization-internal-im-configuration">Keyboard shortcut customization (Internal IM configuration)</a></li>
+        <li><a href="#right-mouse-click-with-single-button-setting">Right mouse click with single button (Setting)</a></li>
+        <li><a href="#non-usable-keyboard-shortcut-key-combos-with-super">Non-usable Keyboard shortcut key combos with super</a></li>
+      </ul>
+    </li>
+    <li><a href="#application-customization">Application customization</a>
+      <ul>
+        <li><a href="#personal-packages">Personal packages</a></li>
+        <li><a href="#editor-setups">Editor setups</a></li>
+        <li><a href="#web-browser">Web browser</a></li>
+        <li><a href="#libreoffice">LibreOffice</a></li>
+        <li><a href="#mail-client">Mail client</a></li>
+      </ul>
+    </li>
+    <li><a href="#miscellaneous-tips">Miscellaneous tips</a>
+      <ul>
+        <li><a href="#migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</a></li>
+        <li><a href="#setting-group-membership">Setting group membership</a></li>
+        <li><a href="#setting-lxd">Setting LXD</a></li>
+        <li><a href="#re-install-and-uidgid-issues">Re-install and UID/GID issues</a></li>
+        <li><a href="#efi-based-firmware-updates">EFI-based firmware updates</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p>XXX WIP XXX</p>
+<h2 id="workstation-usability">Workstation usability</h2>
+<p>Here is the system configuration memo on my workstation running Debian 13
+<code>Trixie</code> stable release with GNOME 48.  This is a rewrite of the <a href="/en/2023/10/07/debian-usability-2023a/">older
+guide</a> for Debian 12 <code>Bookworm</code>.</p>
+<p>I am trying to keep my workstation as clean <code>Trixie</code> installation as
+possible.</p>
+<p>This is non-hardware specific notes and tips. For the hardware specific notes
+and tips, see also:</p>
+<ul>
+<li><a href="/en/2021/01/07/thinkpad-t14-gen-1-amd/">Thinkpad T14 Gen 1</a> &ndash; <code>hostname=goofy</code></li>
+<li><a href="/en/2023/02/13/svt1313-1/">Sony Vaio SVT1313</a> &ndash; <code>hostname=casper</code> <del><code>hostname=mickey</code></del></li>
+</ul>
+<h2 id="bare-metal-initial-system-installation">Bare metal initial system installation</h2>
+<h3 id="initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></h3>
+<p>The initial installation by the <code>debian-installer</code> may skip &ldquo;Desktop
+environment (<code>task-desktop</code>)&rdquo; task and select &ldquo;SSH server (<code>task-ssh-server</code>)&rdquo;
+to make it light, GUI-less, and SSH-ready.  For the 2025 reinstallation of
+Sony Vaio SVT1313, I chose the Gnome GUI Desktop System.</p>
+<p>This process installs (mostly) packages with <code>Priority:</code> values in <code>required</code>,
+<code>important</code> and <code>standard</code>.</p>
+<p>In order to place all user data on btrfs while
+keeping this system bootable with GRUB, I install as follows:</p>
+<ul>
+<li>For encrypted MBR system:
+<ul>
+<li>See <a href="/en/2025/08/22/rescue-02/">Rescue media(2)</a> for the system migration
+<ul>
+<li>A primary partition formatted to ext4 for <code>/</code> (system data).</li>
+<li>A LUKS encrypted PV == VG which holds 2 LVs
+<ul>
+<li>a large LV formatted to btrfs used for <code>/home</code> (user data).</li>
+<li>a small LV formatted to swap used for swap.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>Create a small (10GB+) ext4 partition and install a minimum system to it.</li>
+</ul>
+</li>
+<li>For non-encrypted UEFI system: (This is based on my experience of the <code>Bookworm</code> installation.  I upgraded it to <code>Trixie</code> via <code>apt full-upgrade</code>.)
+<ul>
+<li>No special action is needed.
+<ul>
+<li>Create and select btrfs for <code>/</code>.  (The installer automatically use subvolume <code>@rootfs</code> within its partition for the rootfs.)</li>
+<li>Shared partition for &ldquo;EFI system partition&rdquo; is automatically mounted at <code>/boot/efi</code> and formatted as FAT32.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>I leave the domain name as blank. All hosts on the same local subnet can be
+accessed by adding <code>.local</code> at the end of each host name thanks to Avahi
+(<code>avahi-autoipd</code> package).</p>
+<h3 id="initial-manual-setup-minimal-cli-commands">Initial manual setup (minimal CLI commands)</h3>
+<p>If your system boot into the GUI console for any reason, use &ldquo;<code>CTRL-ALT-F?</code>&rdquo;
+(<code>?</code> can be 1-6) to access Linux virtual terminal login prompt. Otherwise, you
+are already at login prompt on Linux virtual terminal.</p>
+<p>Login to the root account and execute:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ su bash
+</span></span><span style="display:flex;"><span> ...
+</span></span><span style="display:flex;"><span># apt-get update
+</span></span><span style="display:flex;"><span># apt-get install aptitude sudo vim mc wget nano-
+</span></span></code></pre></div><p>NOTE: If you didn&rsquo;t set password for <code>root</code> during system installation with <code>debian-installer</code> in the expert mode, <code>sudo</code> is configured for you and you need to use it to gain root privilege.</p>
+<h3 id="tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</h3>
+<p>I use <code>aptitude</code> as the primary package maintenance tool and identify
+intentionally installed packages as a scrollable list by typing in
+<code>~i!~M~poptional</code> in the <code>l</code> prompt of <code>aptitude</code>.</p>
+<p>Since <code>debian-installer</code> installed packages doesn&rsquo;t set the auto install flag
+(<code>M</code>), I usually tidy-up them up before installing GUI packages by setting
+missing <code>M</code> flags to groups of files:</p>
+<ul>
+<li>packages under <code>libs</code> section</li>
+<li>packages under <code>Depends</code> and <code>Recommends</code> for:
+<ul>
+<li><code>apt</code></li>
+<li><code>dpkg</code></li>
+<li><code>aptitude</code></li>
+<li><code>debconf</code></li>
+<li><code>task-desktop</code> etc. (if installed)</li>
+</ul>
+</li>
+<li>Add a few packages &hellip;</li>
+</ul>
+<p>You can print list of intentionally installed packages as a plain text with:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;!~M~poptional~i&#39;</span>
+</span></span><span style="display:flex;"><span>XXX FIXME XXX
+</span></span></code></pre></div><p>(This intentionally ignores some outdated packages with priority=extra packages.)</p>
+<h3 id="initial-manual-setup-sudo">Initial manual setup (SUDO)</h3>
+<p>For the passwordless <code>sudo</code> operation, configure <code>sudo</code> from root by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span># No passowrd required for the user in sudo group
+</span></span><span style="display:flex;"><span># please note the last match wins configuration
+</span></span><span style="display:flex;"><span>%sudo ALL = (ALL:ALL) NOPASSWD: ALL
+</span></span><span style="display:flex;"><span># No password for 8 hours
+</span></span><span style="display:flex;"><span>#Defaults timestamp_timeout = 480
+</span></span><span style="display:flex;"><span>#Defaults timestamp_type = global
+</span></span></code></pre></div><p>NOTE: Please note that the last matching configuration is the active one for <code>sudo</code>.</p>
+<h3 id="initial-manual-setup-ssh">Initial manual setup (SSH)</h3>
+<p>For paswordless <code>ssh</code> operation to the new system, configure ssh server as follows from the primary user:</p>
+<ul>
+<li>Copy ssh public keys of the main machine into new machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access to the new machine from the main machine.</li>
+<li>Run <code>ssh-keygen</code> to generate ssh keys for the new machine</li>
+<li>Copy ssh public keys of the new machine into the main machine&rsquo;s <code>~/.ssh/authorized_keys</code> to allow access from the new machine to the main machine. (optional)</li>
+<li>Disable password-based login via <code>sudo vi /etc/ssh/sshd_config</code> to set <code>PasswordAuthentication no</code> for all machines after setting passwordless SSH logins.</li>
+</ul>
+<h3 id="initial-manual-setup-gpg">Initial manual setup (GPG)</h3>
+<p>After configuring SSH as above, your GPG keys on <code>goofy</code> can be moved to <code>casper</code> by executing the following on <code>goofy</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ scp -r .gnupg casper.local:.
+</span></span></code></pre></div><h3 id="initial-manual-setup-gnome">Initial manual setup (GNOME)</h3>
+<p>Install <code>task-desktop</code> package which pulls in <code>task-gnome-desktop</code> package to set up a decent GNOME GUI workstation with <code>aptitude</code> if not installed.</p>
+<h3 id="wallpaper-for-grub">Wallpaper for GRUB</h3>
+<p>Place your JPEG wallpaper graphics (JPEG) in <code>/boot/grub/</code> and update GRUB
+configuration using  one of the followings:</p>
+<ul>
+<li><code>sudo update-grub</code></li>
+<li><code>sudo dpkg-reconfigure grub-efi-amd64</code> # UEFI system</li>
+<li><code>sudo dpkg-reconfigure grub-pc</code> # MBR system</li>
+</ul>
+<h3 id="os-probing-for-grub">OS probing for GRUB</h3>
+<p>No change from <a href="/en/2023/10/07/debian-usability-2023a/#os-probing-for-grub">older guide</a> for Debian 12 <code>Bookworm</code>.</p>
+<h3 id="multi-boot-with-grub-on-uefi-system">Multi-boot with GRUB on UEFI system</h3>
+<p>No change from <a href="/en/2023/10/07/debian-usability-2023a/#multi-boot-with-grub-on-uefi-system">older guide</a> for Debian 12 <code>Bookworm</code>.</p>
+<h2 id="gnome-desktop-customization">GNOME desktop customization</h2>
+<p>The <code>gnome-tweak</code> and <code>gnome-shell-extension-manager</code> packages installed along
+with <code>gnome</code> package help to tweak the system via GUI application <code>Tweak</code> and
+<code>Extension Manager</code>.</p>
+<p>The GNOME extension packages are available from <a href="https://extensions.gnome.org/local/">GNOME Extension web
+site</a> using browser with <a href="https://chrome.google.com/webstore/detail/gnome-shell-integration/gphhapmejobijbbhgpjhcjognlahblep">GNOME Shell
+integration</a>
+enabled.</p>
+<p>My essential GNOME extension is
+<a href="https://extensions.gnome.org/extension/6066/shortcuts-to-activate-input-methods/">Input method and touchpad shortcuts </a>
+(See <a href="/en/2023/06/19/gnome-im-1/">GNOME shell extension for input methods</a>.)</p>
+<h3 id="terminal-customization">Terminal customization</h3>
+<ul>
+<li>Disable &ldquo;F10&rdquo;</li>
+<li>Use <code>MONO 14</code> or equivalent (HACK <a href="https://www.nerdfonts.com/font-downloads">NERD FONT</a> MONO)
+<ul>
+<li>Install <code>*.ttf</code> files into <code>~/.fonts/</code> for a single user or <code>/usr/local/share/fonts/</code> for system wide installation.</li>
+</ul>
+</li>
+<li>Add &ldquo;080x24&rdquo;, &ldquo;080x43&rdquo;, &ldquo;127x43&rdquo; or similar</li>
+<li>(Set shell as login shell if you want anything other than Bash.)</li>
+</ul>
+<h3 id="wallpaper-for-gnome-settingstweaks">Wallpaper for GNOME (Settings+Tweaks)</h3>
+<p>You can set wallpaper graphics from:</p>
+<ul>
+<li>Desktop: <code>Settings</code> -&gt; <code>Background</code></li>
+<li>Desktop: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code></li>
+<li>Lock Screen: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Lock Screen</code></li>
+<li>GDM3: &mdash; Not so easy (leave this as is)</li>
+</ul>
+<h3 id="keyboard-customization-settings">Keyboard customization (Settings)</h3>
+<ul>
+<li>Install Debian <code>ibus-mozc</code> package</li>
+<li><code>Settings</code> -&gt; <code>Keyboard</code> tab
+<ul>
+<li>Set up <code>Input Sources</code> with:
+<ul>
+<li><code>Japanese (Mozc)</code></li>
+<li><code>English (US)</code></li>
+<li><code>English (intl., with AltGr dead keys)</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>Settings</code> -&gt; <code>Keyboard</code> tab
+<ul>
+<li><code>Keyboard Shortcuts</code> -&gt; <code>View and Customize Shortcuts</code>
+<ul>
+<li><code>Sound and Media</code>
+<ul>
+<li><code>SUPER-,</code>: volume mute/un-mute</li>
+</ul>
+</li>
+<li><code>Custom Shortcuts</code>
+<ul>
+<li><code>SUPER-\</code>: Name: Terminal, Command: <code>gnome-terminal</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>(<code>SUPER-\</code> is easier to type than <code>SUPER-T</code>.)</p>
+<p>(No more remap of <code>CapsLock</code> as additional <code>Esc</code> with GNOME Tweak.  I use <code>jk</code> as <code>Esc</code>.)</p>
+<h3 id="keyboard-and-touchpad-shortcut-customization-extension">Keyboard and touchpad shortcut customization (Extension)</h3>
+<ul>
+<li>Install my GNOME extension: <a href="https://github.com/osamuaoki/inputmethod-shortcuts">Quick switching of input method and touchpad</a> &ndash; source
+<ul>
+<li><a href="https://extensions.gnome.org/extension/6066/shortcuts-to-activate-input-methods/">GNOME extension: Input method and touchpad shortcuts</a></li>
+</ul>
+</li>
+<li>Log out and log in to GNOME</li>
+<li>Enabled shortcuts from GNOME shell extension preference menu as:
+<ul>
+<li>Input Method Shortcuts
+<ul>
+<li><code>CTRL-SUPER</code>: English (US)</li>
+<li><code>SHIFT-SUPER</code>: Mozc</li>
+<li><code>SUPER-CTRL</code>: English (international)</li>
+</ul>
+</li>
+<li>Touchpad Shortcuts
+<ul>
+<li><code>SUPER-.</code>: Touchpad On</li>
+<li><code>SUPER-/</code>: Touchpad Off</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>See <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a> how I get here.</p>
+<h3 id="keyboard-shortcut-customization-internal-im-configuration">Keyboard shortcut customization (Internal IM configuration)</h3>
+<p>For Japanese IM (<code>ibus-mozc</code>), set it up as:</p>
+<ul>
+<li>Keymap style: <code>MS-IME</code> (default) &ndash;&gt; Click <code>Customize ...</code></li>
+<li>全角かな入力 (hiragana mode) 変換キー equivalent for US keyboard:
+<ul>
+<li><code>Direct Input</code> mode: <code>Shift Space</code> key : <code>Activate IME</code></li>
+</ul>
+</li>
+<li>英数半角入力 (latin mode) 無変換キー equivalent for US keyboard:
+<ul>
+<li><code>Precomposition</code> mode: <code>Ctrl Space</code> key : <code>Deactivate IME</code></li>
+<li><code>Composition</code> mode: <code>Ctrl Space</code> key : <code>Deactivate IME</code> (originally <code>Insert HW Space</code>)</li>
+<li><code>Conversion</code> mode: <code>Ctrl Space</code> key : <code>Deactivate IME</code></li>
+</ul>
+</li>
+<li>UI consistency adjustment
+<ul>
+<li><code>Conversion</code> mode: <code>Ctrl Enter</code> key : <code>CommitOnlyFirstSegment</code> (originally
+<code>Commit</code>)</li>
+</ul>
+</li>
+</ul>
+<p>Since Windows style Alt-`(Alt-backtick) is grubbed by Gnome Desktop, this key can&rsquo;t be used to toggle IM for Mozc.</p>
+<p>See my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> and its <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a>.</p>
+<h3 id="right-mouse-click-with-single-button-setting">Right mouse click with single button (Setting)</h3>
+<p>For Mac or some Sony Vaio with single tap pad button, the following allows
+proper secondary-click (or even middle-click).</p>
+<ul>
+<li><code>Settings</code> -&gt; <code>Mouse &amp; Touchpad</code> (side) -&gt; <code>Touchpad</code> tab (top)</li>
+<li>-&gt; &ldquo;Secondary Click&rdquo;: select &ldquo;Corner Push&rdquo;</li>
+<li>-&gt; &ldquo;Tap to Click&rdquo;: disable</li>
+<li>-&gt; &ldquo;Scrolling&rdquo;: select &ldquo;Two Finger&rdquo;</li>
+</ul>
+<h3 id="non-usable-keyboard-shortcut-key-combos-with-super">Non-usable Keyboard shortcut key combos with super</h3>
+<ul>
+<li>Any use of <code>SUPER</code>+<code>modifier</code>+<code>SPACE</code> or <code>SUPER</code>-<code>SPACE</code> breaks normal <code>SUPER</code>-<code>SPACE</code> for rotating input method and bad idea</li>
+<li><code>SUPER</code>-<code>P</code> seems to be unresponsive</li>
+<li><code>SUPER</code>-<code>O</code> seems to be unresponsive</li>
+</ul>
+<h2 id="application-customization">Application customization</h2>
+<h3 id="personal-packages">Personal packages</h3>
+<p>See <a href="/en/2022/08/20/deb-repo-1/">Personal DEB package repository</a> for the method to publish personal DEB packages.</p>
+<p>You need to add <a href="/en/2022/08/20/deb-repo-1/#setting-up-secure-apt-cliant">configuration file for personal DEB package repository</a> to use them.</p>
+<p>Here are some of my personal binary DEB packages to help my command line.</p>
+<ul>
+<li><code>bss</code>: Btrfs Subvolume Snapshot Utility
+<ul>
+<li>src: <a href="https://github.com/osamuaoki/bss">https://github.com/osamuaoki/bss</a></li>
+<li>This helps me with easy backup and snapshot using btrfs.</li>
+</ul>
+</li>
+<li><code>unzip-i18n</code>: patched unzip (<code>-O</code> and <code>-I</code> options to support encoding of filenames)
+<ul>
+<li>src: <a href="https://github.com/osamuaoki/unzip">https://github.com/osamuaoki/unzip</a></li>
+<li>This replaces Debian unzip program which lacks <code>-I</code> and <code>-O</code> options to
+offer functionality available under other distribution.
+<ul>
+<li>Use <code>unzip -Osjis filename.zip</code> to unzip Japanese zip files.</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><code>00-min</code>: Osamu&rsquo;s Task Packages  &ndash; WIP updating
+<ul>
+<li>src: <a href="https://github.com/osamuaoki/osamu-task">https://github.com/osamuaoki/osamu-task</a></li>
+<li>This comes with configuration dot files under <code>/usr/share/doc/00-min/examples/</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="editor-setups">Editor setups</h3>
+<p>I use NeoVim 0.11.4 fetched from <a href="https://osamuaoki.github.io/http/">my HTTP repo</a> with <code>wget</code> and install it with <code>dpkg -i</code> as my main editor.</p>
+<ul>
+<li>Main editor: <code>NVIM_APPNAME=nvim_osamu nvim</code> with <code>~/.config/nvim_osamu</code> (alias <code>vi</code>)
+<ul>
+<li>Configuration by my <a href="https://github.com/osamuaoki/starter">forked LazyVim starter</a> placed in <code>~/.config/nvim_osamu/</code>.</li>
+<li>Install a few required packages found by <code>:checkhealth</code>: <code>git</code>, <code>ripgrep</code>, &hellip;</li>
+</ul>
+</li>
+<li>Fallback editor: <code>nvim -u NONE</code> (alias <code>v0</code>)
+<ul>
+<li>No configuration bare neovim.</li>
+</ul>
+</li>
+<li>Fallback editor: <code>vim</code>
+<ul>
+<li>Configuration by <a href="https://github.com/osamuaoki/dot-vim">https://github.com/osamuaoki/dot-vim</a> in <code>~/.vimrc</code>.</li>
+</ul>
+</li>
+</ul>
+<p>See <a href="/en/2023/03/05/nvim-build/">Building Neovim</a> for how I set up <a href="https://osamuaoki.github.io/http/">my HTTP repo</a>.</p>
+<h3 id="web-browser">Web browser</h3>
+<p>Although <a href="https://tracker.debian.org/pkg/chromium">Chromium</a> exists in the
+official Debian repository, it lacks <a href="https://blog.chromium.org/2021/01/limiting-private-api-availability-in.html">account synchronization capability with
+other devices since
+2021</a>.
+Although there are <a href="https://stackoverflow.com/questions/67459316/enabling-chromium-to-sync-with-google-account">some workarounds tips posted on
+web</a>,
+installing <a href="https://www.google.com/chrome/">Chrome</a> can solve this situation
+for sure.</p>
+<p>The official Chrome installer create the APT configuration file
+<code>/etc/apt/sources.list</code> in old non-DEB822-STYLE FORMAT.</p>
+<h3 id="libreoffice">LibreOffice</h3>
+<p>Debian 13 <code>Trixie</code> (stable release) offers the LibreOffice 25.2.  I think it
+is in good shape.</p>
+<p>If any issues arise, I may switch to the latest upstream flatpack package
+offering from
+<a href="https://www.libreoffice.org/download/download-libreoffice/">LibreOffice download</a>.</p>
+<h3 id="mail-client">Mail client</h3>
+<p>Updated in <strong>2023-11-24</strong></p>
+<p>For the GUI access to the remotely hosted IMAP4 mail services, use GNOME Online
+accounts and Evolution.  This approach works for Gmail etc. and compatible with
+using other devices such as smart phones.  Evolution can also be configured to
+read locally delivered mails to mbox too.  (send+receive).</p>
+<p>I decided to configure MTA as simple as possible with &ldquo;sudo dpkg-reconfigure
+exim4-config&rdquo; to select &ldquo;local delivery only; not on a network&rdquo;. Everything
+else can be default.  I have no more smartsost things nor <code>fetchmail</code>.</p>
+<p>When I need to send mail from shell prompt for Debian BTS or Debian mail
+gateway services, I use my &ldquo;@debian.org&rdquo; address and use ssh+sendmail (created
+shell script <code>~/bin/sendmail-p.d.o</code>) to access a Debian host. (The similar
+trick may be usable for any shell access hosts such as salsa.debian.org etc.)</p>
+<p>I have mail configuration for:</p>
+<ul>
+<li>GUI:
+<ul>
+<li>Evolution (GNOME online account)</li>
+</ul>
+</li>
+<li>CLI:
+<ul>
+<li><code>devscripts</code> (add &ldquo;<code>BTS_SENDMAIL_COMMAND='/home/osamu/bin/sendmail-p.d.o'</code>&rdquo; to <code>~/.devscripts</code>)</li>
+<li><code>reportbug</code> (add &ldquo;<code>mta /home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.reportbugrc</code>)</li>
+<li><code>mail</code> (add &ldquo;<code>set sendmail=/home/osamu/bin/sendmail-p.d.o</code>&rdquo; to <code>~/.mailrc</code>)</li>
+<li><code>mutt</code> (add &ldquo;<code>set sendmail = '/home/osamu/bin/sendmail-p.d.o'</code>&rdquo; to <code>~/.muttrc</code>)</li>
+</ul>
+</li>
+</ul>
+<p>For Debian voting, mutt works most reliably.</p>
+<h2 id="miscellaneous-tips">Miscellaneous tips</h2>
+<h3 id="migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</h3>
+<p>As installed, user&rsquo;s home directory is in the rootfs using subvolume <code>@rootfs</code>.
+Let me create and use subvolume <code>@osamu</code> for my user <code>osamu</code> and copy contents
+of original <code>/home/osamu</code> into <code>@osamu</code>.  Then update <code>/etc/fstab</code> to mount
+<code>@osamu</code> onto <code>/home/osamu</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span># mount /dev/sda6 on /mnt
+</span></span><span style="display:flex;"><span># cd /mnt
+</span></span><span style="display:flex;"><span>$ ls -lai
+</span></span><span style="display:flex;"><span>total 16
+</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root   26 Oct  8 17:11 .
+</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 ..
+</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 @rootfs
+</span></span><span style="display:flex;"><span># btrfs subvolume create @osamu
+</span></span><span style="display:flex;"><span># chmod <span style="color:#ae81ff">700</span> @osamu
+</span></span><span style="display:flex;"><span># chown osamu:osamu @osamu
+</span></span><span style="display:flex;"><span>total 16
+</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root   26 Oct  8 17:11 .
+</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 ..
+</span></span><span style="display:flex;"><span>256 drwx------ 1 osamu osamu 610 Oct  8 17:01 @osamu
+</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 @rootfs
+</span></span><span style="display:flex;"><span># cp -a /home/osamu/. @osamu
+</span></span><span style="display:flex;"><span># vi /etc/fstab
+</span></span><span style="display:flex;"><span># cat /etc/fstab
+</span></span><span style="display:flex;"><span># &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;
+</span></span><span style="display:flex;"><span># / was on /dev/sdb6 during installation
+</span></span><span style="display:flex;"><span>UUID=01ec7a23-d2bd-4b27-a5e0-da88cfed58c1 /               btrfs   defaults,subvol=@rootfs 0       0
+</span></span><span style="display:flex;"><span># /home/osamu is on /dev/sdb6 where / is
+</span></span><span style="display:flex;"><span>UUID=01ec7a23-d2bd-4b27-a5e0-da88cfed58c1 /home/osamu     btrfs   defaults,subvol=@osamu 0       0
+</span></span><span style="display:flex;"><span># /boot was on /dev/sdb5 during installation
+</span></span><span style="display:flex;"><span>UUID=85827838-41ae-42e2-9081-a98ab7f819f5 /boot           ext4    defaults        0       2
+</span></span><span style="display:flex;"><span># swap was on /dev/sdb7 during installation
+</span></span><span style="display:flex;"><span>UUID=31355cb6-e02f-4462-91a4-323dcc351ea9 none            swap    sw              0       0
+</span></span></code></pre></div><p>Then reboot this machine.</p>
+<h3 id="setting-group-membership">Setting group membership</h3>
+<p>Don&rsquo;t forget to setup group membership for the primary user (UID=1000).  Notable groups to watch out are:</p>
+<ul>
+<li><code>adm</code></li>
+<li><code>src</code></li>
+<li><code>staff</code></li>
+<li><code>sudo</code>  &ndash;  by adding this, you enable sudo with password</li>
+<li><code>lxd</code> &ndash; for LXD</li>
+<li><code>backup</code> &ndash; for backup operation</li>
+<li><code>www-data</code> &ndash; for web server</li>
+</ul>
+<p>You need to re-login to enable them after setting them with e.g., `sudo adduser osamu lxd.</p>
+<h3 id="setting-lxd">Setting LXD</h3>
+<ul>
+<li>Install:
+<ul>
+<li><code>lxd</code></li>
+<li><code>lxc</code></li>
+<li><code>lxd-tools</code></li>
+</ul>
+</li>
+<li>Add the primary user to <code>lxd</code> group.</li>
+<li>Initialize LXD use environment</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sudo lxd init
+</span></span><span style="display:flex;"><span>Would you like to use LXD clustering? (yes/no) [default=no]:
+</span></span><span style="display:flex;"><span>Do you want to configure a new storage pool? (yes/no) [default=yes]:
+</span></span><span style="display:flex;"><span>Name of the new storage pool [default=default]:
+</span></span><span style="display:flex;"><span>Name of the storage backend to use (dir, btrfs) [default=btrfs]:
+</span></span><span style="display:flex;"><span>Would you like to create a new btrfs subvolume under /var/lib/lxd? (yes/no) [default=yes]:
+</span></span><span style="display:flex;"><span>Would you like to connect to a MAAS server? (yes/no) [default=no]:
+</span></span><span style="display:flex;"><span>Would you like to create a new local network bridge? (yes/no) [default=yes]:
+</span></span><span style="display:flex;"><span>What should the new bridge be called? [default=lxdbr0]:
+</span></span><span style="display:flex;"><span>What IPv4 address should be used? (CIDR subnet notation, “auto” or “none”) [default=auto]:
+</span></span><span style="display:flex;"><span>What IPv6 address should be used? (CIDR subnet notation, “auto” or “none”) [default=auto]:
+</span></span><span style="display:flex;"><span>Would you like the LXD server to be available over the network? (yes/no) [default=no]:
+</span></span><span style="display:flex;"><span>Would you like stale cached images to be updated automatically? (yes/no) [default=yes]:
+</span></span><span style="display:flex;"><span>Would you like a YAML &#34;lxd init&#34; preseed to be printed? (yes/no) [default=no]:
+</span></span></code></pre></div><p>If this is on host <code>casper</code> with the primary user <code>osamu</code>:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sysctl kernel.unprivileged_userns_clone
+</span></span><span style="display:flex;"><span>kernel.unprivileged_userns_clone = 1
+</span></span><span style="display:flex;"><span>$ cd /etc
+</span></span><span style="display:flex;"><span>$ cat subgid
+</span></span><span style="display:flex;"><span>osamu:100000:65536
+</span></span><span style="display:flex;"><span>_lxd:165536:10000001
+</span></span><span style="display:flex;"><span>root:165536:10000001
+</span></span><span style="display:flex;"><span>$ cat subuid
+</span></span><span style="display:flex;"><span>osamu:100000:65536
+</span></span><span style="display:flex;"><span>_lxd:165536:10000001
+</span></span><span style="display:flex;"><span>root:165536:10000001
+</span></span><span style="display:flex;"><span>$ grep _lxd passwd
+</span></span><span style="display:flex;"><span>_lxd:x:103:111::/var/lib/lxd/:/bin/false
+</span></span><span style="display:flex;"><span>$ grep lxd group
+</span></span><span style="display:flex;"><span>lxd:x:111:osamu
+</span></span><span style="display:flex;"><span>$ sudo ls -la /var/lib/lxd
+</span></span><span style="display:flex;"><span>total 8
+</span></span><span style="display:flex;"><span>drwx--x--x 1 _lxd lxd  336 Oct  9 08:38 .
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root 856 Oct  8 14:41 ..
+</span></span><span style="display:flex;"><span>drwx------ 1 root root  30 Oct  8 14:49 backups
+</span></span><span style="display:flex;"><span>drwx--x--x 1 root root   0 Oct  8 14:49 containers
+</span></span><span style="display:flex;"><span>drwx------ 1 root root  28 Oct  8 14:49 database
+</span></span><span style="display:flex;"><span>drwx--x--x 1 root root   0 Oct  8 14:49 devices
+</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root   0 Oct  8 14:49 devlxd
+</span></span><span style="display:flex;"><span>drwx------ 1 root root   0 Oct  8 14:49 disks
+</span></span><span style="display:flex;"><span>drwx------ 1 root root   0 Oct  8 14:49 images
+</span></span><span style="display:flex;"><span>drwx--x--x 1 root root  12 Oct  8 14:50 networks
+</span></span><span style="display:flex;"><span>drwx------ 1 root root  30 Oct  8 14:49 security
+</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 757 Oct  8 14:49 server.crt
+</span></span><span style="display:flex;"><span>-rw------- 1 root root 288 Oct  8 14:49 server.key
+</span></span><span style="display:flex;"><span>drwx--x--x 1 root root   0 Oct  8 14:49 shmounts
+</span></span><span style="display:flex;"><span>drwx------ 1 root root   0 Oct  8 14:49 snapshots
+</span></span><span style="display:flex;"><span>drwx--x--x 1 root root  14 Oct  8 14:50 storage-pools
+</span></span><span style="display:flex;"><span>srw-rw---- 1 root lxd    0 Oct  9 08:38 unix.socket
+</span></span><span style="display:flex;"><span>drwx--x--x 1 root root   0 Oct  8 14:49 virtual-machines
+</span></span><span style="display:flex;"><span>drwx------ 1 root root   0 Oct  8 14:49 virtual-machines-snapshots
+</span></span></code></pre></div><h3 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h3>
+<p>UID and GID used by some applications are not fixed.  So, if you reinstall the
+exact same packages in a different order, you end up assigning UID and GID for
+the application.</p>
+<p>UID in range between 101-999 such as ones for <code>avahi</code>, <code>saned</code>, <code>colord</code>,
+<code>_ssh</code>, &hellip;  are the most susceptible on this issue.</p>
+<p><code>apt-cacher-ng</code> needs special attention.</p>
+<h3 id="efi-based-firmware-updates">EFI-based firmware updates</h3>
+<p>Install <code>gnome-firmware</code> package and invoke GUI to update firmware on devices
+supported by <code>fwupd</code> using <a href="https://fwupd.org/">Linux Vendor Firmware Service</a>.</p>
+<p>Many firmware data can be updated using <code>gnome-firmware</code>.</p>
+<h4 id="workaround-for-some-firmware">Workaround for some firmware</h4>
+<p>Some firmware devices may experience some problem to be updated by
+<code>gnome-firmware</code>.</p>
+<p>Most notable one on my system was &ldquo;Lenovo System Firmware&rdquo;.  (I don&rsquo;t know if
+this was version dependent or not.) I used vendor&rsquo;s BIOS update offered as
+bootable CD and made USB key containing it image data:</p>
+<ul>
+<li><a href="https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue/downloads/driver-list/component?name=BIOS%2FUEFI">https://pcsupport.lenovo.com/us/en/products/laptops-and-netbooks/thinkpad-t-series-laptops/thinkpad-t14-type-20ud-20ue/downloads/driver-list/component?name=BIOS%2FUEFI</a></li>
+</ul>
+<p>If the BIOS options <code>Security &gt; Secure Boot</code> is enabled, it may restrict booting
+up from the BIOS Update bootable CD image, you may need to disabled the Secure Boot option to use it.</p>
+<p>If Windows 10 or 11 is installed, you may need to reenable Secure Boot after
+this operation.</p>
+<!-- raw HTML omitted -->
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/en/2025/08/22/rescue-02/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/en/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2024 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

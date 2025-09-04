@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2023/10/07 (initial publish),
-2025/08/21 (last update)
+2025/09/04 (last update)
 </h3>
 <h3 class="source">Source:
 note-00049
@@ -128,6 +128,7 @@ and tips, see also:</p>
 <li><a href="/en/2021/01/07/thinkpad-t14-gen-1-amd/">Thinkpad T14 Gen 1</a> &ndash; <code>hostname=goofy</code></li>
 <li><a href="/en/2023/02/13/svt1313-1/">Sony Vaio SVT1313</a> &ndash; <del><code>hostname=casper</code></del> <code>hostname=mickey</code></li>
 </ul>
+<p>See <a href="/en/2025/09/03/debian-usability-2025/">newer updated guide</a> for <code>Trixie</code>.</p>
 <h2 id="bare-metal-initial-system-installation">Bare metal initial system installation</h2>
 <h3 id="initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></h3>
 <p>The initial installation by the <code>debian-installer</code> should skip &ldquo;Desktop
@@ -238,7 +239,7 @@ missing <code>M</code> flags to groups of files:</p>
 </span></span><span style="display:flex;"><span>i   task-ssh-server                  - SSH server
 </span></span><span style="display:flex;"><span>i   usbutils                         - Linux USB utilities
 </span></span><span style="display:flex;"><span>i   vim                              - Vi IMproved - enhanced vi editor
-</span></span></code></pre></div><p>(This intensionally ignores some outdated packages with priority=extra packages.)</p>
+</span></span></code></pre></div><p>(This intentionally ignores some outdated packages with priority=extra packages.)</p>
 <h3 id="initial-manual-setup-ssh">Initial manual setup (SSH)</h3>
 <p>For paswordless <code>ssh</code> operation to the new system, configure ssh server as follows from the primary user:</p>
 <ul>
@@ -431,15 +432,16 @@ proper secondary-click (or even middle-click).</p>
 <h3 id="keyboard-shortcut-customization-internal-im-configuration">Keyboard shortcut customization (Internal IM configuration)</h3>
 <p>For Japanese input with US keyboard, set IM (<code>mozc</code> etc.) configuration as:</p>
 <ul>
-<li>On a system where Control-SPACE` is usable (My Thinkpad.)
+<li>On a system where <code>Control-SPACE</code> is usable (My Thinkpad <code>Bookworm</code> and <code>Trixie</code>; and my Sony Vaio
+<code>Trixie</code>)
 <ul>
 <li>SHIFT-SPACE: 全角かな入力 (hiragana mode) 変換キー equivalent (activate IM)</li>
 <li>CTRL-SPACE: 英数半角入力 (latin mode) 無変換キー equivalent (deactivate IM)</li>
 </ul>
 </li>
-<li>On a system where Control-SPACE` is not usable (My Sony Vaio.)
+<li>On a system where <code>Control-SPACE</code> seemed not usable (My Sony Vaio <code>Bookworm</code>.)
 <ul>
-<li>SHIFT-SPACE:  漢字 (kanji mode) キー equivalent (toggle IM)
+<li>SHIFT-SPACE:  漢字 (kanji mode) キー equivalent (toggle IM) as work around
 <ul>
 <li>Set to activate in DirectInput</li>
 <li>Set to deactivate in PreComposition</li>
