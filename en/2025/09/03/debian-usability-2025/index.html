@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2025/09/03 (initial publish),
-2025/09/04 (last update)
+2025/09/06 (last update)
 </h3>
 <h3 class="source">Source:
 note-00080
@@ -68,8 +68,8 @@ note-00080
     <li><a href="#bare-metal-initial-system-installation">Bare metal initial system installation</a>
       <ul>
         <li><a href="#initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></a></li>
-        <li><a href="#initial-manual-setup-minimal-cli-commands">Initial manual setup (minimal CLI commands)</a></li>
-        <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</a></li>
+        <li><a href="#initial-manual-setup">Initial manual setup</a></li>
+        <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude</a></li>
         <li><a href="#initial-manual-setup-sudo">Initial manual setup (SUDO)</a></li>
         <li><a href="#initial-manual-setup-ssh">Initial manual setup (SSH)</a></li>
         <li><a href="#initial-manual-setup-gpg">Initial manual setup (GPG)</a></li>
@@ -114,7 +114,7 @@ note-00080
 <p>XXX WIP XXX</p>
 <h2 id="workstation-usability">Workstation usability</h2>
 <p>Here is the system configuration memo on my workstation running Debian 13
-<code>Trixie</code> stable release with GNOME 48.  This is a rewrite of the <a href="/en/2023/10/07/debian-usability-2023a/">older
+<code>Trixie</code> stable release with GNOME 48.  This is mostly a rewrite of the <a href="/en/2023/10/07/debian-usability-2023a/">older
 guide</a> for Debian 12 <code>Bookworm</code>.</p>
 <p>I am trying to keep my workstation as clean <code>Trixie</code> installation as
 possible.</p>
@@ -165,7 +165,7 @@ keeping this system bootable with GRUB, I install as follows:</p>
 <p>I leave the domain name as blank. All hosts on the same local subnet can be
 accessed by adding <code>.local</code> at the end of each host name thanks to Avahi
 (<code>avahi-autoipd</code> package).</p>
-<h3 id="initial-manual-setup-minimal-cli-commands">Initial manual setup (minimal CLI commands)</h3>
+<h3 id="initial-manual-setup">Initial manual setup</h3>
 <p>If your system boot into the GUI console for any reason, use &ldquo;<code>CTRL-ALT-F?</code>&rdquo;
 (<code>?</code> can be 1-6) to access Linux virtual terminal login prompt. Otherwise, you
 are already at login prompt on Linux virtual terminal.</p>
@@ -175,12 +175,12 @@ are already at login prompt on Linux virtual terminal.</p>
 </span></span><span style="display:flex;"><span># apt-get update
 </span></span><span style="display:flex;"><span># apt-get install aptitude sudo vim mc wget nano-
 </span></span></code></pre></div><p>NOTE: If you didn&rsquo;t set password for <code>root</code> during system installation with <code>debian-installer</code> in the expert mode, <code>sudo</code> is configured for you and you need to use it to gain root privilege.</p>
-<h3 id="tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude.</h3>
+<h3 id="tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude</h3>
 <p>I use <code>aptitude</code> as the primary package maintenance tool and identify
 intentionally installed packages as a scrollable list by typing in
 <code>~i!~M~poptional</code> in the <code>l</code> prompt of <code>aptitude</code>.</p>
 <p>Since <code>debian-installer</code> installed packages doesn&rsquo;t set the auto install flag
-(<code>M</code>), I usually tidy-up them up before installing GUI packages by setting
+(<code>M</code>), I usually tidy-up them up before installing optional packages by setting
 missing <code>M</code> flags to groups of files:</p>
 <ul>
 <li>packages under <code>libs</code> section</li>
@@ -198,7 +198,7 @@ missing <code>M</code> flags to groups of files:</p>
 <p>You can print list of intentionally installed packages as a plain text with:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;!~M~poptional~i&#39;</span>
 </span></span><span style="display:flex;"><span>XXX FIXME XXX
-</span></span></code></pre></div><p>(This intentionally ignores some outdated packages with priority=extra packages.)</p>
+</span></span></code></pre></div><p>(This intentionally ignores some outdated packages with <code>priority=extra</code> packages.)</p>
 <h3 id="initial-manual-setup-sudo">Initial manual setup (SUDO)</h3>
 <p>For the passwordless <code>sudo</code> operation, configure <code>sudo</code> from root by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span># No passowrd required for the user in sudo group
@@ -231,6 +231,11 @@ configuration using  one of the followings:</p>
 </ul>
 <h3 id="os-probing-for-grub">OS probing for GRUB</h3>
 <p>No change from <a href="/en/2023/10/07/debian-usability-2023a/#os-probing-for-grub">older guide</a> for Debian 12 <code>Bookworm</code>.</p>
+<p>NOTE: After re-installation to my Sony Vaio, UUID of the primary partition of
+secondary SSD (<code>/dev/sdb1</code>) was missing in the Linux kernel data.  This made it
+un-bootable.  I made a fresh re-install to <code>/dev/sdb</code> including fresh partition
+creation using newer <code>fdisk</code> with 2048 sectors before <code>/dev/sdb1</code>.  This effort
+resolved the UUID detection issue and generated dual-boot.</p>
 <h3 id="multi-boot-with-grub-on-uefi-system">Multi-boot with GRUB on UEFI system</h3>
 <p>No change from <a href="/en/2023/10/07/debian-usability-2023a/#multi-boot-with-grub-on-uefi-system">older guide</a> for Debian 12 <code>Bookworm</code>.</p>
 <h2 id="gnome-desktop-customization">GNOME desktop customization</h2>
@@ -242,7 +247,7 @@ site</a> using browser with <a href="https://chrome.google.com/webstore/detail/g
 integration</a>
 enabled.</p>
 <p>My essential GNOME extension is
-<a href="https://extensions.gnome.org/extension/6066/shortcuts-to-activate-input-methods/">Input method and touchpad shortcuts </a>
+<a href="https://extensions.gnome.org/extension/6066/shortcuts-to-activate-input-methods/">Input method and touchpad shortcuts</a>
 (See <a href="/en/2023/06/19/gnome-im-1/">GNOME shell extension for input methods</a>.)</p>
 <h3 id="terminal-customization">Terminal customization</h3>
 <ul>
