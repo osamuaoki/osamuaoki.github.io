@@ -36,7 +36,7 @@
 
 <h3 class="date">Date:
 2025/09/03 (initial publish),
-2025/09/06 (last update)
+2025/09/11 (last update)
 </h3>
 <h3 class="source">Source:
 note-00080
@@ -65,9 +65,9 @@ note-00080
 <nav id="TableOfContents">
   <ul>
     <li><a href="#workstation-usability">Workstation usability</a></li>
-    <li><a href="#bare-metal-initial-system-installation">Bare metal initial system installation</a>
+    <li><a href="#system-installation">System installation</a>
       <ul>
-        <li><a href="#initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></a></li>
+        <li><a href="#installation-by-debian-installer-and-apt">Installation by <code>debian-installer</code> and <code>apt</code></a></li>
         <li><a href="#initial-manual-setup">Initial manual setup</a></li>
         <li><a href="#tidy-up-package-installation-status-for-aptitude">Tidy-up package installation status for aptitude</a></li>
         <li><a href="#initial-manual-setup-sudo">Initial manual setup (SUDO)</a></li>
@@ -83,11 +83,11 @@ note-00080
       <ul>
         <li><a href="#terminal-customization">Terminal customization</a></li>
         <li><a href="#wallpaper-for-gnome-settingstweaks">Wallpaper for GNOME (Settings+Tweaks)</a></li>
+        <li><a href="#keyboard-customization-limitations">Keyboard customization limitations</a></li>
         <li><a href="#keyboard-customization-settings">Keyboard customization (Settings)</a></li>
         <li><a href="#keyboard-and-touchpad-shortcut-customization-extension">Keyboard and touchpad shortcut customization (Extension)</a></li>
         <li><a href="#keyboard-shortcut-customization-internal-im-configuration">Keyboard shortcut customization (Internal IM configuration)</a></li>
         <li><a href="#right-mouse-click-with-single-button-setting">Right mouse click with single button (Setting)</a></li>
-        <li><a href="#non-usable-keyboard-shortcut-key-combos-with-super">Non-usable Keyboard shortcut key combos with super</a></li>
       </ul>
     </li>
     <li><a href="#application-customization">Application customization</a>
@@ -101,11 +101,10 @@ note-00080
     </li>
     <li><a href="#miscellaneous-tips">Miscellaneous tips</a>
       <ul>
-        <li><a href="#migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</a></li>
         <li><a href="#setting-group-membership">Setting group membership</a></li>
-        <li><a href="#setting-lxd">Setting LXD</a></li>
         <li><a href="#re-install-and-uidgid-issues">Re-install and UID/GID issues</a></li>
         <li><a href="#efi-based-firmware-updates">EFI-based firmware updates</a></li>
+        <li><a href="#workaround-for-some-firmware">Workaround for some firmware</a></li>
       </ul>
     </li>
   </ul>
@@ -124,47 +123,60 @@ and tips, see also:</p>
 <li><a href="/en/2021/01/07/thinkpad-t14-gen-1-amd/">Thinkpad T14 Gen 1</a> &ndash; <code>hostname=goofy</code></li>
 <li><a href="/en/2023/02/13/svt1313-1/">Sony Vaio SVT1313</a> &ndash; <code>hostname=casper</code> <del><code>hostname=mickey</code></del></li>
 </ul>
-<h2 id="bare-metal-initial-system-installation">Bare metal initial system installation</h2>
-<h3 id="initial-installation-by-debian-installer">Initial installation by <code>debian-installer</code></h3>
-<p>The initial installation by the <code>debian-installer</code> may skip &ldquo;Desktop
-environment (<code>task-desktop</code>)&rdquo; task and select &ldquo;SSH server (<code>task-ssh-server</code>)&rdquo;
-to make it light, GUI-less, and SSH-ready.  For the 2025 reinstallation of
-Sony Vaio SVT1313, I chose the Gnome GUI Desktop System.</p>
-<p>This process installs (mostly) packages with <code>Priority:</code> values in <code>required</code>,
-<code>important</code> and <code>standard</code>.</p>
-<p>In order to place all user data on btrfs while
-keeping this system bootable with GRUB, I install as follows:</p>
+<h2 id="system-installation">System installation</h2>
+<h3 id="installation-by-debian-installer-and-apt">Installation by <code>debian-installer</code> and <code>apt</code></h3>
 <ul>
-<li>For encrypted MBR system:
+<li>For non-encrypted UEFI system: (Thinkpad main)
 <ul>
+<li>Simply <code>apt full-upgrade</code> from <code>Debian 12/Bookworm</code> (see <a href="/en/2023/10/07/debian-usability-2023a/#bare-metal-initial-system-installation">older guide</a>) to <code>Trixie</code>.</li>
+<li><code>/dev/nvme1n1p1</code>: <code>/boot/EFI</code> &ndash; EFI boot partition in FAT32</li>
+<li><code>/dev/nvme1n1p5</code>: Btrfs holding many subvolumes: <code>@rootfs</code>, <code>@osamu</code>, &hellip;</li>
+<li><code>/dev/nvme1n1p6</code>: swap</li>
+</ul>
+</li>
+<li>For non-encrypted UEFI system: (Thinkpad sub)
+<ul>
+<li>Brute force <code>apt full-upgrade</code> several times from <code>Debian 11/Bullseye</code> to <code>Trixie</code>.
+<ul>
+<li>I forgot to upgrade to <code>Bookworm</code> previously.</li>
+<li>Newer keys are copied to <code>/etc/apt/trusted.gpg.d/</code> from main system.</li>
+</ul>
+</li>
+<li><code>/dev/nvme1n1p1</code>: <code>/boot/EFI</code> &ndash; EFI boot partition in FAT32</li>
+<li><code>/dev/nvme0n1p1</code>: Btrfs holding a subvolume: <code>@rootfs</code></li>
+<li><code>/dev/nvme0n1p2</code>: Unused</li>
+</ul>
+</li>
+<li>For encrypted MBR system (Sony main):
+<ul>
+<li>Perform full disk encrypted installation (default).</li>
 <li>See <a href="/en/2025/08/22/rescue-02/">Rescue media(2)</a> for the system migration
 <ul>
-<li>A primary partition formatted to ext4 for <code>/</code> (system data).</li>
-<li>A LUKS encrypted PV == VG which holds 2 LVs
+<li>A primary partition (<code>/dev/sda1</code>) formatted to Ext4 for <code>/</code> (system data).</li>
+<li>A LUKS encrypted PV == VG which holds 2 LVs (in <code>/dev/sda5</code>)
 <ul>
-<li>a large LV formatted to btrfs used for <code>/home</code> (user data).</li>
-<li>a small LV formatted to swap used for swap.</li>
+<li>A 30G LV formatted to ext4 for <code>/</code> (system data).</li>
+<li>A 8G LV formatted to swap used for swap.</li>
+<li>A 408G LV formatted to btrfs (<code>@home</code> subvolume used for <code>/home</code> for user data).</li>
 </ul>
 </li>
 </ul>
 </li>
-<li>Create a small (10GB+) ext4 partition and install a minimum system to it.</li>
 </ul>
 </li>
-<li>For non-encrypted UEFI system: (This is based on my experience of the <code>Bookworm</code> installation.  I upgraded it to <code>Trixie</code> via <code>apt full-upgrade</code>.)
+<li>For non-encrypted MBR system (Sony sub):
 <ul>
-<li>No special action is needed.
-<ul>
-<li>Create and select btrfs for <code>/</code>.  (The installer automatically use subvolume <code>@rootfs</code> within its partition for the rootfs.)</li>
-<li>Shared partition for &ldquo;EFI system partition&rdquo; is automatically mounted at <code>/boot/efi</code> and formatted as FAT32.</li>
+<li>Refreshed partition to make UUID of <code>/dev/sdb1</code> discovered by the recent Linux kernel. (<code>/dev/sdb1</code> now starts at sector 2024.)</li>
+<li><code>/dev/sdb1</code>: 21G Ext4 /</li>
+<li><code>/dev/sdb2</code>: 1.5G swap</li>
 </ul>
 </li>
 </ul>
-</li>
-</ul>
-<p>I leave the domain name as blank. All hosts on the same local subnet can be
-accessed by adding <code>.local</code> at the end of each host name thanks to Avahi
-(<code>avahi-autoipd</code> package).</p>
+<p>I left the domain name as blank for <code>debian-installer</code>. All hosts on the same
+local subnet can be accessed by adding <code>.local</code> at the end of each host name
+thanks to Avahi (<code>avahi-autoipd</code> package).</p>
+<p>All packages with <code>Priority:</code> values <code>required</code>, <code>important</code> and <code>standard</code> are
+installed by <code>debian-installer</code>.</p>
 <h3 id="initial-manual-setup">Initial manual setup</h3>
 <p>If your system boot into the GUI console for any reason, use &ldquo;<code>CTRL-ALT-F?</code>&rdquo;
 (<code>?</code> can be 1-6) to access Linux virtual terminal login prompt. Otherwise, you
@@ -197,7 +209,53 @@ missing <code>M</code> flags to groups of files:</p>
 </ul>
 <p>You can print list of intentionally installed packages as a plain text with:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;!~M~poptional~i&#39;</span>
-</span></span><span style="display:flex;"><span>XXX FIXME XXX
+</span></span><span style="display:flex;"><span>i  00-min - Task for the minimal non-GUI system
+</span></span><span style="display:flex;"><span>i  aptitude - terminal-based package manager
+</span></span><span style="display:flex;"><span>i  bss - Btrfs Subvolume Snapshot Utility
+</span></span><span style="display:flex;"><span>i  btrfs-progs - Checksumming Copy on Write Filesystem utilities
+</span></span><span style="display:flex;"><span>i  chromium - web browser
+</span></span><span style="display:flex;"><span>i  cmake - cross-platform, open-source make system
+</span></span><span style="display:flex;"><span>i  cryptsetup - disk encryption support - startup scripts
+</span></span><span style="display:flex;"><span>i  devscripts - scripts to make the life of a Debian Package maintainer easier
+</span></span><span style="display:flex;"><span>i  dgit - git interoperability with the Debian archive
+</span></span><span style="display:flex;"><span>i  dh-exec - Scripts to help with executable debhelper files
+</span></span><span style="display:flex;"><span>i  discover - hardware identification system
+</span></span><span style="display:flex;"><span>i  dmsetup - Linux Kernel Device Mapper userspace library
+</span></span><span style="display:flex;"><span>i  firmware-iwlwifi - Binary firmware for Intel Wireless cards
+</span></span><span style="display:flex;"><span>i  firmware-linux - Binary firmware for various drivers in the Linux kernel (metapackage)
+</span></span><span style="display:flex;"><span>i  firmware-misc-nonfree - Binary firmware for various drivers in the Linux kernel
+</span></span><span style="display:flex;"><span>i  firmware-realtek - Binary firmware for Realtek network and audio chips
+</span></span><span style="display:flex;"><span>i  gdisk - GPT fdisk text-mode partitioning tool
+</span></span><span style="display:flex;"><span>i  gitk - fast, scalable, distributed revision control system (revision tree visualizer)
+</span></span><span style="display:flex;"><span>i  gnome-firmware - GTK front end for fwupd
+</span></span><span style="display:flex;"><span>i  gparted - GNOME partition editor
+</span></span><span style="display:flex;"><span>i  grub-efi-amd64 - GRand Unified Bootloader, version 2 (EFI-AMD64 version)
+</span></span><span style="display:flex;"><span>i  hugo - Fast and flexible Static Site Generator written in Go
+</span></span><span style="display:flex;"><span>i  ibus-mozc - Mozc engine for IBus - Client of the Mozc input method
+</span></span><span style="display:flex;"><span>i  imediff - interactive full screen 2/3-way merge tool
+</span></span><span style="display:flex;"><span>i  installation-report - system installation report
+</span></span><span style="display:flex;"><span>i  isc-dhcp-client - DHCP client for automatically obtaining an IP address (deprecated)
+</span></span><span style="display:flex;"><span>i  libcap2-bin - POSIX 1003.1e capabilities (utilities)
+</span></span><span style="display:flex;"><span>i  linux-image-amd64 - Linux for 64-bit PCs (meta-package)
+</span></span><span style="display:flex;"><span>i  locales-all - GNU C Library: Precompiled locale data
+</span></span><span style="display:flex;"><span>i  lvm2 - Linux Logical Volume Manager
+</span></span><span style="display:flex;"><span>i  mc - Midnight Commander - a powerful file manager
+</span></span><span style="display:flex;"><span>i  moreutils - additional Unix utilities
+</span></span><span style="display:flex;"><span>i  neovim - heavily refactored vim fork
+</span></span><span style="display:flex;"><span>i  npm - package manager for Node.js
+</span></span><span style="display:flex;"><span>i  rsyslog - reliable system and kernel logging daemon
+</span></span><span style="display:flex;"><span>i  sbuild - Tool for building Debian binary packages from Debian sources
+</span></span><span style="display:flex;"><span>i  ssh-askpass-gnome - interactive X program to prompt users for a passphrase for ssh-add
+</span></span><span style="display:flex;"><span>i  task-english - General English environment
+</span></span><span style="display:flex;"><span>i  task-gnome-desktop - GNOME
+</span></span><span style="display:flex;"><span>i  task-laptop - laptop
+</span></span><span style="display:flex;"><span>i  task-ssh-server - SSH server
+</span></span><span style="display:flex;"><span>i  unzip-i18n - De-archiver for .zip files with i18n supports
+</span></span><span style="display:flex;"><span>i  usbutils - Linux USB utilities
+</span></span><span style="display:flex;"><span>i  vim - Vi IMproved - enhanced vi editor
+</span></span><span style="display:flex;"><span>i  vim-scripts - plugins for vim, adding bells and whistles
+</span></span><span style="display:flex;"><span>i  xxd - tool to make (or reverse) a hex dump
+</span></span><span style="display:flex;"><span>i  zip - Archiver for .zip files
 </span></span></code></pre></div><p>(This intentionally ignores some outdated packages with <code>priority=extra</code> packages.)</p>
 <h3 id="initial-manual-setup-sudo">Initial manual setup (SUDO)</h3>
 <p>For the passwordless <code>sudo</code> operation, configure <code>sudo</code> from root by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
@@ -231,11 +289,6 @@ configuration using  one of the followings:</p>
 </ul>
 <h3 id="os-probing-for-grub">OS probing for GRUB</h3>
 <p>No change from <a href="/en/2023/10/07/debian-usability-2023a/#os-probing-for-grub">older guide</a> for Debian 12 <code>Bookworm</code>.</p>
-<p>NOTE: After re-installation to my Sony Vaio, UUID of the primary partition of
-secondary SSD (<code>/dev/sdb1</code>) was missing in the Linux kernel data.  This made it
-un-bootable.  I made a fresh re-install to <code>/dev/sdb</code> including fresh partition
-creation using newer <code>fdisk</code> with 2048 sectors before <code>/dev/sdb1</code>.  This effort
-resolved the UUID detection issue and generated dual-boot.</p>
 <h3 id="multi-boot-with-grub-on-uefi-system">Multi-boot with GRUB on UEFI system</h3>
 <p>No change from <a href="/en/2023/10/07/debian-usability-2023a/#multi-boot-with-grub-on-uefi-system">older guide</a> for Debian 12 <code>Bookworm</code>.</p>
 <h2 id="gnome-desktop-customization">GNOME desktop customization</h2>
@@ -263,10 +316,21 @@ enabled.</p>
 <h3 id="wallpaper-for-gnome-settingstweaks">Wallpaper for GNOME (Settings+Tweaks)</h3>
 <p>You can set wallpaper graphics from:</p>
 <ul>
-<li>Desktop: <code>Settings</code> -&gt; <code>Background</code></li>
-<li>Desktop: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code></li>
-<li>Lock Screen: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Lock Screen</code></li>
+<li>Desktop: <code>Settings</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code></li>
+<li>Desktop: <code>Tweaks</code> -&gt; <code>Appearance</code> -&gt; <code>Background</code> (zoom, &hellip;)</li>
+<li>Lock Screen: Blur only</li>
 <li>GDM3: &mdash; Not so easy (leave this as is)</li>
+</ul>
+<h3 id="keyboard-customization-limitations">Keyboard customization limitations</h3>
+<ul>
+<li>Any use of <code>SUPER</code>+<code>modifier</code>+<code>SPACE</code> or <code>SUPER</code>-<code>SPACE</code> breaks normal <code>SUPER</code>-<code>SPACE</code> for rotating input method and bad idea</li>
+<li><code>SUPER</code>-<code>P</code> seems to be unresponsive</li>
+<li><code>SUPER</code>-<code>O</code> seems to be unresponsive</li>
+<li>Alt-` (Alt-backtick) is grubbed by Gnome Desktop
+<ul>
+<li>No windows style toggle IM with Alt-backtick.</li>
+</ul>
+</li>
 </ul>
 <h3 id="keyboard-customization-settings">Keyboard customization (Settings)</h3>
 <ul>
@@ -301,8 +365,8 @@ enabled.</p>
 </ul>
 </li>
 </ul>
-<p>(<code>SUPER-\</code> is easier to type than <code>SUPER-T</code>.)</p>
-<p>(No more remap of <code>CapsLock</code> as additional <code>Esc</code> with GNOME Tweak.  I use <code>jk</code> as <code>Esc</code>.)</p>
+<p>(No more remap of <code>CapsLock</code> as additional <code>Esc</code> with GNOME Tweak.  I use <code>jk</code> as <code>Esc</code> for <code>vi</code>.)</p>
+<p>NOTE: Non-usable Keyboard shortcut key combos with super</p>
 <h3 id="keyboard-and-touchpad-shortcut-customization-extension">Keyboard and touchpad shortcut customization (Extension)</h3>
 <ul>
 <li>Install my GNOME extension: <a href="https://github.com/osamuaoki/inputmethod-shortcuts">Quick switching of input method and touchpad</a> &ndash; source
@@ -353,7 +417,6 @@ enabled.</p>
 </ul>
 </li>
 </ul>
-<p>Since Windows style Alt-`(Alt-backtick) is grubbed by Gnome Desktop, this key can&rsquo;t be used to toggle IM for Mozc.</p>
 <p>See my old <a href="/jp/2019/03/23/gnome-uskb-im-select/">Japanese input on US-keyboard (in Japanese)</a> and its <a href="https://osamuaoki-github-io.translate.goog/jp/2019/03/23/gnome-uskb-im-select/?_x_tr_sl=ja&amp;_x_tr_tl=en&amp;_x_tr_hl=en&amp;_x_tr_pto=wapp#%E6%97%A5%E6%9C%AC%E8%AA%9E%E3%82%AD%E3%83%BC%E3%83%9C%E3%83%BC%E3%83%89%E3%81%AEim%E5%81%B4%E3%81%AE%E8%A8%AD%E5%AE%9A%E6%96%B9%E6%B3%95">Google translation</a>.</p>
 <h3 id="right-mouse-click-with-single-button-setting">Right mouse click with single button (Setting)</h3>
 <p>For Mac or some Sony Vaio with single tap pad button, the following allows
@@ -363,12 +426,6 @@ proper secondary-click (or even middle-click).</p>
 <li>-&gt; &ldquo;Secondary Click&rdquo;: select &ldquo;Corner Push&rdquo;</li>
 <li>-&gt; &ldquo;Tap to Click&rdquo;: disable</li>
 <li>-&gt; &ldquo;Scrolling&rdquo;: select &ldquo;Two Finger&rdquo;</li>
-</ul>
-<h3 id="non-usable-keyboard-shortcut-key-combos-with-super">Non-usable Keyboard shortcut key combos with super</h3>
-<ul>
-<li>Any use of <code>SUPER</code>+<code>modifier</code>+<code>SPACE</code> or <code>SUPER</code>-<code>SPACE</code> breaks normal <code>SUPER</code>-<code>SPACE</code> for rotating input method and bad idea</li>
-<li><code>SUPER</code>-<code>P</code> seems to be unresponsive</li>
-<li><code>SUPER</code>-<code>O</code> seems to be unresponsive</li>
 </ul>
 <h2 id="application-customization">Application customization</h2>
 <h3 id="personal-packages">Personal packages</h3>
@@ -439,14 +496,12 @@ is in good shape.</p>
 offering from
 <a href="https://www.libreoffice.org/download/download-libreoffice/">LibreOffice download</a>.</p>
 <h3 id="mail-client">Mail client</h3>
-<p>Updated in <strong>2023-11-24</strong></p>
+<p>Updated in <strong>2025-09-08</strong></p>
+<p>Debian 13 <code>Trixie</code> doesn&rsquo;t require to install MTA such as <code>exim4</code>.</p>
 <p>For the GUI access to the remotely hosted IMAP4 mail services, use GNOME Online
 accounts and Evolution.  This approach works for Gmail etc. and compatible with
 using other devices such as smart phones.  Evolution can also be configured to
 read locally delivered mails to mbox too.  (send+receive).</p>
-<p>I decided to configure MTA as simple as possible with &ldquo;sudo dpkg-reconfigure
-exim4-config&rdquo; to select &ldquo;local delivery only; not on a network&rdquo;. Everything
-else can be default.  I have no more smartsost things nor <code>fetchmail</code>.</p>
 <p>When I need to send mail from shell prompt for Debian BTS or Debian mail
 gateway services, I use my &ldquo;@debian.org&rdquo; address and use ssh+sendmail (created
 shell script <code>~/bin/sendmail-p.d.o</code>) to access a Debian host. (The similar
@@ -469,39 +524,6 @@ trick may be usable for any shell access hosts such as salsa.debian.org etc.)</p
 </ul>
 <p>For Debian voting, mutt works most reliably.</p>
 <h2 id="miscellaneous-tips">Miscellaneous tips</h2>
-<h3 id="migrating-users-home-directory-to-a-separate-subvolume">Migrating user&rsquo;s home directory to a separate subvolume</h3>
-<p>As installed, user&rsquo;s home directory is in the rootfs using subvolume <code>@rootfs</code>.
-Let me create and use subvolume <code>@osamu</code> for my user <code>osamu</code> and copy contents
-of original <code>/home/osamu</code> into <code>@osamu</code>.  Then update <code>/etc/fstab</code> to mount
-<code>@osamu</code> onto <code>/home/osamu</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span># mount /dev/sda6 on /mnt
-</span></span><span style="display:flex;"><span># cd /mnt
-</span></span><span style="display:flex;"><span>$ ls -lai
-</span></span><span style="display:flex;"><span>total 16
-</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root   26 Oct  8 17:11 .
-</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 ..
-</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 @rootfs
-</span></span><span style="display:flex;"><span># btrfs subvolume create @osamu
-</span></span><span style="display:flex;"><span># chmod <span style="color:#ae81ff">700</span> @osamu
-</span></span><span style="display:flex;"><span># chown osamu:osamu @osamu
-</span></span><span style="display:flex;"><span>total 16
-</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root   26 Oct  8 17:11 .
-</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 ..
-</span></span><span style="display:flex;"><span>256 drwx------ 1 osamu osamu 610 Oct  8 17:01 @osamu
-</span></span><span style="display:flex;"><span>256 drwxr-xr-x 1 root  root  238 Oct  8 06:41 @rootfs
-</span></span><span style="display:flex;"><span># cp -a /home/osamu/. @osamu
-</span></span><span style="display:flex;"><span># vi /etc/fstab
-</span></span><span style="display:flex;"><span># cat /etc/fstab
-</span></span><span style="display:flex;"><span># &lt;file system&gt; &lt;mount point&gt;   &lt;type&gt;  &lt;options&gt;       &lt;dump&gt;  &lt;pass&gt;
-</span></span><span style="display:flex;"><span># / was on /dev/sdb6 during installation
-</span></span><span style="display:flex;"><span>UUID=01ec7a23-d2bd-4b27-a5e0-da88cfed58c1 /               btrfs   defaults,subvol=@rootfs 0       0
-</span></span><span style="display:flex;"><span># /home/osamu is on /dev/sdb6 where / is
-</span></span><span style="display:flex;"><span>UUID=01ec7a23-d2bd-4b27-a5e0-da88cfed58c1 /home/osamu     btrfs   defaults,subvol=@osamu 0       0
-</span></span><span style="display:flex;"><span># /boot was on /dev/sdb5 during installation
-</span></span><span style="display:flex;"><span>UUID=85827838-41ae-42e2-9081-a98ab7f819f5 /boot           ext4    defaults        0       2
-</span></span><span style="display:flex;"><span># swap was on /dev/sdb7 during installation
-</span></span><span style="display:flex;"><span>UUID=31355cb6-e02f-4462-91a4-323dcc351ea9 none            swap    sw              0       0
-</span></span></code></pre></div><p>Then reboot this machine.</p>
 <h3 id="setting-group-membership">Setting group membership</h3>
 <p>Don&rsquo;t forget to setup group membership for the primary user (UID=1000).  Notable groups to watch out are:</p>
 <ul>
@@ -509,75 +531,10 @@ of original <code>/home/osamu</code> into <code>@osamu</code>.  Then update <cod
 <li><code>src</code></li>
 <li><code>staff</code></li>
 <li><code>sudo</code>  &ndash;  by adding this, you enable sudo with password</li>
-<li><code>lxd</code> &ndash; for LXD</li>
-<li><code>backup</code> &ndash; for backup operation</li>
 <li><code>www-data</code> &ndash; for web server</li>
 </ul>
-<p>You need to re-login to enable them after setting them with e.g., `sudo adduser osamu lxd.</p>
-<h3 id="setting-lxd">Setting LXD</h3>
-<ul>
-<li>Install:
-<ul>
-<li><code>lxd</code></li>
-<li><code>lxc</code></li>
-<li><code>lxd-tools</code></li>
-</ul>
-</li>
-<li>Add the primary user to <code>lxd</code> group.</li>
-<li>Initialize LXD use environment</li>
-</ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sudo lxd init
-</span></span><span style="display:flex;"><span>Would you like to use LXD clustering? (yes/no) [default=no]:
-</span></span><span style="display:flex;"><span>Do you want to configure a new storage pool? (yes/no) [default=yes]:
-</span></span><span style="display:flex;"><span>Name of the new storage pool [default=default]:
-</span></span><span style="display:flex;"><span>Name of the storage backend to use (dir, btrfs) [default=btrfs]:
-</span></span><span style="display:flex;"><span>Would you like to create a new btrfs subvolume under /var/lib/lxd? (yes/no) [default=yes]:
-</span></span><span style="display:flex;"><span>Would you like to connect to a MAAS server? (yes/no) [default=no]:
-</span></span><span style="display:flex;"><span>Would you like to create a new local network bridge? (yes/no) [default=yes]:
-</span></span><span style="display:flex;"><span>What should the new bridge be called? [default=lxdbr0]:
-</span></span><span style="display:flex;"><span>What IPv4 address should be used? (CIDR subnet notation, “auto” or “none”) [default=auto]:
-</span></span><span style="display:flex;"><span>What IPv6 address should be used? (CIDR subnet notation, “auto” or “none”) [default=auto]:
-</span></span><span style="display:flex;"><span>Would you like the LXD server to be available over the network? (yes/no) [default=no]:
-</span></span><span style="display:flex;"><span>Would you like stale cached images to be updated automatically? (yes/no) [default=yes]:
-</span></span><span style="display:flex;"><span>Would you like a YAML &#34;lxd init&#34; preseed to be printed? (yes/no) [default=no]:
-</span></span></code></pre></div><p>If this is on host <code>casper</code> with the primary user <code>osamu</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sysctl kernel.unprivileged_userns_clone
-</span></span><span style="display:flex;"><span>kernel.unprivileged_userns_clone = 1
-</span></span><span style="display:flex;"><span>$ cd /etc
-</span></span><span style="display:flex;"><span>$ cat subgid
-</span></span><span style="display:flex;"><span>osamu:100000:65536
-</span></span><span style="display:flex;"><span>_lxd:165536:10000001
-</span></span><span style="display:flex;"><span>root:165536:10000001
-</span></span><span style="display:flex;"><span>$ cat subuid
-</span></span><span style="display:flex;"><span>osamu:100000:65536
-</span></span><span style="display:flex;"><span>_lxd:165536:10000001
-</span></span><span style="display:flex;"><span>root:165536:10000001
-</span></span><span style="display:flex;"><span>$ grep _lxd passwd
-</span></span><span style="display:flex;"><span>_lxd:x:103:111::/var/lib/lxd/:/bin/false
-</span></span><span style="display:flex;"><span>$ grep lxd group
-</span></span><span style="display:flex;"><span>lxd:x:111:osamu
-</span></span><span style="display:flex;"><span>$ sudo ls -la /var/lib/lxd
-</span></span><span style="display:flex;"><span>total 8
-</span></span><span style="display:flex;"><span>drwx--x--x 1 _lxd lxd  336 Oct  9 08:38 .
-</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root 856 Oct  8 14:41 ..
-</span></span><span style="display:flex;"><span>drwx------ 1 root root  30 Oct  8 14:49 backups
-</span></span><span style="display:flex;"><span>drwx--x--x 1 root root   0 Oct  8 14:49 containers
-</span></span><span style="display:flex;"><span>drwx------ 1 root root  28 Oct  8 14:49 database
-</span></span><span style="display:flex;"><span>drwx--x--x 1 root root   0 Oct  8 14:49 devices
-</span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root   0 Oct  8 14:49 devlxd
-</span></span><span style="display:flex;"><span>drwx------ 1 root root   0 Oct  8 14:49 disks
-</span></span><span style="display:flex;"><span>drwx------ 1 root root   0 Oct  8 14:49 images
-</span></span><span style="display:flex;"><span>drwx--x--x 1 root root  12 Oct  8 14:50 networks
-</span></span><span style="display:flex;"><span>drwx------ 1 root root  30 Oct  8 14:49 security
-</span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 757 Oct  8 14:49 server.crt
-</span></span><span style="display:flex;"><span>-rw------- 1 root root 288 Oct  8 14:49 server.key
-</span></span><span style="display:flex;"><span>drwx--x--x 1 root root   0 Oct  8 14:49 shmounts
-</span></span><span style="display:flex;"><span>drwx------ 1 root root   0 Oct  8 14:49 snapshots
-</span></span><span style="display:flex;"><span>drwx--x--x 1 root root  14 Oct  8 14:50 storage-pools
-</span></span><span style="display:flex;"><span>srw-rw---- 1 root lxd    0 Oct  9 08:38 unix.socket
-</span></span><span style="display:flex;"><span>drwx--x--x 1 root root   0 Oct  8 14:49 virtual-machines
-</span></span><span style="display:flex;"><span>drwx------ 1 root root   0 Oct  8 14:49 virtual-machines-snapshots
-</span></span></code></pre></div><h3 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h3>
+<p>You need to re-login to enable them after setting them.</p>
+<h3 id="re-install-and-uidgid-issues">Re-install and UID/GID issues</h3>
 <p>UID and GID used by some applications are not fixed.  So, if you reinstall the
 exact same packages in a different order, you end up assigning UID and GID for
 the application.</p>
@@ -588,7 +545,7 @@ the application.</p>
 <p>Install <code>gnome-firmware</code> package and invoke GUI to update firmware on devices
 supported by <code>fwupd</code> using <a href="https://fwupd.org/">Linux Vendor Firmware Service</a>.</p>
 <p>Many firmware data can be updated using <code>gnome-firmware</code>.</p>
-<h4 id="workaround-for-some-firmware">Workaround for some firmware</h4>
+<h3 id="workaround-for-some-firmware">Workaround for some firmware</h3>
 <p>Some firmware devices may experience some problem to be updated by
 <code>gnome-firmware</code>.</p>
 <p>Most notable one on my system was &ldquo;Lenovo System Firmware&rdquo;.  (I don&rsquo;t know if
