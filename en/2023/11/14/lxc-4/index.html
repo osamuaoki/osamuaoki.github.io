@@ -86,6 +86,11 @@ note-00055
 </ol>
 <p>All these interesting references are not always using GNOME
 wayland under the Debian bookworm environment.</p>
+<!-- VM
+- 概論
+  1. Overview: [GUI inside Containers](https://discuss.linuxcontainers.org/t/overview-gui-inside-containers/8767) (2020-08-22)
+  1. [lxd_gui_container - Run GUI applications in LXD containers. Separate display server.](https://broken-engineer.opensource.ryukyu/archives/14442464.html) (2022-05-02)
+-->
 <p>Also, there are subtle differences.</p>
 <table>
   <thead>
@@ -175,6 +180,17 @@ wayland under the Debian bookworm environment.</p>
   </tbody>
 </table>
 <p>It seems that the use of the <code>disk</code> device has some advantages.</p>
+<!--
+test with:
+xclock
+glxinfo
+glxgears
+
+proxy seems to be a feature design imitating docker offers
+disk is generic
+
+need fuse to use appimage
+-->
 <p>I will try similar things as above references using GNOME Wayland under the
 Debian bookworm environment in the followings.</p>
 <h2 id="yaml-setting-for-profiledefault">YAML setting for profile=default</h2>
@@ -417,6 +433,7 @@ implies to install <code>libpci-dev</code> which installs more packages in addit
 pulls in <code>libpci3</code>.  But <code>firefox-esr</code> doesn&rsquo;t list <code>libpci3</code> explicitly as
 <code>Depends:</code> nor <code>Recommends:</code>.  I suppose this is a
 <a href="https://bugs.debian.org/993308">bug</a>.</p>
+<!-- vim: set sw=4 sts=4 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

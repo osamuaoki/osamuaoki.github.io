@@ -293,6 +293,40 @@ a self-signed certificate using <code>ED25519</code>, here.</p>
 </ul>
 </li>
 </ul>
+<!--
+
+## Apache  HTTPS server
+
+Let's enable HTTPS for Apache:
+
+/usr/share/doc/apache2/README.Debian.gz
+/usr/sbin/make-ssl-cert
+
+
+
+```
+ $ sudo a2enmod ssl
+Considering dependency setenvif for ssl:
+Module setenvif already enabled
+Considering dependency mime for ssl:
+Module mime already enabled
+Considering dependency socache_shmcb for ssl:
+Enabling module socache_shmcb.
+Enabling module ssl.
+See /usr/share/doc/apache2/README.Debian.gz on how to configure SSL and create self-signed certificates.
+To activate the new configuration, you need to run:
+  systemctl restart apache2
+```
+
+
+https://www.digitalocean.com/community/tutorials/how-to-create-a-self-signed-ssl-certificate-for-apache-in-ubuntu-22-04
+https://medium.com/@pasanglamatamang/configuring-a-self-signed-ssl-certificate-on-a-apache-server-cbcd6eefdf1a
+https://serverfault.com/questions/43458/setting-up-https-with-a-self-signed-certificate-on-apache
+https://www.howtogeek.com/devops/how-to-create-and-use-self-signed-ssl-on-apache/
+https://superuser.com/questions/1521648/self-signed-ssl-cert-in-chrome-not-working-2020
+https://wiki.debian.org/Self-Signed_Certificate
+-->
+<!-- vim: set sw=4 sts=4 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

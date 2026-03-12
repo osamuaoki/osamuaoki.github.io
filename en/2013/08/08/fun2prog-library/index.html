@@ -315,6 +315,11 @@ newline &ldquo;<code>\n</code>&rdquo; code, <code>getdelim</code>(3) may alterna
 other solution for the safe <code>scanf</code> alternative. (You need newer POSIX.1-2008
 complient <code>libc</code>.)  It uses &ldquo;<code>[vf]scanf(&quot;%ms&quot;, &amp;char)</code>&rdquo; with <code>free</code> instead of
 &ldquo;<code>[vf]scanf(&quot;%s&quot;, char)</code>&rdquo; alone.</p>
+<!--
+ https://buildsecurityin.us-cert.gov/bsi/articles/knowledge/coding/816-BSI.html
+ http://stackoverflow.com/questions/2430303/disadvantages-of-scanf
+ http://blog.markloiseau.com/2012/02/two-safer-alternatives-to-scanf/
+-->
 <h3 id="libc-safe_strncpy">libc: safe_strncpy</h3>
 <p>The <code>safe_strncpy</code> recommended by busybox coders is essentially the 0-terminate
 guranteed <code>strncpy</code> with the safe data length.  Since it is missing in the
@@ -462,6 +467,7 @@ These example codes are not meant to be the fastest nor the shortest code.</p>
 method seems to be the most popular one used.</p>
 <p>Here are benchmark results of these methods using <code>perf</code> (See <a href="/en/2013/08/13/fun2prog-debug-4/#perf">Debug: level 4: perf</a>).</p>
 <p>Speed benchmark of various methods to obtain the file size.</p>
+<!-- table "examples/file/bench/perf0.txt"  -->
 <table>
   <thead>
       <tr>
@@ -512,7 +518,7 @@ method seems to be the most popular one used.</p>
           <td>cycles</td>
           <td>154,305,859</td>
           <td>2,428,799</td>
-          <td><!-- raw HTML omitted --></td>
+          <td><not counted></td>
           <td>1,297,107</td>
       </tr>
       <tr>
@@ -539,9 +545,9 @@ method seems to be the most popular one used.</p>
       <tr>
           <td>branch-misses</td>
           <td>14,795</td>
-          <td><!-- raw HTML omitted --></td>
+          <td><not counted></td>
           <td>9,023</td>
-          <td><!-- raw HTML omitted --></td>
+          <td><not counted></td>
       </tr>
   </tbody>
 </table>
@@ -726,6 +732,7 @@ main(int argc, char* argv[])
 </ul>
 <p>Here are benchmark results of these methods using <code>perf</code> (See <a href="/en/2013/08/13/fun2prog-debug-4/#perf">Debug: level 4: perf</a>).</p>
 <p>Speed benchmark of various methods to copy a large file about 2.4 MiB.</p>
+<!-- "examples/file/bench/perf1.txt" -->
 <table>
   <thead>
       <tr>
@@ -816,11 +823,12 @@ main(int argc, char* argv[])
           <td>12,048</td>
           <td>10,295</td>
           <td>8,539</td>
-          <td><!-- raw HTML omitted --></td>
+          <td><not counted></td>
       </tr>
   </tbody>
 </table>
 <p>Speed benchmark of various methods to copy a small file about 2 KiB.</p>
+<!-- "examples/file/bench/perf2.txt" -->
 <table>
   <thead>
       <tr>
@@ -875,7 +883,7 @@ main(int argc, char* argv[])
       </tr>
       <tr>
           <td>cycles</td>
-          <td><!-- raw HTML omitted --></td>
+          <td><not counted></td>
           <td>731,955</td>
           <td>769,188</td>
           <td>606,346</td>
@@ -908,10 +916,10 @@ main(int argc, char* argv[])
       <tr>
           <td>branch-misses</td>
           <td>3,292</td>
-          <td><!-- raw HTML omitted --></td>
+          <td><not counted></td>
           <td>2,232</td>
           <td>2,474</td>
-          <td><!-- raw HTML omitted --></td>
+          <td><not counted></td>
       </tr>
   </tbody>
 </table>
@@ -1428,6 +1436,7 @@ library installed in the system.</p>
 <li><a href="https://computing.llnl.gov/tutorials/pthreads/">POSIX Threads Programming</a></li>
 <li><a href="http://www.gentoo.org/doc/en/articles/l-posix1.xml">POSIX threads explained</a> (updated, based on <a href="http://www.ibm.com/developerworks/library/l-posix1/">IBM developerWorks: POSIX threads explained</a>.)</li>
 </ul>
+<!--  GNU/Linux でのスレッドプログラミング http://www.tsoftware.jp/nptl/ -->
 <p>TIP: We should focus on reading tutorials which are written after the <a href="http://en.wikipedia.org/wiki/Native_POSIX_Thread_Library">native POSIX thread library (NPTL)</a> support.  This means tutorial should be newer than 2006.</p>
 <p>The actual execution speed of a program on the modern CPU can be affected by many issues other than the utilization of CPU cores:</p>
 <ul>
@@ -1463,6 +1472,7 @@ library installed in the system.</p>
 </ul>
 <p>Here is a benchmark results of execution times for these programs listed below.</p>
 <p>Speed benchmark of various program languages</p>
+<!-- "examples/prime/bench/time-table1.txt" -->
 <table>
   <thead>
       <tr>
@@ -2010,6 +2020,7 @@ $ ./prime8 &#34;1091&#34;&gt;/dev/null; echo $?
 0
 </code></pre>
 
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

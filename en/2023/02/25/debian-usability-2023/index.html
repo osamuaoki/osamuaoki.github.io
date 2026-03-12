@@ -318,6 +318,43 @@ proper secondary-click (or even middle-click).</p>
 <p><img src="/img/InputMethods.png" alt="prefs.js"></p>
 <p>Since I don&rsquo;t intend to use <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts, I don&rsquo;t bother to disabled normal <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts in &ldquo;Settings&rdquo; -&gt; &ldquo;Keyboard&rdquo; -&gt; &ldquo;Keyboard Shortcuts&rdquo; -&gt; &ldquo;Typing&rdquo;.</p>
 <p>For other extensions I use, see <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a>.</p>
+<!--
+
+#### Old hackish way with `gdbus`
+
+**This is for historical record.**
+
+For selecting IM deterministically (instead of Super-SPACE toggles), bind
+javascript MACRO to keys by `Keyboard Shortcuts`.
+
+* `SUPER-ENTER`: English (US)
+* `SUPER-SHIFT-ENTER`: Mozc
+* `SUPER-CTRL-ENTER`: English (international)
+* `SUPER-ALT_ENTER`: Anthy
+
+(I use "ENTER"-combos for shortcuts to enter easily with both hands.)
+
+For example, `inputSources[0]` (the first selection item in the GNOME input source menu) is English (US) and if you want to use SUPER-ENTER to switch to US, you need to set as:
+```shell
+Name     IM_0
+Command  gdbus call --session --dest org.gnome.Shell --object-path /org/gnome/Shell --method org.gnome.Shell.Eval  "imports.ui.status.keyboard.getInputSourceManager().inputSources[0].activate()"
+Shortcut SUPER-ENTER
+```
+Please make sure to enter the above **Command** in a single line.
+
+Since 2022, we must install
+[Unsafe Mode Menu](https://github.com/linushdot/unsafe-mode-menu) extension locally as instructed by the upstream.
+
+This local extension can be activated using "GNOME extensions" (in `gnome-shell-extensions` deb package).
+
+![extension screen](/img/extensions.png)
+
+This "Unsafe mode" can be enabled via GNOME right top corner dialog.
+
+![unsafe mode screen](/img/unsafe-mode.png)
+
+The history of how I came to the above is recorded in [GNOME shell changes](/en/2023/06/16/gnome-shell-1/).
+-->
 <h3 id="keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</h3>
 <p>For Japanese input with US keyboard, set IM (<code>mozc</code> etc.) configuration as:</p>
 <ul>
@@ -498,6 +535,7 @@ available from <a href="https://www.libreoffice.org/">the upstream LibreOffice s
 Debian testing environment is the least effort solution for me.  For stability,
 I chose older stable 6.4.7.2-2 version aimed for business deployments (2021/12).
 This enabled me to print nicely to Hagaki.</p>
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

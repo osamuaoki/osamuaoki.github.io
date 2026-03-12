@@ -105,6 +105,18 @@ without knowing the offending process.</p>
 <li><a href="https://github.com/systemd/systemd/issues/11821#issuecomment-477545885">https://github.com/systemd/systemd/issues/11821#issuecomment-477545885</a></li>
 </ul>
 <p>Setting up proper shutdown sequence is the root cause fix.</p>
+<!--
+XXX untested
+You can find offending systemd service file by running the following shell
+script:
+```sh
+#!/bin/sh -e
+find /usr/lib/systemd/system/*.service -type f | \
+xargs grep --files-with-matches DefaultDependencies=no | \
+xargs grep --files-with-matches Conflicts=.*shutdown.target | \
+xargs grep --files-without-match Before=.*shutdown.target
+```
+-->
 <p>For example, I edited the seemingly offending <code>*.service</code> files such as
 <code>/lib/systemd/user/tracke~er-fs-control-3.service</code> by adding dependency as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
@@ -115,6 +127,7 @@ without knowing the offending process.</p>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Service]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">...</span>
 </span></span></code></pre></div><p>This seemed to help avoid waiting for timeout.</p>
+<!-- vim: set sw=4 sts=4 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

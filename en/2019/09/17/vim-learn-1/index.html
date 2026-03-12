@@ -260,6 +260,25 @@ and looks like EMACS/Shell sequence.</p>
 </ul>
 </li>
 </ul>
+<!--
+### Last resort inputs with `CTRL-V`-keys
+
+* `^Vxαα`: insert character at `0xαα`. (command mode)
+* `^Vuαααα`: insert unicode character at `0xαααα`. (command mode)
+* `^Vuαααααα`: insert unicode character at `0xαααααααα`. (command mode)
+
+* `^P`: Find previous keyword.(map non-starter `<S-TAB>` to this)
+* `^N`: Find next keyword.    (map non-starter `<TAB>` to this)
+* `^Y`: Insert the character which is above the cursor. (Only INSERT MODE)
+* `^E`: Insert the character which is below the cursor. (Only INSERT MODE)
+* `^T`: Insert one shiftwidth of indent. (Only INSERT MODE)
+* `^D`: Delete one shiftwidth of indent. (Only INSERT MODE)
+* COMMAND MODE
+  * `^D`: List all possible choices. (Only Ex COMMAND MODE to start wildmenu)
+  * `^F`: open editable command history. (only COMMAND MODE)
+* `^X`: start of sub-mode (`h: insert_expand`).
+* `0^D`: delete all indent.
+-->
 <h2 id="quickfix-mode">QUICKFIX MODE</h2>
 <p>If you have a task to search some text to make Vim to jump to particular places
 in its buffer, QUICKFIX MODE is the one to automate your process.  No more
@@ -305,6 +324,7 @@ becomes &rsquo;terminal&rsquo; type.</p>
 <p>For terminal, set <code>DEL</code>-code(0x7F) for Backspace and use escape sequence for
 Delete. This frees the ASCII <code>BS</code> (CTRL-H) code so window jump can be mapped to
 <code>&lt;C-H&gt;</code>.</p>
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

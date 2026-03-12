@@ -257,6 +257,18 @@ mounting it.</p>
 <li><a href="https://stgraber.org/2017/06/15/custom-user-mappings-in-lxd-containers/">Custom user mappings in LXD containers</a></li>
 <li><a href="https://www.cyberciti.biz/faq/how-to-add-or-mount-directory-in-lxd-linux-container/">How to add or mount directory in LXD (Linux container)</a></li>
 </ul>
+<!--
+ https://discuss.linuxcontainers.org/t/debian-12-kernel-6-1-0-11-behavior-of-security-idmap-isolated/17921/14
+ https://discuss.linuxcontainers.org/t/few-questions-regarding-security-idmap-isolated-and-security-nesting/18128/14
+ https://discuss.linuxcontainers.org/t/problem-mounting-directory-between-host-and-unprivileged-container-idmapping/1294  ****
+ https://documentation.ubuntu.com/lxd/en/latest/userns-idmap/
+ https://documentation.ubuntu.com/lxd/en/stable-5.0/reference/instance_options/
+ https://stgraber.org/2017/06/15/custom-user-mappings-in-lxd-containers/
+ https://ubuntu.com/blog/custom-user-mappings-in-lxd-containers
+ https://wiki.debian.org/LXD
+ https://www.cyberciti.biz/faq/how-to-add-or-mount-directory-in-lxd-linux-container/
+
+-->
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subuid
 </span></span><span style="display:flex;"><span> $ echo &#34;root:1000:1&#34; | sudo tee -a /etc/subgid
 </span></span><span style="display:flex;"><span> $ cat /etc/subuid
@@ -670,7 +682,8 @@ can&rsquo;s be seen.</p>
 </span></span><span style="display:flex;"><span>profiles:
 </span></span><span style="display:flex;"><span>- sharedx
 </span></span><span style="display:flex;"><span>stateful: false
-</span></span></code></pre></div>
+</span></span></code></pre></div><!-- vim: set sw=4 sts=4 ai si et tw=79 ft=markdown: -->
+
 
 <table width="100%">
   <tbody>

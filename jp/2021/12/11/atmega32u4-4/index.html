@@ -267,6 +267,11 @@ RST 5 WHITE  --------------------+
 </ul>
 </li>
 </ul>
+<!--
+最初動かなかったのはavrdudeのデバイス指定が間違っていた
+* [at90usb1286: 8 KB　の　QMKにあるbootloader_at90usb128_1.0.1.hex](https://github.com/qmk/qmk_firmware/tree/master/util)の使用が推奨
+    * `dfu-programmer`
+-->
 <h2 id="動作検証">動作検証</h2>
 <p>基本、ファームウエアーを導入し動作させて確認するのが一番です。</p>
 <ul>
@@ -483,6 +488,19 @@ LUFA HIDブートローダーを徹底的にハンドオプティマイズした
 extensionに対応している<code>dfu-tool</code>があります。この辺、基本AVRは<code>dfu-programmer</code>でいきます。</p>
 <p>ここで、<code>DfuSe</code>が&quot;DFU STによるVender Extension(ベンダー拡張)&ldquo;の略と分かりちょっと納得。</p>
 <p>STM32系のARMチップの際にでも他の2つは使ってみます。</p>
+<!--
+
+dfu-tool
+
+* https://blogs.gnome.org/hughsie/2015/11/14/fwupd-and-dfu/
+* https://m　anpages.debian.org/testing/fwupd/dfu-tool.1.en.html
+* https://lvfs.readthedocs.io/en/latest/testing.html
+## DFU 色々
+
+* DfuSe (DFU with ST Microsystems extensions) is a protocol based on DFU 1.1. However, in expanding the functionality of the DFU protocol, ST Microsystems broke all compatibility with the DFU 1.1 standard. DfuSe devices report the DFU version as "1.1a".
+
+-->
+<!-- vim: se ai tw=79 sw=4 et sts=4: -->
 
 
 <table width="100%">

@@ -84,6 +84,7 @@ fun2-00012
 updated. (2021)</p>
 </blockquote>
 <h2 id="debug-level-3">Debug: level 3</h2>
+<!--  vim to do :%s#/home/osamu/proj/fun2prog/fun2prog/hello/#/path/to/#gc -->
 <p>The GNU debugger (GDB) make you look into binary programs.</p>
 <p>If you do not mind reading the code in the assembler, no source code is required.</p>
 <p>The GDB works even better if the program is compiled with the <code>-g</code> option and
@@ -538,6 +539,17 @@ the <code>-g</code> option.  See <a href="/en/2013/08/09/fun2prog-elf/#compile-h
       </tr>
   </tbody>
 </table>
+<!--
+ * If you wish reverse debug etc., compile binaries with the GCC `-ggdb` option. (advanced)
+ |`reverse-continue`	|`rc`	|Continue program being debugged but run it in reverse.
+ |`reverse-next`		|`rn`	|Step program backward, proceeding through subroutine calls.
+ |`reverse-nexti`	|`rni`	|Step backward one instruction, proceeding through called subroutines.
+ |`reverse-search`	|`rev`	|Search backward for regular expression (see `regex`(3)) from last line listed.
+ |`reverse-step`		|`rs`	|Step program backward until it reaches the beginning of another source line
+ |`reverse-stepi`	|`rsi`	|Step backward exactly one instruction.
+ |`record`		|`rec`	|Abbreviated form of "`target record`" command.
+ |`while-stepping`	|`ws`	|Specify single-stepping behavior at a tracepoint.
+-->
 <p>Formating option <code>F</code> is used with <code>call/F</code>, <code>print/F</code> and <code>x/NFU</code> sequences:</p>
 <ul>
 <li><code>a</code> address</li>
@@ -566,6 +578,10 @@ the <code>-g</code> option.  See <a href="/en/2013/08/09/fun2prog-elf/#compile-h
 <li><code>-x</code> and <code>-nx</code> options disable default init files.</li>
 </ul>
 <p>TIP: Use the &ldquo;Return&rdquo;-key to repeat the last command.</p>
+<!--
+ TIP: Features for reverse-* and python supports are very new in GDB 7 series.
+ You may need latest tool chains to use it.
+-->
 <h3 id="detached-debugging-symbols">Detached debugging symbols</h3>
 <p>The Debian system provided library packages have no debugging symbols in them.</p>
 <p>The <code>dh_strip</code>(1) is normally used to strip executables, shared libraries, and
@@ -1018,6 +1034,7 @@ $
 <p>This is just a simple walk through but you get roughly what GDB can do.</p>
 <h3 id="gdb-prime8-gdb">gdb prime8-gdb</h3>
 <p>The <a href="/en/2013/08/08/fun2prog-library/#libpthread">Library: libpthread</a> had a buggy <code>prime8.c</code> code.  Let&rsquo;s check what was wrong under GDB.</p>
+<!-- Here I cheat since I had prime8.xxx as prime8.c in the above. -->
 <p>Let&rsquo;s compile  <code>prime8.c</code> with <code>-g</code> as <code>prime8-gdb</code> and run it to create the <code>core</code> file as [ELF: Core dump]/en/2013/08/09/fun2prog-elf/#core-dump), then analyze it with GDB.</p>
 <p>Compiling <code>prime8.c</code> with <code>-g</code> as <code>prime8-gdb</code> and check core under GDB.</p>
 
@@ -1736,6 +1753,17 @@ is going on.</p>
 <li><a href="http://www.ibm.com/developerworks/linux/library/l-debug/">Mastering Linux debugging techniques</a> by Steve Best (IBM DW, Date: 01 Aug 2002)</li>
 <li><a href="http://www.ibm.com/developerworks/library/l-gdb/">Linux software debugging with GDB</a> by David Seager (IBM DW, Date: 01 Feb 2001)</li>
 </ul>
+<!--
+ http://www.cs.cmu.edu/~gilpin/tutorial/
+ Advanced Debugging with gdb (David Khosid)
+ http://www.unknownroad.com/rtfm/gdbtut/gdbuse.html RMS
+ strip
+ GDB: thread apply all backtrace
+ https://blogs.oracle.com/ksplice/entry/8_gdb_tricks_you_should
+ https://blogs.oracle.com/ksplice/tags/debugging
+ http://beej.us/guide/bggdb/
+-->
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

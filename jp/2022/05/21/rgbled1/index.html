@@ -141,6 +141,38 @@ note-00051
 <li>正攻法：レベルシフト回路追加（1MOSFET+2R） &ndash; <a href="https://www.maximintegrated.com/en/design/technical-documents/app-notes/7/7106.html">HOW TO LEVEL SHIFT 1-WIRE SYSTEMS</a></li>
 <li>簡便法：１段目LEDにダイオード追加 &ndash; <a href="https://hackaday.com/2017/01/20/cheating-at-5v-ws2812-control-to-use-a-3-3v-data-line/">CHEATING AT 5V WS2812 CONTROL TO USE 3.3V DATA</a></li>
 </ul>
+<!--
+
+通信速度
+
+SPI 20 Mbit/s -> 0.05 us　はやい
+
+SK 6812 MINI-E
+WS2812B          T 1.2us -> 800 Kbps (SPIでクロックは繋がない)
+
+I2C slow  10 Kbit/s ->  100 us
+I2C base 400 Kbit/s ->   2.5 us
+
+Serial
+9600 bps   104 us
+19200 bps   52 us
+115200 bps   8.68 us
+
+-->
+<!--
+https://sites.google.com/site/hubmartin/
+https://github.com/technobly/Particle-NeoPixel 187 stars (STM32)
+https://github.com/MaJerle/stm32-ws2811-ws2812-ws2812b-ws281x-tim-pwm-dma-timer 94 stars (STM32)
+https://github.com/Crazy-Geeks/STM32-ARGB-DMA 20 stars
+https://github.com/evilwombat/stm32f103_fastNP 21 stars
+https://github.com/rogerclarkmelbourne/WS2812B_STM32_Libmaple 58 stars
+https://github.com/ottojo/stm32_neopixel 0 stars SPI
+https://michaeltien8901.github.io/stm32/2018/07/19/Using-STM32-SPI-For-LED-STRIP.html
+  https://bitbucket.org/mtien888/stm32-for-ws2812b-using-spi/src/master/ SPI
+https://github.com/berndoJ/libneopixel32 0 star
+
+-->
+<!-- vim: se ai sw=2 sts=2 tw=150: -->
 
 
 <table width="100%">

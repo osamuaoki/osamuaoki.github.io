@@ -179,6 +179,18 @@ are already at login prompt on Linux virtual terminal.</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span># apt-get update
 </span></span><span style="display:flex;"><span># apt-get install aptitude sudo vim mc wget nano-
 </span></span></code></pre></div><p>NOTE: If you didn&rsquo;t set password for <code>root</code> during system installation with <code>debian-installer</code> in the expert mode, <code>sudo</code> is configured for you and you need to use it to gain root privilege.</p>
+<!--
+
+### Initial setup (automatic)
+
+Running `initial-setup` script found at my repository should set up most of followings.
+
+* https://github.com/osamuaoki/osamu-utils/blob/main/halexec/initial-setup
+
+NOTE: See [Personal DEB package repository](/en/2022/08/20/deb-repo-1/) for how personal repo
+is created and used.
+
+-->
 <h3 id="initial-manual-setup-sudo">Initial manual setup (SUDO)</h3>
 <p>For the passwordless <code>sudo</code> operation, configure <code>sudo</code> from root by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span># No passowrd required for the user in sudo group
@@ -710,6 +722,7 @@ bootable CD and made USB key containing it image data:</p>
 up from the BIOS Update bootable CD image, you may need to disabled the Secure Boot option to use it.</p>
 <p>If Windows 10 or 11 is installed, you may need to reenable Secure Boot after
 this operation.</p>
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

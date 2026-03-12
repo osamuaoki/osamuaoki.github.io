@@ -79,6 +79,51 @@ note-00071
 <li>Click &ldquo;Create a new certificate&rdquo; button and follow the web GUI instruction.</li>
 <li>Enjoy Incus web UI at <a href="https://localhost:8443">https://localhost:8443</a>.</li>
 </ul>
+<!--
+INCUS container wayland
+  https://discuss.linuxcontainers.org/t/incus-lxd-profile-for-gui-apps-wayland-x11-and-pulseaudio/18295/2
+  note-00056.md
+  https://blog.simos.info/how-to-run-graphics-accelerated-gui-apps-in-lxd-containers-on-your-ubuntu-desktop/
+
+INCUS UI
+  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1067041 wishlist on incus
+  https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1036926 Dropped ITP for lxd-ui
+
+  https://stgraber.org/2023/11/25/adding-a-web-ui-to-the-incus-demo-service/
+    https://discuss.linuxcontainers.org/t/web-ui-for-incus/18198/2
+    https://discuss.linuxcontainers.org/t/incus-web-ui-spacing/18928 Incus Web UI spacing
+    https://discuss.linuxcontainers.org/t/lxconsole-as-web-ui/19212 Lxconsole as web UI
+
+  https://github.com/KosmX/incus-ui-canonical-arch Arch Linux package
+  https://gist.github.com/vaxvhbe/ce679df15fc521c8aca1ff9ddf537201 RPM spec file?
+
+Other UI
+  https://github.com/PenningLabs/lxconsole (PYTHON)
+  https://github.com/AdaptiveScale/lxdui (PYTHON)
+  https://github.com/turtle0x1/LxdMosaic (JS with SQL)
+  https://github.com/lxdware/lxd-dashboard (PHP)
+
+  There are different types of implementations. lxconsole is written in Python,
+  is based on the Flask web framework, and uses a database to store settings.
+  On the other hand, Incus UI is a single-page application written in
+  TypeScript and React and only replicates what you can do with the incus CLI
+  program (i.e. works through the REST API).
+
+  https://discuss.linuxcontainers.org/t/stateful-uis-and-questions-about-lxd-ui-history/18302
+
+  My comment from earlier was in response to a question about whether lxconsole
+  would work with the INCUS_UI env variable, and the response remains accurate
+  that no, if you want to have a web UI that you can just drop into
+  /opt/incus/ui/ and have it work out immediately, then your only options are
+  those UIs that rely on static files and on no other external components.
+
+  Those more complex web interfaces will typically come with their own set of
+  instructions on how to properly deploy them, what OS they support to run
+  their daemon and database, how to setup the database for high-availability
+  when in a cluster environment, how to perform backups of that data, …
+
+-->
+<!-- vim: set sw=4 sts=4 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

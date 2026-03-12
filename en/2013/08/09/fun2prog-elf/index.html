@@ -325,6 +325,7 @@ ELF Header:
 <p>TIP: <code>-h</code> = <code>--file-header</code></p>
 <p>Let&rsquo;s compare the ELF file headers of the compiled <code>hello.c</code>.</p>
 <p>ELF file headers of the compiled <code>hello.c</code></p>
+<!-- table "examples/hello/bench/elf-header.txt" -->
 <table>
   <thead>
       <tr>
@@ -561,6 +562,7 @@ Key to Flags:
 <p>TIP: <code>-S</code> = <code>--sections</code> = <code>--section-headers</code></p>
 <p>Let&rsquo;s compare the ELF file sections of the compiled <code>hello.c</code>.</p>
 <p>ELF file sections of the compiled <code>hello.c</code></p>
+<!-- "examples/hello/bench/elf-section.txt" -->
 <table>
   <thead>
       <tr>
@@ -975,6 +977,12 @@ frame_hdr .eh_frame
    07
 </code></pre>
 
+<!--
+ .Segment headers of the `hello-gdb` file.
+ ----
+ include::hello/c/hello-gdb-readelf-l.log[]
+ ----
+-->
 <p>Segment headers of the <code>hello-gdb</code> file is the same as that of the <code>hello</code> file.</p>
 <p>TIP: <code>-l</code> = <code>--segments</code> = <code>--program-headers</code></p>
 <p>Various sections are described mostly in the man page <code>elf</code>(5) under <code>p_type</code>.</p>
@@ -1685,6 +1693,7 @@ simple classical core dump behavior, please ensure the following.</p>
 <p>Please read the <code>core</code>(5) manpage and the <code>ulimit</code> section in the <code>bash</code>(1)
 manpage for more.</p>
 <p>You can use GDB to inspect the <code>core</code> file as <a href="/en/2013/08/12/fun2prog-debug-3/#gdb-prime8-gdb">Debug: level 3: gdb prime8-gdb</a>.</p>
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

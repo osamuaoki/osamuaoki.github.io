@@ -295,6 +295,14 @@ for Python 3.12 on Debian bookworm.  (Ordinary Debian bookworm is Python
 <li><code>vfs-layers/</code>: ? (<code>tar-split.gz</code> containing data such as
 <code>{&quot;type&quot;:1,&quot;name&quot;:&quot;var/log/apt/&quot;,&quot;payload&quot;:null,&quot;position&quot;:7007}</code>)</li>
 </ul>
+<!--
+* volume: 
+* image
+* container
+* pods: groups of containers
+* machine: virtual machine
+* network
+-->
 <h2 id="typical-cliché-for-dockerpodman">Typical cliché for <code>docker</code>/<code>podman</code></h2>
 <p>I often see the following cliché:</p>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ docker run -it --rm -w /root alpine:edge sh -uelic &#34;
@@ -336,7 +344,21 @@ for Python 3.12 on Debian bookworm.  (Ordinary Debian bookworm is Python
 </span></span><span style="display:flex;"><span>cd cwd
 </span></span><span style="display:flex;"><span>$command_string
 </span></span><span style="display:flex;"><span>&#34;
-</span></span></code></pre></div>
+</span></span></code></pre></div><!--
+`Dockerfile` for `docker` automates the steps of creating a container image.  It functions somewhat like configuration file in `YAML` for LXD (Incus).
+docker run -it --rm -w /root -v .:/root/cwd -e FOOBAR=foobar debian bash
+```
+FROM debian
+VOLUME . /root/cwd
+ENV FOOBAR=foobar
+WORKDIR /root
+RUN bash
+????
+
+```
+-->
+<!-- vim:set sw=4 sts=4 nosi et tw=79 ft=markdown: -->
+
 
 <table width="100%">
   <tbody>

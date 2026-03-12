@@ -238,6 +238,23 @@ LazyVim can activate <code>dap.core</code> LazyExtra and activate <code>cpptools
 <p>Problem is Nvim with DAP UI doesn&rsquo;t seem to allow running program using STDIN.</p>
 <p>Run <code>./test</code> on a separate console under <code>gdbserver</code> as above solved this
 issue for me.</p>
+<!--
+I need to check how to debug stripped binary on remote with local dbg symbol data.
+
+https://zakuarbor.github.io/blog/debugging-symbols/
+
+After launching GDB, use the symbol-file command to load the debugging symbols. I don't think that GDB can find debug information automatically, because it cannot know the name of the file.
+
+You don't need to change the debug-file-directory for this.
+
+~~~~~~~~~~~~~~~
+
+https://sourceware.org/gdb/current/onlinedocs/gdb.html/Files.html#Files
+
+symbol-file [ filename ]
+Read symbol table information from file filename. PATH is searched when necessary. Use the file command to get both symbol table and program to run from the same file. symbol-file with no argument clears out GDB information on your program's symbol table. The symbol-file command causes GDB to forget the contents of its convenience variables, the value history, and all breakpoints and auto-display expressions. This is because they may contain pointers to the internal data recording symbols and data types, which are part of the old symbol table data being discarded inside GDB. symbol-file does not repeat if you press RET again after executing it once. When GDB is configured for a particular environment, it understands debugging information in whatever format is the standard generated for that environment; you may use either a GNU compiler, or other compilers that adhere to the local conventions. Best results are usually obtained from GNU compilers; for example, using gcc you can generate debugging information for optimized code. For most kinds of object files, with the exception of old SVR3 systems using COFF, the symbol-file command does not normally read the symbol table in full right away. Instead, it scans the symbol table quickly to find which source files and which symbols are present. The details are read later, one source file at a time, as they are needed. The purpose of this two-stage reading strategy is to make GDB start up faster. For the most part, it is invisible except for occasional pauses while the symbol table details for a particular source file are being read. (The set verbose command can turn these pauses into messages if desired. See section Optional warnings and messages.) We have not implemented the two-stage strategy for COFF yet. When the symbol table is stored in COFF format, symbol-file reads the symbol table data in full right away. Note that "stabs-in-COFF" still does the two-stage strategy, since the debug info is actually in stabs format.
+
+-->
 <p>I need to read
 <code>nvim-dap-ui/doc/nvim-dap-ui.txt</code> and <a href="https://github.com/rcarriga/nvim-dap-ui">nvim-dap-ui/README.md</a> directory since this is not
 shown in normal Vim-help system.</p>
@@ -289,6 +306,24 @@ shown in normal Vim-help system.</p>
 <p>Hmmm&hellip; it looks like LazyExtras store data in
 <code>~/.config/$NVIM_APPNAME/*.json</code>.  Ensuring to store these updated data in VCS seems to be important.</p>
 <p>Let me stick to the basic direct CLI GDB usage for now.</p>
+<!--
+input
+https://sourceware.org/gdb/current/onlinedocs/gdb.html/File-Options.html#File-Options
+
+condition
+https://sourceware.org/gdb/current/onlinedocs/gdb.html/Set-Breaks.html#Set-Breaks
+https://stackoverflow.com/questions/14390256/gdb-break-if-variable-equal-value
+https://www.cse.unsw.edu.au/~learn/debugging/modules/gdb_conditional_breakpoints/
+https://www.it.uc3m.es/pbasanta/asng/course_notes/debugger_condbreak_en.html
+https://sourceware.org/gdb/current/onlinedocs/gdb.html/Set-Breaks.html
+
+https://github.com/mfussenegger/nvim-dap/discussions/557
+https://stackoverflow.com/questions/13104206/how-to-debug-a-program-that-takes-user-input-from-stdin-with-gdb
+https://stackoverflow.com/questions/31074433/can-i-dump-stdin-with-gdb
+https://stackoverflow.com/questions/455544/how-to-load-program-reading-stdin-and-taking-parameters-in-gdb
+https://stackoverflow.com/questions/8422259/gdb-debugging-with-piped-input-not-arguments
+https://www.reddit.com/r/neovim/comments/1aub6fr/gdb_with_nvimdapui_getting_input_from_program/
+-->
 <h2 id="jump-to-the-specific-position-in-a-file-generic-vim">Jump to the specific position in a file: generic Vim</h2>
 <p>Let me revisit trick to jump to the specific position manually.</p>
 <p>To go to line 99 of <code>file.txt</code>, try:</p>
@@ -316,6 +351,7 @@ line.  (List index in Vim Script starts at 0.)</p>
 </ul>
 </li>
 </ul>
+<!-- vim: set sw=4 sts=4 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">

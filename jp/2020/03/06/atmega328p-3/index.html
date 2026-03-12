@@ -460,7 +460,8 @@ DDRB =IIOIIIII DDRC =IIIIIIII DDRD =IIIIIIII
 PORTB=******** PORTC=_******* PORTD=********
 PINB =00110111 PINC =00110111 PIND =11111101
 .....................
-</code></pre><p>ソースコードが大幅に増え、表示する情報量も<code>printf()</code>を使う場合の
+</code></pre><!-- xxx******** -->
+<p>ソースコードが大幅に増え、表示する情報量も<code>printf()</code>を使う場合の
 約3倍となっています。</p>
 <pre tabindex="0"><code> $ avr-size --mcu=atmega328p --format=avr hello.elf
 AVR Memory Usage
@@ -491,6 +492,7 @@ Data:          0 bytes (0.0% Full)
 <p>細かなことはマニュアルを読むしか無いのですが、avr-gccは、GNU cc/asでは
 ありますが、アセンブラーはGNU標準のATT式ではなくINTEL式の代入される方が
 前にオペランド記述される順であることに注意がいります。</p>
+<!-- vim: se ai tw=79: -->
 
 
 <table width="100%">

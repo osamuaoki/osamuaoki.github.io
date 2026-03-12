@@ -260,6 +260,36 @@ bus: 6, device: 42 was not an MTP device
 <p><a href="https://www.st.com/ja/development-tools/stm32cubeprog.html">STM32CubeProg</a>をダウンロードすると、LINUX上でもJAVAベースのIDEがSWD/JTAGベースで接続して使えるようです。ただファイルの展開の際に、LINUX上なのにEXEファイルが必要だったのは意外でした。拡張子がEXEですが、大きなファイルだから中身は自己解凍のアーカイブなのかな?</p>
 <p>ちなみにSTM32CubeProgの前に使われた古いプログラムに、<a href="https://www.st.com/ja/development-tools/stsw-stm32080.html">DfuSe USB device firmware upgrade (UM0412)</a> がソース付きであるようです。ただ、WINDOWS専用です。</p>
 <p>STM32CubeProgを実行した所、なぜか立ち上げてみた新しいSTM32CubeProgでは、LinuxのGUI上ではSWDとかJTAGしか選択肢にDFUがつかえるように見えませんでした。STM32CubeProgは、GUIのプログラム群でめまいがします。とにかく、<code>dfu-util</code>が動いているのでSTのプロプライエタリーツールは降参しておきます。</p>
+<!--
+
+MicroPython/platform
+
+[MicroPython](https://www.micropython.org/)のForkに[CircuitPython](https://circuitpython.org/)があり、[STM32F411CE Black Pillを明示的にサポート](https://circuitpython.org/board/stm32f411ce_blackpill/)しています。
+
+このインストール関係情報読み漁りました。
+
+* https://github.com/SuperThunder/STM32F411CEU6-BlackPill-MicroPython-Examples
+    * If you use internal, there's only around 45kb free. With external you can have 4-16 MB.
+* https://github.com/mcauser/WEACT_F411CEU6
+* https://rephtone.com/electronics/weact-stm32f411ce-black-pill/
+* https://elchika.com/article/3991eab6-dc97-486c-9b95-cbb0441ac743/
+
+RTOS導入
+https://acassis.wordpress.com/2020/06/07/flashing-the-blackpill-on-linux-using-dfu-util/
+
+DFU色々
+https://blogs.gnome.org/hughsie/2017/10/
+https://www.usb.org/sites/default/files/DFU_1.1.pdf
+http://ww1.microchip.com/downloads/en/devicedoc/doc7618.pdf (ATMEL)
+https://www.st.com/resource/en/application_note/an1577-device-firmware-upgrade-dfu-implementation-in-st7-usb-devices-stmicroelectronics.pdf (ST)
+https://www.ftdichip.cn/Support/Documents/AppNotes/AN_344_FT51A_DFU_Sample.pdf (FTDI)
+
+dfu-tool new but command getting less
+dfu-util st focus
+dfu-programmer atmel only
+
+-->
+<!-- vim: se ai tw=79: -->
 
 
 <table width="100%">

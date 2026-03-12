@@ -255,6 +255,21 @@ considered.</p>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/blockinfile_module.html">ansible.builtin.blockinfile</a></li>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html">ansible.builtin.file</a></li>
 </ul>
+<!--
+https://fumiyas.github.io/2018/12/05/shell-module.ansible-advent-calendar.html
+問題の一つは、何故かヒアドキュメントがうまく動作しませんでした。
+簡単に調べた限りでは、Ansible が YAML に記述したスクリプトの改行を
+改行+スペースに変換してからシェルに渡しているようです。
+ヒアドキュメント以外でも動作が壊れる可能性がありますが、恐らく、
+大抵のケースで問題とならないでしょう。
+Ansible はコマンド /bin/sh と引数 -c に続く
+引数にシェルスクリプトを渡して実行しようとするのですが、余計なエスケープ処理を
+実行しているのかもしれません。エスケープは不要なはずなので謎です。
+
+  https://qiita.com/hiroyuki_onodera/items/e63d8d1fd640bb007a33
+  https://qiita.com/dkuji/items/7bbbea2ad65614c57705
+  https://groups.google.com/g/ansible-project/c/zdhg2Kw4UxA
+-->
 <h2 id="debug-hints">Debug hints</h2>
 <p>I found interesting post on <a href="https://www.reddit.com/r/ansible/comments/14lbknm/debugging_ansible_jinja2_templates/">redit</a>.</p>
 <ul>
@@ -299,6 +314,30 @@ though whenever I wonder.  Here are links to the portion I keep coming back.</p>
 </ul>
 </li>
 </ul>
+<!--
+Trace points
+
+https://zenn.dev/y_mrok/books/ansible-no-module-no-tsukaikata 2023/09/22
+https://noknowing.hatenablog.com/entry/2021/01/02/130032 docker nginx
+
+Official example
+https://github.com/ansible/ansible-examples
+Similar examples referenced to go forward.
+https://github.com/pythops/workstation
+https://github.com/jhx0/debian-desktop-playbook.git
+https://github.com/Regrau/ansible-workstation-play.git
+https://github.com/sys0dm1n/ansible-ubuntu-desktop.git
+https://github.com/gh640/ansible-playbook-localhost-examples
+https://github.com/alecigne/ansible-desktop.git
+https://github.com/kalos/ansible-debian-workstation.git -- Automate workstation setup with Ansible
+  https://schfkt.dev/blog/workstation-setup-with-ansible/ May 13, 2023
+https://github.com/rpthms/ansible-debian-server.git
+https://github.com/allotmentandy/ansible-debian-install-desktop.git -- Using Ansible To Setup My New Debian Desktop Machine
+
+-->
+<!--
+vim: set sw=2 sts=2 ai si et tw=79 ft=markdown:
+-->
 
 
 <table width="100%">

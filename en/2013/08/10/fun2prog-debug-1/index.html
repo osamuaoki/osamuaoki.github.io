@@ -323,6 +323,11 @@ Oops!
 enclose them between a pair of macros such as <code>#ifdef TESTERRLOG</code> and <code>#endif</code>
 and remove them with the <code>unifdef</code> command.</p>
 <p>TIP: For the serious logging, consider using <code>syslog</code>(3).</p>
+<!-- syslog
+ http://www.gnu.org/software/libc/manual/html_node/openlog.html#openlog
+ http://stackoverflow.com/questions/8485333/syslog-command-in-c-code
+ http://www.linuxquestions.org/questions/programming-9/logging-in-c-on-linux-760009/
+-->
 <h3 id="shell-assertion">Shell assertion</h3>
 <p>If you know something should not happen, test it to ensure it.</p>
 <p>The <code>cli-assert</code> program aborts with an error message if the first and the
@@ -439,6 +444,7 @@ Argument is a single non-negative value: 1
 $ ./cli-assert-no -1
 </code></pre>
 
+<!-- vim: set sw=2 sts=2 ai si et tw=79 ft=markdown: -->
 
 
 <table width="100%">
