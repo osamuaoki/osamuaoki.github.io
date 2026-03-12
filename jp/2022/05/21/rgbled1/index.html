@@ -73,45 +73,45 @@ note-00051
 <p>電子工作の基本の光り物の駆動が、単純なカラーLEDを直接電流駆動するタイプから、MCUが組み込まれてデジタルコントロールの調色機能付のDigital RGB LEDとかNEOPIXEL LED等と呼ばれるLEDをデジタル信号ドライブするように変わってきました。その状況を調べました。</p>
 <h2 id="よく使うdigital-rgb-ledチップ">よく使うDigital RGB LEDチップ</h2>
 <table>
-<thead>
-<tr>
-<th>LED</th>
-<th>size</th>
-<th>VDD</th>
-<th>data rate</th>
-<th>signal wire</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>WS2812B</td>
-<td>5mm x 5mm</td>
-<td>5V</td>
-<td>800 Kbps</td>
-<td>1</td>
-</tr>
-<tr>
-<td>WS2813</td>
-<td>5mm x 5mm</td>
-<td>5V</td>
-<td>800 Kbps</td>
-<td>2</td>
-</tr>
-<tr>
-<td>WS2815B</td>
-<td>5mm x 5mm</td>
-<td>12V</td>
-<td>800 Kbps</td>
-<td>1</td>
-</tr>
-<tr>
-<td>SK6812MINI-E</td>
-<td>3.2mm x 2.8mm</td>
-<td>5V</td>
-<td>800 Kbps</td>
-<td>1</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>LED</th>
+          <th>size</th>
+          <th>VDD</th>
+          <th>data rate</th>
+          <th>signal wire</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>WS2812B</td>
+          <td>5mm x 5mm</td>
+          <td>5V</td>
+          <td>800 Kbps</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>WS2813</td>
+          <td>5mm x 5mm</td>
+          <td>5V</td>
+          <td>800 Kbps</td>
+          <td>2</td>
+      </tr>
+      <tr>
+          <td>WS2815B</td>
+          <td>5mm x 5mm</td>
+          <td>12V</td>
+          <td>800 Kbps</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>SK6812MINI-E</td>
+          <td>3.2mm x 2.8mm</td>
+          <td>5V</td>
+          <td>800 Kbps</td>
+          <td>1</td>
+      </tr>
+  </tbody>
 </table>
 <p>すべて800 Kbps で、1.2 us毎に１ビットのクロックで、共通の制御信号でコントロールできます。</p>
 <p>WS2812B と その改良型のWS2813の違いは、<a href="https://www.seeedstudio.com/blog/2019/02/14/ws2812b-vs-ws2813-addressable-rgb-led-strips-how-are-they-different/">WS2812B vs WS2813 Addressable RGB LED Strips – How are they different?</a> に詳しいです。</p>
@@ -141,11 +141,6 @@ note-00051
 <li>正攻法：レベルシフト回路追加（1MOSFET+2R） &ndash; <a href="https://www.maximintegrated.com/en/design/technical-documents/app-notes/7/7106.html">HOW TO LEVEL SHIFT 1-WIRE SYSTEMS</a></li>
 <li>簡便法：１段目LEDにダイオード追加 &ndash; <a href="https://hackaday.com/2017/01/20/cheating-at-5v-ws2812-control-to-use-a-3-3v-data-line/">CHEATING AT 5V WS2812 CONTROL TO USE 3.3V DATA</a></li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

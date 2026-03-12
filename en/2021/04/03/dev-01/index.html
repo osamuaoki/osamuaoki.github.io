@@ -170,7 +170,7 @@ WS for guest VMs(=kvm).  Simply installing <code>auto-apt-proxy</code> is suffic
 up APT proxy for them.  For host WS itself or <code>chroot</code> (including ones created
 through <code>schroot</code>, <code>sbuild</code>) environment on the host WS, proxy is always the
 local.  So I simply add <code>/etc/apt/apt.conf.d/00proxy</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Acquire::http <span style="color:#f92672">{</span> Proxy <span style="color:#e6db74">&#34;http://localhost:3142&#34;</span>; <span style="color:#f92672">}</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>Acquire::http <span style="color:#f92672">{</span> Proxy <span style="color:#e6db74">&#34;http://localhost:3142&#34;</span>; <span style="color:#f92672">}</span>
 </span></span></code></pre></div><h3 id="permission-and-ownership">Permission and ownership</h3>
 <p>The permission and ownership of <code>/var/cache/apt-cacher-ng/</code> is <code>drwxr-sr-x</code>
 (2755) with <code>apt-cacher-ng:apt-cacher-ng</code>.</p>
@@ -187,14 +187,14 @@ backend.</p>
 <h3 id="setup">Setup</h3>
 <p>Here, I follow <a href="https://wiki.debian.org/sbuild">https://wiki.debian.org/sbuild</a> (I have made a few updates there,
 too.).</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo apt install sbuild piuparts autopkgtest lintian
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo apt install sbuild piuparts autopkgtest lintian
 </span></span><span style="display:flex;"><span>$ adduser osamu sbuild
 </span></span></code></pre></div><p>Logout and login to check you are a member of <code>sbuild</code> group.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ id
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ id
 </span></span><span style="display:flex;"><span>uid<span style="color:#f92672">=</span>1000<span style="color:#f92672">(</span>osamu<span style="color:#f92672">)</span> gid<span style="color:#f92672">=</span>1000<span style="color:#f92672">(</span>osamu<span style="color:#f92672">)</span> groups<span style="color:#f92672">=</span>1000<span style="color:#f92672">(</span>osamu<span style="color:#f92672">)</span>,...,132<span style="color:#f92672">(</span>sbuild<span style="color:#f92672">)</span>
 </span></span></code></pre></div><p>Let&rsquo;s create the configuration file <code>~/.sbuildrc</code> in line with recent Debian
 practice <a href="https://wiki.debian.org/SourceOnlyUpload">https://wiki.debian.org/SourceOnlyUpload</a> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat &gt;~/.sbuildrc <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>cat &gt;~/.sbuildrc <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">##############################################################################
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># PACKAGE BUILD RELATED (source-only-upload as default)
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">##############################################################################
@@ -230,40 +230,40 @@ practice <a href="https://wiki.debian.org/SourceOnlyUpload">https://wiki.debian.
 </span></span></code></pre></div><p>You can disable and enable each functionality by assigning 0 or 1 to
 corresponding variables.  You can customize this further for your GPG key etc.</p>
 <p>Currently, I have several variants and switch among them with symlink.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ls -l .sbuild*
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ls -l .sbuild*
 </span></span><span style="display:flex;"><span>lrwxrwxrwx <span style="color:#ae81ff">1</span> osamu osamu   <span style="color:#ae81ff">13</span> May  <span style="color:#ae81ff">4</span> 07:58 .sbuildrc -&gt; .sbuildrc-src
 </span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> osamu osamu <span style="color:#ae81ff">1377</span> May  <span style="color:#ae81ff">4</span> 07:58 .sbuildrc-bin
 </span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> osamu osamu <span style="color:#ae81ff">1330</span> May  <span style="color:#ae81ff">4</span> 07:58 .sbuildrc-no-test
 </span></span><span style="display:flex;"><span>-rw-r--r-- <span style="color:#ae81ff">1</span> osamu osamu <span style="color:#ae81ff">1330</span> May  <span style="color:#ae81ff">4</span> 07:58 .sbuildrc-src
 </span></span></code></pre></div><p>Then create the baseline chroot environment as:</p>
 <p>If <code>apt-cacher-ng</code> is NOT used:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-createchroot --include<span style="color:#f92672">=</span>eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://deb.debian.org/debian
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-createchroot --include<span style="color:#f92672">=</span>eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://deb.debian.org/debian
 </span></span></code></pre></div><p>If <code>apt-cacher-ng</code> is used:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-createchroot --include<span style="color:#f92672">=</span>eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-createchroot --include<span style="color:#f92672">=</span>eatmydata,ccache unstable /srv/chroot/unstable-amd64-sbuild http://127.0.0.1:3142/deb.debian.org/debian
 </span></span></code></pre></div><p>(The difference can be resolved later by editing the <code>.../etc/apt/sources.list</code>
 file found under <code>/srv/chroot/unstable-amd64-sbuild</code>.)</p>
 <p>Please note that the above create <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> to be used by <code>schroot</code>.
 (This file is effectively a split-up <code>/etc/schroot/schroot.conf</code> and this file needs to be removed together with the chroot system directory tree under <code>/srv/chroot/unstable-amd64-sbuild</code> to rerun above <code>sbuild-createchroot</code> if you messed up chroot contents.)</p>
 <p>TODO: decide on technical merits: eatmydata or tmpfs for /build etc.</p>
 <p>Prior to every use, you need to keep it up to date.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-update -udcar u
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-update -udcar u
 </span></span></code></pre></div><h3 id="package-build-with-sbuild">Package build with sbuild</h3>
 <h4 id="for-unstable">For <code>unstable</code></h4>
 <p>Package build from the source directory is simply as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild
 </span></span></code></pre></div><p>or using source package as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild &lt;packagename&gt;.dsc
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild &lt;packagename&gt;.dsc
 </span></span></code></pre></div><p>Hmmm&hellip; sbuild is now easier than pbuilder/cowbuilder and uses the new
 bind-mount kernel feature smartly to make build environment quickly.</p>
 <h4 id="for-testing">For <code>testing</code></h4>
 <p>Package build from the source directory is simply as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild -c testing-amd64-sbuild
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild -c testing-amd64-sbuild
 </span></span></code></pre></div><h4 id="for-stable">For <code>stable</code></h4>
 <p>Package build from the source directory is simply as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild -c stable-amd64-sbuild
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sbuild -c stable-amd64-sbuild
 </span></span></code></pre></div><h3 id="gbp-buildpackage-configuration">gbp-buildpackage configuration</h3>
 <p>I changed gbp-buildpackage to use sbuild.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#f92672">[</span>DEFAULT<span style="color:#f92672">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#f92672">[</span>DEFAULT<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># the default build command:</span>
 </span></span><span style="display:flex;"><span>builder <span style="color:#f92672">=</span> sbuild -A -s --source-only-changes -v -d unstable
 </span></span><span style="display:flex;"><span>...
@@ -271,13 +271,13 @@ bind-mount kernel feature smartly to make build environment quickly.</p>
 <code>sbuild</code> here.)</p>
 <h3 id="the-source-chroot-environment-used-by-sbuild">The source chroot environment used by sbuild</h3>
 <p>In order to access the minimum unstable chroot environment used by sbuild, use the standard command.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-shell u
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-shell u
 </span></span></code></pre></div><p>In order to update the minimum unstable chroot environment used by sbuild, use the standard command.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-update -udcar u
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-update -udcar u
 </span></span></code></pre></div><p>In order to access the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo schroot-shell -u o
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo schroot-shell -u o
 </span></span></code></pre></div><p>In order to update the minimum oldstable chroot environment used by sbuild, use the standard command.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-update -udcar o
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo sbuild-update -udcar o
 </span></span></code></pre></div><h3 id="reminder-for-adduser-package-in-the-source-chroot-environment-used-by-sbuild">Reminder for <code>adduser</code> package in the source chroot environment used by sbuild</h3>
 <p>The above update method for <code>schroot</code> generally works for normal situation.
 But when an essential package becomes a non-essential one (e.g., <code>adduser</code>),
@@ -297,7 +297,7 @@ unstable, I created a simple shell script:</p>
 <ul>
 <li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell">https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell</a></li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -h
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -h
 </span></span><span style="display:flex;"><span>NAME
 </span></span><span style="display:flex;"><span>    schroot-shell - start a shell in chroot with current home data.
 </span></span><span style="display:flex;"><span>
@@ -387,21 +387,21 @@ different devices (including Btrfs subvolumes).</li>
 </ul>
 <h3 id="access-to-the-persistent-chroot-environment-as-user">Access to the persistent chroot environment as user</h3>
 <p>In order to access the pre-loaded unstable chroot environment, I simply type.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell
 </span></span></code></pre></div><p>In order to update the pre-loaded unstable chroot environment, I simply type.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -u
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -u
 </span></span></code></pre></div><p>In order to access the pre-loaded oldstable chroot environment, I simply type.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell o
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell o
 </span></span></code></pre></div><p>In order to update the pre-loaded oldstable chroot environment, I simply type.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -u o
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -u o
 </span></span></code></pre></div><h2 id="chroot-update-optimization">Chroot update optimization</h2>
 <p>Slow <code>fsync</code>(2) process problem caused by <code>dpkg</code> and SSD waring problem can be avoided.</p>
 <h3 id="via-eatmydata">Via <code>eatmydata</code></h3>
 <p>Add following line into <code>/etc/schroot/chroot.d/unstable-amd64-sbuild-$suffix</code> or similar to speed up the package installation process.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>command-prefix<span style="color:#f92672">=</span>eatmydata
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>command-prefix<span style="color:#f92672">=</span>eatmydata
 </span></span></code></pre></div><h3 id="via-tmpfs">Via <code>tmpfs</code></h3>
 <p>Add following to my <code>/etc/fstab</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># For speeding up sbuild/schroot and prevent SSD wear-out</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># For speeding up sbuild/schroot and prevent SSD wear-out</span>
 </span></span><span style="display:flex;"><span>none /var/lib/schroot/session        tmpfs uid<span style="color:#f92672">=</span>root,gid<span style="color:#f92672">=</span>root,mode<span style="color:#f92672">=</span><span style="color:#ae81ff">0755</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
 </span></span><span style="display:flex;"><span>none /var/lib/schroot/union/overlay  tmpfs uid<span style="color:#f92672">=</span>root,gid<span style="color:#f92672">=</span>root,mode<span style="color:#f92672">=</span><span style="color:#ae81ff">0755</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
 </span></span><span style="display:flex;"><span>none /var/lib/sbuild/build           tmpfs uid<span style="color:#f92672">=</span>sbuild,gid<span style="color:#f92672">=</span>sbuild,mode<span style="color:#f92672">=</span><span style="color:#ae81ff">2770</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>
@@ -433,130 +433,130 @@ parallel build.</p>
 </ul>
 <p>Result:</p>
 <table>
-<thead>
-<tr>
-<th>source</th>
-<th>eatmydata</th>
-<th>tmpfs</th>
-<th>parallel</th>
-<th>real</th>
-<th>user</th>
-<th>system</th>
-<th>Note</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>DR</td>
-<td>no</td>
-<td>yes</td>
-<td>1</td>
-<td>20m54s</td>
-<td>18m12s</td>
-<td>0m47s</td>
-<td>Cold APT</td>
-</tr>
-<tr>
-<td>DR</td>
-<td>yes</td>
-<td>yes</td>
-<td>1</td>
-<td>17m08s</td>
-<td>17m32s</td>
-<td>0m34s</td>
-<td></td>
-</tr>
-<tr>
-<td>DR</td>
-<td>no</td>
-<td>yes</td>
-<td>1</td>
-<td>17m56s</td>
-<td>18m09s</td>
-<td>0m45s</td>
-<td></td>
-</tr>
-<tr>
-<td>DR</td>
-<td>no</td>
-<td>no</td>
-<td>1</td>
-<td>19m24s</td>
-<td>18m12s</td>
-<td>1m21s</td>
-<td>No speed-up</td>
-</tr>
-<tr>
-<td>DR</td>
-<td>yes</td>
-<td>no</td>
-<td>1</td>
-<td>17m10s</td>
-<td>17m28s</td>
-<td>0m43s</td>
-<td></td>
-</tr>
-<tr>
-<td>DR'</td>
-<td>yes</td>
-<td>no</td>
-<td>24</td>
-<td>5m02s</td>
-<td>31m05s</td>
-<td>0m54s</td>
-<td></td>
-</tr>
-<tr>
-<td>DR'</td>
-<td>yes</td>
-<td>yes</td>
-<td>24</td>
-<td>5m02s</td>
-<td>31m05s</td>
-<td>0m54s</td>
-<td></td>
-</tr>
-<tr>
-<td>DR'</td>
-<td>yes</td>
-<td>no</td>
-<td>24</td>
-<td>6m34s</td>
-<td>35m37s</td>
-<td>0m56s</td>
-<td></td>
-</tr>
-<tr>
-<td>GIT</td>
-<td>yes</td>
-<td>yes</td>
-<td>24</td>
-<td>7m24s</td>
-<td>33m23s</td>
-<td>9m45s</td>
-<td>Cool CPU</td>
-</tr>
-<tr>
-<td>GIT</td>
-<td>yes</td>
-<td>no</td>
-<td>24</td>
-<td>7m51s</td>
-<td>38m18s</td>
-<td>12m00s</td>
-<td>Hot CPU</td>
-</tr>
-<tr>
-<td>GIT</td>
-<td>yes</td>
-<td>yes</td>
-<td>24</td>
-<td>7m21s</td>
-<td>35m08s</td>
-<td>12m34s</td>
-<td>Hotter CPU</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>source</th>
+          <th>eatmydata</th>
+          <th>tmpfs</th>
+          <th>parallel</th>
+          <th>real</th>
+          <th>user</th>
+          <th>system</th>
+          <th>Note</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>DR</td>
+          <td>no</td>
+          <td>yes</td>
+          <td>1</td>
+          <td>20m54s</td>
+          <td>18m12s</td>
+          <td>0m47s</td>
+          <td>Cold APT</td>
+      </tr>
+      <tr>
+          <td>DR</td>
+          <td>yes</td>
+          <td>yes</td>
+          <td>1</td>
+          <td>17m08s</td>
+          <td>17m32s</td>
+          <td>0m34s</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>DR</td>
+          <td>no</td>
+          <td>yes</td>
+          <td>1</td>
+          <td>17m56s</td>
+          <td>18m09s</td>
+          <td>0m45s</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>DR</td>
+          <td>no</td>
+          <td>no</td>
+          <td>1</td>
+          <td>19m24s</td>
+          <td>18m12s</td>
+          <td>1m21s</td>
+          <td>No speed-up</td>
+      </tr>
+      <tr>
+          <td>DR</td>
+          <td>yes</td>
+          <td>no</td>
+          <td>1</td>
+          <td>17m10s</td>
+          <td>17m28s</td>
+          <td>0m43s</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>DR'</td>
+          <td>yes</td>
+          <td>no</td>
+          <td>24</td>
+          <td>5m02s</td>
+          <td>31m05s</td>
+          <td>0m54s</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>DR'</td>
+          <td>yes</td>
+          <td>yes</td>
+          <td>24</td>
+          <td>5m02s</td>
+          <td>31m05s</td>
+          <td>0m54s</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>DR'</td>
+          <td>yes</td>
+          <td>no</td>
+          <td>24</td>
+          <td>6m34s</td>
+          <td>35m37s</td>
+          <td>0m56s</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>GIT</td>
+          <td>yes</td>
+          <td>yes</td>
+          <td>24</td>
+          <td>7m24s</td>
+          <td>33m23s</td>
+          <td>9m45s</td>
+          <td>Cool CPU</td>
+      </tr>
+      <tr>
+          <td>GIT</td>
+          <td>yes</td>
+          <td>no</td>
+          <td>24</td>
+          <td>7m51s</td>
+          <td>38m18s</td>
+          <td>12m00s</td>
+          <td>Hot CPU</td>
+      </tr>
+      <tr>
+          <td>GIT</td>
+          <td>yes</td>
+          <td>yes</td>
+          <td>24</td>
+          <td>7m21s</td>
+          <td>35m08s</td>
+          <td>12m34s</td>
+          <td>Hotter CPU</td>
+      </tr>
+  </tbody>
 </table>
 <p>Observation for real:</p>
 <ul>
@@ -591,7 +591,7 @@ complication due to version so I stop using it.)</li>
 <li>Execute: <code>apt install virt-manager gnome-boxes</code></li>
 <li>Read /usr/share/doc/libvirt-daemon/README.Debian.gz and follow it.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo bash
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo bash
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># virsh net-start default</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># virsh net-autostart default</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># mkdir /etc/dnsmasq.d</span>
@@ -655,7 +655,7 @@ repository and than try again.  (Don&rsquo;t use <code>--fix-missing</code>)</li
 <li>Clone from &ldquo;debian10&rdquo; to &ldquo;sid-dev&rdquo;</li>
 <li>Change <code>/etc/apt/sources.list</code></li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>deb http://deb.debian.org/debian/ sid main
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>deb http://deb.debian.org/debian/ sid main
 </span></span><span style="display:flex;"><span>deb-src http://deb.debian.org/debian/ sid main
 </span></span></code></pre></div><ul>
 <li><code>apt-get update &amp;&amp; apt-get dist-upgrade &amp;&amp; apt autoremove</code></li>
@@ -674,12 +674,12 @@ seen from other VMs and the host WS need reboot of the VM.)</p>
 <p>As long as the host WS and guest VMs are installed with <code>avahi-utils</code>, we can
 use each host name appended with &ldquo;<code>.local</code>&rdquo; to access using good old SSH.  For
 example between VMs.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>osamu@sid-dev:~$ ssh sid-GNOME.local
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>osamu@sid-dev:~$ ssh sid-GNOME.local
 </span></span></code></pre></div><p>SSH login directly to root account of a system are probably blocked.  In that
 case, you must SSH into user account first and sudo/su to root.</p>
 <p>Use of SSH key placed in user&rsquo;s home directory is a good idea.  Typical key
 generation goes:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>osamu@sid-dev:~$ ssh-keygen -t rsa
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>osamu@sid-dev:~$ ssh-keygen -t rsa
 </span></span></code></pre></div><p>This should create:</p>
 <ul>
 <li><code>id_rsa</code> contains the private key</li>
@@ -689,11 +689,11 @@ generation goes:</p>
 account on <code>sid-GNOME</code>, you need to append the content of <code>id_rsa.pub</code> on
 <code>sid-dev</code> to <code>~/.ssh/authorized_keys</code> on the <code>sid-GNOME</code>.</p>
 <p>Please make sure to set proper permissions on the remote host:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>osamu@sid-GNOME $ chmod <span style="color:#ae81ff">700</span> ~/.ssh
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>osamu@sid-GNOME $ chmod <span style="color:#ae81ff">700</span> ~/.ssh
 </span></span><span style="display:flex;"><span>osamu@sid-GNOME $ chmod <span style="color:#ae81ff">600</span> ~/.ssh/authorized_keys
 </span></span></code></pre></div><h3 id="setting-up-sudo">Setting up <code>sudo</code></h3>
 <p>Following will configure <code>sudo</code> to allow user &ldquo;osamu&rdquo; for root privilege.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ su
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ su
 </span></span><span style="display:flex;"><span>Password:
 </span></span><span style="display:flex;"><span>root@sid-dev:/home/osamu# /sbin/adduser osamu sudo
 </span></span><span style="display:flex;"><span>...
@@ -720,7 +720,6 @@ VirtualBox.
 <h2 id="helper-script">Helper script</h2>
 <p>I created short scripts and use them to initialize Debian VMs.  This also takes
 care SSH keys: <a href="https://github.com/osamuaoki/vm-setup">https://github.com/osamuaoki/vm-setup</a></p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

@@ -80,7 +80,7 @@ note-00060
 <p>Here is a memo over IP address and its logging.</p>
 <h2 id="local-ip-address">Local IP address</h2>
 <p>Local IP address can be obtained by using <code>ip addr</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ip addr
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ip addr
 </span></span></code></pre></div><p>For processing this output with script, use of <code>-o</code> option is handy.</p>
 <h2 id="global-ip-address">Global IP address</h2>
 <p>If a workstation is behind the firewall, Global IP address is that for the
@@ -125,7 +125,7 @@ gateway device.</p>
 <p>So I don&rsquo;t get global IP with IPv4 but have global IP with IPv6.</p>
 <h2 id="logging-ip-address-with-systemd-timer">Logging IP address with systemd timer</h2>
 <h3 id="configsystemdusermyipservice"><code>~/.config/systemd/user/myip.service</code></h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">Check external IP address</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Documentation</span><span style="color:#f92672">=</span><span style="color:#e6db74">man:myip(1)</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># journalctl -a -b -t myip</span>
@@ -143,7 +143,7 @@ gateway device.</p>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">StandardOutput</span><span style="color:#f92672">=</span><span style="color:#e6db74">null</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">StandardError</span><span style="color:#f92672">=</span><span style="color:#e6db74">null</span>
 </span></span></code></pre></div><h3 id="configsystemdusermyiptimer"><code>~/.config/systemd/user/myip.timer</code>:</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#75715e"># activate by: systemctl --user enable myip.timer</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#75715e"># activate by: systemctl --user enable myip.timer</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">Check external IP address</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Documentation</span><span style="color:#f92672">=</span><span style="color:#e6db74">man:myip(1)</span>
@@ -155,16 +155,14 @@ gateway device.</p>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Install]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">WantedBy</span><span style="color:#f92672">=</span><span style="color:#e6db74">timers.target</span>
 </span></span></code></pre></div><h3 id="activating-timer-service">Activating timer service</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ systemctl --user enable myip.timer
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ systemctl --user enable myip.timer
 </span></span></code></pre></div><p>This creates a symlink <code>~/.config/systemd/user/timers.target.wants/myip.timer</code> pointing to <code>~/.config/systemd/user/myip.timer</code></p>
 <h3 id="checking-logged-ips">Checking logged IPs</h3>
 <p>IP address as I powered-on this time.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ journalctl -a -b -t myip
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ journalctl -a -b -t myip
 </span></span></code></pre></div><p>IP address as I powered-on recently.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ journalctl -a -t myip
-</span></span></code></pre></div><!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ journalctl -a -t myip
+</span></span></code></pre></div>
 
 <table width="100%">
   <tbody>

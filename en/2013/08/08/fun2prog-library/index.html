@@ -194,60 +194,60 @@ library.  So normally, user has to define them.</p>
 <p>The macros for the error are explained in the manpage <code>errno</code>(3).</p>
 <p>The values of the macros for the error are defined in <code>&lt;errno.h&gt;</code> header file which is a bit convoluted.  Arch dependent symlinks are marked as (*).:</p>
 <table>
-<thead>
-<tr>
-<th>header file</th>
-<th>action</th>
-<th>target</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>&lt;errno.h&gt;</code></td>
-<td>defines</td>
-<td>&ldquo;<code>extern int errno;</code>&rdquo;.</td>
-</tr>
-<tr>
-<td><code>&lt;errno.h&gt;</code></td>
-<td>includes</td>
-<td><code>&lt;bits/errno.h&gt;</code>.</td>
-</tr>
-<tr>
-<td><code>&lt;bits/errno.h&gt;</code> (*)</td>
-<td>includes</td>
-<td><code>&lt;linux/errno.h&gt;</code>.</td>
-</tr>
-<tr>
-<td><code>&lt;linux/errno.h&gt;</code></td>
-<td>includes</td>
-<td><code>&lt;asm/errno.h&gt;</code>.</td>
-</tr>
-<tr>
-<td><code>&lt;asm/errno.h&gt;</code> (*)</td>
-<td>includes</td>
-<td><code>&lt;asm-generic/errno.h&gt;</code>.</td>
-</tr>
-<tr>
-<td><code>&lt;asm-generic/errno.h&gt;</code></td>
-<td>defines</td>
-<td>many error values.</td>
-</tr>
-<tr>
-<td><code>&lt;asm-generic/errno.h&gt;</code></td>
-<td>includes</td>
-<td><code>&lt;asm-generic/errno-base.h&gt;</code>.</td>
-</tr>
-<tr>
-<td><code>&lt;asm-generic/errno-base.h&gt;</code></td>
-<td>defines</td>
-<td>important error values from 1 to 34.</td>
-</tr>
-<tr>
-<td></td>
-<td></td>
-<td></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>header file</th>
+          <th>action</th>
+          <th>target</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>&lt;errno.h&gt;</code></td>
+          <td>defines</td>
+          <td>&ldquo;<code>extern int errno;</code>&rdquo;.</td>
+      </tr>
+      <tr>
+          <td><code>&lt;errno.h&gt;</code></td>
+          <td>includes</td>
+          <td><code>&lt;bits/errno.h&gt;</code>.</td>
+      </tr>
+      <tr>
+          <td><code>&lt;bits/errno.h&gt;</code> (*)</td>
+          <td>includes</td>
+          <td><code>&lt;linux/errno.h&gt;</code>.</td>
+      </tr>
+      <tr>
+          <td><code>&lt;linux/errno.h&gt;</code></td>
+          <td>includes</td>
+          <td><code>&lt;asm/errno.h&gt;</code>.</td>
+      </tr>
+      <tr>
+          <td><code>&lt;asm/errno.h&gt;</code> (*)</td>
+          <td>includes</td>
+          <td><code>&lt;asm-generic/errno.h&gt;</code>.</td>
+      </tr>
+      <tr>
+          <td><code>&lt;asm-generic/errno.h&gt;</code></td>
+          <td>defines</td>
+          <td>many error values.</td>
+      </tr>
+      <tr>
+          <td><code>&lt;asm-generic/errno.h&gt;</code></td>
+          <td>includes</td>
+          <td><code>&lt;asm-generic/errno-base.h&gt;</code>.</td>
+      </tr>
+      <tr>
+          <td><code>&lt;asm-generic/errno-base.h&gt;</code></td>
+          <td>defines</td>
+          <td>important error values from 1 to 34.</td>
+      </tr>
+      <tr>
+          <td></td>
+          <td></td>
+          <td></td>
+      </tr>
+  </tbody>
 </table>
 <p>TIP: Make sure to include <code>&lt;error.h&gt;</code> in the header if a program needs to
 deal with the <code>libc</code> library generated errors.</p>
@@ -255,55 +255,55 @@ deal with the <code>libc</code> library generated errors.</p>
 <p>Unfortunately, some C string functions are known to be troublemakers.</p>
 <p>Safe coding recommendations by busybox coders</p>
 <table>
-<thead>
-<tr>
-<th>troublemaker functions</th>
-<th>overrun concerns</th>
-<th>recommendation</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>strcpy</code>(3)</td>
-<td><code>dest</code> string</td>
-<td><code>safe_strncpy</code></td>
-</tr>
-<tr>
-<td><code>strncpy</code>(3)</td>
-<td>may fail to 0-terminate <code>dst</code></td>
-<td><code>safe_strncpy</code></td>
-</tr>
-<tr>
-<td><code>strcat</code>(3)</td>
-<td><code>dest</code> string</td>
-<td><code>strncat</code>(3)</td>
-</tr>
-<tr>
-<td><code>gets</code>(3)</td>
-<td>string it gets</td>
-<td><code>fgets</code>(3)</td>
-</tr>
-<tr>
-<td><code>getwd</code>(3)</td>
-<td><code>buf</code> string</td>
-<td><code>getcwd</code>(3)</td>
-</tr>
-<tr>
-<td><code>[v]sprintf</code>(3)</td>
-<td><code>str</code> buffer</td>
-<td><code>[v]snprintf</code>(3)</td>
-</tr>
-<tr>
-<td><code>realpath</code>(3)</td>
-<td><code>path</code> buffer</td>
-<td>use with <code>pathconf</code>(3)</td>
-</tr>
-<tr>
-<td><code>[vf]scanf</code>(3)</td>
-<td>its arguments</td>
-<td>just avoid it</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>troublemaker functions</th>
+          <th>overrun concerns</th>
+          <th>recommendation</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>strcpy</code>(3)</td>
+          <td><code>dest</code> string</td>
+          <td><code>safe_strncpy</code></td>
+      </tr>
+      <tr>
+          <td><code>strncpy</code>(3)</td>
+          <td>may fail to 0-terminate <code>dst</code></td>
+          <td><code>safe_strncpy</code></td>
+      </tr>
+      <tr>
+          <td><code>strcat</code>(3)</td>
+          <td><code>dest</code> string</td>
+          <td><code>strncat</code>(3)</td>
+      </tr>
+      <tr>
+          <td><code>gets</code>(3)</td>
+          <td>string it gets</td>
+          <td><code>fgets</code>(3)</td>
+      </tr>
+      <tr>
+          <td><code>getwd</code>(3)</td>
+          <td><code>buf</code> string</td>
+          <td><code>getcwd</code>(3)</td>
+      </tr>
+      <tr>
+          <td><code>[v]sprintf</code>(3)</td>
+          <td><code>str</code> buffer</td>
+          <td><code>[v]snprintf</code>(3)</td>
+      </tr>
+      <tr>
+          <td><code>realpath</code>(3)</td>
+          <td><code>path</code> buffer</td>
+          <td>use with <code>pathconf</code>(3)</td>
+      </tr>
+      <tr>
+          <td><code>[vf]scanf</code>(3)</td>
+          <td>its arguments</td>
+          <td>just avoid it</td>
+      </tr>
+  </tbody>
 </table>
 <p>Although <code>[vf]scanf</code>(3) are marked as &ldquo;just avoid it&rdquo;, it is not the end of the
 world for the coding of the <code>scanf</code>-like logic.</p>
@@ -315,8 +315,6 @@ newline &ldquo;<code>\n</code>&rdquo; code, <code>getdelim</code>(3) may alterna
 other solution for the safe <code>scanf</code> alternative. (You need newer POSIX.1-2008
 complient <code>libc</code>.)  It uses &ldquo;<code>[vf]scanf(&quot;%ms&quot;, &amp;char)</code>&rdquo; with <code>free</code> instead of
 &ldquo;<code>[vf]scanf(&quot;%s&quot;, char)</code>&rdquo; alone.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h3 id="libc-safe_strncpy">libc: safe_strncpy</h3>
 <p>The <code>safe_strncpy</code> recommended by busybox coders is essentially the 0-terminate
 guranteed <code>strncpy</code> with the safe data length.  Since it is missing in the
@@ -464,89 +462,88 @@ These example codes are not meant to be the fastest nor the shortest code.</p>
 method seems to be the most popular one used.</p>
 <p>Here are benchmark results of these methods using <code>perf</code> (See <a href="/en/2013/08/13/fun2prog-debug-4/#perf">Debug: level 4: perf</a>).</p>
 <p>Speed benchmark of various methods to obtain the file size.</p>
-<!-- raw HTML omitted -->
 <table>
-<thead>
-<tr>
-<th>Performance counter stats</th>
-<th>char</th>
-<th>block</th>
-<th>lseek</th>
-<th>stat</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>seconds time elapsed</td>
-<td>0.060168937</td>
-<td>0.004092420</td>
-<td>0.002638296</td>
-<td>0.002588425</td>
-</tr>
-<tr>
-<td>task-clock</td>
-<td>59.126037</td>
-<td>3.051782</td>
-<td>1.616662</td>
-<td>1.634113</td>
-</tr>
-<tr>
-<td>context-switches</td>
-<td>5</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>cpu-migrations</td>
-<td>1</td>
-<td>1</td>
-<td>0</td>
-<td>1</td>
-</tr>
-<tr>
-<td>page-faults</td>
-<td>193</td>
-<td>193</td>
-<td>191</td>
-<td>191</td>
-</tr>
-<tr>
-<td>cycles</td>
-<td>154,305,859</td>
-<td>2,428,799</td>
-<td><!-- raw HTML omitted --></td>
-<td>1,297,107</td>
-</tr>
-<tr>
-<td>stalled-cycles-frontend</td>
-<td>32,413,607</td>
-<td>1,237,525</td>
-<td>787,158</td>
-<td>805,663</td>
-</tr>
-<tr>
-<td>stalled-cycles-backend</td>
-<td>3,089,296</td>
-<td>828,200</td>
-<td>612,162</td>
-<td>627,711</td>
-</tr>
-<tr>
-<td>branches</td>
-<td>87,138,178</td>
-<td>382,322</td>
-<td>209,395</td>
-<td>208,836</td>
-</tr>
-<tr>
-<td>branch-misses</td>
-<td>14,795</td>
-<td><!-- raw HTML omitted --></td>
-<td>9,023</td>
-<td><!-- raw HTML omitted --></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Performance counter stats</th>
+          <th>char</th>
+          <th>block</th>
+          <th>lseek</th>
+          <th>stat</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>seconds time elapsed</td>
+          <td>0.060168937</td>
+          <td>0.004092420</td>
+          <td>0.002638296</td>
+          <td>0.002588425</td>
+      </tr>
+      <tr>
+          <td>task-clock</td>
+          <td>59.126037</td>
+          <td>3.051782</td>
+          <td>1.616662</td>
+          <td>1.634113</td>
+      </tr>
+      <tr>
+          <td>context-switches</td>
+          <td>5</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+      </tr>
+      <tr>
+          <td>cpu-migrations</td>
+          <td>1</td>
+          <td>1</td>
+          <td>0</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>page-faults</td>
+          <td>193</td>
+          <td>193</td>
+          <td>191</td>
+          <td>191</td>
+      </tr>
+      <tr>
+          <td>cycles</td>
+          <td>154,305,859</td>
+          <td>2,428,799</td>
+          <td><!-- raw HTML omitted --></td>
+          <td>1,297,107</td>
+      </tr>
+      <tr>
+          <td>stalled-cycles-frontend</td>
+          <td>32,413,607</td>
+          <td>1,237,525</td>
+          <td>787,158</td>
+          <td>805,663</td>
+      </tr>
+      <tr>
+          <td>stalled-cycles-backend</td>
+          <td>3,089,296</td>
+          <td>828,200</td>
+          <td>612,162</td>
+          <td>627,711</td>
+      </tr>
+      <tr>
+          <td>branches</td>
+          <td>87,138,178</td>
+          <td>382,322</td>
+          <td>209,395</td>
+          <td>208,836</td>
+      </tr>
+      <tr>
+          <td>branch-misses</td>
+          <td>14,795</td>
+          <td><!-- raw HTML omitted --></td>
+          <td>9,023</td>
+          <td><!-- raw HTML omitted --></td>
+      </tr>
+  </tbody>
 </table>
 <p>If you wish to do more than just counting characters, other methods may give
 good starting point for such programs.  I will list all the source of <code>size.c</code> as below.</p>
@@ -729,196 +726,194 @@ main(int argc, char* argv[])
 </ul>
 <p>Here are benchmark results of these methods using <code>perf</code> (See <a href="/en/2013/08/13/fun2prog-debug-4/#perf">Debug: level 4: perf</a>).</p>
 <p>Speed benchmark of various methods to copy a large file about 2.4 MiB.</p>
-<!-- raw HTML omitted -->
 <table>
-<thead>
-<tr>
-<th>Performance counter stats</th>
-<th>char</th>
-<th>block</th>
-<th>block big</th>
-<th>mmap memcpy</th>
-<th>mmap write</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>seconds time elapsed</td>
-<td>0.089096423</td>
-<td>0.015654253</td>
-<td>0.016963338</td>
-<td>0.018813373</td>
-<td>0.018040972</td>
-</tr>
-<tr>
-<td>task-clock</td>
-<td>78.600617</td>
-<td>5.916846</td>
-<td>7.286212</td>
-<td>8.114573</td>
-<td>6.747344</td>
-</tr>
-<tr>
-<td>context-switches</td>
-<td>12</td>
-<td>5</td>
-<td>5</td>
-<td>5</td>
-<td>5</td>
-</tr>
-<tr>
-<td>cpu-migrations</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>page-faults</td>
-<td>132</td>
-<td>132</td>
-<td>715</td>
-<td>1,283</td>
-<td>694</td>
-</tr>
-<tr>
-<td>cycles</td>
-<td>213,622,432</td>
-<td>8,787,602</td>
-<td>9,975,035</td>
-<td>9,506,449</td>
-<td>8,258,812</td>
-</tr>
-<tr>
-<td>stalled-cycles-frontend</td>
-<td>46,249,968</td>
-<td>5,289,960</td>
-<td>4,939,101</td>
-<td>4,771,343</td>
-<td>4,421,422</td>
-</tr>
-<tr>
-<td>stalled-cycles-backend</td>
-<td>8,069,075</td>
-<td>3,617,957</td>
-<td>3,660,122</td>
-<td>3,965,894</td>
-<td>3,223,960</td>
-</tr>
-<tr>
-<td>branches</td>
-<td>118,042,429</td>
-<td>1,614,855</td>
-<td>1,639,492</td>
-<td>1,555,953</td>
-<td>1,442,130</td>
-</tr>
-<tr>
-<td>branch-misses</td>
-<td>20,800</td>
-<td>12,048</td>
-<td>10,295</td>
-<td>8,539</td>
-<td><!-- raw HTML omitted --></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Performance counter stats</th>
+          <th>char</th>
+          <th>block</th>
+          <th>block big</th>
+          <th>mmap memcpy</th>
+          <th>mmap write</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>seconds time elapsed</td>
+          <td>0.089096423</td>
+          <td>0.015654253</td>
+          <td>0.016963338</td>
+          <td>0.018813373</td>
+          <td>0.018040972</td>
+      </tr>
+      <tr>
+          <td>task-clock</td>
+          <td>78.600617</td>
+          <td>5.916846</td>
+          <td>7.286212</td>
+          <td>8.114573</td>
+          <td>6.747344</td>
+      </tr>
+      <tr>
+          <td>context-switches</td>
+          <td>12</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+          <td>5</td>
+      </tr>
+      <tr>
+          <td>cpu-migrations</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+      </tr>
+      <tr>
+          <td>page-faults</td>
+          <td>132</td>
+          <td>132</td>
+          <td>715</td>
+          <td>1,283</td>
+          <td>694</td>
+      </tr>
+      <tr>
+          <td>cycles</td>
+          <td>213,622,432</td>
+          <td>8,787,602</td>
+          <td>9,975,035</td>
+          <td>9,506,449</td>
+          <td>8,258,812</td>
+      </tr>
+      <tr>
+          <td>stalled-cycles-frontend</td>
+          <td>46,249,968</td>
+          <td>5,289,960</td>
+          <td>4,939,101</td>
+          <td>4,771,343</td>
+          <td>4,421,422</td>
+      </tr>
+      <tr>
+          <td>stalled-cycles-backend</td>
+          <td>8,069,075</td>
+          <td>3,617,957</td>
+          <td>3,660,122</td>
+          <td>3,965,894</td>
+          <td>3,223,960</td>
+      </tr>
+      <tr>
+          <td>branches</td>
+          <td>118,042,429</td>
+          <td>1,614,855</td>
+          <td>1,639,492</td>
+          <td>1,555,953</td>
+          <td>1,442,130</td>
+      </tr>
+      <tr>
+          <td>branch-misses</td>
+          <td>20,800</td>
+          <td>12,048</td>
+          <td>10,295</td>
+          <td>8,539</td>
+          <td><!-- raw HTML omitted --></td>
+      </tr>
+  </tbody>
 </table>
 <p>Speed benchmark of various methods to copy a small file about 2 KiB.</p>
-<!-- raw HTML omitted -->
 <table>
-<thead>
-<tr>
-<th>Performance counter stats</th>
-<th>char</th>
-<th>block</th>
-<th>block big</th>
-<th>mmap memcpy</th>
-<th>mmap write</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>seconds time elapsed</td>
-<td>0.002350776</td>
-<td>0.001894332</td>
-<td>0.001848917</td>
-<td>0.002023421</td>
-<td>0.002016262</td>
-</tr>
-<tr>
-<td>task-clock</td>
-<td>1.335467</td>
-<td>1.008275</td>
-<td>0.954096</td>
-<td>1.053580</td>
-<td>1.013171</td>
-</tr>
-<tr>
-<td>context-switches</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-<td>1</td>
-</tr>
-<tr>
-<td>cpu-migrations</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-</tr>
-<tr>
-<td>page-faults</td>
-<td>132</td>
-<td>132</td>
-<td>132</td>
-<td>117</td>
-<td>111</td>
-</tr>
-<tr>
-<td>cycles</td>
-<td><!-- raw HTML omitted --></td>
-<td>731,955</td>
-<td>769,188</td>
-<td>606,346</td>
-<td>616,053</td>
-</tr>
-<tr>
-<td>stalled-cycles-frontend</td>
-<td>696,792</td>
-<td>625,996</td>
-<td>648,758</td>
-<td>579,552</td>
-<td>552,678</td>
-</tr>
-<tr>
-<td>stalled-cycles-backend</td>
-<td>536,087</td>
-<td>495,138</td>
-<td>513,756</td>
-<td>455,248</td>
-<td>434,162</td>
-</tr>
-<tr>
-<td>branches</td>
-<td>153,252</td>
-<td>125,526</td>
-<td>127,090</td>
-<td>102,813</td>
-<td>99,467</td>
-</tr>
-<tr>
-<td>branch-misses</td>
-<td>3,292</td>
-<td><!-- raw HTML omitted --></td>
-<td>2,232</td>
-<td>2,474</td>
-<td><!-- raw HTML omitted --></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Performance counter stats</th>
+          <th>char</th>
+          <th>block</th>
+          <th>block big</th>
+          <th>mmap memcpy</th>
+          <th>mmap write</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>seconds time elapsed</td>
+          <td>0.002350776</td>
+          <td>0.001894332</td>
+          <td>0.001848917</td>
+          <td>0.002023421</td>
+          <td>0.002016262</td>
+      </tr>
+      <tr>
+          <td>task-clock</td>
+          <td>1.335467</td>
+          <td>1.008275</td>
+          <td>0.954096</td>
+          <td>1.053580</td>
+          <td>1.013171</td>
+      </tr>
+      <tr>
+          <td>context-switches</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+          <td>1</td>
+      </tr>
+      <tr>
+          <td>cpu-migrations</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+      </tr>
+      <tr>
+          <td>page-faults</td>
+          <td>132</td>
+          <td>132</td>
+          <td>132</td>
+          <td>117</td>
+          <td>111</td>
+      </tr>
+      <tr>
+          <td>cycles</td>
+          <td><!-- raw HTML omitted --></td>
+          <td>731,955</td>
+          <td>769,188</td>
+          <td>606,346</td>
+          <td>616,053</td>
+      </tr>
+      <tr>
+          <td>stalled-cycles-frontend</td>
+          <td>696,792</td>
+          <td>625,996</td>
+          <td>648,758</td>
+          <td>579,552</td>
+          <td>552,678</td>
+      </tr>
+      <tr>
+          <td>stalled-cycles-backend</td>
+          <td>536,087</td>
+          <td>495,138</td>
+          <td>513,756</td>
+          <td>455,248</td>
+          <td>434,162</td>
+      </tr>
+      <tr>
+          <td>branches</td>
+          <td>153,252</td>
+          <td>125,526</td>
+          <td>127,090</td>
+          <td>102,813</td>
+          <td>99,467</td>
+      </tr>
+      <tr>
+          <td>branch-misses</td>
+          <td>3,292</td>
+          <td><!-- raw HTML omitted --></td>
+          <td>2,232</td>
+          <td>2,474</td>
+          <td><!-- raw HTML omitted --></td>
+      </tr>
+  </tbody>
 </table>
 <p>The <em>char</em> method works the slowest as expected.</p>
 <p>The <em>block</em> method works slightly faster than all other methods excluding the
@@ -1433,7 +1428,6 @@ library installed in the system.</p>
 <li><a href="https://computing.llnl.gov/tutorials/pthreads/">POSIX Threads Programming</a></li>
 <li><a href="http://www.gentoo.org/doc/en/articles/l-posix1.xml">POSIX threads explained</a> (updated, based on <a href="http://www.ibm.com/developerworks/library/l-posix1/">IBM developerWorks: POSIX threads explained</a>.)</li>
 </ul>
-<!-- raw HTML omitted -->
 <p>TIP: We should focus on reading tutorials which are written after the <a href="http://en.wikipedia.org/wiki/Native_POSIX_Thread_Library">native POSIX thread library (NPTL)</a> support.  This means tutorial should be newer than 2006.</p>
 <p>The actual execution speed of a program on the modern CPU can be affected by many issues other than the utilization of CPU cores:</p>
 <ul>
@@ -1469,57 +1463,56 @@ library installed in the system.</p>
 </ul>
 <p>Here is a benchmark results of execution times for these programs listed below.</p>
 <p>Speed benchmark of various program languages</p>
-<!-- raw HTML omitted -->
 <table>
-<thead>
-<tr>
-<th>Program</th>
-<th style="text-align:right">real(2^20)</th>
-<th style="text-align:right">user(2^20)</th>
-<th style="text-align:right">sys(2^20)</th>
-<th style="text-align:right">real(2^24)</th>
-<th style="text-align:right">user(2^24)</th>
-<th style="text-align:right">sys(2^24)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>prime5.c</code></td>
-<td style="text-align:right">0.15</td>
-<td style="text-align:right">0.15</td>
-<td style="text-align:right">0.00</td>
-<td style="text-align:right">5.62</td>
-<td style="text-align:right">5.60</td>
-<td style="text-align:right">0.02</td>
-</tr>
-<tr>
-<td><code>prime6.c</code></td>
-<td style="text-align:right">0.48</td>
-<td style="text-align:right">0.09</td>
-<td style="text-align:right">1.15</td>
-<td style="text-align:right">7.38</td>
-<td style="text-align:right">1.52</td>
-<td style="text-align:right">18.30</td>
-</tr>
-<tr>
-<td><code>prime7.c</code></td>
-<td style="text-align:right">0.77</td>
-<td style="text-align:right">0.26</td>
-<td style="text-align:right">1.80</td>
-<td style="text-align:right">12.01</td>
-<td style="text-align:right">5.18</td>
-<td style="text-align:right">27.82</td>
-</tr>
-<tr>
-<td><code>prime8.c</code></td>
-<td style="text-align:right">0.05</td>
-<td style="text-align:right">0.28</td>
-<td style="text-align:right">0.00</td>
-<td style="text-align:right">1.61</td>
-<td style="text-align:right">10.27</td>
-<td style="text-align:right">0.08</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Program</th>
+          <th style="text-align: right">real(2^20)</th>
+          <th style="text-align: right">user(2^20)</th>
+          <th style="text-align: right">sys(2^20)</th>
+          <th style="text-align: right">real(2^24)</th>
+          <th style="text-align: right">user(2^24)</th>
+          <th style="text-align: right">sys(2^24)</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>prime5.c</code></td>
+          <td style="text-align: right">0.15</td>
+          <td style="text-align: right">0.15</td>
+          <td style="text-align: right">0.00</td>
+          <td style="text-align: right">5.62</td>
+          <td style="text-align: right">5.60</td>
+          <td style="text-align: right">0.02</td>
+      </tr>
+      <tr>
+          <td><code>prime6.c</code></td>
+          <td style="text-align: right">0.48</td>
+          <td style="text-align: right">0.09</td>
+          <td style="text-align: right">1.15</td>
+          <td style="text-align: right">7.38</td>
+          <td style="text-align: right">1.52</td>
+          <td style="text-align: right">18.30</td>
+      </tr>
+      <tr>
+          <td><code>prime7.c</code></td>
+          <td style="text-align: right">0.77</td>
+          <td style="text-align: right">0.26</td>
+          <td style="text-align: right">1.80</td>
+          <td style="text-align: right">12.01</td>
+          <td style="text-align: right">5.18</td>
+          <td style="text-align: right">27.82</td>
+      </tr>
+      <tr>
+          <td><code>prime8.c</code></td>
+          <td style="text-align: right">0.05</td>
+          <td style="text-align: right">0.28</td>
+          <td style="text-align: right">0.00</td>
+          <td style="text-align: right">1.61</td>
+          <td style="text-align: right">10.27</td>
+          <td style="text-align: right">0.08</td>
+      </tr>
+  </tbody>
 </table>
 <p>Here, the time reported by the <code>/usr/bin/time -p</code> command is in POSIX standard 1003.2 style:</p>
 <ul>
@@ -1723,7 +1716,7 @@ user 1.52
 sys 18.30
 </code></pre>
 
-<h4 id="prime7c-multi-threaded-program-fixed-number-of-threads-are-started-and-controlled-via-semaphorehttpenwikipediaorgwikisemaphore_programming"><code>prime7.c</code>: multi-threaded program, fixed number of threads are started and controlled via <a href="http://en.wikipedia.org/wiki/Semaphore_(programming)">semaphore</a>.</h4>
+<h4 id="prime7c-multi-threaded-program-fixed-number-of-threads-are-started-and-controlled-via-semaphore"><code>prime7.c</code>: multi-threaded program, fixed number of threads are started and controlled via <a href="http://en.wikipedia.org/wiki/Semaphore_(programming)">semaphore</a>.</h4>
 <p>Source code for the Vala program: prime7.c</p>
 
 <pre><code>#include &lt;stdlib.h&gt;
@@ -2017,7 +2010,6 @@ $ ./prime8 &#34;1091&#34;&gt;/dev/null; echo $?
 0
 </code></pre>
 
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

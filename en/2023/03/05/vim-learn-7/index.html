@@ -109,7 +109,7 @@ with very minimal customization.  (Sometimes, LazyVim acts strange.  This <code>
 is much faster to start and caused no such issues.)</p>
 <h2 id="vi-as-an-baseline-simple-editor">Vi as an baseline simple editor</h2>
 <p>Here, I created <a href="https://github.com/osamuaoki/dot-vim">a single generic configuration file for Vim and NeoVim <code>~/.vimrc</code></a>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#75715e">&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vimrc)</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-vim" data-lang="vim"><span style="display:flex;"><span><span style="color:#75715e">&#34;&#34;&#34; Generic baseline Vim and Neovim configuration (~/.vimrc)</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">&#34;&#34;&#34;   - For NeoVim, use &#34;nvim -u ~/.vimrc [filename]&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">set</span> <span style="color:#a6e22e">nocompatible</span>                <span style="color:#75715e">&#34; :h &#39;cp -- sensible (n)vim mode</span>
@@ -206,7 +206,7 @@ is much faster to start and caused no such issues.)</p>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">augroup</span> <span style="color:#a6e22e">END</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">&#34; vim: set sw=2 sts=2 et ft=vim :</span>
 </span></span></code></pre></div><p>Since nvim may not be available, I created bash alias for <code>vi</code> etc. in <code>~/.bashrc</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># sourced at the end of ~/.bashrc</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># sourced at the end of ~/.bashrc</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># vim:set sw=2 sts=2 ai si et:</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># Use: shfmt -s -w</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#=============================================================================</span>
@@ -302,8 +302,6 @@ internal function and its keymap.  (it is <code>&lt;SPACE&gt;/</code> for AstroN
 <h3 id="colorscheme-of-lazyvim">Colorscheme of Lazyvim</h3>
 <p>The default <code>colorscheme</code> for <code>Lazyvim</code> is <code>tokyonight</code>.</p>
 <p>Now Neovim default to <code>vim.go.background = &quot;dark&quot;</code>.  (as of 0.9.0+)</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h3 id="masonnvim-support"><code>mason.nvim</code> support</h3>
 <p><code>mason.nvim</code> manages binary commands used by <code>null-ls.nvim</code>.  It can be started
 by <code>:Mason</code> (alternatively, <code>&lt;SPACE&gt;cm</code>).  To update binary commands to the
@@ -314,7 +312,7 @@ latest, just press &ldquo;U&rdquo;.</p>
 <code>~/.local/share/nvim/mason/bin/&lt;progname&gt;</code>. So executable programs from Neovim
 plugins are not the one on the main system.</p>
 <p>As I see my situation with <code>:checkhelth mason</code>.:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>==============================================================================
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-markdown" data-lang="markdown"><span style="display:flex;"><span>==============================================================================
 </span></span><span style="display:flex;"><span>mason: require(&#34;mason.health&#34;).check()
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>mason.nvim ~
@@ -454,7 +452,6 @@ plugin for <code>view</code> purpose.</p>
 <a href="https://neovim.io/doc/user/lsp.html">LSP</a>.
 Reddit gave me good intro: <a href="https://www.reddit.com/r/neovim/comments/1109wgr/treesitter_vs_lsp_differences_ans_overlap/">Treesitter vs LSP. Differences ans overlap</a>.</p>
 <p>The <a href="https://github.com/nvim-treesitter/playground">nvim-treesitter playground</a> plugin is now integrated into Neovim v0.9, so <code>:InspectTree</code> works without installing this plugin.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

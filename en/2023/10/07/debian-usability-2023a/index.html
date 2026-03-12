@@ -176,14 +176,12 @@ accessed by adding <code>.local</code> at the end of each host name thanks to Av
 (<code>?</code> can be 1-6) to access Linux virtual terminal login prompt. Otherwise, you
 are already at login prompt on Linux virtual terminal.</p>
 <p>Login to the root account and execute:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span># apt-get update
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span># apt-get update
 </span></span><span style="display:flex;"><span># apt-get install aptitude sudo vim mc wget nano-
 </span></span></code></pre></div><p>NOTE: If you didn&rsquo;t set password for <code>root</code> during system installation with <code>debian-installer</code> in the expert mode, <code>sudo</code> is configured for you and you need to use it to gain root privilege.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h3 id="initial-manual-setup-sudo">Initial manual setup (SUDO)</h3>
 <p>For the passwordless <code>sudo</code> operation, configure <code>sudo</code> from root by adding <code>/etc/sudoers.d/passwordless</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span># No passowrd required for the user in sudo group
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span># No passowrd required for the user in sudo group
 </span></span><span style="display:flex;"><span># please note the last match wins configuration
 </span></span><span style="display:flex;"><span>%sudo ALL = (ALL:ALL) NOPASSWD: ALL
 </span></span><span style="display:flex;"><span># No password for 8 hours
@@ -211,7 +209,7 @@ missing <code>M</code> flags to groups of files:</p>
 <li>Add a few packages &hellip;</li>
 </ul>
 <p>You can print list of intentionally installed packages as a plain text with:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;!~M~poptional~i&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;!~M~poptional~i&#39;</span>
 </span></span><span style="display:flex;"><span>i   aptitude                         - terminal-based package manager
 </span></span><span style="display:flex;"><span>i   btrfs-progs                      - Checksumming Copy on Write Filesystem utili
 </span></span><span style="display:flex;"><span>i   discover                         - hardware identification system
@@ -250,7 +248,7 @@ missing <code>M</code> flags to groups of files:</p>
 </ul>
 <h3 id="initial-manual-setup-gpg">Initial manual setup (GPG)</h3>
 <p>After configuring SSH as above, your GPG keys on <code>goofy</code> can be moved to <code>casper</code> by executing the following on <code>goofy</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ scp -r .gnupg casper.local:.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ scp -r .gnupg casper.local:.
 </span></span></code></pre></div><h3 id="initial-manual-setup-gnome">Initial manual setup (GNOME)</h3>
 <p>Install <code>task-desktop</code> package which pulls in <code>task-gnome-desktop</code> package to set up a decent GNOME GUI workstation with <code>aptitude</code>.</p>
 <h3 id="wallpaper-for-grub">Wallpaper for GRUB</h3>
@@ -274,8 +272,8 @@ around the <strong>unset</strong> problem.</p>
 <code>GRUB_DISABLE_OS_PROBE=false</code> to do OS probing.</p>
 <h3 id="multi-boot-with-grub-on-uefi-system">Multi-boot with GRUB on UEFI system</h3>
 <p>For more robust multi-boot, I usually add following as <code>/etc/grub.d/40_fixed_linux</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>exec tail -n +3 $0
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span>exec tail -n +3 $0
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># This file provides an easy way to add custom menu entries.  Simply type the</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># menu entries you want to add after this comment.  Be careful not to change</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># the &#39;exec tail&#39; line above.</span>
@@ -585,7 +583,7 @@ trick may be usable for any shell access hosts such as salsa.debian.org etc.)</p
 Let me create and use subvolume <code>@osamu</code> for my user <code>osamu</code> and copy contents
 of original <code>/home/osamu</code> into <code>@osamu</code>.  Then update <code>/etc/fstab</code> to mount
 <code>@osamu</code> onto <code>/home/osamu</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span># mount /dev/sda6 on /mnt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span># mount /dev/sda6 on /mnt
 </span></span><span style="display:flex;"><span># cd /mnt
 </span></span><span style="display:flex;"><span>$ ls -lai
 </span></span><span style="display:flex;"><span>total 16
@@ -637,7 +635,7 @@ of original <code>/home/osamu</code> into <code>@osamu</code>.  Then update <cod
 <li>Add the primary user to <code>lxd</code> group.</li>
 <li>Initialize LXD use environment</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sudo lxd init
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sudo lxd init
 </span></span><span style="display:flex;"><span>Would you like to use LXD clustering? (yes/no) [default=no]:
 </span></span><span style="display:flex;"><span>Do you want to configure a new storage pool? (yes/no) [default=yes]:
 </span></span><span style="display:flex;"><span>Name of the new storage pool [default=default]:
@@ -652,7 +650,7 @@ of original <code>/home/osamu</code> into <code>@osamu</code>.  Then update <cod
 </span></span><span style="display:flex;"><span>Would you like stale cached images to be updated automatically? (yes/no) [default=yes]:
 </span></span><span style="display:flex;"><span>Would you like a YAML &#34;lxd init&#34; preseed to be printed? (yes/no) [default=no]:
 </span></span></code></pre></div><p>If this is on host <code>casper</code> with the primary user <code>osamu</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sysctl kernel.unprivileged_userns_clone
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ sysctl kernel.unprivileged_userns_clone
 </span></span><span style="display:flex;"><span>kernel.unprivileged_userns_clone = 1
 </span></span><span style="display:flex;"><span>$ cd /etc
 </span></span><span style="display:flex;"><span>$ cat subgid
@@ -712,7 +710,6 @@ bootable CD and made USB key containing it image data:</p>
 up from the BIOS Update bootable CD image, you may need to disabled the Secure Boot option to use it.</p>
 <p>If Windows 10 or 11 is installed, you may need to reenable Secure Boot after
 this operation.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

@@ -98,7 +98,7 @@ priority list of translated languages.  If <code>LANG</code> is set to <code>C</
 ignored.</p>
 <p>The current values of such environment variables on the default en_US system
 can be checked from shell prompt as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ locale
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ locale
 </span></span><span style="display:flex;"><span>LANG<span style="color:#f92672">=</span>en_US.UTF-8
 </span></span><span style="display:flex;"><span>LANGUAGE<span style="color:#f92672">=</span>en_US:en
 </span></span><span style="display:flex;"><span>LC_CTYPE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en_US.UTF-8&#34;</span>
@@ -117,7 +117,7 @@ can be checked from shell prompt as:</p>
 </span></span></code></pre></div><p>These values are effective inside of the <code>locale</code> command.</p>
 <p>The tricky thing is Bash only exports <code>LANG</code> and <code>LANGUAGE</code> and the <code>locale</code>
 command sets other variable values inside it.  See variables exported.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ export -p|grep -E -e  <span style="color:#e6db74">&#39;(LC_|LANG)&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ export -p|grep -E -e  <span style="color:#e6db74">&#39;(LC_|LANG)&#39;</span>
 </span></span><span style="display:flex;"><span>declare -x GDM_LANG<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en_US.UTF-8&#34;</span>
 </span></span><span style="display:flex;"><span>declare -x LANG<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en_US.UTF-8&#34;</span>
 </span></span><span style="display:flex;"><span>declare -x LANGUAGE<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;en_US:en&#34;</span>
@@ -126,7 +126,7 @@ command sets other variable values inside it.  See variables exported.</p>
 <code>LANG</code> and <code>LANGUAGE</code> variables to the program to be executed.</p>
 <p>Here, <code>LANG</code> is respected by many programs while <code>LANGUAGE</code> seems to be respected only by programs using GNU Gettext system.</p>
 <p>I check actual situation by invoking program as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ LANG<span style="color:#f92672">=</span>ja_JP.UTF-8 program_name
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ LANG<span style="color:#f92672">=</span>ja_JP.UTF-8 program_name
 </span></span><span style="display:flex;"><span>$ LANG<span style="color:#f92672">=</span>en_US.UTF-8 LANGUAGE<span style="color:#f92672">=</span>ja program_name
 </span></span></code></pre></div><p>My cursory checks yielded:</p>
 <ul>
@@ -187,7 +187,7 @@ desirable L10N setting</li>
 <p>This is least invasive and easy to manage from CLI.</p>
 <p>The use shell alias can be used to execute program under an arbitral L10N
 environment without <strong>logout</strong> and without changing the main system environment.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias jo<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANG=ja_JP.UTF-8 libreoffice&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>alias jo<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANG=ja_JP.UTF-8 libreoffice&#34;</span>
 </span></span><span style="display:flex;"><span>alias jw<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANG=ja_JP.UTF-8 lowriter&#34;</span>
 </span></span><span style="display:flex;"><span>alias jc<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANG=ja_JP.UTF-8 LANGUAGE=ja gnucash&#34;</span>
 </span></span><span style="display:flex;"><span>alias jc<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;LANGUAGE=ja google-chrome-stable&#34;</span>
@@ -199,7 +199,7 @@ account entry names in Japanese.</p>
 <h2 id="custom-l10ned-execution-without-logout-for-gui-via-desktop">Custom L10Ned execution without logout for GUI (via desktop)</h2>
 <p>This is least invasive and easy to manage from GUI.</p>
 <p>Create a <code>jgnucash.desktop</code> file as follows based on <code>/usr/share/applications/gnucash.desktop</code> with minor changes and place it in <code>~/local/share/applications/</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#f92672">[</span>Desktop Entry<span style="color:#f92672">]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#f92672">[</span>Desktop Entry<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>Type<span style="color:#f92672">=</span>Application
 </span></span><span style="display:flex;"><span>MimeType<span style="color:#f92672">=</span>application/x-gnucash;
 </span></span><span style="display:flex;"><span>Version<span style="color:#f92672">=</span>0.9.4
@@ -227,7 +227,7 @@ becomes hidden from the GUI session.</p>
 environment <code>ja_JP.UTF-8</code> while keeping your system under <code>en_US.UTF-8</code>.</p>
 <p>Simple use of <code>sudo mv /usr/bin/gnucash /usr/bin/gnucash.orig</code> isn&rsquo;t robust
 against package update.  Here, <code>dpkg-divert</code> must be used, instead.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ cd /usr/bin
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ cd /usr/bin
 </span></span><span style="display:flex;"><span> $ sudo tee gnucash.orig <span style="color:#e6db74">&lt;&lt; EOF
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LANG=&#34;ja_JP.UTF-8&#34; LANGUAGE=ja /usr/bin/gnucash.orig
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
@@ -238,7 +238,7 @@ against package update.  Here, <code>dpkg-divert</code> must be used, instead.</
 <p>With this set up, one can switch among different environment by changing
 symlink.</p>
 <p>You can restore the original state as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ rm gnucash
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ rm gnucash
 </span></span><span style="display:flex;"><span> $ sudo dpkg-divert --local --rename --remove /usr/bin/gnucash
 </span></span></code></pre></div><h2 id="set-default-in-all-applications-of-libreoffice">Set default in all applications of Libreoffice</h2>
 <p>It took me a while to find a way to set default initial values in all
@@ -327,7 +327,6 @@ I decided to keep myself away from this.</p>
 <h2 id="l10n-for-displayed-page-of-web-content-by-the-browser">L10N for displayed page of web content by the browser</h2>
 <p>Displayed page of web content by the browser can be set independent of GUI dialog language set by <code>LANG</code>.</p>
 <p>For Chrome, click &ldquo;customize and control&rdquo; at the top-right corner to display &ldquo;Settings&rdquo;.  Then click &ldquo;Languages&rdquo; and configure &ldquo;Preferred languages&rdquo;.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

@@ -208,55 +208,55 @@ conventions need to be noted.</p>
 assembler style (NASM default).  These are in the opposite order.</p>
 <p>Examples of assembly codes</p>
 <table>
-<thead>
-<tr>
-<th>AT&amp;T</th>
-<th>Intel</th>
-<th>quasi-C</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>movq $0x12345678, %rax</code></td>
-<td><code>mov rax, 12345678h</code></td>
-<td><code>rax = 0x12345678</code></td>
-</tr>
-<tr>
-<td><code>movq $0xff, %rax</code></td>
-<td><code>mov rax, 0ffh</code></td>
-<td><code>rax = 0xff</code></td>
-</tr>
-<tr>
-<td><code>movq -8(%rbp), %rax</code></td>
-<td><code>mov rax, [rbp-8]</code></td>
-<td><code>rax = *(rbp - 8)</code></td>
-</tr>
-<tr>
-<td><code>movq -0x10(%rbp, %rdx, 8), %rax</code></td>
-<td><code>mov rax, [rbp+rdx*8-10h]</code></td>
-<td><code>rax = *(rbp + rdx * 8 - 0x10)</code></td>
-</tr>
-<tr>
-<td><code>movq (%rcx), %rax</code></td>
-<td><code>mov rax, [rcx]</code></td>
-<td><code>rax = *(rcx)</code></td>
-</tr>
-<tr>
-<td><code>movq %rcx, %rax</code></td>
-<td><code>mov rax, rcx</code></td>
-<td><code>rax = rcx</code></td>
-</tr>
-<tr>
-<td><code>leaq 8(,%rcx,8), %rax</code></td>
-<td><code>lea rax, [rcx*8+8]</code></td>
-<td><code>rax = rcx * 8 + 8</code></td>
-</tr>
-<tr>
-<td><code>leaq (%rbx,%rcx,4), %rax</code></td>
-<td><code>lea rax, [rbx+rcx*4]</code></td>
-<td><code>rax = rbx + rcx * 4</code></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>AT&amp;T</th>
+          <th>Intel</th>
+          <th>quasi-C</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>movq $0x12345678, %rax</code></td>
+          <td><code>mov rax, 12345678h</code></td>
+          <td><code>rax = 0x12345678</code></td>
+      </tr>
+      <tr>
+          <td><code>movq $0xff, %rax</code></td>
+          <td><code>mov rax, 0ffh</code></td>
+          <td><code>rax = 0xff</code></td>
+      </tr>
+      <tr>
+          <td><code>movq -8(%rbp), %rax</code></td>
+          <td><code>mov rax, [rbp-8]</code></td>
+          <td><code>rax = *(rbp - 8)</code></td>
+      </tr>
+      <tr>
+          <td><code>movq -0x10(%rbp, %rdx, 8), %rax</code></td>
+          <td><code>mov rax, [rbp+rdx*8-10h]</code></td>
+          <td><code>rax = *(rbp + rdx * 8 - 0x10)</code></td>
+      </tr>
+      <tr>
+          <td><code>movq (%rcx), %rax</code></td>
+          <td><code>mov rax, [rcx]</code></td>
+          <td><code>rax = *(rcx)</code></td>
+      </tr>
+      <tr>
+          <td><code>movq %rcx, %rax</code></td>
+          <td><code>mov rax, rcx</code></td>
+          <td><code>rax = rcx</code></td>
+      </tr>
+      <tr>
+          <td><code>leaq 8(,%rcx,8), %rax</code></td>
+          <td><code>lea rax, [rcx*8+8]</code></td>
+          <td><code>rax = rcx * 8 + 8</code></td>
+      </tr>
+      <tr>
+          <td><code>leaq (%rbx,%rcx,4), %rax</code></td>
+          <td><code>lea rax, [rbx+rcx*4]</code></td>
+          <td><code>rax = rbx + rcx * 4</code></td>
+      </tr>
+  </tbody>
 </table>
 <p>Some basic 64-bit (= 8 bytes) integer ABI conventions under the <code>x86-64</code> (<code>amd64</code>) Linux need to be noted.</p>
 <ul>
@@ -692,7 +692,6 @@ Aborted
 <li><a href="http://www.ipa.go.jp/security/awareness/vendor/programmingv2/contents/c904.html">http://www.ipa.go.jp/security/awareness/vendor/programmingv2/contents/c904.html</a> (Japanese: Part of secure programing course by IPA, Japanese government funded.)</li>
 <li>&ldquo;Introduction to GCC by Brian J. Gough&rdquo; in the <a href="http://packages.qa.debian.org/g/gccintro.html">gccintro</a> package.</li>
 </ul>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

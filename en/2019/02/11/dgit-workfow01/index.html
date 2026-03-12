@@ -75,55 +75,55 @@ note-00003
 <p>For Debian maintainer, there can be 4 approaches for maintaining git repository
 with <code>dgit</code>.  Let me get all key points of manpages.</p>
 <table>
-<thead>
-<tr>
-<th>tutorials</th>
-<th>model</th>
-<th>tool</th>
-<th>history</th>
-<th>patch</th>
-<th>quilt</th>
-<th>maintainer</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>dgit-maint-native(7)</td>
-<td>native</td>
-<td>git(1)</td>
-<td>upstream git</td>
-<td>(same)</td>
-<td>N/A</td>
-<td>upstream</td>
-</tr>
-<tr>
-<td>dgit-maint-merge(7)</td>
-<td>merge</td>
-<td>git merge(1)</td>
-<td>upstream git</td>
-<td>applied</td>
-<td>merged</td>
-<td>upstream involved</td>
-</tr>
-<tr>
-<td>dgit-maint-debrebase(7)</td>
-<td>rebasish</td>
-<td>git-debrebase(1)</td>
-<td>upstream git</td>
-<td>applied</td>
-<td>series</td>
-<td>pure downstream</td>
-</tr>
-<tr>
-<td>dgit-maint-gbp(7)</td>
-<td>gbp</td>
-<td>git-buildpackage(1)</td>
-<td>upstream tar</td>
-<td>unapplied</td>
-<td>series</td>
-<td>pure downstream</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>tutorials</th>
+          <th>model</th>
+          <th>tool</th>
+          <th>history</th>
+          <th>patch</th>
+          <th>quilt</th>
+          <th>maintainer</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>dgit-maint-native(7)</td>
+          <td>native</td>
+          <td>git(1)</td>
+          <td>upstream git</td>
+          <td>(same)</td>
+          <td>N/A</td>
+          <td>upstream</td>
+      </tr>
+      <tr>
+          <td>dgit-maint-merge(7)</td>
+          <td>merge</td>
+          <td>git merge(1)</td>
+          <td>upstream git</td>
+          <td>applied</td>
+          <td>merged</td>
+          <td>upstream involved</td>
+      </tr>
+      <tr>
+          <td>dgit-maint-debrebase(7)</td>
+          <td>rebasish</td>
+          <td>git-debrebase(1)</td>
+          <td>upstream git</td>
+          <td>applied</td>
+          <td>series</td>
+          <td>pure downstream</td>
+      </tr>
+      <tr>
+          <td>dgit-maint-gbp(7)</td>
+          <td>gbp</td>
+          <td>git-buildpackage(1)</td>
+          <td>upstream tar</td>
+          <td>unapplied</td>
+          <td>series</td>
+          <td>pure downstream</td>
+      </tr>
+  </tbody>
 </table>
 <p>Here, the maintainer column indicates relationship of the maintainer to the upstream development.</p>
 <p>Let&rsquo;s copy key parts of manpages.</p>
@@ -226,80 +226,80 @@ patches-unapplied.</p>
 <h2 id="gbp-import-orig-usage-with-dgit"><code>gbp-import-orig</code> usage with <code>dgit</code></h2>
 <p>Let me compare <code>gbp-import-orig</code> usage for each <code>dgit</code> strategy.</p>
 <table>
-<thead>
-<tr>
-<th>Stanza \ Strategy</th>
-<th><code>dgit-maint-merge</code></th>
-<th><code>dgit-maint-debrebase</code></th>
-<th><code>dgit-maint-gbp</code></th>
-<th><code>dgit-maint-native</code></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Use of <code>debian/gbp.conf</code></td>
-<td><strong>customize</strong></td>
-<td><strong>customize</strong></td>
-<td><strong>default</strong></td>
-<td><strong>not applicable ???</strong></td>
-</tr>
-<tr>
-<td><code>upstream-branch</code></td>
-<td><code>upstream</code></td>
-<td><code>upstream</code></td>
-<td><code>upstream</code></td>
-<td><code>--</code></td>
-</tr>
-<tr>
-<td><code>debian-branch</code></td>
-<td><code>master</code></td>
-<td><code>master</code></td>
-<td><code>master</code></td>
-<td><code>master</code></td>
-</tr>
-<tr>
-<td><code>upstream-tag</code></td>
-<td><code>upstream/%(version)s</code></td>
-<td><code>upstream/%(version)s</code></td>
-<td><code>upstream/%(version)s</code></td>
-<td><code>%(version)s</code> ???</td>
-</tr>
-<tr>
-<td><code>sign-tags</code></td>
-<td><code>True</code></td>
-<td><code>True</code></td>
-<td><code>True</code></td>
-<td><code>True</code></td>
-</tr>
-<tr>
-<td><code>pristine-tar</code></td>
-<td><code>False</code></td>
-<td><code>False</code></td>
-<td><code>True</code> *</td>
-<td><code>--</code> (N/A)</td>
-</tr>
-<tr>
-<td><code>pristine-tar-commit</code></td>
-<td><code>False</code></td>
-<td><code>False</code></td>
-<td><code>True</code> *</td>
-<td><code>--</code> (N/A)</td>
-</tr>
-<tr>
-<td><code>merge-mode</code></td>
-<td><code>merge</code></td>
-<td><code>merge</code></td>
-<td><code>replace</code> &lt;- 3.0 (quilt)</td>
-<td><code>--</code> (N/A)</td>
-</tr>
-<tr>
-<td><code>merge</code></td>
-<td><code>False</code></td>
-<td><code>True</code> *</td>
-<td><code>True</code> *</td>
-<td><code>--</code> (N/A)</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Stanza \ Strategy</th>
+          <th><code>dgit-maint-merge</code></th>
+          <th><code>dgit-maint-debrebase</code></th>
+          <th><code>dgit-maint-gbp</code></th>
+          <th><code>dgit-maint-native</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Use of <code>debian/gbp.conf</code></td>
+          <td><strong>customize</strong></td>
+          <td><strong>customize</strong></td>
+          <td><strong>default</strong></td>
+          <td><strong>not applicable ???</strong></td>
+      </tr>
+      <tr>
+          <td><code>upstream-branch</code></td>
+          <td><code>upstream</code></td>
+          <td><code>upstream</code></td>
+          <td><code>upstream</code></td>
+          <td><code>--</code></td>
+      </tr>
+      <tr>
+          <td><code>debian-branch</code></td>
+          <td><code>master</code></td>
+          <td><code>master</code></td>
+          <td><code>master</code></td>
+          <td><code>master</code></td>
+      </tr>
+      <tr>
+          <td><code>upstream-tag</code></td>
+          <td><code>upstream/%(version)s</code></td>
+          <td><code>upstream/%(version)s</code></td>
+          <td><code>upstream/%(version)s</code></td>
+          <td><code>%(version)s</code> ???</td>
+      </tr>
+      <tr>
+          <td><code>sign-tags</code></td>
+          <td><code>True</code></td>
+          <td><code>True</code></td>
+          <td><code>True</code></td>
+          <td><code>True</code></td>
+      </tr>
+      <tr>
+          <td><code>pristine-tar</code></td>
+          <td><code>False</code></td>
+          <td><code>False</code></td>
+          <td><code>True</code> *</td>
+          <td><code>--</code> (N/A)</td>
+      </tr>
+      <tr>
+          <td><code>pristine-tar-commit</code></td>
+          <td><code>False</code></td>
+          <td><code>False</code></td>
+          <td><code>True</code> *</td>
+          <td><code>--</code> (N/A)</td>
+      </tr>
+      <tr>
+          <td><code>merge-mode</code></td>
+          <td><code>merge</code></td>
+          <td><code>merge</code></td>
+          <td><code>replace</code> &lt;- 3.0 (quilt)</td>
+          <td><code>--</code> (N/A)</td>
+      </tr>
+      <tr>
+          <td><code>merge</code></td>
+          <td><code>False</code></td>
+          <td><code>True</code> *</td>
+          <td><code>True</code> *</td>
+          <td><code>--</code> (N/A)</td>
+      </tr>
+  </tbody>
 </table>
 
 

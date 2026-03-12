@@ -90,7 +90,7 @@ choice of many options, commands and arguments.</p>
 <p>Please also see &ldquo;<a href="/en/2024/01/02/backup-2/">Automatic USB backup</a>&rdquo;.</p>
 <h2 id="snapshot-manual">Snapshot (manual)</h2>
 <p>Just execute following in btrfs:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ bss snapshot
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ bss snapshot
 </span></span></code></pre></div><h2 id="setup-snapshot-batch-updated-2024-01-02">Setup snapshot (batch: updated 2024-01-02)</h2>
 <p>I set up 3 configuration files.</p>
 <ul>
@@ -149,7 +149,7 @@ OnUnitInactiveSec=900
 [Install]
 WantedBy=timers.target
 </code></pre><p>Then I activate timer with:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ systemctl --user enable bss-snap.timer
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ systemctl --user enable bss-snap.timer
 </span></span></code></pre></div><p>I can see state of running bss with <code>bss jobs</code>.  Its output is as follows:</p>
 <pre tabindex="0"><code> $ systemctl --system --all list-timers &#39;bss-*&#39;
 NEXT LEFT LAST PASSED UNIT ACTIVATES
@@ -252,7 +252,6 @@ be an idea.</p>
 </ul>
 </li>
 </ul>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

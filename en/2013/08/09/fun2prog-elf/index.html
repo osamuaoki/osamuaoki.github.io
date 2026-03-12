@@ -68,9 +68,9 @@ fun2-00009
       <ul>
         <li><a href="#compile-hello-gdb">Compile hello-gdb</a></li>
         <li><a href="#size">size</a></li>
-        <li><a href="#readelf---file-header">readelf &ndash;file-header</a></li>
-        <li><a href="#readelf---sections">readelf &ndash;sections</a></li>
-        <li><a href="#readelf---segments">readelf &ndash;segments</a></li>
+        <li><a href="#readelf-file-header">readelf &ndash;file-header</a></li>
+        <li><a href="#readelf-sections">readelf &ndash;sections</a></li>
+        <li><a href="#readelf-segments">readelf &ndash;segments</a></li>
         <li><a href="#hexdump">hexdump</a></li>
         <li><a href="#readelf--a">readelf -a</a></li>
         <li><a href="#readelf--wl">readelf -wL</a></li>
@@ -237,35 +237,35 @@ $ gcc -Wall -g -o hello-gdb.o -c hello.c
 <p>So including the <code>hello</code> file generated in <a href="/en/2013/08/02/fun2prog-hello/#c">Hello World: C</a>, we have 4 ELF files to play with.</p>
 <p>Summary of options and generated output files from <code>hello.c</code>.</p>
 <table>
-<thead>
-<tr>
-<th><em>option</em></th>
-<th><em>output</em> file</th>
-<th><em>content</em></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><em><strong>NONE</strong></em></td>
-<td><code>hello</code></td>
-<td>executable file</td>
-</tr>
-<tr>
-<td><code>-g</code></td>
-<td><code>hello-gdb</code></td>
-<td>executable file with debug symbol</td>
-</tr>
-<tr>
-<td><code>-c</code></td>
-<td><code>hello.o</code></td>
-<td>object file</td>
-</tr>
-<tr>
-<td><code>-c -g</code></td>
-<td><code>hello-gdb.o</code></td>
-<td>object file with debug symbol</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th><em>option</em></th>
+          <th><em>output</em> file</th>
+          <th><em>content</em></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><em><strong>NONE</strong></em></td>
+          <td><code>hello</code></td>
+          <td>executable file</td>
+      </tr>
+      <tr>
+          <td><code>-g</code></td>
+          <td><code>hello-gdb</code></td>
+          <td>executable file with debug symbol</td>
+      </tr>
+      <tr>
+          <td><code>-c</code></td>
+          <td><code>hello.o</code></td>
+          <td>object file</td>
+      </tr>
+      <tr>
+          <td><code>-c -g</code></td>
+          <td><code>hello-gdb.o</code></td>
+          <td>object file with debug symbol</td>
+      </tr>
+  </tbody>
 </table>
 <h3 id="size">size</h3>
 <p>Here is the size of the ELF files.</p>
@@ -295,7 +295,7 @@ $ size  hello.o hello hello-gdb.o hello-gdb
 <p>Since the difference between <code>hello</code> and <code>hello-gdb</code> is the debug information, they share the same values with <code>size</code>(1) but their file size is different with <code>ls</code>(1).</p>
 <p>The <code>text</code> column of <code>hello-gdb</code> is much larger than that of <code>hello-gdb.o</code> since the linker seems to link few additional object files such as <code>crt1.o</code>, <code>crti.o</code>, etc.</p>
 <p>These will be elucidated from the following results.</p>
-<h3 id="readelf---file-header">readelf &ndash;file-header</h3>
+<h3 id="readelf-file-header">readelf &ndash;file-header</h3>
 <p>Here are the ELF file header of the <code>hello</code> file.</p>
 <p>ELF file Header of the <code>hello</code> file.</p>
 
@@ -325,154 +325,153 @@ ELF Header:
 <p>TIP: <code>-h</code> = <code>--file-header</code></p>
 <p>Let&rsquo;s compare the ELF file headers of the compiled <code>hello.c</code>.</p>
 <p>ELF file headers of the compiled <code>hello.c</code></p>
-<!-- raw HTML omitted -->
 <table>
-<thead>
-<tr>
-<th>Item</th>
-<th><code>hello.o</code></th>
-<th><code>hello-gdb.o</code></th>
-<th><code>hello</code></th>
-<th><code>hello-gdb</code></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>Magic</td>
-<td>7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00</td>
-<td>←</td>
-<td>←</td>
-<td>←</td>
-</tr>
-<tr>
-<td>Class</td>
-<td>ELF64</td>
-<td>←</td>
-<td>←</td>
-<td>←</td>
-</tr>
-<tr>
-<td>Data</td>
-<td>2&rsquo;s complement, little endian</td>
-<td>←</td>
-<td>←</td>
-<td>←</td>
-</tr>
-<tr>
-<td>Version (EI_VERSION)</td>
-<td>1 (current)</td>
-<td>←</td>
-<td>←</td>
-<td>←</td>
-</tr>
-<tr>
-<td>OS/ABI</td>
-<td>UNIX - System V</td>
-<td>←</td>
-<td>←</td>
-<td>←</td>
-</tr>
-<tr>
-<td>ABI Version</td>
-<td>0</td>
-<td>←</td>
-<td>←</td>
-<td>←</td>
-</tr>
-<tr>
-<td>Type</td>
-<td>REL (Relocatable file)</td>
-<td>←</td>
-<td>EXEC (Executable file)</td>
-<td>←</td>
-</tr>
-<tr>
-<td>Machine</td>
-<td>Advanced Micro Devices X86-64</td>
-<td>←</td>
-<td>←</td>
-<td>←</td>
-</tr>
-<tr>
-<td>Version (e_version)</td>
-<td>0x1</td>
-<td>0x1</td>
-<td>0x1</td>
-<td>0x1</td>
-</tr>
-<tr>
-<td>Entry point address</td>
-<td>0x0</td>
-<td>0x0</td>
-<td>0x400410</td>
-<td>0x400410</td>
-</tr>
-<tr>
-<td>Start of program headers (bytes into file)</td>
-<td>0</td>
-<td>0</td>
-<td>64</td>
-<td>64</td>
-</tr>
-<tr>
-<td>Start of section headers (bytes into file)</td>
-<td>288</td>
-<td>944</td>
-<td>2640</td>
-<td>3232</td>
-</tr>
-<tr>
-<td>Flags</td>
-<td>0x0</td>
-<td>0x0</td>
-<td>0x0</td>
-<td>0x0</td>
-</tr>
-<tr>
-<td>Size of this header (bytes)</td>
-<td>64</td>
-<td>64</td>
-<td>64</td>
-<td>64</td>
-</tr>
-<tr>
-<td>Size of program headers (bytes)</td>
-<td>0</td>
-<td>0</td>
-<td>56</td>
-<td>56</td>
-</tr>
-<tr>
-<td>Number of program headers</td>
-<td>0</td>
-<td>0</td>
-<td>8</td>
-<td>8</td>
-</tr>
-<tr>
-<td>Size of section headers (bytes)</td>
-<td>64</td>
-<td>64</td>
-<td>64</td>
-<td>64</td>
-</tr>
-<tr>
-<td>Number of section headers</td>
-<td>13</td>
-<td>21</td>
-<td>30</td>
-<td>35</td>
-</tr>
-<tr>
-<td>Section header string table index</td>
-<td>10</td>
-<td>18</td>
-<td>27</td>
-<td>32</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Item</th>
+          <th><code>hello.o</code></th>
+          <th><code>hello-gdb.o</code></th>
+          <th><code>hello</code></th>
+          <th><code>hello-gdb</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>Magic</td>
+          <td>7f 45 4c 46 02 01 01 00 00 00 00 00 00 00 00 00</td>
+          <td>←</td>
+          <td>←</td>
+          <td>←</td>
+      </tr>
+      <tr>
+          <td>Class</td>
+          <td>ELF64</td>
+          <td>←</td>
+          <td>←</td>
+          <td>←</td>
+      </tr>
+      <tr>
+          <td>Data</td>
+          <td>2&rsquo;s complement, little endian</td>
+          <td>←</td>
+          <td>←</td>
+          <td>←</td>
+      </tr>
+      <tr>
+          <td>Version (EI_VERSION)</td>
+          <td>1 (current)</td>
+          <td>←</td>
+          <td>←</td>
+          <td>←</td>
+      </tr>
+      <tr>
+          <td>OS/ABI</td>
+          <td>UNIX - System V</td>
+          <td>←</td>
+          <td>←</td>
+          <td>←</td>
+      </tr>
+      <tr>
+          <td>ABI Version</td>
+          <td>0</td>
+          <td>←</td>
+          <td>←</td>
+          <td>←</td>
+      </tr>
+      <tr>
+          <td>Type</td>
+          <td>REL (Relocatable file)</td>
+          <td>←</td>
+          <td>EXEC (Executable file)</td>
+          <td>←</td>
+      </tr>
+      <tr>
+          <td>Machine</td>
+          <td>Advanced Micro Devices X86-64</td>
+          <td>←</td>
+          <td>←</td>
+          <td>←</td>
+      </tr>
+      <tr>
+          <td>Version (e_version)</td>
+          <td>0x1</td>
+          <td>0x1</td>
+          <td>0x1</td>
+          <td>0x1</td>
+      </tr>
+      <tr>
+          <td>Entry point address</td>
+          <td>0x0</td>
+          <td>0x0</td>
+          <td>0x400410</td>
+          <td>0x400410</td>
+      </tr>
+      <tr>
+          <td>Start of program headers (bytes into file)</td>
+          <td>0</td>
+          <td>0</td>
+          <td>64</td>
+          <td>64</td>
+      </tr>
+      <tr>
+          <td>Start of section headers (bytes into file)</td>
+          <td>288</td>
+          <td>944</td>
+          <td>2640</td>
+          <td>3232</td>
+      </tr>
+      <tr>
+          <td>Flags</td>
+          <td>0x0</td>
+          <td>0x0</td>
+          <td>0x0</td>
+          <td>0x0</td>
+      </tr>
+      <tr>
+          <td>Size of this header (bytes)</td>
+          <td>64</td>
+          <td>64</td>
+          <td>64</td>
+          <td>64</td>
+      </tr>
+      <tr>
+          <td>Size of program headers (bytes)</td>
+          <td>0</td>
+          <td>0</td>
+          <td>56</td>
+          <td>56</td>
+      </tr>
+      <tr>
+          <td>Number of program headers</td>
+          <td>0</td>
+          <td>0</td>
+          <td>8</td>
+          <td>8</td>
+      </tr>
+      <tr>
+          <td>Size of section headers (bytes)</td>
+          <td>64</td>
+          <td>64</td>
+          <td>64</td>
+          <td>64</td>
+      </tr>
+      <tr>
+          <td>Number of section headers</td>
+          <td>13</td>
+          <td>21</td>
+          <td>30</td>
+          <td>35</td>
+      </tr>
+      <tr>
+          <td>Section header string table index</td>
+          <td>10</td>
+          <td>18</td>
+          <td>27</td>
+          <td>32</td>
+      </tr>
+  </tbody>
 </table>
-<h3 id="readelf---sections">readelf &ndash;sections</h3>
+<h3 id="readelf-sections">readelf &ndash;sections</h3>
 <p>The section header lists the set of sections of the binary.</p>
 <p>Here are the sections in these ELF files.</p>
 <p>Sections of the <code>hello-gdb</code> file.</p>
@@ -562,376 +561,375 @@ Key to Flags:
 <p>TIP: <code>-S</code> = <code>--sections</code> = <code>--section-headers</code></p>
 <p>Let&rsquo;s compare the ELF file sections of the compiled <code>hello.c</code>.</p>
 <p>ELF file sections of the compiled <code>hello.c</code></p>
-<!-- raw HTML omitted -->
 <table>
-<thead>
-<tr>
-<th>section</th>
-<th>type</th>
-<th><code>hello.o</code></th>
-<th><code>hello-gdb.o</code></th>
-<th><code>hello</code></th>
-<th><code>hello-gdb</code></th>
-<th><code>size</code></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td>NULL</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td>0</td>
-<td></td>
-</tr>
-<tr>
-<td>.interp</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x1c</td>
-<td>0x1c</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.note.ABI-tag</td>
-<td>NOTE</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x20</td>
-<td>0x20</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.note.gnu.build-i</td>
-<td>NOTE</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x24</td>
-<td>0x24</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.dynsym</td>
-<td>DYNSYM</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x60</td>
-<td>0x60</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.dynstr</td>
-<td>STRTAB</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x3d</td>
-<td>0x3d</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.gnu.hash</td>
-<td>GNU_HASH</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x1c</td>
-<td>0x1c</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.gnu.version</td>
-<td>VERSYM</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x8</td>
-<td>0x8</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.gnu.version_r</td>
-<td>VERNEED</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x20</td>
-<td>0x20</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.rela.dyn</td>
-<td>RELA</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x18</td>
-<td>0x18</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.rela.plt</td>
-<td>RELA</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x48</td>
-<td>0x48</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.init</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x1a</td>
-<td>0x1a</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.plt</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x40</td>
-<td>0x40</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.text</td>
-<td>PROGBITS</td>
-<td>0x15</td>
-<td>0x15</td>
-<td>0x1a2</td>
-<td>0x1a2</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.fini</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x9</td>
-<td>0x9</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.rodata</td>
-<td>PROGBITS</td>
-<td>0xe</td>
-<td>0xe</td>
-<td>0x12</td>
-<td>0x12</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.eh_frame</td>
-<td>PROGBITS</td>
-<td>0x38</td>
-<td>0x38</td>
-<td>0xd4</td>
-<td>0xd4</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.eh_frame_hdr</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x34</td>
-<td>0x34</td>
-<td>text</td>
-</tr>
-<tr>
-<td>.dynamic</td>
-<td>DYNAMIC</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x1d0</td>
-<td>0x1d0</td>
-<td>data</td>
-</tr>
-<tr>
-<td>.got</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x8</td>
-<td>0x8</td>
-<td>data</td>
-</tr>
-<tr>
-<td>.got.plt</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x30</td>
-<td>0x30</td>
-<td>data</td>
-</tr>
-<tr>
-<td>.data</td>
-<td>PROGBITS</td>
-<td>0</td>
-<td>0</td>
-<td>0x10</td>
-<td>0x10</td>
-<td>data</td>
-</tr>
-<tr>
-<td>.jcr</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x8</td>
-<td>0x8</td>
-<td>data</td>
-</tr>
-<tr>
-<td>.fini_array</td>
-<td>FINI_ARRAY</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x8</td>
-<td>0x8</td>
-<td>data</td>
-</tr>
-<tr>
-<td>.init_array</td>
-<td>INIT_ARRAY</td>
-<td>N/A</td>
-<td>N/A</td>
-<td>0x8</td>
-<td>0x8</td>
-<td>data</td>
-</tr>
-<tr>
-<td>.bss</td>
-<td>NOBITS</td>
-<td>0</td>
-<td>0</td>
-<td>0x8</td>
-<td>0x8</td>
-<td>bss</td>
-</tr>
-<tr>
-<td>.comment</td>
-<td>PROGBITS</td>
-<td>0x1d</td>
-<td>0x1d</td>
-<td>0x38</td>
-<td>0x38</td>
-<td>???</td>
-</tr>
-<tr>
-<td>.debug_info</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>0x9f</td>
-<td>N/A</td>
-<td>0x9f</td>
-<td>???</td>
-</tr>
-<tr>
-<td>.debug_abbrev</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>0x42</td>
-<td>N/A</td>
-<td>0x42</td>
-<td>???</td>
-</tr>
-<tr>
-<td>.debug_aranges</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>0x30</td>
-<td>N/A</td>
-<td>0x30</td>
-<td>???</td>
-</tr>
-<tr>
-<td>.debug_line</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>0x3c</td>
-<td>N/A</td>
-<td>0x3c</td>
-<td>???</td>
-</tr>
-<tr>
-<td>.debug_str</td>
-<td>PROGBITS</td>
-<td>N/A</td>
-<td>0xf5</td>
-<td>N/A</td>
-<td>0xbc</td>
-<td>???</td>
-</tr>
-<tr>
-<td>.symtab</td>
-<td>SYMTAB</td>
-<td>0x108</td>
-<td>0x180</td>
-<td>0x618</td>
-<td>0x690</td>
-<td>???</td>
-</tr>
-<tr>
-<td>.strtab</td>
-<td>STRTAB</td>
-<td>0x13</td>
-<td>0x13</td>
-<td>0x237</td>
-<td>0x237</td>
-<td>???</td>
-</tr>
-<tr>
-<td>.shstrtab</td>
-<td>STRTAB</td>
-<td>0x61</td>
-<td>0xb0</td>
-<td>0x108</td>
-<td>0x148</td>
-<td>???</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>section</th>
+          <th>type</th>
+          <th><code>hello.o</code></th>
+          <th><code>hello-gdb.o</code></th>
+          <th><code>hello</code></th>
+          <th><code>hello-gdb</code></th>
+          <th><code>size</code></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td></td>
+          <td>NULL</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>.interp</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x1c</td>
+          <td>0x1c</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.note.ABI-tag</td>
+          <td>NOTE</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x20</td>
+          <td>0x20</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.note.gnu.build-i</td>
+          <td>NOTE</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x24</td>
+          <td>0x24</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.dynsym</td>
+          <td>DYNSYM</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x60</td>
+          <td>0x60</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.dynstr</td>
+          <td>STRTAB</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x3d</td>
+          <td>0x3d</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.gnu.hash</td>
+          <td>GNU_HASH</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x1c</td>
+          <td>0x1c</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.gnu.version</td>
+          <td>VERSYM</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x8</td>
+          <td>0x8</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.gnu.version_r</td>
+          <td>VERNEED</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x20</td>
+          <td>0x20</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.rela.dyn</td>
+          <td>RELA</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x18</td>
+          <td>0x18</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.rela.plt</td>
+          <td>RELA</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x48</td>
+          <td>0x48</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.init</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x1a</td>
+          <td>0x1a</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.plt</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x40</td>
+          <td>0x40</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.text</td>
+          <td>PROGBITS</td>
+          <td>0x15</td>
+          <td>0x15</td>
+          <td>0x1a2</td>
+          <td>0x1a2</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.fini</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x9</td>
+          <td>0x9</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.rodata</td>
+          <td>PROGBITS</td>
+          <td>0xe</td>
+          <td>0xe</td>
+          <td>0x12</td>
+          <td>0x12</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.eh_frame</td>
+          <td>PROGBITS</td>
+          <td>0x38</td>
+          <td>0x38</td>
+          <td>0xd4</td>
+          <td>0xd4</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.eh_frame_hdr</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x34</td>
+          <td>0x34</td>
+          <td>text</td>
+      </tr>
+      <tr>
+          <td>.dynamic</td>
+          <td>DYNAMIC</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x1d0</td>
+          <td>0x1d0</td>
+          <td>data</td>
+      </tr>
+      <tr>
+          <td>.got</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x8</td>
+          <td>0x8</td>
+          <td>data</td>
+      </tr>
+      <tr>
+          <td>.got.plt</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x30</td>
+          <td>0x30</td>
+          <td>data</td>
+      </tr>
+      <tr>
+          <td>.data</td>
+          <td>PROGBITS</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0x10</td>
+          <td>0x10</td>
+          <td>data</td>
+      </tr>
+      <tr>
+          <td>.jcr</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x8</td>
+          <td>0x8</td>
+          <td>data</td>
+      </tr>
+      <tr>
+          <td>.fini_array</td>
+          <td>FINI_ARRAY</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x8</td>
+          <td>0x8</td>
+          <td>data</td>
+      </tr>
+      <tr>
+          <td>.init_array</td>
+          <td>INIT_ARRAY</td>
+          <td>N/A</td>
+          <td>N/A</td>
+          <td>0x8</td>
+          <td>0x8</td>
+          <td>data</td>
+      </tr>
+      <tr>
+          <td>.bss</td>
+          <td>NOBITS</td>
+          <td>0</td>
+          <td>0</td>
+          <td>0x8</td>
+          <td>0x8</td>
+          <td>bss</td>
+      </tr>
+      <tr>
+          <td>.comment</td>
+          <td>PROGBITS</td>
+          <td>0x1d</td>
+          <td>0x1d</td>
+          <td>0x38</td>
+          <td>0x38</td>
+          <td>???</td>
+      </tr>
+      <tr>
+          <td>.debug_info</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>0x9f</td>
+          <td>N/A</td>
+          <td>0x9f</td>
+          <td>???</td>
+      </tr>
+      <tr>
+          <td>.debug_abbrev</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>0x42</td>
+          <td>N/A</td>
+          <td>0x42</td>
+          <td>???</td>
+      </tr>
+      <tr>
+          <td>.debug_aranges</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>0x30</td>
+          <td>N/A</td>
+          <td>0x30</td>
+          <td>???</td>
+      </tr>
+      <tr>
+          <td>.debug_line</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>0x3c</td>
+          <td>N/A</td>
+          <td>0x3c</td>
+          <td>???</td>
+      </tr>
+      <tr>
+          <td>.debug_str</td>
+          <td>PROGBITS</td>
+          <td>N/A</td>
+          <td>0xf5</td>
+          <td>N/A</td>
+          <td>0xbc</td>
+          <td>???</td>
+      </tr>
+      <tr>
+          <td>.symtab</td>
+          <td>SYMTAB</td>
+          <td>0x108</td>
+          <td>0x180</td>
+          <td>0x618</td>
+          <td>0x690</td>
+          <td>???</td>
+      </tr>
+      <tr>
+          <td>.strtab</td>
+          <td>STRTAB</td>
+          <td>0x13</td>
+          <td>0x13</td>
+          <td>0x237</td>
+          <td>0x237</td>
+          <td>???</td>
+      </tr>
+      <tr>
+          <td>.shstrtab</td>
+          <td>STRTAB</td>
+          <td>0x61</td>
+          <td>0xb0</td>
+          <td>0x108</td>
+          <td>0x148</td>
+          <td>???</td>
+      </tr>
+  </tbody>
 </table>
 <p>Here, N/A stands for &ldquo;not available&rdquo;.</p>
 <p>Let&rsquo;s compare the <code>.text</code> size reported by <code>size</code> and <code>readelf -S</code>.</p>
 <p>Comparison of the reported size.</p>
 <table>
-<thead>
-<tr>
-<th><em>file</em></th>
-<th><em>size</em></th>
-<th><em>readelf</em></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>hello.o</code></td>
-<td><em>text</em> = 91 = 0x5b</td>
-<td><em>.text</em> + <em>.rodata</em> + <em>.eh_frame</em> = 0x5b</td>
-</tr>
-<tr>
-<td><code>hello</code></td>
-<td><em>text</em> = 1350 = 0x546</td>
-<td>all marked <code>text</code> in <code>size</code> column = 0x53b = 1339 (11 bytes mismatch)</td>
-</tr>
-<tr>
-<td><code>hello</code></td>
-<td><em>data</em> = 568 = 0x238</td>
-<td><em>.dynamic</em> + <em>.got</em> + <em>.got.plt</em> + <em>.data</em> + <em>.jcr</em> + <em>.fini_array</em> + <em>.init.array</em> = 0x238</td>
-</tr>
-<tr>
-<td><code>hello</code></td>
-<td><em>bss</em>  = 4   = 0x4</td>
-<td><em>.bss</em>  = 0x4</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th><em>file</em></th>
+          <th><em>size</em></th>
+          <th><em>readelf</em></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>hello.o</code></td>
+          <td><em>text</em> = 91 = 0x5b</td>
+          <td><em>.text</em> + <em>.rodata</em> + <em>.eh_frame</em> = 0x5b</td>
+      </tr>
+      <tr>
+          <td><code>hello</code></td>
+          <td><em>text</em> = 1350 = 0x546</td>
+          <td>all marked <code>text</code> in <code>size</code> column = 0x53b = 1339 (11 bytes mismatch)</td>
+      </tr>
+      <tr>
+          <td><code>hello</code></td>
+          <td><em>data</em> = 568 = 0x238</td>
+          <td><em>.dynamic</em> + <em>.got</em> + <em>.got.plt</em> + <em>.data</em> + <em>.jcr</em> + <em>.fini_array</em> + <em>.init.array</em> = 0x238</td>
+      </tr>
+      <tr>
+          <td><code>hello</code></td>
+          <td><em>bss</em>  = 4   = 0x4</td>
+          <td><em>.bss</em>  = 0x4</td>
+      </tr>
+  </tbody>
 </table>
 <p>FIXME: Why different?</p>
 <p>Here you see some additional sections marked as <code>.debug_*</code> exist since you compiled the <code>hello-gdb.o</code> and <code>hello-gdb</code> files with the <code>-g</code> option.  The <code>hello.o</code> and <code>hello</code> files do not have these debug sections.</p>
 <p>Various sections are described in the man page <code>elf</code>(5) after &ldquo;Various sections hold program and control information:&rdquo;.</p>
 <p>TIP: The <code>objdump -h</code> outputs very similar results.</p>
-<h3 id="readelf---segments">readelf &ndash;segments</h3>
+<h3 id="readelf-segments">readelf &ndash;segments</h3>
 <p>The program header shows the segments used at run-time.  So this is only available for the ELF executable files.</p>
 <p>Here are the program headers (=segments) in these ELF files.</p>
 <p>Program headers of the <code>hello</code> file.</p>
@@ -977,8 +975,6 @@ frame_hdr .eh_frame
    07
 </code></pre>
 
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <p>Segment headers of the <code>hello-gdb</code> file is the same as that of the <code>hello</code> file.</p>
 <p>TIP: <code>-l</code> = <code>--segments</code> = <code>--program-headers</code></p>
 <p>Various sections are described mostly in the man page <code>elf</code>(5) under <code>p_type</code>.</p>
@@ -1689,7 +1685,6 @@ simple classical core dump behavior, please ensure the following.</p>
 <p>Please read the <code>core</code>(5) manpage and the <code>ulimit</code> section in the <code>bash</code>(1)
 manpage for more.</p>
 <p>You can use GDB to inspect the <code>core</code> file as <a href="/en/2013/08/12/fun2prog-debug-3/#gdb-prime8-gdb">Debug: level 3: gdb prime8-gdb</a>.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

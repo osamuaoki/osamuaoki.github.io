@@ -127,7 +127,7 @@ kernel.</a></p>
 <h2 id="installation-of-lxd-to-debian-12">Installation of LXD to Debian 12</h2>
 <p>On a Debian 12 system with its <code>/var/lib</code> on btrfs, I run following commands to
 install LXD.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo aptitude install lxc lxd lxd-tools
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo aptitude install lxc lxd lxd-tools
 </span></span><span style="display:flex;"><span> $ sudo adduser osamu lxd
 </span></span><span style="display:flex;"><span> $ sudo newusers group
 </span></span><span style="display:flex;"><span> $ sudo lxd init
@@ -138,11 +138,11 @@ install LXD.</p>
 really happening.</p>
 <h3 id="getting-system-images-for-lxd">Getting system images for LXD</h3>
 <p>Since manpage for <code>lxc-launch</code> on Debian 12 is useless, let&rsquo;s see:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch -h
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch -h
 </span></span><span style="display:flex;"><span>Description:
 </span></span><span style="display:flex;"><span>  Create and start instances from images
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span></span><span style="display:flex;"><span>Usage:
 </span></span><span style="display:flex;"><span>  lxc launch [&lt;remote&gt;:]&lt;image&gt; [&lt;remote&gt;:][&lt;name&gt;] [flags]
 </span></span><span style="display:flex;"><span>...
 </span></span></code></pre></div><p>Full list of <code>remote</code> is available by issuing <code>lxc remote list</code>.  Notable ones
@@ -152,7 +152,7 @@ are:</p>
 <li><code>ubuntu</code> for specifically Ubuntu images at <a href="https://cloud-images.ubuntu.com/releases">https://cloud-images.ubuntu.com/releases</a></li>
 </ul>
 <p>Let me create and start instances from images for &ldquo;Ubuntu 22.04&rdquo; and &ldquo;Debian 12&rdquo;.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch images:debian/12 debian-12
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch images:debian/12 debian-12
 </span></span><span style="display:flex;"><span> $ lxc launch ubuntu:22.04 ubuntu-2204
 </span></span></code></pre></div><p>System images specified as <code>ubuntu:22.04</code> or <code>images:debian/12</code> are downloaded
 to <code>/var/lib/lxd/images/</code>.  Each of these seems to be made of 2 files.  One for
@@ -170,7 +170,7 @@ created under <code>/var/lib/lxd/containers/</code>.  These instance names are l
 <p>Here:<code>lxc launch ...</code> = <code>lxc init ...</code> + <code>lxc start ...</code></p>
 <h3 id="inspect-instances">Inspect instances</h3>
 <p>Let me inspect instances.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc list
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc list
 </span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
 </span></span><span style="display:flex;"><span>|    NAME     |  STATE  |         IPV4         |                    IPV6                     |   TYPE    | SNAPSHOTS |
 </span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
@@ -179,7 +179,7 @@ created under <code>/var/lib/lxd/containers/</code>.  These instance names are l
 </span></span><span style="display:flex;"><span>| ubuntu-2204 | RUNNING | 10.30.104.155 (eth0) | fd42:2b6:d45:cc06:216:3eff:fecc:8b51 (eth0) | CONTAINER | 0         |
 </span></span><span style="display:flex;"><span>+-------------+---------+----------------------+---------------------------------------------+-----------+-----------+
 </span></span></code></pre></div><p>Let me stop these instances and inspect them:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc stop debian-12
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc stop debian-12
 </span></span><span style="display:flex;"><span> $ lxc stop ubuntu-2204
 </span></span><span style="display:flex;"><span> $ lxc list
 </span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
@@ -190,7 +190,7 @@ created under <code>/var/lib/lxd/containers/</code>.  These instance names are l
 </span></span><span style="display:flex;"><span>| ubuntu-2204 | STOPPED |      |      | CONTAINER | 0         |
 </span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
 </span></span></code></pre></div><p>More detailed information can be obtained:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc info debian-12
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc info debian-12
 </span></span><span style="display:flex;"><span>Name: debian-12
 </span></span><span style="display:flex;"><span>Status: STOPPED
 </span></span><span style="display:flex;"><span>Type: container
@@ -198,7 +198,7 @@ created under <code>/var/lib/lxd/containers/</code>.  These instance names are l
 </span></span><span style="display:flex;"><span>Created: 2023/10/11 10:59 JST
 </span></span><span style="display:flex;"><span>Last Used: 2023/10/12 05:08 JST
 </span></span></code></pre></div><p>Let me turn-on <code>debian-12</code> and quickly inspect it twice in the row.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc start debian-12
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc start debian-12
 </span></span><span style="display:flex;"><span> $ lxc list
 </span></span><span style="display:flex;"><span>+-------------+---------+------+------+-----------+-----------+
 </span></span><span style="display:flex;"><span>|    NAME     |  STATE  | IPV4 | IPV6 |   TYPE    | SNAPSHOTS |
@@ -218,7 +218,7 @@ created under <code>/var/lib/lxd/containers/</code>.  These instance names are l
 </span></span></code></pre></div><p>This changed results are because of slow network activation.</p>
 <p>Let me set IPV6 network configuration to be disabled.  I need to restart it
 to activate this network configuration change.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc network set lxdbr0 ipv6.address none
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc network set lxdbr0 ipv6.address none
 </span></span><span style="display:flex;"><span> $ lxc restart debian-12
 </span></span><span style="display:flex;"><span> $ lxc list
 </span></span><span style="display:flex;"><span>+-------------+---------+----------------------+------+-----------+-----------+
@@ -231,7 +231,7 @@ to activate this network configuration change.</p>
 </span></span></code></pre></div><p>The fact of changing results for repeated last 2 commands indicate that establishment of network address takes time.</p>
 <h3 id="inspect-images">Inspect images</h3>
 <p>Let me inspect images</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc image list
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc image list
 </span></span><span style="display:flex;"><span>+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
 </span></span><span style="display:flex;"><span>| ALIAS | FINGERPRINT  | PUBLIC |                 DESCRIPTION                 | ARCHITECTURE |   TYPE    |   SIZE   |          UPLOAD DATE          |
 </span></span><span style="display:flex;"><span>+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
@@ -241,7 +241,7 @@ to activate this network configuration change.</p>
 </span></span><span style="display:flex;"><span>+-------+--------------+--------+---------------------------------------------+--------------+-----------+----------+-------------------------------+
 </span></span></code></pre></div><h3 id="inspect-filesystem">Inspect filesystem</h3>
 <p>Let&rsquo;s see how all these images and instances are stored under <code>/var/lib/lxd</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo btrfs subvolume list /var/lib/lxd|grep &#34;var/lib/lxd&#34;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo btrfs subvolume list /var/lib/lxd|grep &#34;var/lib/lxd&#34;
 </span></span><span style="display:flex;"><span>ID 42668 gen 1952301 top level 22924 path var/lib/lxd/storage-pools/default
 </span></span><span style="display:flex;"><span>ID 43251 gen 1951314 top level 42668 path var/lib/lxd/storage-pools/default/images/b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
 </span></span><span style="display:flex;"><span>ID 43284 gen 1952313 top level 42668 path var/lib/lxd/storage-pools/default/containers/debian-12
@@ -256,14 +256,14 @@ to activate this network configuration change.</p>
 </span></span><span style="display:flex;"><span>256 d--x------ 1 231072 root 78 Oct 11 10:59 debian-12
 </span></span><span style="display:flex;"><span>256 d--x------ 1 root   root 78 Oct 11 21:53 ubuntu-2204
 </span></span></code></pre></div><p>I see btrfs subvolume is generated here.  <code>inode=256</code> means the root of btrfs subvolume.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo ls -l /var/lib/lxd/images
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo ls -l /var/lib/lxd/images
 </span></span><span style="display:flex;"><span>total 541992
 </span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root       680 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678
 </span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root  98775040 Oct 12 17:07 80496135241fade673df5db2b3a8d3fca280370b17578227892776839bbeb678.rootfs
 </span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root       412 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf
 </span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 456216576 Oct 10 19:20 b948dd91cd5a8da89f6dcd4949d7189f064cf6d4dc5bd70b7f9b7aff1883babf.rootfs
 </span></span></code></pre></div><p>These seem to be downloaded squashfs files</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo bash -c &#34;ls -il /var/lib/lxd/storage-pools/default/images/80496135241f*&#34;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ sudo bash -c &#34;ls -il /var/lib/lxd/storage-pools/default/images/80496135241f*&#34;
 </span></span><span style="display:flex;"><span>total 4
 </span></span><span style="display:flex;"><span>257 -rw-r--r-- 1 root root 535 Oct 12 14:29 metadata.yaml
 </span></span><span style="display:flex;"><span>261 drwxr-xr-x 1 root root 154 Oct 12 14:29 rootfs
@@ -322,7 +322,7 @@ to activate this network configuration change.</p>
 </span></span><span style="display:flex;"><span>drwxr-xr-x 1 root root   90 Oct 10 14:25 var
 </span></span></code></pre></div><p>I see btrfs subvolume is used for each file tree based on images and instances.</p>
 <p>Hmmm&hellip;. <code>debian-12</code> is owned by <code>231072</code> while <code>ubuntu-2204</code> is owned by <code>root</code> for directory under <code>/var/lib/lxd/storage-pools/default/containers</code>. The uid=<code>231072</code> is found in <code>/etc/subuid</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>_lxd:231072:10000001
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>_lxd:231072:10000001
 </span></span><span style="display:flex;"><span>root:231072:10000001
 </span></span></code></pre></div><p>This directory ownership changes:</p>
 <ul>
@@ -352,7 +352,7 @@ container images and instances don&rsquo;t have the normal <code>uid=1000</code>
 <p>Issues of different UID between outside and inside of the container can be taken care nicely with above commands.</p>
 <h3 id="example-of-operations-on-instances">Example of operations on instances</h3>
 <p>Here is an example of basic operations on instances.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc copy debian-12 debian-12-ephemerical
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc copy debian-12 debian-12-ephemerical
 </span></span><span style="display:flex;"><span> $ lxc exec debian-12-ephemerical -- adduser osamu
 </span></span><span style="display:flex;"><span>Adding user `osamu&#39; ...
 </span></span><span style="display:flex;"><span>...
@@ -363,30 +363,30 @@ container images and instances don&rsquo;t have the normal <code>uid=1000</code>
 </span></span><span style="display:flex;"><span>...
 </span></span><span style="display:flex;"><span>[  OK  ] Finished systemd-update-utmp-runlev… - Record Runlevel Change in UTMP.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Debian GNU/Linux 12 debian-12-ephemerical console
+</span></span></span><span style="display:flex;"><span>Debian GNU/Linux 12 debian-12-ephemerical console
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>debian-12-ephemerical login: osamu
+</span></span></span><span style="display:flex;"><span>debian-12-ephemerical login: osamu
 </span></span><span style="display:flex;"><span>Password:
 </span></span><span style="display:flex;"><span>Linux debian-12-ephemerical 6.4.0-0.deb12.2-amd64 #1 SMP PREEMPT_DYNAMIC Debian 6.4.4-3~bpo12+1 (2023-08-08) x86_64
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>The programs included with the Debian GNU/Linux system are free software;
+</span></span></span><span style="display:flex;"><span>The programs included with the Debian GNU/Linux system are free software;
 </span></span><span style="display:flex;"><span>the exact distribution terms for each program are described in the
 </span></span><span style="display:flex;"><span>individual files in /usr/share/doc/*/copyright.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+</span></span></span><span style="display:flex;"><span>Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
 </span></span><span style="display:flex;"><span>permitted by applicable law.
 </span></span><span style="display:flex;"><span>osamu@debian-12-ephemerical:~$
 </span></span></code></pre></div><p>One can detach from the console for the container instance with <code>CTRL-A+q</code> and gain console for the host machine.  One can regain access to the console for the container instance by:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc console debian-12-ephemerical
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc console debian-12-ephemerical
 </span></span><span style="display:flex;"><span>To detach from the console, press: &lt;ctrl&gt;+a q
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>osamu@debian-12-ephemerical:~$
+</span></span></span><span style="display:flex;"><span>osamu@debian-12-ephemerical:~$
 </span></span></code></pre></div><p>You can stop and delete this instance from the console on the host machine as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc stop debian-12-ephemerical
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc stop debian-12-ephemerical
 </span></span><span style="display:flex;"><span> $ lxc delete debian-12-ephemerical
 </span></span></code></pre></div><h3 id="more-example-of-operations-on-instances-and-images">More example of operations on instances and images</h3>
 <p>Let&rsquo;s play more &hellip;</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd path/to/working-space
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd path/to/working-space
 </span></span><span style="display:flex;"><span> $ lxc init images:debian/bookworm/cloud dbc
 </span></span><span style="display:flex;"><span> $ lxc start dbc
 </span></span><span style="display:flex;"><span> $ lxc export dbc backup-dbc.tar.gz
@@ -456,7 +456,7 @@ no.</p>
 <li>Unified taraball:  32988437b9eec43d0a87f1e7dbbbf02f27a2525cd1379a9d73f1b95774572a92</li>
 <li>Split tarballs: 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3.rootfs</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> # cd /var/lib/lxd/images
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> # cd /var/lib/lxd/images
 </span></span><span style="display:flex;"><span> # file 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3
 </span></span><span style="display:flex;"><span>187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3: XZ compressed data, checksum CRC64
 </span></span><span style="display:flex;"><span> # file 187a9674b77056a0d466f5058ea72660cb52430dcdf06974ca8cd6c5a47fb6b3.rootfs
@@ -502,7 +502,7 @@ no.</p>
 <a href="https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1055786">bug #1055786</a>.</p>
 <p>Here is how I get around this problem by removing toxic <code>netdev</code> out of
 installed file <code>/etc/cloud/cloud.cfg</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd path/to
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd path/to
 </span></span><span style="display:flex;"><span> $ lxc init images:debian/bookworm/cloud dbc0
 </span></span><span style="display:flex;"><span> $ lxc file pull dbc0/etc/cloud/cloud.cfg .
 </span></span><span style="display:flex;"><span> $ sed -i -e &#39;s/ netdev,//&#39; cloud.cfg
@@ -517,7 +517,7 @@ installed file <code>/etc/cloud/cloud.cfg</code>:</p>
 above commmand sequence since I wanted these file modification to happen before
 starting instance. (<code>lxc exec ... -- command ...</code> requires running instance)</p>
 <p>You can see this behavior as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxc stop dbc0
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxc stop dbc0
 </span></span><span style="display:flex;"><span>$ lxc exec dbc0 -- echo <span style="color:#e6db74">&#34;Hello&#34;</span>
 </span></span><span style="display:flex;"><span>Error: Instance is not running
 </span></span><span style="display:flex;"><span>$ lxc start dbc0
@@ -536,27 +536,25 @@ data in these directory nor hash value used for the image name but updates
 description displayed by <code>lxc image ls dbc</code>.</p>
 <p>Although there seem to be only interactive editor available to modify metadata, you can do more with this by changing actual program for editor via exported environment variables <code>EDITOR</code> and <code>VISUAL</code> (<code>VISUAL</code> supersedes <code>EDITOR</code>).</p>
 <p>To get a copy of <code>metadata.yaml</code> as the <code>copy_metadata.yaml</code> on the host</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ unset VISUAL
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ unset VISUAL
 </span></span><span style="display:flex;"><span> $ export EDITOR=cat
 </span></span><span style="display:flex;"><span> $ lxc config metadata edit d0 &gt;copy_metadata.yaml
 </span></span></code></pre></div><p>To update the <code>metadata.yaml</code> with the <code>copy_metadata.yaml</code> on the host</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ unset VISUAL
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ unset VISUAL
 </span></span><span style="display:flex;"><span> $ export EDITOR=&#34;tee&#34;
 </span></span><span style="display:flex;"><span> $ lxc config metadata edit d0 &lt;copy_metadata.yaml
 </span></span></code></pre></div><h3 id="lxd-one-liners">LXD one liners</h3>
 <p>Stop all instances:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc ls -cn -fcsv) ; do lxc stop $f; done
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc ls -cn -fcsv) ; do lxc stop $f; done
 </span></span></code></pre></div><p>Delete all instances:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc ls -cn -fcsv) ; do lxc delete $f; done
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc ls -cn -fcsv) ; do lxc delete $f; done
 </span></span></code></pre></div><p>Delete all images:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc image ls -cf -fcsv) ; do lxc image delete $f; done
 </span></span></code></pre></div><p>Delete all images without alias:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,$/s/,//p&#34;) ; do lxc image delete $f; done
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,$/s/,//p&#34;) ; do lxc image delete $f; done
 </span></span></code></pre></div><p>Delete all images with alias:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,..*$/s/,.*$//p&#34;) ; do lxc image delete $f; done
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ for f in $(lxc image ls -cfl -fcsv|sed -ne &#34;/,..*$/s/,.*$//p&#34;) ; do lxc image delete $f; done
 </span></span></code></pre></div><p>I think I got some glimpses of LXC/LXD commmands.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h2 id="review-gui-tools-to-support-lxd-management">Review: GUI tools to support LXD management</h2>
 <p>Debian 12 doesn&rsquo;t ship any GUI tools for LXD.</p>
 <p>I decided to give up on finding good GUI tools for LXD after my cursory research as below.</p>
@@ -575,18 +573,18 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 <ul>
 <li>The <code>lxd-client</code> package pulled in by <code>lxd</code> offers <code>lxc</code> command with many subcommands.  Auto-generated manpages on Debian 12 are mostly useless. Use <code>-h</code> with command to see reasonable command usage syntax.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc -h --all --sub-commands
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc -h --all --sub-commands
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Description:
+</span></span></span><span style="display:flex;"><span>Description:
 </span></span><span style="display:flex;"><span>  Command line client for LXD
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  All of LXD&#39;s features can be driven through the various commands below.
+</span></span></span><span style="display:flex;"><span>  All of LXD&#39;s features can be driven through the various commands below.
 </span></span><span style="display:flex;"><span>  For help with any of those, simply call them with --help.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span></span><span style="display:flex;"><span>Usage:
 </span></span><span style="display:flex;"><span>  lxc [command]
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Available Commands:
+</span></span></span><span style="display:flex;"><span>Available Commands:
 </span></span><span style="display:flex;"><span>  alias        Manage command aliases
 </span></span><span style="display:flex;"><span>    add          Add new aliases
 </span></span><span style="display:flex;"><span>    list         List aliases
@@ -853,7 +851,7 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 </span></span><span style="display:flex;"><span>    list         List warnings
 </span></span><span style="display:flex;"><span>    show         Show warning
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Flags:
+</span></span></span><span style="display:flex;"><span>Flags:
 </span></span><span style="display:flex;"><span>      --all            Show less common commands
 </span></span><span style="display:flex;"><span>      --debug          Show all debug messages
 </span></span><span style="display:flex;"><span>      --force-local    Force using the local unix socket
@@ -864,27 +862,25 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 </span></span><span style="display:flex;"><span>  -v, --verbose        Show all information messages
 </span></span><span style="display:flex;"><span>      --version        Print version number
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Use &#34;lxc [command] --help&#34; for more information about a command.
-</span></span></code></pre></div><!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<ul>
+</span></span></span><span style="display:flex;"><span>Use &#34;lxc [command] --help&#34; for more information about a command.
+</span></span></code></pre></div><ul>
 <li>The <code>lxd</code> package offers <code>lxd</code> and <code>lxd-user</code> daemons with many subcommands for <code>lxd</code>.  Subcommand tool description tends to include &ldquo;low-level&rdquo;.</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd -h
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd -h
 </span></span><span style="display:flex;"><span>Description:
 </span></span><span style="display:flex;"><span>  The LXD container manager (daemon)
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  This is the LXD daemon command line. It&#39;s typically started directly by your
+</span></span></span><span style="display:flex;"><span>  This is the LXD daemon command line. It&#39;s typically started directly by your
 </span></span><span style="display:flex;"><span>  init system and interacted with through a tool like `lxc`.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  There are however a number of subcommands that let you interact directly with
+</span></span></span><span style="display:flex;"><span>  There are however a number of subcommands that let you interact directly with
 </span></span><span style="display:flex;"><span>  the local LXD daemon and which may not be performed through the REST API alone.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span></span><span style="display:flex;"><span>Usage:
 </span></span><span style="display:flex;"><span>  lxd [flags]
 </span></span><span style="display:flex;"><span>  lxd [command]
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Available Commands:
+</span></span></span><span style="display:flex;"><span>Available Commands:
 </span></span><span style="display:flex;"><span>  activateifneeded   Check if LXD should be started
 </span></span><span style="display:flex;"><span>  cluster            Low-level cluster administration commands
 </span></span><span style="display:flex;"><span>  help               Help about any command
@@ -895,7 +891,7 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 </span></span><span style="display:flex;"><span>  version            Show the server version
 </span></span><span style="display:flex;"><span>  waitready          Wait for LXD to be ready to process requests
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Flags:
+</span></span></span><span style="display:flex;"><span>Flags:
 </span></span><span style="display:flex;"><span>  -d, --debug     Show all debug messages
 </span></span><span style="display:flex;"><span>      --group     The group of users that will be allowed to talk to LXD
 </span></span><span style="display:flex;"><span>  -h, --help      Print help
@@ -905,16 +901,16 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 </span></span><span style="display:flex;"><span>  -v, --verbose   Show all information messages
 </span></span><span style="display:flex;"><span>      --version   Print version number
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Use &#34;lxd [command] --help&#34; for more information about a command.
+</span></span></span><span style="display:flex;"><span>Use &#34;lxd [command] --help&#34; for more information about a command.
 </span></span></code></pre></div><p>Since I used this <code>init</code> subcommand, let&rsquo;s see:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd init -h
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd init -h
 </span></span><span style="display:flex;"><span>Description:
 </span></span><span style="display:flex;"><span>  Configure the LXD daemon
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span></span><span style="display:flex;"><span>Usage:
 </span></span><span style="display:flex;"><span>  lxd init [flags]
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Examples:
+</span></span></span><span style="display:flex;"><span>Examples:
 </span></span><span style="display:flex;"><span>  init --minimal
 </span></span><span style="display:flex;"><span>  init --auto [--network-address=IP] [--network-port=8443] [--storage-backend=dir]
 </span></span><span style="display:flex;"><span>              [--storage-create-device=DEVICE] [--storage-create-loop=SIZE]
@@ -923,7 +919,7 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 </span></span><span style="display:flex;"><span>  init --dump
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Flags:
+</span></span></span><span style="display:flex;"><span>Flags:
 </span></span><span style="display:flex;"><span>      --auto                    Automatic (non-interactive) mode
 </span></span><span style="display:flex;"><span>      --dump                    Dump YAML config to stdout
 </span></span><span style="display:flex;"><span>      --minimal                 Minimal configuration (non-interactive)
@@ -936,7 +932,7 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 </span></span><span style="display:flex;"><span>      --storage-pool            Storage pool to use or create
 </span></span><span style="display:flex;"><span>      --trust-password          Password required to add new clients
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Global Flags:
+</span></span></span><span style="display:flex;"><span>Global Flags:
 </span></span><span style="display:flex;"><span>  -d, --debug     Show all debug messages
 </span></span><span style="display:flex;"><span>  -h, --help      Print help
 </span></span><span style="display:flex;"><span>      --logfile   Path to the log file
@@ -945,23 +941,21 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 </span></span><span style="display:flex;"><span>  -v, --verbose   Show all information messages
 </span></span><span style="display:flex;"><span>      --version   Print version number
 </span></span></code></pre></div><p>I also see another command in this package.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd-user -h
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd-user -h
 </span></span><span style="display:flex;"><span>Description:
 </span></span><span style="display:flex;"><span>  LXD user project daemon
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  This daemon is used to allow users that aren&#39;t considered to be LXD
+</span></span></span><span style="display:flex;"><span>  This daemon is used to allow users that aren&#39;t considered to be LXD
 </span></span><span style="display:flex;"><span>  administrators access to a personal LXD project with suitable
 </span></span><span style="display:flex;"><span>  restrictions.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Usage:
+</span></span></span><span style="display:flex;"><span>Usage:
 </span></span><span style="display:flex;"><span>  lxd-user [flags]
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Flags:
+</span></span></span><span style="display:flex;"><span>Flags:
 </span></span><span style="display:flex;"><span>  -h, --help      Print help
 </span></span><span style="display:flex;"><span>      --version   Print version number
-</span></span></code></pre></div><!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<ul>
+</span></span></code></pre></div><ul>
 <li>The <code>lxd-tools</code> package offers extra tools for <code>lxd</code>.
 <ul>
 <li><code>fuidshift</code>(1)</li>
@@ -976,8 +970,6 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 </ul>
 </li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h2 id="references-container-landscape-essays">References: Container landscape essays</h2>
 <ul>
 <li><a href="https://lwn.net/Articles/531114/">Namespaces in operation</a> January 4, 2013 &ndash; series index up to June 15, 2016</li>
@@ -1012,7 +1004,6 @@ description displayed by <code>lxc image ls dbc</code>.</p>
 </ul>
 </li>
 </ul>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

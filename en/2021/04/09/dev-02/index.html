@@ -83,11 +83,11 @@ I decided to go with <code>reprepro</code> package.</p>
 <p>Here, I follow <a href="https://wiki.debian.org/DebianRepository/SetupWithReprepro">https://wiki.debian.org/DebianRepository/SetupWithReprepro</a>
 (It was slightly outdated.  I update it.)</p>
 <h3 id="setting-up-an-web-server">Setting up an web server</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ sudo apt install apache2
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ sudo apt install apache2
 </span></span></code></pre></div><p>Now you can see a nice &ldquo;Default Page&rdquo; at &ldquo;[::1]&rdquo; (or &ldquo;127.0.0.1&rdquo; for IPV4)
 using browser.</p>
 <p>Let&rsquo;s create a simple directory tree for single distribution case.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ sudo bash -i
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span> $ sudo bash -i
 </span></span><span style="display:flex;"><span> <span style="color:#75715e"># mkdir -p /var/www/html/debian</span>
 </span></span><span style="display:flex;"><span> <span style="color:#75715e"># cat &gt; /etc/apache2/conf-available/repos.conf &lt;&lt;&#39;EOF&#39;</span>
 </span></span><span style="display:flex;"><span>&lt;Directory /var/www/html/debian/ &gt;
@@ -111,21 +111,21 @@ using browser.</p>
 </span></span><span style="display:flex;"><span>&lt;/Directory&gt;
 </span></span><span style="display:flex;"><span>EOF
 </span></span></code></pre></div><p>Let&rsquo;s enable configuration</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo a2enconf repos
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo a2enconf repos
 </span></span><span style="display:flex;"><span>Enabling conf repos.
 </span></span><span style="display:flex;"><span>To activate the new configuration, you need to run:
 </span></span><span style="display:flex;"><span>  systemctl reload apache2
 </span></span><span style="display:flex;"><span>$ sudo systemctl reload apache2
 </span></span></code></pre></div><h3 id="gnu-pg">GNU PG</h3>
 <p>Since we need to use sub-key for this purpose, let me check:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ gpg --list-secret-keys  --with-subkey-fingerprint
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ gpg --list-secret-keys  --with-subkey-fingerprint
 </span></span><span style="display:flex;"><span>pub   rsa4096 2010-09-23 <span style="color:#f92672">[</span>SC<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>      3133724D6207881579E95D621E1356881DD8D791
 </span></span><span style="display:flex;"><span>uid           <span style="color:#f92672">[</span>ultimate<span style="color:#f92672">]</span> Osamu Aoki &lt;osamu@debian.org&gt;
 </span></span><span style="display:flex;"><span>sub   rsa4096 2010-09-23 <span style="color:#f92672">[</span>E<span style="color:#f92672">]</span>
 </span></span><span style="display:flex;"><span>      FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
 </span></span></code></pre></div><h3 id="setting-up-apt-repository">Setting up APT repository</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo mkdir -p /var/www/html/debian/conf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo mkdir -p /var/www/html/debian/conf
 </span></span><span style="display:flex;"><span>$ cd /var/www/html/debian/conf
 </span></span></code></pre></div><p>In there, <code>distributions</code>:</p>
 <pre tabindex="0"><code>Origin: Osamu
@@ -140,9 +140,8 @@ SignWith: FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
 basedir /var/www/html/debian/
 ask-passphrase
 </code></pre><h3 id="installing-package">Installing package</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ reprepro -b /path/to/package_build_results includedeb sid *.deb
-</span></span></code></pre></div><!-- raw HTML omitted -->
-
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ reprepro -b /path/to/package_build_results includedeb sid *.deb
+</span></span></code></pre></div>
 
 <table width="100%">
   <tbody>

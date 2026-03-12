@@ -125,76 +125,76 @@ BLUE    6 - GND    *  *   5 - RESET  WHITE (w/yellow)
                         -------------------- TAPE
 </code></pre><h2 id="wiring-to-program-avr-chips-with-ft-232rl-on-ttl-232r">Wiring to program AVR chips with FT-232RL on TTL-232R</h2>
 <table>
-<thead>
-<tr>
-<th>FT232RL</th>
-<th>BB</th>
-<th>TTL-232R</th>
-<th><strong>ICPS</strong></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>TXD  1</td>
-<td>D0</td>
-<td>4 ORANGE</td>
-<td>5 RESET</td>
-</tr>
-<tr>
-<td>RXD  5</td>
-<td>D1</td>
-<td>5 YELLOW</td>
-<td>3 SCK</td>
-</tr>
-<tr>
-<td>RTS# 3</td>
-<td>D2</td>
-<td>6 GREEN</td>
-<td>1 MISO</td>
-</tr>
-<tr>
-<td>CTS# 11</td>
-<td>D3</td>
-<td>2 BROWN</td>
-<td>4 MOSI</td>
-</tr>
-<tr>
-<td>DTR# 2</td>
-<td>D4</td>
-<td>&mdash;</td>
-<td></td>
-</tr>
-<tr>
-<td>DSR# 9</td>
-<td>D5</td>
-<td>&mdash;</td>
-<td></td>
-</tr>
-<tr>
-<td>DCD# 10</td>
-<td>D6</td>
-<td>&mdash;</td>
-<td></td>
-</tr>
-<tr>
-<td>RI#  6</td>
-<td>D7</td>
-<td>&mdash;</td>
-<td></td>
-</tr>
-<tr>
-<td>VCC</td>
-<td>&ndash;</td>
-<td>3 RED</td>
-<td>2 VCC</td>
-</tr>
-<tr>
-<td>GND</td>
-<td>&ndash;</td>
-<td>1 BLACK</td>
-<td>6 GND</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>FT232RL</th>
+          <th>BB</th>
+          <th>TTL-232R</th>
+          <th><strong>ICPS</strong></th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>TXD  1</td>
+          <td>D0</td>
+          <td>4 ORANGE</td>
+          <td>5 RESET</td>
+      </tr>
+      <tr>
+          <td>RXD  5</td>
+          <td>D1</td>
+          <td>5 YELLOW</td>
+          <td>3 SCK</td>
+      </tr>
+      <tr>
+          <td>RTS# 3</td>
+          <td>D2</td>
+          <td>6 GREEN</td>
+          <td>1 MISO</td>
+      </tr>
+      <tr>
+          <td>CTS# 11</td>
+          <td>D3</td>
+          <td>2 BROWN</td>
+          <td>4 MOSI</td>
+      </tr>
+      <tr>
+          <td>DTR# 2</td>
+          <td>D4</td>
+          <td>&mdash;</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>DSR# 9</td>
+          <td>D5</td>
+          <td>&mdash;</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>DCD# 10</td>
+          <td>D6</td>
+          <td>&mdash;</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>RI#  6</td>
+          <td>D7</td>
+          <td>&mdash;</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>VCC</td>
+          <td>&ndash;</td>
+          <td>3 RED</td>
+          <td>2 VCC</td>
+      </tr>
+      <tr>
+          <td>GND</td>
+          <td>&ndash;</td>
+          <td>1 BLACK</td>
+          <td>6 GND</td>
+      </tr>
+  </tbody>
 </table>
 <ul>
 <li>FT232RL: IC chip in TTL-232R, D/D, Uncompatino</li>
@@ -204,93 +204,92 @@ BLUE    6 - GND    *  *   5 - RESET  WHITE (w/yellow)
 </ul>
 <h2 id="wiring-to-program-avr-chips-with-ft232rl-on-old-arduinos">Wiring to program AVR chips with FT232RL on old-Arduinos</h2>
 <table>
-<thead>
-<tr>
-<th>FT232RL</th>
-<th>BB</th>
-<th>D/D</th>
-<th>Uncompatino</th>
-<th>ATmega328</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>TXD  1</td>
-<td>D0</td>
-<td></td>
-<td>(2 ATmega)</td>
-<td>&mdash;</td>
-</tr>
-<tr>
-<td>RXD  5</td>
-<td>D1</td>
-<td></td>
-<td>(3 ATmega)</td>
-<td>&mdash;</td>
-</tr>
-<tr>
-<td>RTS# 3</td>
-<td>D2</td>
-<td></td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-</tr>
-<tr>
-<td>CTS# 11</td>
-<td>D3</td>
-<td>X3-1</td>
-<td>:</td>
-<td>18 MISO</td>
-</tr>
-<tr>
-<td>DTR# 2</td>
-<td>D4</td>
-<td></td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-</tr>
-<tr>
-<td>DSR# 9</td>
-<td>D5</td>
-<td>X3-2</td>
-<td>:</td>
-<td>19 SCK</td>
-</tr>
-<tr>
-<td>DCD# 10</td>
-<td>D6</td>
-<td>X3-3</td>
-<td>:</td>
-<td>17 MOSI</td>
-</tr>
-<tr>
-<td>RI#  6</td>
-<td>D7</td>
-<td>X3-4</td>
-<td>:</td>
-<td>1  RESET</td>
-</tr>
-<tr>
-<td>VCC</td>
-<td>&ndash;</td>
-<td></td>
-<td>VCC (com.)</td>
-<td>VCC</td>
-</tr>
-<tr>
-<td>GND</td>
-<td>&ndash;</td>
-<td></td>
-<td>GND (com.)</td>
-<td>GND</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>FT232RL</th>
+          <th>BB</th>
+          <th>D/D</th>
+          <th>Uncompatino</th>
+          <th>ATmega328</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>TXD  1</td>
+          <td>D0</td>
+          <td></td>
+          <td>(2 ATmega)</td>
+          <td>&mdash;</td>
+      </tr>
+      <tr>
+          <td>RXD  5</td>
+          <td>D1</td>
+          <td></td>
+          <td>(3 ATmega)</td>
+          <td>&mdash;</td>
+      </tr>
+      <tr>
+          <td>RTS# 3</td>
+          <td>D2</td>
+          <td></td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+      </tr>
+      <tr>
+          <td>CTS# 11</td>
+          <td>D3</td>
+          <td>X3-1</td>
+          <td>:</td>
+          <td>18 MISO</td>
+      </tr>
+      <tr>
+          <td>DTR# 2</td>
+          <td>D4</td>
+          <td></td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+      </tr>
+      <tr>
+          <td>DSR# 9</td>
+          <td>D5</td>
+          <td>X3-2</td>
+          <td>:</td>
+          <td>19 SCK</td>
+      </tr>
+      <tr>
+          <td>DCD# 10</td>
+          <td>D6</td>
+          <td>X3-3</td>
+          <td>:</td>
+          <td>17 MOSI</td>
+      </tr>
+      <tr>
+          <td>RI#  6</td>
+          <td>D7</td>
+          <td>X3-4</td>
+          <td>:</td>
+          <td>1  RESET</td>
+      </tr>
+      <tr>
+          <td>VCC</td>
+          <td>&ndash;</td>
+          <td></td>
+          <td>VCC (com.)</td>
+          <td>VCC</td>
+      </tr>
+      <tr>
+          <td>GND</td>
+          <td>&ndash;</td>
+          <td></td>
+          <td>GND (com.)</td>
+          <td>GND</td>
+      </tr>
+  </tbody>
 </table>
 <ul>
 <li>D/D: Diecimila/Duemilnove pin outs for FT232RL</li>
 <li>Uncompatino: Cheap D/D Alternative with different PCB with short pins</li>
 </ul>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

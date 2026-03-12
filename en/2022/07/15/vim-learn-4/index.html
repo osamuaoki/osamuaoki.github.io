@@ -160,21 +160,21 @@ not only <code>$XDG_CONFIG_HOME/nvim</code> but also <code>$XDG_CONFIG_HOME/astr
 <code>~/.config/nvim/lua/user</code> and the offset path of
 <code>~/.config/astronvim/lua/user</code>.</p>
 <p>Its value can be verified by:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(vim.opt.runtimepath))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(vim.opt.runtimepath))
 </span></span></code></pre></div><p>It is impossible to read so much output and make any sense.  Here, <code>:redir</code> can
 be used to ease reading of these by capturing output in a file. (The use of
 <code>:silent</code> kills pager prompt.)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:redir <span style="color:#f92672">&gt;</span> rtp.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:redir <span style="color:#f92672">&gt;</span> rtp.txt
 </span></span><span style="display:flex;"><span>:silent lua print(vim.inspect(vim.opt.runtimepath))
 </span></span><span style="display:flex;"><span>:redir END
 </span></span></code></pre></div><p>Now we know <code>scope = &quot;global&quot;</code>, <code>shortname = &quot;rtp&quot;</code>, etc.  We can always use
 short name, too.</p>
 <p>If we need its current value only,  it can be inspected and presented in lua
 table by:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(vim.opt.rtp:get()))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(vim.opt.rtp:get()))
 </span></span></code></pre></div><p>Alternatively since we now know it is a global option, it can be accessed and
 presented in similar way as vim classic <code>:set rtp?</code> style by:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.go.rtp)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.go.rtp)
 </span></span></code></pre></div><p>From this output, we can confirm <code>rtp</code> to be scanned roughly as follows.</p>
 <ul>
 <li><code>/home/&lt;username&gt;/.config/nvim</code></li>
@@ -196,7 +196,7 @@ presented in similar way as vim classic <code>:set rtp?</code> style by:</p>
 <h3 id="entry-point-initlua">Entry point: <code>init.lua</code></h3>
 <p>The entry point of nvim is <code>/home/&lt;username&gt;/.config/nvim/init.lua</code>.  It is
 simply as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">local</span> impatient_ok, impatient <span style="color:#f92672">=</span> pcall(require, <span style="color:#e6db74">&#34;impatient&#34;</span>)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">local</span> impatient_ok, impatient <span style="color:#f92672">=</span> pcall(require, <span style="color:#e6db74">&#34;impatient&#34;</span>)
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> impatient_ok <span style="color:#66d9ef">then</span> impatient.enable_profile() <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> _, source <span style="color:#66d9ef">in</span> ipairs {
@@ -234,19 +234,19 @@ out followings:</p>
 <h3 id="variable-astronvim">Variable <code>astronvim</code></h3>
 <p>The <code>astronvim</code> is the globally accessible variable within AstroNvim
 defined originally in <code>utils/init.lua</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>_G.astronvim <span style="color:#f92672">=</span> {}
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>_G.astronvim <span style="color:#f92672">=</span> {}
 </span></span></code></pre></div><p>We can inspect its current value as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(astronvim))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print(vim.inspect(astronvim))
 </span></span></code></pre></div><p>(It is too big to paste here but it is full of important informaion)</p>
 <p>For checking user setting, use the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print (vim.inspect(astronvim.user_settings))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print (vim.inspect(astronvim.user_settings))
 </span></span></code></pre></div><p>For checking &ldquo;mappings&rdquo; only, use the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print (vim.inspect(astronvim.user_settings.mappings))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print (vim.inspect(astronvim.user_settings.mappings))
 </span></span></code></pre></div><p>For checking &ldquo;which-key&rdquo; only, use the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print (vim.inspect(astronvim.user_settings[<span style="color:#e6db74">&#34;which-key&#34;</span>]))
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>:lua print (vim.inspect(astronvim.user_settings[<span style="color:#e6db74">&#34;which-key&#34;</span>]))
 </span></span></code></pre></div><h3 id="function-conditional_func">Function: <code>conditional_func</code></h3>
 <p>This is a simple function defined in <code>lua/core/utils/init.lua</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">conditional_func</span>(func, condition, ...)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">conditional_func</span>(func, condition, ...)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (condition <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#f92672">and</span> <span style="color:#66d9ef">true</span> <span style="color:#f92672">or</span> condition) <span style="color:#f92672">and</span> type(func) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;function&#34;</span> <span style="color:#66d9ef">then</span> <span style="color:#66d9ef">return</span> func(...) <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><ul>
@@ -258,7 +258,7 @@ So this simply calls <code>astrovim.user_plugin_opts(&quot;polish&quot;, nil, fa
 end of the nvim start up.</p>
 <h3 id="function-user_plugin_opts-in-confignviminitlua">Function: <code>user_plugin_opts</code> in <code>~/.config/nvim/init.lua</code></h3>
 <p>This is a function defined in <code>lua/core/utils/init.lua</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">user_plugin_opts</span>(module, default, extend, prefix)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">user_plugin_opts</span>(module, default, extend, prefix)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> extend <span style="color:#f92672">==</span> <span style="color:#66d9ef">nil</span> <span style="color:#66d9ef">then</span> extend <span style="color:#f92672">=</span> <span style="color:#66d9ef">true</span> <span style="color:#66d9ef">end</span>
 </span></span><span style="display:flex;"><span>  default <span style="color:#f92672">=</span> default <span style="color:#f92672">or</span> {}
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> user_settings <span style="color:#f92672">=</span> load_module_file((prefix <span style="color:#f92672">or</span> <span style="color:#e6db74">&#34;user&#34;</span>) <span style="color:#f92672">..</span> <span style="color:#e6db74">&#34;.&#34;</span> <span style="color:#f92672">..</span> module)
@@ -274,7 +274,7 @@ end of the nvim start up.</p>
 <li><code>prefix=nil</code></li>
 </ul>
 <p>Thus, this function processes essentially as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>  module<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;polish&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>  module<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;polish&#34;</span>
 </span></span><span style="display:flex;"><span>  default <span style="color:#f92672">=</span> {}
 </span></span><span style="display:flex;"><span>  extend<span style="color:#f92672">=</span><span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  prefix<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>
@@ -317,7 +317,7 @@ conclusion.)</p>
 </li>
 </ul>
 <p>Key part of codes are commented as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>astronvim.install <span style="color:#f92672">=</span> { home <span style="color:#f92672">=</span> stdpath <span style="color:#e6db74">&#34;config&#34;</span> } <span style="color:#75715e">-- ~/.config/nvim</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>astronvim.install <span style="color:#f92672">=</span> { home <span style="color:#f92672">=</span> stdpath <span style="color:#e6db74">&#34;config&#34;</span> } <span style="color:#75715e">-- ~/.config/nvim</span>
 </span></span><span style="display:flex;"><span>astronvim.install.config <span style="color:#f92672">=</span> stdpath(<span style="color:#e6db74">&#34;config&#34;</span>):gsub(<span style="color:#e6db74">&#34;nvim$&#34;</span>, <span style="color:#e6db74">&#34;astronvim&#34;</span>) <span style="color:#75715e">-- ~/.config/`astronvim</span>
 </span></span><span style="display:flex;"><span>vim.opt.rtp:append(astronvim.install.config) <span style="color:#75715e">-- extend rtp to include ~/.config/astronvim</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">local</span> supported_configs <span style="color:#f92672">=</span> { astronvim.install.home, astronvim.install.config }
@@ -342,9 +342,9 @@ conclusion.)</p>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">end</span>
 </span></span></code></pre></div><p>This extends load module capability not only from <code>/.config/nvim</code> but also
 <code>~/.config/astronvim</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>astronvim.user_settings <span style="color:#f92672">=</span> load_module_file <span style="color:#e6db74">&#34;user.init&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>astronvim.user_settings <span style="color:#f92672">=</span> load_module_file <span style="color:#e6db74">&#34;user.init&#34;</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#75715e">-- load from &#34;user/init.lua&#34; in `/.config/nvim` or `~/.config/`astronvim`.</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">func_or_extend</span>(overrides, default, extend)
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">func_or_extend</span>(overrides, default, extend)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> extend <span style="color:#66d9ef">then</span> <span style="color:#75715e">-- false for this part of code run</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> type(overrides) <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;table&#34;</span> <span style="color:#66d9ef">then</span>
 </span></span><span style="display:flex;"><span>      default <span style="color:#f92672">=</span> vim.tbl_deep_extend(<span style="color:#e6db74">&#34;force&#34;</span>, default, overrides)
@@ -363,7 +363,7 @@ the argument is returned.</p>
 <p>This allows upstream code to set default values while a separate user module
 file <code>~/.config/astronvim/lua/user/init.lua</code> can override it.  No variable
 abstruction etc. involved.  Very nice.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">user_setting_table</span>(module)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">local</span> <span style="color:#66d9ef">function</span> <span style="color:#a6e22e">user_setting_table</span>(module)
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">local</span> settings <span style="color:#f92672">=</span> astronvim.user_settings <span style="color:#f92672">or</span> {}
 </span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">for</span> tbl <span style="color:#66d9ef">in</span> string.gmatch(module, <span style="color:#e6db74">&#34;([^%.]+)&#34;</span>) <span style="color:#66d9ef">do</span>
 </span></span><span style="display:flex;"><span>    settings <span style="color:#f92672">=</span> settings[tbl]
@@ -379,13 +379,13 @@ this, there are some user configuration tips with its mechanism discussion and
 benchmarks against popular configurations.</p>
 <h3 id="other-user_plugin_opts">other <code>user_plugin_opts</code></h3>
 <p>There are many other use of this hook function to enable user configuration.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ grep -R  -v <span style="color:#e6db74">&#34;^ *local&#34;</span> . 2&gt;/dev/null |grep user_plugin_opts|wc -l
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ grep -R  -v <span style="color:#e6db74">&#34;^ *local&#34;</span> . 2&gt;/dev/null |grep user_plugin_opts|wc -l
 </span></span><span style="display:flex;"><span><span style="color:#ae81ff">44</span>
 </span></span></code></pre></div><p>For those other <code>user_plugin_opts</code> in places other than <code>~/.config/init.lua</code>,
 they don&rsquo;t use <code>polish</code> but has actual module name found under
 <code>~/.config/astronvim/lua/user/</code> such as <code>plugins.packaer</code> for
 <code>~/.config/astrovim/lua/user/plugins/packer</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">user_plugin_opts</span>(module, default, extend, prefix)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span><span style="color:#66d9ef">function</span> <span style="color:#a6e22e">astronvim</span>.<span style="color:#a6e22e">user_plugin_opts</span>(module, default, extend, prefix)
 </span></span><span style="display:flex;"><span>  module<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;plugins.packaer&#34;</span>
 </span></span><span style="display:flex;"><span>  default <span style="color:#f92672">=</span> {some default values given ...}
 </span></span><span style="display:flex;"><span>  extend<span style="color:#f92672">=</span><span style="color:#66d9ef">nil</span>
@@ -490,7 +490,7 @@ original upstream <code>DEFAULT</code>.</li>
 </ul>
 <p>My latest updated PR is <a href="https://github.com/AstroNvim/AstroNvim/pull/769">https://github.com/AstroNvim/AstroNvim/pull/769</a></p>
 <p>In my user configuration <code>~/.config/astronvim/lua/user/init.lua</code>, my <code>options</code> modification started simply as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>  <span style="color:#75715e">-- set vim options here (vim.&lt;first_key&gt;.&lt;second_key&gt; =  value)</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-lua" data-lang="lua"><span style="display:flex;"><span>  <span style="color:#75715e">-- set vim options here (vim.&lt;first_key&gt;.&lt;second_key&gt; =  value)</span>
 </span></span><span style="display:flex;"><span>  options <span style="color:#f92672">=</span> {
 </span></span><span style="display:flex;"><span>    opt <span style="color:#f92672">=</span> {
 </span></span><span style="display:flex;"><span>      relativenumber <span style="color:#f92672">=</span> <span style="color:#66d9ef">false</span>, <span style="color:#75715e">-- unsets vim.opt.relativenumber</span>
@@ -535,7 +535,6 @@ input processing, so users can now map e.g. <code>&lt;Tab&gt;</code> and <code>&
 <h2 id="paste-mode">Paste mode</h2>
 <p>By obsoleting needs for paste mode, Neovim deprecated it.  Neovim can tell
 difference between actual key input from paste input.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

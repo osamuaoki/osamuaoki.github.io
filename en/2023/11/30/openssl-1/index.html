@@ -116,14 +116,14 @@ specific utilities because additional algorithm options and
 ENGINE provided algorithms can be used.</p>
 </blockquote>
 <h3 id="step-1-create-private-key">Step 1 (create private key)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl genpkey -algorithm rsa   -out rsa_private_key.pem
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl genpkey -algorithm rsa   -out rsa_private_key.pem
 </span></span><span style="display:flex;"><span> ...
 </span></span></code></pre></div><p>This creates key in PKCS #8 format:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ head -2 rsa_private_key.pem
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ head -2 rsa_private_key.pem
 </span></span><span style="display:flex;"><span>-----BEGIN PRIVATE KEY-----
 </span></span><span style="display:flex;"><span>MIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCpdaNF0FYQbpDh
 </span></span></code></pre></div><h3 id="step-2-create-public-certificate">Step 2 (create public certificate)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl req -new -key rsa_private_key.pem -x509 -days 3000 -out rsa_public_certificate.pem
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl req -new -key rsa_private_key.pem -x509 -days 3000 -out rsa_public_certificate.pem
 </span></span><span style="display:flex;"><span>You are about to be asked to enter information that will be incorporated
 </span></span><span style="display:flex;"><span>into your certificate request.
 </span></span><span style="display:flex;"><span>What you are about to enter is what is called a Distinguished Name or a DN.
@@ -140,11 +140,11 @@ ENGINE provided algorithms can be used.</p>
 </span></span><span style="display:flex;"><span>Email Address []:foo@example.org
 </span></span></code></pre></div><p>Alternatively, we can split this step into creating the public key and signing
 it with private key to create the self-signed certificate as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl req -new -key rsa_private_key.pem -out rsa_public.pem
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl req -new -key rsa_private_key.pem -out rsa_public.pem
 </span></span><span style="display:flex;"><span> ...
 </span></span><span style="display:flex;"><span> $ openssl x509 -req -days 3000 -signkey rsa_private_key.pem -in rsa_public.pem -out rsa_public_certificate.pem
 </span></span></code></pre></div><h3 id="step-3-print-out-the-certificate-in-text-form">Step 3 (print out the certificate in text form)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl x509 -in rsa_public_certificate.pem  -noout -text
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl x509 -in rsa_public_certificate.pem  -noout -text
 </span></span><span style="display:flex;"><span>Certificate:
 </span></span><span style="display:flex;"><span>    Data:
 </span></span><span style="display:flex;"><span>        Version: 3 (0x2)
@@ -207,9 +207,9 @@ it with private key to create the self-signed certificate as follows:</p>
 <p>Although I don&rsquo;t see <code>ED25519</code> is in use for CA certificates, I created
 a self-signed certificate using <code>ED25519</code>, here.</p>
 <h3 id="step-1-create-private-key-1">Step 1 (create private key)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl genpkey -algorithm ED25519   -out ed25519_private_key.pem
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl genpkey -algorithm ED25519   -out ed25519_private_key.pem
 </span></span></code></pre></div><h3 id="step-2-create-public-certificate-1">Step 2 (create public certificate)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl req -new -key ed25519_private_key.pem -x509 -days 3000 -out ed25519_public_certificate.pem
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl req -new -key ed25519_private_key.pem -x509 -days 3000 -out ed25519_public_certificate.pem
 </span></span><span style="display:flex;"><span>You are about to be asked to enter information that will be incorporated
 </span></span><span style="display:flex;"><span>into your certificate request.
 </span></span><span style="display:flex;"><span>What you are about to enter is what is called a Distinguished Name or a DN.
@@ -225,7 +225,7 @@ a self-signed certificate using <code>ED25519</code>, here.</p>
 </span></span><span style="display:flex;"><span>Common Name (e.g. server FQDN or YOUR name) []:
 </span></span><span style="display:flex;"><span>Email Address []:foo@example.org
 </span></span></code></pre></div><h3 id="step-3-print-out-the-certificate-in-text-form-1">Step 3 (print out the certificate in text form)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl x509 -in ed25519_public_certificate.pem  -noout -text
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ openssl x509 -in ed25519_public_certificate.pem  -noout -text
 </span></span><span style="display:flex;"><span>Certificate:
 </span></span><span style="display:flex;"><span>    Data:
 </span></span><span style="display:flex;"><span>        Version: 3 (0x2)
@@ -259,7 +259,7 @@ a self-signed certificate using <code>ED25519</code>, here.</p>
 </span></span><span style="display:flex;"><span>        9c:16:ce:d8:86:b3:05:74:ce:0f
 </span></span></code></pre></div><h2 id="comparison-of-algorithm">Comparison of algorithm</h2>
 <p><code>ED25519</code> creates much smaller files.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ls -l
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ls -l
 </span></span><span style="display:flex;"><span>-rw------- 1 osamu osamu   119 Nov 30 17:51 ed25519_private_key.pem
 </span></span><span style="display:flex;"><span>-rw-rw-r-- 1 osamu osamu   692 Nov 30 17:52 ed25519_public_certificate.pem
 </span></span><span style="display:flex;"><span>-rw------- 1 osamu osamu  1704 Nov 30 17:48 rsa_private_key.pem
@@ -293,9 +293,6 @@ a self-signed certificate using <code>ED25519</code>, here.</p>
 </ul>
 </li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

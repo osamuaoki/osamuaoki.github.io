@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Debianで青色申告2026 (e-Tax 2025年度) | Goofing Osamu</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="stylesheet" href="/css/fonts.css" />
+    
+  </head>
+
+  <body>
+    <nav>
+    <ul class="menu">
+      
+      <li><a href="/">Home</a></li>
+      
+      <li><a href="/about/">About</a></li>
+      
+      <li><a href="/categories/">Categories</a></li>
+      
+      <li><a href="/tags/">Tags</a></li>
+      
+      <li><a href="/en/">English</a></li>
+      
+      <li><a href="/jp/">Japanese</a></li>
+      
+      <li><a href="/index.xml">Subscribe</a></li>
+      
+    </ul>
+    <hr/>
+    </nav>
+
+<div class="article-meta">
+<h1><span class="title">Debianで青色申告2026 (e-Tax 2025年度)</span></h1>
+
+<h3 class="date">Date:
+2026/03/12 (initial publish),
+2026/03/12 (last update)
+</h3>
+<h3 class="source">Source:
+note-00063
+</h3>
+</div>
+
+<main>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2024/03/10/etax2023/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+<h2>TOC</h2>
+
+<nav id="TableOfContents">
+  <ul>
+    <li>
+      <ul>
+        <li><a href="#e-taxがwindows-11-専用問題">e-TaxがWindows 11 専用問題</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+<p><strong>以下が、正しい対応かどうかは、私は保証できません。</strong></p>
+<p><a href="/jp/2024/03/10/etax2023/">Debianで青色申告2023 (e-Tax)</a>の更新版です。</p>
+<h3 id="e-taxがwindows-11-専用問題">e-TaxがWindows 11 専用問題</h3>
+<p>e-Taxソフト(WEB版)を使うのがDebianでの基本です。</p>
+<p>公共性が求められる国家機関のサービスが、十分な理由なく特定ベンダーの有償製品のWindowsオンリーに限定のみのサポートと表示されている現状には懸念があります。</p>
+<p>この「サポート」の件は無視します。あくまで「これ以外で使用禁止」などはないので、間抜けな制約は、クライアントのブラウザーでの対応で回避すろことを考えます。今年からは「WINDOWS11」が要件なので巷に転がっていたプラグインでの簡易対応ができません。</p>
+<ul>
+<li>スマホでのQRコード認証対応をしたいので、GOOGLE CHOROMEを使用します。</li>
+<li><a href="https://www.keisan.nta.go.jp/kyoutu/ky/sm/top#bsctrl">国税庁 確定申告書等作成コーナー</a> -&gt; 作成開始</li>
+<li>マイナンバーカードをお持ちですか。-&gt; はい</li>
+<li>マイナンバーカード読み取りに対応したスマートフォン&hellip; -&gt; はい</li>
+<li>「スマートフォンを使用する」をクリックしてPOPUP
+<ul>
+<li>「ご利用のパソコン環境（OS/ブラウザ）は、QRコードを利用したマイナンバーカード方式によるe-Taxの推奨バージョン（国税庁において動作を確認した環境）ではありません。」との高言をいただくお役所からいただく。このままPOPUPは閉めない。右下のボタンは「閉じる」</li>
+</ul>
+</li>
+<li>F12 (or SHIFT-CTRL-I)を押し、通常MORE TOOLS 経由で通常行く開発者ツール(Developer tool)に飛ぶ</li>
+<li>DEVELOPER TOOLの画面で、右上の３点アイコンクリック -&gt; More tools (経由) -&gt; Network conditions</li>
+<li>User Agent の「Use browser default」のチェックボックスをクリックして外す</li>
+<li>プルダウンから「Chrome &ndash; Windows」 を選択</li>
+<li>「User agent client hints」をクリックして展開表示</li>
+<li>Platform (Sec-CH-UA-Platform/&hellip;)を「Windows」「11.0」とする。</li>
+<li>このままこれは閉じない。</li>
+<li>もとのPOPアップで「F5」を押してリロードし、少し戻ったところから前回同様の選択をしていく</li>
+<li>また出るエラーメッセージは一見変わらないが、よく見ると右下のボタンは「このまま進む」と微妙に変わっている。これが重要。</li>
+<li>どういうわけか、突破完了。「令和７年分の申告書等の作成」や「過去の年分の申告書等の作成」が見える。</li>
+</ul>
+<p>参考：</p>
+<ul>
+<li><a href="https://learn.microsoft.com/ja-jp/microsoft-edge/web-platform/how-to-detect-win11">https://learn.microsoft.com/ja-jp/microsoft-edge/web-platform/how-to-detect-win11</a></li>
+<li><a href="https://developers.google.com/authorized-buyers/rtb/useragent-targeting?hl=ja#example_populating_useragent_based_on_client_hints">https://developers.google.com/authorized-buyers/rtb/useragent-targeting?hl=ja#example_populating_useragent_based_on_client_hints</a></li>
+<li><a href="https://note.com/real_mango826/n/neb2f07149c50">https://note.com/real_mango826/n/neb2f07149c50</a> (300円払う寸前までありがたく読ませていいただきました。有償部分は読んでません)</li>
+</ul>
+
+
+<table width="100%">
+  <tbody>
+  <tr>
+  
+  <td align="left" width="33%"><a href="/jp/2024/03/10/etax2023/">Previous Post</a></td>
+  
+  <td align="center" width="33%"><a href="/jp/">Top</a></td>
+  
+  <td align="right" width="33%"><a href="#">***</a></td>
+  
+  </tr>
+  </tbody>
+</table>
+
+</main>
+
+  <footer>
+  
+  
+  <hr/>
+  © 2013-2024 <a href="https://github.com/osamuaoki">Osamu Aoki</a>
+  
+  </footer>
+  </body>
+</html>
+

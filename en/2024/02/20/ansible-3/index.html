@@ -136,7 +136,7 @@ default&rdquo;.  It also takes care variable type issues.</p>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/set_fact_module.html">ansible.builtin.set_fact</a> &ndash; Set host variable(s) and fact(s)</li>
 </ul>
 <p><code>roles/base/defaults/main.yml</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># prefix internal variables with underscore</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#   -- let -e to set external variables without underscore</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># ensure internal variables to be defined (and boolean for override)</span>
@@ -150,14 +150,14 @@ default&rdquo;.  It also takes care variable type issues.</p>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">_var1_override</span>:  <span style="color:#e6db74">&#34;{{ var1_override | default(false) | bool }}&#34;</span> 
 </span></span><span style="display:flex;"><span><span style="color:#f92672">_var2_override</span>:  <span style="color:#e6db74">&#34;{{ var2_override | default(false) | bool }}&#34;</span> 
 </span></span></code></pre></div><p><code>roles/base/vars/main.yml</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># vars file</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">_var3</span>: <span style="color:#e6db74">&#34;&#34;</span>
 </span></span></code></pre></div><p>Then tested these against <code>roles/base/tasks/main.yml</code> and played with it from
 the command line.  Many repeated long lines are for the variable value tracing.</p>
 <p><code>roles/base/tasks/main.yml</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>---
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>- <span style="color:#f92672">name</span>: <span style="color:#ae81ff">Debug external variables with msg</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.debug</span>:
@@ -206,7 +206,7 @@ the command line.  Many repeated long lines are for the variable value tracing.<
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">ansible.builtin.debug</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">var</span>: <span style="color:#ae81ff">_var1 == _var2</span>
 </span></span></code></pre></div><p>Using these, I tested as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible-playbook pb_main.yml -e &#34;var1=0 var2=0 var1_override=1 var2_override=0&#34;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ansible-playbook pb_main.yml -e &#34;var1=0 var2=0 var1_override=1 var2_override=0&#34;
 </span></span><span style="display:flex;"><span>...
 </span></span></code></pre></div><p>YAML or JSON is too much to type in the command line.  The <code>-e</code> option with
 easier to type <code>key=value</code> produces <code>value</code> in string.  The application of
@@ -255,8 +255,6 @@ considered.</p>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/blockinfile_module.html">ansible.builtin.blockinfile</a></li>
 <li><a href="https://docs.ansible.com/ansible/latest/collections/ansible/builtin/file_module.html">ansible.builtin.file</a></li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h2 id="debug-hints">Debug hints</h2>
 <p>I found interesting post on <a href="https://www.reddit.com/r/ansible/comments/14lbknm/debugging_ansible_jinja2_templates/">redit</a>.</p>
 <ul>
@@ -301,10 +299,6 @@ though whenever I wonder.  Here are links to the portion I keep coming back.</p>
 </ul>
 </li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

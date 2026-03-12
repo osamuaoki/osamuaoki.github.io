@@ -77,7 +77,7 @@ note-00070
 the <code>testing</code> due to &ldquo;disk full`.</p>
 <p>In order to check reason for the above problem, I installed most DE (w/o Office
 programs) without upgrade again.  I see:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus exec vmc0 -- df -h
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus exec vmc0 -- df -h
 </span></span><span style="display:flex;"><span>Filesystem      Size  Used Avail Use% Mounted on
 </span></span><span style="display:flex;"><span>udev            1.9G     0  1.9G   0% /dev
 </span></span><span style="display:flex;"><span>tmpfs           391M  1.4M  390M   1% /run
@@ -91,7 +91,7 @@ programs) without upgrade again.  I see:</p>
 system but not enough for full GUI DE.</p>
 <h2 id="the-source-of-the-storage-size-limitation">The source of the storage size limitation</h2>
 <p>I checked VM as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config show vmc0
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config show vmc0
 </span></span><span style="display:flex;"><span>architecture: x86_64
 </span></span><span style="display:flex;"><span>config:
 </span></span><span style="display:flex;"><span>  image.architecture: amd64
@@ -126,7 +126,7 @@ system but not enough for full GUI DE.</p>
 </span></span><span style="display:flex;"><span>description: Osamu&#39;s default Incus profile 0
 </span></span></code></pre></div><p>I see no storage limitation here.</p>
 <p>Let me dig into <code>default</code> profile used.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile show default
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile show default
 </span></span><span style="display:flex;"><span>config: {}
 </span></span><span style="display:flex;"><span>description: Default Incus profile
 </span></span><span style="display:flex;"><span>devices:
@@ -146,7 +146,7 @@ system but not enough for full GUI DE.</p>
 </span></span><span style="display:flex;"><span>- /1.0/instances/ctc1
 </span></span></code></pre></div><p>Here, <code>root</code> device uses storage pool <code>default</code>.  Let me dig into this storage pool
 <code>default</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus storage show default
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus storage show default
 </span></span><span style="display:flex;"><span>config:
 </span></span><span style="display:flex;"><span>  source: /var/lib/incus/storage-pools/default
 </span></span><span style="display:flex;"><span>description: &#34;&#34;
@@ -162,7 +162,7 @@ system but not enough for full GUI DE.</p>
 </span></span><span style="display:flex;"><span>locations:
 </span></span><span style="display:flex;"><span>- none
 </span></span></code></pre></div><p>So I looked into <code>/var/lib/incus/storage-pools/default</code>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd /var/lib/incus/storage-pools/default
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ cd /var/lib/incus/storage-pools/default
 </span></span><span style="display:flex;"><span> $ sudo tree -F -L 3 .
 </span></span><span style="display:flex;"><span>./
 </span></span><span style="display:flex;"><span>├── buckets/
@@ -208,7 +208,7 @@ system but not enough for full GUI DE.</p>
 </span></span><span style="display:flex;"><span>│       └── templates/
 </span></span><span style="display:flex;"><span>└── virtual-machines-snapshots/
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>21 directories, 22 files
+</span></span></span><span style="display:flex;"><span>21 directories, 22 files
 </span></span><span style="display:flex;"><span> $ sudo ls -lh virtual-machines/vmc{0,1}/root.img
 </span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 10G Mar 16 11:18 virtual-machines/vmc0/root.img
 </span></span><span style="display:flex;"><span>-rw-r--r-- 1 root root 10G Mar 15 23:54 virtual-machines/vmc1/root.img
@@ -221,7 +221,7 @@ to be quite useful.</p>
 <p>I created osamu-large profile using <code>osamu-large.yaml</code> file under the
 <a href="https://github.com/osamuaoki/osamuaoki-hugo-proj/tree/master/018_incus0">018_incus</a>
 directory.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile edit  osamu-large &lt;osamu-large.yaml
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile edit  osamu-large &lt;osamu-large.yaml
 </span></span><span style="display:flex;"><span> $ incus profile show  osamu-large
 </span></span><span style="display:flex;"><span>config:
 </span></span><span style="display:flex;"><span>  user.user-data: |-
@@ -256,10 +256,10 @@ directory.</p>
 </span></span><span style="display:flex;"><span>/dev/sda1        99M   12M   87M  12% /boot/efi
 </span></span></code></pre></div><p>I got a system with a large 40GB disk.  Good!</p>
 <p>When I tried to change disk size for existing instance, I got.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config device set vmc0 root size=20GB
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config device set vmc0 root size=20GB
 </span></span><span style="display:flex;"><span>Error: Device from profile(s) cannot be modified for individual instance. Override device or modify profile instead
 </span></span></code></pre></div><p>OK, so I need to modify profile, instead.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config show vmc1
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus config show vmc1
 </span></span><span style="display:flex;"><span>architecture: x86_64
 </span></span><span style="display:flex;"><span>config:
 </span></span><span style="display:flex;"><span>  cloud-init.user-data: |-
@@ -291,7 +291,7 @@ directory.</p>
 </span></span><span style="display:flex;"><span>description: Osamu&#39;s default Incus profile 1
 </span></span></code></pre></div><p>Since profile <code>osamu0</code> and <code>osamu1</code> only had <code>config:</code> and no <code>devices:</code>, the
 above lists only <code>default</code> profile.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile add  vmc1 osamu-large
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ incus profile add  vmc1 osamu-large
 </span></span><span style="display:flex;"><span>Profile osamu-large added to vmc1
 </span></span><span style="display:flex;"><span> $ incus profile add  vmc0 osamu-large
 </span></span><span style="display:flex;"><span>Profile osamu-large added to vmc0
@@ -307,9 +307,6 @@ and <a href="https://cdimage.debian.org/cdimage/">other images</a></p>
 <p>I need to learn more on
 <a href="https://linuxcontainers.org/incus/docs/main/storage/">Incus: Storage</a> and
 <a href="https://linuxcontainers.org/incus/docs/main/images/">Incus: Images</a>.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

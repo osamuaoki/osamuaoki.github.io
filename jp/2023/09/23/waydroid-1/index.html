@@ -72,7 +72,7 @@ note-00061
 <h2 id="waydriod-を使ったアンドロイドエミュレーター環境の導入">waydriod を使ったアンドロイドエミュレーター環境の導入</h2>
 <p>どうも現在もっとも使えそうなアンドロイドエミュレーター環境は、<a href="https://waydro.id/">waydriod</a>のようなので、試してみました。</p>
 <p><a href="https://docs.waydro.id/usage/install-on-desktops#ubuntu-debian-and-derivatives">ウェッブサイトのDebian用のwaydroid導入方法</a>では、スクリプトが何をするのか不安なので、一度ファイルに落としてから使いました。こうすると、コマンドラインオプション追加設定の話も意味が通ります。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo apt install curl ca-certificates -y
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo apt install curl ca-certificates -y
 </span></span><span style="display:flex;"><span>$ mkdir -p ~/tmp <span style="color:#f92672">&amp;&amp;</span> cd ~/temp
 </span></span><span style="display:flex;"><span>$ curl https://repo.waydro.id &gt; waydroid.sh
 </span></span><span style="display:flex;"><span>$ chmod <span style="color:#ae81ff">755</span> waydroid.sh
@@ -89,7 +89,7 @@ Architectures: amd64
 signed-by: /usr/share/keyrings/waydroid.gpg
 </code></pre><p>その後、<a href="https://docs.waydro.id/usage/install-on-desktops">waydroid導入マニュアル</a>指示の<a href="https://docs.waydro.id/usage/install-on-desktops#manually-starting-waydroid">手動スタート手順</a>通り<code>sudo waydroid container start</code>だとエラーメッセージがでます。</p>
 <p>そのメッセージを参考に、<a href="https://docs.waydro.id/usage/waydroid-command-line-options">Waydroid command line options</a> に従って System type を <a href="https://wiki.lineageos.org/gapps">GAPPS</a> 対応とすべく以下を実行しました。(結構大きなファイルなので、ダウンロードに３０分ほど時間がかかりました。)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo waydroid init -s GAPPS
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo waydroid init -s GAPPS
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>23:03:28<span style="color:#f92672">]</span> Downloading https://sourceforge.net/projects/waydroid/files/images/system/lineage/waydroid_x86_64/lineage-18.1-20230923-GAPPS-waydroid_x86_64-system.zip/download
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>Downloading<span style="color:#f92672">]</span> 862.32 MB/862.36 MB    5875.47 kbps<span style="color:#f92672">(</span>approx.<span style="color:#f92672">)[</span>23:21:51<span style="color:#f92672">]</span> Validating system image
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>23:21:52<span style="color:#f92672">]</span> Extracting to /var/lib/waydroid/images
@@ -98,7 +98,7 @@ signed-by: /usr/share/keyrings/waydroid.gpg
 </span></span><span style="display:flex;"><span><span style="color:#f92672">[</span>23:48:57<span style="color:#f92672">]</span> Extracting to /var/lib/waydroid/images
 </span></span></code></pre></div><p>このあとも、<a href="https://waydro.id/#install">waydroidオープニングのページの導入コメント</a>の<code>systemctl</code>コマンドを使った手動コンテナー起動指示が気になります。上記の初期化プログラムやDebパッケージスクリプトが関連設定をちゃんとやってくれていればいいのですが。。。</p>
 <p>そこで、以下を実行してコンテナーが起動されているかを確認し安心しています。</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo systemctl status waydroid-container
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ sudo systemctl status waydroid-container
 </span></span><span style="display:flex;"><span>● waydroid-container.service - Waydroid Container
 </span></span><span style="display:flex;"><span>     Loaded: loaded <span style="color:#f92672">(</span>/lib/systemd/system/waydroid-container.service; enabled; preset: enabled<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>     Active: active <span style="color:#f92672">(</span>running<span style="color:#f92672">)</span> since Sun 2023-09-24 23:02:26 JST; 48min ago
@@ -128,7 +128,6 @@ $ rm -r ~/.local/share/applications/waydroid.com.*.*.desktop
 <li><a href="http://mochiuwiki.e2.valueserver.jp/index.php/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB_-_WayDroid">インストール - WayDroid</a> (2022-04-16) ネットワーク設定なども</li>
 <li><a href="https://ubunlog.com/ja/waydroid-un-conjunto-de-herramientas-para-tener-tus-apps-de-android-en-ubuntu/">Waydroid、UbuntuにAndroidアプリをインストールするためのツールセット</a> (????)</li>
 </ul>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

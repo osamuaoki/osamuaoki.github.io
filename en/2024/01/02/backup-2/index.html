@@ -87,7 +87,7 @@ mechanism</a>.
 <p>Let&rsquo;s suppose my backup USB drive is (auto)mounted as
 <code>/media/osamu/BKUP_USB</code>.  Then, I can use <code>systemctl list-units -t mount|grep BKUP_USB</code> to find systemd service name corresponding to
 <code>/media/osamu/BKUP_USB</code>.  For example:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ systemctl list-units -t mount|grep USB
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ systemctl list-units -t mount|grep USB
 </span></span><span style="display:flex;"><span>  media-osamu-BKUP_USB.mount      loaded active mounted /media/osamu/BKUP_USB
 </span></span><span style="display:flex;"><span>$ systemctl status media-osamu-BKUP_USB.mount
 </span></span><span style="display:flex;"><span>● media-osamu-BKUP_USB.mount - /media/osamu/BKUP_USB
@@ -97,7 +97,7 @@ mechanism</a>.
 </span></span><span style="display:flex;"><span>       What: /dev/sda1
 </span></span></code></pre></div><h2 id="backup-upon-each-mount-event">Backup upon each mount event</h2>
 <p>Create <code>~/.config/systemd/user/bss-BKUP_USB.service</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Description</span><span style="color:#f92672">=</span><span style="color:#e6db74">USB Disk backup</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Requires</span><span style="color:#f92672">=</span><span style="color:#e6db74">media-penguin-BKUP_USB.mount</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">After</span><span style="color:#f92672">=</span><span style="color:#e6db74">media-penguin-BKUP_USB.mount</span>
@@ -108,7 +108,7 @@ mechanism</a>.
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Install]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">WantedBy</span><span style="color:#f92672">=</span><span style="color:#e6db74">media-penguin-BKUP_USB.mount</span>
 </span></span></code></pre></div><p>Create <code>~/.config/bss/BKUP_USB</code></p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">########################################################################</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">########################################################################</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># make new backup copy (path are relative from $HOME)</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># * source is a btrfs subvolume at ~/SRC_SUBVOL</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#   * always ignore error from gather</span>
@@ -133,9 +133,9 @@ mechanism</a>.
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># vim:se sw=2 ts=2 sts=2 et ai tw=78:</span>
 </span></span></code></pre></div><p>Please note use of <code>notify-send</code> in this script.</p>
 <p>Then, activate this service unit as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ systemctl --user enable bss-BKUP_USB.service
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ systemctl --user enable bss-BKUP_USB.service
 </span></span></code></pre></div><p>Somehow, I get the following unexpected spurious yellow warning.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>Unit /home/penguin/.config/systemd/user/bss-BKUP_USB.service is added as a dependency to a non-existent unit media-penguin-BKUP_USB.mount.
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>Unit /home/penguin/.config/systemd/user/bss-BKUP_USB.service is added as a dependency to a non-existent unit media-penguin-BKUP_USB.mount.
 </span></span></code></pre></div><p>Despite this warning, USB storage seems to be getting backup data when my workstation is powered up with USB drive plugged-in or when it get plugged-in.</p>
 <h2 id="bss-gather-"><code>bss gather ...</code></h2>
 <p>The <code>bss gather</code> subcommand was introduced as an alternative tool to enable
@@ -144,7 +144,7 @@ changed its configuration file format.  Now it uses &ldquo;FILTER RULES&rdquo; o
 <code>rsync</code>(1).</p>
 <p>For gather configuration file <code>.gather.rc</code>, <code>bss gather</code> executes <code>rsync</code> with
 the following (excluding details):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ rsync -a --filter=&#34;. .gather.rc&#34; $srcdir $destdir
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ rsync -a --filter=&#34;. .gather.rc&#34; $srcdir $destdir
 </span></span></code></pre></div><p>The syntax of gather configuration file is defined in the &ldquo;FILTER RULES&rdquo; in
 <code>rsync</code>(1) manpage.</p>
 <p>Although this gather configuration file can be written in any order, I usually
@@ -215,11 +215,9 @@ organize this file in the following order.</p>
 </code></pre><p>The use of <code>***</code> (available for recent <code>rsync</code>) makes it easy to write rule.</p>
 <p>The above execution is actually over-simplified.  In reality, details are taken
 care to avoid gathering snapshot files under the <code>.bss.d/</code> directory as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ rsync -aHS --delete-excluded --mkpath --filter=&#34;- .bss.d/&#34; \
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ rsync -aHS --delete-excluded --mkpath --filter=&#34;- .bss.d/&#34; \
 </span></span><span style="display:flex;"><span>              --filter=&#34;. .gather.rc&#34; $srcdir $destdir
 </span></span></code></pre></div><p>For more, see <a href="https://github.com/osamuaoki/bss">https://github.com/osamuaoki/bss</a></p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

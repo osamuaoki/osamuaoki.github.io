@@ -76,7 +76,7 @@ note-00056
 <h2 id="yaml-to-allow-ipcs-for-wayland--x--sounds">YAML to allow IPCs for Wayland + X + sounds</h2>
 <p>Here is a YAML data example (<code>waylandx.yaml</code>) to add <code>disk</code> device for
 many IPC sockets supporting Wayland + X + sounds.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">config</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">config</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">boot.autostart</span>: <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">raw.idmap</span>: <span style="color:#ae81ff">both 1000 1000</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">security.nesting</span>: <span style="color:#e6db74">&#34;true&#34;</span>
@@ -125,7 +125,7 @@ many IPC sockets supporting Wayland + X + sounds.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - echo &#39;export XDG_SESSION_TYPE=wayland&#39;  &gt;&gt; /home/osamu/.profile
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - echo &#39;export QT_QPA_PLATFORM=wayland&#39;   &gt;&gt; /home/osamu/.profile
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - echo &#39;export DISPLAY=:0&#39;                &gt;&gt; /home/osamu/.profile
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - echo &#39;export XAUTHORITY=$(echo /mnt/runuser/.mutter-Xwaylandauth.*)&#39; &gt;&gt; /home/osamu/.profile</span>    
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - echo &#39;export XAUTHORITY=$(echo /mnt/runuser/.mutter-Xwaylandauth.*)&#39; &gt;&gt; /home/osamu/.profile</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">description</span>: <span style="color:#ae81ff">Wayland+X+sound LXD profile</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">devices</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">eth0</span>:
@@ -149,13 +149,13 @@ many IPC sockets supporting Wayland + X + sounds.</p>
 </span></span><span style="display:flex;"><span>    <span style="color:#f92672">type</span>: <span style="color:#ae81ff">disk</span>
 </span></span></code></pre></div><p>NOTE: I don&rsquo;t know if lock files as above work well or not.</p>
 <p>Here, I used information on my host system as below.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ echo $XAUTHORITY
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ echo $XAUTHORITY
 </span></span><span style="display:flex;"><span>/run/user/1000/.mutter-Xwaylandauth.VC1EF2
 </span></span><span style="display:flex;"><span> $ getent group video
 </span></span><span style="display:flex;"><span>video:x:44:osamu
 </span></span></code></pre></div><p>I am using the primary user name <code>osamu</code> in the container.</p>
 <h2 id="running-x-gui-application-xeyes-in-container">Running X GUI application <code>xeyes</code> in container</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc profile create waylandx
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc profile create waylandx
 </span></span><span style="display:flex;"><span> $ lxc profile edit waylandx &lt; waylandx.yaml
 </span></span><span style="display:flex;"><span> $ lxc profile ls
 </span></span><span style="display:flex;"><span>+----------+-----------------------------+---------+
@@ -168,10 +168,10 @@ many IPC sockets supporting Wayland + X + sounds.</p>
 </span></span><span style="display:flex;"><span>| waylandx | Wayland+X+sound LXD profile | 0       |
 </span></span><span style="display:flex;"><span>+----------+-----------------------------+---------+
 </span></span></code></pre></div><p>Let me create template <code>waylandx0</code> instance with <code>waylandx</code> profile</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc init images:debian/12/cloud waylandx0 --profile waylandx
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc init images:debian/12/cloud waylandx0 --profile waylandx
 </span></span></code></pre></div><p>Let me inspect this instance. (We need to expand to see effective configuration
 settings.)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc config waylandx0 -e
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc config waylandx0 -e
 </span></span><span style="display:flex;"><span>architecture: x86_64
 </span></span><span style="display:flex;"><span>config:
 </span></span><span style="display:flex;"><span>  boot.autostart: &#34;false&#34;
@@ -260,7 +260,7 @@ settings.)</p>
 </span></span><span style="display:flex;"><span>- waylandx
 </span></span><span style="display:flex;"><span>stateful: false
 </span></span></code></pre></div><p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
 </span></span><span style="display:flex;"><span> $ lxc start waylandx
 </span></span><span style="display:flex;"><span> $ lxc exec waylandx -- apt install x11-apps
 </span></span><span style="display:flex;"><span> ...
@@ -268,7 +268,7 @@ settings.)</p>
 </span></span></code></pre></div><p>Now <code>xeyes</code> works.</p>
 <h2 id="running-mesa-utils-gui-application-in-container">Running mesa-utils GUI application in container</h2>
 <p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
 </span></span><span style="display:flex;"><span> $ lxc start waylandx
 </span></span><span style="display:flex;"><span> $ lxc exec waylandx -- apt install mesa-utils
 </span></span><span style="display:flex;"><span> ...
@@ -314,7 +314,7 @@ settings.)</p>
 </span></span></code></pre></div><p>Now GL/EGL/ES2 programs work.  (except <code>es2gears_wayland</code>)</p>
 <h2 id="running-wayland-gui-application-firefox-in-container">Running Wayland GUI application <code>firefox</code> in container</h2>
 <p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
 </span></span><span style="display:flex;"><span> $ lxc start waylandx
 </span></span><span style="display:flex;"><span> $ lxc exec waylandx -- apt install firefox-esr
 </span></span><span style="display:flex;"><span> ...
@@ -332,7 +332,7 @@ settings.)</p>
 Browser works well with sound capability.</p>
 <h2 id="running-x-gui-application-chromium-in-container">Running X GUI application <code>chromium</code> in container</h2>
 <p>Let&rsquo;s start with a fresh <code>waylandx</code> instance.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc delete waylandx -f || lxc copy wayland0 waylandx
 </span></span><span style="display:flex;"><span> $ lxc start waylandx
 </span></span><span style="display:flex;"><span> $ lxc exec waylandx -- apt install chromium
 </span></span><span style="display:flex;"><span> ...
@@ -346,7 +346,6 @@ Browser works well with sound capability.</p>
 </span></span><span style="display:flex;"><span>[4442:4442:1125/064117.418688:ERROR:policy_logger.cc(157)] :components/enterprise/browser/controller/chrome_browser_cloud_management_controller.cc(163) Cloud management controller initialization aborted as CBCM is not enabled.
 </span></span></code></pre></div><p>Works even without some library but by installing them reduces warnings.
 Browser works well with sound capability.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

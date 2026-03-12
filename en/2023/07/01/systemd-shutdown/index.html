@@ -85,7 +85,7 @@ following process names:</p>
 </ul>
 <p>Edit <code>/etc/systemd/system.conf</code> to reduce timeout from default 100s according to
 <code>systemd-system.conf</code>(5):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span> <span style="color:#a6e22e">DefaultTimeoutStartSec</span><span style="color:#f92672">=</span><span style="color:#e6db74">, DefaultTimeoutStopSec=,
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span> <span style="color:#a6e22e">DefaultTimeoutStartSec</span><span style="color:#f92672">=</span><span style="color:#e6db74">, DefaultTimeoutStopSec=,
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74"> DefaultTimeoutAbortSec=, DefaultRestartSec=
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     Configures the default timeouts for starting, stopping and aborting
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     of units, as well as the default time to sleep between automatic
@@ -105,11 +105,9 @@ without knowing the offending process.</p>
 <li><a href="https://github.com/systemd/systemd/issues/11821#issuecomment-477545885">https://github.com/systemd/systemd/issues/11821#issuecomment-477545885</a></li>
 </ul>
 <p>Setting up proper shutdown sequence is the root cause fix.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <p>For example, I edited the seemingly offending <code>*.service</code> files such as
 <code>/lib/systemd/user/tracke~er-fs-control-3.service</code> by adding dependency as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-ini" data-lang="ini"><span style="display:flex;"><span><span style="color:#66d9ef">[Unit]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">...</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Conflicts</span><span style="color:#f92672">=</span><span style="color:#e6db74">shutdown.target initrd-switch-root.target</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">Before</span><span style="color:#f92672">=</span><span style="color:#e6db74">shutdown.target initrd-switch-root.target</span>
@@ -117,7 +115,6 @@ without knowing the offending process.</p>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">[Service]</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">...</span>
 </span></span></code></pre></div><p>This seemed to help avoid waiting for timeout.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

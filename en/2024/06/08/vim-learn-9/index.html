@@ -133,7 +133,7 @@ by <code>-O0</code>. So I should use <code>-O2</code> or <code>-Og</code> to mak
 <h2 id="jump-to-errors-in-the-source-code-c-program-example-with-quickfix">Jump to errors in the source code: C program example with quickfix</h2>
 <p>Above example compiles without issue.  So let me intensionally break it by
 removing <code>;</code> in some lines by editing with:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ vi test.c
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ vi test.c
 </span></span></code></pre></div><p>While in Nvim, let me type <code>:make</code> in NORMAL mode.  This runs the content of
 <code>Makefile</code> with <code>make</code>.  It sure causes errors and the cursor moves to the
 first error position. I can jump around errors with <code>[q</code> and <code>]q</code>.  Cool.</p>
@@ -142,7 +142,7 @@ first error position. I can jump around errors with <code>[q</code> and <code>]q
 position.</p>
 <h2 id="inspect-running-program-direct-gdb">Inspect running program (direct GDB)</h2>
 <p>Use of GDB was touched in <a href="/en/2013/08/12/fun2prog-debug-3/">Fun to Program – Debug: level 3</a>.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ make
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ make
 </span></span><span style="display:flex;"><span>$ gdb -q ./test
 </span></span><span style="display:flex;"><span>Reading symbols from ./test...
 </span></span><span style="display:flex;"><span>(gdb) list 1,15
@@ -168,7 +168,7 @@ position.</p>
 </span></span><span style="display:flex;"><span>Using host libthread_db library &#34;/lib/x86_64-linux-gnu/libthread_db.so.1&#34;.
 </span></span><span style="display:flex;"><span>Enter the number: 17
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Breakpoint 1, main () at test.c:8
+</span></span></span><span style="display:flex;"><span>Breakpoint 1, main () at test.c:8
 </span></span><span style="display:flex;"><span>8      factorial = factorial * i;
 </span></span><span style="display:flex;"><span>(gdb) info locals
 </span></span><span style="display:flex;"><span>i = 1
@@ -177,7 +177,7 @@ position.</p>
 </span></span><span style="display:flex;"><span>(gdb) c 16
 </span></span><span style="display:flex;"><span>Will ignore next 15 crossings of breakpoint 1.  Continuing.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>Breakpoint 1, main () at test.c:8
+</span></span></span><span style="display:flex;"><span>Breakpoint 1, main () at test.c:8
 </span></span><span style="display:flex;"><span>8      factorial = factorial * i;
 </span></span><span style="display:flex;"><span>(gdb) info locals
 </span></span><span style="display:flex;"><span>i = 17
@@ -201,11 +201,11 @@ position.</p>
 <h2 id="inspect-running-program-remote-gdb">Inspect running program (remote GDB)</h2>
 <p>Let&rsquo;s think about simple single host with 2 terminal console case.</p>
 <p>On console GDBSERVER (remote), let&rsquo;s start <code>gdbserver</code> to test <code>./test</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdbserver localhost:1234 ./test
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdbserver localhost:1234 ./test
 </span></span><span style="display:flex;"><span>Process ./test created; pid = 32761
 </span></span><span style="display:flex;"><span>Listening on port 1234
 </span></span></code></pre></div><p>On console GDB (local), start <code>gdb</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdb -q
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdb -q
 </span></span><span style="display:flex;"><span>(gdb) target remote localhost:1234
 </span></span><span style="display:flex;"><span>(gdb) b 7
 </span></span><span style="display:flex;"><span>Breakpoint 1 at 0x55555555519c: file test.c, line 7.
@@ -213,13 +213,13 @@ position.</p>
 </span></span><span style="display:flex;"><span>Continuing.
 </span></span><span style="display:flex;"><span>Reading /lib/x86_64-linux-gnu/libc.so.6 from remote target...
 </span></span></code></pre></div><p>On console GDBSERVER, we now see the following and enter <code>5</code> on prompt.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdbserver localhost:1234 ./test
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdbserver localhost:1234 ./test
 </span></span><span style="display:flex;"><span>Process ./test created; pid = 32761
 </span></span><span style="display:flex;"><span>Listening on port 1234
 </span></span><span style="display:flex;"><span>Remote debugging from host ::1, port 60566
 </span></span><span style="display:flex;"><span>Enter the number: 5
 </span></span></code></pre></div><p>On console GDB, we now see <code>gdb</code> stopping at break point:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdb -q
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gdb -q
 </span></span><span style="display:flex;"><span>(gdb) target remote localhost:1234
 </span></span><span style="display:flex;"><span>(gdb) b 7
 </span></span><span style="display:flex;"><span>Breakpoint 1 at 0x55555555519c: file test.c, line 7.
@@ -238,8 +238,6 @@ LazyVim can activate <code>dap.core</code> LazyExtra and activate <code>cpptools
 <p>Problem is Nvim with DAP UI doesn&rsquo;t seem to allow running program using STDIN.</p>
 <p>Run <code>./test</code> on a separate console under <code>gdbserver</code> as above solved this
 issue for me.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <p>I need to read
 <code>nvim-dap-ui/doc/nvim-dap-ui.txt</code> and <a href="https://github.com/rcarriga/nvim-dap-ui">nvim-dap-ui/README.md</a> directory since this is not
 shown in normal Vim-help system.</p>
@@ -286,19 +284,17 @@ shown in normal Vim-help system.</p>
 <p>Also UI dialog for &ldquo;Input&rdquo; and &ldquo;Condition&rdquo; needs to be investigated. &hellip;.</p>
 <p>After fiddling updates, DAP stops working even with simple <code>hello</code> with direct
 <code>gdb</code> run without using <code>gdbserver</code>.  It errors as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>DAP Couldn&#39;t connect to localhost:${port}: ECONNREFUSED
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>DAP Couldn&#39;t connect to localhost:${port}: ECONNREFUSED
 </span></span></code></pre></div><p>This makes no sense to me.  TBH, it&rsquo;s too complicated and unstable for me at this moment to use this DAP.</p>
 <p>Hmmm&hellip; it looks like LazyExtras store data in
 <code>~/.config/$NVIM_APPNAME/*.json</code>.  Ensuring to store these updated data in VCS seems to be important.</p>
 <p>Let me stick to the basic direct CLI GDB usage for now.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h2 id="jump-to-the-specific-position-in-a-file-generic-vim">Jump to the specific position in a file: generic Vim</h2>
 <p>Let me revisit trick to jump to the specific position manually.</p>
 <p>To go to line 99 of <code>file.txt</code>, try:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ vim +99 file.txt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ vim +99 file.txt
 </span></span></code></pre></div><p>To go to line 99 column 40 of <code>file.txt</code>, try any one of the following:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ vim +99 file.txt +<span style="color:#e6db74">&#39;norm 40|&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ vim +99 file.txt +<span style="color:#e6db74">&#39;norm 40|&#39;</span>
 </span></span><span style="display:flex;"><span>$ vim file.txt +<span style="color:#e6db74">&#39;norm 99G40|&#39;</span>
 </span></span><span style="display:flex;"><span>$ vim +<span style="color:#e6db74">&#39;call cursor(99, 40)&#39;</span> file.txt
 </span></span></code></pre></div><p>NOTE: <code>|</code> (bar) in NORMAL mode is &ldquo;goto column&rdquo;, and in EX-mode is &ldquo;command
@@ -320,7 +316,6 @@ line.  (List index in Vim Script starts at 0.)</p>
 </ul>
 </li>
 </ul>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

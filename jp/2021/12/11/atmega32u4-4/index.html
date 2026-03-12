@@ -84,8 +84,8 @@ note-00038
     <li><a href="#各種ブートローダの状況確認メモ">各種ブートローダの状況確認メモ</a>
       <ul>
         <li><a href="#arduino系のブートローダー">Arduino系のブートローダー</a></li>
-        <li><a href="#lufa-4kb-each-----cdc-dfu-hid-ブートローダー">LUFA (4KB each)  &ndash; CDC, DFU, HID ブートローダー</a></li>
-        <li><a href="#nanoboot改led-512b----hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</a></li>
+        <li><a href="#lufa-4kb-each---cdc-dfu-hid-ブートローダー">LUFA (4KB each)  &ndash; CDC, DFU, HID ブートローダー</a></li>
+        <li><a href="#nanoboot改led-512b--hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</a></li>
         <li><a href="#各種ブートローダーの比較">各種ブートローダーの比較</a></li>
       </ul>
     </li>
@@ -267,8 +267,6 @@ RST 5 WHITE  --------------------+
 </ul>
 </li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h2 id="動作検証">動作検証</h2>
 <p>基本、ファームウエアーを導入し動作させて確認するのが一番です。</p>
 <ul>
@@ -325,7 +323,7 @@ RST 5 WHITE  --------------------+
 <p>ちなみに本物のUNOには、USB-SERIAL変換をするファームウエアーが導入されていたサブMCU(Atmega8u2) が搭載されています。
 このサブMCU自体の書き換えにもちいるブートローダーはシリアル変換ファームウエアーとともに<a href="https://github.com/arduino/ArduinoCore-avr/tree/master/firmwares/atmegaxxu2">Arduino Uno and Mega 2560 Firmwares for the ATmega8U2</a>にあります。
 これは通常のARDUINOの書き換えで書き込まれないようにブートローダーはDFUです。</p>
-<h4 id="sparkfanの改造版caterina-4kb----cdc-ブートローダー">Sparkfanの改造版Caterina (4KB) &ndash; CDC ブートローダー</h4>
+<h4 id="sparkfanの改造版caterina-4kb--cdc-ブートローダー">Sparkfanの改造版Caterina (4KB) &ndash; CDC ブートローダー</h4>
 <p><a href="https://cdn.sparkfun.com/datasheets/Dev/Arduino/Boards/32U4Note.pdf">Sparkfanの改造版Caterinaの特徴</a></p>
 <ul>
 <li>リセットのダブルクリックでのみ、アプリ書き込みモードに8秒間なる。</li>
@@ -338,7 +336,7 @@ RST 5 WHITE  --------------------+
 <li><a href="https://github.com/jknofe/caterina">https://github.com/jknofe/caterina</a> (with LUFA-111009) (2017年)</li>
 </ul>
 <p>Sparkfanの改造版Caterinaはいい感じのCDCですが、TeensyのLEDに対応するものがなかったので、リビルドはトライしていません。</p>
-<h4 id="katiana-4kb----cdc-ブートローダー">Katiana (4KB) &ndash; CDC ブートローダー</h4>
+<h4 id="katiana-4kb--cdc-ブートローダー">Katiana (4KB) &ndash; CDC ブートローダー</h4>
 <p>googleで興味ある、<a href="https://forum.arduino.cc/t/new-version-of-caterina-bootloader/483909">フォーラムへのポスト</a>
 を見つけました。
 <a href="https://github.com/aweatherguy/Katiana/blob/master/Katiana-Bootloader.pdf">LUFAの2017ごろをベースに、Arduinoの改変を含め、USBシリアル番号等を含めた各種独自改造</a>
@@ -352,7 +350,7 @@ RST 5 WHITE  --------------------+
 <li><a href="https://github.com/aweatherguy/Katiana">https://github.com/aweatherguy/Katiana</a></li>
 </ul>
 <p>TeensyのLEDに対応するものがなかったので、リビルドはトライしていません。</p>
-<h3 id="lufa-4kb-each-----cdc-dfu-hid-ブートローダー">LUFA (4KB each)  &ndash; CDC, DFU, HID ブートローダー</h3>
+<h3 id="lufa-4kb-each---cdc-dfu-hid-ブートローダー">LUFA (4KB each)  &ndash; CDC, DFU, HID ブートローダー</h3>
 <p>LUFAはCDC, DFU, HID の3種類すべてのブートローダーを提供しています。</p>
 <p>最新のLUFAベースで<a href="https://github.com/osamuaoki/lufa/tree/teensy2/">私がPRしたLUFAのブランチ</a>を、さらにBUILD用にパラメーター変更し
 <a href="https://github.com/osamuaoki/lufa/tree/osamu/">生成したHEXやビルドログもコミットしたLUFAのブランチ</a>を作りました。</p>
@@ -373,66 +371,66 @@ Data:        164 bytes (6.4% Full)
  [INFO]    : Finished building project &#34;BootloaderCDC&#34;.
 </code></pre><p>すべてのビルド結果をまとめると以下で、いずれも4KBのブート領域確保が必要でした。</p>
 <table>
-<thead>
-<tr>
-<th>Program</th>
-<th>Data</th>
-<th>board</th>
-<th>mcu</th>
-<th>bootloader</th>
-<th>programmer</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>3846</td>
-<td>164</td>
-<td>teensy2</td>
-<td>atmega32u4</td>
-<td>BootloaderCDC</td>
-<td><code>avrdude -c arduino</code></td>
-</tr>
-<tr>
-<td>3882</td>
-<td>133</td>
-<td>teensy2</td>
-<td>atmega32u4</td>
-<td>BootloaderDFU</td>
-<td><code>dfu-programmer</code></td>
-</tr>
-<tr>
-<td>2118</td>
-<td>86</td>
-<td>teensy2</td>
-<td>atmega32u4</td>
-<td>BootloaderHID</td>
-<td><code>hid_bootloader_cli</code></td>
-</tr>
-<tr>
-<td>3790</td>
-<td>164</td>
-<td>teensy2pp</td>
-<td>at90usb1286</td>
-<td>BootloaderCDC</td>
-<td><code>avrdude -c arduino</code></td>
-</tr>
-<tr>
-<td>3812</td>
-<td>133</td>
-<td>teensy2pp</td>
-<td>at90usb1286</td>
-<td>BootloaderDFU</td>
-<td><code>dfu-programmer</code></td>
-</tr>
-<tr>
-<td>2124</td>
-<td>86</td>
-<td>teensy2pp</td>
-<td>at90usb1286</td>
-<td>BootloaderHID</td>
-<td><code>hid_bootloader_cli</code></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>Program</th>
+          <th>Data</th>
+          <th>board</th>
+          <th>mcu</th>
+          <th>bootloader</th>
+          <th>programmer</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>3846</td>
+          <td>164</td>
+          <td>teensy2</td>
+          <td>atmega32u4</td>
+          <td>BootloaderCDC</td>
+          <td><code>avrdude -c arduino</code></td>
+      </tr>
+      <tr>
+          <td>3882</td>
+          <td>133</td>
+          <td>teensy2</td>
+          <td>atmega32u4</td>
+          <td>BootloaderDFU</td>
+          <td><code>dfu-programmer</code></td>
+      </tr>
+      <tr>
+          <td>2118</td>
+          <td>86</td>
+          <td>teensy2</td>
+          <td>atmega32u4</td>
+          <td>BootloaderHID</td>
+          <td><code>hid_bootloader_cli</code></td>
+      </tr>
+      <tr>
+          <td>3790</td>
+          <td>164</td>
+          <td>teensy2pp</td>
+          <td>at90usb1286</td>
+          <td>BootloaderCDC</td>
+          <td><code>avrdude -c arduino</code></td>
+      </tr>
+      <tr>
+          <td>3812</td>
+          <td>133</td>
+          <td>teensy2pp</td>
+          <td>at90usb1286</td>
+          <td>BootloaderDFU</td>
+          <td><code>dfu-programmer</code></td>
+      </tr>
+      <tr>
+          <td>2124</td>
+          <td>86</td>
+          <td>teensy2pp</td>
+          <td>at90usb1286</td>
+          <td>BootloaderHID</td>
+          <td><code>hid_bootloader_cli</code></td>
+      </tr>
+  </tbody>
 </table>
 <p>ここで、最近の<code>avrdude</code>はDFUもサポートしているので、<code>dfu-programmer</code> とあるところは<code>avrdude -c flip1</code> としても同じです。</p>
 <p>比較的機能が少なく小さいHIDブートローダーでも、わずかではありますが2KBを越えているので、ブート専用領域に4KBを取っておく必要があります。</p>
@@ -441,7 +439,7 @@ Data:        164 bytes (6.4% Full)
 <p>LUFAのhid bootloaderに対応する、ホストPC側のプログラムです。
 Debianでコンパイルするには、<code>libusb-dev</code>パッケージが導入されている
 必要があります。</p>
-<h3 id="nanoboot改led-512b----hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</h3>
+<h3 id="nanoboot改led-512b--hid-ブートローダー">nanoBoot改LED (512B) &ndash; HID ブートローダー</h3>
 <p>元々の<a href="https://github.com/volium/nanoBoot">nanoBoot</a>
 は512 Byteに収まる小さな優れものBootloaderです。これは
 LUFA HIDブートローダーを徹底的にハンドオプティマイズしたものです。
@@ -485,9 +483,6 @@ LUFA HIDブートローダーを徹底的にハンドオプティマイズした
 extensionに対応している<code>dfu-tool</code>があります。この辺、基本AVRは<code>dfu-programmer</code>でいきます。</p>
 <p>ここで、<code>DfuSe</code>が&quot;DFU STによるVender Extension(ベンダー拡張)&ldquo;の略と分かりちょっと納得。</p>
 <p>STM32系のARMチップの際にでも他の2つは使ってみます。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

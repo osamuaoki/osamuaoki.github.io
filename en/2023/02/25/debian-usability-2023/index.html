@@ -86,8 +86,8 @@ note-00038
         <li><a href="#gui-desktop-customization">GUI Desktop customization</a></li>
         <li><a href="#terminal-customization">Terminal customization</a></li>
         <li><a href="#right-mouse-click-with-single-button">Right mouse click with single button</a></li>
-        <li><a href="#keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</a></li>
-        <li><a href="#keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-settings--launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</a></li>
+        <li><a href="#keyboard-shortcut-customization-gnome-settings--custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</a></li>
         <li><a href="#keyboard-shortcut-customization-input-method">Keyboard shortcut customization (Input Method)</a></li>
         <li><a href="#keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</a></li>
         <li><a href="#note-on-non-usable-shortcut-key-combos-for-super">Note on non usable shortcut key combos for super</a></li>
@@ -157,7 +157,7 @@ primary user&rsquo;s password.</li>
 </li>
 <li>If passwordless operation is desired, configure <code>sudo</code> by adding <code>/etc/sudoers.d/passwordless</code> as:</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># No passowrd required for the user in sudo group</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e"># No passowrd required for the user in sudo group</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># please note the last match wins configuration</span>
 </span></span><span style="display:flex;"><span>%sudo ALL <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>ALL:ALL<span style="color:#f92672">)</span> NOPASSWD: ALL
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># No password for 8 hours</span>
@@ -180,7 +180,7 @@ initial install.</p>
 set library packages as auto-installed.  If some of them are not used by other
 program, let them remove.</p>
 <p>Now you can verify intentionally installed packages with:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;~i!~M~poptional&#39;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>$ aptitude search <span style="color:#e6db74">&#39;~i!~M~poptional&#39;</span>
 </span></span></code></pre></div><p>(This intensionally ignores some outdated packages with priority=extra packages.)</p>
 <h3 id="install-typical-packages">Install typical packages</h3>
 <p>Typically, installing <code>00-typ</code> and <code>00-notex</code> task packages from the
@@ -188,13 +188,13 @@ program, let them remove.</p>
 <h3 id="set-up-grub">Set-up GRUB</h3>
 <p>In order to probe OSs on other drives, add a following line to
 <code>/etc/default/grub</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>GRUB_DISABLE_OS_PROBER<span style="color:#f92672">=</span>false
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>GRUB_DISABLE_OS_PROBER<span style="color:#f92672">=</span>false
 </span></span></code></pre></div><p>This is good idea for dual-boot on MBR disk.</p>
 <p>But this is not so robust for btrfs.</p>
 <h4 id="multi-boot-with-grub">Multi-boot with GRUB</h4>
 <p>For more robust multi-boot, I usually add following as <code>/etc/grub.d/40_fixed_linux</code> (The first line should be #!/bin/bash without space. Intentional mistype to avoid missing line):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>exec tail -n +3 $0
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh
+</span></span></span><span style="display:flex;"><span>exec tail -n +3 $0
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># This file provides an easy way to add custom menu entries.  Simply type the</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># menu entries you want to add after this comment.  Be careful not to change</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># the &#39;exec tail&#39; line above.</span>
@@ -282,17 +282,17 @@ proper secondary-click (or even middle-click).</p>
 </ul>
 </li>
 </ul>
-<h3 id="keyboard-shortcut-customization-gnome-settings----launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</h3>
+<h3 id="keyboard-shortcut-customization-gnome-settings--launcher">Keyboard shortcut customization (GNOME Settings &ndash; launcher)</h3>
 <ul>
 <li><code>SUPER-C</code>: launch calculator</li>
 <li><code>SUPER-E</code>: launch email client</li>
 <li><code>SUPER-B</code>: launch web browser</li>
 </ul>
-<h3 id="keyboard-shortcut-customization-gnome-settings----custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</h3>
+<h3 id="keyboard-shortcut-customization-gnome-settings--custom-shortcut">Keyboard shortcut customization (GNOME Settings &ndash; custom shortcut)</h3>
 <ul>
 <li><code>SUPER-\</code>: Open terminal</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     Terminal
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-shell" data-lang="shell"><span style="display:flex;"><span>Name     Terminal
 </span></span><span style="display:flex;"><span>Command  gnome-terminal
 </span></span><span style="display:flex;"><span>Shortcut SUPER-<span style="color:#ae81ff">\
 </span></span></span></code></pre></div><p>(<code>SUPER-\</code> is easier to type than <code>SUPER-T</code>.)</p>
@@ -318,8 +318,6 @@ proper secondary-click (or even middle-click).</p>
 <p><img src="/img/InputMethods.png" alt="prefs.js"></p>
 <p>Since I don&rsquo;t intend to use <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts, I don&rsquo;t bother to disabled normal <code>SUPER-SPACE</code> and <code>SUPER-SHIFT-SPACE</code> shortcuts in &ldquo;Settings&rdquo; -&gt; &ldquo;Keyboard&rdquo; -&gt; &ldquo;Keyboard Shortcuts&rdquo; -&gt; &ldquo;Typing&rdquo;.</p>
 <p>For other extensions I use, see <a href="/en/2023/06/17/gnome-extensions-1/">GNOME extensions for better UX</a>.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h3 id="keyboard-shortcut-customization-im">Keyboard shortcut customization (IM)</h3>
 <p>For Japanese input with US keyboard, set IM (<code>mozc</code> etc.) configuration as:</p>
 <ul>
@@ -500,7 +498,6 @@ available from <a href="https://www.libreoffice.org/">the upstream LibreOffice s
 Debian testing environment is the least effort solution for me.  For stability,
 I chose older stable 6.4.7.2-2 version aimed for business deployments (2021/12).
 This enabled me to print nicely to Hagaki.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

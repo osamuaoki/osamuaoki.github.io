@@ -86,104 +86,100 @@ note-00055
 </ol>
 <p>All these interesting references are not always using GNOME
 wayland under the Debian bookworm environment.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <p>Also, there are subtle differences.</p>
 <table>
-<thead>
-<tr>
-<th>#</th>
-<th>Wayland</th>
-<th>X11</th>
-<th>PulseA</th>
-<th>PipeW</th>
-<th>GPU</th>
-<th>Note</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>1</td>
-<td>disk</td>
-<td>disk</td>
-<td>disk</td>
-<td>&mdash;</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>2</td>
-<td>proxy</td>
-<td>proxy</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>Yes</td>
-<td></td>
-</tr>
-<tr>
-<td>3.1</td>
-<td>proxy</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>basic</td>
-</tr>
-<tr>
-<td>3.2</td>
-<td>disk</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>for browsers</td>
-</tr>
-<tr>
-<td>3.3</td>
-<td>disk</td>
-<td>&mdash;</td>
-<td>proxy</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>for audio</td>
-</tr>
-<tr>
-<td>4</td>
-<td>proxy</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td></td>
-</tr>
-<tr>
-<td>5</td>
-<td>proxy</td>
-<td>proxy</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>Yes</td>
-<td>Xwayland</td>
-</tr>
-<tr>
-<td>6</td>
-<td>disk</td>
-<td>disk</td>
-<td>&mdash;</td>
-<td>&mdash;</td>
-<td>Yes</td>
-<td>share <code>/run/user/1000</code></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>#</th>
+          <th>Wayland</th>
+          <th>X11</th>
+          <th>PulseA</th>
+          <th>PipeW</th>
+          <th>GPU</th>
+          <th>Note</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>1</td>
+          <td>disk</td>
+          <td>disk</td>
+          <td>disk</td>
+          <td>&mdash;</td>
+          <td>Yes</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>2</td>
+          <td>proxy</td>
+          <td>proxy</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>Yes</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>3.1</td>
+          <td>proxy</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>basic</td>
+      </tr>
+      <tr>
+          <td>3.2</td>
+          <td>disk</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>for browsers</td>
+      </tr>
+      <tr>
+          <td>3.3</td>
+          <td>disk</td>
+          <td>&mdash;</td>
+          <td>proxy</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>for audio</td>
+      </tr>
+      <tr>
+          <td>4</td>
+          <td>proxy</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td></td>
+      </tr>
+      <tr>
+          <td>5</td>
+          <td>proxy</td>
+          <td>proxy</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>Yes</td>
+          <td>Xwayland</td>
+      </tr>
+      <tr>
+          <td>6</td>
+          <td>disk</td>
+          <td>disk</td>
+          <td>&mdash;</td>
+          <td>&mdash;</td>
+          <td>Yes</td>
+          <td>share <code>/run/user/1000</code></td>
+      </tr>
+  </tbody>
 </table>
 <p>It seems that the use of the <code>disk</code> device has some advantages.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <p>I will try similar things as above references using GNOME Wayland under the
 Debian bookworm environment in the followings.</p>
 <h2 id="yaml-setting-for-profiledefault">YAML setting for profile=default</h2>
 <p>Let&rsquo;s see the default LXD profile:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxc profile show default
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxc profile show default
 </span></span><span style="display:flex;"><span>config: {}
 </span></span><span style="display:flex;"><span>description: Default LXD profile
 </span></span><span style="display:flex;"><span>devices:
@@ -205,7 +201,7 @@ Debian bookworm environment in the followings.</p>
 <h2 id="user-specific-sockets-used-by-ipc">User specific sockets used by IPC</h2>
 <p>For my primary user (name=<code>osamu</code>, UID=<code>1000</code>) on the host system running
 Debian 12 bookworm with GNOME wayland, I see following user accessible sockets under <code>/run/user/</code> and <code>/tmp</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ls -l $(find /run/user -type s 2&gt;/dev/null)
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ls -l $(find /run/user -type s 2&gt;/dev/null)
 </span></span><span style="display:flex;"><span>srwxrwxrwx 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/at-spi/bus
 </span></span><span style="display:flex;"><span>srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/bus
 </span></span><span style="display:flex;"><span>srw-rw-rw- 1 osamu osamu 0 Nov 25 07:13 /run/user/1000/gcr/ssh
@@ -237,7 +233,7 @@ Debian 12 bookworm with GNOME wayland, I see following user accessible sockets u
 </span></span><span style="display:flex;"><span>srwxr-xr-x 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.X11-unix/X1024
 </span></span><span style="display:flex;"><span>srwxr-xr-x 1 Debian-gdm Debian-gdm 0 Nov 25 07:13 /tmp/.X11-unix/X1025
 </span></span></code></pre></div><p>Let me check further who uses X sockets while running GNOME desktop on Wayland.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lsof -U |grep -e &#39;[^@]/tmp/\.X11-unix/&#39;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lsof -U |grep -e &#39;[^@]/tmp/\.X11-unix/&#39;
 </span></span><span style="display:flex;"><span>gnome-she 2733 osamu   45u  unix 0x0000000061b9b072      0t0 38083 /tmp/.X11-unix/X1 type=STREAM (LISTEN)
 </span></span><span style="display:flex;"><span>Xwayland  3244 osamu    5u  unix 0x000000005899b02d      0t0 38081 /tmp/.X11-unix/X0 type=STREAM (LISTEN)
 </span></span><span style="display:flex;"><span> $ ps aux |grep &#39;\(273[3]\|324[4]\)&#39;
@@ -253,7 +249,7 @@ be needed.  If X program needs to be accessed, sockets such as
 <h2 id="yaml-to-allow-display-to-wayland-using-extra-disk-device">YAML to allow display to Wayland using extra disk device</h2>
 <p>Here is a simple YAML data example (<code>wayland.yaml</code>) to add <code>disk</code> device for
 the Wayland socket.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">config</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span><span style="color:#f92672">config</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">boot.autostart</span>: <span style="color:#66d9ef">false</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">raw.idmap</span>: <span style="color:#ae81ff">both 1000 1000</span>
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">user.user-data</span>: |<span style="color:#e6db74">
@@ -287,7 +283,7 @@ the Wayland socket.</p>
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/default.target.wants/mystartup.service
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - ln -s /usr/local/etc/mystartup.service /home/osamu/.config/systemd/user/mystartup.service
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - chown -R osamu:osamu /home/osamu
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile</span>    
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    - echo &#39;export WAYLAND_DISPLAY=wayland-0&#39; &gt;&gt; /home/osamu/.profile</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">description</span>: <span style="color:#ae81ff">Wayland LXD profile</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">devices</span>:
 </span></span><span style="display:flex;"><span>  <span style="color:#f92672">eth0</span>:
@@ -312,7 +308,7 @@ usual location in the container (<code>/run/user/1000/wayland-0</code>) every ti
 primary user <code>osamu</code> logs in.</p>
 <h2 id="running-wayland-gui-application-eog-in-container">Running Wayland GUI application <code>eog</code> in container</h2>
 <p>Let me first create a profile <code>wayland</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc profile create wayland
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc profile create wayland
 </span></span><span style="display:flex;"><span> $ lxc profile edit wayland &lt; wayland.yaml
 </span></span><span style="display:flex;"><span> $ lxc profile ls
 </span></span><span style="display:flex;"><span>+---------+---------------------+---------+
@@ -323,10 +319,10 @@ primary user <code>osamu</code> logs in.</p>
 </span></span><span style="display:flex;"><span>| wayland | Wayland LXD profile | 0       |
 </span></span><span style="display:flex;"><span>+---------+---------------------+---------+
 </span></span></code></pre></div><p>Let me start <code>wayland</code> instance with <code>wayland</code> profile</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch images:debian/12/cloud wayland --profile wayland
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc launch images:debian/12/cloud wayland --profile wayland
 </span></span></code></pre></div><p>Let me inspect this instance. (We need to expand to see effective configuration
 settings.)</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc config show wayland -e
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc config show wayland -e
 </span></span><span style="display:flex;"><span>architecture: x86_64
 </span></span><span style="display:flex;"><span>config:
 </span></span><span style="display:flex;"><span>  boot.autostart: &#34;false&#34;
@@ -401,27 +397,26 @@ settings.)</p>
 </span></span></code></pre></div><p>Now, we can see full contents of <code>user.user_data:</code> and <code>devices:</code>.</p>
 <p>This <code>user.user_data:</code> YAML data is passed to <code>cloud-init</code> to create files and
 execute commands as the container starts.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc exec wayland -- apt install eog
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc exec wayland -- apt install eog
 </span></span><span style="display:flex;"><span> $ lxc exec wayland -- sudo -u osamu -i eog
 </span></span></code></pre></div><p>This container environment allowed me to run an Wayland GUI program <code>eog</code> in
 container and displaying its result to the host GNOME Desktop.  Nice.</p>
 <h2 id="running-wayland-gui-application-firefox-in-container-using-disk-device">Running Wayland GUI application <code>firefox</code> in container using disk device</h2>
 <p>I  installed and tried the <code>firefox-esr</code> package.</p>
 <p>Then started <code>firefox</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc exec wayland -- apt install firefox-esr
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc exec wayland -- apt install firefox-esr
 </span></span><span style="display:flex;"><span> $ lxc exec wayland -- sudo -u osamu -i firefox
 </span></span><span style="display:flex;"><span>[GFX1-]: glxtest: libpci missing
 </span></span></code></pre></div><p>This can be fixed by installing <code>libpci3</code> package (<a href="https://askubuntu.com/questions/1334192/glxtest-libpci-missing-although-i-made-an-apt-install">some web
 article</a>
 implies to install <code>libpci-dev</code> which installs more packages in addition to
 <code>libpci3</code> as a cure.):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc exec wayland -- apt install libpci3
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc exec wayland -- apt install libpci3
 </span></span><span style="display:flex;"><span> $ lxc exec wayland -- sudo -u osamu -i firefox
 </span></span></code></pre></div><p>Normally, <code>pciutils</code> package which has &ldquo;priority: standard&rdquo; is installed and
 pulls in <code>libpci3</code>.  But <code>firefox-esr</code> doesn&rsquo;t list <code>libpci3</code> explicitly as
 <code>Depends:</code> nor <code>Recommends:</code>.  I suppose this is a
 <a href="https://bugs.debian.org/993308">bug</a>.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

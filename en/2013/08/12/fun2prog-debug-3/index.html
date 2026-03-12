@@ -84,7 +84,6 @@ fun2-00012
 updated. (2021)</p>
 </blockquote>
 <h2 id="debug-level-3">Debug: level 3</h2>
-<!-- raw HTML omitted -->
 <p>The GNU debugger (GDB) make you look into binary programs.</p>
 <p>If you do not mind reading the code in the assembler, no source code is required.</p>
 <p>The GDB works even better if the program is compiled with the <code>-g</code> option and
@@ -94,453 +93,451 @@ the <code>-g</code> option.  See <a href="/en/2013/08/09/fun2prog-elf/#compile-h
 <p>Please have <a href="http://users.ece.utexas.edu/~adnan/gdb-refcard.pdf">GDB QUICK REFERENCE</a> with you.</p>
 <p>Here are some basic GDB commands.</p>
 <table>
-<thead>
-<tr>
-<th>command</th>
-<th>alias</th>
-<th>meaning</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>help COMMAND</code></td>
-<td><code>h</code></td>
-<td>Print help for <code>COMMAND</code>.</td>
-</tr>
-<tr>
-<td><code>file FILE</code></td>
-<td><code>fil</code></td>
-<td>Use <code>FILE</code> as the program to be debugged.</td>
-</tr>
-<tr>
-<td><code>set VAR = EXP</code></td>
-<td></td>
-<td>Evaluate <code>EXP</code> and assign its result to <code>VAR</code>.</td>
-</tr>
-<tr>
-<td><code>show VAR</code></td>
-<td><code>sho</code></td>
-<td>Show <code>VAR</code> contents.</td>
-</tr>
-<tr>
-<td><code>set trace-commands on|off</code></td>
-<td></td>
-<td>Set/reset tracing of GDB CLI commands</td>
-</tr>
-<tr>
-<td><code>set substitute-path FROM TO</code></td>
-<td></td>
-<td>Set a substitution rule replacing <code>FROM</code> into <code>TO</code> in source file paths. (<code>unset ...</code>)</td>
-</tr>
-<tr>
-<td><code>set args ARGS</code></td>
-<td></td>
-<td>Set command arguments <code>ARGS</code> to be used when GDB runs a program to be debugged.</td>
-</tr>
-<tr>
-<td><code>set env VAR VALUE</code></td>
-<td></td>
-<td>Set environment variable <code>VAR</code> to <code>VALUE</code>. (<code>unset ...</code>)</td>
-</tr>
-<tr>
-<td><code>directory DIR ...</code></td>
-<td><code>dir</code></td>
-<td>Add <code>DIR</code> to the search path for source files (<code>:</code> separated). Reset the search path to the default, if invoked without <code>DIR</code>.</td>
-</tr>
-<tr>
-<td><code>run</code></td>
-<td><code>r</code></td>
-<td>Start debugged program.</td>
-</tr>
-<tr>
-<td><code>run ARGS</code></td>
-<td><code>r</code></td>
-<td>Start debugged program with its command arguments <code>ARGS</code>.</td>
-</tr>
-<tr>
-<td><code>start</code></td>
-<td><code>star</code></td>
-<td>Run the debugged program like <code>run</code> but stop at the beginning of <code>main</code>.</td>
-</tr>
-<tr>
-<td><code>cont</code></td>
-<td><code>c</code></td>
-<td>Resume execution, after signal or breakpoint.</td>
-</tr>
-<tr>
-<td><code>next</code></td>
-<td><code>n</code></td>
-<td>Step to the next source code line (proceed through soubroutine call)</td>
-</tr>
-<tr>
-<td><code>nexti</code></td>
-<td><code>ni</code></td>
-<td>Step to the next instruction line (proceed through soubroutine call)</td>
-</tr>
-<tr>
-<td><code>step</code></td>
-<td><code>s</code></td>
-<td>Step one source code line, step into subroutine call as needed.</td>
-</tr>
-<tr>
-<td><code>stepi</code></td>
-<td><code>si</code></td>
-<td>Step one instruction line, step into subroutine call as needed.</td>
-</tr>
-<tr>
-<td><code>finish</code></td>
-<td><code>fin</code></td>
-<td>Execute until selected stack frame returns.</td>
-</tr>
-<tr>
-<td><code>until</code></td>
-<td><code>u</code></td>
-<td>Execute until the program reaches a source line greater than the current or a specified location within the current frame.</td>
-</tr>
-<tr>
-<td><code>kill</code></td>
-<td><code>k</code></td>
-<td>Kill execution of program being debugged.</td>
-</tr>
-<tr>
-<td><code>quit</code></td>
-<td><code>q</code></td>
-<td>Exit &ldquo;<code>gdb</code>&rdquo;.</td>
-</tr>
-<tr>
-<td><code>break [FILE:]LINE</code></td>
-<td><code>b</code></td>
-<td>Set breakpoint at <code>LINE</code> [of <code>FUNCTION</code>].</td>
-</tr>
-<tr>
-<td><code>break [FILE:]LINE if COND</code></td>
-<td><code>b</code></td>
-<td>Set breakpoint at <code>LINE</code> [of <code>FUNCTION</code>] which breaks only if <code>COND</code> is true.</td>
-</tr>
-<tr>
-<td><code>break * ADDRESS</code></td>
-<td><code>b</code></td>
-<td>Set breakpoint at <code>ADDRESS</code></td>
-</tr>
-<tr>
-<td><code>info break</code></td>
-<td><code>i</code></td>
-<td>Status of specified breakpoints (all user-settable breakpoints if no argument).</td>
-</tr>
-<tr>
-<td><code>condition N COND</code></td>
-<td><code>cond</code></td>
-<td>Specify breakpoint number <code>N</code> to break only if <code>COND</code> is true.</td>
-</tr>
-<tr>
-<td><code>tbreak [FILE:]LINE</code></td>
-<td><code>tb</code></td>
-<td>Set a temporary breakpoint at <code>LINE</code> [of <code>FUNCTION</code>].</td>
-</tr>
-<tr>
-<td><code>rbreak REGEXP</code></td>
-<td><code>rb</code></td>
-<td>Set a breakpoint for all functions matching <code>REGEXP</code>.</td>
-</tr>
-<tr>
-<td><code>clear</code></td>
-<td><code>cl</code></td>
-<td>Clear breakpoint at specified line or function.</td>
-</tr>
-<tr>
-<td><code>delete</code></td>
-<td><code>d</code></td>
-<td>Delete some breakpoints or auto-display expressions.</td>
-</tr>
-<tr>
-<td><code>enable</code></td>
-<td><code>en</code></td>
-<td>Enable some breakpoints.</td>
-</tr>
-<tr>
-<td><code>disable</code></td>
-<td><code>dis</code></td>
-<td>Disable some breakpoints.</td>
-</tr>
-<tr>
-<td><code>define NAME</code></td>
-<td><code>def</code></td>
-<td>Define a new command NAME. End with a <code>end</code> line.</td>
-</tr>
-<tr>
-<td><code>command N</code></td>
-<td><code>comm</code></td>
-<td>Set commands to be executed when a breakpoint N is hit. End with a <code>end</code> line.</td>
-</tr>
-<tr>
-<td><code>ignore N COUNT</code></td>
-<td><code>ig</code></td>
-<td>Set ignore-count of breakpoint number <code>N</code> to <code>COUNT</code>.</td>
-</tr>
-<tr>
-<td><code>signal NUM</code></td>
-<td><code>sig</code></td>
-<td>Resume execution with signal <code>NUM</code>. (without signal if &ldquo;0&rdquo;)</td>
-</tr>
-<tr>
-<td><code>catch EVENT</code></td>
-<td><code>cat</code></td>
-<td>Set catchpoints to catch <code>EVENT</code>(assert catch exception exec fork syscall throw vfork).</td>
-</tr>
-<tr>
-<td><code>info catch</code></td>
-<td><code>i</code></td>
-<td>Exceptions that can be caught in the current stack frame</td>
-</tr>
-<tr>
-<td><code>trace [FILE:]LINE</code></td>
-<td><code>tr</code></td>
-<td>Set a tracepoint at <code>LINE</code> [of <code>FUNCTION</code>].</td>
-</tr>
-<tr>
-<td><code>info trace</code></td>
-<td><code>i</code></td>
-<td>Specified watchpoints (all watchpoints if no argument).</td>
-</tr>
-<tr>
-<td><code>watch EXP</code></td>
-<td><code>wa</code></td>
-<td>Stop execution whenever the value of an <code>EXP</code> changes. If <code>-l</code> is given, the value of a <code>*(EXP)</code> changes.</td>
-</tr>
-<tr>
-<td><code>info watch</code></td>
-<td><code>i</code></td>
-<td>Specified watchpoints (all watchpoints if no argument).</td>
-</tr>
-<tr>
-<td><code>list</code></td>
-<td><code>l</code></td>
-<td>List ten more lines after or around previous listing.</td>
-</tr>
-<tr>
-<td><code>list -</code></td>
-<td><code>l</code></td>
-<td>List the ten lines before a previous ten-line listing.</td>
-</tr>
-<tr>
-<td><code>list FROM[,TO]</code></td>
-<td><code>l</code></td>
-<td>List specified function or line.</td>
-</tr>
-<tr>
-<td><code>disassemble</code></td>
-<td><code>disas</code></td>
-<td>Disassemble a specified section of memory.</td>
-</tr>
-<tr>
-<td><code>disassemble/m</code></td>
-<td><code>disas</code></td>
-<td>Disassemble a specified section of memory with source lines (if available). (m: more code)</td>
-</tr>
-<tr>
-<td><code>disassemble/r</code></td>
-<td><code>disas</code></td>
-<td>Disassemble a specified section of memory with raw instructions in hex. (r: raw code)</td>
-</tr>
-<tr>
-<td><code>info</code></td>
-<td><code>i</code></td>
-<td>Generic command for showing things about the program being debugged.</td>
-</tr>
-<tr>
-<td><code>info all-reg</code></td>
-<td><code>i</code></td>
-<td>List of all registers and their contents, for selected stack frame.</td>
-</tr>
-<tr>
-<td><code>info locales</code></td>
-<td><code>i</code></td>
-<td>List of local variables of current stack frame.</td>
-</tr>
-<tr>
-<td><code>info reg</code></td>
-<td><code>i</code></td>
-<td>List of integer registers and their contents, for selected stack frame.</td>
-</tr>
-<tr>
-<td><code>print EXP</code></td>
-<td><code>p</code></td>
-<td>Print value of expression <code>EXP</code>.</td>
-</tr>
-<tr>
-<td><code>print/F EXP</code></td>
-<td><code>p</code></td>
-<td>Print value of expression <code>EXP</code> with <code>F</code> format.</td>
-</tr>
-<tr>
-<td><code>printf &quot;FMT&quot;, EXP, ...</code></td>
-<td></td>
-<td>Print value of expression <code>EXP, ...</code> with C-style FMT.</td>
-</tr>
-<tr>
-<td><code>print-object</code></td>
-<td><code>po</code></td>
-<td>Ask an Objective-C object to print itself.</td>
-</tr>
-<tr>
-<td><code>call FUNC</code></td>
-<td><code>cal</code></td>
-<td>Call a function <code>FUNC</code> in the program and print its result.</td>
-</tr>
-<tr>
-<td><code>call/F FUNC</code></td>
-<td><code>cal</code></td>
-<td>Call a function <code>FUNC</code> in the program and print its result with <code>F</code> format.</td>
-</tr>
-<tr>
-<td><code>ptype TYPE</code></td>
-<td><code>pt</code></td>
-<td>Print definition of type <code>TYPE</code>. (unrolls any typedefs)</td>
-</tr>
-<tr>
-<td><code>whatis EXP</code></td>
-<td><code>wha</code></td>
-<td>Print data type of expression <code>EXP</code>. (Only one level of typedefs is unrolled.)</td>
-</tr>
-<tr>
-<td><code>x/NFU</code></td>
-<td><code>x</code></td>
-<td>Examine memory, <code>N</code> data with <code>F</code> format in <code>U</code> unit</td>
-</tr>
-<tr>
-<td><code>backtrace</code></td>
-<td><code>bt</code></td>
-<td>Print backtrace of all stack frames, or innermost <code>COUNT</code> frames. (<code>where</code> == <code>bt</code>)</td>
-</tr>
-<tr>
-<td><code>backtrace full</code></td>
-<td><code>bt f</code></td>
-<td>Print backtrace of all stack frames and the values of the local variables.</td>
-</tr>
-<tr>
-<td><code>frame</code></td>
-<td><code>f</code></td>
-<td>Select and print a stack frame.</td>
-</tr>
-<tr>
-<td><code>down</code></td>
-<td><code>do</code></td>
-<td>Select and print stack frame called by this one.</td>
-</tr>
-<tr>
-<td><code>up</code></td>
-<td></td>
-<td>Select and print stack frame that called this one.</td>
-</tr>
-<tr>
-<td><code>attach PID</code></td>
-<td><code>at</code></td>
-<td>Attach to a <code>PID</code> process outside of GDB.</td>
-</tr>
-<tr>
-<td><code>detach</code></td>
-<td><code>det</code></td>
-<td>Detach a process or file previously attached to GDB.</td>
-</tr>
-<tr>
-<td><code>target</code></td>
-<td><code>tar</code></td>
-<td>Connect to a target machine or process.</td>
-</tr>
-<tr>
-<td><code>overlay</code></td>
-<td><code>ov</code></td>
-<td>Commands for debugging overlays.</td>
-</tr>
-<tr>
-<td><code>thread N</code></td>
-<td><code>t</code></td>
-<td>Switch to the thread number <code>N</code>.</td>
-</tr>
-<tr>
-<td><code>thread apply N COMMAND</code></td>
-<td><code>t a</code></td>
-<td>Apply a <code>COMMAND</code> to the thread number <code>N</code>.</td>
-</tr>
-<tr>
-<td><code>thread apply all COMMAND</code></td>
-<td><code>t a a</code></td>
-<td>Apply a <code>COMMAND</code> to all threads.</td>
-</tr>
-<tr>
-<td><code>thread apply all bt full</code></td>
-<td><code>t a a bt f</code></td>
-<td>Apply <code>bt full</code> to all threads.</td>
-</tr>
-<tr>
-<td><code>info thread</code></td>
-<td><code>i</code></td>
-<td>List of information on all currently known threads.</td>
-</tr>
-<tr>
-<td><code>advance</code></td>
-<td><code>adv</code></td>
-<td>Continue the program up to the specified line or function.</td>
-</tr>
-<tr>
-<td><code>go</code></td>
-<td><code>g</code></td>
-<td>Go to an earlier-bookmarked point in the program&rsquo;s execution history.</td>
-</tr>
-<tr>
-<td><code>jump</code></td>
-<td><code>ju</code></td>
-<td>Continue program being debugged at specified line or address.</td>
-</tr>
-<tr>
-<td><code>generate-core-file</code></td>
-<td><code>gcore</code></td>
-<td>Save a core file with the current state of the debugged process.</td>
-</tr>
-<tr>
-<td><code>shell</code></td>
-<td><code>!</code></td>
-<td>Execute the rest of the line as a shell command.</td>
-</tr>
-<tr>
-<td><code>cd DIR</code></td>
-<td></td>
-<td>Set working directory to <code>DIR</code> for debugger and program being debugged.</td>
-</tr>
-<tr>
-<td><code>make</code></td>
-<td><code>mak</code></td>
-<td>Run the &ldquo;<code>make</code>&rdquo; program using the rest of the line as arguments.</td>
-</tr>
-<tr>
-<td><code>pwd</code></td>
-<td><code>pw</code></td>
-<td>Print working directory.  This is used for your program as well.</td>
-</tr>
-<tr>
-<td><code>focus</code></td>
-<td><code>fs</code></td>
-<td>Set focus to the next/prev/src/asm/regs/cmd window. (TUI)</td>
-</tr>
-<tr>
-<td><code>layout</code></td>
-<td><code>lo</code></td>
-<td>Change the layout of windows to next/prev/src/asm/split/regs. (TUI)</td>
-</tr>
-<tr>
-<td><code>info win</code></td>
-<td><code>i</code></td>
-<td>List of all displayed windows. (TUI)</td>
-</tr>
-<tr>
-<td><code>winheight W [+|-] VAL</code></td>
-<td><code>wh</code></td>
-<td>Set the height of a window, W=src/cmd/asm/regs. (TUI)</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>command</th>
+          <th>alias</th>
+          <th>meaning</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>help COMMAND</code></td>
+          <td><code>h</code></td>
+          <td>Print help for <code>COMMAND</code>.</td>
+      </tr>
+      <tr>
+          <td><code>file FILE</code></td>
+          <td><code>fil</code></td>
+          <td>Use <code>FILE</code> as the program to be debugged.</td>
+      </tr>
+      <tr>
+          <td><code>set VAR = EXP</code></td>
+          <td></td>
+          <td>Evaluate <code>EXP</code> and assign its result to <code>VAR</code>.</td>
+      </tr>
+      <tr>
+          <td><code>show VAR</code></td>
+          <td><code>sho</code></td>
+          <td>Show <code>VAR</code> contents.</td>
+      </tr>
+      <tr>
+          <td><code>set trace-commands on|off</code></td>
+          <td></td>
+          <td>Set/reset tracing of GDB CLI commands</td>
+      </tr>
+      <tr>
+          <td><code>set substitute-path FROM TO</code></td>
+          <td></td>
+          <td>Set a substitution rule replacing <code>FROM</code> into <code>TO</code> in source file paths. (<code>unset ...</code>)</td>
+      </tr>
+      <tr>
+          <td><code>set args ARGS</code></td>
+          <td></td>
+          <td>Set command arguments <code>ARGS</code> to be used when GDB runs a program to be debugged.</td>
+      </tr>
+      <tr>
+          <td><code>set env VAR VALUE</code></td>
+          <td></td>
+          <td>Set environment variable <code>VAR</code> to <code>VALUE</code>. (<code>unset ...</code>)</td>
+      </tr>
+      <tr>
+          <td><code>directory DIR ...</code></td>
+          <td><code>dir</code></td>
+          <td>Add <code>DIR</code> to the search path for source files (<code>:</code> separated). Reset the search path to the default, if invoked without <code>DIR</code>.</td>
+      </tr>
+      <tr>
+          <td><code>run</code></td>
+          <td><code>r</code></td>
+          <td>Start debugged program.</td>
+      </tr>
+      <tr>
+          <td><code>run ARGS</code></td>
+          <td><code>r</code></td>
+          <td>Start debugged program with its command arguments <code>ARGS</code>.</td>
+      </tr>
+      <tr>
+          <td><code>start</code></td>
+          <td><code>star</code></td>
+          <td>Run the debugged program like <code>run</code> but stop at the beginning of <code>main</code>.</td>
+      </tr>
+      <tr>
+          <td><code>cont</code></td>
+          <td><code>c</code></td>
+          <td>Resume execution, after signal or breakpoint.</td>
+      </tr>
+      <tr>
+          <td><code>next</code></td>
+          <td><code>n</code></td>
+          <td>Step to the next source code line (proceed through soubroutine call)</td>
+      </tr>
+      <tr>
+          <td><code>nexti</code></td>
+          <td><code>ni</code></td>
+          <td>Step to the next instruction line (proceed through soubroutine call)</td>
+      </tr>
+      <tr>
+          <td><code>step</code></td>
+          <td><code>s</code></td>
+          <td>Step one source code line, step into subroutine call as needed.</td>
+      </tr>
+      <tr>
+          <td><code>stepi</code></td>
+          <td><code>si</code></td>
+          <td>Step one instruction line, step into subroutine call as needed.</td>
+      </tr>
+      <tr>
+          <td><code>finish</code></td>
+          <td><code>fin</code></td>
+          <td>Execute until selected stack frame returns.</td>
+      </tr>
+      <tr>
+          <td><code>until</code></td>
+          <td><code>u</code></td>
+          <td>Execute until the program reaches a source line greater than the current or a specified location within the current frame.</td>
+      </tr>
+      <tr>
+          <td><code>kill</code></td>
+          <td><code>k</code></td>
+          <td>Kill execution of program being debugged.</td>
+      </tr>
+      <tr>
+          <td><code>quit</code></td>
+          <td><code>q</code></td>
+          <td>Exit &ldquo;<code>gdb</code>&rdquo;.</td>
+      </tr>
+      <tr>
+          <td><code>break [FILE:]LINE</code></td>
+          <td><code>b</code></td>
+          <td>Set breakpoint at <code>LINE</code> [of <code>FUNCTION</code>].</td>
+      </tr>
+      <tr>
+          <td><code>break [FILE:]LINE if COND</code></td>
+          <td><code>b</code></td>
+          <td>Set breakpoint at <code>LINE</code> [of <code>FUNCTION</code>] which breaks only if <code>COND</code> is true.</td>
+      </tr>
+      <tr>
+          <td><code>break * ADDRESS</code></td>
+          <td><code>b</code></td>
+          <td>Set breakpoint at <code>ADDRESS</code></td>
+      </tr>
+      <tr>
+          <td><code>info break</code></td>
+          <td><code>i</code></td>
+          <td>Status of specified breakpoints (all user-settable breakpoints if no argument).</td>
+      </tr>
+      <tr>
+          <td><code>condition N COND</code></td>
+          <td><code>cond</code></td>
+          <td>Specify breakpoint number <code>N</code> to break only if <code>COND</code> is true.</td>
+      </tr>
+      <tr>
+          <td><code>tbreak [FILE:]LINE</code></td>
+          <td><code>tb</code></td>
+          <td>Set a temporary breakpoint at <code>LINE</code> [of <code>FUNCTION</code>].</td>
+      </tr>
+      <tr>
+          <td><code>rbreak REGEXP</code></td>
+          <td><code>rb</code></td>
+          <td>Set a breakpoint for all functions matching <code>REGEXP</code>.</td>
+      </tr>
+      <tr>
+          <td><code>clear</code></td>
+          <td><code>cl</code></td>
+          <td>Clear breakpoint at specified line or function.</td>
+      </tr>
+      <tr>
+          <td><code>delete</code></td>
+          <td><code>d</code></td>
+          <td>Delete some breakpoints or auto-display expressions.</td>
+      </tr>
+      <tr>
+          <td><code>enable</code></td>
+          <td><code>en</code></td>
+          <td>Enable some breakpoints.</td>
+      </tr>
+      <tr>
+          <td><code>disable</code></td>
+          <td><code>dis</code></td>
+          <td>Disable some breakpoints.</td>
+      </tr>
+      <tr>
+          <td><code>define NAME</code></td>
+          <td><code>def</code></td>
+          <td>Define a new command NAME. End with a <code>end</code> line.</td>
+      </tr>
+      <tr>
+          <td><code>command N</code></td>
+          <td><code>comm</code></td>
+          <td>Set commands to be executed when a breakpoint N is hit. End with a <code>end</code> line.</td>
+      </tr>
+      <tr>
+          <td><code>ignore N COUNT</code></td>
+          <td><code>ig</code></td>
+          <td>Set ignore-count of breakpoint number <code>N</code> to <code>COUNT</code>.</td>
+      </tr>
+      <tr>
+          <td><code>signal NUM</code></td>
+          <td><code>sig</code></td>
+          <td>Resume execution with signal <code>NUM</code>. (without signal if &ldquo;0&rdquo;)</td>
+      </tr>
+      <tr>
+          <td><code>catch EVENT</code></td>
+          <td><code>cat</code></td>
+          <td>Set catchpoints to catch <code>EVENT</code>(assert catch exception exec fork syscall throw vfork).</td>
+      </tr>
+      <tr>
+          <td><code>info catch</code></td>
+          <td><code>i</code></td>
+          <td>Exceptions that can be caught in the current stack frame</td>
+      </tr>
+      <tr>
+          <td><code>trace [FILE:]LINE</code></td>
+          <td><code>tr</code></td>
+          <td>Set a tracepoint at <code>LINE</code> [of <code>FUNCTION</code>].</td>
+      </tr>
+      <tr>
+          <td><code>info trace</code></td>
+          <td><code>i</code></td>
+          <td>Specified watchpoints (all watchpoints if no argument).</td>
+      </tr>
+      <tr>
+          <td><code>watch EXP</code></td>
+          <td><code>wa</code></td>
+          <td>Stop execution whenever the value of an <code>EXP</code> changes. If <code>-l</code> is given, the value of a <code>*(EXP)</code> changes.</td>
+      </tr>
+      <tr>
+          <td><code>info watch</code></td>
+          <td><code>i</code></td>
+          <td>Specified watchpoints (all watchpoints if no argument).</td>
+      </tr>
+      <tr>
+          <td><code>list</code></td>
+          <td><code>l</code></td>
+          <td>List ten more lines after or around previous listing.</td>
+      </tr>
+      <tr>
+          <td><code>list -</code></td>
+          <td><code>l</code></td>
+          <td>List the ten lines before a previous ten-line listing.</td>
+      </tr>
+      <tr>
+          <td><code>list FROM[,TO]</code></td>
+          <td><code>l</code></td>
+          <td>List specified function or line.</td>
+      </tr>
+      <tr>
+          <td><code>disassemble</code></td>
+          <td><code>disas</code></td>
+          <td>Disassemble a specified section of memory.</td>
+      </tr>
+      <tr>
+          <td><code>disassemble/m</code></td>
+          <td><code>disas</code></td>
+          <td>Disassemble a specified section of memory with source lines (if available). (m: more code)</td>
+      </tr>
+      <tr>
+          <td><code>disassemble/r</code></td>
+          <td><code>disas</code></td>
+          <td>Disassemble a specified section of memory with raw instructions in hex. (r: raw code)</td>
+      </tr>
+      <tr>
+          <td><code>info</code></td>
+          <td><code>i</code></td>
+          <td>Generic command for showing things about the program being debugged.</td>
+      </tr>
+      <tr>
+          <td><code>info all-reg</code></td>
+          <td><code>i</code></td>
+          <td>List of all registers and their contents, for selected stack frame.</td>
+      </tr>
+      <tr>
+          <td><code>info locales</code></td>
+          <td><code>i</code></td>
+          <td>List of local variables of current stack frame.</td>
+      </tr>
+      <tr>
+          <td><code>info reg</code></td>
+          <td><code>i</code></td>
+          <td>List of integer registers and their contents, for selected stack frame.</td>
+      </tr>
+      <tr>
+          <td><code>print EXP</code></td>
+          <td><code>p</code></td>
+          <td>Print value of expression <code>EXP</code>.</td>
+      </tr>
+      <tr>
+          <td><code>print/F EXP</code></td>
+          <td><code>p</code></td>
+          <td>Print value of expression <code>EXP</code> with <code>F</code> format.</td>
+      </tr>
+      <tr>
+          <td><code>printf &quot;FMT&quot;, EXP, ...</code></td>
+          <td></td>
+          <td>Print value of expression <code>EXP, ...</code> with C-style FMT.</td>
+      </tr>
+      <tr>
+          <td><code>print-object</code></td>
+          <td><code>po</code></td>
+          <td>Ask an Objective-C object to print itself.</td>
+      </tr>
+      <tr>
+          <td><code>call FUNC</code></td>
+          <td><code>cal</code></td>
+          <td>Call a function <code>FUNC</code> in the program and print its result.</td>
+      </tr>
+      <tr>
+          <td><code>call/F FUNC</code></td>
+          <td><code>cal</code></td>
+          <td>Call a function <code>FUNC</code> in the program and print its result with <code>F</code> format.</td>
+      </tr>
+      <tr>
+          <td><code>ptype TYPE</code></td>
+          <td><code>pt</code></td>
+          <td>Print definition of type <code>TYPE</code>. (unrolls any typedefs)</td>
+      </tr>
+      <tr>
+          <td><code>whatis EXP</code></td>
+          <td><code>wha</code></td>
+          <td>Print data type of expression <code>EXP</code>. (Only one level of typedefs is unrolled.)</td>
+      </tr>
+      <tr>
+          <td><code>x/NFU</code></td>
+          <td><code>x</code></td>
+          <td>Examine memory, <code>N</code> data with <code>F</code> format in <code>U</code> unit</td>
+      </tr>
+      <tr>
+          <td><code>backtrace</code></td>
+          <td><code>bt</code></td>
+          <td>Print backtrace of all stack frames, or innermost <code>COUNT</code> frames. (<code>where</code> == <code>bt</code>)</td>
+      </tr>
+      <tr>
+          <td><code>backtrace full</code></td>
+          <td><code>bt f</code></td>
+          <td>Print backtrace of all stack frames and the values of the local variables.</td>
+      </tr>
+      <tr>
+          <td><code>frame</code></td>
+          <td><code>f</code></td>
+          <td>Select and print a stack frame.</td>
+      </tr>
+      <tr>
+          <td><code>down</code></td>
+          <td><code>do</code></td>
+          <td>Select and print stack frame called by this one.</td>
+      </tr>
+      <tr>
+          <td><code>up</code></td>
+          <td></td>
+          <td>Select and print stack frame that called this one.</td>
+      </tr>
+      <tr>
+          <td><code>attach PID</code></td>
+          <td><code>at</code></td>
+          <td>Attach to a <code>PID</code> process outside of GDB.</td>
+      </tr>
+      <tr>
+          <td><code>detach</code></td>
+          <td><code>det</code></td>
+          <td>Detach a process or file previously attached to GDB.</td>
+      </tr>
+      <tr>
+          <td><code>target</code></td>
+          <td><code>tar</code></td>
+          <td>Connect to a target machine or process.</td>
+      </tr>
+      <tr>
+          <td><code>overlay</code></td>
+          <td><code>ov</code></td>
+          <td>Commands for debugging overlays.</td>
+      </tr>
+      <tr>
+          <td><code>thread N</code></td>
+          <td><code>t</code></td>
+          <td>Switch to the thread number <code>N</code>.</td>
+      </tr>
+      <tr>
+          <td><code>thread apply N COMMAND</code></td>
+          <td><code>t a</code></td>
+          <td>Apply a <code>COMMAND</code> to the thread number <code>N</code>.</td>
+      </tr>
+      <tr>
+          <td><code>thread apply all COMMAND</code></td>
+          <td><code>t a a</code></td>
+          <td>Apply a <code>COMMAND</code> to all threads.</td>
+      </tr>
+      <tr>
+          <td><code>thread apply all bt full</code></td>
+          <td><code>t a a bt f</code></td>
+          <td>Apply <code>bt full</code> to all threads.</td>
+      </tr>
+      <tr>
+          <td><code>info thread</code></td>
+          <td><code>i</code></td>
+          <td>List of information on all currently known threads.</td>
+      </tr>
+      <tr>
+          <td><code>advance</code></td>
+          <td><code>adv</code></td>
+          <td>Continue the program up to the specified line or function.</td>
+      </tr>
+      <tr>
+          <td><code>go</code></td>
+          <td><code>g</code></td>
+          <td>Go to an earlier-bookmarked point in the program&rsquo;s execution history.</td>
+      </tr>
+      <tr>
+          <td><code>jump</code></td>
+          <td><code>ju</code></td>
+          <td>Continue program being debugged at specified line or address.</td>
+      </tr>
+      <tr>
+          <td><code>generate-core-file</code></td>
+          <td><code>gcore</code></td>
+          <td>Save a core file with the current state of the debugged process.</td>
+      </tr>
+      <tr>
+          <td><code>shell</code></td>
+          <td><code>!</code></td>
+          <td>Execute the rest of the line as a shell command.</td>
+      </tr>
+      <tr>
+          <td><code>cd DIR</code></td>
+          <td></td>
+          <td>Set working directory to <code>DIR</code> for debugger and program being debugged.</td>
+      </tr>
+      <tr>
+          <td><code>make</code></td>
+          <td><code>mak</code></td>
+          <td>Run the &ldquo;<code>make</code>&rdquo; program using the rest of the line as arguments.</td>
+      </tr>
+      <tr>
+          <td><code>pwd</code></td>
+          <td><code>pw</code></td>
+          <td>Print working directory.  This is used for your program as well.</td>
+      </tr>
+      <tr>
+          <td><code>focus</code></td>
+          <td><code>fs</code></td>
+          <td>Set focus to the next/prev/src/asm/regs/cmd window. (TUI)</td>
+      </tr>
+      <tr>
+          <td><code>layout</code></td>
+          <td><code>lo</code></td>
+          <td>Change the layout of windows to next/prev/src/asm/split/regs. (TUI)</td>
+      </tr>
+      <tr>
+          <td><code>info win</code></td>
+          <td><code>i</code></td>
+          <td>List of all displayed windows. (TUI)</td>
+      </tr>
+      <tr>
+          <td><code>winheight W [+|-] VAL</code></td>
+          <td><code>wh</code></td>
+          <td>Set the height of a window, W=src/cmd/asm/regs. (TUI)</td>
+      </tr>
+  </tbody>
 </table>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <p>Formating option <code>F</code> is used with <code>call/F</code>, <code>print/F</code> and <code>x/NFU</code> sequences:</p>
 <ul>
 <li><code>a</code> address</li>
@@ -569,8 +566,6 @@ the <code>-g</code> option.  See <a href="/en/2013/08/09/fun2prog-elf/#compile-h
 <li><code>-x</code> and <code>-nx</code> options disable default init files.</li>
 </ul>
 <p>TIP: Use the &ldquo;Return&rdquo;-key to repeat the last command.</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 <h3 id="detached-debugging-symbols">Detached debugging symbols</h3>
 <p>The Debian system provided library packages have no debugging symbols in them.</p>
 <p>The <code>dh_strip</code>(1) is normally used to strip executables, shared libraries, and
@@ -583,25 +578,25 @@ the <code>objcopy</code>(1) manpage under &ldquo;<code>--only-keep-debug</code>&
 too.)</p>
 <p>Examples for the path to the key file of library and its debugging symbols</p>
 <table>
-<thead>
-<tr>
-<th>package type</th>
-<th>package name</th>
-<th>path to the key file</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>library</td>
-<td><code>libfoo</code></td>
-<td><code>/usr/lib/x86_64-linux-gnu/libfoo.so</code></td>
-</tr>
-<tr>
-<td>debug symbols</td>
-<td><code>libfoo-dbg</code></td>
-<td><code>/usr/lib/debug/lib/x86_64-linux-gnu/libfoo.so</code></td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>package type</th>
+          <th>package name</th>
+          <th>path to the key file</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>library</td>
+          <td><code>libfoo</code></td>
+          <td><code>/usr/lib/x86_64-linux-gnu/libfoo.so</code></td>
+      </tr>
+      <tr>
+          <td>debug symbols</td>
+          <td><code>libfoo-dbg</code></td>
+          <td><code>/usr/lib/debug/lib/x86_64-linux-gnu/libfoo.so</code></td>
+      </tr>
+  </tbody>
 </table>
 <p>When ever GDB executes a function in the stripped library
 <code>/usr/lib/x86_64-linux-gnu/libfoo.so</code> file, GDB shipped with Debian obtains its
@@ -1023,7 +1018,6 @@ $
 <p>This is just a simple walk through but you get roughly what GDB can do.</p>
 <h3 id="gdb-prime8-gdb">gdb prime8-gdb</h3>
 <p>The <a href="/en/2013/08/08/fun2prog-library/#libpthread">Library: libpthread</a> had a buggy <code>prime8.c</code> code.  Let&rsquo;s check what was wrong under GDB.</p>
-<!-- raw HTML omitted -->
 <p>Let&rsquo;s compile  <code>prime8.c</code> with <code>-g</code> as <code>prime8-gdb</code> and run it to create the <code>core</code> file as [ELF: Core dump]/en/2013/08/09/fun2prog-elf/#core-dump), then analyze it with GDB.</p>
 <p>Compiling <code>prime8.c</code> with <code>-g</code> as <code>prime8-gdb</code> and check core under GDB.</p>
 
@@ -1742,9 +1736,6 @@ is going on.</p>
 <li><a href="http://www.ibm.com/developerworks/linux/library/l-debug/">Mastering Linux debugging techniques</a> by Steve Best (IBM DW, Date: 01 Aug 2002)</li>
 <li><a href="http://www.ibm.com/developerworks/library/l-gdb/">Linux software debugging with GDB</a> by David Seager (IBM DW, Date: 01 Feb 2001)</li>
 </ul>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

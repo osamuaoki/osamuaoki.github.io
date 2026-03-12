@@ -80,7 +80,7 @@ note-00053
 <p>Here is a series of memos of me trying to use LXC/LXD on Debian 12 (<code>bookworm</code>).</p>
 <h2 id="default-lxd-debian-image-issues">Default LXD Debian image issues</h2>
 <p>Let me simply use the default LXD Debian image to launch <code>d0</code> instance with:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd launch images:debian/12/cloud d0
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxd launch images:debian/12/cloud d0
 </span></span></code></pre></div><p>Then, the resulting <code>d0</code> image has a few glitches to my taste:</p>
 <ul>
 <li>The primary user in the container is always <code>debian</code> having UID=1000, GID=1001</li>
@@ -91,7 +91,7 @@ GID somewhere between 100 and 999.)</li>
 <h2 id="lxcinit-local-fixed-up-image-generation-command"><code>./lxcinit</code>: local fixed-up image generation command</h2>
 <p>I first created local image with primary user name set to <code>osamu</code> and without
 <code>netdev</code> in groups-list as <code>deb-12</code>-image:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc init images:debian/12/cloud d0
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ lxc init images:debian/12/cloud d0
 </span></span><span style="display:flex;"><span> $ lxc file edit d0/etc/cloud/cloud.cfg
 </span></span><span style="display:flex;"><span> $ lxc publish d0 --alias deb-12
 </span></span></code></pre></div><p>Please note that the &ldquo;write_files:&rdquo; part in &ldquo;user.user-data:&rdquo; portion of YAML
@@ -101,38 +101,38 @@ trick to use this functionality to update <code>/etc/cloud/cloud.cfg</code> does
 <a href="https://github.com/osamuaoki/osamu-utils/blob/main/lxcinit">lxcinit</a>.  This
 removes <code>netdev</code> group and optionally changes the primary user to <code>osamu</code> for
 cloud-init.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxcinit -h
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ lxcinit -h
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>=============================================================================
+</span></span></span><span style="display:flex;"><span>=============================================================================
 </span></span><span style="display:flex;"><span>NAME:
 </span></span><span style="display:flex;"><span>  lxcinit -- download lxd Debian cloud image and make local fixed image
 </span></span><span style="display:flex;"><span>             &#34;deb-&lt;name&gt;&#34;
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>SYNOPSIS:
+</span></span></span><span style="display:flex;"><span>SYNOPSIS:
 </span></span><span style="display:flex;"><span>  lxcinit [-b|-d|-h|-p|-u|--] [&lt;name&gt;]
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>DESCRIPTION:
+</span></span></span><span style="display:flex;"><span>DESCRIPTION:
 </span></span><span style="display:flex;"><span>  lxcinit creates a local un-previlidged LXD image &#34;deb-&lt;name&gt;&#34; just like
 </span></span><span style="display:flex;"><span>  the following but with some fix-ups on /etc/cloud/cloud.cfg:
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  $ lxc init images:debian/&lt;name&gt;/cloud deb-&lt;name&gt;
+</span></span></span><span style="display:flex;"><span>  $ lxc init images:debian/&lt;name&gt;/cloud deb-&lt;name&gt;
 </span></span><span style="display:flex;"><span>  $ lxc publish deb-&lt;name&gt; --alias=deb-&lt;name&gt;
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  The default &lt;name&gt; is &#34;sid&#34;.  The &lt;name&gt; consists of the codename or the
+</span></span></span><span style="display:flex;"><span>  The default &lt;name&gt; is &#34;sid&#34;.  The &lt;name&gt; consists of the codename or the
 </span></span><span style="display:flex;"><span>  release version:
 </span></span><span style="display:flex;"><span>    - &#34;sid&#34;, &#34;trixie&#34;, &#34;bookworm&#34;, &#34;bullseye&#34;, &#34;buster&#34;, 12, 11, 10
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>  You can&#39;t have an existing instance name such as deb-&lt;name&gt; for this
+</span></span></span><span style="display:flex;"><span>  You can&#39;t have an existing instance name such as deb-&lt;name&gt; for this
 </span></span><span style="display:flex;"><span>  command to function.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>OPTIONS: (only the first character matters)
+</span></span></span><span style="display:flex;"><span>OPTIONS: (only the first character matters)
 </span></span><span style="display:flex;"><span>  -base BASE  set base name as BASE (&#34;deb-&#34;)
 </span></span><span style="display:flex;"><span>  -delete     delete unmodified instance deb-&lt;name&gt;
 </span></span><span style="display:flex;"><span>  -help       print this help message and exit
 </span></span><span style="display:flex;"><span>  -primary    match primary user name in container with the current user
 </span></span><span style="display:flex;"><span>  -update     update the local image deb-&lt;name&gt; after removing it first.
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>=============================================================================
+</span></span></span><span style="display:flex;"><span>=============================================================================
 </span></span></code></pre></div><p>This was an interesting practice for me to get familiar with <code>lxc publish ...</code>.
 But TBH, this is a bit cumbersome to use.  So I don&rsquo;t use this much.</p>
 <h2 id="configuration-of-lxd-instance">Configuration of LXD instance</h2>
@@ -183,7 +183,7 @@ instance with the existing configuration to minimize overhead.</p>
 <p>The latter style using profile provides me with an organized working environment.</p>
 <h2 id="overriding-default_user-of-cloud-init-with-profile">Overriding <code>default_user</code> of cloud-init with profile</h2>
 <p>The root cause of issue is <code>default_user</code> data provided as the default cloud-init setting and cloud-init automatically creates normal group if it finds missing group name in <code>groups</code> list.  These can be seen in <code>/etc/cloud/cloud.cfg</code> as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>...
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-yaml" data-lang="yaml"><span style="display:flex;"><span>...
 </span></span><span style="display:flex;"><span>   <span style="color:#f92672">default_user</span>:
 </span></span><span style="display:flex;"><span>     <span style="color:#f92672">name</span>: <span style="color:#ae81ff">debian</span>
 </span></span><span style="display:flex;"><span>     <span style="color:#f92672">lock_passwd</span>: <span style="color:#66d9ef">True</span>
@@ -196,8 +196,8 @@ to override this default setting.</p>
 <p>I eventually found &ldquo;<a href="https://cloudinit.readthedocs.io/en/latest/reference/modules.html#users-and-groups">Users and Groups</a>&rdquo; on cloud-init reference document. The &ldquo;Summary&rdquo; explanation was confusing for me.  So I tried &ldquo;Examples&rdquo; to see how thisfeature can be used.</p>
 <h3 id="test-script-userssh">Test script <code>users.sh</code></h3>
 <p>I created a simple shell script <code>users.sh</code> to test configuration.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh -e
-</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>lxc stop d0 &gt;/dev/null 2&gt;&amp;<span style="color:#ae81ff">1</span> <span style="color:#f92672">||</span> true
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/sh -e
+</span></span></span><span style="display:flex;"><span>lxc stop d0 &gt;/dev/null 2&gt;&amp;<span style="color:#ae81ff">1</span> <span style="color:#f92672">||</span> true
 </span></span><span style="display:flex;"><span>lxc delete d0 &gt;/dev/null 2&gt;&amp;<span style="color:#ae81ff">1</span> <span style="color:#f92672">||</span> true
 </span></span><span style="display:flex;"><span>lxc ls -f compact | grep d0 <span style="color:#f92672">||</span> true
 </span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;I: ===== YAML data </span>$1<span style="color:#e6db74"> ===========&#34;</span>
@@ -218,7 +218,7 @@ this requirement better.</p>
 <h3 id="override-default_user-settings-1">Override <code>default_user</code> settings (1)</h3>
 <p>The following simply sets <code>users:</code> to an empty list overrides <code>default_user</code>
 settings.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ./users.sh users0.yaml
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ./users.sh users0.yaml
 </span></span><span style="display:flex;"><span>I: ===== YAML data users0.yaml ===========
 </span></span><span style="display:flex;"><span>config:
 </span></span><span style="display:flex;"><span>  user.user-data: |
@@ -245,7 +245,7 @@ settings.</p>
 <h3 id="override-default_user-settings-2">Override <code>default_user</code> settings (2)</h3>
 <p>The following sets <code>users:</code> to a list with updated <code>name:</code> and <code>groups:</code> list
 overrides <code>default_user</code> settings.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ./users.sh users1.yaml
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ ./users.sh users1.yaml
 </span></span><span style="display:flex;"><span>I: ===== YAML data users1.yaml ===========
 </span></span><span style="display:flex;"><span>config:
 </span></span><span style="display:flex;"><span>  user.user-data: |
@@ -278,7 +278,6 @@ overrides <code>default_user</code> settings.</p>
 <p>In order this to add &ldquo;osamu&rdquo; to all groups (excluding <code>netdev</code>) as the initial
 list, <code>groups: [adm, audio, cdrom, dialout, dip, floppy, plugdev, sudo, video]</code>
 should be used in <code>user0.yaml</code> instead.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

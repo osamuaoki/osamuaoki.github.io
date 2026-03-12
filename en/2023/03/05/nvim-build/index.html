@@ -99,23 +99,23 @@ after reading following interesting references.</p>
 </ul>
 <h3 id="cmake-basics">CMake basics</h3>
 <p>The good old way to configure a source package with CMake is as follows:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd path/to/source
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cd path/to/source
 </span></span><span style="display:flex;"><span>$ mkdir build
 </span></span><span style="display:flex;"><span>$ cd build
 </span></span><span style="display:flex;"><span>$ cmake <span style="color:#f92672">[</span>&lt;options&gt;<span style="color:#f92672">]</span> ..
 </span></span></code></pre></div><p>Then, build and install the configured source package with the generated build
 system, e.g., &ldquo;Unix Makefile&rdquo; is as follows (executed in <code>build/</code> directory):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ make
 </span></span><span style="display:flex;"><span>$ sudo make install
 </span></span></code></pre></div><p>Here, this build and install process can also be done with the build system agnostic way as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cmake --build . --verbose
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cmake --build . --verbose
 </span></span><span style="display:flex;"><span>$ sudo cmake --install . --verbose
 </span></span></code></pre></div><h3 id="cmake-and-deb-package">CMake and DEB-package</h3>
 <p>This above basic method installs binary executables directory to the system.
 The removal of installed files is a bit tricky.  It will be nice if we can
 create a DEB-package and install it with <code>dpkg -i &lt;packagename&gt;.deb</code>.  Then its
 clean removal is intuitive process.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cmake --build . --verbose
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ cmake --build . --verbose
 </span></span><span style="display:flex;"><span>$ cpack -G DEB --verbose
 </span></span><span style="display:flex;"><span>$ sudo dpkg -i &lt;packagename&gt;-linux64.deb
 </span></span></code></pre></div><p>Please note this is not how official Debian packages are build.  This CMake
@@ -128,7 +128,7 @@ format without adding <code>debian/*</code> files.</p>
 <a href="https://github.com/neovim/neovim">upstream Neovim</a>
 v0.7.2 version (released on 2022-06-27) for the upcoming bookworm release.</p>
 <p>Please note this uses external libraries via shared library mechanism.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ldd /usr/bin/nvim
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ldd /usr/bin/nvim
 </span></span><span style="display:flex;"><span>        linux-vdso.so.1 <span style="color:#f92672">(</span>0x00007ffec159e000<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>        liblua5.1-luv.so.0 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/liblua5.1-luv.so.0 <span style="color:#f92672">(</span>0x00007f4788c16000<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>        libuv.so.1 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libuv.so.1 <span style="color:#f92672">(</span>0x00007f4788be6000<span style="color:#f92672">)</span>
@@ -208,21 +208,21 @@ platform, it is nice to have its latest version.</p>
 <p>When building Neovim, you need to provide options to configure Neovim source to
 match header and library file locations on Debian. Initial <code>cmake</code> needs to be
 executed with following options.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ GENERATOR<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-G Ninja&#34;</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ GENERATOR<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-G Ninja&#34;</span>
 </span></span><span style="display:flex;"><span>$ BUILD_TYPE<span style="color:#f92672">=</span>RelWithDebInfo
 </span></span><span style="display:flex;"><span>$ DEB_HOST_MULTIARCH<span style="color:#f92672">=</span>x86_64-linux-gnu
 </span></span><span style="display:flex;"><span>$ cd path/to/source
 </span></span><span style="display:flex;"><span>$ mkdir build
 </span></span><span style="display:flex;"><span>$ cd build
 </span></span><span style="display:flex;"><span>$ cmake <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  $GENERATOR <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DCMAKE_BUILD_TYPE<span style="color:#f92672">=</span>$BUILD_TYPE <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DBUSTED_OUTPUT_TYPE<span style="color:#f92672">=</span>nvim <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DLIBLUV_LIBRARY:FILEPATH<span style="color:#f92672">=</span>/usr/lib/$DEB_HOST_MULTIARCH/lua/5.1/luv.so <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DLIBLUV_INCLUDE_DIR:PATH<span style="color:#f92672">=</span>/usr/include/lua5.1 <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DPREFER_LUA<span style="color:#f92672">=</span>OFF <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  -DCOMPILE_LUA<span style="color:#f92672">=</span>OFF <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>  <span style="color:#e6db74">&#34;</span>$LOGLEVEL<span style="color:#e6db74">&#34;</span> ..
+</span></span></span><span style="display:flex;"><span>  $GENERATOR <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -DCMAKE_BUILD_TYPE<span style="color:#f92672">=</span>$BUILD_TYPE <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -DBUSTED_OUTPUT_TYPE<span style="color:#f92672">=</span>nvim <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -DLIBLUV_LIBRARY:FILEPATH<span style="color:#f92672">=</span>/usr/lib/$DEB_HOST_MULTIARCH/lua/5.1/luv.so <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -DLIBLUV_INCLUDE_DIR:PATH<span style="color:#f92672">=</span>/usr/include/lua5.1 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -DPREFER_LUA<span style="color:#f92672">=</span>OFF <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  -DCOMPILE_LUA<span style="color:#f92672">=</span>OFF <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;</span>$LOGLEVEL<span style="color:#e6db74">&#34;</span> ..
 </span></span><span style="display:flex;"><span>$ cpack -G DEB
 </span></span><span style="display:flex;"><span>$ sudo dpkg -i nvim-linux64.deb
 </span></span></code></pre></div><p>This configure source to use -dev packages and build a binary executable linked
@@ -234,7 +234,7 @@ troubles.</p>
 <p>Let&rsquo;s build Neovim as described in
 <a href="https://github.com/neovim/neovim/wiki/Building-Neovim#quick-start">Building Neovim: Quick start</a>
 for Developer.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ git clone https://github.com/neovim/neovim
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ git clone https://github.com/neovim/neovim
 </span></span><span style="display:flex;"><span>$ cd neovim <span style="color:#f92672">&amp;&amp;</span> make CMake_BUILD_TYPE<span style="color:#f92672">=</span>RelWithDebInfo
 </span></span><span style="display:flex;"><span>$ cd build
 </span></span><span style="display:flex;"><span>$ cpack -G DEB --verbose
@@ -242,7 +242,7 @@ for Developer.</p>
 </span></span></code></pre></div><p>This <code>cpack -G DEB</code> is probably how upstream builds its DEB-packages.</p>
 <p>Now (2023-04-09), this builds the latest Neovim master branch on git repo
 (0.10.0-dev version) with all external libraries statically linked.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ bin/nvim --version
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ bin/nvim --version
 </span></span><span style="display:flex;"><span>NVIM v0.10.0-dev-19+g339011f59
 </span></span><span style="display:flex;"><span>Build type: Debug
 </span></span><span style="display:flex;"><span>LuaJIT 2.1.0-beta3
@@ -253,7 +253,7 @@ for Developer.</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>Run :checkhealth <span style="color:#66d9ef">for</span> more info
 </span></span></code></pre></div><p>Let&rsquo;s see what was built.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ldd bin/nvim
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ ldd bin/nvim
 </span></span><span style="display:flex;"><span>    linux-vdso.so.1 <span style="color:#f92672">(</span>0x00007fff131a7000<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>    libm.so.6 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libm.so.6 <span style="color:#f92672">(</span>0x00007f4860921000<span style="color:#f92672">)</span>
 </span></span><span style="display:flex;"><span>    libgcc_s.so.1 <span style="color:#f92672">=</span>&gt; /lib/x86_64-linux-gnu/libgcc_s.so.1 <span style="color:#f92672">(</span>0x00007f48610b0000<span style="color:#f92672">)</span>
@@ -270,7 +270,7 @@ upstream), you must remove both Debian <code>neovim</code> and <code>neovim-runt
 in advance to avoid package conflicts.</p>
 <p>Since command normally provided by the update-alternatives are not available, <code>view</code>, <code>vimdiff</code>, <code>ex</code>, and <code>editor</code>
 commands needs some workaround such as the use of alias defined in <code>~/.bashrc</code>:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># nvim: nvim with LazyVim -- as /usr/bin/nvim</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span><span style="color:#75715e"># nvim: nvim with LazyVim -- as /usr/bin/nvim</span>
 </span></span><span style="display:flex;"><span>export EDITOR<span style="color:#f92672">=</span>nvim
 </span></span><span style="display:flex;"><span>export VISUAL<span style="color:#f92672">=</span>nvim
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># `vi` as neovim with LazyVim</span>
@@ -300,7 +300,6 @@ build results on this site:</p>
 </ul>
 <p>Since I use bare CMAKE, there are no APT compatible data.  So use <code>wget</code> and
 <code>dpkg -i</code>.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

@@ -81,7 +81,7 @@ note-00052
 <li><a href="https://security.stackexchange.com/questions/90077/ssh-key-ed25519-vs-rsa">stackexchange: SSH Key: Ed25519 vs RSA</a></li>
 </ul>
 <h2 id="generate-new-ed25519-key">Generate new ED25519 key</h2>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ssh-keygen -t ed25519 -C &#34;osamu@goofy&#34;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ssh-keygen -t ed25519 -C &#34;osamu@goofy&#34;
 </span></span><span style="display:flex;"><span>Generatingublic/private ed25519 keyair.
 </span></span><span style="display:flex;"><span>Enter file in which to save the key (/home/osamu/.ssh/id_ed25519):
 </span></span><span style="display:flex;"><span> $ ssh-keygen -lf id_ed25519.pub
@@ -109,31 +109,31 @@ note-00052
 <p>I realize my public key to access my github account <code>osamuaoki</code> is available at
 <!-- raw HTML omitted --><a href="https://github.com/osamuaoki.keys">https://github.com/osamuaoki.keys</a><!-- raw HTML omitted -->.</p>
 <p>Hmmm&hellip; I see my SSH public key is as public as it can be.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ wget -q -O - https://github.com/osamuaoki.keys
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ wget -q -O - https://github.com/osamuaoki.keys
 </span></span><span style="display:flex;"><span>ssh-rsa A**********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************t
 </span></span><span style="display:flex;"><span>ssh-ed25519 A******************************************************************C
 </span></span></code></pre></div><p>ED25519 key string is much smaller.</p>
 <p>After removing old SSH key</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ wget -q -O - https://github.com/osamuaoki.keys
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ wget -q -O - https://github.com/osamuaoki.keys
 </span></span><span style="display:flex;"><span>ssh-ed25519 A******************************************************************C
 </span></span></code></pre></div><p>If I trust this data and service, I can set SSH-PUBLIC-KEY to a system by running <code>ssh-import-id</code>(1) (package: <code>ssh-import-id</code>) command.</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ssh-import-id gh:osamuaoki
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ ssh-import-id gh:osamuaoki
 </span></span></code></pre></div><h2 id="gnupg-new-key">GnuPG (new key)</h2>
 <p>Let&rsquo;s see my old key:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ gpg --list-keys --fingerprint --keyid-format LONG osamu
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ gpg --list-keys --fingerprint --keyid-format LONG osamu
 </span></span><span style="display:flex;"><span>pub   rsa4096/1E1356881DD8D791 2010-09-23 [SC]
 </span></span><span style="display:flex;"><span>      Key fingerprint = 3133 724D 6207 8815 79E9  5D62 1E13 5688 1DD8 D791
 </span></span><span style="display:flex;"><span>uid                 [ultimate] Osamu Aoki &lt;osamu@debian.org&gt;
 </span></span><span style="display:flex;"><span>sub   rsa4096/A04CBCEEF08BEFAD 2010-09-23 [E]
 </span></span></code></pre></div><p>Let&rsquo;s make a new key with newer algo:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ gpg --generate-key --default-new-key-algo=&#34;ed25519/cert,sign+cv25519/encr&#34;
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ gpg --generate-key --default-new-key-algo=&#34;ed25519/cert,sign+cv25519/encr&#34;
 </span></span><span style="display:flex;"><span> ...
 </span></span><span style="display:flex;"><span> $ gpg --edit-key D89E6B09B42098CEAF081AB16D6D3809215F720D
 </span></span><span style="display:flex;"><span>  ... add uid
 </span></span><span style="display:flex;"><span>  ... set expiration
 </span></span><span style="display:flex;"><span>  ... set primary uid
 </span></span></code></pre></div><p>Now let&rsquo;s see my keys (I happen to pickup older key of mine by removing <code>.gpg-v21-migrated</code>):</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>osamu@goofy:~/.gnupg/private-keys-v1.d 21:22:48
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>osamu@goofy:~/.gnupg/private-keys-v1.d 21:22:48
 </span></span><span style="display:flex;"><span>$ gpg --list-keys  --with-subkey --with-keygrip  --keyid-format long  osamu
 </span></span><span style="display:flex;"><span>pub   rsa4096/1E1356881DD8D791 2010-09-23 [SC]
 </span></span><span style="display:flex;"><span>      3133724D6207881579E95D621E1356881DD8D791
@@ -143,7 +143,7 @@ note-00052
 </span></span><span style="display:flex;"><span>      FDCAD8AB29E281A0E004B510A04CBCEEF08BEFAD
 </span></span><span style="display:flex;"><span>      Keygrip = B94F91E2FC0B861EAB1144DE3FDAC204347F66EB
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>pub   ed25519/6D6D3809215F720D 2024-01-07 [SC]
+</span></span></span><span style="display:flex;"><span>pub   ed25519/6D6D3809215F720D 2024-01-07 [SC]
 </span></span><span style="display:flex;"><span>      D89E6B09B42098CEAF081AB16D6D3809215F720D
 </span></span><span style="display:flex;"><span>      Keygrip = FB290BFC4B3A02AA471B4AB6FFE506D55A0BC1FB
 </span></span><span style="display:flex;"><span>uid                 [ultimate] Osamu Aoki &lt;osamu@debian.org&gt;
@@ -152,7 +152,7 @@ note-00052
 </span></span><span style="display:flex;"><span>      F2B600DA9D34FA48B346EFED15021D9E0E61D985
 </span></span><span style="display:flex;"><span>      Keygrip = F3F6241DB23FBF9A676EAEE4D3B37749B11157A6
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>pub   dsa1024/E80FC4C1A8061F32 2002-05-07 [SC]
+</span></span></span><span style="display:flex;"><span>pub   dsa1024/E80FC4C1A8061F32 2002-05-07 [SC]
 </span></span><span style="display:flex;"><span>      253A40766A3BCCE2A426DEF5E80FC4C1A8061F32
 </span></span><span style="display:flex;"><span>      Keygrip = 644078C16C0A81049F0C0526AD1EDB894357223D
 </span></span><span style="display:flex;"><span>uid                 [ unknown] Osamu Aoki &lt;osamu@debian.org&gt;
@@ -163,7 +163,7 @@ note-00052
 </span></span></code></pre></div><p>Here, keygrip is the name used for the filename in
 <code>~/.gnupg//private-keys-v1.d/</code>.</p>
 <p>Then, I signed this with my old RSA4096 key (keyid=<code>1E1356881DD8D791</code>).</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gpg --list-sigs D89E6B09B42098CEAF081AB16D6D3809215F720D
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gpg --list-sigs D89E6B09B42098CEAF081AB16D6D3809215F720D
 </span></span><span style="display:flex;"><span>pub   ed25519 2024-01-07 [SC]
 </span></span><span style="display:flex;"><span>      D89E6B09B42098CEAF081AB16D6D3809215F720D
 </span></span><span style="display:flex;"><span>uid           [ultimate] Osamu Aoki &lt;osamu@debian.org&gt;
@@ -175,10 +175,10 @@ note-00052
 </span></span><span style="display:flex;"><span>sub   cv25519 2024-01-07 [E]
 </span></span><span style="display:flex;"><span>sig          6D6D3809215F720D 2024-01-07  Osamu Aoki &lt;osamu@debian.org&gt;
 </span></span></code></pre></div><p>Now I can publish public key in ASCII format as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gpg -a --export D89E6B09B42098CEAF081AB16D6D3809215F720D
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span>$ gpg -a --export D89E6B09B42098CEAF081AB16D6D3809215F720D
 </span></span><span style="display:flex;"><span>-----BEGIN PGP PUBLIC KEY BLOCK-----
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>mDMEZZpSFhYJKwYBBAHaRw8BAQdA9T6mXRx7Zc64kQC+dKB2RgxNHK0+KFlCT8b/
+</span></span></span><span style="display:flex;"><span>mDMEZZpSFhYJKwYBBAHaRw8BAQdA9T6mXRx7Zc64kQC+dKB2RgxNHK0+KFlCT8b/
 </span></span><span style="display:flex;"><span>JtFAWRu0HU9zYW11IEFva2kgPG9zYW11QGRlYmlhbi5vcmc+iJIEExYIADsCGwMF
 </span></span><span style="display:flex;"><span>CwkIBwIGFQoJCAsCBBYCAwECHgECF4AWIQTYnmsJtCCYzq8IGrFtbTgJIV9yDQUC
 </span></span><span style="display:flex;"><span>ZZpXMAIZAQAKCRBtbTgJIV9yDc+YAQDhuq/q76qobfHKi8C2MT83u1qZkg2eCpEF
@@ -218,11 +218,11 @@ note-00052
 </span></span><span style="display:flex;"><span>=7Kpk
 </span></span><span style="display:flex;"><span>-----END PGP PUBLIC KEY BLOCK-----
 </span></span></code></pre></div><p>For export, smaller public key can be made as:</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ gpg -a --export --export-options export-minimal D89E6B09B42098CEAF081AB16D6D3809215F720D
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-console" data-lang="console"><span style="display:flex;"><span> $ gpg -a --export --export-options export-minimal D89E6B09B42098CEAF081AB16D6D3809215F720D
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>-----BEGIN PGP PUBLIC KEY BLOCK-----
+</span></span></span><span style="display:flex;"><span>-----BEGIN PGP PUBLIC KEY BLOCK-----
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span>mDMEZZpSFhYJKwYBBAHaRw8BAQdA9T6mXRx7Zc64kQC+dKB2RgxNHK0+KFlCT8b/
+</span></span></span><span style="display:flex;"><span>mDMEZZpSFhYJKwYBBAHaRw8BAQdA9T6mXRx7Zc64kQC+dKB2RgxNHK0+KFlCT8b/
 </span></span><span style="display:flex;"><span>JtFAWRu0HU9zYW11IEFva2kgPG9zYW11QGRlYmlhbi5vcmc+iJIEExYIADsCGwMF
 </span></span><span style="display:flex;"><span>CwkIBwIGFQoJCAsCBBYCAwECHgECF4AWIQTYnmsJtCCYzq8IGrFtbTgJIV9yDQUC
 </span></span><span style="display:flex;"><span>ZZpXMAIZAQAKCRBtbTgJIV9yDc+YAQDhuq/q76qobfHKi8C2MT83u1qZkg2eCpEF
@@ -239,7 +239,6 @@ note-00052
 </span></span><span style="display:flex;"><span>-----END PGP PUBLIC KEY BLOCK-----
 </span></span></code></pre></div><p>See <a href="/en/2022/08/20/deb-repo-1/">Personal DEB package repository</a> how this can
 be used.</p>
-<!-- raw HTML omitted -->
 
 
 <table width="100%">

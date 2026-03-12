@@ -96,28 +96,28 @@ note-00045
 <p>ベンダーの WeActTCの技術情報サイトから落としたGIT repo中の情報によると、HID Bootloaderの <code>APP forwarding address</code>は<code>0x8004000</code>だそうです。
 STM32F103と違いSTM32F411はフラッシュの書き換え単位が16KBあるので、これだけのスペース空けています。</p>
 <table>
-<thead>
-<tr>
-<th style="text-align:center">ROM Addr</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td style="text-align:center">0x8000000 Bootloader</td>
-</tr>
-<tr>
-<td style="text-align:center">16KB</td>
-</tr>
-<tr>
-<td style="text-align:center">0x8004000 APP</td>
-</tr>
-<tr>
-<td style="text-align:center">&hellip;..</td>
-</tr>
-<tr>
-<td style="text-align:center">END</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th style="text-align: center">ROM Addr</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td style="text-align: center">0x8000000 Bootloader</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">16KB</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">0x8004000 APP</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">&hellip;..</td>
+      </tr>
+      <tr>
+          <td style="text-align: center">END</td>
+      </tr>
+  </tbody>
 </table>
 <p>つまり元々ボード上のMCUに書き込まれていたのHID Bootloaderには<code>0x800 0400</code> に読み込まれて実行されるように作成したファームウエアーが必要です。</p>
 <p>QMKは通常<code>0x800 0000</code> に書き込み実行するファームウエアーを作成するので、QMKファームウエアーの導入にHID Bootloaderは使えません。</p>
@@ -163,40 +163,40 @@ Found DFU: [0483:df11] ver=2200, devnum=27, cfg=1, intf=0, path=&#34;6-1.4.3&#34
 <h2 id="stm32f411の各種プログラム方法">STM32F411の各種プログラム方法</h2>
 <p>Linux上でのSTM32F411チップのプログラム法を整理しました。</p>
 <table>
-<thead>
-<tr>
-<th>program</th>
-<th>機能</th>
-<th>タイプ</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td><code>dfu-util</code></td>
-<td>USB-DFU 経由でのプログラム</td>
-<td>FLOSS</td>
-</tr>
-<tr>
-<td><code>pydfu</code></td>
-<td>USB-DFU 経由でのプログラム</td>
-<td>FLOSS</td>
-</tr>
-<tr>
-<td><code>stlink-tools</code>/<code>stlink-gui</code></td>
-<td>STLink (SWD) 経由でのプログラム</td>
-<td>FLOSS</td>
-</tr>
-<tr>
-<td><a href="https://www.st.com/en/development-tools/stm32cubeprog.html/">STM32CubeProg</a></td>
-<td>JTAG/SWD/? 経由でのプログラム</td>
-<td>Proprietary (ST)</td>
-</tr>
-<tr>
-<td><a href="https://github.com/WeActTC/WeAct_HID_Bootloader_F4x1">WeAct_HID_Flash-CLI</a></td>
-<td>USB-HID 経由でのプログラム</td>
-<td>Proprietary (WeAct)</td>
-</tr>
-</tbody>
+  <thead>
+      <tr>
+          <th>program</th>
+          <th>機能</th>
+          <th>タイプ</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>dfu-util</code></td>
+          <td>USB-DFU 経由でのプログラム</td>
+          <td>FLOSS</td>
+      </tr>
+      <tr>
+          <td><code>pydfu</code></td>
+          <td>USB-DFU 経由でのプログラム</td>
+          <td>FLOSS</td>
+      </tr>
+      <tr>
+          <td><code>stlink-tools</code>/<code>stlink-gui</code></td>
+          <td>STLink (SWD) 経由でのプログラム</td>
+          <td>FLOSS</td>
+      </tr>
+      <tr>
+          <td><a href="https://www.st.com/en/development-tools/stm32cubeprog.html/">STM32CubeProg</a></td>
+          <td>JTAG/SWD/? 経由でのプログラム</td>
+          <td>Proprietary (ST)</td>
+      </tr>
+      <tr>
+          <td><a href="https://github.com/WeActTC/WeAct_HID_Bootloader_F4x1">WeAct_HID_Flash-CLI</a></td>
+          <td>USB-HID 経由でのプログラム</td>
+          <td>Proprietary (WeAct)</td>
+      </tr>
+  </tbody>
 </table>
 <p><code>pydfu</code> は <a href="https://github.com/micropython/micropython">Micropython</a> に含まれてます。</p>
 <h2 id="binファイル経由でのdfu実行">BINファイル経由でのDFU実行</h2>
@@ -260,9 +260,6 @@ bus: 6, device: 42 was not an MTP device
 <p><a href="https://www.st.com/ja/development-tools/stm32cubeprog.html">STM32CubeProg</a>をダウンロードすると、LINUX上でもJAVAベースのIDEがSWD/JTAGベースで接続して使えるようです。ただファイルの展開の際に、LINUX上なのにEXEファイルが必要だったのは意外でした。拡張子がEXEですが、大きなファイルだから中身は自己解凍のアーカイブなのかな?</p>
 <p>ちなみにSTM32CubeProgの前に使われた古いプログラムに、<a href="https://www.st.com/ja/development-tools/stsw-stm32080.html">DfuSe USB device firmware upgrade (UM0412)</a> がソース付きであるようです。ただ、WINDOWS専用です。</p>
 <p>STM32CubeProgを実行した所、なぜか立ち上げてみた新しいSTM32CubeProgでは、LinuxのGUI上ではSWDとかJTAGしか選択肢にDFUがつかえるように見えませんでした。STM32CubeProgは、GUIのプログラム群でめまいがします。とにかく、<code>dfu-util</code>が動いているのでSTのプロプライエタリーツールは降参しておきます。</p>
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
-<!-- raw HTML omitted -->
 
 
 <table width="100%">
