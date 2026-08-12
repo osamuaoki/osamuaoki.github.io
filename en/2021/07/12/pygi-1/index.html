@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GTK GUI with PyGObject (1) | Goofing Osamu</title>
+    <title>GTK GUI with PyGObject (1) | My English Site</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -213,7 +213,7 @@ file.
 </ul>
 </li>
 <li>When using Glade to create GUI, you are using
-<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html#Gtk.Buildable">Gtk.Buildable</a>
+<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html%23Gtk.Buildable">Gtk.Buildable</a>
 to create GUI widgets.  So the &ldquo;User data&rdquo; parameter can take widgets defined in the Glade XML only.
 No external constant number nor string.</li>
 <li>Changing widget types or renaming IDs or shuffling position of widgets in Glade XML file are easier with the text editor than Glade.</li>
@@ -222,7 +222,7 @@ file, use the text editor to fix it.
 <ul>
 <li><a href="https://gitlab.gnome.org/GNOME/glade/-/issues/499">Can&rsquo;t add GtkHeaderBar to window with existing widgets / containers</a></li>
 <li>Read the pertinent API document carefully around parts mentioning
-<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html#Gtk.Buildable">Gtk.Buildable</a>
+<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html%23Gtk.Buildable">Gtk.Buildable</a>
 and use them</li>
 <li>Look for the successful XML file dealing the similar situation and
 imitate it.</li>
@@ -254,29 +254,29 @@ buttons to the center canvas.</p>
 <p>Out of these 4 big buttons, the &ldquo;Toplevels&rdquo; button seems to be a good to start.
 Let&rsquo;s check what are these GUI objects in &ldquo;Toplevels&rdquo;.</p>
 <ul>
-<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">Gtk.Window</a> — Toplevel which can contain other widgets</li>
-<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/OffscreenWindow.html#class-details">Gtk.OffscreenWindow</a> — A toplevel to manage offscreen rendering of child widgets</li>
-<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/ApplicationWindow.html#class-details">Gtk.ApplicationWindow</a> — GtkWindow subclass with GtkApplication support</li>
-<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Dialog.html#class-details">Gtk.Dialog</a> — Create popup windows
+<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html%23class-details">Gtk.Window</a> — Toplevel which can contain other widgets</li>
+<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/OffscreenWindow.html%23class-details">Gtk.OffscreenWindow</a> — A toplevel to manage offscreen rendering of child widgets</li>
+<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/ApplicationWindow.html%23class-details">Gtk.ApplicationWindow</a> — GtkWindow subclass with GtkApplication support</li>
+<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Dialog.html%23class-details">Gtk.Dialog</a> — Create popup windows
 <ul>
 <li><strong>Gtk&hellip;.Dialog</strong>  — Create specific purpose helper popup windows for typical use cases</li>
 </ul>
 </li>
-<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Assistant.html#class-details">Gtk.Assistant</a> — A widget used to guide users through multi-step operations</li>
+<li><a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Assistant.html%23class-details">Gtk.Assistant</a> — A widget used to guide users through multi-step operations</li>
 </ul>
 <p>Since I want a simple GUI,
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a>
 seems to be a good starting point for the GUI programming learning experience for me now, though
-<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/ApplicationWindow.html#class-details">Gtk.ApplicationWindow</a>
+<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/ApplicationWindow.html%23class-details">Gtk.ApplicationWindow</a>
 seems to be a good starting point for serious applications in future</p>
 <p><a href="https://en.wikipedia.org/wiki/Glade_Interface_Designer">Glade</a>
 generates
 <a href="https://developer.gnome.org/gtk3/stable/GtkBuilder.html#BUILDER-UI">GtkBuilder UI descriptions</a>
 in a XML file and
-<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html#gtk-buildable-vfuncs">Gtk.Buildable</a>
+<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html%23gtk-buildable-vfuncs">Gtk.Buildable</a>
 consumes this XML file to create complicated widgets.
 Please pay attention to some of these linked pages talking how widgets are implemented in the
-<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html#gtk-buildable-vfuncs">Gtk.Buildable</a>.</p>
+<a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Buildable.html%23gtk-buildable-vfuncs">Gtk.Buildable</a>.</p>
 <p>How to create the top bar embedded primary menu is tricky with
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Window.html">GtkWindow</a>.
 It looks like

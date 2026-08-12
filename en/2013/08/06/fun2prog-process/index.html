@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Fun to Program -- Process | Goofing Osamu</title>
+    <title>Fun to Program -- Process | My English Site</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -91,7 +91,7 @@ updated. (2021)</p>
 </blockquote>
 <h2 id="process">Process</h2>
 <p>Here are some practice results to play with
-<a href="http://en.wikipedia.org/wiki/Process_(computing)">process</a> and
+<a href="http://en.wikipedia.org/wiki/Process_%28computing%29">process</a> and
 <a href="http://en.wikipedia.org/wiki/Inter-process_communication">inter process communication (IPC)</a>
 (<a href="http://en.wikipedia.org/wiki/Unix_signal">signal</a> and <a href="http://en.wikipedia.org/wiki/Network_socket">network socket</a>)
 on Debian wheezy.</p>
@@ -310,7 +310,7 @@ $ jobs
 </code></pre>
 
 <p>The most common use of the <code>trap</code> command is to set up a hook script for the
-program <a href="http://en.wikipedia.org/wiki/Exit_(operating_system)">exit</a>.  Here a special signal <code>EXIT</code> is used in addition to other normal
+program <a href="http://en.wikipedia.org/wiki/Exit_%28operating_system%29">exit</a>.  Here a special signal <code>EXIT</code> is used in addition to other normal
 signals with the <code>trap</code> command.  This <code>EXIT</code> signal is raised when shell
 script itself exits without external signals.</p>
 <p>Example shell code with trap and remove a file.</p>
@@ -372,7 +372,7 @@ modules and functions to make them more secure easily.  See
 <p>Let&rsquo;s execute a command as a new process from the C program in 3 ways.</p>
 <ul>
 <li><code>system</code>(3) : The <code>system()</code> function starts a command by calling &ldquo;<code>/bin/sh -c</code>&rdquo; command, and returns after its completion.  During execution of the command, <code>SIGCHLD</code> will be blocked, and <code>SIGINT</code> and <code>SIGQUIT</code> will be ignored.</li>
-<li><code>popen</code>(3) : The <code>popen()</code> function opens a process by creating a <a href="http://en.wikipedia.org/wiki/Anonymous_pipe">pipe</a>(read-only or write-only), <a href="http://en.wikipedia.org/wiki/Fork_(operating_system)">forking</a>, and invoking the shell.</li>
+<li><code>popen</code>(3) : The <code>popen()</code> function opens a process by creating a <a href="http://en.wikipedia.org/wiki/Anonymous_pipe">pipe</a>(read-only or write-only), <a href="http://en.wikipedia.org/wiki/Fork_%28operating_system%29">forking</a>, and invoking the shell.</li>
 <li><code>fork</code>(2) + <code>exec</code>(3) : The <code>fork()</code> function creates a new process by duplicating the calling process.  The <code>exec()</code> family of functions replaces the current process image with a new process image.</li>
 </ul>
 <h4 id="c-system">C: system</h4>
@@ -871,7 +871,7 @@ design guide line I used.</p>
 <li>write simple for the easier to understand code.</li>
 </ul>
 <p>TIP: See
-<a href="http://www.ibm.com/developerworks/systems/library/es-nweb/index.html%5Bnweb">http://www.ibm.com/developerworks/systems/library/es-nweb/index.html[nweb</a>: a
+<a href="http://www.ibm.com/developerworks/systems/library/es-nweb/index.html[nweb">http://www.ibm.com/developerworks/systems/library/es-nweb/index.html[nweb</a>: a
 tiny, safe Web server (static pages only)] for IPv4 protocol example code.  It
 comes with detailed explanation on how things work.  (My example is basically a
 rewrite for IPv6 in my coding style.)</p>

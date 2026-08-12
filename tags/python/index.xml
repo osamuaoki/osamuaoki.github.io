@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
 	<channel>
-		<title>Python on Goofing Osamu</title>
+		<title>Python on My English Site</title>
 		<link>/tags/python/</link>
-		<description>Recent content in Python on Goofing Osamu</description>
+		<description>Recent content in Python on My English Site</description>
 		<generator>Hugo</generator>
-		<language>en</language>
+		<language>en-US</language>
 		
 		
 		
 		
-			<lastBuildDate>Thu, 21 Aug 2025 23:49:57 +0900</lastBuildDate>
+			<lastBuildDate>Wed, 12 Aug 2026 22:40:11 +0900</lastBuildDate>
 		
 			<atom:link href="/tags/python/index.xml" rel="self" type="application/rss+xml" />
 			<item>
@@ -46,14 +46,14 @@
 				<link>/en/2021/07/22/pygi-9/</link>
 				<pubDate>Thu, 22 Jul 2021 00:00:00 +0000</pubDate>
 				<guid>/en/2021/07/22/pygi-9/</guid>
-				<description>&lt;p&gt;FYI: If the buggy Glade v=3.38.2 is &lt;a href=&#34;https://gitlab.gnome.org/GNOME/glade/-/merge_requests/116&#34;&gt;patched&lt;/a&gt;, the complicated manual process is not needed.&lt;/p&gt;&#xA;&lt;h2 id=&#34;client-side-decoration-with-gtkheaderbar-using-glade&#34;&gt;Client-side decoration with GtkHeaderbar using Glade&lt;/h2&gt;&#xA;&lt;p&gt;Let&amp;rsquo;s consider to add client-side decorated&#xA;&lt;a href=&#34;https://lazka.github.io/pgi-docs/Gtk-3.0/classes/HeaderBar.html&#34;&gt;GtkHeaderBar&lt;/a&gt;&#xA;and to put primary menu with&#xA;&lt;a href=&#34;https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Popover.html&#34;&gt;GtkPopover&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;This may not be easy with Glade 3.38.2 on upcoming Debian Bullseye 11 since it is buggy.  I created a note on my workaround at the end of &lt;a href=&#34;#workaround-of-glade-bug&#34;&gt;this page&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;Let&amp;rsquo;s assume Glade is fixed by &lt;a href=&#34;https://gitlab.gnome.org/GNOME/glade/-/merge_requests/116&#34;&gt;my patch&lt;/a&gt; or any other means and let&amp;rsquo;s use Glade to design GUI.&lt;/p&gt;</description>
+				<description>&lt;p&gt;FYI: If the buggy Glade v=3.38.2 is &lt;a href=&#34;https://gitlab.gnome.org/GNOME/glade/-/merge_requests/116&#34;&gt;patched&lt;/a&gt;, the complicated manual process is not needed.&lt;/p&gt;&#xA;&lt;h2 id=&#34;client-side-decoration-with-gtkheaderbar-using-glade&#34;&gt;Client-side decoration with GtkHeaderbar using Glade&lt;/h2&gt;&#xA;&lt;p&gt;Let&amp;rsquo;s consider to add client-side decorated&#xA;&lt;a href=&#34;https://lazka.github.io/pgi-docs/Gtk-3.0/classes/HeaderBar.html&#34;&gt;GtkHeaderBar&lt;/a&gt;&#xA;and to put primary menu with&#xA;&lt;a href=&#34;https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Popover.html&#34;&gt;GtkPopover&lt;/a&gt;.&lt;/p&gt;&#xA;&lt;p&gt;This may not be easy with Glade 3.38.2 on upcoming Debian Bullseye 11 since it is buggy.  I created a note on my workaround at the end of &lt;a href=&#34;/en/2021/07/22/pygi-9/#workaround-of-glade-bug&#34;&gt;this page&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;Let&amp;rsquo;s assume Glade is fixed by &lt;a href=&#34;https://gitlab.gnome.org/GNOME/glade/-/merge_requests/116&#34;&gt;my patch&lt;/a&gt; or any other means and let&amp;rsquo;s use Glade to design GUI.&lt;/p&gt;</description>
 			</item>
 			<item>
 				<title>GTK GUI with PyGObject (8)</title>
 				<link>/en/2021/07/21/pygi-8/</link>
 				<pubDate>Wed, 21 Jul 2021 00:00:00 +0900</pubDate>
 				<guid>/en/2021/07/21/pygi-8/</guid>
-				<description>&lt;h2 id=&#34;example-multiline-text-editor-with-gtksourceview&#34;&gt;Example: Multiline Text Editor with GtkSource.View&lt;/h2&gt;&#xA;&lt;p&gt;Next exercise is to create a modal dialog window with Glade similar to &lt;a href=&#34;https://python-gtk-3-tutorial.readthedocs.io/en/latest/textview.html&#34;&gt;Multiline Text Editor&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;Doing this with the&#xA;&lt;a href=&#34;https://lazka.github.io/pgi-docs/Gtk-3.0/classes/TextView.html&#34;&gt;Gtk.TextView&lt;/a&gt;&#xA;widget is not so challenging. I decided to use&#xA;&lt;a href=&#34;https://lazka.github.io/pgi-docs/GtkSource-3.0/classes/View.html&#34;&gt;GtkSource.View&lt;/a&gt;&#xA;instead to gain access to capability of regex and case sensitivity.&lt;/p&gt;&#xA;&lt;p&gt;I didn&amp;rsquo;t see &lt;strong&gt;GtkSource.View&lt;/strong&gt; related widgets in the Glade&amp;rsquo;s available choice list, I first created Multiline Text Editor with &lt;strong&gt;Gtk.TextView&lt;/strong&gt; just to get the general design done.&#xA;Since we have 2 toplevel widgets, 2 XML files were created by Glade to allow us to use&#xA;&lt;a href=&#34;htt__GtkSource.View__ps://pygobject.readthedocs.io/en/latest/guide/gtk_template.html&#34;&gt;Gtk.Template&lt;/a&gt;.&lt;/p&gt;</description>
+				<description>&lt;h2 id=&#34;example-multiline-text-editor-with-gtksourceview&#34;&gt;Example: Multiline Text Editor with GtkSource.View&lt;/h2&gt;&#xA;&lt;p&gt;Next exercise is to create a modal dialog window with Glade similar to &lt;a href=&#34;https://python-gtk-3-tutorial.readthedocs.io/en/latest/textview.html&#34;&gt;Multiline Text Editor&lt;/a&gt;&lt;/p&gt;&#xA;&lt;p&gt;Doing this with the&#xA;&lt;a href=&#34;https://lazka.github.io/pgi-docs/Gtk-3.0/classes/TextView.html&#34;&gt;Gtk.TextView&lt;/a&gt;&#xA;widget is not so challenging. I decided to use&#xA;&lt;a href=&#34;https://lazka.github.io/pgi-docs/GtkSource-3.0/classes/View.html&#34;&gt;GtkSource.View&lt;/a&gt;&#xA;instead to gain access to capability of regex and case sensitivity.&lt;/p&gt;&#xA;&lt;p&gt;I didn&amp;rsquo;t see &lt;strong&gt;GtkSource.View&lt;/strong&gt; related widgets in the Glade&amp;rsquo;s available choice list, I first created Multiline Text Editor with &lt;strong&gt;Gtk.TextView&lt;/strong&gt; just to get the general design done.&#xA;Since we have 2 toplevel widgets, 2 XML files were created by Glade to allow us to use&#xA;&lt;a href=&#34;https://pygobject.readthedocs.io/en/latest/guide/gtk_template.html&#34;&gt;Gtk.Template&lt;/a&gt;.&lt;/p&gt;</description>
 			</item>
 			<item>
 				<title>GTK GUI with PyGObject (7)</title>

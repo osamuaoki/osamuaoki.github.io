@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-US">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>GTK GUI with PyGObject (9) | Goofing Osamu</title>
+    <title>GTK GUI with PyGObject (9) | My English Site</title>
     <link rel="stylesheet" href="/css/style.css" />
     <link rel="stylesheet" href="/css/fonts.css" />
     
@@ -82,7 +82,7 @@ note-00022
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/HeaderBar.html">GtkHeaderBar</a>
 and to put primary menu with
 <a href="https://lazka.github.io/pgi-docs/Gtk-3.0/classes/Popover.html">GtkPopover</a>.</p>
-<p>This may not be easy with Glade 3.38.2 on upcoming Debian Bullseye 11 since it is buggy.  I created a note on my workaround at the end of <a href="#workaround-of-glade-bug">this page</a></p>
+<p>This may not be easy with Glade 3.38.2 on upcoming Debian Bullseye 11 since it is buggy.  I created a note on my workaround at the end of <a href="/en/2021/07/22/pygi-9/#workaround-of-glade-bug">this page</a></p>
 <p>Let&rsquo;s assume Glade is fixed by <a href="https://gitlab.gnome.org/GNOME/glade/-/merge_requests/116">my patch</a> or any other means and let&rsquo;s use Glade to design GUI.</p>
 <ul>
 <li>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates to add top special area inside the window.</li>
@@ -424,7 +424,7 @@ XML, <code>@Gtk.Template.Callback</code> takes argument such as <code>@Gtk.Templ
 <p>Activating the &ldquo;Client-side window decorations&rdquo; checkbox creates odd <strong>non-editable</strong> blank area inside the window.  Trying to put a widget there causes the error message as follows:</p>
 <p><img src="/img/head-csd.png" alt="Glade not woring as expected"></p>
 <p>This seems to be intentional design of Glade to deal newly introduced XML structure support with minimal efforts on time.</p>
-<p>Please look into the UI XML file after above change.  There is an odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is found in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html#class-details">GtkWindow</a> as:</p>
+<p>Please look into the UI XML file after above change.  There is an odd XML tag <code>&lt;placeholder/&gt;</code> which has been added inside of the newly added <code>&lt;child type=&quot;titlebar&quot;&gt;...&lt;/child&gt;</code>-tag pair.  This meaning of <code>type=&quot;titlebar&quot;</code> is found in <a href="https://lazka.github.io/pgi-docs/#Gtk-3.0/classes/Window.html%23class-details">GtkWindow</a> as:</p>
 <blockquote>
 <p>The <strong>Gtk.Window</strong> implementation of the <strong>Gtk.Buildable</strong> interface supports setting a child as the titlebar by specifying “titlebar” as the “type” attribute of a <code>&lt;child&gt;</code> element.</p>
 </blockquote>
