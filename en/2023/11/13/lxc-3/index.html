@@ -136,52 +136,52 @@ and one root (UID=0) shell on the Linux terminal tty3 on the host system.</p>
 </span></span><span style="display:flex;"><span>...
 </span></span></code></pre></div><p>Let&rsquo;s see <code>/proc/18801</code>, <code>/proc/19122</code>, <code>proc/21311</code>, and <code>proc/22686</code>.</p>
 <table>
-  <thead>
-      <tr>
-          <th>PID</th>
-          <th>18801</th>
-          <th>19122</th>
-          <th>21311</th>
-          <th>22686</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>UID (global)</td>
-          <td>231072</td>
-          <td>232072</td>
-          <td>1000</td>
-          <td>0</td>
-      </tr>
-      <tr>
-          <td>UID in container</td>
-          <td>0</td>
-          <td>1000</td>
-          <td>N/A</td>
-          <td>N/A</td>
-      </tr>
-      <tr>
-          <td>cgroup</td>
-          <td><code>0::/lxc.payload.d0/.lxc</code></td>
-          <td><code>0::/lxc.payload.d0/.lxc</code></td>
-          <td>*1</td>
-          <td>*2</td>
-      </tr>
-      <tr>
-          <td>gid_map</td>
-          <td><code>0 231072 10000001</code></td>
-          <td><code>0 231072 10000001</code></td>
-          <td><code>0 0 4294967295</code></td>
-          <td><code>0 0 4294967295</code></td>
-      </tr>
-      <tr>
-          <td>uid_map</td>
-          <td><code>0 231072 10000001</code></td>
-          <td><code>0 231072 10000001</code></td>
-          <td><code>0 0 4294967295</code></td>
-          <td><code>0 0 4294967295</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>PID</th>
+					<th>18801</th>
+					<th>19122</th>
+					<th>21311</th>
+					<th>22686</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>UID (global)</td>
+					<td>231072</td>
+					<td>232072</td>
+					<td>1000</td>
+					<td>0</td>
+			</tr>
+			<tr>
+					<td>UID in container</td>
+					<td>0</td>
+					<td>1000</td>
+					<td>N/A</td>
+					<td>N/A</td>
+			</tr>
+			<tr>
+					<td>cgroup</td>
+					<td><code>0::/lxc.payload.d0/.lxc</code></td>
+					<td><code>0::/lxc.payload.d0/.lxc</code></td>
+					<td>*1</td>
+					<td>*2</td>
+			</tr>
+			<tr>
+					<td>gid_map</td>
+					<td><code>0 231072 10000001</code></td>
+					<td><code>0 231072 10000001</code></td>
+					<td><code>0 0 4294967295</code></td>
+					<td><code>0 0 4294967295</code></td>
+			</tr>
+			<tr>
+					<td>uid_map</td>
+					<td><code>0 231072 10000001</code></td>
+					<td><code>0 231072 10000001</code></td>
+					<td><code>0 0 4294967295</code></td>
+					<td><code>0 0 4294967295</code></td>
+			</tr>
+	</tbody>
 </table>
 <ul>
 <li>*1: <code>0::/user.slice/user-1000.slice/user@1000.service/app.slice/app-org.gnome.Terminal.slice/vte-spawn-15e39553-cc20-4c70-bfd5-f8b95e2c6b5a.scope</code></li>

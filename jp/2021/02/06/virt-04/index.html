@@ -103,31 +103,31 @@ Debian Bulleseye/testing pre-11 release環境で確認していきます。</p>
 前提で、現状とずれている可能性を感じました。現在はBulleseyeがtestingにあり、
 リリース前です。まず現在のDebianの関連インフラ状況をまとめてみました。</p>
 <table>
-  <thead>
-      <tr>
-          <th>Debian release</th>
-          <th>Kernel version</th>
-          <th>util-linux</th>
-          <th>cgroup hierarchy</th>
-          <th>Year</th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>Buster 10</td>
-          <td>4.19系</td>
-          <td>2.33系</td>
-          <td>hybrid (v1+v2)</td>
-          <td>2019</td>
-      </tr>
-      <tr>
-          <td>Bulleseye 11</td>
-          <td>5.10系</td>
-          <td>2.36系</td>
-          <td>unified (v2 only)</td>
-          <td>2021 ?</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>Debian release</th>
+					<th>Kernel version</th>
+					<th>util-linux</th>
+					<th>cgroup hierarchy</th>
+					<th>Year</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>Buster 10</td>
+					<td>4.19系</td>
+					<td>2.33系</td>
+					<td>hybrid (v1+v2)</td>
+					<td>2019</td>
+			</tr>
+			<tr>
+					<td>Bulleseye 11</td>
+					<td>5.10系</td>
+					<td>2.36系</td>
+					<td>unified (v2 only)</td>
+					<td>2021 ?</td>
+			</tr>
+	</tbody>
 </table>
 <p>ここで、2015年に書かれたという、
 <a href="https://www.kernel.org/doc/html/latest/admin-guide/cgroup-v2.html">Control Group v2</a>
@@ -182,30 +182,30 @@ sh1# sleep 1000000 &amp;
 を抜き出して表にします。Systemd＋GUI環境のconsoleからなので少々
 cgroup PATHが長めです。</p>
 <table>
-  <thead>
-      <tr>
-          <th>command</th>
-          <th><code>bash --norc</code></th>
-          <th><code>sleep 1000000</code></th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>PID</td>
-          <td><code>392578</code></td>
-          <td><code>397732</code></td>
-      </tr>
-      <tr>
-          <td>cgroup PATH</td>
-          <td><code>/user.slice/...a188.scope</code></td>
-          <td><code>/user.slice/...a188.scope</code></td>
-      </tr>
-      <tr>
-          <td>cgroup2-fs mount point</td>
-          <td><code>/</code></td>
-          <td><code>/</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>command</th>
+					<th><code>bash --norc</code></th>
+					<th><code>sleep 1000000</code></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>PID</td>
+					<td><code>392578</code></td>
+					<td><code>397732</code></td>
+			</tr>
+			<tr>
+					<td>cgroup PATH</td>
+					<td><code>/user.slice/...a188.scope</code></td>
+					<td><code>/user.slice/...a188.scope</code></td>
+			</tr>
+			<tr>
+					<td>cgroup2-fs mount point</td>
+					<td><code>/</code></td>
+					<td><code>/</code></td>
+			</tr>
+	</tbody>
 </table>
 <p>さてこれらの気になるプロセスのcgroup帰属を変更します。</p>
 <pre tabindex="0"><code>sh1# echo $$
@@ -235,30 +235,30 @@ sh1# cgck
  ---
 </code></pre><p>ここでcgroupのPATHが新規作成した場所に変わっています。</p>
 <table>
-  <thead>
-      <tr>
-          <th>command</th>
-          <th><code>bash --norc</code></th>
-          <th><code>sleep 1000000</code></th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>PID</td>
-          <td><code>392578</code></td>
-          <td><code>397732</code></td>
-      </tr>
-      <tr>
-          <td>cgroup PATH</td>
-          <td><code>/freezer/sub</code></td>
-          <td><code>/freezer/sub2</code></td>
-      </tr>
-      <tr>
-          <td>cgroup2-fs mount point</td>
-          <td><code>/</code></td>
-          <td><code>/</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>command</th>
+					<th><code>bash --norc</code></th>
+					<th><code>sleep 1000000</code></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>PID</td>
+					<td><code>392578</code></td>
+					<td><code>397732</code></td>
+			</tr>
+			<tr>
+					<td>cgroup PATH</td>
+					<td><code>/freezer/sub</code></td>
+					<td><code>/freezer/sub2</code></td>
+			</tr>
+			<tr>
+					<td>cgroup2-fs mount point</td>
+					<td><code>/</code></td>
+					<td><code>/</code></td>
+			</tr>
+	</tbody>
 </table>
 <p>さて、<code>unshare</code>を用いて新規のcgroupやmountのnamespaces内に新規のshellを
 立ち上げましょう。</p>
@@ -292,34 +292,34 @@ cgroupのPATHは、<code>/sys/fs/cgroup/freeze/sub</code>からの相対にな�
 cgroup2のファイルシステムの mount pointも、<code>/sys/fs/cgroup/freeze/sub</code>からの
 相対になるので変わります。</p>
 <table>
-  <thead>
-      <tr>
-          <th>command</th>
-          <th><code>bash --norc</code></th>
-          <th><code>sleep 1000000</code></th>
-          <th><code>bash --norc</code></th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>PID</td>
-          <td><code>392578</code></td>
-          <td><code>397732</code></td>
-          <td><code>425474</code></td>
-      </tr>
-      <tr>
-          <td>cgroup PATH</td>
-          <td><code>/</code></td>
-          <td><code>/../sub2</code></td>
-          <td><code>/</code></td>
-      </tr>
-      <tr>
-          <td>cgroup2-fs mount point</td>
-          <td><code>/../..</code></td>
-          <td><code>/../..</code></td>
-          <td><code>/../..</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>command</th>
+					<th><code>bash --norc</code></th>
+					<th><code>sleep 1000000</code></th>
+					<th><code>bash --norc</code></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>PID</td>
+					<td><code>392578</code></td>
+					<td><code>397732</code></td>
+					<td><code>425474</code></td>
+			</tr>
+			<tr>
+					<td>cgroup PATH</td>
+					<td><code>/</code></td>
+					<td><code>/../sub2</code></td>
+					<td><code>/</code></td>
+			</tr>
+			<tr>
+					<td>cgroup2-fs mount point</td>
+					<td><code>/../..</code></td>
+					<td><code>/../..</code></td>
+					<td><code>/../..</code></td>
+			</tr>
+	</tbody>
 </table>
 <p>ただこうして作成された新規のshell (PID=425474) のcgroup2-fs mount pointは<code>/</code>で
 あるべきでが、<code>/../..</code>となっています。これを直します。</p>
@@ -368,34 +368,34 @@ sh2# cgck
  ---
 </code></pre><p>マウントイベントが他のnamespacesに漏れないようにした上で、一度マウントをはずしました。</p>
 <table>
-  <thead>
-      <tr>
-          <th>command</th>
-          <th><code>bash --norc</code></th>
-          <th><code>sleep 1000000</code></th>
-          <th><code>bash --norc</code></th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>PID</td>
-          <td><code>392578</code></td>
-          <td><code>397732</code></td>
-          <td><code>425474</code></td>
-      </tr>
-      <tr>
-          <td>cgroup PATH</td>
-          <td><code>/</code></td>
-          <td><code>/../sub2</code></td>
-          <td><code>/</code></td>
-      </tr>
-      <tr>
-          <td>cgroup2-fs mount point</td>
-          <td><code>/../..</code></td>
-          <td><code>/../..</code></td>
-          <td>無し</td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>command</th>
+					<th><code>bash --norc</code></th>
+					<th><code>sleep 1000000</code></th>
+					<th><code>bash --norc</code></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>PID</td>
+					<td><code>392578</code></td>
+					<td><code>397732</code></td>
+					<td><code>425474</code></td>
+			</tr>
+			<tr>
+					<td>cgroup PATH</td>
+					<td><code>/</code></td>
+					<td><code>/../sub2</code></td>
+					<td><code>/</code></td>
+			</tr>
+			<tr>
+					<td>cgroup2-fs mount point</td>
+					<td><code>/../..</code></td>
+					<td><code>/../..</code></td>
+					<td>無し</td>
+			</tr>
+	</tbody>
 </table>
 <pre tabindex="0"><code>sh2# mount -t cgroup2  cgroup2 /sys/fs/cgroup/
 sh2# cgck
@@ -421,34 +421,34 @@ sh2# cgck
  ---
 </code></pre><p>cgroup2-fsをマウントしました。</p>
 <table>
-  <thead>
-      <tr>
-          <th>command</th>
-          <th><code>bash --norc</code></th>
-          <th><code>sleep 1000000</code></th>
-          <th><code>bash --norc</code></th>
-      </tr>
-  </thead>
-  <tbody>
-      <tr>
-          <td>PID</td>
-          <td><code>392578</code></td>
-          <td><code>397732</code></td>
-          <td><code>425474</code></td>
-      </tr>
-      <tr>
-          <td>cgroup PATH</td>
-          <td><code>/</code></td>
-          <td><code>/../sub2</code></td>
-          <td><code>/</code></td>
-      </tr>
-      <tr>
-          <td>cgroup2-fs mount point</td>
-          <td><code>/../..</code></td>
-          <td><code>/../..</code></td>
-          <td><code>/</code></td>
-      </tr>
-  </tbody>
+	<thead>
+			<tr>
+					<th>command</th>
+					<th><code>bash --norc</code></th>
+					<th><code>sleep 1000000</code></th>
+					<th><code>bash --norc</code></th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>PID</td>
+					<td><code>392578</code></td>
+					<td><code>397732</code></td>
+					<td><code>425474</code></td>
+			</tr>
+			<tr>
+					<td>cgroup PATH</td>
+					<td><code>/</code></td>
+					<td><code>/../sub2</code></td>
+					<td><code>/</code></td>
+			</tr>
+			<tr>
+					<td>cgroup2-fs mount point</td>
+					<td><code>/../..</code></td>
+					<td><code>/../..</code></td>
+					<td><code>/</code></td>
+			</tr>
+	</tbody>
 </table>
 <p>これで新規のshell (PID=425474) のcgroup2-fs mount pointが<code>/</code>となりました。</p>
 <p>もう、このPID=425474のプロセスのシェルから、PID=392578やPID=397732の
