@@ -38,7 +38,7 @@
 
 <h3 class="date">Date:
 2021/04/03 (initial publish),
-2023/11/08 (last update)
+2026/11/21 (last update)
 </h3>
 <h3 class="source">Source:
 note-00012
@@ -300,86 +300,132 @@ unstable, I created a simple shell script:</p>
 <li><a href="https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell">https://github.com/osamuaoki/osamu-utils/blob/main/schroot-shell</a></li>
 </ul>
 <div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-sh" data-lang="sh"><span style="display:flex;"><span>$ schroot-shell -h
-</span></span><span style="display:flex;"><span>NAME
-</span></span><span style="display:flex;"><span>    schroot-shell - start a shell in chroot with current home data.
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>SYNOPSIS
+</span></span><span style="display:flex;"><span> % /home/osamu/bin/schroot-shell -h
+</span></span><span style="display:flex;"><span>I: executing as SUDO_USER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;&#39;</span>
+</span></span><span style="display:flex;"><span>I: executing as USER<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;osamu&#39;</span>
+</span></span><span style="display:flex;"><span>I: set pwd to user<span style="color:#e6db74">&#39;s home directory: /home/osamu
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">I: export DPKG_FORCE=confdef
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">NAME
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  schroot-shell - start a shell in chroot with current home data.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SYNOPSIS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  schroot-shell           [DIST [CONFIG          ]] [[--] command_string]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  schroot-shell --config                [PROFILE]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  schroot-shell --init    [DIST [CONFIG [PROFILE]]]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  schroot-shell --upgrade [DIST [CONFIG]          ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  schroot-shell --add     [DIST [CONFIG]          ] [[--] package_list]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  schroot-shell --rm      [DIST [CONFIG]          ] [[--] package_list]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">DESCRIPTION
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  The *schroot-shell* command offers a single frontend covering generarized
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  functionalities of combined *sbuild-createchroot*, *sbuild-update*, and
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  *sbuild-shell* for the persistent (source) chroot shell environment instead
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  of the session one while sharing the user data from the user&#39;</span>s home
+</span></span><span style="display:flex;"><span>  directory of the host system.
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>  For this typical use, this *schroot-shell* command is invoked as:
+</span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>    schroot-shell <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
-</span></span><span style="display:flex;"><span>    schroot-shell --config <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>    schroot-shell <span style="color:#f92672">[</span>--init|--prep|--upgrade<span style="color:#f92672">]</span> <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>DESCRIPTION
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>This wrapper command of *schroot* offers a set of helper commands to work in
-</span></span><span style="display:flex;"><span>the persistent pre-loaded <span style="color:#f92672">(</span>source<span style="color:#f92672">)</span> chroot system environment <span style="color:#66d9ef">while</span> sharing the
-</span></span><span style="display:flex;"><span>user data from the user<span style="color:#e6db74">&#39;s home directory of the host system.
+</span></span><span style="display:flex;"><span>  This starts an interactive shell in the <span style="color:#e6db74">&#39;DIST-ARCH-CONFIG&#39;</span> source chroot
+</span></span><span style="display:flex;"><span>  located at <span style="color:#e6db74">&#39;/srv/chroot/DIST-ARCH-CONFIG&#39;</span> using the *schroot* profile at
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#39;/etc/schroot/PROFILE/&#39;</span> specified normally in the
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#39;/etc/schroot/chroot.d/DIST-ARCH-CONFIG-????&#39;</span> file under <span style="color:#e6db74">&#39;profile=...&#39;</span>.
+</span></span><span style="display:flex;"><span>  This bind-mounts the user data from the user<span style="color:#e6db74">&#39;s home directory of the host
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  system.  This is somewhat modeled after *sbuild-shell*.  While
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  *sbuild-shell* is designed to work with the session chroot and the changes
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  made from *sbuild-shell* to the chroot is discarded, the changes made from
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  *schroot-shell* to the chroot is persistent.
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">Here, if &#39;</span>CONFIG<span style="color:#e6db74">&#39; and &#39;</span>DIST<span style="color:#e6db74">&#39; are missing in the command line, &#39;</span>desktop<span style="color:#e6db74">&#39; for
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;</span>CONFIG<span style="color:#e6db74">&#39; and &#39;</span>unstable<span style="color:#e6db74">&#39; for &#39;</span>DIST<span style="color:#e6db74">&#39; are used as the default values.  Normally,
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">you skip specifying &#39;</span>CONFIG<span style="color:#e6db74">&#39; to use its default value.  This command
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">automatically becomes root when needed.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  For &#39;</span>DIST<span style="color:#e6db74">&#39;, it specifies base distribution of the chroot system and its
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  default is &#39;</span>unstable<span style="color:#e6db74">&#39;.  &#39;</span>DIST<span style="color:#e6db74">&#39; can be suitenames such as &#39;</span>unstable<span style="color:#e6db74">&#39;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#39;</span>testing<span style="color:#e6db74">&#39;, &#39;</span>stable<span style="color:#e6db74">&#39;, &#39;</span>oldstable<span style="color:#e6db74">&#39;, or &#39;</span>oldoldstable<span style="color:#e6db74">&#39;.  These can be shortened
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  as &#39;</span>u<span style="color:#e6db74">&#39;, &#39;</span>t<span style="color:#e6db74">&#39;, &#39;</span>s<span style="color:#e6db74">&#39;, &#39;</span>o<span style="color:#e6db74">&#39;, or &#39;</span>oo<span style="color:#e6db74">&#39; in the command line.  &#39;</span>DIST<span style="color:#e6db74">&#39; may also use
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  release codenames such as &#39;</span>sid<span style="color:#e6db74">&#39;, &#39;</span>forky<span style="color:#e6db74">&#39;, &#39;</span>trixie<span style="color:#e6db74">&#39;, ... .
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">The *schroot-shell* command is normally invoked as:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  For &#39;</span>CONFIG<span style="color:#e6db74">&#39;, its default is &#39;</span>custom<span style="color:#e6db74">&#39;.  You should avoid setting it to
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#39;</span>sbuild<span style="color:#e6db74">&#39; unless you know what exactly happens.  (&#39;</span>sbuild<span style="color:#e6db74">&#39; is used by the
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  sbuild command under chroot mode)
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   schroot-shell [DIST [CONFIG]]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  For &#39;</span>PROFILE<span style="color:#e6db74">&#39;, its default is the value of &#39;</span>CONFIG<span style="color:#e6db74">&#39;.  You should avoid
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  setting it to values &#39;</span>default<span style="color:#e6db74">&#39;, &#39;</span>minimal<span style="color:#e6db74">&#39;, &#39;</span>buildd<span style="color:#e6db74">&#39;, &#39;</span>desktop<span style="color:#e6db74">&#39;, and &#39;</span>sbuild<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  unless you know what exactly happens since these setup scripts may have been
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  used by *sbuild* and other *schroot* based codes.
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">This starts an interactive shell in the &#39;</span>DIST-amd64-CONFIG<span style="color:#e6db74">&#39; source chroot
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">managed by the *schroot* command while bind mounting the user data from the
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">user&#39;</span>s home directory of the host system.  This is somewhat modeled after
-</span></span><span style="display:flex;"><span>*sbuild-shell*.  While *sbuild-shell* is designed to work with the session
-</span></span><span style="display:flex;"><span>chroot and the changes made from *sbuild-shell* to the chroot is discarded,
-</span></span><span style="display:flex;"><span>the changes made from *schroot-shell* to the chroot is persistent.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Default values for missing arguments:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    DIST    = &#39;</span>unstable<span style="color:#e6db74">&#39; (default=&#39;</span>unstable<span style="color:#e6db74">&#39;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ARCH    = &#39;</span>amd64<span style="color:#e6db74">&#39;    (normally &#39;</span>amd64<span style="color:#e6db74">&#39; for PC)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    CONFIG  = &#39;</span>custom<span style="color:#e6db74">&#39;   (default=&#39;</span>custom<span style="color:#e6db74">&#39;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    PROFILE = &#39;</span>custom<span style="color:#e6db74">&#39;   (default=custom)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  The schroot name is set by the &#39;</span>DIST-ARCH-CONFIG<span style="color:#e6db74">&#39; combination
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  The &#39;</span>custom<span style="color:#e6db74">&#39; profile is very similar to the package-provided &#39;</span>desktop<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  profile with some adjustments to the local desktop settings.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  This command automatically becomes root when needed.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  Before starting the typical use of this *schroot-shell* command, you need to set
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  up the &#39;</span>DIST-ARCH-CONFIG<span style="color:#e6db74">&#39; source chroot properly in advance in 2 steps.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  1. Skip this step if you already set up schroot profile configuration in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     files under the &#39;</span>/etc/schroot/PROFILE/<span style="color:#e6db74">&#39; directory.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     Create the same set of configuration files for *schroot* under
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     &#39;</span>/etc/schroot/PROFILE/<span style="color:#e6db74">&#39; directory as explained in the &#39;</span>FILES<span style="color:#e6db74">&#39; section
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     under &#39;</span>Setup script coconfiguration<span style="color:#e6db74">&#39; in schroot.conf(5) for
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     &#39;</span>/etc/schroot/default<span style="color:#e6db74">&#39;:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       schroot-shell --config [PROFILE]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     Customize the setup script configuration files for *schroot* at
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     &#39;</span>/etc/schroot/PROFILE/fstab<span style="color:#e6db74">&#39; to list all mounted devices in your home
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     directory. (The reason for the name &#39;</span>custom<span style="color:#e6db74">&#39;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  2. Skip this step if you intend to keep using the existing source chroot
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     &#39;</span>DIST-ARCH-CONFIG<span style="color:#e6db74">&#39;.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     Create a source chroot file system at &#39;</span>/srv/chroot/DIST-ARCH-CONFIG<span style="color:#e6db74">&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     using the profile configuration files in &#39;</span>/etc/schroot/PROFILE/<span style="color:#e6db74">&#39;:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">       schroot-shell --init [DIST [CONFIG [PROFILE]]]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     Customize alias in &#39;</span>/etc/schroot/chroot.d/DIST-ARCH-CONFIG-????<span style="color:#e6db74">&#39; file
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     to use, e.g., both &#39;</span>sid<span style="color:#e6db74">&#39; and &#39;</span>unstable<span style="color:#e6db74">&#39; as DIST with a shared chroot.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     This also installs pre-defined extra packages desirable for the shell
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     activities.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  The existing &#39;</span>DIST-ARCH-CONFIG<span style="color:#e6db74">&#39; source chroot can be updated to the latest
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  state by:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    schroot-shell --update [DIST [CONFIG]]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  The existing &#39;</span>DIST-ARCH-CONFIG<span style="color:#e6db74">&#39; source chroot can be updated by installing
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  specific packages listed in package_list by:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    schroot-shell --add  [DIST [CONFIG]] -- package_list
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  For package_list, &#34;min&#34; can be used as alias to install minimal packages for
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  functional cheroot and &#34;base&#34; can be used as alias to install base packages
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  required for development.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  The existing &#39;</span>DIST-ARCH-CONFIG<span style="color:#e6db74">&#39; source chroot and its corresponding chroot
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  configuration can be completely removed by:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    schroot-shell --rm [DIST [CONFIG]]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  The existing &#39;</span>DIST-ARCH-CONFIG<span style="color:#960050;background-color:#1e0010">&#39;</span> source chroot can be updated by removing
+</span></span><span style="display:flex;"><span>  specific packages listed in package_list by:
 </span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>In order <span style="color:#66d9ef">for</span> the *schroot-shell* command to <span style="color:#66d9ef">function</span>, you need to set up the
-</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#39;DIST-amd64-CONFIG&#39;</span> source chroot properly.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>The <span style="color:#e6db74">&#39;DIST-amd64-CONFIG&#39;</span> source chroot can be initialized in <span style="color:#ae81ff">3</span>
-</span></span><span style="display:flex;"><span>steps.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  1. Create the setup script configuration files <span style="color:#66d9ef">for</span> *schroot* under
-</span></span><span style="display:flex;"><span>     <span style="color:#e6db74">&#39;/etc/schroot/CONFIG/&#39;</span> as explained in the <span style="color:#e6db74">&#39;FILES&#39;</span> section under <span style="color:#e6db74">&#39;Setup
-</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">     script configuration&#39;</span> in schroot.conf<span style="color:#f92672">(</span>5<span style="color:#f92672">)</span> <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;/etc/schroot/default&#39;</span>.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>       schroot-shell --config <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  2. Customize the setup script configuration files <span style="color:#66d9ef">for</span> *schroot* at
-</span></span><span style="display:flex;"><span>     <span style="color:#e6db74">&#39;/etc/schroot/CONFIG/fstab&#39;</span> to list all mounted devices in your home
-</span></span><span style="display:flex;"><span>     directory.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>  3. Create a chroot file system <span style="color:#66d9ef">for</span> <span style="color:#e6db74">&#39;DIST&#39;</span> at
-</span></span><span style="display:flex;"><span>     <span style="color:#e6db74">&#39;/srv/chroot/DIST-amd64-CONFIG&#39;</span> using the setup script configuration
-</span></span><span style="display:flex;"><span>     files in <span style="color:#e6db74">&#39;/etc/schroot/CONFIG&#39;</span>.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>       schroot-shell --init <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>    Here, <span style="color:#e6db74">&#39;DIST&#39;</span> specifies base distribution of the chroot system.  <span style="color:#e6db74">&#39;DIST&#39;</span>
-</span></span><span style="display:flex;"><span>    can be <span style="color:#e6db74">&#39;unstable&#39;</span> <span style="color:#f92672">(</span>default<span style="color:#f92672">)</span>, <span style="color:#e6db74">&#39;testing&#39;</span>, <span style="color:#e6db74">&#39;stable&#39;</span>, <span style="color:#e6db74">&#39;oldstable&#39;</span>, or
-</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;oldoldstable&#39;</span>.  These can be shortened as <span style="color:#e6db74">&#39;u&#39;</span>, <span style="color:#e6db74">&#39;t&#39;</span>, <span style="color:#e6db74">&#39;s&#39;</span>, <span style="color:#e6db74">&#39;o&#39;</span>, or <span style="color:#e6db74">&#39;oo&#39;</span>
-</span></span><span style="display:flex;"><span>    in the command line.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>The <span style="color:#e6db74">&#39;DIST-amd64-CONFIG&#39;</span> source chroot can be updated to the latest
-</span></span><span style="display:flex;"><span>state by:
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   schroot-shell --update <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>The <span style="color:#e6db74">&#39;DIST-amd64-CONFIG&#39;</span> source chroot can be prepped up with a few
-</span></span><span style="display:flex;"><span>pre-defined extra packages desirable <span style="color:#66d9ef">for</span> the shell activities by:
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>   schroot-shell --prep <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span>
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>For <span style="color:#e6db74">&#39;CONFIG&#39;</span>, values <span style="color:#e6db74">&#39;default&#39;</span>, <span style="color:#e6db74">&#39;minimal&#39;</span>, <span style="color:#e6db74">&#39;buildd&#39;</span>, and <span style="color:#e6db74">&#39;sbuild&#39;</span>
-</span></span><span style="display:flex;"><span>should be avoided unless you know what exactly happens since these setup
-</span></span><span style="display:flex;"><span>scripts are already used by *sbuild* and *schroot*.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>The *schroot-shell* command offers a generarized and similar functionality of
-</span></span><span style="display:flex;"><span>combined *sbuild-createchroot*, *sbuild-update*, and *sbuild-shell* <span style="color:#66d9ef">for</span> the
-</span></span><span style="display:flex;"><span>persistent chroot shell environment instead of the session one.
-</span></span><span style="display:flex;"><span>
-</span></span><span style="display:flex;"><span>Parametrs:
-</span></span><span style="display:flex;"><span>  TYPE    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;source&#39;</span>
-</span></span><span style="display:flex;"><span>  DIST    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;unstable&#39;</span>
-</span></span><span style="display:flex;"><span>  ARCH    <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;amd64&#39;</span>
-</span></span><span style="display:flex;"><span>  CONFIG  <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;desktop&#39;</span>
+</span></span><span style="display:flex;"><span>    schroot-shell --rm  <span style="color:#f92672">[</span>DIST <span style="color:#f92672">[</span>CONFIG<span style="color:#f92672">]]</span> -- package_list
 </span></span></code></pre></div><h3 id="customizing-etcschrootdesktopfstab">Customizing <code>/etc/schroot/desktop/fstab</code></h3>
 <p>I customized my desktop profile at <code>/etc/schroot/desktop/fstab</code> as follows:</p>
 <ul>
